@@ -729,7 +729,7 @@ function GetArmorProficiencyGrowth(growthValue, classType) {
         // set the increase rate
         if (profGrowth.growthRate.startLevel > 0) {
             let rank = profGrowth.growthRate.ranks[1];
-            let iterator = profGrowth.growthRate.iteration;
+            let iterator = 0;
             for (let i = profGrowth.growthRate.startLevel; i <= 20; i++) {
                 iterator--;
                 if (profGrowth.growthRate.ranks[i] != undefined) {
