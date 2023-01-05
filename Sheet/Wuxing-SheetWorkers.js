@@ -1090,6 +1090,14 @@ on("change:repeating_gearWeapons:createAction", function (eventinfo) {
 	make_attack_from_weapon(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_gearWeapons"));
 });
 
+on("clicked:createUnarmedStrike", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	make_unarmed_strike();
+});
+
 on("change:gearUnarmoredIsSelected remove:repeating_gearArmor", function (eventinfo) {
 	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
 		return;
@@ -5721,130 +5729,127 @@ var update_item_id_list = function (repeatingSection, listId) {
 	});
 }
 
-var make_attack_from_weapon = function (itemId) {
+var getAttackData = function() {
+	return {
+		prof: {},
+		itemname: "",
+		itemCategory: "",
+		itemGroup: "",
+		itemDamage: "",
+		itemDamageType: "",
+		itemElement: "",
+		itemEnhancement: "",
+		itemProperties: "",
+		featureDesc: ""
+	};
+}
 
+var make_attack_from_weapon = function(itemId) {
 	var repeatingWeapons = "repeating_gearweapons";
-	var mod_attrs = ["weapon_prof-axe", "weapon_prof-blade", "weapon_prof-bow", "weapon_prof-brawling", "weapon_prof-dart",
-		"weapon_prof-flail", "weapon_prof-hammer", "weapon_prof-pistol", "weapon_prof-polearm", "weapon_prof-rifle",
-		GetSectionIdName(repeatingWeapons, itemId, "itemname"),
-		GetSectionIdName(repeatingWeapons, itemId, "itemCategory"),
-		GetSectionIdName(repeatingWeapons, itemId, "itemGroup"),
-		GetSectionIdName(repeatingWeapons, itemId, "itemDamage"),
-		GetSectionIdName(repeatingWeapons, itemId, "itemDamageType"),
-		GetSectionIdName(repeatingWeapons, itemId, "itemElement"),
-		GetSectionIdName(repeatingWeapons, itemId, "itemEnhancement"),
-		GetSectionIdName(repeatingWeapons, itemId, "itemProperties"),
-		GetSectionIdName(repeatingWeapons, itemId, "featureDesc")
-	];
+
+	var mod_attrs = GetSectionIdValues([itemId], repeatingWeapons,
+		["itemname", "itemCategory", "itemGroup", "itemDamage", "itemDamageType", "itemElement", "itemEnhancement", "itemProperties", "featureDesc"]);
 
 	getAttrs(mod_attrs, function (v) {
-		console.log("CONVERTING WEAPON INTO ACTION: " + v[GetSectionIdName(repeatingWeapons, itemId, "itemname")]);
-		var update = {};
+		let attackData = getAttackData();
+		attackData.itemname = v[GetSectionIdName(repeatingWeapons, itemId, "itemname")];
+		attackData.itemCategory = v[GetSectionIdName(repeatingWeapons, itemId, "itemCategory")];
+		attackData.itemGroup = v[GetSectionIdName(repeatingWeapons, itemId, "itemGroup")];
+		attackData.itemDamage = v[GetSectionIdName(repeatingWeapons, itemId, "itemDamage")];
+		attackData.itemDamageType = v[GetSectionIdName(repeatingWeapons, itemId, "itemDamageType")];
+		attackData.itemElement = v[GetSectionIdName(repeatingWeapons, itemId, "itemElement")];
+		attackData.itemEnhancement = v[GetSectionIdName(repeatingWeapons, itemId, "itemEnhancement")];
+		attackData.itemProperties = v[GetSectionIdName(repeatingWeapons, itemId, "itemProperties")];
+		attackData.featureDesc = v[GetSectionIdName(repeatingWeapons, itemId, "featureDesc")];
 
-		// create a new row in the custom actions section
-		var repeatingSection = "repeating_customActions";
-		var newrowid = generateRowID();
+		console.log("CONVERTING WEAPON INTO ACTION: " + attackData.itemname);
+		make_attack_from_attack_data(attackData);
+	});
 
-		// variables
-		var properties = v[GetSectionIdName(repeatingWeapons, itemId, "itemProperties")];
+}
 
-		// set basics
-		update[GetSectionIdName(repeatingSection, newrowid, "options-flag")] = "0";
-		update[GetSectionIdName(repeatingSection, newrowid, "atkname")] = v[GetSectionIdName(repeatingWeapons, itemId, "itemname")];
-		update[GetSectionIdName(repeatingSection, newrowid, "atkTargetStyle")] = "Token";
-		update[GetSectionIdName(repeatingSection, newrowid, "atkTraits")] = "Attack";
-		update[GetSectionIdName(repeatingSection, newrowid, "atkActionCost")] = "1";
-		update[GetSectionIdName(repeatingSection, newrowid, "atkActionsCanChange")] = "1";
+var make_unarmed_strike = function() {
+	
+	let attackData = getAttackData();
+	attackData.itemname = "Unarmed Strike";
+	attackData.itemCategory = "Simple";
+	attackData.itemGroup = "Brawling";
+	attackData.itemDamage = "1d4";
+	attackData.itemDamageType = "Bludgeoning";
+	attackData.itemElement = "";
+	attackData.itemEnhancement = "1";
+	attackData.itemProperties = "";
 
-		// see if there's a range property
-		if (properties.indexOf("Ammo") >= 0) {
-			let rangeString = properties.substr(properties.indexOf("Ammo"));
-			let rangeStart = rangeString.indexOf("(");
-			let rangeEnd = rangeString.indexOf(")");
-			update[GetSectionIdName(repeatingSection, newrowid, "atkrange")] = `${rangeString.substring(rangeStart + 1, rangeEnd)} feet`;
-		} else if (properties.indexOf("Thrown") >= 0) {
-			let rangeString = properties.substr(properties.indexOf("Thrown"));
-			let rangeStart = rangeString.indexOf("(");
-			let rangeEnd = rangeString.indexOf(")");
-			update[GetSectionIdName(repeatingSection, newrowid, "atkrange")] = `${rangeString.substring(rangeStart + 1, rangeEnd)} feet`;
-		} else {
-			update[GetSectionIdName(repeatingSection, newrowid, "atkrange")] = `5 feet`;
-		}
+	console.log("CREATING UNARMED STRIKE");
+	make_attack_from_attack_data(attackData);
+}
 
-		// set attack data
-		update[GetSectionIdName(repeatingSection, newrowid, "checkflag")] = "1";
-		update[GetSectionIdName(repeatingSection, newrowid, "atkflag")] = "1";
-		if (properties.indexOf("Finesse") >= 0) {
-			update[GetSectionIdName(repeatingSection, newrowid, "atkattr_base")] = "dexterity";
-		} else {
-			update[GetSectionIdName(repeatingSection, newrowid, "atkattr_base")] = "strength";
-		}
-		update[GetSectionIdName(repeatingSection, newrowid, "atkmod")] = v[GetSectionIdName(repeatingWeapons, itemId, "itemEnhancement")];
+var make_attack_from_attack_data = function (attackData) {
 
-		// set the best proficiency
-		var groupName = "";
-		var groupBonus = 0;
-		switch (v[GetSectionIdName(repeatingWeapons, itemId, "itemGroup")].toLowerCase().trim()) {
-			case "axe":
-				groupBonus = parseInt(v["weapon_prof-axe"]);
-				groupName = "Axe";
-				break;
-			case "blade":
-				groupBonus = parseInt(v["weapon_prof-blade"]);
-				groupName = "Blade";
-				break;
-			case "bow":
-				groupBonus = parseInt(v["weapon_prof-bow"]);
-				groupName = "Bow";
-				break;
-			case "brawling":
-				groupBonus = parseInt(v["weapon_prof-brawling"]);
-				groupName = "Brawling";
-				break;
-			case "dart":
-				groupBonus = parseInt(v["weapon_prof-dart"]);
-				groupName = "Dart";
-				break;
-			case "flail":
-				groupBonus = parseInt(v["weapon_prof-flail"]);
-				groupName = "Flail";
-				break;
-			case "hammer":
-				groupBonus = parseInt(v["weapon_prof-hammer"]);
-				groupName = "Hammer";
-				break;
-			case "pistol":
-				groupBonus = parseInt(v["weapon_prof-pistol"]);
-				groupName = "Pistol";
-				break;
-			case "polearm":
-				groupBonus = parseInt(v["weapon_prof-polearm"]);
-				groupName = "Polearm";
-				break;
-			case "rifle":
-				groupBonus = parseInt(v["weapon_prof-rifle"]);
-				groupName = "Rifle";
-				break;
-		}
-		if (groupName != "") {
-			update[GetSectionIdName(repeatingSection, newrowid, "proficiency_group")] = groupName;
-		} else {
-			update[GetSectionIdName(repeatingSection, newrowid, "proficiency_group")] = "0";
-		}
+	var update = {};
 
-		// set damage data
-		update[GetSectionIdName(repeatingSection, newrowid, "dmgflag")] = "1";
-		update[GetSectionIdName(repeatingSection, newrowid, "dmgbase")] = v[GetSectionIdName(repeatingWeapons, itemId, "itemDamage")];
-		update[GetSectionIdName(repeatingSection, newrowid, "dmgattr")] = "strength";
-		update[GetSectionIdName(repeatingSection, newrowid, "dmgmod")] = v[GetSectionIdName(repeatingWeapons, itemId, "itemEnhancement")];
-		update[GetSectionIdName(repeatingSection, newrowid, "dmgtype")] = v[GetSectionIdName(repeatingWeapons, itemId, "itemDamageType")];
-		update[GetSectionIdName(repeatingSection, newrowid, "dmgelement")] = v[GetSectionIdName(repeatingWeapons, itemId, "itemElement")];
+	// create a new row in the custom actions section
+	var repeatingSection = "repeating_customActions";
+	var newrowid = generateRowID();
 
-		setAttrs(update, {
-			silent: true
-		}, function () {
-			update_actions(newrowid, true);
-		});
+	// variables
+	var properties = attackData.itemProperties;
+	let isMelee = true;
+
+	// set basics
+	update[GetSectionIdName(repeatingSection, newrowid, "options-flag")] = "0";
+	update[GetSectionIdName(repeatingSection, newrowid, "atkname")] = attackData.itemname;
+	update[GetSectionIdName(repeatingSection, newrowid, "atkTargetStyle")] = "Token";
+	update[GetSectionIdName(repeatingSection, newrowid, "atkTraits")] = "Attack";
+	update[GetSectionIdName(repeatingSection, newrowid, "atkActionCost")] = "1";
+	update[GetSectionIdName(repeatingSection, newrowid, "atkActionsCanChange")] = "1";
+
+	// see if there's a range property
+	if (properties.indexOf("Ammo") >= 0) {
+		let rangeString = properties.substr(properties.indexOf("Ammo"));
+		let rangeStart = rangeString.indexOf("(");
+		let rangeEnd = rangeString.indexOf(")");
+		isMelee = false;
+		update[GetSectionIdName(repeatingSection, newrowid, "atkrange")] = `${rangeString.substring(rangeStart + 1, rangeEnd)} feet`;
+	} else if (properties.indexOf("Thrown") >= 0) {
+		let rangeString = properties.substr(properties.indexOf("Thrown"));
+		let rangeStart = rangeString.indexOf("(");
+		let rangeEnd = rangeString.indexOf(")");
+		update[GetSectionIdName(repeatingSection, newrowid, "atkrange")] = `${rangeString.substring(rangeStart + 1, rangeEnd)} feet`;
+	} else {
+		update[GetSectionIdName(repeatingSection, newrowid, "atkrange")] = `5 feet`;
+	}
+
+	// set attack data
+	update[GetSectionIdName(repeatingSection, newrowid, "checkflag")] = "1";
+	update[GetSectionIdName(repeatingSection, newrowid, "atkflag")] = "1";
+	if (!isMelee || properties.indexOf("Finesse") >= 0) {
+		update[GetSectionIdName(repeatingSection, newrowid, "atkattr_base")] = "dexterity";
+	} else {
+		update[GetSectionIdName(repeatingSection, newrowid, "atkattr_base")] = "strength";
+	}
+	update[GetSectionIdName(repeatingSection, newrowid, "atkmod")] = attackData.itemEnhancement;
+
+	// set the best proficiency
+	let groupName = attackData.itemGroup.substring(0, 1).toUpperCase() + attackData.itemGroup.substring(1);
+	if (groupName != "") {
+		update[GetSectionIdName(repeatingSection, newrowid, "proficiency_group")] = groupName;
+	} else {
+		update[GetSectionIdName(repeatingSection, newrowid, "proficiency_group")] = "0";
+	}
+
+	// set damage data
+	update[GetSectionIdName(repeatingSection, newrowid, "dmgflag")] = "1";
+	update[GetSectionIdName(repeatingSection, newrowid, "dmgbase")] = attackData.itemDamage;
+	update[GetSectionIdName(repeatingSection, newrowid, "dmgattr")] = "strength";
+	update[GetSectionIdName(repeatingSection, newrowid, "dmgmod")] = attackData.itemEnhancement;
+	update[GetSectionIdName(repeatingSection, newrowid, "dmgtype")] = attackData.itemDamageType;
+	update[GetSectionIdName(repeatingSection, newrowid, "dmgelement")] = attackData.itemElement;
+
+	setAttrs(update, {
+		silent: true
+	}, function () {
+		update_actions(newrowid, true);
 	});
 }
 
@@ -13266,7 +13271,7 @@ var versioning = function () {
 		} else if (v["version"] === "1.0.1" || v["version"] === "1.0.2") {
 			console.log("UPGRADING TO v1.1.0");
 			upgrade_to_1_1_0(function () {
-				setAttrs({version: "1.1.0"});
+				setAttrs({version: "1.1.1"}); // the 1.1.1 fix is included in this update, so we skip it
 				versioning();
 			});
 		} else if (v["version"] === "1.0") {
