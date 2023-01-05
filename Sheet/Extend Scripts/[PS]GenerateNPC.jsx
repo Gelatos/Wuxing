@@ -236,6 +236,6 @@ function RandomizeEyeNeutralExpression(group) {
 
 
 // ====== Run Script
-#include "/Users/vincent/Dropbox/Campaigns/Wuxing/Wuxing-Character Sheet/Extend Scripts/[PS]Support.jsx";
+#include "/Users/vincent/Projects/Wuxing/Sheet/Extend Scripts/[PS]Support.jsx";
 CreateNpc();
 

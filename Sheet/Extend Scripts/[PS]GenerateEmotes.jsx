@@ -30,7 +30,7 @@ function GenerateEmotes() {
 
   // Create the emotes
   app.activeDocument.trim();
-  CreateEmotes(headGroup, dataLayers, documentName, imageIndex);
+  CreateEmotes(FindHeadGroup(headGroup), dataLayers, documentName, imageIndex);
   Revert();
 
   // make sure only the new image is visible so that it can be made into a token
@@ -56,28 +56,33 @@ function CreateDefaultArt(completeGroup, imageName) {
     return newCharacterEntryLayer;
 }
 
-function CreateEmotes(headGroup, dataLayers, documentName, imageIndex) {
-  
-  // determine the selected head
-  var selectHeadIndex = GetSelectedGroup(headGroup);
-  if (selectHead == -1) {
-    return;
+function FindHeadGroup(group) {
+
+  if (group.layerSets.length > 0 && group.layers[0].typename == "ArtLayer" && group.layers[0].name.toLowerCase() == "head") {
+    // we found the head 
+    return group;
   }
-  var selectHead = headGroup.layerSets[selectHeadIndex];
+  else {
+    return FindHeadGroup(group.layerSets[GetSelectedGroup(group)]);
+  }
+
+}
+
+function CreateEmotes(headGroup, dataLayers, documentName, imageIndex) {
 
   // get the groups for different body parts
   var browGroup, eyeGroup, mouthGroup;
-  for (var i = 0; i < selectHead.layerSets.length; i++) {
-    switch (selectHead.layerSets[i].toString().toLowerCase()) {
+  for (var i = 0; i < headGroup.layerSets.length; i++) {
+    switch (headGroup.layerSets[i].toString().toLowerCase()) {
       case "[layerset brow]": 
       case "[layerset brows]": 
-      browGroup = selectHead.layerSets[i]; break;
+      browGroup = headGroup.layerSets[i]; break;
       case "[layerset eye]": 
       case "[layerset eyes]": 
-      eyeGroup = selectHead.layerSets[i]; break;
+      eyeGroup = headGroup.layerSets[i]; break;
       case "[layerset mouth]": 
       case "[layerset mouths]": 
-      mouthGroup = selectHead.layerSets[i]; break;
+      mouthGroup = headGroup.layerSets[i]; break;
     }
   }
 
@@ -102,7 +107,7 @@ function CreateEmotes(headGroup, dataLayers, documentName, imageIndex) {
 
   // one discerning 
   emotesAdded = SelectRandomEmote(emotesAdded, groupData, documentName, imageIndex, "Concern",
-    ["Concern", "Think", "Ponder"]);
+    ["Concern", "Think", "Ponder", "Worry"]);
 
   // one iritable 
   emotesAdded = SelectRandomEmote(emotesAdded, groupData, documentName, imageIndex, "Irate",
@@ -110,13 +115,13 @@ function CreateEmotes(headGroup, dataLayers, documentName, imageIndex) {
 
   // one surprised 
   emotesAdded = SelectRandomEmote(emotesAdded, groupData, documentName, imageIndex, "Surprised",
-    ["Surprised", "Startled", "Thrown"]);
+    ["Surprised", "Startled"]);
 
   // two random from the full set
   emotesAdded = SelectRandomEmote(emotesAdded, groupData, documentName, imageIndex, "",
-    ["Happy", "Elated", "Sneer", "Think", "Concern", "Ponder", "Irate", "Bored", "Angry", "Annoyed", "Surprised", "Startled", "Thrown"]);
+    ["Happy", "Elated", "Sneer", "Think", "Concern", "Ponder", "Worry", "Irate", "Bored", "Angry", "Annoyed", "Surprised", "Startled"]);
   emotesAdded = SelectRandomEmote(emotesAdded, groupData, documentName, imageIndex, "",
-    ["Happy", "Elated", "Sneer", "Think", "Concern", "Ponder", "Irate", "Bored", "Angry", "Annoyed", "Surprised", "Startled", "Thrown"]);
+    ["Happy", "Elated", "Sneer", "Think", "Concern", "Ponder", "Worry", "Irate", "Bored", "Angry", "Annoyed", "Surprised", "Startled"]);
 }
 
 function CreateToken(newCharacterEntryLayer, headGroup, bodyGroup, documentName, imageIndex, dataLayers) {
@@ -196,19 +201,14 @@ function CheckEmoteAvailability(groupData, emote) {
       return SetEyesClosed(groupData.eye, groupData.eyeIndex) >= 0;
     break;
     case "Concern":
-      if (Math.random() * 2 == 0) {
-        SetEyesConcern(groupData.brow, groupData.browIndex);
-      }
-      else {
-        SetEyesNeutral(groupData.brow, groupData.browIndex);
-      }
-      if (Math.random() * 2 == 0) {
-        SetEyesConcern(groupData.eye, groupData.eyeIndex);
-      }
-      else {
-        SetEyesNeutral(groupData.eye, groupData.eyeIndex);
-      }
-      return SetMouthFrown(groupData.mouth, groupData.mouthIndex) >= 0;
+      SetEyesNeutral(groupData.brow, groupData.browIndex);
+      SetMouthFrown(groupData.mouth, groupData.mouthIndex) >= 0;
+      return SetEyesConcern(groupData.eye, groupData.eyeIndex);
+    break;
+    case "Worry":
+      SetEyesNeutral(groupData.eye, groupData.eyeIndex);
+      SetMouthFrown(groupData.mouth, groupData.mouthIndex) >= 0;
+      return SetEyesConcern(groupData.brow, groupData.browIndex); 
     break;
     case "Ponder":
       SetEyesNeutral(groupData.brow, groupData.browIndex);
@@ -257,13 +257,8 @@ function CheckEmoteAvailability(groupData, emote) {
     break;
     case "Startled":
       SetEyesNeutral(groupData.eye, groupData.eyeIndex);
-      return (SetEyesRaised(groupData.brow, groupData.browIndex) >= 0) 
-        && (SetMouthOpen(groupData.mouth, groupData.mouthIndex) >= 0);
-    break;
-    case "Thrown":
-      SetEyesAngry(groupData.eye, groupData.eyeIndex);
-      return (SetEyesAngry(groupData.brow, groupData.browIndex) >= 0) 
-        && (SetMouthOpen(groupData.mouth, groupData.mouthIndex) >= 0);
+      SetEyesRaised(groupData.brow, groupData.browIndex);
+      return SetMouthOpen(groupData.mouth, groupData.mouthIndex) >= 0;
     break;
   }
 
@@ -311,6 +306,6 @@ function Revert(){
 }
 
 // ====== Run Script
-#include "/Users/vincent/Dropbox/Campaigns/Wuxing/Wuxing-Character Sheet/Extend Scripts/[PS]Support.jsx";
+#include "/Users/vincent/Projects/Wuxing/Sheet/Extend Scripts/[PS]Support.jsx";
 GenerateEmotes();
 

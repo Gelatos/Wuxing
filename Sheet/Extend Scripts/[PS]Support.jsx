@@ -142,7 +142,7 @@ function SelectGroup(group, selectedIndex) {
 function SelectGroupByName(group, quality, randomize) {
 
   var selectedIndex = -1;
-  if (quality != "") {
+  if (quality != "" && group != undefined && group.layerSets.length > 0) {
     for (var i = 0; i < group.layerSets.length; i++) {
       if (group.layerSets[i].toString().toLowerCase() == quality) {
         selectedIndex = i;
@@ -155,7 +155,9 @@ function SelectGroupByName(group, quality, randomize) {
     selectedIndex = Math.floor(Math.random() * group.layerSets.length);
   }
 
-  SelectGroup(group, selectedIndex);
+  if (selectedIndex >= 0) {
+    SelectGroup(group, selectedIndex);
+  }
   return selectedIndex;
 }
 

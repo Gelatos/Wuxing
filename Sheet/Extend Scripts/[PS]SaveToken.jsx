@@ -29,6 +29,6 @@ function Revert(){
 }
 
 // ====== Run Script
-#include "/Users/vincent/Dropbox/Campaigns/Wuxing/Wuxing-Character Sheet/Extend Scripts/[PS]Support.jsx";
+#include "/Users/vincent/Projects/Wuxing/Sheet/Extend Scripts/[PS]Support.jsx";
 SaveToken();
 
