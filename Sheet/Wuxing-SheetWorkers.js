@@ -13260,7 +13260,7 @@ var versioning = function () {
 		} else if (v["version"] === "1.1.0") {
 			console.log("UPGRADING TO v1.1.1");
 			upgrade_to_1_1_1(function () {
-				setAttrs({version: "1.1.0"});
+				setAttrs({version: "1.1.1"});
 				versioning();
 			});
 		} else if (v["version"] === "1.0.1" || v["version"] === "1.0.2") {
