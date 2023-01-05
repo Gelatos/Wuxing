@@ -1,43 +1,120 @@
+// ======= Emote Object
+// =================================================
+
+function GetChatData() {
+    return {
+        target: undefined,
+        message: "",
+        chatType: "",
+        sender: "",
+
+        setChatDataFromMsg: function (msg) {
+            let sendingPlayer = getObj('player', msg.playerid);
+            this.sender = sendingPlayer.get("_displayname").split(" ")[0];
+        
+            // grab the selected character
+            let targets = GetMessageTargetData(msg);
+            if (targets.length > 0) {
+                this.target = targets[0];
+            }
+            else {
+                this.target = GetActorTargetData(msg.who.split(" ")[0])[0];
+            }
+
+        },
+
+        setChatMessageFromMsgContent: function(msgContent) {
+            this.chatType = "m";
+    
+            if (msgContent.indexOf("!m ") == 0) {
+                this.chatType = "m";
+                this.message = msgContent.replace("!m ", "");
+            }
+            else if (msgContent.indexOf("!w ") == 0) {
+                this.chatType = "w";
+                this.message = msgContent.replace("!w ", "");
+            }
+            else if (msgContent.indexOf("!y ") == 0) {
+                this.chatType = "y";
+                this.message = msgContent.replace("!y ", "");
+            }
+            else if (msgContent.indexOf("!t ") == 0) {
+                this.chatType = "t";
+                this.message = msgContent.replace("!t ", "");
+            }
+            else if (msgContent.indexOf("!d ") == 0) {
+                this.chatType = "d";
+                this.message = msgContent.replace("!d ", "");
+            }
+            else if (msgContent.indexOf("!de ") == 0) {
+                this.chatType = "de";
+                this.message = msgContent.replace("!de ", "");
+            }
+            this.message = ReplaceSpecialCharactersHTML(this.message);
+        },
+
+        sendEmoteOption: function() {
+
+            if (this.target == undefined) {
+                sendChat("Emote Manager", `/w ${this.sender} There was an error. Could not find character.`, null, {noarchive:true});
+                return;
+            }
+
+            if (this.target.charId == "") {
+                sendChat("Emote Manager", `/w ${this.sender} There was an error. You do not have a character selected.`, null, {noarchive:true});
+                return;
+            }
+
+            // get emote list 
+            let emoteData = GetOutfitEmoteData(this.target);
+            if (!emoteData.isSet) {
+                sendChat("Emote Manager", `/w ${this.sender} There was an error. ${emoteData.error}`, 
+                    null, {noarchive:true}
+                );
+                return;
+            }
+            
+            // get effects
+            let element = SetSpiritRealmEffect(this.target);
+            let languageButtons = GetLanguageButtons(this.target, this.chatType, this.message);
+    
+            // create the emote buttons
+            let emoteButtons = "";
+            emoteData.emotes.sort();
+            for (var i = 0; i < emoteData.emotes.length; i++)
+            {
+                var emoteSplit = emoteData.emotes[i].split("@");
+                emoteButtons += "[" + emoteSplit[0] + "]";
+                emoteButtons += "(!&#13;";
+                emoteButtons += GetEmoteMessage(this.target, this.chatType, this.message, emoteSplit[1], false, element) + " )";
+                emoteButtons += " ";
+            }
+            emoteButtons = ReplaceBraces(emoteButtons);
+            
+            // write the final message
+            let sendMessage = `/w ${this.sender} ${GetEmoteMessage(this.target, this.chatType, this.message, emoteData.activeURL, true, element)} {{sub=<div style='font-weight: bold'>Emotes</div>${emoteButtons}`;
+            if (languageButtons != "")
+            {
+                sendMessage += "<br /><div style='font-weight: bold'>Languages</div>";
+                sendMessage += languageButtons;
+            }
+            sendMessage += "}}";
+            sendChat("Emote Manager", sendMessage, null, {noarchive:true});
+        }
+    };
+}
+
 // ======= Command Functions
 // =================================================
 
 function CommandGetEmoteMessageOptions(msg) {
-
-    // grab message data
-    var sendingPlayer = getObj('player', msg.playerid);
-    var sendingPlayerName = sendingPlayer.get("_displayname").split(" ")[0];
-    var msgwho = msg.who.split(" ")[0];
-
-    let token = "";
-    let tokenId = "";
-    if (msg.selected != undefined && msg.selected != "") {
-        let obj = msg.selected[0];
-        tokenId = obj._id;
-
-        token = getObj('graphic', tokenId);
-        if (!token) {
-            token = "";
-        }
-    }
-
-    // grab the selected character
-    var tokenInfo = GetEmoteTokenModifications(msg, token);
-    var targets = GetMessageTargetData(msg);
-    var target;
-    if (targets.length > 0) {
-        target = targets[0];
-    }
-    else {
-        var character = GetSelectedCharacter(msg, sendingPlayerName, msgwho);
-        if (character != null) {
-            target = FormTargetData(character.id, character.get("name"), tokenId, (tokenInfo.name != "" ? tokenInfo.name : character.get("name")));
-        }
-    }
-
-    if (target != undefined) {
-        ParseEmoteCommand(msg.content, sendingPlayerName, target);
-    }
     
+    // grab message data
+    let chatData = GetChatData();
+    chatData.setChatDataFromMsg(msg);
+
+    chatData.setChatMessageFromMsgContent(msg.content);
+    chatData.sendEmoteOption();
 }
 
 function CommandSendFormattedMessage(msg) {
@@ -66,45 +143,15 @@ function CommandSetOutfit(msg) {
 }
 
 function CommandSetLanguage(msg) {
-    
-    var messageParts = msg.content.replace("!setlang ", "").split("@@@");
 
     // grab message data
-    var sendingPlayer = getObj('player', msg.playerid);
-    var sendingPlayerName = sendingPlayer.get("_displayname").split(" ")[0];
-    var msgwho = msg.who.split(" ")[0];
+    let messageParts = msg.content.replace("!setlang ", "").split("@@@");
+    let chatData = GetChatData();
+    chatData.setChatDataFromMsg(msg);
 
-    let token = "";
-    let tokenId = "";
-    if (msg.selected != undefined && msg.selected != "") {
-        let obj = msg.selected[0];
-        tokenId = obj._id;
-
-        token = getObj('graphic', tokenId);
-        if (!token) {
-            token = "";
-        }
-    }
-
-    // grab the selected character
-    var tokenInfo = GetEmoteTokenModifications(msg, token);
-    var targets = GetMessageTargetData(msg);
-    var target;
-    if (targets.length > 0) {
-        target = targets[0];
-    }
-    else {
-        var character = GetSelectedCharacter(msg, sendingPlayerName, msgwho);
-        if (character != null) {
-            target = FormTargetData(character.id, character.get("name"), tokenId, (tokenInfo.name != "" ? tokenInfo.name : character.get("name")));
-        }
-    }
-
-    if (target != undefined) {
-        SetLanguage(sendingPlayerName, target, messageParts[0]);
-        tokenInfo.language = messageParts[0];
-        ParseEmoteCommand(messageParts[1], sendingPlayerName, target);
-    }
+    SetLanguage(chatData.target, messageParts[0]);
+    chatData.setChatMessageFromMsgContent(messageParts[1]);
+    chatData.sendEmoteOption();
 }
 
 // ======= Replace Functions
@@ -142,34 +189,6 @@ function RestoreSpecialCharactersHTML(str) {
 
 // ======= Get Emote Data Functions
 // =================================================
-
-function GetEmoteTokenModifications (msg, token) {
-    
-    var returnVal = {
-        name: "",
-        outfit: "",
-        language: ""
-    };
-    if (token != "") {
-        returnVal.name = token.get('name');
-        
-        var options = token.get('gmnotes');
-        if (options.indexOf ("%21") == 0)
-        {
-            options = options.substr(3).split("%2C");
-            returnVal.outfit = options[0];
-            returnVal.language = options[1];
-        }
-        else if (options.indexOf ("!") == 0)
-        {
-            options = options.substr(1).split(",");
-            returnVal.outfit = options[0];
-            returnVal.language = options[1];
-        }
-    }
-    
-    return returnVal;
-}
 
 function GetEmoteURL(charId, emote) {
     
@@ -232,23 +251,16 @@ function SetOutfit(sendingPlayerName, character, modifier) {
 
 }
 
-function SetLanguage(sendingPlayerName, target, modifier) {
-    
-    // begin message
-    var sceneMessage = "/w " + sendingPlayerName;
+function SetLanguage(target, language) {
     
     // get the language name
-    let language = modifier;
     if (language == "" || language == undefined) {
         language = "None";
     }
     language = GetLanguageName(language);
 
-    var languageObj = GetCharacterAttribute(target.charId, "speaking_language");
+    let languageObj = GetCharacterAttribute(target.charId, "speaking_language");
     languageObj.set("current", language);
-
-    var sceneMessage = " Setting " + target.charName + "'s language to " + language;
-    sendChat("Emote Manager", "/w " + sendingPlayerName + sceneMessage, null, {noarchive:true});
 }
 
 // ======= Send Functions
@@ -283,9 +295,6 @@ function ParseEmoteCommand(message, sendingPlayerName, target) {
         message = message.replace("!de ", "");
     }
     message = ReplaceSpecialCharactersHTML(message);
-
-    // send a message
-    SendEmoteOption(sendingPlayerName, target, chatType, message);
 }
 
 function ParseFormattedCommand(msg, message, sendingPlayerName) {
@@ -323,50 +332,6 @@ function ParseFormattedCommand(msg, message, sendingPlayerName) {
 
     SendFormattedMessage(sendingPlayerName, chatType, message, false);
     
-}
-
-function SendEmoteOption(sendingPlayerName, target, chatType, message) {
-    
-    if(target != undefined) {
-        // get emote list 
-        var emoteData = GetOutfitEmoteData(target);
-        if (!emoteData.isSet) {
-            sendChat("Emote Manager", `/w ${sendingPlayerName} There was an error. ${emoteData.error}`, 
-                null, {noarchive:true}
-            );
-            return;
-        }
-        
-        // get effects
-        let element = SetSpiritRealmEffect(target);
-        let languageButtons = GetLanguageButtons(target, chatType, message);
-
-        // create the emote buttons
-        let emoteButtons = "";
-        emoteData.emotes.sort();
-        for (var i = 0; i < emoteData.emotes.length; i++)
-        {
-            var emoteSplit = emoteData.emotes[i].split("@");
-            emoteButtons += "[" + emoteSplit[0] + "]";
-            emoteButtons += "(!&#13;";
-            emoteButtons += GetEmoteMessage(target, chatType, message, emoteSplit[1], false, element) + " )";
-            emoteButtons += " ";
-        }
-        emoteButtons = ReplaceBraces(emoteButtons);
-        
-        // write the final message
-        let sendMessage = `/w ${sendingPlayerName} ${GetEmoteMessage(target, chatType, message, emoteData.activeURL, true, element)} {{sub=<div style='font-weight: bold'>Emotes</div>${emoteButtons}`;
-        if (languageButtons != "")
-        {
-            sendMessage += "<br /><div style='font-weight: bold'>Languages</div>";
-            sendMessage += languageButtons;
-        }
-        sendMessage += "}}";
-        sendChat("Emote Manager", sendMessage, null, {noarchive:true});
-    }
-    else {
-        sendChat("Emote Manager", "/w " + sendingPlayerName + " There was an error. Could not find character.", null, {noarchive:true});
-    }
 }
 
 function GetOutfitEmoteData(target) {
