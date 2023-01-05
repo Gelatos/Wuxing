@@ -4440,7 +4440,7 @@ var update_save = function (attr) {
 	getAttrs(save_attrs, function (v) {
 
 		var prof = GetProfRankBonus(v[attr + "_save_prof"], false, v["pb"]);
-		prof += GetProfRankBonus(v[attr + "_save_prof"], true, v["pb"]);
+		// prof += GetProfRankBonus(v[attr + "_save_prof"], true, v["pb"]);
 		prof += isNaN(parseInt(v[attr + "_save_prof"])) ? 0 : parseInt(v[attr + "_save_prof"]);
 		prof += isNaN(parseInt(v[attr + "_save_mod"])) ? 0 : parseInt(v[attr + "_save_mod"]);
 		var total = prof + (isNaN(parseInt(v[attr + "_mod"])) ? 0 : parseInt(v[attr + "_mod"]));
@@ -13205,6 +13205,12 @@ function GetKiCapacityBonuses(pointObj, spellcasting_ability) {
 
 
 // Sheet Upgrades
+var upgrade_to_1_1_1 = function (doneupdating) {
+	update_pb();
+	finish_update_pb();
+	doneupdating();
+};
+
 var upgrade_to_1_1_0 = function (doneupdating) {
 
 	let skill_attrs = ["characterAncestry-skill", "background", "class"];
@@ -13249,8 +13255,14 @@ var versioning = function () {
 	getAttrs(["version"], function (v) {
 		console.log("Checking version " + v["version"]);
 
-		if (v["version"] === "1.1.0") {
+		if (v["version"] === "1.1.1") {
 			console.log("Wuxing Sheet modified from 5th Edition OGL by Roll20 v" + v["version"]);
+		} else if (v["version"] === "1.1.0") {
+			console.log("UPGRADING TO v1.1.1");
+			upgrade_to_1_1_1(function () {
+				setAttrs({version: "1.1.0"});
+				versioning();
+			});
 		} else if (v["version"] === "1.0.1" || v["version"] === "1.0.2") {
 			console.log("UPGRADING TO v1.1.0");
 			upgrade_to_1_1_0(function () {

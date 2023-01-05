@@ -1609,9 +1609,9 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 }
 
 .wuxInfoSection input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoData,
-.wuxInfoSection .wuxInfoSubField input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoSubdata
+input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoSubdata
 {
-    background-color: #ba1717;
+    background: #ba1717;
 }
 
 /*========================================
