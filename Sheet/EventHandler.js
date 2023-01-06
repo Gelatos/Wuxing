@@ -72,14 +72,15 @@ on("chat:message", function(msg) {
             var options = msg.content.replace("!help", "").trim().toLowerCase();
             CommandHelpCommands(msg, options);
         }
-        else if (msg.content.indexOf("!rollstats ") !== -1) {
+        else if (msg.content.indexOf("!deathsave ") !== -1) {
             
-            var content = msg.content.replace("!rollstats ", "");
-            CommandRollStats(content);
+            var content = msg.content.replace("!deathsave ", "");
+            CommandDeathSave(content);
         }
-        else if (msg.content.indexOf("!rollstats") !== -1) {
+        else if (msg.content.indexOf("!deathfailure ") !== -1) {
             
-            CommandRollStats("");
+            var content = msg.content.replace("!deathfailure ", "");
+            CommandDeathFailure(content);
         }
         else if (msg.content.indexOf("!roll20AM ") !== -1) {
 
@@ -842,15 +843,15 @@ function SanitizeSheetRollAction(roll) {
 
 function CreateRepeatingRowAttribute(repeatingSection, id, name, value, charId) {
 
-    createObj("attribute", {"name": GetSectionIdName(repeatingSection, id, name), "current": value, "_characterid": charId});
+    return createObj("attribute", {"name": GetSectionIdName(repeatingSection, id, name), "current": value, "_characterid": charId});
 }
 
 function CreateNormalAttribute(name, value, charId, max) {
+    log (`Creating Attribute ${name} with value ${value}`);
 
     if (max != undefined) {
-        createObj("attribute", {"name": name, "current": value, "max": max, "_characterid": charId});
+        return createObj("attribute", {"name": name, "current": value, "max": max, "_characterid": charId});
     }
-    else {
-        createObj("attribute", {"name": name, "current": value, "_characterid": charId});
-    }
+
+    return createObj("attribute", {"name": name, "current": value, "_characterid": charId});
 }

@@ -162,8 +162,7 @@ function PerformRaisedShieldOutput(msg, charId) {
     // determine if the character already has the shield raised
     let raisedShieldObj = GetCharacterAttribute(charId, "gearEquippedShieldRaised");
     if (raisedShieldObj == undefined) {
-        CreateNormalAttribute("gearEquippedShieldRaised", "0", charId);
-        raisedShieldObj = GetCharacterAttribute(charId, "gearEquippedShieldRaised");
+        raisedShieldObj = CreateNormalAttribute("gearEquippedShieldRaised", "0", charId);
     }
 
     if (raisedShieldObj != undefined && raisedShieldObj.get("current") != "1") {
@@ -598,16 +597,23 @@ function GetActionData() {
 
 function GetActionTargetData() {
     return {
+        displayName: "",
+        charName: "",
+        charId: "",
+        tokenId: "",
         isSet: false,
         isToken: false,
         isTarget: false,
-        displayName: "",
-        charId: "",
-        tokenId: "",
         hasBarrier: "1",
         element: "",
-        token: {},
+        token: undefined,
 
+        getToken: function() {
+            if (this.token == undefined) {
+                this.token = getObj('graphic', this.tokenId);
+            }
+            return this.token;
+        },
         createFromNothing: function () {
             this.isSet = true;
         },
@@ -616,9 +622,10 @@ function GetActionTargetData() {
             this.isTarget = true;
             this.charId = charId;
             this.tokenId = "";
+            this.charName = getAttrByName(charId, "character_name");
             this.displayName = getAttrByName(charId, "nickname");
             if (this.displayName == undefined || this.displayName == "") {
-                this.displayName = getAttrByName(charId, "character_name");
+                this.displayName = this.charName;
             }
             this.element = getAttrByName(charId, "prime_element");
 
@@ -805,6 +812,14 @@ function GetActionHealData() {
         healingMods: "",
 
         injuryId: "",
+        token: undefined,
+
+        getToken: function() {
+            if (this.token == undefined) {
+                this.token = getObj('graphic', this.tokenId);
+            }
+            return this.token;
+        },
 
         toString: function () {
             // return `${"Mods - Boof (df) "}`;
@@ -1218,22 +1233,22 @@ function CommandHandleActionResults(content) {
     let actionResults = GetActionResultsData();
     actionResults.setActionData(content);
 
-    let targetData = GetActionTargetData();
+    let actionTargetData = GetActionTargetData();
     if (actionResults.targetTokenId == "") {
         // this is a self target
-        targetData.createFromCharId(actionResults.targetCharId);
+        actionTargetData.createFromCharId(actionResults.targetCharId);
     } else {
-        targetData.createFromToken(actionResults.targetTokenId);
+        actionTargetData.createFromToken(actionResults.targetTokenId);
     }
 
     if (actionResults.damage1TypeQualities.isHealing) {
-        HandleHealingResult(actionResults, targetData);
+        HandleHealingResult(actionResults, actionTargetData);
     } else {
-        HandleActionResults(actionResults, targetData);
+        HandleActionResults(actionResults, actionTargetData);
     }
 }
 
-function HandleActionResults(actionResults, targetData) {
+function HandleActionResults(actionResults, actionTargetData) {
 
     // begin the output
     let output = `&{template:results} {{rname=${actionResults.rname}}}`;
@@ -1277,7 +1292,7 @@ function HandleActionResults(actionResults, targetData) {
     // create the damage data
     if (actionResults.hasDamage == "1") {
         let damageResults = GetActionResultsDamageData();
-        damageResults.createFromTargetData(targetData);
+        damageResults.createFromTargetData(actionTargetData);
         damageResults = HandleActionResultDamage(damageResults, actionResults, actionResults.damage1, actionResults.damage1TypeQualities);
         if (actionResults.hasDamage2 == "1") {
             damageResults = HandleActionResultDamage(damageResults, actionResults, actionResults.damage2, actionResults.damage2TypeQualities);
@@ -1330,13 +1345,16 @@ function HandleActionResults(actionResults, targetData) {
 
             if (damageResults.hp < 0) {
                 isDying = true;
-                damageString += "\n" + actionResults.target + " is downed and dying";
+                if (SetTargetDying(actionTargetData)) {
+                    damageString += "\n" + actionResults.target + " is downed and dying";
+                }
             }
 
             // set the hp
             if (damageResults.isToken) {
                 damageResults.token.set("bar1_value", damageResults.hp);
-            } else if (damageResults.hpObj != undefined) {
+            } 
+            else if (damageResults.hpObj != undefined) {
                 damageResults.hpObj.set("current", damageResults.hp);
             }
 
@@ -1441,7 +1459,7 @@ function HandleActionResults(actionResults, targetData) {
 
         // add the effect to the token
         let sourceData = FormTargetData(actionResults.executorId, actionResults.executor, "", actionResults.executor);
-        let printoutData = AddTokenCondition(targetData.token, coreEffect, actionResults.rname, sourceData, actionResults.attack1, effectPower);
+        let printoutData = AddTokenCondition(actionTargetData.token, coreEffect, actionResults.rname, sourceData, actionResults.attack1, effectPower);
 
         log ("setting core effect:" + ` {{condition=Adding Condition}} {{conditionResult=${printoutData.title}}} {{cond-${printoutData.img}=1}} {{conditionDetails=${printoutData.desc}}}`);
         output += ` {{condition=Adding Condition}} {{conditionResult=${printoutData.title}}} {{cond-${printoutData.img.toLowerCase()}=1}} {{conditionDetails=${printoutData.desc}}}`;
@@ -1630,6 +1648,10 @@ function CommandTargetHealInjury(content) {
     let healingString = healingResults.target + " healed " + healingResults.healing + " hp";
     healingString += "\n" + TargetHealInjury(healingResults);
 
+    // set target as not dying
+    let targetData = FormTargetData(healingResults.targetCharId, healingResults.target, healingResults.targetTokenId, healingResults.target);
+    SetTargetNotDying(targetData);
+
     // begin the output
     let output = `&{template:results} {{rname=${healingResults.rname}}}`;
     output += GetActionResultImage(healingResults, false);
@@ -1805,11 +1827,12 @@ function TargetHealInjury(healingResults) {
 
     // set the new hp value
     let injuryHp = injury.hpObj.get("current");
+    let hpHealed = healingResults.healing;
     injuryHp = isNaN(parseInt(injuryHp)) ? 0 : parseInt(injuryHp);
-    injuryHp -= healingResults.healing;
-    if (injuryHp <= 0) {
-        injuryHp = 0;
+    if (injuryHp - hpHealed < 0) {
+        hpHealed = injuryHp;
     }
+    injuryHp -= hpHealed;
     injury.hpObj.set("current", injuryHp);
     output += `The ${injury.nameObj.get("current")} injury's damage has reduced to ${injuryHp}`;
 
@@ -1827,6 +1850,18 @@ function TargetHealInjury(healingResults) {
         TargetAddInjury(newInjuryData, false);
         injury.deleteInjury();
         output += `\nThe ${injury.nameObj.get("current")} injury is in recovery`;
+    }
+
+    // set the hp
+    let hpObj = GetCharacterAttribute(healingResults.targetCharId, "hp");
+    if (hpObj != undefined) {
+        let hp = isNaN(parseInt(hpObj.get("current"))) ? 0 : parseInt(hpObj.get("current"));
+        let hpMax = isNaN(parseInt(hpObj.get("max"))) ? 0 : parseInt(hpObj.get("max"));
+        hp += hpHealed;
+        if (hp > hpMax) {
+            hp = hpMax;
+        }
+        hpObj.set("current", hp);
     }
 
     return output;
@@ -1892,6 +1927,83 @@ function TargetAddInjury(injuryData, showReport) {
     }
 }
 
+// this function assumes the target has already been checked to see if it has less than one HP
+function SetTargetDying(targetData) {
+
+    // determine if the target is already in the dying state
+    let successesObj;
+
+    // determine if the token is already tinted
+    if (targetData.getToken().get("tint_color") == "#FF0000") {
+
+        // this creature is already set to downed. if they are not a minion, make sure their death track successes aren't full
+        let difficultyStyle = getAttrByName(targetData.charId, "difficultyStyle");
+        if (difficultyStyle == undefined || difficultyStyle != "3") {
+
+            successesObj = GetCharacterAttribute(targetData.charId, "deathSaveSuccess");
+            if (successesObj == undefined) {
+                successesObj = CreateNormalAttribute("deathSaveSuccess", "0", targetData.charId);
+            }
+            if (parseInt(successesObj.get("current")) < 3) {
+                // creature is not stabilized and is therefore already dying
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+
+    if (successesObj == undefined) {
+        ssuccessesObj = GetCharacterAttribute(targetData.charId, "deathSaveSuccess");
+        if (successesObj == undefined) {
+            successesObj = CreateNormalAttribute("deathSaveSuccess", "0", targetData.charId);
+        }
+    }
+
+    let failureObj = GetCharacterAttribute(targetData.charId, "deathSaveFailure");
+    if (failureObj == undefined) {
+        failureObj = CreateNormalAttribute("deathSaveFailure", "0", targetData.charId);
+    }
+
+    // set the creature to dying
+    successesObj.set("current", 0);
+    failureObj.set("current", 0);
+    targetData.getToken().set("tint_color", "#FF0000");
+    tokenStatusMarkers = targetData.getToken().get("statusmarkers");
+    tokenStatusMarkers += GetTokenStatusMarkerName("Prone");
+    targetData.getToken().set("statusmarkers", tokenStatusMarkers);
+    
+    return true;
+}
+
+function SetTargetNotDying(targetData) {
+
+    if (targetData.getToken() != undefined) {
+        // check if the creature is not downed
+        let hp = getAttrByName(targetData.charId, "hp");
+        if (parseInt(hp) > 0 && targetData.getToken().get("tint_color") == "#FF0000") {
+            targetData.getToken().set("tint_color", "transparent");
+        }
+    }
+        
+    // make sure the creature's successes are set to full
+    let difficultyStyle = getAttrByName(targetData.charId, "difficultyStyle");
+    if (difficultyStyle == undefined || difficultyStyle != "3") {
+
+        let successesObj = GetCharacterAttribute(targetData.charId, "deathSaveSuccess");
+        if (successesObj == undefined) {
+            successesObj = CreateNormalAttribute("deathSaveSuccess", "0", targetData.charId);
+        }
+        successesObj.set("current", "3");
+
+        let failureObj = GetCharacterAttribute(targetData.charId, "deathSaveFailure");
+        if (failureObj == undefined) {
+            failureObj = CreateNormalAttribute("deathSaveFailure", "0", targetData.charId);
+        }
+        failureObj.set("current", "0");
+    }
+}
 
 // ======= Crafting 
 

@@ -5731,7 +5731,6 @@ var update_item_id_list = function (repeatingSection, listId) {
 
 var getAttackData = function() {
 	return {
-		prof: {},
 		itemname: "",
 		itemCategory: "",
 		itemGroup: "",
@@ -5769,7 +5768,7 @@ var make_attack_from_weapon = function(itemId) {
 }
 
 var make_unarmed_strike = function() {
-	
+
 	let attackData = getAttackData();
 	attackData.itemname = "Unarmed Strike";
 	attackData.itemCategory = "Simple";

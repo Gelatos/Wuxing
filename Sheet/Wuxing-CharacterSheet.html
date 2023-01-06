@@ -62764,11 +62764,65 @@
 				<div class="wuxSectionHeader">Basic Actions</div>
 				<div class="wuxSectionContent">
 					<div class="wuxFieldSet">
+						<input type="checkbox" class="wuxCollapseField-flag" name="attr_featureDisplay-actionaid">
+						<div class="wuxMultiRow">
+							<div class="wuxFormEntry">
+								<span class="wuxFormHeaderLeadIcon">J</span>
+								<input type="hidden" class="" name="attr_actionroll-aid" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Aid}} {{actionR=1}}{{conditionals=1}} {{trigger=An ally is about to use an action that requires a skill check or attack roll.}} {{req=The ally is willing to accept your aid, and you have prepared to help (see below).}}{{results=1}} {{critsuccess=You grant your ally a +2 bonus to the triggering check. If you’re a master with the check you attempted, the bonus is +3, and if you’re legendary, it’s +4.}} {{success=You grant your ally a +1 bonus to the triggering check.}} {{critfailure=Your ally takes a –1 penalty to the triggering check.}} {{description=You try to help your ally with a task. To use this reaction, you must first prepare to help, usually by using an action during your turn. You must explain to the GM exactly how you’re trying to help, and they determine whether you can Aid your ally.
+				
+				When you use your Aid reaction, attempt a skill check or attack roll of a type decided by the GM. The typical DC is 20, but the GM might adjust this DC for particularly hard or easy tasks. The GM can add any relevant traits to your preparatory action or to your Aid reaction depending on the situation, or even allow you to Aid checks other than skill checks and attack rolls.}}">
+								<button type="roll" name="roll_action-aid" value="@{whispertoggle}&{template:@{actionroll-aid}">
+									<span name="">Aid <img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
+								</button>
+							</div>
+						</div>
+						<div class="wuxCollapseField">
+							<div class="wuxMultiRow">
+								<div class="wuxFormSubsection">
+									<span class="wuxDescription"><strong>Trigger: </strong> An ally is about to use an action that requires a skill check or attack roll.</span>
+									<span class="wuxDescription"><strong>Requirements: </strong> The ally is willing to accept your aid, and you have prepared to help (see below).</span>
+									<span class="wuxDescription">You try to help your ally with a task. To use this reaction, you must first prepare to help, usually by using an action during your turn. You must explain to the GM exactly how you’re trying to help, and they determine whether you can Aid your ally.
+
+										When you use your Aid reaction, attempt a skill check or attack roll of a type decided by the GM. The typical DC is 20, but the GM might adjust this DC for particularly hard or easy tasks. The GM can add any relevant traits to your preparatory action or to your Aid reaction depending on the situation, or even allow you to Aid checks other than skill checks and attack rolls.</span>
+									<span class="wuxDescription"><strong>Crit Success: </strong> You grant your ally a +2 bonus to the triggering check. If you’re a master with the check you attempted, the bonus is +3, and if you’re legendary, it’s +4.</span>
+									<span class="wuxDescription"><strong>Success: </strong> You grant your ally a +1 bonus to the triggering check.</span>
+									<span class="wuxDescription"><strong>Crit Failure: </strong> Your ally takes a –1 penalty to the triggering check.</span>
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="wuxFieldSet">
+						<input type="checkbox" class="wuxCollapseField-flag" name="attr_featureDisplay-actiondelay">
+						<div class="wuxMultiRow">
+							<div class="wuxFormEntry">
+								<span class="wuxFormHeaderLeadIcon">J</span>
+								<input type="hidden" class="" name="attr_actionroll-delay" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Delay}} {{action0=1}}{{conditionals=1}} {{trigger=Your turn begins.}} {{description=You wait for the right moment to act. The rest of your turn doesn’t happen yet. Instead, you’re removed from the initiative order. You can return to the initiative order as a free action triggered by the end of any other creature’s turn. This permanently changes your initiative to the new position. You can’t use reactions until you return to the initiative order. If you Delay an entire round without returning to the initiative order, the actions from the Delayed turn are lost, your initiative doesn’t change, and your next turn occurs at your original position in the initiative order.
+				
+				When you Delay, any persistent damage or other negative effects that normally occur at the start or end of your turn occur immediately when you use the Delay action. Any beneficial effects that would end at any point during your turn also end. The GM might determine that other effects end when you Delay as well. Essentially, you can’t Delay to avoid negative consequences that would happen on your turn or to extend beneficial effects that would end on your turn.}}">
+								<button type="roll" name="roll_action-delay" value="@{whispertoggle}&{template:@{actionroll-delay}">
+									<span name="">Delay <img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/EirCfmI.png" /></span>
+								</button>
+							</div>
+						</div>
+						<div class="wuxCollapseField">
+							<div class="wuxMultiRow">
+								<div class="wuxFormSubsection">
+									<span class="wuxDescription"><strong>Trigger: </strong> Your turn begins.</span>
+									<span class="wuxDescription">You wait for the right moment to act. The rest of your turn doesn’t happen yet. Instead, you’re removed from the initiative order. You can return to the initiative order as a free action triggered by the end of any other creature’s turn. This permanently changes your initiative to the new position. You can’t use reactions until you return to the initiative order. If you Delay an entire round without returning to the initiative order, the actions from the Delayed turn are lost, your initiative doesn’t change, and your next turn occurs at your original position in the initiative order.
+
+										When you Delay, any persistent damage or other negative effects that normally occur at the start or end of your turn occur immediately when you use the Delay action. Any beneficial effects that would end at any point during your turn also end. The GM might determine that other effects end when you Delay as well. Essentially, you can’t Delay to avoid negative consequences that would happen on your turn or to extend beneficial effects that would end on your turn.</span>
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="wuxFieldSet">
 						<input type="checkbox" class="wuxCollapseField-flag" name="attr_featureDisplay-actioninteract">
 						<div class="wuxMultiRow">
 							<div class="wuxFormEntry">
 								<span class="wuxFormHeaderLeadIcon">J</span>
-								<input type="hidden" class="" name="attr_actionroll-interact" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Interact Check}} {{action0=1}} {{trait0=Manipulate}} {{trait0Desc=You must physically manipulate an item or make gestures to use an action with this trait. Creatures without a suitable appendage can’t perform actions with this trait. Manipulate actions often trigger reactions.}} {{description=You use your hand or hands to manipulate an object or the terrain. You can grab an unattended or stored object, open a door, or produce some similar effect. You might have to attempt a skill check to determine if your Interact action was successful.}}">
+								<input type="hidden" class="" name="attr_actionroll-interact" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Interact}} {{action0=1}} {{trait0=Manipulate}} {{trait0Desc=You must physically manipulate an item or make gestures to use an action with this trait. Creatures without a suitable appendage can’t perform actions with this trait. Manipulate actions often trigger reactions.}} {{description=You use your hand or hands to manipulate an object or the terrain. You can grab an unattended or stored object, open a door, or produce some similar effect. You might have to attempt a skill check to determine if your Interact action was successful.}}">
 								<button type="roll" name="roll_action-interact" value="@{whispertoggle}&{template:@{actionroll-interact}">
 									<span name="">Interact <img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/EirCfmI.png" /></span>
 								</button>
@@ -62791,13 +62845,34 @@
 						</div>
 					</div>
 					<div class="wuxFieldSet">
+						<input type="checkbox" class="wuxCollapseField-flag" name="attr_featureDisplay-actionopportunityattack">
+						<div class="wuxMultiRow">
+							<div class="wuxFormEntry">
+								<span class="wuxFormHeaderLeadIcon">J</span>
+								<input type="hidden" class="" name="attr_actionroll-opportunityattack" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Opportunity Attack}} {{actionR=1}}{{conditionals=1}} {{trigger=A creature within your reach uses a manipulate action or a move action, makes a ranged attack, or leaves a square during a move action it’s using.}} {{description=You lash out at a foe that leaves an opening. Make a melee Strike against the triggering creature. If your attack is a critical hit and the trigger was a manipulate action, you disrupt that action. This Strike doesn’t count toward your multiple attack penalty, and your multiple attack penalty doesn’t apply to this Strike.}}">
+								<button type="roll" name="roll_action-opportunityattack" value="@{whispertoggle}&{template:@{actionroll-opportunityattack}">
+									<span name="">Opportunity Attack <img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
+								</button>
+							</div>
+						</div>
+						<div class="wuxCollapseField">
+							<div class="wuxMultiRow">
+								<div class="wuxFormSubsection">
+									<span class="wuxDescription"><strong>Trigger: </strong> A creature within your reach uses a manipulate action or a move action, makes a ranged attack, or leaves a square during a move action it’s using.</span>
+									<span class="wuxDescription">You lash out at a foe that leaves an opening. Make a melee Strike against the triggering creature. If your attack is a critical hit and the trigger was a manipulate action, you disrupt that action. This Strike doesn’t count toward your multiple attack penalty, and your multiple attack penalty doesn’t apply to this Strike.</span>
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="wuxFieldSet">
 						<input type="checkbox" class="wuxCollapseField-flag" name="attr_featureDisplay-actionready">
 						<div class="wuxMultiRow">
 							<div class="wuxFormEntry">
 								<span class="wuxFormHeaderLeadIcon">J</span>
-								<input type="hidden" class="" name="attr_actionroll-ready" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Ready Check}} {{action2=1}} {{trait0=Concentrate}} {{trait0Desc=An action with this trait requires a degree of mental concentration and discipline.}} {{description=You prepare to use an action that will occur outside your turn. Choose a single action or free action you can use, and designate a trigger. Your turn then ends. If the trigger you designated occurs before the start of your next turn, you can use the chosen action as a reaction (provided you still meet the requirements to use it). You can’t Ready a free action that already has a trigger.
-
-If you have a multiple attack penalty and your readied action is an attack action, your readied attack takes the multiple attack penalty you had at the time you used Ready. This is one of the few times the multiple attack penalty applies when it’s not your turn.}}">
+								<input type="hidden" class="" name="attr_actionroll-ready" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Ready}} {{action2=1}} {{trait0=Concentrate}} {{trait0Desc=An action with this trait requires a degree of mental concentration and discipline.}} {{description=You prepare to use an action that will occur outside your turn. Choose a single action or free action you can use, and designate a trigger. Your turn then ends. If the trigger you designated occurs before the start of your next turn, you can use the chosen action as a reaction (provided you still meet the requirements to use it). You can’t Ready a free action that already has a trigger.
+				
+				If you have a multiple attack penalty and your readied action is an attack action, your readied attack takes the multiple attack penalty you had at the time you used Ready. This is one of the few times the multiple attack penalty applies when it’s not your turn.}}">
 								<button type="roll" name="roll_action-ready" value="@{whispertoggle}&{template:@{actionroll-ready}">
 									<span name="">Ready <img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
 								</button>
@@ -62826,9 +62901,9 @@ If you have a multiple attack penalty and your readied action is an attack actio
 						<div class="wuxMultiRow">
 							<div class="wuxFormEntry">
 								<span class="wuxFormHeaderLeadIcon">J</span>
-								<input type="hidden" class="" name="attr_actionroll-release" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Release Check}} {{action0=1}} {{trait0=Manipulate}} {{trait0Desc=You must physically manipulate an item or make gestures to use an action with this trait. Creatures without a suitable appendage can’t perform actions with this trait. Manipulate actions often trigger reactions.}} {{description=You release something you're holding in your hand or hands. This might mean dropping an item, removing one hand from your weapon while continuing to hold it in another hand, releasing a rope suspending a chandelier, or performing a similar action. Unlike most manipulate actions, Release does not trigger reactions that can be triggered by actions with the manipulate trait (such as Attack of Opportunity).
-
-If you want to prepare to Release something outside of your turn, use the Ready activity.}}">
+								<input type="hidden" class="" name="attr_actionroll-release" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Release}} {{action0=1}} {{trait0=Manipulate}} {{trait0Desc=You must physically manipulate an item or make gestures to use an action with this trait. Creatures without a suitable appendage can’t perform actions with this trait. Manipulate actions often trigger reactions.}} {{description=You release something you're holding in your hand or hands. This might mean dropping an item, removing one hand from your weapon while continuing to hold it in another hand, releasing a rope suspending a chandelier, or performing a similar action. Unlike most manipulate actions, Release does not trigger reactions that can be triggered by actions with the manipulate trait (such as Attack of Opportunity).
+				
+				If you want to prepare to Release something outside of your turn, use the Ready activity.}}">
 								<button type="roll" name="roll_action-release" value="@{whispertoggle}&{template:@{actionroll-release}">
 									<span name="">Release <img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/EirCfmI.png" /></span>
 								</button>
@@ -62857,7 +62932,7 @@ If you want to prepare to Release something outside of your turn, use the Ready 
 						<div class="wuxMultiRow">
 							<div class="wuxFormEntry">
 								<span class="wuxFormHeaderLeadIcon">J</span>
-								<input type="hidden" class="" name="attr_actionroll-strike" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Strike Check}} {{action1=1}} {{trait0=Attack}} {{trait0Desc=An ability with this trait involves an attack. For each attack you make beyond the first on your turn, you take a multiple attack penalty.}}{{results=1}} {{critsuccess=As success, but you double any damage dice.}} {{success=You deal damage according to the weapon or unarmed attack, including any modifiers, bonuses, and penalties you have to damage.}} {{description=You attack with a weapon you're wielding or with an unarmed attack, targeting one creature within your reach (for a melee attack) or within range (for a ranged attack). Roll the attack roll for the weapon or unarmed attack you are using, and compare the result to the target creature's AC to determine the effect. See Attack Rolls and Damage for details on calculating your attack and damage rolls.}}">
+								<input type="hidden" class="" name="attr_actionroll-strike" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Strike}} {{action1=1}} {{trait0=Attack}} {{trait0Desc=An ability with this trait involves an attack. For each attack you make beyond the first on your turn, you take a multiple attack penalty.}}{{results=1}} {{critsuccess=As success, but you double any damage dice.}} {{success=You deal damage according to the weapon or unarmed attack, including any modifiers, bonuses, and penalties you have to damage.}} {{description=You attack with a weapon you're wielding or with an unarmed attack, targeting one creature within your reach (for a melee attack) or within range (for a ranged attack). Roll the attack roll for the weapon or unarmed attack you are using, and compare the result to the target creature's AC to determine the effect. See Attack Rolls and Damage for details on calculating your attack and damage rolls.}}">
 								<button type="roll" name="roll_action-strike" value="@{whispertoggle}&{template:@{actionroll-strike}">
 									<span name="">Strike <img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
 								</button>
@@ -62881,9 +62956,32 @@ If you want to prepare to Release something outside of your turn, use the Ready 
 							</div>
 						</div>
 					</div>
+					<div class="wuxFieldSet">
+						<input type="checkbox" class="wuxCollapseField-flag" name="attr_featureDisplay-actiontakecover">
+						<div class="wuxMultiRow">
+							<div class="wuxFormEntry">
+								<span class="wuxFormHeaderLeadIcon">J</span>
+								<input type="hidden" class="" name="attr_actionroll-takecover" value="action} {{charname=@{character_name}}} {{username=@{nickname}}} {{image=@{emote_activesetimageurl}}} {{rname=Take Cover}} {{action1=1}}{{conditionals=1}} {{req=You are benefiting from cover, are near a feature that allows you to take cover, or are prone.}} {{description=You press yourself against a wall or duck behind an obstacle to take better advantage of cover. If you would have standard cover, you instead gain greater cover, which provides a +4 circumstance bonus to AC; to Reflex saves against area effects; and to Stealth checks to Hide, Sneak, or otherwise avoid detection. Otherwise, you gain the benefits of standard cover (a +2 circumstance bonus instead). This lasts until you move from your current space, use an attack action, become unconscious, or end this effect as a free action.}}">
+								<button type="roll" name="roll_action-takecover" value="@{whispertoggle}&{template:@{actionroll-takecover}">
+									<span name="">Take Cover <img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+								</button>
+							</div>
+						</div>
+						<div class="wuxCollapseField">
+							<div class="wuxMultiRow">
+								<div class="wuxFormSubsection">
+									<span class="wuxDescription"><strong>Requirements: </strong> You are benefiting from cover, are near a feature that allows you to take cover, or are prone.</span>
+									<span class="wuxDescription">You press yourself against a wall or duck behind an obstacle to take better advantage of cover. If you would have standard cover, you instead gain greater cover, which provides a +4 circumstance bonus to AC; to Reflex saves against area effects; and to Stealth checks to Hide, Sneak, or otherwise avoid detection. Otherwise, you gain the benefits of standard cover (a +2 circumstance bonus instead). This lasts until you move from your current space, use an attack action, become unconscious, or end this effect as a free action.</span>
+
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="wuxSectionContentCollapsed"></div>
 			</div>
+
+
 
 			<div class="actions-MoveActions wuxSectionBlock wuxLayoutItem">
 				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-actions-MoveActions" checked="checked" style="display: block">
@@ -63698,7 +63796,7 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				</div>
 				<div class="display">
 					<div class="wuxContainer">
-						<span class="wuxHeader">Death Saves</span>
+						<button type="roll" class="wuxHeader" name="roll_death_save" value="!deathsave @{character_name}@@?{Add Death Save Bonus|0}">Death Track</button>
 					</div>
 					<div class="wuxSubContainers">
 						<div class="wuxSubContainer">
@@ -63711,7 +63809,7 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 							</div>
 						</div>
 						<div class="wuxSubContainer">
-							<div class="wuxHeader">Failure</div>
+							<button type="roll" class="wuxHeader" name="roll_death_save" value="!deathfailure @{character_name}">Failure</button>
 							<div class="wuxInput wuxAspectInput wuxAspectDoubleInput wuxSizeSmall">
 								<input type="hidden" class="wuxActionCost-flag" name="attr_deathSaveFailure" value="0">
 								<img class="wuxFormHeaderActionSymbol wuxActionCost1" src="https://i.imgur.com/oVm5M7Y.png" />

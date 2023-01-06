@@ -284,22 +284,20 @@ function TargetStartTurn(targets) {
 
     log ("Starting turn for " + target.displayName);
 
-    let token = getObj('graphic', targets[0].tokenId);
-
     // grab resource data
     let actionCountObj = GetCharacterAttribute(target.charId, "actioncount");
     if (actionCountObj != undefined) {
         actionCountObj.set("current", actionCountObj.get("max"));
     }
     else {
-        CreateNormalAttribute("actioncount", "3", target.charId, "3");
+        actionCountObj = CreateNormalAttribute("actioncount", "3", target.charId, "3");
     }
     let reactionCountObj = GetCharacterAttribute(target.charId, "reactioncount");
     if (reactionCountObj != undefined) {
         reactionCountObj.set("current", reactionCountObj.get("max"));
     }
     else {
-        CreateNormalAttribute("reactioncount", "1", target.charId, "1");
+        reactionCountObj = CreateNormalAttribute("reactioncount", "1", target.charId, "1");
     }
 
     // restore their resources that accumulate each round
@@ -347,14 +345,18 @@ function TargetStartTurn(targets) {
         }
     }
 
-    // print the token conditions
-    PrintTokenConditionInformation(target);
-}
-
-function PrintTokenConditionInformation(targetData) {
-    let tokenConditionInfo = GetTokenConditionInformation(targetData, true);
+    // create a status update
+    let infoPrintout = "";
+    let tokenConditionInfo = GetTokenConditionInformation(target, true);
     if (tokenConditionInfo.conditions != "") {
-        sendChat("CombatMaster", GetFormattedMessage("si", tokenConditionInfo.display()));
+        infoPrintout += tokenConditionInfo.display();
+    }
+    let deathInfo = GetDeathInformation(target);
+    if (deathInfo.info != "") {
+        infoPrintout += deathInfo.display();
+    }
+    if (infoPrintout != "") {
+        sendChat("CombatMaster", GetFormattedMessage("si", infoPrintout));
     }
 }
 
@@ -386,6 +388,53 @@ function GetTokenConditionInformation(targetData, showNameplate) {
             }
         }
     }
+    return output;
+}
+
+function GetDeathInformation(targetData) {
+    let output = {
+        header: `${targetData.displayName} Is Downed`,
+        info: "",
+
+        display: function() {
+            if (this.info == "") {
+                return `${this.formatHeader()}<div>Not currently downed.</div>`;
+            }
+            
+            return `${this.formatHeader()}${this.info}`;
+        },
+
+        formatHeader: function() {
+            return `<div class="sheet-title" style="width: 270px;">${this.header}</div>`;
+        }
+    };
+
+    let difficultyStyle = getAttrByName(targetData.charId, "difficultyStyle");
+    if (difficultyStyle == undefined || difficultyStyle != "3") {
+        let hp = getAttrByName(targetData.charId, "hp");
+        hp = isNaN(parseInt(hp)) ? 0 : parseInt(hp);
+        if (hp <= 0) {
+            // this creature is downed
+            let successes = getAttrByName(targetData.charId, "deathSaveSuccess");
+            successes = isNaN(parseInt(successes)) ? 0 : parseInt(successes);
+            let failures = getAttrByName(targetData.charId, "deathSaveFailure");
+            let vitality = getAttrByName(targetData.charId, "vitality");
+
+            output.info += `<div>Death Track Failures: ${failures}</div><div>Vitality: ${vitality}</div>
+            `;
+
+            if (successes < 3) {
+                // this creature is dying
+                output.info += `<div><strong>This creature is dying.</strong></div><div>Anytime a Death Track Failure is gained, you will lose one vitality.</div><div>Make a death saving throw now. 
+                [Death Saving Throw](!deathsave ${targetData.charName}@@?{Add Death Save Bonus|0})</div>
+                `;
+            }
+
+            output.info += `<div>When you take an action other than Crawl or Stride, you must take a Death Track failure. Click this button when you take a failure. 
+            [Take Failure](!deathfailure ${targetData.charName})</div>`;
+        }
+    }
+
     return output;
 }
 

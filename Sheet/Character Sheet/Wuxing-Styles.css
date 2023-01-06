@@ -1904,6 +1904,36 @@ input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoSubdata
     border-radius: 5px 0px 0px 5px;
 }
 
+.wuxAspectContainer .wuxSubContainer button[type=roll].wuxHeader 
+{
+    position: relative;
+    display: inline-block;
+    top : -2px;
+    width: 40px;
+    margin: 0px;
+    height: 10px;
+    padding: 0px 0px 5px 0px;
+
+    font-size: 10px;
+    color: #f4f6f8;
+
+    text-shadow: none;
+    box-shadow: none;
+    border: none;
+
+	background: #1d1e1f;
+    background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 100%);
+    border-style: solid;
+    border-color: #a6a6a6;
+    border-width: 1px 0px 1px 1px;
+    border-radius: 5px 0px 0px 5px;
+}
+
+.wuxAspectContainer .wuxSubContainer button[type=roll]::before
+{
+    content: "" !important;
+}
+
 .wuxAspectContainer .wuxSubContainer .wuxHeader.wuxSizeSmall
 {
     width: 20px;
@@ -4453,11 +4483,22 @@ visibility: visible;
     margin-bottom: 10px;
 }
 
-.sheet-rolltemplate-ctinteract .sheet-chatsub .sheet-title 
+.sheet-rolltemplate-systemInfoBox .sheet-title,
+.sheet-rolltemplate-ctinteract .sheet-chatsub .sheet-title
 {
     font-family: Georgia, serif; 
     font-size: 12px; 
     font-weight: bold;
+    border-bottom: 1px solid #000;
+}
+
+.sheet-rolltemplate-systemInfoBox .sheet-title 
+{
+    border-bottom: 1px solid #FFF;
+}
+
+.sheet-rolltemplate-ctinteract .sheet-chatsub .sheet-title
+{
     border-bottom: 1px solid #000;
 }
 

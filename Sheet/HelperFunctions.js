@@ -90,6 +90,109 @@ function GetCharactersListFromTargetsMessage(targets) {
 // ======= On Kill Functions
 // =================================================
 
+function CommandDeathSave(content) {
+
+    let contentSplit = content.split("@@");
+    let targetData = GetActorTargetData(contentSplit[0])[0];
+    let output = `<div class="sheet-title" style="width: 270px;">[${targetData.displayName}] Death Save</div>`;
+
+    // grab successes
+    let successesObj = GetCharacterAttribute(targetData.charId, "deathSaveSuccess");
+    let successes = successesObj.get("current");
+    successes = isNaN(parseInt(successes)) ? 0 : parseInt(successes);
+
+    // make check
+    let rng = randomInteger(20);
+    let bonus = contentSplit[1];
+    bonus = isNaN(parseInt(bonus)) ? 0 : parseInt(bonus);
+    output += `<div>Death Save Roll: [${rng + bonus}]</div>
+    `;
+    if ((rng + bonus) >= 10) {
+        if (rng == 20) {
+            successes = 3;
+        }
+        else if (successes < 3) {
+            successes++;
+            successesObj.set("current", successes);
+        }
+        output += `<div>Success!</div>`;
+        if (successes >= 3) {
+            output += `<div>${targetData.displayName} has stabilized!</div>`;
+        }
+        else {
+            output += `<div>Death Track successes: ${successes}</div>`;
+        }
+    }
+    else {
+        let failureObj = GetCharacterAttribute(targetData.charId, "deathSaveFailure");
+        let failures = failureObj.get("current");
+        failures = isNaN(parseInt(failures)) ? 0 : parseInt(failures);
+        if (failures < 3) {
+            failures++;
+            failureObj.set("current", failures);
+        }
+
+        let vitality = 10;
+        if (successes < 3) {
+            let vitalityObj = GetCharacterAttribute(targetData.charId, "vitality");
+            vitality = vitalityObj.get("current");
+            vitality = isNaN(parseInt(vitality)) ? 0 : parseInt(vitality);
+            if (vitality > 0) {
+                vitality--;
+                vitalityObj.set("current", vitality);
+            }
+        }
+
+        output += `<div>Failure.</div>`;
+        if (failures >= 3 || vitality <= 0) {
+            output += `<div>${targetData.displayName} has died.</div>`;
+        } 
+        else {
+            output += `<div>Death Track failures: ${failures}</div>${vitality < 10 ? `<div>Vitality: ${vitality}</div>` : ""}`;
+        }
+    }
+
+    sendChat("CombatMaster", GetFormattedMessage("si", output));
+}
+
+function CommandDeathFailure(content) {
+    let targetData = GetActorTargetData(content)[0];
+    let output = `<div class="sheet-title" style="width: 270px;">[${targetData.displayName}] Death Track Failure</div>`;
+
+    // grab successes
+    let successesObj = GetCharacterAttribute(targetData.charId, "deathSaveSuccess");
+    let successes = successesObj.get("current");
+    successes = isNaN(parseInt(successes)) ? 0 : parseInt(successes);
+    
+    let failureObj = GetCharacterAttribute(targetData.charId, "deathSaveFailure");
+    let failures = failureObj.get("current");
+    failures = isNaN(parseInt(failures)) ? 0 : parseInt(failures);
+    if (failures < 3) {
+        failures++;
+        failureObj.set("current", failures);
+    }
+
+    let vitality = 10;
+    if (successes < 3) {
+        let vitalityObj = GetCharacterAttribute(targetData.charId, "vitality");
+        vitality = vitalityObj.get("current");
+        vitality = isNaN(parseInt(vitality)) ? 0 : parseInt(vitality);
+        if (vitality > 0) {
+            vitality--;
+            vitalityObj.set("current", vitality);
+        }
+    }
+
+    if (failures >= 3 || vitality <= 0) {
+        output += `<div>${targetData.displayName} has died.</div>`;
+    } 
+    else {
+        output += `<div>Death Track failures: ${failures}</div>${vitality < 10 ? `<div>Vitality: ${vitality}</div>` : ""}`;
+    }
+
+    sendChat("CombatMaster", GetFormattedMessage("si", output));
+}
+
 function GetRandomDrop(character) {
 
     // get the number of random drops
