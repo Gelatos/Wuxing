@@ -212,8 +212,8 @@ input[type=radio].wuxTabButton.wuxTabVitals + span
     width: 35px;
 }
 
-input[type=radio].wuxTabButton.wuxTabLife,
-input[type=radio].wuxTabButton.wuxTabLife + span 
+input[type=radio].wuxTabButton.wuxTabBio,
+input[type=radio].wuxTabButton.wuxTabBio + span
 {
     right: 0px;
     width: 35px;
@@ -240,8 +240,6 @@ input[type=radio].wuxTabButton.wuxTabTools + span
     width: 35px;
 }
 
-input[type=radio].wuxTabButton.wuxTabChat,
-input[type=radio].wuxTabButton.wuxTabChat + span,
 input[type=radio].wuxTabButton.wuxTabNotes,
 input[type=radio].wuxTabButton.wuxTabNotes + span, 
 input[type=radio].wuxTabButton.wuxTabField,
@@ -251,8 +249,8 @@ input[type=radio].wuxTabButton.wuxTabField + span
     width: 35px;
 }
 
-input[type=radio].wuxTabButton.wuxTabBio,
-input[type=radio].wuxTabButton.wuxTabBio + span,
+input[type=radio].wuxTabButton.wuxTabChat,
+input[type=radio].wuxTabButton.wuxTabChat + span,
 input[type=radio].wuxTabButton.wuxTabMusic,
 input[type=radio].wuxTabButton.wuxTabMusic + span,
 input[type=radio].wuxTabButton.wuxTabBattle,
@@ -1620,12 +1618,6 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     width: 60px;
 }
 
-.wuxInfoSection input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoData,
-input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoSubdata
-{
-    background: #ba1717;
-}
-
 /*========================================
     Aspect Containers
 ========================================*/
@@ -2200,9 +2192,21 @@ input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoSubdata
     display: none;
 }
 
+
+/*========================================
+    Error Field
+========================================*/
+
 .wuxAspectContainer input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxAspectInput
 {
-    background-color: #e86363;
+    background: #e86363;
+}
+
+.wuxInfoSection input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoData,
+input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoSubdata,
+input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInput
+{
+    background: #ba1717;
 }
 
 /*========================================

@@ -23,13 +23,12 @@
 						<input type="radio" class="wuxTabButton wuxTabSkill" name="attr_tab" value="skill"><span>Skill</span>
 						<input type="radio" class="wuxTabButton wuxTabActions" name="attr_tab" value="actions"><span>Actions</span>
 						<input type="radio" class="wuxTabButton wuxTabVitals" name="attr_tab" value="vitals"><span>Vitals</span>
-						<input type="radio" class="wuxTabButton wuxTabLife" name="attr_tab" value="life"><span>Life</span>
+						<input type="radio" class="wuxTabButton wuxTabBio" name="attr_tab" value="bio"><span>Bio</span>
 					</div>
 					<div class="wuxTabRow">
 						<input type="radio" class="wuxTabButton wuxTabWhisperPublic" name="attr_whispertoggle" value="" checked="checked"><span>PUBLIC</span>
 						<input type="radio" class="wuxTabButton wuxTabWhisperToGM" name="attr_whispertoggle" value="/w gm "><span>TO GM</span>
 						<input type="radio" class="wuxTabButton wuxTabChat" name="attr_tab" value="chat"><span>Chat</span>
-						<input type="radio" class="wuxTabButton wuxTabBio" name="attr_tab" value="bio"><span>Bio</span>
 						<input type="radio" class="wuxTabButton wuxTabOptions" name="attr_tab" value="options"><span style="font-family: pictos">y</span>
 					</div>
 				</div>
@@ -194,48 +193,92 @@
 
 		<div class="gear-Currency wuxLayoutItem wuxTabGear">
 			<div class="gear-PaperCurrency wuxAspectContainer wuxSizeSmall">
-				<div class="wuxContainer wuxAspectInput">
-					<input type="text" class="wuxHeader" name="attr_jin">
-					<span class="wuxSubheader">Jin</span>
-				</div>
-				<div class="wuxSubContainers">
-					<div class="wuxSubContainer">
-						<div class="wuxHeader wuxSizeSmall">Frta</div>
-						<div class="wuxInput wuxAspectInput wuxSizeLarge">
-							<input type="number" name="attr_frt">
+				<input class="options-flag" type="checkbox" name="attr_options-papercurrency-flag"><span>y</span>
+				<div class="options">
+					<div class="wuxSectionBlock">
+						<div class="wuxFieldSet">
+							<div class="wuxRow">
+								<span class="wuxFormHeader">Storage</span>
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Jin</span>
+								<input type="number" class="wuxFormInput" name="attr_jin_storage">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Forta</span>
+								<input type="number" class="wuxFormInput" name="attr_frt_storage">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Syre</span>
+								<input type="number" class="wuxFormInput" name="attr_syr_storage">
+							</div>
 						</div>
 					</div>
-					<div class="wuxSubContainer">
-						<div class="wuxHeader wuxSizeSmall">Syre</div>
-						<div class="wuxInput wuxAspectInput wuxSizeLarge">
-							<input type="number" name="attr_syr">
+				</div>
+				<div class="display">
+					<div class="wuxContainer wuxAspectInput">
+						<input type="text" class="wuxHeader" name="attr_jin">
+						<span class="wuxSubheader">Jin</span>
+					</div>
+					<div class="wuxSubContainers">
+						<div class="wuxSubContainer">
+							<div class="wuxHeader wuxSizeSmall">Frta</div>
+							<div class="wuxInput wuxAspectInput wuxSizeLarge">
+								<input type="number" name="attr_frt">
+							</div>
+						</div>
+						<div class="wuxSubContainer">
+							<div class="wuxHeader wuxSizeSmall">Syre</div>
+							<div class="wuxInput wuxAspectInput wuxSizeLarge">
+								<input type="number" name="attr_syr">
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="wuxCircleContainer">
-					<img src="https://i.imgur.com/hFkRdVU.png">
+					<div class="wuxCircleContainer">
+						<img src="https://i.imgur.com/hFkRdVU.png">
+					</div>
 				</div>
 			</div>
 			<div class="gear-CoinCurrency wuxAspectContainer wuxSizeSmall">
-				<div class="wuxContainer wuxAspectInput">
-					<input type="text" class="wuxHeader" name="attr_gp">
-					<span class="wuxSubheader">Gold</span>
-				</div>
-				<div class="wuxSubContainers">
-					<div class="wuxSubContainer">
-						<div class="wuxHeader wuxSizeSmall">CP</div>
-						<div class="wuxInput wuxAspectInput wuxSizeLarge">
-							<input type="number" name="attr_cp">
+				<input class="options-flag" type="checkbox" name="attr_options-coincurrency-flag"><span>y</span>
+				<div class="options">
+					<div class="wuxSectionBlock">
+						<div class="wuxFieldSet">
+							<div class="wuxRow">
+								<span class="wuxFormHeader">Storage</span>
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Gold</span>
+								<input type="number" class="wuxFormInput" name="attr_gp_storage">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">CP</span>
+								<input type="number" class="wuxFormInput" name="attr_cp_storage">
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="wuxCircleContainer">
-					<img src="https://i.imgur.com/abjFd1W.png">
+				<div class="display">
+					<div class="wuxContainer wuxAspectInput">
+						<input type="text" class="wuxHeader" name="attr_gp">
+						<span class="wuxSubheader">Gold</span>
+					</div>
+					<div class="wuxSubContainers">
+						<div class="wuxSubContainer">
+							<div class="wuxHeader wuxSizeSmall">CP</div>
+							<div class="wuxInput wuxAspectInput wuxSizeLarge">
+								<input type="number" name="attr_cp">
+							</div>
+						</div>
+					</div>
+					<div class="wuxCircleContainer">
+						<img src="https://i.imgur.com/abjFd1W.png">
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="gear-Weight wuxLayoutItem wuxTabGear">
-			<div class="core-Inspiration wuxAspectContainer">
+			<div class="wuxAspectContainer">
 				<input class="options-flag" type="checkbox" name="attr_options-capacity-flag"><span>y</span>
 				<div class="options">
 					<div class="wuxSectionBlock">
@@ -258,6 +301,7 @@
 						</div>
 						<div class="wuxSubContainer">
 							<div class="wuxHeader wuxSizeLarge">Carry max</div>
+							<input type="hidden" class="wuxErrorField-flag" name="attr_capacityCarryError" value="0" />
 							<div class="wuxInput wuxSizeTiny"><span name="attr_weightmaximum" value="50">50</span></div>
 						</div>
 						<div class="wuxSubContainer wuxInvisibleField">
@@ -266,6 +310,7 @@
 						</div>
 						<div class="wuxSubContainer">
 							<div class="wuxHeader wuxSizeLarge">Lift max</div>
+							<input type="hidden" class="wuxErrorField-flag" name="attr_capacityLiftError" value="0" />
 							<div class="wuxInput wuxSizeTiny"><span name="attr_weightLift" value="100">100</span></div>
 						</div>
 						<div class="wuxSubContainer wuxInvisibleField">
@@ -274,6 +319,7 @@
 						</div>
 						<div class="wuxSubContainer">
 							<div class="wuxHeader wuxSizeLarge">Drag max</div>
+							<input type="hidden" class="wuxErrorField-flag" name="attr_capacityDragError" value="0" />
 							<div class="wuxInput wuxSizeTiny"><span name="attr_weightDrag" value="150">150</span></div>
 						</div>
 					</div>
@@ -551,49 +597,6 @@
 					<div class="wuxCircleContainer">
 						<img src="https://i.imgur.com/4VVpcYj.png">
 					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="life-Currency wuxLayoutItem wuxTabLife">
-			<div class="gear-PaperCurrency wuxAspectContainer wuxSizeSmall">
-				<div class="wuxContainer wuxAspectInput">
-					<input type="text" class="wuxHeader" name="attr_jin_storage">
-					<span class="wuxSubheader">Jin Storage</span>
-				</div>
-				<div class="wuxSubContainers">
-					<div class="wuxSubContainer">
-						<div class="wuxHeader wuxSizeSmall">Frta</div>
-						<div class="wuxInput wuxAspectInput wuxSizeLarge">
-							<input type="number" name="attr_frt_storage">
-						</div>
-					</div>
-					<div class="wuxSubContainer">
-						<div class="wuxHeader wuxSizeSmall">Syre</div>
-						<div class="wuxInput wuxAspectInput wuxSizeLarge">
-							<input type="number" name="attr_syr_storage">
-						</div>
-					</div>
-				</div>
-				<div class="wuxCircleContainer">
-					<img src="https://i.imgur.com/hFkRdVU.png">
-				</div>
-			</div>
-			<div class="gear-CoinCurrency wuxAspectContainer wuxSizeSmall">
-				<div class="wuxContainer wuxAspectInput">
-					<input type="text" class="wuxHeader" name="attr_gp_storage">
-					<span class="wuxSubheader">Gold Storage</span>
-				</div>
-				<div class="wuxSubContainers">
-					<div class="wuxSubContainer">
-						<div class="wuxHeader wuxSizeSmall">CP</div>
-						<div class="wuxInput wuxAspectInput wuxSizeLarge">
-							<input type="number" name="attr_cp_storage">
-						</div>
-					</div>
-				</div>
-				<div class="wuxCircleContainer">
-					<img src="https://i.imgur.com/abjFd1W.png">
 				</div>
 			</div>
 		</div>

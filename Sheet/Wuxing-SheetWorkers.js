@@ -5668,15 +5668,9 @@ var update_weight = function () {
 										update["weightmaximum"] = weightMax;
 										update["weightLift"] = weightLift;
 										update["weightDrag"] = weightDrag;
-										if (wtotal > weightDrag) {
-											update["encumberance"] = "IMMOBILE";
-										} else if (wtotal > weightLift) {
-											update["encumberance"] = "HEAVILY ENCUMBERED";
-										} else if (wtotal > weightMax) {
-											update["encumberance"] = "ENCUMBERED";
-										} else {
-											update["encumberance"] = " ";
-										}
+										update["capacityCarryError"] = (wtotal > weightMax) ? "1" : "0";
+										update["capacityLiftError"] = (wtotal > weightLift) ? "1" : "0";
+										update["capacityDragError"] = (wtotal > weightDrag) ? "1" : "0";
 
 										setAttrs(update, {
 											silent: true
