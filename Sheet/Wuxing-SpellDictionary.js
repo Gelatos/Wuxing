@@ -6389,6 +6389,94 @@ function GetSpellInformation(spell) {
                     desc: `You regenerate a barrier. Choose a target creature within range. The target gains 1d4 barrier.`,
                     heightenDesc: `Barrier healing increases by 1d4 per level.`,
             };
+        case "greater barrier healer":
+            return {
+                name: "Greater Barrier Healer",
+                    traits: "",
+                    power: 2,
+                    branch: "health",
+                    family: "Empower Barrier",
+                    element: "Wood",
+
+                    spellslotcost: 2,
+                    actionCost: "2",
+                    trigger: "",
+                    mana: 600,
+
+                    range: "60 feet",
+                    area: "",
+                    targets: "",
+                    targerCode: "Token",
+
+                    check: "",
+                    duration: "",
+
+                    dmg: "8d4",
+                    dmgType: "Convalescing",
+                    dmgElem: "",
+                    hldmg: "1d4",
+                    dmg2: "",
+                    dmg2Type: "",
+                    dmg2Elem: "",
+                    addAbilityScore: false,
+
+                    critSuccess: "",
+                    success: "",
+                    failure: "",
+                    critFailure: "",
+
+                    onCritSuccess: "",
+                    onSuccess: "",
+                    onFailure: "",
+                    onCritFailure: "",
+
+                    desc: `You heal a barrier with a lot of energy. Choose a target creature within range. The target gains 8d4 barrier.`,
+                    heightenDesc: `Barrier healing increases by 1d4 per level.`,
+            };
+        case "convalescence":
+            return {
+                name: "Convalescence",
+                    traits: "",
+                    power: 4,
+                    branch: "health",
+                    family: "Empower Barrier",
+                    element: "Wood",
+
+                    spellslotcost: 4,
+                    actionCost: "2",
+                    trigger: "",
+                    mana: 1000,
+
+                    range: "60 feet",
+                    area: "",
+                    targets: "",
+                    targerCode: "Token",
+
+                    check: "",
+                    duration: "",
+
+                    dmg: "8d10",
+                    dmgType: "Convalescing",
+                    dmgElem: "",
+                    hldmg: "2d10",
+                    dmg2: "",
+                    dmg2Type: "",
+                    dmg2Elem: "",
+                    addAbilityScore: false,
+
+                    critSuccess: "",
+                    success: "",
+                    failure: "",
+                    critFailure: "",
+
+                    onCritSuccess: "",
+                    onSuccess: "",
+                    onFailure: "",
+                    onCritFailure: "",
+
+                    desc: `You impart a large amount of ki into a barrier. Choose a target creature within range. The target gains 8d10 barrier.`,
+                    heightenDesc: `Barrier healing increases by 2d10 per level.`,
+            };
         case "wind barrier":
             return {
                 name: "Wind Barrier",
@@ -6651,6 +6739,50 @@ function GetSpellInformation(spell) {
                     onCritFailure: "",
 
                     desc: `You regenerate a barrier. Choose a target creature within range. The target gains 1d10 + your spellcasting ability modifier barrier.`,
+                    heightenDesc: `Barrier healing increases by 1d10 per level.`,
+            };
+        case "greater barrier restorer":
+            return {
+                name: "Greater Barrier Restorer",
+                    traits: "",
+                    power: 3,
+                    branch: "restoration",
+                    family: "Empower Barrier",
+                    element: "Water",
+
+                    spellslotcost: 3,
+                    actionCost: "2",
+                    trigger: "",
+                    mana: 750,
+
+                    range: "Touch",
+                    area: "",
+                    targets: "",
+                    targerCode: "Token",
+
+                    check: "",
+                    duration: "",
+
+                    dmg: "7d10",
+                    dmgType: "Convalescing",
+                    dmgElem: "",
+                    hldmg: "1d10",
+                    dmg2: "",
+                    dmg2Type: "",
+                    dmg2Elem: "",
+                    addAbilityScore: true,
+
+                    critSuccess: "",
+                    success: "",
+                    failure: "",
+                    critFailure: "",
+
+                    onCritSuccess: "",
+                    onSuccess: "",
+                    onFailure: "",
+                    onCritFailure: "",
+
+                    desc: `You heal a barrier with a lot of energy. Choose a target creature within range. The target gains 7d10 barrier.`,
                     heightenDesc: `Barrier healing increases by 1d10 per level.`,
             };
         case "sand barrier":
@@ -10253,6 +10385,94 @@ function GetSpellInformation(spell) {
                     onCritFailure: "",
 
                     desc: `All nonmagical food and drink within a 5-foot-radius sphere centered on a point of your choice within range is purified and rendered free of poison and disease.`,
+                    heightenDesc: ``,
+            };
+        case "heal vitality":
+            return {
+                name: "Heal Vitality",
+                    traits: "",
+                    power: 2,
+                    branch: "health",
+                    family: "Heal Affliction",
+                    element: "Wood",
+
+                    spellslotcost: 2,
+                    actionCost: "2",
+                    trigger: "",
+                    mana: 200,
+
+                    range: "10 feet",
+                    area: "",
+                    targets: "",
+                    targerCode: "Token",
+
+                    check: "",
+                    duration: "",
+
+                    dmg: "",
+                    dmgType: "",
+                    dmgElem: "",
+                    hldmg: "",
+                    dmg2: "",
+                    dmg2Type: "",
+                    dmg2Elem: "",
+                    addAbilityScore: false,
+
+                    critSuccess: "",
+                    success: "",
+                    failure: "",
+                    critFailure: "",
+
+                    onCritSuccess: "",
+                    onSuccess: "",
+                    onFailure: "",
+                    onCritFailure: "",
+
+                    desc: `You trade some of your own life force to restore another's. You lose 3 Vitality to grant your target 2 Vitality.`,
+                    heightenDesc: ``,
+            };
+        case "restore vitality":
+            return {
+                name: "Restore Vitality",
+                    traits: "",
+                    power: 2,
+                    branch: "restoration",
+                    family: "Heal Affliction",
+                    element: "Water",
+
+                    spellslotcost: 2,
+                    actionCost: "2",
+                    trigger: "",
+                    mana: 300,
+
+                    range: "10 feet",
+                    area: "",
+                    targets: "",
+                    targerCode: "Token",
+
+                    check: "",
+                    duration: "",
+
+                    dmg: "",
+                    dmgType: "",
+                    dmgElem: "",
+                    hldmg: "",
+                    dmg2: "",
+                    dmg2Type: "",
+                    dmg2Elem: "",
+                    addAbilityScore: false,
+
+                    critSuccess: "",
+                    success: "",
+                    failure: "",
+                    critFailure: "",
+
+                    onCritSuccess: "",
+                    onSuccess: "",
+                    onFailure: "",
+                    onCritFailure: "",
+
+                    desc: `You trade some of your own life force to restore another's. You lose 5 Vitality to grant your target 4 Vitality.`,
                     heightenDesc: ``,
             };
         case "remove radiation":
@@ -16856,8 +17076,8 @@ function GetSpellInformation(spell) {
 }
 
 function SearchSpellNames(feature) {
-    let featuresList = ["", "Shimmer", "Distortion", "Dust Wood", "Dust Glass", "Dust Earth", "Dust Metal", "Dust Ice", "Dust Ironwood", "Excavate", "Dust Glacial", "Dust Fireglass", "Dust Adamantine", "Dust Platinum", "Dust Viridium", "Dust Obsidian", "Dust Mithral", "Dust Albryst", "Forest Guise", "Light Blindness", "Shadow Walk", "Earth Guise", "Shadow Steps", "Water Guise", "Cloud of Shadow", "Shadow Stalker", "Wind Wall", "Wall of Fire", "Wall of Sand", "Blade Barrier", "Wall of Water", "Wall of Force", "Fog Cloud", "Congregate Clouds", "Misty Terrain", "Smoke Cloud", "Sandstorm", "Ashen Cloud", "Solid Smoke", "Incendiary Cloud", "Produce Heat", "Static Shock", "Produce Cold", "Petal Storm", "Spore", "Silence", "Sleet Storm", "Irradiate", "Sound Buffer", "Diamond Dust", "Updraft", "Alleviate", "Calm Air", "Downdraft", "Pressure", "Zero Gravity", "Reverse Gravity", "Light", "Dancing Lights", "Dancing Darkness", "Burning Light", "Darkness", "Deeper Darkness", "Dawn", "Entangle", "Seism", "Ice Floor", "Eruption", "Twister", "Quicksand", "Whirlpool", "Flame Whirl", "Tornado", "Flame Cyclone", "Antlion Pit", "Maelstrom", "Blizzard", "Nubikinesis", "Force Hand", "Catapult", "Floating Disk", "Gust of Wind", "Part Sand", "Sand Tunnel", "Part Water", "Tidal Surge", "Storm Gust", "Kinetic Haul", "Create Forge Duplicate", "Create Glass Duplicate", "Create Ice Duplicate", "Create Plant Duplicate", "Create Rock Duplicate", "Quickcraft: Wood", "Quickcraft: Glass", "Quickcraft: Earth", "Quickcraft: Metal", "Quickcraft: Ice", "Create Pine", "Create Cloth", "Create Maple", "Create Clay", "Create Glass", "Create Stone", "Create Crystal", "Create Iron", "Create Steel", "Create Snow", "Create Ice", "Create Ironwood", "Create Glacial", "Create Fireglass", "Create Adamantine", "Create Platinum", "Create Viridium", "Create Obsidian", "Create Mithral", "Create Albryst", "Stalagmite", "Pine Spear", "Wildwood", "Glacier", "Wood Shield", "Rock Cover", "Ice Block", "Sicken", "Restrain", "Subdue", "Trip", "Attenuate", "Flash", "Ashen Veil", "Sandman", "Earthbind", "Encumber", "Clouded Eyes", "Blindness", "Freezebind", "Lethargy", "Sound Boom", "Weight", "Arcane Healing", "Barrier Healer", "Wind Barrier", "Flame Barrier", "Ether Barrier", "Static Barrier", "Cold Barrier", "Barrier Restorer", "Sand Barrier", "Ether Buffer", "Spirit Beacon", "Spirit Walk", "Expel Essence", "Arcane Burst", "Wind Burst", "Fireball", "Flame Pyre", "Erupting Earth", "Ball Lightning", "Shatter", "Geyser", "Fireblast", "Plasma Blast", "Caustic Eruption", "Sunburst", "Horrid Wilting", "Rockslide", "Daggerfall", "Hail", "Storm of Glass", "Dagger Storm", "Arcane Strike", "Wood Burst", "Fire Burst", "Glass Burst", "Quake", "Blade Burst", "Static Burst", "Lightning Pulse", "Thunderclap", "Repelling Pulse", "Rolling Fire", "Glass Surge", "Defoliate", "Lightning Bolt", "Caustic Rebuke", "Acid Spray", "Sunbeam", "Tidal Wave", "Diffuse", "Call Lightning", "Wither", "Coagulate", "Spirit Blast", "Harm", "Atrophy", "Chain Lightning", "Arcane Bolt", "Wind Bullet", "Repulse", "Flame Arrow", "Rock Bullets", "Lightning Shaft", "Ice Darts", "Ray of Frost", "Acid Arrow", "Fulgor", "Acid Blast", "Brick Barrage", "Burning Hands", "Glass Slasher", "Sand Blast", "Stone Shower", "Lightning Burst", "Rain of Daggers", "Water Blast", "Freezing Blast", "Thunderwave", "Cone of Cold", "Boom Burst", "Kinesis", "Diakopy", "Katapeltis", "Chlorotheurgy", "Pyrotheurgy", "Geotheurgy", "Ferrotheurgy", "Hydrotheurgy", "Purify Food and Drink", "Remove Radiation", "Poison Ward", "Rejuvenate", "Radiation Ward", "Cure Light Trauma", "Passive Healing", "Cure Injury", "Mend Light Wounds", "Passive Mending", "Mend Injuries", "Cure Light Wounds", "Passive Restoration", "Cure Wounds", "Lesser Life Weave", "Cure Fractures", "Cure Severs", "Mass Cure Injuries", "Mend", "Mass Cure Wounds", "Rhapsody", "Heal", "Life Weave", "Purify", "Nightingale", "True Restoration", "Mirage", "Minor Reflection", "Mirror Image", "Greater Reflection", "Instant Fake", "Heat Adaption", "Resistance", "Unencumbered", "Lift", "Grasp", "Cold Adaption", "True Strike", "Ashen Path", "Unburden", "Water Breathing", "Alacrity", "Embolden", "Overcome", "Nimble Dodge", "Foresight", "Feather Fall", "Leap", "Feather Step", "Ascent", "Root", "Zephyr", "Reposition", "Levitate", "Air Walk", "Floating Ice", "Detect Radiation", "Know Weather", "Scent", "Darkvision", "Darksight", "Tremorsense", "Blindsense", "Aquasense", "True Sight", "Greater Tremorsense", "Fleet Footed", "Longstrider", "Fleet Step", "Swift Swim", "Soar", "Jet", "Fast Climb", "Group Climb", "Burrow", "Sleep", "Slumber", "Hold Person", "Seize", "Cardiac Seizure", "Calmed Surge", "Mana Release", "Ether Release", "Duplicate Evocation", "Counterspell", "Innervate", "Boost Surge", "Mana Battery", "Mana Drain", "Sustained Mana", "Venom", "Blood Mark", "Ethereal Mark", "Distant Whisper", "Whisper", "Message", "Ghost Sound", "Transmission", "Whispering Wind", "Skywrite", "Sculpt Sound", "Telegram", "Telepathy", "Shape Fiber", "Shape Wood", "Shape Clay", "Shape Glass", "Shape Earth", "Shape Metal", "Shape Ice", "Shape Ironwood", "Shape Glacial", "Shape Fireglass", "Shape Adamantine", "Shape Platinum", "Shape Viridium", "Shape Obsidian", "Shape Mithral", "Shape Albryst", "Cultivate", "Torch", "Drench", "Earthquake", "Bleed", "Stabilize", "Revitalize", "Resuscitate", "Feign Death", "Ensnaring Strike", "Howling Strike", "Searing Strike", "Sand Impact", "Buffeting Water", "Freezing Strike", "Thunderous Smite", "Heavy Blade", "Lightning Blade", "Arcane Blade", "Flashing Blade", "Sand Strike", "Booming Strike", "Toxic Strike", "Spark Blade", "Zephyr Strike", "Time Leap", "Quick Stop", "Rewinding Step", "Blink", "True Stop"];
-    let searchFeaturesList = ["", "shimmer", "distortion", "dust wood", "dust glass", "dust earth", "dust metal", "dust ice", "dust ironwood", "excavate", "dust glacial", "dust fireglass", "dust adamantine", "dust platinum", "dust viridium", "dust obsidian", "dust mithral", "dust albryst", "forest guise", "light blindness", "shadow walk", "earth guise", "shadow steps", "water guise", "cloud of shadow", "shadow stalker", "wind wall", "wall of fire", "wall of sand", "blade barrier", "wall of water", "wall of force", "fog cloud", "congregate clouds", "misty terrain", "smoke cloud", "sandstorm", "ashen cloud", "solid smoke", "incendiary cloud", "produce heat", "static shock", "produce cold", "petal storm", "spore", "silence", "sleet storm", "irradiate", "sound buffer", "diamond dust", "updraft", "alleviate", "calm air", "downdraft", "pressure", "zero gravity", "reverse gravity", "light", "dancing lights", "dancing darkness", "burning light", "darkness", "deeper darkness", "dawn", "entangle", "seism", "ice floor", "eruption", "twister", "quicksand", "whirlpool", "flame whirl", "tornado", "flame cyclone", "antlion pit", "maelstrom", "blizzard", "nubikinesis", "force hand", "catapult", "floating disk", "gust of wind", "part sand", "sand tunnel", "part water", "tidal surge", "storm gust", "kinetic haul", "create forge duplicate", "create glass duplicate", "create ice duplicate", "create plant duplicate", "create rock duplicate", "quickcraft: wood", "quickcraft: glass", "quickcraft: earth", "quickcraft: metal", "quickcraft: ice", "create pine", "create cloth", "create maple", "create clay", "create glass", "create stone", "create crystal", "create iron", "create steel", "create snow", "create ice", "create ironwood", "create glacial", "create fireglass", "create adamantine", "create platinum", "create viridium", "create obsidian", "create mithral", "create albryst", "stalagmite", "pine spear", "wildwood", "glacier", "wood shield", "rock cover", "ice block", "sicken", "restrain", "subdue", "trip", "attenuate", "flash", "ashen veil", "sandman", "earthbind", "encumber", "clouded eyes", "blindness", "freezebind", "lethargy", "sound boom", "weight", "arcane healing", "barrier healer", "wind barrier", "flame barrier", "ether barrier", "static barrier", "cold barrier", "barrier restorer", "sand barrier", "ether buffer", "spirit beacon", "spirit walk", "expel essence", "arcane burst", "wind burst", "fireball", "flame pyre", "erupting earth", "ball lightning", "shatter", "geyser", "fireblast", "plasma blast", "caustic eruption", "sunburst", "horrid wilting", "rockslide", "daggerfall", "hail", "storm of glass", "dagger storm", "arcane strike", "wood burst", "fire burst", "glass burst", "quake", "blade burst", "static burst", "lightning pulse", "thunderclap", "repelling pulse", "rolling fire", "glass surge", "defoliate", "lightning bolt", "caustic rebuke", "acid spray", "sunbeam", "tidal wave", "diffuse", "call lightning", "wither", "coagulate", "spirit blast", "harm", "atrophy", "chain lightning", "arcane bolt", "wind bullet", "repulse", "flame arrow", "rock bullets", "lightning shaft", "ice darts", "ray of frost", "acid arrow", "fulgor", "acid blast", "brick barrage", "burning hands", "glass slasher", "sand blast", "stone shower", "lightning burst", "rain of daggers", "water blast", "freezing blast", "thunderwave", "cone of cold", "boom burst", "kinesis", "diakopy", "katapeltis", "chlorotheurgy", "pyrotheurgy", "geotheurgy", "ferrotheurgy", "hydrotheurgy", "purify food and drink", "remove radiation", "poison ward", "rejuvenate", "radiation ward", "cure light trauma", "passive healing", "cure injury", "mend light wounds", "passive mending", "mend injuries", "cure light wounds", "passive restoration", "cure wounds", "lesser life weave", "cure fractures", "cure severs", "mass cure injuries", "mend", "mass cure wounds", "rhapsody", "heal", "life weave", "purify", "nightingale", "true restoration", "mirage", "minor reflection", "mirror image", "greater reflection", "instant fake", "heat adaption", "resistance", "unencumbered", "lift", "grasp", "cold adaption", "true strike", "ashen path", "unburden", "water breathing", "alacrity", "embolden", "overcome", "nimble dodge", "foresight", "feather fall", "leap", "feather step", "ascent", "root", "zephyr", "reposition", "levitate", "air walk", "floating ice", "detect radiation", "know weather", "scent", "darkvision", "darksight", "tremorsense", "blindsense", "aquasense", "true sight", "greater tremorsense", "fleet footed", "longstrider", "fleet step", "swift swim", "soar", "jet", "fast climb", "group climb", "burrow", "sleep", "slumber", "hold person", "seize", "cardiac seizure", "calmed surge", "mana release", "ether release", "duplicate evocation", "counterspell", "innervate", "boost surge", "mana battery", "mana drain", "sustained mana", "venom", "blood mark", "ethereal mark", "distant whisper", "whisper", "message", "ghost sound", "transmission", "whispering wind", "skywrite", "sculpt sound", "telegram", "telepathy", "shape fiber", "shape wood", "shape clay", "shape glass", "shape earth", "shape metal", "shape ice", "shape ironwood", "shape glacial", "shape fireglass", "shape adamantine", "shape platinum", "shape viridium", "shape obsidian", "shape mithral", "shape albryst", "cultivate", "torch", "drench", "earthquake", "bleed", "stabilize", "revitalize", "resuscitate", "feign death", "ensnaring strike", "howling strike", "searing strike", "sand impact", "buffeting water", "freezing strike", "thunderous smite", "heavy blade", "lightning blade", "arcane blade", "flashing blade", "sand strike", "booming strike", "toxic strike", "spark blade", "zephyr strike", "time leap", "quick stop", "rewinding step", "blink", "true stop"];
+    let featuresList = ["", "Shimmer", "Distortion", "Dust Wood", "Dust Glass", "Dust Earth", "Dust Metal", "Dust Ice", "Dust Ironwood", "Excavate", "Dust Glacial", "Dust Fireglass", "Dust Adamantine", "Dust Platinum", "Dust Viridium", "Dust Obsidian", "Dust Mithral", "Dust Albryst", "Forest Guise", "Light Blindness", "Shadow Walk", "Earth Guise", "Shadow Steps", "Water Guise", "Cloud of Shadow", "Shadow Stalker", "Wind Wall", "Wall of Fire", "Wall of Sand", "Blade Barrier", "Wall of Water", "Wall of Force", "Fog Cloud", "Congregate Clouds", "Misty Terrain", "Smoke Cloud", "Sandstorm", "Ashen Cloud", "Solid Smoke", "Incendiary Cloud", "Produce Heat", "Static Shock", "Produce Cold", "Petal Storm", "Spore", "Silence", "Sleet Storm", "Irradiate", "Sound Buffer", "Diamond Dust", "Updraft", "Alleviate", "Calm Air", "Downdraft", "Pressure", "Zero Gravity", "Reverse Gravity", "Light", "Dancing Lights", "Dancing Darkness", "Burning Light", "Darkness", "Deeper Darkness", "Dawn", "Entangle", "Seism", "Ice Floor", "Eruption", "Twister", "Quicksand", "Whirlpool", "Flame Whirl", "Tornado", "Flame Cyclone", "Antlion Pit", "Maelstrom", "Blizzard", "Nubikinesis", "Force Hand", "Catapult", "Floating Disk", "Gust of Wind", "Part Sand", "Sand Tunnel", "Part Water", "Tidal Surge", "Storm Gust", "Kinetic Haul", "Create Forge Duplicate", "Create Glass Duplicate", "Create Ice Duplicate", "Create Plant Duplicate", "Create Rock Duplicate", "Quickcraft: Wood", "Quickcraft: Glass", "Quickcraft: Earth", "Quickcraft: Metal", "Quickcraft: Ice", "Create Pine", "Create Cloth", "Create Maple", "Create Clay", "Create Glass", "Create Stone", "Create Crystal", "Create Iron", "Create Steel", "Create Snow", "Create Ice", "Create Ironwood", "Create Glacial", "Create Fireglass", "Create Adamantine", "Create Platinum", "Create Viridium", "Create Obsidian", "Create Mithral", "Create Albryst", "Stalagmite", "Pine Spear", "Wildwood", "Glacier", "Wood Shield", "Rock Cover", "Ice Block", "Sicken", "Restrain", "Subdue", "Trip", "Attenuate", "Flash", "Ashen Veil", "Sandman", "Earthbind", "Encumber", "Clouded Eyes", "Blindness", "Freezebind", "Lethargy", "Sound Boom", "Weight", "Arcane Healing", "Barrier Healer", "Greater Barrier Healer", "Convalescence", "Wind Barrier", "Flame Barrier", "Ether Barrier", "Static Barrier", "Cold Barrier", "Barrier Restorer", "Greater Barrier Restorer", "Sand Barrier", "Ether Buffer", "Spirit Beacon", "Spirit Walk", "Expel Essence", "Arcane Burst", "Wind Burst", "Fireball", "Flame Pyre", "Erupting Earth", "Ball Lightning", "Shatter", "Geyser", "Fireblast", "Plasma Blast", "Caustic Eruption", "Sunburst", "Horrid Wilting", "Rockslide", "Daggerfall", "Hail", "Storm of Glass", "Dagger Storm", "Arcane Strike", "Wood Burst", "Fire Burst", "Glass Burst", "Quake", "Blade Burst", "Static Burst", "Lightning Pulse", "Thunderclap", "Repelling Pulse", "Rolling Fire", "Glass Surge", "Defoliate", "Lightning Bolt", "Caustic Rebuke", "Acid Spray", "Sunbeam", "Tidal Wave", "Diffuse", "Call Lightning", "Wither", "Coagulate", "Spirit Blast", "Harm", "Atrophy", "Chain Lightning", "Arcane Bolt", "Wind Bullet", "Repulse", "Flame Arrow", "Rock Bullets", "Lightning Shaft", "Ice Darts", "Ray of Frost", "Acid Arrow", "Fulgor", "Acid Blast", "Brick Barrage", "Burning Hands", "Glass Slasher", "Sand Blast", "Stone Shower", "Lightning Burst", "Rain of Daggers", "Water Blast", "Freezing Blast", "Thunderwave", "Cone of Cold", "Boom Burst", "Kinesis", "Diakopy", "Katapeltis", "Chlorotheurgy", "Pyrotheurgy", "Geotheurgy", "Ferrotheurgy", "Hydrotheurgy", "Purify Food and Drink", "Heal Vitality", "Restore Vitality", "Remove Radiation", "Poison Ward", "Rejuvenate", "Radiation Ward", "Cure Light Trauma", "Passive Healing", "Cure Injury", "Mend Light Wounds", "Passive Mending", "Mend Injuries", "Cure Light Wounds", "Passive Restoration", "Cure Wounds", "Lesser Life Weave", "Cure Fractures", "Cure Severs", "Mass Cure Injuries", "Mend", "Mass Cure Wounds", "Rhapsody", "Heal", "Life Weave", "Purify", "Nightingale", "True Restoration", "Mirage", "Minor Reflection", "Mirror Image", "Greater Reflection", "Instant Fake", "Heat Adaption", "Resistance", "Unencumbered", "Lift", "Grasp", "Cold Adaption", "True Strike", "Ashen Path", "Unburden", "Water Breathing", "Alacrity", "Embolden", "Overcome", "Nimble Dodge", "Foresight", "Feather Fall", "Leap", "Feather Step", "Ascent", "Root", "Zephyr", "Reposition", "Levitate", "Air Walk", "Floating Ice", "Detect Radiation", "Know Weather", "Scent", "Darkvision", "Darksight", "Tremorsense", "Blindsense", "Aquasense", "True Sight", "Greater Tremorsense", "Fleet Footed", "Longstrider", "Fleet Step", "Swift Swim", "Soar", "Jet", "Fast Climb", "Group Climb", "Burrow", "Sleep", "Slumber", "Hold Person", "Seize", "Cardiac Seizure", "Calmed Surge", "Mana Release", "Ether Release", "Duplicate Evocation", "Counterspell", "Innervate", "Boost Surge", "Mana Battery", "Mana Drain", "Sustained Mana", "Venom", "Blood Mark", "Ethereal Mark", "Distant Whisper", "Whisper", "Message", "Ghost Sound", "Transmission", "Whispering Wind", "Skywrite", "Sculpt Sound", "Telegram", "Telepathy", "Shape Fiber", "Shape Wood", "Shape Clay", "Shape Glass", "Shape Earth", "Shape Metal", "Shape Ice", "Shape Ironwood", "Shape Glacial", "Shape Fireglass", "Shape Adamantine", "Shape Platinum", "Shape Viridium", "Shape Obsidian", "Shape Mithral", "Shape Albryst", "Cultivate", "Torch", "Drench", "Earthquake", "Bleed", "Stabilize", "Revitalize", "Resuscitate", "Feign Death", "Ensnaring Strike", "Howling Strike", "Searing Strike", "Sand Impact", "Buffeting Water", "Freezing Strike", "Thunderous Smite", "Heavy Blade", "Lightning Blade", "Arcane Blade", "Flashing Blade", "Sand Strike", "Booming Strike", "Toxic Strike", "Spark Blade", "Zephyr Strike", "Time Leap", "Quick Stop", "Rewinding Step", "Blink", "True Stop"];
+    let searchFeaturesList = ["", "shimmer", "distortion", "dust wood", "dust glass", "dust earth", "dust metal", "dust ice", "dust ironwood", "excavate", "dust glacial", "dust fireglass", "dust adamantine", "dust platinum", "dust viridium", "dust obsidian", "dust mithral", "dust albryst", "forest guise", "light blindness", "shadow walk", "earth guise", "shadow steps", "water guise", "cloud of shadow", "shadow stalker", "wind wall", "wall of fire", "wall of sand", "blade barrier", "wall of water", "wall of force", "fog cloud", "congregate clouds", "misty terrain", "smoke cloud", "sandstorm", "ashen cloud", "solid smoke", "incendiary cloud", "produce heat", "static shock", "produce cold", "petal storm", "spore", "silence", "sleet storm", "irradiate", "sound buffer", "diamond dust", "updraft", "alleviate", "calm air", "downdraft", "pressure", "zero gravity", "reverse gravity", "light", "dancing lights", "dancing darkness", "burning light", "darkness", "deeper darkness", "dawn", "entangle", "seism", "ice floor", "eruption", "twister", "quicksand", "whirlpool", "flame whirl", "tornado", "flame cyclone", "antlion pit", "maelstrom", "blizzard", "nubikinesis", "force hand", "catapult", "floating disk", "gust of wind", "part sand", "sand tunnel", "part water", "tidal surge", "storm gust", "kinetic haul", "create forge duplicate", "create glass duplicate", "create ice duplicate", "create plant duplicate", "create rock duplicate", "quickcraft: wood", "quickcraft: glass", "quickcraft: earth", "quickcraft: metal", "quickcraft: ice", "create pine", "create cloth", "create maple", "create clay", "create glass", "create stone", "create crystal", "create iron", "create steel", "create snow", "create ice", "create ironwood", "create glacial", "create fireglass", "create adamantine", "create platinum", "create viridium", "create obsidian", "create mithral", "create albryst", "stalagmite", "pine spear", "wildwood", "glacier", "wood shield", "rock cover", "ice block", "sicken", "restrain", "subdue", "trip", "attenuate", "flash", "ashen veil", "sandman", "earthbind", "encumber", "clouded eyes", "blindness", "freezebind", "lethargy", "sound boom", "weight", "arcane healing", "barrier healer", "greater barrier healer", "convalescence", "wind barrier", "flame barrier", "ether barrier", "static barrier", "cold barrier", "barrier restorer", "greater barrier restorer", "sand barrier", "ether buffer", "spirit beacon", "spirit walk", "expel essence", "arcane burst", "wind burst", "fireball", "flame pyre", "erupting earth", "ball lightning", "shatter", "geyser", "fireblast", "plasma blast", "caustic eruption", "sunburst", "horrid wilting", "rockslide", "daggerfall", "hail", "storm of glass", "dagger storm", "arcane strike", "wood burst", "fire burst", "glass burst", "quake", "blade burst", "static burst", "lightning pulse", "thunderclap", "repelling pulse", "rolling fire", "glass surge", "defoliate", "lightning bolt", "caustic rebuke", "acid spray", "sunbeam", "tidal wave", "diffuse", "call lightning", "wither", "coagulate", "spirit blast", "harm", "atrophy", "chain lightning", "arcane bolt", "wind bullet", "repulse", "flame arrow", "rock bullets", "lightning shaft", "ice darts", "ray of frost", "acid arrow", "fulgor", "acid blast", "brick barrage", "burning hands", "glass slasher", "sand blast", "stone shower", "lightning burst", "rain of daggers", "water blast", "freezing blast", "thunderwave", "cone of cold", "boom burst", "kinesis", "diakopy", "katapeltis", "chlorotheurgy", "pyrotheurgy", "geotheurgy", "ferrotheurgy", "hydrotheurgy", "purify food and drink", "heal vitality", "restore vitality", "remove radiation", "poison ward", "rejuvenate", "radiation ward", "cure light trauma", "passive healing", "cure injury", "mend light wounds", "passive mending", "mend injuries", "cure light wounds", "passive restoration", "cure wounds", "lesser life weave", "cure fractures", "cure severs", "mass cure injuries", "mend", "mass cure wounds", "rhapsody", "heal", "life weave", "purify", "nightingale", "true restoration", "mirage", "minor reflection", "mirror image", "greater reflection", "instant fake", "heat adaption", "resistance", "unencumbered", "lift", "grasp", "cold adaption", "true strike", "ashen path", "unburden", "water breathing", "alacrity", "embolden", "overcome", "nimble dodge", "foresight", "feather fall", "leap", "feather step", "ascent", "root", "zephyr", "reposition", "levitate", "air walk", "floating ice", "detect radiation", "know weather", "scent", "darkvision", "darksight", "tremorsense", "blindsense", "aquasense", "true sight", "greater tremorsense", "fleet footed", "longstrider", "fleet step", "swift swim", "soar", "jet", "fast climb", "group climb", "burrow", "sleep", "slumber", "hold person", "seize", "cardiac seizure", "calmed surge", "mana release", "ether release", "duplicate evocation", "counterspell", "innervate", "boost surge", "mana battery", "mana drain", "sustained mana", "venom", "blood mark", "ethereal mark", "distant whisper", "whisper", "message", "ghost sound", "transmission", "whispering wind", "skywrite", "sculpt sound", "telegram", "telepathy", "shape fiber", "shape wood", "shape clay", "shape glass", "shape earth", "shape metal", "shape ice", "shape ironwood", "shape glacial", "shape fireglass", "shape adamantine", "shape platinum", "shape viridium", "shape obsidian", "shape mithral", "shape albryst", "cultivate", "torch", "drench", "earthquake", "bleed", "stabilize", "revitalize", "resuscitate", "feign death", "ensnaring strike", "howling strike", "searing strike", "sand impact", "buffeting water", "freezing strike", "thunderous smite", "heavy blade", "lightning blade", "arcane blade", "flashing blade", "sand strike", "booming strike", "toxic strike", "spark blade", "zephyr strike", "time leap", "quick stop", "rewinding step", "blink", "true stop"];
     let foundFeatures = [];
 
     let arbitrarySearchLimit = 6;
