@@ -673,6 +673,18 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     border-image: linear-gradient(to right, #ffffffff 0%, #ffffff00 70%) 1;
 }
 
+.wuxSectionBlock .wuxFormEntry select 
+{
+    display: inline-block;
+    width: auto;
+
+    color: #d0d0d0;
+    font-size: 11px;
+    font-weight: normal;
+    border: none;
+    background: none;
+}
+
 .wuxSectionBlock .wuxFormEntry button[type=roll]
 {
     position: relative;
@@ -4268,7 +4280,9 @@ visibility: visible;
 
 
 .sheet-rolltemplate-action .sheet-inner-border .sheet-wuxDescription .inlinerollresult,
-.sheet-rolltemplate-results .sheet-inner-border .sheet-wuxDescription .inlinerollresult
+.sheet-rolltemplate-action .sheet-inner-border .sheet-wuxDescription .sheet-wuxCheckSet .inlinerollresult,
+.sheet-rolltemplate-results .sheet-inner-border .sheet-wuxDescription .inlinerollresult,
+.sheet-rolltemplate-results .sheet-inner-border .sheet-wuxDescription .sheet-wuxCheckSet .inlinerollresult
 {
     display: inline-block;
     width: 16px;
@@ -4280,6 +4294,13 @@ visibility: visible;
 
     background: #8d4f00;
     border: none;
+}
+
+
+.sheet-rolltemplate-action .sheet-inner-border .sheet-wuxDescription .sheet-wuxCheckSet .inlinerollresult,
+.sheet-rolltemplate-results .sheet-inner-border .sheet-wuxDescription .sheet-wuxCheckSet .inlinerollresult
+{
+    border: 1px solid #00c6ee;
 }
 
 .sheet-rolltemplate-action .sheet-inner-border .sheet-wuxFooter,

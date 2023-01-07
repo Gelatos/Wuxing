@@ -1399,7 +1399,7 @@ on("change:repeating_customActions:atkname", function (eventinfo) {
 	update_actions(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_customActions"), true);
 });
 
-on("change:repeating_customActions:atkTargetStyle change:repeating_customActions:atkTraits change:repeating_customActions:atkActionCost change:repeating_customActions:atkConditionalsflag change:repeating_customActions:atkrange change:repeating_customActions:atkTrigger change:repeating_customActions:atkRequirement change:repeating_customActions:checkflag change:repeating_customActions:checkbase change:repeating_customActions:checkmod change:repeating_customActions:checkdef change:repeating_customActions:checkdefdc change:repeating_customActions:atkflag change:repeating_customActions:atkattr_base change:repeating_customActions:atkmod change:repeating_customActions:proficiency_group change:repeating_customActions:proficiency_customrank change:repeating_customActions:dmgflag change:repeating_customActions:dmgbase change:repeating_customActions:dmgattr change:repeating_customActions:dmgmod change:repeating_customActions:dmgtype change:repeating_customActions:dmgelement change:repeating_customActions:dmg2flag change:repeating_customActions:dmg2base change:repeating_customActions:dmg2attr change:repeating_customActions:dmg2mod change:repeating_customActions:dmg2type change:repeating_customActions:dmg2element change:repeating_customActions:atkspellpower change:repeating_customActions:hldmg change:repeating_customActions:atkCritSuccess change:repeating_customActions:atkSuccess change:repeating_customActions:atkFailure change:repeating_customActions:atkCritFailure change:repeating_customActions:spellmana change:repeating_customActions:ammo change:repeating_customActions:resource change:repeating_customActions:consumable change:repeating_customActions:atk_desc", function (eventinfo) {
+on("change:repeating_customActions:atkTargetStyle change:repeating_customActions:atkTraits change:repeating_customActions:atkActionCost change:repeating_customActions:atkConditionalsflag change:repeating_customActions:atkrange change:repeating_customActions:atkTrigger change:repeating_customActions:atkRequirement change:repeating_customActions:checkflag change:repeating_customActions:checkbase change:repeating_customActions:checkmod change:repeating_customActions:checkdef change:repeating_customActions:checkdefdc change:repeating_customActions:atkflag change:repeating_customActions:atkattr_base change:repeating_customActions:atkmod change:repeating_customActions:atkaskforroll change:repeating_customActions:proficiency_group change:repeating_customActions:proficiency_customrank change:repeating_customActions:dmgflag change:repeating_customActions:dmgbase change:repeating_customActions:dmgattr change:repeating_customActions:dmgmod change:repeating_customActions:dmgtype change:repeating_customActions:dmgelement change:repeating_customActions:dmg2flag change:repeating_customActions:dmg2base change:repeating_customActions:dmg2attr change:repeating_customActions:dmg2mod change:repeating_customActions:dmg2type change:repeating_customActions:dmg2element change:repeating_customActions:atkspellpower change:repeating_customActions:hldmg change:repeating_customActions:atkCritSuccess change:repeating_customActions:atkSuccess change:repeating_customActions:atkFailure change:repeating_customActions:atkCritFailure change:repeating_customActions:spellmana change:repeating_customActions:ammo change:repeating_customActions:resource change:repeating_customActions:consumable change:repeating_customActions:atk_desc", function (eventinfo) {
 	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
 		return;
 	}
@@ -1897,6 +1897,7 @@ var GetActionData = function () {
 		// checks {{check=1}}
 		checkName: "",
 		checkRoll: false,
+		checkAsk: false,
 		checkMod: "",
 		checkDef: "",
 
@@ -1992,7 +1993,12 @@ var GetActionData = function () {
 				output += ` {{check=${this.checkName}}}`;
 				output += ` {{checkDef=${this.checkDef}}}`;
 				output += this.checkRoll ? " {{checkRoll=1}}" : "";
-				output += ` {{r1=[[${(this.checkRoll ? "1d20" : "0d20") + (this.checkMod != "" ? " + " + this.checkMod : "")}]]}}`;
+				if (this.checkAsk) {
+					output += ` {{checkAsk=1}}{{r1=[[?{Check Roll Result|0}${(this.checkMod != "" ? " + " + this.checkMod : "")}]]}}`;
+				}
+				else {
+					output += ` {{r1=[[${(this.checkRoll ? "1d20" : "0d20") + (this.checkMod != "" ? " + " + this.checkMod : "")}]]}}`;
+				}
 				output += ` {{r2=[[${(this.checkRoll ? "1d20" : "0d20") + (this.checkMod != "" ? " + " + this.checkMod : "")}]]}}`;
 			}
 
@@ -3399,11 +3405,6 @@ var do_update_classLevels_complex_growths = function (update, idarray, v, levelI
 var update_caster_point_totals = function () {
 	console.log("UPDATING CLASS LEVELS - CASTER POINTS");
 
-	let resetAll = false;
-	if (levelId == undefined) {
-		resetAll = true;
-	}
-
 	var mod_attrs = ["class", "spellcasting_ability", "intelligence_mod", "wisdom_mod", "charisma_mod", "magicSpellforce", "magicAffinityControl", "magicWillpower", "magicKiCapacity"];
 	var repeatingArchetypes = "repeating_archetypeLevels";
 
@@ -3962,7 +3963,6 @@ var do_update_classLevels_complex_proficiencies = function (levelGrowth, v, sour
 
 		// determine growths
 		let startingGrowth = `Become ${GetProficiencyRankTitle(skillProf.init.startRank)} in ${skillProf.init.startingCount} skills from ${skillProf.init.startingSkills}.\n`;
-		startingGrowth += `\nBecome Trained in ${(extraSkills + skillProf.init.additionalSkills)} additional skills.`;
 		if (skillProf.init.specializationCount > 0) {
 			startingGrowth += `\nBecome Trained in ${(skillProf.init.specializationCount)} specializations.`;
 		}
@@ -6965,7 +6965,7 @@ var update_specializations_base_skill = function (prevValue, newValue, skill) {
 var update_skill_proficiency_points = function() {
 	let profArray = PrefixAttributeArray("skillproficiency-", GetSkillProficiencyTypes());
 	profArray = profArray.concat(PrefixAttributeArray("skillspecproficiency-", GetSkillSpecializationTypes()));
-	let maxProfArray = ["skillAncestryBonus", "skillBackgroundBonus", "skillClassBonus", "skillArchetypeBonus", "skillFeatBonus", "skillMiscBonus"];
+	let maxProfArray = ["skillAncestryBonus", "skillBackgroundBonus", "skillClassBonus", "skillArchetypeBonus", "skillFeatBonus", "intelligence_mod", "skillLifeBonus", "skillMiscBonus"];
 	update_proficiency_points("skillPoints", profArray, maxProfArray);
 }
 
@@ -7321,7 +7321,7 @@ var do_update_action = function (attackArray) {
 	var repeatingSection = "repeating_customActions";
 	attack_attribs = attack_attribs.concat(GetSectionIdValues(attackArray, repeatingSection, [
 		"atkname", "atkTargetStyle", "atkTraits", "atkActionCost", "atkConditionalsflag", "atkrange", "atkTrigger", "atkRequirement",
-		"checkflag", "checkbase", "checkmod", "checkdef", "checkdefdc",
+		"checkflag", "checkbase", "checkmod", "checkdef", "checkdefdc", "atkaskforroll",
 		"atkflag", "atkattr_base", "atkmod", "proficiency_group", "proficiency_customrank",
 		"dmgflag", "dmgbase", "dmgattr", "dmgmod", "dmgtype", "dmgelement",
 		"dmg2flag", "dmg2base", "dmg2attr", "dmg2mod", "dmg2type", "dmg2element",
@@ -7426,6 +7426,8 @@ var do_update_action = function (attackArray) {
 
 				// add checks
 				if (v[GetSectionIdName(repeatingSection, id, "checkflag")] == "1") {
+					console.log ("Check ask: " + v[GetSectionIdName(repeatingSection, id, "atkaskforroll")]);
+					actionData.checkAsk = v[GetSectionIdName(repeatingSection, id, "atkaskforroll")] == "1" ? true : false;
 
 					if (v[GetSectionIdName(repeatingSection, id, "atkflag")] == "1") {
 						actionModString = "";
@@ -8017,7 +8019,9 @@ var update_spell_from_database = function (spellName, spellId, autoClose) {
 var update_centered_spells = function (spellId) {
 	var repeatingSection = "repeating_spells";
 	getSectionIDs(repeatingSection, function (idarray) {
-		var spell_attribs = GetSectionIdValues(idarray, repeatingSection, ["isSelected", "spellslotcost"]);
+		let spell_attribs = ["spell_slots_max"];
+		spell_attribs = spell_attribs.concat(GetSectionIdValues(idarray, repeatingSection, ["isSelected", "spellslotcost"]));
+
 		getAttrs(spell_attribs, function (v) {
 			var update = {};
 			var slots = 0;
@@ -8030,10 +8034,15 @@ var update_centered_spells = function (spellId) {
 			});
 			update["spell_slots"] = slots;
 
+			let spell_slots_max = isNaN(parseInt(v["spell_slots_max"])) ? 0 : parseInt(v["spell_slots_max"]);
+			update["spellSlotsError"] = slots > spell_slots_max ? "1" : "0";
+
 			setAttrs(update, {
 				silent: true
 			}, function () {
-				update_spell_info(spellId);
+				if (spellId != undefined) {
+					update_spell_info(spellId);
+				}
 			});
 		});
 	});
@@ -13212,6 +13221,7 @@ function GetKiCapacityBonuses(pointObj, spellcasting_ability) {
 var upgrade_to_1_1_1 = function (doneupdating) {
 	update_pb();
 	finish_update_pb();
+	update_centered_spells();
 	doneupdating();
 };
 
@@ -13239,6 +13249,7 @@ var upgrade_to_1_1_0 = function (doneupdating) {
 		update_health_barrier();
 		update_caster_points();
 		update_all_known_spells();
+		update_centered_spells();
 
 		doneupdating();
 

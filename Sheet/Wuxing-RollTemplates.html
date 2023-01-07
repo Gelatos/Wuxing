@@ -118,8 +118,8 @@
                     {{^check1}}
                     <strong>Check: </strong> 
                     {{/check1}}
-                    <span>{{#checkRoll}}{{r1}} | {{r2}}{{/checkRoll}}
-                    {{^checkRoll}}DC {{r1}} {{/checkRoll}}
+                    <span>{{#checkRoll}}{{#checkAsk}}<span class="wuxCheckSet">{{r1}}</span>{{/checkAsk}}{{^checkAsk}}{{r1}}{{/checkAsk}} | {{r2}}{{/checkRoll}}
+                    {{^checkRoll}}DC {{#checkAsk}}<span class="wuxCheckSet">{{r1}}</span>{{/checkAsk}}{{^checkAsk}}{{r1}}{{/checkAsk}} {{/checkRoll}}
                     {{#checkDef}}{{#checkRoll}} vs. {{/checkRoll}}{{checkDef}}{{/checkDef}}
                     </span>
                     {{#check1}}

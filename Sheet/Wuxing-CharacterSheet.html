@@ -325,6 +325,13 @@
 									<span class="wuxFormTitle">Archetype</span>
 									<span class="wuxFormInput wuxSizeTiny" name="attr_skillArchetypeBonus" value="0">0</span>
 									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxFormTitle">Life</span>
+									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_skillLifeBonus" value="0">
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle">Int Bonus</span>
+									<span class="wuxFormInput wuxSizeTiny" name="attr_intelligence_mod" value="0">0</span>
+									<span class="wuxPmSpacer">&nbsp;</span>
 									<span class="wuxFormTitle">Misc</span>
 									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_skillMiscBonus" value="0">
 								</div>
@@ -23212,9 +23219,34 @@
 											<div class="wuxCollapseField">
 												<div class="wuxDescription">
 													<div class="wuxRow">
-														<span class="wuxFormHeader">Spellcharge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														<span class="wuxFormHeader">Spellcharge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/Sqy4Mex.png" /></span>
 													</div>
-													<div class="wuxMultiRow">You expend ki in order to fuel your own magical abilities. For every 20 ki you expend as a part of this action, you gain 1 spellcharge. You can hold a maximum of 3 spellcharges. Whenever you complete a short or long rest, your spellcharges increase to your maximum. As long as you have at least 1 spellcharge, your barrier AC increases by 1.</div>
+													<div class="wuxMultiRow">You expend ki in order to fuel your own magical abilities. For every 20 ki you expend as a part of this action, you gain 1 spellcharge. You can hold a maximum of 10 spellcharges. Whenever you complete a short or long rest, your spellcharges increase to your maximum. As long as you have at least 1 spellcharge, your barrier AC increases by 1.</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxSubCategory featlist-SpellchargeBattery">
+										<div class="wuxFieldSet">
+											<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-SpellchargeBattery">
+											<input type="hidden" name="attr_featlist-SpellchargeBattery" value="Spellcharge Battery">
+											<div class="wuxFeatEntry">
+												<div class="wuxFormEntry">
+													<span class="wuxFormHeaderLeadIcon">J</span>
+													<button class="wuxSpellAddButton" type="action" name="act_addfeat-SpellchargeBattery"><span>Add</span></button>
+													<span class="wuxFeatLevel">Character 02</span>
+													<span name="attr_featlist-SpellchargeBattery" value="Spellcharge Battery">Spellcharge Battery</span>
+												</div>
+											</div>
+
+
+											<div class="wuxCollapseField">
+												<div class="wuxDescription">
+													<div class="wuxRow">
+														<span class="wuxFormHeader">Spellcharge Battery<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+													</div>
+													<div class="wuxMultiRow">At 2nd level and every two levels thereafter, your spellcharge maxmum increase by 5.
+														In addition, whenever you complete a brief rest, your spellcharges return to their maximum.</div>
 												</div>
 											</div>
 										</div>
@@ -23239,30 +23271,6 @@
 														<span class="wuxFormHeader">Spellstrike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
 													</div>
 													<div class="wuxMultiRow">When you use this action, make a melee Strike. On hit, expend a number of spellcharges up to your Spell Power level. For each spellcharge you expend, you deal an extra 1d8 damage. </div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="wuxSubCategory featlist-SpellchargeBattery">
-										<div class="wuxFieldSet">
-											<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-SpellchargeBattery">
-											<input type="hidden" name="attr_featlist-SpellchargeBattery" value="Spellcharge Battery">
-											<div class="wuxFeatEntry">
-												<div class="wuxFormEntry">
-													<span class="wuxFormHeaderLeadIcon">J</span>
-													<button class="wuxSpellAddButton" type="action" name="act_addfeat-SpellchargeBattery"><span>Add</span></button>
-													<span class="wuxFeatLevel">Character 03</span>
-													<span name="attr_featlist-SpellchargeBattery" value="Spellcharge Battery">Spellcharge Battery</span>
-												</div>
-											</div>
-
-
-											<div class="wuxCollapseField">
-												<div class="wuxDescription">
-													<div class="wuxRow">
-														<span class="wuxFormHeader">Spellcharge Battery<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
-													</div>
-													<div class="wuxMultiRow">At 3rd level and every three levels thereafter, your spellcharge maxmum increase by 1.</div>
 												</div>
 											</div>
 										</div>
@@ -23310,7 +23318,7 @@
 													<div class="wuxRow">
 														<span class="wuxFormHeader">Spellshielding<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
 													</div>
-													<div class="wuxMultiRow">You channel some of your spellcharge back into your barrier. Expend a number of spellcharges. For each spellcharge you expend, you heal 1d6 barrier.</div>
+													<div class="wuxMultiRow">You channel some of your spellcharge back into your barrier. Expend a number of spellcharges up to your Spell Power level. For each spellcharge you expend, you heal 1d4 barrier.</div>
 												</div>
 											</div>
 										</div>
@@ -24383,38 +24391,6 @@
 																<span class="wuxFormHeader">Lunge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
 															</div>
 															<div class="wuxMultiRow">You can increase your reach by 5 feet for the rest of your turn. Doing so grants you a -2 penalty on all attack rolls this turn.</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="wuxSubCategory featlist-ShieldBlock">
-												<div class="wuxFieldSet">
-													<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ShieldBlock">
-													<input type="hidden" name="attr_featlist-ShieldBlock" value="Shield Block">
-													<div class="wuxFeatEntry">
-														<div class="wuxFormEntry">
-															<span class="wuxFormHeaderLeadIcon">J</span>
-															<button class="wuxSpellAddButton" type="action" name="act_addfeat-ShieldBlock"><span>Add</span></button>
-															<span class="wuxFeatLevel">Character 01</span>
-															<span name="attr_featlist-ShieldBlock" value="Shield Block">Shield Block</span>
-														</div>
-													</div>
-
-													<div class="wuxMultiRow">
-														<div class="wuxFormEntry">
-															<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ShieldBlock-Combat">Combat</label>
-															<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ShieldBlock-General">General</label>
-
-														</div>
-													</div>
-
-													<div class="wuxCollapseField">
-														<div class="wuxDescription">
-															<div class="wuxRow">
-																<span class="wuxFormHeader">Shield Block<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
-															</div>
-															<div class='wuxMultiRow'><span><strong>Requirement: </strong>You must be wielding a shield.</span></div>
-															<div class="wuxMultiRow">When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll.</div>
 														</div>
 													</div>
 												</div>
@@ -37970,9 +37946,9 @@
 													<div class="wuxCollapseField">
 														<div class="wuxDescription">
 															<div class="wuxRow">
-																<span class="wuxFormHeader">Spellcharge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+																<span class="wuxFormHeader">Spellcharge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/Sqy4Mex.png" /></span>
 															</div>
-															<div class="wuxMultiRow">You expend ki in order to fuel your own magical abilities. For every 20 ki you expend as a part of this action, you gain 1 spellcharge. You can hold a maximum of 3 spellcharges. Whenever you complete a short or long rest, your spellcharges increase to your maximum. As long as you have at least 1 spellcharge, your barrier AC increases by 1.</div>
+															<div class="wuxMultiRow">You expend ki in order to fuel your own magical abilities. For every 20 ki you expend as a part of this action, you gain 1 spellcharge. You can hold a maximum of 10 spellcharges. Whenever you complete a short or long rest, your spellcharges increase to your maximum. As long as you have at least 1 spellcharge, your barrier AC increases by 1.</div>
 														</div>
 													</div>
 												</div>
@@ -38066,7 +38042,7 @@
 															<div class="wuxRow">
 																<span class="wuxFormHeader">Spellshielding<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
 															</div>
-															<div class="wuxMultiRow">You channel some of your spellcharge back into your barrier. Expend a number of spellcharges. For each spellcharge you expend, you heal 1d6 barrier.</div>
+															<div class="wuxMultiRow">You channel some of your spellcharge back into your barrier. Expend a number of spellcharges up to your Spell Power level. For each spellcharge you expend, you heal 1d4 barrier.</div>
 														</div>
 													</div>
 												</div>
@@ -48966,7 +48942,7 @@
 								</div>
 							</div>
 							<div class="display">
-								<input type="checkbox" class="wuxCollapseField-flag" name="attr_featureDisplay">\
+								<input type="checkbox" class="wuxCollapseField-flag" name="attr_featureDisplay">
 								<div class="wuxMultiRow">
 									<div class="wuxFormEntry">
 										<span class="wuxFormHeaderLeadIcon">J</span>
@@ -61037,6 +61013,13 @@
 												<span class="wuxFormTitle wuxSizeSmall">Total</span>
 												<span class="wuxFormData wuxSizeSmall" name="attr_atkbonus">0</span>
 											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle wuxSizeLarge">Randomize Roll?</span>
+												<select class='wuxFormInput wuxSizeSmall' name='attr_atkaskforroll'>
+													<option value='0'>Yes</option>
+													<option value="1">No</option>
+												</select>
+											</div>
 										</div>
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_atkflag" value="0">
 										<div class="action-CheckRolls wuxHiddenAuxField">
@@ -61524,31 +61507,31 @@
 										<div class="wuxRow">
 											<span class="wuxFormSubheader">On Crit Success</span>
 										</div>
-										<input type="hidden" class="wuxFormInput" name="attr_atkOnCritSuccess" value="">
-										<div class="wuxMultiRow">
+										<input type="text" class="wuxFormInput" name="attr_atkOnCritSuccess" value="">
+										<!-- <div class="wuxMultiRow">
 											<span class="wuxDescription" name="attr_atkOnCritSuccessString"></span>
-										</div>
+										</div> -->
 										<div class="wuxRow">
 											<span class="wuxFormSubheader">On Success</span>
 										</div>
-										<input type="hidden" class="wuxFormInput" name="attr_atkOnSuccess" value="">
-										<div class="wuxMultiRow">
+										<input type="text" class="wuxFormInput" name="attr_atkOnSuccess" value="">
+										<!-- <div class="wuxMultiRow">
 											<span class="wuxDescription" name="attr_atkOnSuccessString"></span>
-										</div>
+										</div> -->
 										<div class="wuxRow">
 											<span class="wuxFormSubheader">On Failure</span>
 										</div>
-										<input type="hidden" class="wuxFormInput" name="attr_atkOnFailure" value="">
-										<div class="wuxMultiRow">
+										<input type="text" class="wuxFormInput" name="attr_atkOnFailure" value="">
+										<!-- <div class="wuxMultiRow">
 											<span class="wuxDescription" name="attr_atkOnFailureString"></span>
-										</div>
+										</div> -->
 										<div class="wuxRow">
 											<span class="wuxFormSubheader">On Crit Failure</span>
 										</div>
-										<input type="hidden" class="wuxFormInput" name="attr_atkOnCritFailure" value="">
-										<div class="wuxMultiRow">
+										<input type="text" class="wuxFormInput" name="attr_atkOnCritFailure" value="">
+										<!-- <div class="wuxMultiRow">
 											<span class="wuxDescription" name="attr_atkOnCritFailureString"></span>
-										</div>
+										</div> -->
 									</div>
 									<div class="wuxRow">&nbsp;</div>
 
@@ -61779,6 +61762,7 @@
 								</div>
 								<div class="wuxInfoSubField">
 									<span class="wuxInfoSubtitle">Max</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_spellSlotsError" value="0" />
 									<span class="wuxInfoSubdata" name="attr_spell_slots_max" value="0">0</span>
 								</div>
 							</div>
@@ -65720,11 +65704,12 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				<div class="wuxSectionContent">
 					<fieldset class="repeating_languages">
 						<div class="wuxFieldSet">
-							<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
-							<div class="options">
-								<div class="wuxRow">
-									<span class="wuxFormTitle">Language</span>
-									<select class="wuxFormInput" style="width: 124px;" name="attr_language" value="-">
+							<div class="wuxMultiRow">
+								<div class="wuxFormEntry">
+									<input class="wuxEquipField-flag" type="checkbox" name="attr_isSelected" style="display: block">
+									<input class="wuxEquipField-flag" type="hidden" name="attr_isSelected" value="0">
+									<span class="wuxFormHeaderLeadIcon"></span>
+									<select name="attr_language" value="-">
 										<option value="-">-</option>
 										<option value="Minere">Minere</option>
 										<option value="Apollen">Apollen</option>
@@ -65753,16 +65738,6 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 										<option value="Vulca">Vulca</option>
 										<option value="Wolfwarg">Wolfwarg</option>
 									</select>
-								</div>
-							</div>
-							<div class="display">
-								<div class="wuxMultiRow">
-									<div class="wuxFormEntry">
-										<input class="wuxEquipField-flag" type="checkbox" name="attr_isSelected" style="display: block">
-										<input class="wuxEquipField-flag" type="hidden" name="attr_isSelected" value="0">
-										<span class="wuxFormHeaderLeadIcon"></span>
-										<span name="attr_language">Language</span>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -67509,268 +67484,179 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 		</div>
 	</div>
 	<div class="wuxTabField wuxTab">
-		<div class="battle-battleLog wuxSectionBlock wuxLayoutItem">
+		<div class="battle-fieldLog wuxSectionBlock wuxLayoutItem">
 			<div class="wuxSectionContent">
+
 				<fieldset class="repeating_fieldLog">
 					<div class="wuxFieldSet">
 						<input type="hidden" name="attr_rollbase" value="">
 						<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
 						<div class="options">
 							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Caster</span>
-								<input type="text" class="wuxFormInput" name="attr_atksourcename">
-							</div>
-							<div class="wuxRow">
 								<span class="wuxFormTitle wuxSizeSmall">Name</span>
 								<input type="text" class="wuxFormInput" name="attr_atkname">
-							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Target</span>
-								<select class="wuxFormInput wuxSizeMed" name="attr_atkTargetStyle">
-									<option value="0" selected="selected">None</option>
-									<option value="Token">Token</option>
-									<option value="Self">Self</option>
-									<option value="Field">Field</option>
-								</select>
 							</div>
 							<div class="wuxRow">
 								<span class="wuxFormTitle">Traits</span>
 								<input type="text" class="wuxFormInput" name="attr_atkTraits">
 							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle">Action Cost</span>
-								<select class="wuxFormInput wuxSizeMed" name="attr_atkActionCost">
-									<option value="None" selected="selected">None</option>
-									<option value="0">Free</option>
-									<option value="1">Cost 1</option>
-									<option value="2">Cost 2</option>
-									<option value="3">Cost 3</option>
-									<option value="R">Reaction</option>
-								</select>
-							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeLarge">Changing Cost</span>
-								<select class='wuxFormInput wuxSizeSmall' name='attr_atkActionsCanChange' value="0">
-									<option value='0' selected="selected">No</option>
-									<option value='1'>Yes</option>
-								</select>
-							</div>
 							<div class="wuxRow">&nbsp;</div>
 
 							<div class="wuxRow"><span class="wuxFormHeader">Conditionals</span></div>
 							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeLarge">Has Conditionals</span>
-								<select class='wuxFormInput wuxSizeSmall' name='attr_atkConditionalsflag'>
-									<option value='0' selected="selected">No</option>
-									<option value='1'>Yes</option>
-								</select>
+								<span class="wuxFormTitle">Trigger</span>
+								<input type="text" class="wuxFormInput" name="attr_atkTrigger" value="">
 							</div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_atkConditionalsflag" value="0">
-							<div class="wuxHiddenField">
-								<div class="wuxRow">
-									<span class="wuxFormTitle">Range</span>
-									<input type="text" class="wuxFormInput" name="attr_atkrange" value="">
-								</div>
-								<div class="wuxRow">
-									<span class="wuxFormTitle">Trigger</span>
-									<input type="text" class="wuxFormInput" name="attr_atkTrigger" value="">
-								</div>
-								<div class="wuxRow">
-									<span class="wuxFormTitle">Requirement</span>
-									<input type="text" class="wuxFormInput" name="attr_atkRequirement" value="">
-								</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Requirement</span>
+								<input type="text" class="wuxFormInput" name="attr_atkRequirement" value="">
 							</div>
+
 							<div class="wuxRow">&nbsp;</div>
 							<div class="wuxRow">
-								<span class="wuxFormHeader">Checks</span>
+								<span class="wuxFormTitle">Check</span>
+								<input type="number" class="wuxFormInput" name="attr_atkbonus" placeholder="0">
 							</div>
+
 							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeLarge">Has Check</span>
-								<select class="wuxFormInput wuxSizeSmall" name="attr_checkflag">
-									<option value="0">No</option>
-									<option value="1">Yes</option>
+								<span class="wuxFormTitle">Target Check</span>
+								<select class="wuxFormInput wuxSizeMed" name="attr_checkdef">
+									<option value="None">None</option>
+									<option value="ac">AC</option>
+									<option value="Spell Save">Spell Save</option>
+									<option value="Strength Save">Strength Save</option>
+									<option value="Dexterity Save">Dexterity Save</option>
+									<option value="Constitution Save">Constitution Save</option>
+									<option value="Intelligence Save">Intelligence Save</option>
+									<option value="Wisdom Save">Wisdom Save</option>
+									<option value="Charisma Save">Charisma Save</option>
+									<option value="acrobatics">Acrobatics</option>
+									<option value="balance">Balance</option>
+									<option value="escapeartist">Escape Artist</option>
+									<option value="squeeze">Squeeze</option>
+									<option value="tumble">Tumble</option>
+									<option value="arcana">Arcana</option>
+									<option value="identifymagic">Identify Magic</option>
+									<option value="restorebarrier">Restore Barrier</option>
+									<option value="athletics">Athletics</option>
+									<option value="climb">Climb</option>
+									<option value="breakfree">Break Free</option>
+									<option value="grapple">Grapple</option>
+									<option value="highjump">High Jump</option>
+									<option value="longjump">Long Jump</option>
+									<option value="shove">Shove</option>
+									<option value="swim">Swim</option>
+									<option value="deception">Deception</option>
+									<option value="createadiversion">Create a Diversion</option>
+									<option value="impersonate">Impersonate</option>
+									<option value="lie">Lie</option>
+									<option value="health">Health</option>
+									<option value="identifyillness">Identify Illness</option>
+									<option value="stabilize">Stabilize</option>
+									<option value="insight">Insight</option>
+									<option value="discernsecretmessage">Discern Secret Message</option>
+									<option value="sensemotive">Sense Motive</option>
+									<option value="intimidation">Intimidation</option>
+									<option value="coerce">Coerce</option>
+									<option value="demoralize">Demoralize</option>
+									<option value="investigation">Investigation</option>
+									<option value="analyze">Analyze</option>
+									<option value="appraise">Appraise</option>
+									<option value="seek">Seek</option>
+									<option value="nature">Nature</option>
+									<option value="assesscreature">Assess Creature</option>
+									<option value="commandanimal">Command Animal</option>
+									<option value="perception">Perception</option>
+									<option value="perceivebarrier">Perceive Barrier</option>
+									<option value="sensepresence">Sense Presence</option>
+									<option value="performance">Performance</option>
+									<option value="act">Act</option>
+									<option value="comedy">Comedy</option>
+									<option value="dance">Dance</option>
+									<option value="oratory">Oratory</option>
+									<option value="playinstrument">Play Instrument</option>
+									<option value="sing">Sing</option>
+									<option value="persuasion">Persuasion</option>
+									<option value="gatherinformation">Gather Information</option>
+									<option value="influence">Influence</option>
+									<option value="requestfavor">Request Favor</option>
+									<option value="stealth">Stealth</option>
+									<option value="concealanobject">Conceal an Object</option>
+									<option value="hide">Hide</option>
+									<option value="sneak">Sneak</option>
+									<option value="survival">Survival</option>
+									<option value="navigate">Navigate</option>
+									<option value="track">Track</option>
+									<option value="thievery">Thievery</option>
+									<option value="palm">Palm</option>
+									<option value="steal">Steal</option>
+									<option value="alchemy">Alchemy</option>
+									<option value="balm">Balm</option>
+									<option value="inhalent">Inhalent</option>
+									<option value="injection">Injection</option>
+									<option value="tablet">Tablet</option>
+									<option value="artistry">Artistry</option>
+									<option value="painting">Painting</option>
+									<option value="penmanship">Penmanship</option>
+									<option value="sketching">Sketching</option>
+									<option value="brewing">Brewing</option>
+									<option value="blending">Blending</option>
+									<option value="fermenting">Fermenting</option>
+									<option value="roasting">Roasting</option>
+									<option value="steeping">Steeping</option>
+									<option value="carving">Carving</option>
+									<option value="chiselling">Chiselling</option>
+									<option value="cutting">Cutting</option>
+									<option value="shapeice">Shape Ice</option>
+									<option value="shapeplants">Shape Plants</option>
+									<option value="cooking">Cooking</option>
+									<option value="baking">Baking</option>
+									<option value="grilling">Grilling</option>
+									<option value="mixing">Mixing</option>
+									<option value="simmering">Simmering</option>
+									<option value="steaming">Steaming</option>
+									<option value="stewing">Stewing</option>
+									<option value="leatherworking">Leatherworking</option>
+									<option value="stitching">Stitching</option>
+									<option value="tanning">Tanning</option>
+									<option value="molding">Molding</option>
+									<option value="glassblowing">Glassblowing</option>
+									<option value="sculpting">Sculpting</option>
+									<option value="shapeearth">Shape Earth</option>
+									<option value="shapeglass">Shape Glass</option>
+									<option value="smithing">Smithing</option>
+									<option value="forging">Forging</option>
+									<option value="shapemetal">Shape Metal</option>
+									<option value="tinkering">Tinkering</option>
+									<option value="engineering">Engineering</option>
+									<option value="goldsmithing">Goldsmithing</option>
+									<option value="weaving">Weaving</option>
+									<option value="fabriccraft">Fabric Craft</option>
+									<option value="sewing">Sewing</option>
+									<option value="disabledevice">Disable Device</option>
+									<option value="openlock">Open Lock</option>
+									<option value="sabotage">Sabotage</option>
+									<option value="disguise">Disguise</option>
+									<option value="guise">Guise</option>
+									<option value="gathering">Gathering</option>
+									<option value="farm">Farm</option>
+									<option value="fish">Fish</option>
+									<option value="forage">Forage</option>
+									<option value="mining">Mining</option>
+									<option value="medicine">Medicine</option>
+									<option value="coatpoison">Coat Poison</option>
+									<option value="dose">Dose</option>
+									<option value="firstaid">First Aid</option>
+									<option value="releasepoison">Release Poison</option>
+									<option value="pilot">Pilot</option>
+									<option value="pilotaircraft">Pilot Aircraft</option>
+									<option value="pilotgroundcraft">Pilot Groundcraft</option>
+									<option value="pilotseacraft">Pilot Seacraft</option>
 
 								</select>
 
 							</div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_checkflag" value="0">
-							<div class="wuxHiddenField">
 
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeLarge">Is Attack Roll</span>
-									<select class='wuxFormInput wuxSizeSmall' name='attr_atkflag'>
-										<option value='0'>No</option>
-										<option value='1'>Yes</option>
-									</select>
-								</div>
-								<input type="hidden" class="wuxHiddenField-flag" name="attr_atkflag" value="0">
-								<div class="action-AttackRolls wuxHiddenField">
-									<div class="wuxRow">
-										<span class="wuxFormSubheader">Attack Roll</span>
-									</div>
-									<div class="wuxRow">
-										<input type="number" class="wuxFormInput" name="attr_atkmod" placeholder="0">
-									</div>
-								</div>
-								<input type="hidden" class="wuxHiddenField-flag" name="attr_atkflag" value="0">
-								<div class="action-CheckRolls wuxHiddenAuxField">
-									<div class="wuxRow">
-										<span class="wuxFormSubheader">Check Roll</span>
-									</div>
-									<div class="wuxRow">
-										<span class="wuxFormTitle">Check</span>
-										<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_checkmod" value="0">
-									</div>
-									<div class="wuxRow">
-										<span class="wuxFormTitle">Target Check</span>
-										<select class="wuxFormInput wuxSizeMed" name="attr_checkdef">
-											<option value="None">None</option>
-											<option value="Spell Save">Spell Save</option>
-											<option value="Strength Save">Strength Save</option>
-											<option value="Dexterity Save">Dexterity Save</option>
-											<option value="Constitution Save">Constitution Save</option>
-											<option value="Intelligence Save">Intelligence Save</option>
-											<option value="Wisdom Save">Wisdom Save</option>
-											<option value="Charisma Save">Charisma Save</option>
-											<option value="acrobatics">Acrobatics</option>
-											<option value="balance">Balance</option>
-											<option value="escapeartist">Escape Artist</option>
-											<option value="squeeze">Squeeze</option>
-											<option value="tumble">Tumble</option>
-											<option value="arcana">Arcana</option>
-											<option value="identifymagic">Identify Magic</option>
-											<option value="restorebarrier">Restore Barrier</option>
-											<option value="athletics">Athletics</option>
-											<option value="climb">Climb</option>
-											<option value="breakfree">Break Free</option>
-											<option value="grapple">Grapple</option>
-											<option value="highjump">High Jump</option>
-											<option value="longjump">Long Jump</option>
-											<option value="shove">Shove</option>
-											<option value="swim">Swim</option>
-											<option value="deception">Deception</option>
-											<option value="createadiversion">Create a Diversion</option>
-											<option value="impersonate">Impersonate</option>
-											<option value="lie">Lie</option>
-											<option value="health">Health</option>
-											<option value="identifyillness">Identify Illness</option>
-											<option value="stabilize">Stabilize</option>
-											<option value="insight">Insight</option>
-											<option value="discernsecretmessage">Discern Secret Message</option>
-											<option value="sensemotive">Sense Motive</option>
-											<option value="intimidation">Intimidation</option>
-											<option value="coerce">Coerce</option>
-											<option value="demoralize">Demoralize</option>
-											<option value="investigation">Investigation</option>
-											<option value="analyze">Analyze</option>
-											<option value="appraise">Appraise</option>
-											<option value="seek">Seek</option>
-											<option value="nature">Nature</option>
-											<option value="assesscreature">Assess Creature</option>
-											<option value="commandanimal">Command Animal</option>
-											<option value="perception">Perception</option>
-											<option value="perceivebarrier">Perceive Barrier</option>
-											<option value="sensepresence">Sense Presence</option>
-											<option value="performance">Performance</option>
-											<option value="act">Act</option>
-											<option value="comedy">Comedy</option>
-											<option value="dance">Dance</option>
-											<option value="oratory">Oratory</option>
-											<option value="playinstrument">Play Instrument</option>
-											<option value="sing">Sing</option>
-											<option value="persuasion">Persuasion</option>
-											<option value="gatherinformation">Gather Information</option>
-											<option value="influence">Influence</option>
-											<option value="requestfavor">Request Favor</option>
-											<option value="stealth">Stealth</option>
-											<option value="concealanobject">Conceal an Object</option>
-											<option value="hide">Hide</option>
-											<option value="sneak">Sneak</option>
-											<option value="survival">Survival</option>
-											<option value="navigate">Navigate</option>
-											<option value="track">Track</option>
-											<option value="thievery">Thievery</option>
-											<option value="palm">Palm</option>
-											<option value="steal">Steal</option>
-											<option value="alchemy">Alchemy</option>
-											<option value="balm">Balm</option>
-											<option value="inhalent">Inhalent</option>
-											<option value="injection">Injection</option>
-											<option value="tablet">Tablet</option>
-											<option value="artistry">Artistry</option>
-											<option value="painting">Painting</option>
-											<option value="penmanship">Penmanship</option>
-											<option value="sketching">Sketching</option>
-											<option value="brewing">Brewing</option>
-											<option value="blending">Blending</option>
-											<option value="fermenting">Fermenting</option>
-											<option value="roasting">Roasting</option>
-											<option value="steeping">Steeping</option>
-											<option value="carving">Carving</option>
-											<option value="chiselling">Chiselling</option>
-											<option value="cutting">Cutting</option>
-											<option value="shapeice">Shape Ice</option>
-											<option value="shapeplants">Shape Plants</option>
-											<option value="cooking">Cooking</option>
-											<option value="baking">Baking</option>
-											<option value="grilling">Grilling</option>
-											<option value="mixing">Mixing</option>
-											<option value="simmering">Simmering</option>
-											<option value="steaming">Steaming</option>
-											<option value="stewing">Stewing</option>
-											<option value="leatherworking">Leatherworking</option>
-											<option value="stitching">Stitching</option>
-											<option value="tanning">Tanning</option>
-											<option value="molding">Molding</option>
-											<option value="glassblowing">Glassblowing</option>
-											<option value="sculpting">Sculpting</option>
-											<option value="shapeearth">Shape Earth</option>
-											<option value="shapeglass">Shape Glass</option>
-											<option value="smithing">Smithing</option>
-											<option value="forging">Forging</option>
-											<option value="shapemetal">Shape Metal</option>
-											<option value="tinkering">Tinkering</option>
-											<option value="engineering">Engineering</option>
-											<option value="goldsmithing">Goldsmithing</option>
-											<option value="weaving">Weaving</option>
-											<option value="fabriccraft">Fabric Craft</option>
-											<option value="sewing">Sewing</option>
-											<option value="disabledevice">Disable Device</option>
-											<option value="openlock">Open Lock</option>
-											<option value="sabotage">Sabotage</option>
-											<option value="disguise">Disguise</option>
-											<option value="guise">Guise</option>
-											<option value="gathering">Gathering</option>
-											<option value="farm">Farm</option>
-											<option value="fish">Fish</option>
-											<option value="forage">Forage</option>
-											<option value="mining">Mining</option>
-											<option value="medicine">Medicine</option>
-											<option value="coatpoison">Coat Poison</option>
-											<option value="dose">Dose</option>
-											<option value="firstaid">First Aid</option>
-											<option value="releasepoison">Release Poison</option>
-											<option value="pilot">Pilot</option>
-											<option value="pilotaircraft">Pilot Aircraft</option>
-											<option value="pilotgroundcraft">Pilot Groundcraft</option>
-											<option value="pilotseacraft">Pilot Seacraft</option>
-
-										</select>
-
-									</div>
-									<input type="hidden" class="wuxHiddenField-flag" name="attr_checkdef" value="">
-									<div class="wuxHiddenAuxField">
-										<div class="wuxRow">
-											<span class="wuxFormTitle wuxSizeSmall">DC</span>
-											<input type="number" class="wuxFormInput wuxSizeSmall" name="attr_checkdefdc">
-										</div>
-									</div>
-									<div class="wuxRow">
-										<span class="wuxFormTitle wuxSizeSmall">Total</span>
-										<span class="wuxFormData wuxSizeSmall" name="attr_atkbonus">0</span>
-									</div>
-								</div>
-							</div>
 							<div class="wuxRow">&nbsp;</div>
 
 							<div class="wuxRow">
@@ -67788,6 +67674,16 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 								<div class="wuxRow">
 									<span class="wuxFormTitle wuxSizeSmall">Base</span>
 									<input type="text" class="wuxFormInput wuxSizeTiny" name="attr_dmgbase" placeholder="1d6">
+									<span class="wuxFormData">+</span>
+									<select class="wuxFormInput wuxSizeSmall" name="attr_dmgattr" value="strength">
+										<option value="strength" data-i18n="str-u">STR</option>
+										<option value="dexterity" data-i18n="dex-u">DEX</option>
+										<option value="constitution" data-i18n="con-u">CON</option>
+										<option value="intelligence" data-i18n="int-u">INT</option>
+										<option value="wisdom" data-i18n="wis-u">WIS</option>
+										<option value="charisma" data-i18n="cha-u">CHA</option>
+										<option value="0">-</option>
+									</select>
 									<span class="wuxFormData">+</span>
 									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_dmgmod" placeholder="0">
 								</div>
@@ -67850,6 +67746,16 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 									<div class="wuxRow">
 										<span class="wuxFormTitle wuxSizeSmall">Base</span>
 										<input type="text" class="wuxFormInput wuxSizeTiny" name="attr_dmg2base" placeholder="1d6">
+										<span class="wuxFormData">+</span>
+										<select class="wuxFormInput wuxSizeSmall" name="attr_dmg2attr">
+											<option value="strength" data-i18n="str-u">STR</option>
+											<option value="dexterity" data-i18n="dex-u">DEX</option>
+											<option value="constitution" data-i18n="con-u">CON</option>
+											<option value="intelligence" data-i18n="int-u">INT</option>
+											<option value="wisdom" data-i18n="wis-u">WIS</option>
+											<option value="charisma" data-i18n="cha-u">CHA</option>
+											<option value="0">-</option>
+										</select>
 										<span class="wuxFormData">+</span>
 										<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_dmg2mod" placeholder="0">
 									</div>
@@ -67949,31 +67855,40 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 								<div class="wuxRow">
 									<span class="wuxFormSubheader">On Crit Success</span>
 								</div>
-								<input type="hidden" class="wuxFormInput" name="attr_atkOnCritSuccess" value="">
-								<div class="wuxMultiRow">
-									<span class="wuxDescription" name="attr_atkOnCritSuccessString"></span>
-								</div>
+								<input type="text" class="wuxFormInput" name="attr_atkOnCritSuccess" value="">
 								<div class="wuxRow">
 									<span class="wuxFormSubheader">On Success</span>
 								</div>
-								<input type="hidden" class="wuxFormInput" name="attr_atkOnSuccess" value="">
-								<div class="wuxMultiRow">
-									<span class="wuxDescription" name="attr_atkOnSuccessString"></span>
-								</div>
+								<input type="text" class="wuxFormInput" name="attr_atkOnSuccess" value="">
 								<div class="wuxRow">
 									<span class="wuxFormSubheader">On Failure</span>
 								</div>
-								<input type="hidden" class="wuxFormInput" name="attr_atkOnFailure" value="">
-								<div class="wuxMultiRow">
-									<span class="wuxDescription" name="attr_atkOnFailureString"></span>
-								</div>
+								<input type="text" class="wuxFormInput" name="attr_atkOnFailure" value="">
 								<div class="wuxRow">
 									<span class="wuxFormSubheader">On Crit Failure</span>
 								</div>
-								<input type="hidden" class="wuxFormInput" name="attr_atkOnCritFailure" value="">
-								<div class="wuxMultiRow">
-									<span class="wuxDescription" name="attr_atkOnCritFailureString"></span>
-								</div>
+								<input type="text" class="wuxFormInput" name="attr_atkOnCritFailure" value="">
+							</div>
+							<div class="wuxRow">&nbsp;</div>
+
+							<div class="wuxRow">
+								<span class="wuxFormHeader">Resources</span>
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Mana Cost</span>
+								<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_spellmana">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Ammo Cost</span>
+								<input type="text" class="wuxFormInput" name="attr_ammo" placeholder="place resource cost in []">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Resource</span>
+								<input type="text" class="wuxFormInput" name="attr_resource" placeholder="place resource cost in []">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Consumable</span>
+								<input type="text" class="wuxFormInput" name="attr_consumable" placeholder="place resource cost in []">
 							</div>
 						</div>
 						<div class="display">
@@ -68064,6 +67979,7 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 							</div>
 						</div>
 					</div>
+
 				</fieldset>
 			</div>
 		</div>
