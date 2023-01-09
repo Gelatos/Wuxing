@@ -105,7 +105,7 @@ function AssessOutfitGroup(group, dataLayers, outfitQualities) {
             outfitQualities[outfitQualityName] = group.layerSets[SelectGroupByName(group, "", true)].toString().toLowerCase();
           }
           selectedGroup = group.layerSets[SelectGroupByName(group, outfitQualities[outfitQualityName], true)];
-          AssessOutfitGroup(selectedGroup, dataLayers, outfitQualities[outfitQualityName]);
+          AssessOutfitGroup(selectedGroup, dataLayers, outfitQualities);
         break;
       }
     }

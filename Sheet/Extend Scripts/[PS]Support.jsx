@@ -60,6 +60,8 @@ function GetDataLayers(dataGroup, outfitQualities) {
     switch (dataGroup.layerSets[i].toString().toLowerCase()) {
       case "[layerset charindex]": 
       dataLayers.charindex = dataGroup.layerSets[i].layers[0]; break;
+      case "[layerset filename]": 
+      dataLayers.filename = dataGroup.layerSets[i].layers[0]; break;
       case "[layerset leftoffset]": 
       dataLayers.leftOffsetLayer = dataGroup.layerSets[i].layers[0]; break;
       case "[layerset group1]": 
