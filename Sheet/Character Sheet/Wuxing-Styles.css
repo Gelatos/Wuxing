@@ -1018,6 +1018,14 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     width: calc(100% - 10px);
 }
 
+.wuxSectionBlock .wuxFieldSet .wuxFormInputArea textarea
+{
+    width: calc(100% - 20px);
+
+    font-size: 10px;
+    line-height: 12px;
+}
+
 .wuxSectionBlock .wuxFormInputArea.wuxSizeSmall
 {
     width: 220px;
@@ -5454,7 +5462,7 @@ visibility: visible;
 Roll template modified roll button
 ============================= */
 .sheet-rolltemplate-infoBox .sheet-formattedTextbox a[href^="!"],
-.sheet-rolltemplate-systemInfoAuxBox .sheet-formattedTextbox a[href^="!"],
+/* .sheet-rolltemplate-systemInfoAuxBox .sheet-formattedTextbox a[href^="!"], */
 .sheet-rolltemplate-attackBox .sheet-formattedTextbox a[href^="!"],
 .sheet-rolltemplate-combatTracker .sheet-container a[href^="!"],
 .sheet-rolltemplate-ctmsg .sheet-chatsub .sheet-interactions a[href^="!"],

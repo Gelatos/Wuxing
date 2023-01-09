@@ -2964,196 +2964,196 @@ function GetInjury(injury) {
     };
     }
     
-    function GetBasicInjury(damageType) {
-    switch (damageType.toLowerCase()) {
-    case "bludgeoning":
-    case "force":
-    case "impact":
-    return GetInjury("Bruising");
-    case "piercing":
-    case "ballistic":
-    case "stab":
-    case "slashing":
-    case "rending":
-    return GetInjury("Bleeding");
-    case "acid":
-    case "burn":
-    return GetInjury("Burned");
-    case "lightning":
-    case "cold":
-    return GetInjury("Numbness");
-    case "sonic":
-    return GetInjury("Ringing Ears");
-    case "poison":
-    case "radiation":
-    return GetInjury("Nausea");
-    case "tension":
-    return GetInjury("Tension");
-    
-    default:
-    return GetInjury("");
-    }
-    }
-    
-    function GetMajorInjury(damageType) {
-    return GetBasicInjury(damageType);
-    }
+function GetBasicInjury(damageType) {
+switch (damageType.toLowerCase()) {
+case "bludgeoning":
+case "force":
+case "impact":
+return GetInjury("Bruising");
+case "piercing":
+case "ballistic":
+case "stab":
+case "slashing":
+case "rending":
+return GetInjury("Bleeding");
+case "acid":
+case "burn":
+return GetInjury("Burned");
+case "lightning":
+case "cold":
+return GetInjury("Numbness");
+case "sonic":
+return GetInjury("Ringing Ears");
+case "poison":
+case "radiation":
+return GetInjury("Nausea");
+case "tension":
+return GetInjury("Tension");
 
-    function GetCondition(condition) {
-    switch (condition.toLowerCase()) {
-    case "":
-    return {
-    name: ""
-    };
-    case "blinded": 
-    return {
-    name: "Blinded",
-    short: `Auto fail sight checks. Attacks have disadv. Attacks against creature have adv.`,
-    long: `A blinded creature can’t see and automatically fails any ability check that requires sight.
-    Attack rolls against the creature have advantage, and the creature’s attack rolls have disadvantage.`
-    };
-    case "charmed": 
-    return {
-    name: "Charmed",
-    short: `Disadvantage on Skill checks. Can't use actions with concentrate trait.`,
-    long: `You are compelled to focus your attention on something, distracting you from whatever else is going on around you. 
-    You have disadvantage on Skill checks as long as your charmer is within line of sight.
-    You can't use actions with the Concentrate trait.`
-    };
-    case "deafened": 
-    return {
-    name: "Deafened",
-    short: `Auto fail hear checks.`,
-    long: `A deafened creature can’t hear and automatically fails any ability check that requires hearing.`
-    };
-    case "downed": 
-    return {
-    name: "Downed",
-    short: `No actions or reactions. No move. Drop everything and prone. Auto fail Str and Dex saves. Attacks against creature have adv and auto-crit if within 5 feet.`,
-    long: `A downed creature is incapacitated (see the condition) and cannot move.
-    The creature drops whatever it’s holding and falls prone.
-    The creature automatically fails Strength and Dexterity saving throws.
-    Attack rolls against the creature have advantage.
-    Any attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.`
-    };
-    case "flat-footed": 
-    return {
-    name: "Flat-Footed",
-    short: ``,
-    long: `You’re distracted or otherwise unable to focus your full attention on defense. You take a –2 circumstance penalty to AC. Some effects give you the flat-footed condition only to certain creatures or against certain attacks. Others—especially conditions—can make you universally flat-footed against everything. If a rule doesn’t specify that the condition applies only to certain circumstances, it applies to all of them; for example, many effects simply say “The target is flat-footed.”`
-    };
-    case "frightened": 
-    return {
-    name: "Frightened",
-    short: `If fear source in line of sight, attacks and abilities have disadv. Can't move closer to fear source.`,
-    long: `A frightened creature has disadvantage on ability checks and attack rolls against the source of its fear.
-    The creature can’t willingly move closer to the source of its fear.`
-    };
-    case "grappled": 
-    return {
-    name: "Grappled",
-    short: `Speed is 0.`,
-    long: `A grappled creature’s speed becomes 0, and it can’t benefit from any bonus to its speed.
-    The condition ends if the grappler is incapacitated (see the condition).
-    The condition also ends if an effect removes the grappled creature from the reach of the grappler or grappling effect, such as when a creature is hurled away by the thunderwave spell.`
-    };
-    case "incapacitated": 
-    return {
-    name: "Incapacitated",
-    short: `No actions or reactions.`,
-    long: `An incapacitated creature can’t take actions or reactions.`
-    };
-    case "invisible": 
-    return {
-    name: "Invisible",
-    short: `Attacks have adv. Attacks against creature have disadv.`,
-    long: `An invisible creature is impossible to see without the aid of magic or a special sense. For the purpose of hiding, the creature is heavily obscured. The creature’s location can be detected by any noise it makes or any tracks it leaves.
-    Attack rolls against the creature have disadvantage, and the creature’s attack rolls have advantage.`
-    };
-    case "paralyzed": 
-    return {
-    name: "Paralyzed",
-    short: `No actions or reactions. No move or speak. Auto fail Str and Dex saves. Attacks against creature have adv and auto-crit if within 5 feet.`,
-    long: `A paralyzed creature is incapacitated (see the condition) and can’t move or speak.
-    The creature automatically fails Strength and Dexterity saving throws.
-    Attack rolls against the creature have advantage.
-    Any attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.`
-    };
-    case "petrified": 
-    return {
-    name: "Petrified",
-    short: `No actions or reactions. No move or speak. Auto fail Str and Dex saves. Attacks against creature have adv. Resistance to all damage. Immune to disease and poison.`,
-    long: `A petrified creature is transformed, along with any nonmagical object it is wearing or carrying, into a solid inanimate substance (usually stone). Its weight increases by a factor of ten, and it ceases aging.
-    The creature is incapacitated (see the condition), can’t move or speak, and is unaware of its surroundings.
-    Attack rolls against the creature have advantage.
-    The creature automatically fails Strength and Dexterity saving throws.
-    The creature has resistance to all damage.
-    The creature is immune to poison and disease, although a poison or disease already in its system is suspended, not neutralized.`
-    };
-    case "poisoned": 
-    return {
-    name: "Poisoned",
-    short: `Attacks and abilities have disadv.`,
-    long: `A poisoned creature has disadvantage on attack rolls and ability checks.`
-    };
-    case "prone": 
-    return {
-    name: "Prone",
-    short: `Attacks have disadv. Attacks against creature have adv if within 5 feet, otherwise they have disadv.`,
-    long: `A prone creature’s only movement option is to crawl, unless it stands up and thereby ends the condition.
-    The creature has disadvantage on attack rolls.
-    An attack roll against the creature has advantage if the attacker is within 5 feet of the creature. Otherwise, the attack roll has disadvantage.`
-    };
-    case "quickened": 
-    return {
-    name: "Quickened",
-    short: `Gain an additional action that has limited use.`,
-    long: `A quickened creature gains 1 additional action at the start of their turn each round. 
-    Many effects that make you quickened specify the types of actions you can use with this additional action. If you become quickened from multiple sources, you can use the extra action you’ve been granted for any single action allowed by any of the effects that made you quickened. Because quickened has its effect at the start of your turn, you don’t immediately gain actions if you become quickened during your turn.`
-    };
-    case "restrained": 
-    return {
-    name: "Restrained",
-    short: `Speed is 0. Attacks have disadv. Attacks against creature have adv. Dex saves have disadv.`,
-    long: `A restrained creature’s speed becomes 0, and it can’t benefit from any bonus to its speed.
-    Attack rolls against the creature have advantage, and the creature’s attack rolls have disadvantage.
-    The creature has disadvantage on Dexterity saving throws.`
-    };
-    case "slowed": 
-    return {
-    name: "Slowed",
-    short: ``,
-    long: `A slowed creature's speed is halved.`
-    };
-    case "staggered": 
-    return {
-    name: "Staggered",
-    short: `Lose a number of actions based on your stagger value. `,
-    long: `You have fewer actions. Staggered always includes a value. When you regain your actions at the start of your turn, reduce the number of actions you regain by your staggered value. Because staggered has its effect at the start of your turn, you don't immediately lose actions if you become staggered during your turn.`
-    };
-    case "stunned": 
-    return {
-    name: "Stunned",
-    short: `No actions or reactions. No move, limited speak. Auto fail Str and Dex saves. Attacks against creature have adv.`,
-    long: `A stunned creature is incapacitated (see the condition), can’t move, and can speak only falteringly.
-    The creature automatically fails Strength and Dexterity saving throws.
-    Attack rolls against the creature have advantage.`
-    };
-    case "unconscious": 
-    return {
-    name: "Unconscious",
-    short: `No actions or reactions. No move or speak. Drop everything and prone. Auto fail Str and Dex saves. Attacks against creature have adv and auto-crit if within 5 feet.`,
-    long: `An unconscious creature is incapacitated (see the condition), can’t move or speak, and is unaware of its surroundings.
-    The creature drops whatever it’s holding and falls prone.
-    The creature automatically fails Strength and Dexterity saving throws.
-    Attack rolls against the creature have advantage.
-    Any attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.`
-    };
-    }
-    return {
-    name: "",
-    };
-    }
+default:
+return GetInjury("");
+}
+}
+
+function GetMajorInjury(damageType) {
+return GetBasicInjury(damageType);
+}
+
+function GetCondition(condition) {
+switch (condition.toLowerCase()) {
+case "":
+return {
+name: ""
+};
+case "blinded": 
+return {
+name: "Blinded",
+short: `Auto fail sight checks. Attacks have disadv. Attacks against creature have adv.`,
+long: `A blinded creature can’t see and automatically fails any ability check that requires sight.
+Attack rolls against the creature have advantage, and the creature’s attack rolls have disadvantage.`
+};
+case "charmed": 
+return {
+name: "Charmed",
+short: `Disadvantage on Skill checks. Can't use actions with concentrate trait.`,
+long: `You are compelled to focus your attention on something, distracting you from whatever else is going on around you. 
+You have disadvantage on Skill checks as long as your charmer is within line of sight.
+You can't use actions with the Concentrate trait.`
+};
+case "deafened": 
+return {
+name: "Deafened",
+short: `Auto fail hear checks.`,
+long: `A deafened creature can’t hear and automatically fails any ability check that requires hearing.`
+};
+case "downed": 
+return {
+name: "Downed",
+short: `No actions or reactions. No move. Drop everything and prone. Auto fail Str and Dex saves. Attacks against creature have adv and auto-crit if within 5 feet.`,
+long: `A downed creature is incapacitated (see the condition) and cannot move.
+The creature drops whatever it’s holding and falls prone.
+The creature automatically fails Strength and Dexterity saving throws.
+Attack rolls against the creature have advantage.
+Any attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.`
+};
+case "flat-footed": 
+return {
+name: "Flat-Footed",
+short: ``,
+long: `You’re distracted or otherwise unable to focus your full attention on defense. You take a –2 circumstance penalty to AC. Some effects give you the flat-footed condition only to certain creatures or against certain attacks. Others—especially conditions—can make you universally flat-footed against everything. If a rule doesn’t specify that the condition applies only to certain circumstances, it applies to all of them; for example, many effects simply say “The target is flat-footed.”`
+};
+case "frightened": 
+return {
+name: "Frightened",
+short: `If fear source in line of sight, attacks and abilities have disadv. Can't move closer to fear source.`,
+long: `A frightened creature has disadvantage on ability checks and attack rolls against the source of its fear.
+The creature can’t willingly move closer to the source of its fear.`
+};
+case "grappled": 
+return {
+name: "Grappled",
+short: `Speed is 0.`,
+long: `A grappled creature’s speed becomes 0, and it can’t benefit from any bonus to its speed.
+The condition ends if the grappler is incapacitated (see the condition).
+The condition also ends if an effect removes the grappled creature from the reach of the grappler or grappling effect, such as when a creature is hurled away by the thunderwave spell.`
+};
+case "incapacitated": 
+return {
+name: "Incapacitated",
+short: `No actions or reactions.`,
+long: `An incapacitated creature can’t take actions or reactions.`
+};
+case "invisible": 
+return {
+name: "Invisible",
+short: `Attacks have adv. Attacks against creature have disadv.`,
+long: `An invisible creature is impossible to see without the aid of magic or a special sense. For the purpose of hiding, the creature is heavily obscured. The creature’s location can be detected by any noise it makes or any tracks it leaves.
+Attack rolls against the creature have disadvantage, and the creature’s attack rolls have advantage.`
+};
+case "paralyzed": 
+return {
+name: "Paralyzed",
+short: `No actions or reactions. No move or speak. Auto fail Str and Dex saves. Attacks against creature have adv and auto-crit if within 5 feet.`,
+long: `A paralyzed creature is incapacitated (see the condition) and can’t move or speak.
+The creature automatically fails Strength and Dexterity saving throws.
+Attack rolls against the creature have advantage.
+Any attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.`
+};
+case "petrified": 
+return {
+name: "Petrified",
+short: `No actions or reactions. No move or speak. Auto fail Str and Dex saves. Attacks against creature have adv. Resistance to all damage. Immune to disease and poison.`,
+long: `A petrified creature is transformed, along with any nonmagical object it is wearing or carrying, into a solid inanimate substance (usually stone). Its weight increases by a factor of ten, and it ceases aging.
+The creature is incapacitated (see the condition), can’t move or speak, and is unaware of its surroundings.
+Attack rolls against the creature have advantage.
+The creature automatically fails Strength and Dexterity saving throws.
+The creature has resistance to all damage.
+The creature is immune to poison and disease, although a poison or disease already in its system is suspended, not neutralized.`
+};
+case "poisoned": 
+return {
+name: "Poisoned",
+short: `Attacks and abilities have disadv.`,
+long: `A poisoned creature has disadvantage on attack rolls and ability checks.`
+};
+case "prone": 
+return {
+name: "Prone",
+short: `Attacks have disadv. Attacks against creature have adv if within 5 feet, otherwise they have disadv.`,
+long: `A prone creature’s only movement option is to crawl, unless it stands up and thereby ends the condition.
+The creature has disadvantage on attack rolls.
+An attack roll against the creature has advantage if the attacker is within 5 feet of the creature. Otherwise, the attack roll has disadvantage.`
+};
+case "quickened": 
+return {
+name: "Quickened",
+short: `Gain an additional action that has limited use.`,
+long: `A quickened creature gains 1 additional action at the start of their turn each round. 
+Many effects that make you quickened specify the types of actions you can use with this additional action. If you become quickened from multiple sources, you can use the extra action you’ve been granted for any single action allowed by any of the effects that made you quickened. Because quickened has its effect at the start of your turn, you don’t immediately gain actions if you become quickened during your turn.`
+};
+case "restrained": 
+return {
+name: "Restrained",
+short: `Speed is 0. Attacks have disadv. Attacks against creature have adv. Dex saves have disadv.`,
+long: `A restrained creature’s speed becomes 0, and it can’t benefit from any bonus to its speed.
+Attack rolls against the creature have advantage, and the creature’s attack rolls have disadvantage.
+The creature has disadvantage on Dexterity saving throws.`
+};
+case "slowed": 
+return {
+name: "Slowed",
+short: ``,
+long: `A slowed creature's speed is halved.`
+};
+case "staggered": 
+return {
+name: "Staggered",
+short: `Lose a number of actions based on your stagger value. `,
+long: `You have fewer actions. Staggered always includes a value. When you regain your actions at the start of your turn, reduce the number of actions you regain by your staggered value. Because staggered has its effect at the start of your turn, you don't immediately lose actions if you become staggered during your turn.`
+};
+case "stunned": 
+return {
+name: "Stunned",
+short: `No actions or reactions. No move, limited speak. Auto fail Str and Dex saves. Attacks against creature have adv.`,
+long: `A stunned creature is incapacitated (see the condition), can’t move, and can speak only falteringly.
+The creature automatically fails Strength and Dexterity saving throws.
+Attack rolls against the creature have advantage.`
+};
+case "unconscious": 
+return {
+name: "Unconscious",
+short: `No actions or reactions. No move or speak. Drop everything and prone. Auto fail Str and Dex saves. Attacks against creature have adv and auto-crit if within 5 feet.`,
+long: `An unconscious creature is incapacitated (see the condition), can’t move or speak, and is unaware of its surroundings.
+The creature drops whatever it’s holding and falls prone.
+The creature automatically fails Strength and Dexterity saving throws.
+Attack rolls against the creature have advantage.
+Any attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.`
+};
+}
+return {
+name: "",
+};
+}
     
 
 
@@ -3407,823 +3407,884 @@ function GetCraftingSummary(blueprintComponents) {
 
 function GetItemMaterialInfo(item) {
     switch (item.toLowerCase()) {
-        case "":
-            return {
-                name: ""
-            };
-        case "pine":
-            return {
-                name: "Pine",
-                    type: "Common",
-                    element: "Wood",
-                    ac: 11,
-                    dt: 5,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `A common type of soft wood. While Pine is the listed value, these statistics are shared amongst all sott wood.`,
-                    skills: "Shape Plants, Chiselling, Whittling",
-                    rarity: 1,
-                    effort: 1,
-                    cost: 10,
-                    weight: 0.2,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Flammable, Piercing"
-            };
-        case "maple":
-            return {
-                name: "Maple",
-                    type: "Common",
-                    element: "Wood",
-                    ac: 11,
-                    dt: 5,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `A common type of hard wood. While Maple is the listed value, these statistics are shared amongst all hard wood.`,
-                    skills: "Shape Plants, Chiselling, Whittling",
-                    rarity: 1,
-                    effort: 1,
-                    cost: 10,
-                    weight: 0.2,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Flammable, Piercing, Sturdy (1)"
-            };
-        case "cotton":
-            return {
-                name: "Cotton",
-                    type: "Common",
-                    element: "Wood",
-                    ac: 10,
-                    dt: 5,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `Cotton is a naturally occurring staple fiber. Its flexibility, warmth, and ease to grow makes it popular when used to make clothing and fabric.`,
-                    skills: "Shape Plants, Fabric Craft, Sewing",
-                    rarity: 1,
-                    effort: 1,
-                    cost: 4,
-                    weight: 0.1,
-                    wpnBonus: -2,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Flammable, Flexible (1)"
-            };
-        case "hemp":
-            return {
-                name: "Hemp",
-                    type: "Common",
-                    element: "Wood",
-                    ac: 10,
-                    dt: 5,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `This plant is thick and fibrous. It is often used to create rope.`,
-                    skills: "Shape Plants, Fabric Craft, Sewing",
-                    rarity: 1,
-                    effort: 1,
-                    cost: 6,
-                    weight: 0.1,
-                    wpnBonus: -2,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Flammable, Flexible (1)"
-            };
-        case "clearth":
-            return {
-                name: "Clearth",
-                    type: "Common",
-                    element: "Fire",
-                    ac: 12,
-                    dt: 10,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `This type of clay hardens into sturdy rock. It is commonly used when making bricks.`,
-                    skills: "Shape Earth, Brick Craft, Chiselling",
-                    rarity: 1,
-                    effort: 1.5,
-                    cost: 10,
-                    weight: 0.4,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Sturdy (1)"
-            };
-        case "kaolin":
-            return {
-                name: "Kaolin",
-                    type: "Common",
-                    element: "Fire",
-                    ac: 10,
-                    dt: 0,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `This clay is very malleable but hardens to a nice, firm, and light material when applied to heat. It is often used in pottery and sculpting.`,
-                    skills: "Shape Earth, Sculpting, ",
-                    rarity: 1,
-                    effort: 1.5,
-                    cost: 14,
-                    weight: 0.4,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: ""
-            };
-        case "glass":
-            return {
-                name: "Glass",
-                    type: "Common",
-                    element: "Fire",
-                    ac: 10,
-                    dt: 5,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `Glass is a non-crystalline, often transparent amorphous solid, that has widespread practical, technological, and decorative use.`,
-                    skills: "Shape Glass, Glassblowing, ",
-                    rarity: 1,
-                    effort: 2,
-                    cost: 30,
-                    weight: 0.3,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Piercing, Sharp, Transparent"
-            };
-        case "granite":
-            return {
-                name: "Granite",
-                    type: "Common",
-                    element: "Earth",
-                    ac: 14,
-                    dt: 10,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `Granite is a coarse-grained igneous rock.`,
-                    skills: "Shape Earth, Brick Craft, Chiselling",
-                    rarity: 1,
-                    effort: 2,
-                    cost: 12,
-                    weight: 0.3,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Sturdy (2)"
-            };
-        case "iron":
-            return {
-                name: "Iron",
-                    type: "Common",
-                    element: "Metal",
-                    ac: 15,
-                    dt: 13,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `Iron is one of the most common metals.`,
-                    skills: "Shape Metal, Cold Forging, ",
-                    rarity: 1,
-                    effort: 2.5,
-                    cost: 15,
-                    weight: 1,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Piercing, Sharp, Sturdy (2)"
-            };
-        case "steel":
-            return {
-                name: "Steel",
-                    type: "Common",
-                    element: "Metal",
-                    ac: 16,
-                    dt: 16,
-                    hb: 2,
-                    specProp: 0,
-                    desc: `Steel is refined iron made stronger and sturdier.`,
-                    skills: "Shape Metal, Cold Forging, ",
-                    rarity: 1,
-                    effort: 4,
-                    cost: 60,
-                    weight: 1,
-                    wpnBonus: 1,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Piercing, Sharp, Sturdy (3)"
-            };
-        case "snow":
-            return {
-                name: "Snow",
-                    type: "Common",
-                    element: "Water",
-                    ac: 10,
-                    dt: 1,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `Snow is a powdery substance made from solidified water.`,
-                    skills: "Shape Ice, Sculpting, ",
-                    rarity: 1,
-                    effort: 1,
-                    cost: 1,
-                    weight: 0.1,
-                    wpnBonus: -2,
-                    defBonus: -1,
-                    flexibility: 0,
-                    properties: "Flexible (1), Frozen"
-            };
-        case "ice":
-            return {
-                name: "Ice",
-                    type: "Common",
-                    element: "Water",
-                    ac: 12,
-                    dt: 10,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `Ice is solid water.`,
-                    skills: "Shape Ice, Chiselling, ",
-                    rarity: 1,
-                    effort: 1.5,
-                    cost: 5,
-                    weight: 0.2,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Frozen, Piercing, Sharp, Sturdy (1), Transparent"
-            };
-        case "mapla":
-            return {
-                name: "Mapla",
-                    type: "Uncommon",
-                    element: "Wood",
-                    ac: 13,
-                    dt: 12,
-                    hb: 1,
-                    specProp: 1,
-                    desc: `Mapla is a stronger and tougher version of maple wood. It does not exist naturally in the world made entirely from ether.`,
-                    skills: "Shape Plants, Chiselling, Whittling",
-                    rarity: 2,
-                    effort: 1,
-                    cost: 75,
-                    weight: 0.1,
-                    wpnBonus: 1,
-                    defBonus: 0,
-                    flexibility: 2,
-                    properties: "Flammable, Piercing, Sturdy (1)"
-            };
-        case "tempered glass":
-            return {
-                name: "Tempered Glass",
-                    type: "Uncommon",
-                    element: "Fire",
-                    ac: 12,
-                    dt: 10,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `Sometimes known as bulletproof glass, tempered glass is a sturdier glass made to resist blunt force.`,
-                    skills: "Shape Glass, Glassblowing, ",
-                    rarity: 2,
-                    effort: 2,
-                    cost: 60,
-                    weight: 0.3,
-                    wpnBonus: 1,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Piercing, Sharp, Transparent"
-            };
-        case "crystal":
-            return {
-                name: "Crystal",
-                    type: "Uncommon",
-                    element: "Earth",
-                    ac: 14,
-                    dt: 14,
-                    hb: 2,
-                    specProp: 0,
-                    desc: `This rock has a transparent sheen that hides a strong durability.`,
-                    skills: "Shape Earth, Chiselling, ",
-                    rarity: 2,
-                    effort: 3,
-                    cost: 70,
-                    weight: 0.3,
-                    wpnBonus: 1,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Piercing, Sturdy (2), Transparent"
-            };
-        case "sigilite":
-            return {
-                name: "Sigilite",
-                    type: "Uncommon",
-                    element: "Earth",
-                    ac: 14,
-                    dt: 14,
-                    hb: 2,
-                    specProp: 3,
-                    desc: `Sigilite, or more well known as binding stone, is a black stone with a glass-like sheen. When placed in close proximity to a source of ki, it disrupts its creation preventing magical effects from occurring. Because of this property, binding stone is often used in restraints to inhibit the casting of magic while not restricting the wearer's movement.
+    case "":
+    return {
+    name: ""
+    };
+    case "pine": 
+    return {
+    name: "Pine",
+    type: "Common",
+    element: "Wood",
+    ac: 11,
+    dt: 5,
+    hb: 1,
+    specProp: 0,
+    desc: `A common type of soft wood. While Pine is the listed value, these statistics are shared amongst all sott wood.`,
+    skills: "Shape Plants, Chiselling, Whittling",
+    rarity: 1,
+    effort: 1,
+    cost: 10,
+    weight: 0.2,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Flammable, Piercing"
+    };
+    case "maple": 
+    return {
+    name: "Maple",
+    type: "Common",
+    element: "Wood",
+    ac: 11,
+    dt: 5,
+    hb: 1,
+    specProp: 0,
+    desc: `A common type of hard wood. While Maple is the listed value, these statistics are shared amongst all hard wood.`,
+    skills: "Shape Plants, Chiselling, Whittling",
+    rarity: 1,
+    effort: 1,
+    cost: 10,
+    weight: 0.2,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Flammable, Piercing, Sturdy (1)"
+    };
+    case "cotton": 
+    return {
+    name: "Cotton",
+    type: "Common",
+    element: "Wood",
+    ac: 10,
+    dt: 5,
+    hb: 1,
+    specProp: 0,
+    desc: `Cotton is a naturally occurring staple fiber. Its flexibility, warmth, and ease to grow makes it popular when used to make clothing and fabric.`,
+    skills: "Shape Plants, Fabric Craft, Sewing",
+    rarity: 1,
+    effort: 1,
+    cost: 4,
+    weight: 0.1,
+    wpnBonus: -2,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Flammable, Flexible (1)"
+    };
+    case "hemp": 
+    return {
+    name: "Hemp",
+    type: "Common",
+    element: "Wood",
+    ac: 10,
+    dt: 5,
+    hb: 1,
+    specProp: 0,
+    desc: `This plant is thick and fibrous. It is often used to create rope.`,
+    skills: "Shape Plants, Fabric Craft, Sewing",
+    rarity: 1,
+    effort: 1,
+    cost: 6,
+    weight: 0.1,
+    wpnBonus: -2,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Flammable, Flexible (1)"
+    };
+    case "clearth": 
+    return {
+    name: "Clearth",
+    type: "Common",
+    element: "Fire",
+    ac: 12,
+    dt: 10,
+    hb: 1,
+    specProp: 0,
+    desc: `This type of clay hardens into sturdy rock. It is commonly used when making bricks.`,
+    skills: "Shape Earth, Brick Craft, Chiselling",
+    rarity: 1,
+    effort: 1.5,
+    cost: 10,
+    weight: 0.4,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Sturdy (1)"
+    };
+    case "kaolin": 
+    return {
+    name: "Kaolin",
+    type: "Common",
+    element: "Fire",
+    ac: 10,
+    dt: 0,
+    hb: 1,
+    specProp: 0,
+    desc: `This clay is very malleable but hardens to a nice, firm, and light material when applied to heat. It is often used in pottery and sculpting.`,
+    skills: "Shape Earth, Sculpting, ",
+    rarity: 1,
+    effort: 1.5,
+    cost: 14,
+    weight: 0.4,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: ""
+    };
+    case "glass": 
+    return {
+    name: "Glass",
+    type: "Common",
+    element: "Fire",
+    ac: 10,
+    dt: 5,
+    hb: 1,
+    specProp: 0,
+    desc: `Glass is a non-crystalline, often transparent amorphous solid, that has widespread practical, technological, and decorative use.`,
+    skills: "Shape Glass, Glassblowing, ",
+    rarity: 1,
+    effort: 2,
+    cost: 30,
+    weight: 0.3,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Piercing, Sharp, Transparent"
+    };
+    case "granite": 
+    return {
+    name: "Granite",
+    type: "Common",
+    element: "Earth",
+    ac: 14,
+    dt: 10,
+    hb: 1,
+    specProp: 0,
+    desc: `Granite is a coarse-grained igneous rock.`,
+    skills: "Shape Earth, Brick Craft, Chiselling",
+    rarity: 1,
+    effort: 2,
+    cost: 12,
+    weight: 0.3,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Sturdy (2)"
+    };
+    case "iron": 
+    return {
+    name: "Iron",
+    type: "Common",
+    element: "Metal",
+    ac: 15,
+    dt: 13,
+    hb: 1,
+    specProp: 0,
+    desc: `Iron is one of the most common metals.`,
+    skills: "Shape Metal, Cold Forging, ",
+    rarity: 1,
+    effort: 2.5,
+    cost: 15,
+    weight: 1,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Piercing, Sharp, Sturdy (2)"
+    };
+    case "steel": 
+    return {
+    name: "Steel",
+    type: "Common",
+    element: "Metal",
+    ac: 16,
+    dt: 16,
+    hb: 2,
+    specProp: 0,
+    desc: `Steel is refined iron made stronger and sturdier.`,
+    skills: "Shape Metal, Cold Forging, ",
+    rarity: 1,
+    effort: 4,
+    cost: 60,
+    weight: 1,
+    wpnBonus: 1,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Piercing, Sharp, Sturdy (3)"
+    };
+    case "nickel": 
+    return {
+    name: "Nickel",
+    type: "Common",
+    element: "Metal",
+    ac: 12,
+    dt: 10,
+    hb: 1,
+    specProp: 0,
+    desc: `Nickel is a slightly golden, common metal.`,
+    skills: "Shape Metal, Cold Forging, ",
+    rarity: 1,
+    effort: 2.5,
+    cost: 20,
+    weight: 1,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Piercing, Sharp, Sturdy (1)"
+    };
+    case "snow": 
+    return {
+    name: "Snow",
+    type: "Common",
+    element: "Water",
+    ac: 10,
+    dt: 1,
+    hb: 1,
+    specProp: 0,
+    desc: `Snow is a powdery substance made from solidified water.`,
+    skills: "Shape Ice, Sculpting, ",
+    rarity: 1,
+    effort: 1,
+    cost: 1,
+    weight: 0.1,
+    wpnBonus: -2,
+    defBonus: -1,
+    flexibility: 0,
+    properties: "Flexible (1), Frozen"
+    };
+    case "ice": 
+    return {
+    name: "Ice",
+    type: "Common",
+    element: "Water",
+    ac: 12,
+    dt: 10,
+    hb: 1,
+    specProp: 0,
+    desc: `Ice is solid water.`,
+    skills: "Shape Ice, Chiselling, ",
+    rarity: 1,
+    effort: 1.5,
+    cost: 5,
+    weight: 0.2,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Frozen, Piercing, Sharp, Sturdy (1), Transparent"
+    };
+    case "mapla": 
+    return {
+    name: "Mapla",
+    type: "Uncommon",
+    element: "Wood",
+    ac: 13,
+    dt: 12,
+    hb: 1,
+    specProp: 1,
+    desc: `Mapla is a stronger and tougher version of maple wood. It does not exist naturally in the world made entirely from ether.`,
+    skills: "Shape Plants, Chiselling, Whittling",
+    rarity: 2,
+    effort: 1,
+    cost: 75,
+    weight: 0.1,
+    wpnBonus: 1,
+    defBonus: 0,
+    flexibility: 2,
+    properties: "Flammable, Piercing, Sturdy (1)"
+    };
+    case "tempered glass": 
+    return {
+    name: "Tempered Glass",
+    type: "Uncommon",
+    element: "Fire",
+    ac: 12,
+    dt: 10,
+    hb: 1,
+    specProp: 0,
+    desc: `Sometimes known as bulletproof glass, tempered glass is a sturdier glass made to resist blunt force.`,
+    skills: "Shape Glass, Glassblowing, ",
+    rarity: 2,
+    effort: 2,
+    cost: 60,
+    weight: 0.3,
+    wpnBonus: 1,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Piercing, Sharp, Transparent"
+    };
+    case "crystal": 
+    return {
+    name: "Crystal",
+    type: "Uncommon",
+    element: "Earth",
+    ac: 14,
+    dt: 14,
+    hb: 2,
+    specProp: 0,
+    desc: `This rock has a transparent sheen that hides a strong durability.`,
+    skills: "Shape Earth, Chiselling, ",
+    rarity: 2,
+    effort: 3,
+    cost: 70,
+    weight: 0.3,
+    wpnBonus: 1,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Piercing, Sturdy (2), Transparent"
+    };
+    case "morillite": 
+    return {
+    name: "Morillite",
+    type: "Uncommon",
+    element: "Earth",
+    ac: 12,
+    dt: 12,
+    hb: 1,
+    specProp: 3,
+    desc: `Morillite is a crystal that is brittle like glass. It can form in a variety of colors but is most often a soft vermillion. When magical energy flows through it, the crystal will shine. It seems to have properties that allow it to hold ki temporarily.`,
+    skills: "Shape Earth, Goldsmithing, ",
+    rarity: 2,
+    effort: 3,
+    cost: 60,
+    weight: 0.2,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Sharp, Transparent"
+    };
+    case "sigilite": 
+    return {
+    name: "Sigilite",
+    type: "Uncommon",
+    element: "Earth",
+    ac: 14,
+    dt: 14,
+    hb: 2,
+    specProp: 3,
+    desc: `Sigilite, or more well known as binding stone, is a black stone with a glass-like sheen. When placed in close proximity to a source of ki, it disrupts its creation preventing magical effects from occurring. Because of this property, binding stone is often used in restraints to inhibit the casting of magic while not restricting the wearer's movement.
     
     Sigilite's range to disrupt ki is dependant on the amount concentrated in an area. 1 lb. of Sigilite can disrupt ki up to 1 foot away maximizing out to 10 feet for 10 lbs. of Sigilite. Often when making restraints, Sigilite will be used in amounts as small as 0.1 lb as a cost saving alternative due to the closeness of the restraints to the ki source.`,
-                    skills: "Shape Earth, Goldsmithing, ",
-                    rarity: 2,
-                    effort: 3,
-                    cost: 150,
-                    weight: 0.2,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Sturdy (2)"
-            };
-        case "gold":
-            return {
-                name: "Gold",
-                    type: "Uncommon",
-                    element: "Metal",
-                    ac: 10,
-                    dt: 5,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `While valuable for its appearance and use as currency, gold has its uses in magical application too. Gold has the unique property of acting as a mana stabilizer, able to prevent mana from separating. This has made gold important in day to day life, used in building and item construction frequently.
+    skills: "Shape Earth, Goldsmithing, ",
+    rarity: 2,
+    effort: 3,
+    cost: 150,
+    weight: 0.2,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Sturdy (2)"
+    };
+    case "gold": 
+    return {
+    name: "Gold",
+    type: "Uncommon",
+    element: "Metal",
+    ac: 10,
+    dt: 5,
+    hb: 1,
+    specProp: 0,
+    desc: `While valuable for its appearance and use as currency, gold has its uses in magical application too. Gold has the unique property of acting as a mana stabilizer, able to prevent mana from separating. This has made gold important in day to day life, used in building and item construction frequently.
     
     Once gold has been mixed with an object, it masks magical energy making it difficult to detect. The object becomes almost impossible to tell apart from an object made from natural forming substances.
     
     Gold formed into a magical item often has the gold deep within the object, stretched thin and weaving all over the interior of the object to ensure a stable material. Skilled artisans may use the gold to create more intricate designs on the surface. Gold has always been a beautiful accent to a piece and to use it creatively in an item is a sign of artistic talent of the craftsman.`,
-                    skills: "Shape Metal, Goldsmithing, ",
-                    rarity: 2,
-                    effort: 3,
-                    cost: 5000,
-                    weight: 2,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: ""
-            };
-        case "icea":
-            return {
-                name: "Icea",
-                    type: "Uncommon",
-                    element: "Water",
-                    ac: 14,
-                    dt: 13,
-                    hb: 1,
-                    specProp: 1,
-                    desc: `This enhanced ice is made entirely from ether.`,
-                    skills: "Shape Ice, Chiselling, ",
-                    rarity: 2,
-                    effort: 1.5,
-                    cost: 37.5,
-                    weight: 0.1,
-                    wpnBonus: 1,
-                    defBonus: 1,
-                    flexibility: 0,
-                    properties: "Frozen, Piercing, Sharp, Sturdy (2), Transparent"
-            };
-        case "beast bone":
-            return {
-                name: "Beast Bone",
-                    type: "Uncommon",
-                    element: "-",
-                    ac: 13,
-                    dt: 13,
-                    hb: 1,
-                    specProp: 2,
-                    desc: `The bones of a beast.`,
-                    skills: "Chiselling, , ",
-                    rarity: 2,
-                    effort: 2,
-                    cost: 30,
-                    weight: 1,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Piercing, Sharp, Sturdy (2)"
-            };
-        case "beast leather":
-            return {
-                name: "Beast Leather",
-                    type: "Uncommon",
-                    element: "-",
-                    ac: 11,
-                    dt: 12,
-                    hb: 1,
-                    specProp: 2,
-                    desc: `The leather of a beast.`,
-                    skills: "Stitching, Tanning, ",
-                    rarity: 2,
-                    effort: 2,
-                    cost: 40,
-                    weight: 0.8,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Flexible (2)"
-            };
-        case "ironwood":
-            return {
-                name: "Ironwood",
-                    type: "Rare",
-                    element: "Wood",
-                    ac: 15,
-                    dt: 16,
-                    hb: 2,
-                    specProp: 0,
-                    desc: `Ironwood is a sturdy and rare tree that is unnaturally hard as it has grown with iron.
+    skills: "Shape Metal, Goldsmithing, ",
+    rarity: 2,
+    effort: 3,
+    cost: 5000,
+    weight: 2,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: ""
+    };
+    case "icea": 
+    return {
+    name: "Icea",
+    type: "Uncommon",
+    element: "Water",
+    ac: 14,
+    dt: 13,
+    hb: 1,
+    specProp: 1,
+    desc: `This enhanced ice is made entirely from ether.`,
+    skills: "Shape Ice, Chiselling, ",
+    rarity: 2,
+    effort: 1.5,
+    cost: 37.5,
+    weight: 0.1,
+    wpnBonus: 1,
+    defBonus: 1,
+    flexibility: 0,
+    properties: "Frozen, Piercing, Sharp, Sturdy (2), Transparent"
+    };
+    case "beast bone": 
+    return {
+    name: "Beast Bone",
+    type: "Uncommon",
+    element: "-",
+    ac: 13,
+    dt: 13,
+    hb: 1,
+    specProp: 2,
+    desc: `The bones of a beast.`,
+    skills: "Chiselling, , ",
+    rarity: 2,
+    effort: 2,
+    cost: 30,
+    weight: 1,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Piercing, Sharp, Sturdy (2)"
+    };
+    case "beast leather": 
+    return {
+    name: "Beast Leather",
+    type: "Uncommon",
+    element: "-",
+    ac: 11,
+    dt: 12,
+    hb: 1,
+    specProp: 2,
+    desc: `The leather of a beast.`,
+    skills: "Stitching, Tanning, ",
+    rarity: 2,
+    effort: 2,
+    cost: 40,
+    weight: 0.8,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Flexible (2)"
+    };
+    case "ironwood": 
+    return {
+    name: "Ironwood",
+    type: "Rare",
+    element: "Wood",
+    ac: 15,
+    dt: 16,
+    hb: 2,
+    specProp: 0,
+    desc: `Ironwood is a sturdy and rare tree that is unnaturally hard as it has grown with iron.
     
     This material is aspected to Wood but is no longer weak to Metal and is also resistant to Earth.`,
-                    skills: "Shape Plants, Chiselling, Whittling",
-                    rarity: 3,
-                    effort: 2,
-                    cost: 300,
-                    weight: 1,
-                    wpnBonus: 2,
-                    defBonus: 1,
-                    flexibility: 2,
-                    properties: "Complex, Dual Natured, Flammable, Piercing, Sturdy (2)"
-            };
-        case "fireglass":
-            return {
-                name: "Fireglass",
-                    type: "Rare",
-                    element: "Fire",
-                    ac: 13,
-                    dt: 12,
-                    hb: 1,
-                    specProp: 0,
-                    desc: `This glass found near volcanoes has a light red tint. It is stronger than most glass and leaves burns when swung.`,
-                    skills: "Shape Glass, Glassblowing, ",
-                    rarity: 3,
-                    effort: 2.5,
-                    cost: 200,
-                    weight: 0.5,
-                    wpnBonus: 2,
-                    defBonus: 0,
-                    flexibility: 2,
-                    properties: "Complex, Piercing, Sharp, Transparent"
-            };
-        case "crystala":
-            return {
-                name: "Crystala",
-                    type: "Rare",
-                    element: "Earth",
-                    ac: 15,
-                    dt: 16,
-                    hb: 2,
-                    specProp: 1,
-                    desc: `This magically-augmented crystal has been created entirely from ether. It does not appear naturally in the wild.`,
-                    skills: "Shape Earth, Chiselling, ",
-                    rarity: 3,
-                    effort: 3,
-                    cost: 210,
-                    weight: 0.3,
-                    wpnBonus: 2,
-                    defBonus: 1,
-                    flexibility: 0,
-                    properties: "Piercing, Sturdy (2), Transparent"
-            };
-        case "mana gem":
-            return {
-                name: "Mana Gem",
-                    type: "Rare",
-                    element: "Earth",
-                    ac: 14,
-                    dt: 16,
-                    hb: 1,
-                    specProp: 3,
-                    desc: ` In its most pure form, this is a beautiful clear gemstone with an incredible durability. However most often it is most often found in a variety of different colors swirling with a hazy energy within. What is uniquely special about this gemstone is when it is formed it quickly takes on an elemental property of the environment it is placed within. Green mana gems are associated with wood, red with fire, yellow with earth, violet with metal, and blue with water.
+    skills: "Shape Plants, Chiselling, Whittling",
+    rarity: 3,
+    effort: 2,
+    cost: 300,
+    weight: 1,
+    wpnBonus: 2,
+    defBonus: 1,
+    flexibility: 2,
+    properties: "Complex, Dual Natured, Flammable, Piercing, Sturdy (2)"
+    };
+    case "fireglass": 
+    return {
+    name: "Fireglass",
+    type: "Rare",
+    element: "Fire",
+    ac: 13,
+    dt: 12,
+    hb: 1,
+    specProp: 0,
+    desc: `This glass found near volcanoes has a light red tint. It is stronger than most glass and leaves burns when swung.`,
+    skills: "Shape Glass, Glassblowing, ",
+    rarity: 3,
+    effort: 2.5,
+    cost: 200,
+    weight: 0.5,
+    wpnBonus: 2,
+    defBonus: 0,
+    flexibility: 2,
+    properties: "Complex, Piercing, Sharp, Transparent"
+    };
+    case "altillite": 
+    return {
+    name: "Altillite",
+    type: "Rare",
+    element: "Earth",
+    ac: 10,
+    dt: 10,
+    hb: 1,
+    specProp: 3,
+    desc: `This brittle, orange crystal can hold onto ki-infused magical energy incredibly well.`,
+    skills: "Shape Earth, Chiselling, ",
+    rarity: 3,
+    effort: 3,
+    cost: 200,
+    weight: 0.3,
+    wpnBonus: 2,
+    defBonus: 1,
+    flexibility: 0,
+    properties: "Piercing, Sturdy (1)"
+    };
+    case "crystala": 
+    return {
+    name: "Crystala",
+    type: "Rare",
+    element: "Earth",
+    ac: 15,
+    dt: 16,
+    hb: 2,
+    specProp: 1,
+    desc: `This magically-augmented crystal has been created entirely from ether. It does not appear naturally in the wild.`,
+    skills: "Shape Earth, Chiselling, ",
+    rarity: 3,
+    effort: 3,
+    cost: 210,
+    weight: 0.3,
+    wpnBonus: 2,
+    defBonus: 1,
+    flexibility: 0,
+    properties: "Piercing, Sturdy (2), Transparent"
+    };
+    case "mana gem": 
+    return {
+    name: "Mana Gem",
+    type: "Rare",
+    element: "Earth",
+    ac: 14,
+    dt: 16,
+    hb: 1,
+    specProp: 3,
+    desc: ` In its most pure form, this is a beautiful clear gemstone with an incredible durability. However most often it is most often found in a variety of different colors swirling with a hazy energy within. What is uniquely special about this gemstone is when it is formed it quickly takes on an elemental property of the environment it is placed within. Green mana gems are associated with wood, red with fire, yellow with earth, violet with metal, and blue with water.
     
     Mana gems that have a spirit manifest within them have especially interesting qualities. If both the spirit and the mana gem's elemental affinity match, then the gem can glow a soft light at the spirit's whim. More incredibly, an ethereal caster can cast spells through the mana gem if a spirit is within it. See <a href='character-casting.html#gemCasting'>Gem Casting</a> for more information.`,
-                    skills: "Shape Earth, Goldsmithing, ",
-                    rarity: 3,
-                    effort: 4,
-                    cost: 470,
-                    weight: 0.1,
-                    wpnBonus: 0,
-                    defBonus: 1,
-                    flexibility: 0,
-                    properties: "Piercing, Sturdy (2)"
-            };
-        case "ventu stone":
-            return {
-                name: "Ventu Stone",
-                    type: "Rare",
-                    element: "Metal",
-                    ac: 11,
-                    dt: 12,
-                    hb: 2,
-                    specProp: 3,
-                    desc: `Ventu Stone is a type of green emerald with a swirling, wind-like, core. This wind is ether that creates a unique magical resonance. Those with communication spells can target the ventu stone itself instead of a location to deliver their messages, as long as they are aware of the magical resonance. The holder of the ventu stone can then put a little magical energy into the stone to hear the message. This message is communicated directly to the person that supplies the magic.`,
-                    skills: "Shape Earth, Goldsmithing, ",
-                    rarity: 3,
-                    effort: 4,
-                    cost: 500,
-                    weight: 0.2,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: ""
-            };
-        case "steela":
-            return {
-                name: "Steela",
-                    type: "Rare",
-                    element: "Metal",
-                    ac: 17,
-                    dt: 17,
-                    hb: 2,
-                    specProp: 1,
-                    desc: `This enhanced steel is made from ether and does not occur naturally in the world.`,
-                    skills: "Shape Metal, Cold Forging, ",
-                    rarity: 3,
-                    effort: 4,
-                    cost: 375,
-                    weight: 0.8,
-                    wpnBonus: 2,
-                    defBonus: 1,
-                    flexibility: 0,
-                    properties: "Piercing, Sharp, Sturdy (3)"
-            };
-        case "glaceum":
-            return {
-                name: "Glaceum",
-                    type: "Rare",
-                    element: "Water",
-                    ac: 15,
-                    dt: 16,
-                    hb: 2,
-                    specProp: 0,
-                    desc: `This type of ice is incredibly thick and sturdy as the ice has frozen in one large mass all at once. It has become completely opaque with a slight tint of blue.`,
-                    skills: "Shape Ice, Chiselling, ",
-                    rarity: 3,
-                    effort: 2.5,
-                    cost: 120,
-                    weight: 0.4,
-                    wpnBonus: 2,
-                    defBonus: 1,
-                    flexibility: 2,
-                    properties: "Complex, Frozen, Piercing, Sharp, Sturdy (2)"
-            };
-        case "sauran bone":
-            return {
-                name: "Sauran Bone",
-                    type: "Rare",
-                    element: "-",
-                    ac: 14,
-                    dt: 14,
-                    hb: 2,
-                    specProp: 2,
-                    desc: `The bones of saurians.`,
-                    skills: "Chiselling, , ",
-                    rarity: 3,
-                    effort: 5,
-                    cost: 85,
-                    weight: 2,
-                    wpnBonus: 1,
-                    defBonus: 1,
-                    flexibility: 0,
-                    properties: "Piercing, Sharp, Sturdy (2)"
-            };
-        case "ironoak":
-            return {
-                name: "Ironoak",
-                    type: "Epic",
-                    element: "Wood",
-                    ac: 16,
-                    dt: 20,
-                    hb: 2,
-                    specProp: 1,
-                    desc: `Ironoak is ironwood that has been enhanced magically and created from ether.
+    skills: "Shape Earth, Goldsmithing, ",
+    rarity: 3,
+    effort: 4,
+    cost: 470,
+    weight: 0.1,
+    wpnBonus: 0,
+    defBonus: 1,
+    flexibility: 0,
+    properties: "Piercing, Sturdy (2)"
+    };
+    case "ventu stone": 
+    return {
+    name: "Ventu Stone",
+    type: "Rare",
+    element: "Metal",
+    ac: 11,
+    dt: 12,
+    hb: 2,
+    specProp: 3,
+    desc: `Ventu Stone is a type of green emerald with a swirling, wind-like, core. This wind is ether that creates a unique magical resonance. Those with communication spells can target the ventu stone itself instead of a location to deliver their messages, as long as they are aware of the magical resonance. The holder of the ventu stone can then put a little magical energy into the stone to hear the message. This message is communicated directly to the person that supplies the magic.`,
+    skills: "Shape Earth, Goldsmithing, ",
+    rarity: 3,
+    effort: 4,
+    cost: 500,
+    weight: 0.2,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: ""
+    };
+    case "steela": 
+    return {
+    name: "Steela",
+    type: "Rare",
+    element: "Metal",
+    ac: 17,
+    dt: 17,
+    hb: 2,
+    specProp: 1,
+    desc: `This enhanced steel is made from ether and does not occur naturally in the world.`,
+    skills: "Shape Metal, Cold Forging, ",
+    rarity: 3,
+    effort: 4,
+    cost: 375,
+    weight: 0.8,
+    wpnBonus: 2,
+    defBonus: 1,
+    flexibility: 0,
+    properties: "Piercing, Sharp, Sturdy (3)"
+    };
+    case "glaceum": 
+    return {
+    name: "Glaceum",
+    type: "Rare",
+    element: "Water",
+    ac: 15,
+    dt: 16,
+    hb: 2,
+    specProp: 0,
+    desc: `This type of ice is incredibly thick and sturdy as the ice has frozen in one large mass all at once. It has become completely opaque with a slight tint of blue.`,
+    skills: "Shape Ice, Chiselling, ",
+    rarity: 3,
+    effort: 2.5,
+    cost: 120,
+    weight: 0.4,
+    wpnBonus: 2,
+    defBonus: 1,
+    flexibility: 2,
+    properties: "Complex, Frozen, Piercing, Sharp, Sturdy (2)"
+    };
+    case "sauran bone": 
+    return {
+    name: "Sauran Bone",
+    type: "Rare",
+    element: "-",
+    ac: 14,
+    dt: 14,
+    hb: 2,
+    specProp: 2,
+    desc: `The bones of saurians.`,
+    skills: "Chiselling, , ",
+    rarity: 3,
+    effort: 5,
+    cost: 85,
+    weight: 2,
+    wpnBonus: 1,
+    defBonus: 1,
+    flexibility: 0,
+    properties: "Piercing, Sharp, Sturdy (2)"
+    };
+    case "ironoak": 
+    return {
+    name: "Ironoak",
+    type: "Epic",
+    element: "Wood",
+    ac: 16,
+    dt: 20,
+    hb: 2,
+    specProp: 1,
+    desc: `Ironoak is ironwood that has been enhanced magically and created from ether.
     
     This material is aspected to Wood but is no longer weak to Metal and is also resistant to Earth.`,
-                    skills: "Shape Plants, Chiselling, Whittling",
-                    rarity: 4,
-                    effort: 2,
-                    cost: 1170,
-                    weight: 0.8,
-                    wpnBonus: 3,
-                    defBonus: 2,
-                    flexibility: 0,
-                    properties: "Complex, Dual Natured, Flammable, Piercing, Sturdy (3)"
-            };
-        case "adamantine":
-            return {
-                name: "Adamantine",
-                    type: "Epic",
-                    element: "Fire",
-                    ac: 17,
-                    dt: 22,
-                    hb: 2,
-                    specProp: 0,
-                    desc: `A magically created material that is an earthy red in color. It's well known for its incredible durability.
+    skills: "Shape Plants, Chiselling, Whittling",
+    rarity: 4,
+    effort: 2,
+    cost: 1170,
+    weight: 0.8,
+    wpnBonus: 3,
+    defBonus: 2,
+    flexibility: 0,
+    properties: "Complex, Dual Natured, Flammable, Piercing, Sturdy (3)"
+    };
+    case "adamantine": 
+    return {
+    name: "Adamantine",
+    type: "Epic",
+    element: "Fire",
+    ac: 17,
+    dt: 22,
+    hb: 2,
+    specProp: 0,
+    desc: `A magically created material that is an earthy red in color. It's well known for its incredible durability.
     
     This material is aspected to Fire but is also resistant to Metal.`,
-                    skills: "Shape Metal, Brick Craft, ",
-                    rarity: 4,
-                    effort: 4.5,
-                    cost: 980,
-                    weight: 2,
-                    wpnBonus: 3,
-                    defBonus: 2,
-                    flexibility: 0,
-                    properties: "Complex, Dual Natured, Piercing, Sturdy (3)"
-            };
-        case "pnevmarite":
-            return {
-                name: "Pnevmarite",
-                    type: "Epic",
-                    element: "Earth",
-                    ac: 10,
-                    dt: 15,
-                    hb: 1,
-                    specProp: 3,
-                    desc: `Colloquially called Spirit Stone, Pnevmarite is a violet stone with an amber glow has the unique property of repelling spirits from passing through its aura. It effectively prevents manifestation by spirits.
+    skills: "Shape Metal, Brick Craft, ",
+    rarity: 4,
+    effort: 4.5,
+    cost: 980,
+    weight: 2,
+    wpnBonus: 3,
+    defBonus: 2,
+    flexibility: 0,
+    properties: "Complex, Dual Natured, Piercing, Sturdy (3)"
+    };
+    case "pnevmarite": 
+    return {
+    name: "Pnevmarite",
+    type: "Epic",
+    element: "Earth",
+    ac: 10,
+    dt: 15,
+    hb: 1,
+    specProp: 3,
+    desc: `Colloquially called Spirit Stone, Pnevmarite is a violet stone with an amber glow has the unique property of repelling spirits from passing through its aura. It effectively prevents manifestation by spirits.
     
     However, while Pnevmarite can prevent spirits from manifesting and possession, it cannot prevent a spirit from entering its aura if a spirit has already manifested in a creature or object that is entering the Pnevmarite protected area.
     
     Pnevmarite has a secondary property. It is capable of storing mana within it to release it at a later time. This property is still being explored and as such the limits of pnevarmite are currently unknown.`,
-                    skills: "Shape Earth, Goldsmithing, ",
-                    rarity: 4,
-                    effort: 8,
-                    cost: 2000,
-                    weight: 0.1,
-                    wpnBonus: 0,
-                    defBonus: 0,
-                    flexibility: 0,
-                    properties: "Transparent"
-            };
-        case "platinum":
-            return {
-                name: "Platinum",
-                    type: "Epic",
-                    element: "Metal",
-                    ac: 18,
-                    dt: 30,
-                    hb: 2,
-                    specProp: 0,
-                    desc: `Platinum is one of the strongest metals in existance. It is sought for its incredible durability.`,
-                    skills: "Shape Metal, Cold Forging, ",
-                    rarity: 4,
-                    effort: 5,
-                    cost: 1000,
-                    weight: 2,
-                    wpnBonus: 3,
-                    defBonus: 2,
-                    flexibility: 0,
-                    properties: "Complex, Piercing, Sharp, Sturdy (4)"
-            };
-        case "glacerulum":
-            return {
-                name: "Glacerulum",
-                    type: "Epic",
-                    element: "Water",
-                    ac: 16,
-                    dt: 22,
-                    hb: 2,
-                    specProp: 1,
-                    desc: `This magically enhanced glaceum only exists due to magic and cannot be found naturally in the world.`,
-                    skills: "Shape Ice, Chiselling, ",
-                    rarity: 4,
-                    effort: 2.5,
-                    cost: 975,
-                    weight: 0.4,
-                    wpnBonus: 3,
-                    defBonus: 2,
-                    flexibility: 0,
-                    properties: "Complex, Frozen, Piercing, Sharp, Sturdy (3)"
-            };
-        case "viridium":
-            return {
-                name: "Viridium",
-                    type: "Legendary",
-                    element: "Wood",
-                    ac: 16,
-                    dt: 28,
-                    hb: 2,
-                    specProp: 1,
-                    desc: `Magically created glass that is tough and sturdy glass has a faint green tint. It burns with acid when it is used to strike.
+    skills: "Shape Earth, Goldsmithing, ",
+    rarity: 4,
+    effort: 8,
+    cost: 2000,
+    weight: 0.1,
+    wpnBonus: 0,
+    defBonus: 0,
+    flexibility: 0,
+    properties: "Transparent"
+    };
+    case "platinum": 
+    return {
+    name: "Platinum",
+    type: "Epic",
+    element: "Metal",
+    ac: 18,
+    dt: 30,
+    hb: 2,
+    specProp: 0,
+    desc: `Platinum is one of the strongest metals in existance. It is sought for its incredible durability.`,
+    skills: "Shape Metal, Cold Forging, ",
+    rarity: 4,
+    effort: 5,
+    cost: 1000,
+    weight: 2,
+    wpnBonus: 3,
+    defBonus: 2,
+    flexibility: 0,
+    properties: "Complex, Piercing, Sharp, Sturdy (4)"
+    };
+    case "glacerulum": 
+    return {
+    name: "Glacerulum",
+    type: "Epic",
+    element: "Water",
+    ac: 16,
+    dt: 22,
+    hb: 2,
+    specProp: 1,
+    desc: `This magically enhanced glaceum only exists due to magic and cannot be found naturally in the world.`,
+    skills: "Shape Ice, Chiselling, ",
+    rarity: 4,
+    effort: 2.5,
+    cost: 975,
+    weight: 0.4,
+    wpnBonus: 3,
+    defBonus: 2,
+    flexibility: 0,
+    properties: "Complex, Frozen, Piercing, Sharp, Sturdy (3)"
+    };
+    case "viridium": 
+    return {
+    name: "Viridium",
+    type: "Legendary",
+    element: "Wood",
+    ac: 16,
+    dt: 28,
+    hb: 2,
+    specProp: 1,
+    desc: `Magically created glass that is tough and sturdy glass has a faint green tint. It burns with acid when it is used to strike.
     
     This material is aspected to Wood but is also resistant to Fire.`,
-                    skills: "Shape Glass, Glassblowing, ",
-                    rarity: 5,
-                    effort: 3,
-                    cost: 4350,
-                    weight: 0.5,
-                    wpnBonus: 4,
-                    defBonus: 1,
-                    flexibility: 2,
-                    properties: "Complex, Dual Natured, Piercing, Sharp, Transparent"
-            };
-        case "rubrumium":
-            return {
-                name: "Rubrumium",
-                    type: "Legendary",
-                    element: "Fire",
-                    ac: 16,
-                    dt: 28,
-                    hb: 2,
-                    specProp: 1,
-                    desc: `This magically created glass has a light red tint like fireglass. It is stronger than its natural brother and likewise leaves burns when swung.`,
-                    skills: "Shape Glass, Glassblowing, ",
-                    rarity: 5,
-                    effort: 3,
-                    cost: 4350,
-                    weight: 0.5,
-                    wpnBonus: 4,
-                    defBonus: 1,
-                    flexibility: 2,
-                    properties: "Complex, Piercing, Sharp, Transparent"
-            };
-        case "obsidian":
-            return {
-                name: "Obsidian",
-                    type: "Legendary",
-                    element: "Earth",
-                    ac: 21,
-                    dt: 45,
-                    hb: 3,
-                    specProp: 0,
-                    desc: `This black stone is the strongest, naturally occuring, material that is known to man. Incredibly rare, it is sought for its strength.
+    skills: "Shape Glass, Glassblowing, ",
+    rarity: 5,
+    effort: 3,
+    cost: 4350,
+    weight: 0.5,
+    wpnBonus: 4,
+    defBonus: 1,
+    flexibility: 2,
+    properties: "Complex, Dual Natured, Piercing, Sharp, Transparent"
+    };
+    case "rubrumium": 
+    return {
+    name: "Rubrumium",
+    type: "Legendary",
+    element: "Fire",
+    ac: 16,
+    dt: 28,
+    hb: 2,
+    specProp: 1,
+    desc: `This magically created glass has a light red tint like fireglass. It is stronger than its natural brother and likewise leaves burns when swung.`,
+    skills: "Shape Glass, Glassblowing, ",
+    rarity: 5,
+    effort: 3,
+    cost: 4350,
+    weight: 0.5,
+    wpnBonus: 4,
+    defBonus: 1,
+    flexibility: 2,
+    properties: "Complex, Piercing, Sharp, Transparent"
+    };
+    case "obsidian": 
+    return {
+    name: "Obsidian",
+    type: "Legendary",
+    element: "Earth",
+    ac: 21,
+    dt: 45,
+    hb: 3,
+    specProp: 0,
+    desc: `This black stone is the strongest, naturally occuring, material that is known to man. Incredibly rare, it is sought for its strength.
     
     This materials is aspected to Earth but is also resistant to Metal.`,
-                    skills: "Shape Earth, Brick Craft, Chiselling",
-                    rarity: 5,
-                    effort: 8,
-                    cost: 4250,
-                    weight: 3,
-                    wpnBonus: 4,
-                    defBonus: 3,
-                    flexibility: 0,
-                    properties: "Complex, Dual Natured, Piercing, Sharp, Sturdy (5)"
-            };
-        case "mithral":
-            return {
-                name: "Mithral",
-                    type: "Legendary",
-                    element: "Metal",
-                    ac: 18,
-                    dt: 35,
-                    hb: 3,
-                    specProp: 1,
-                    desc: `A magically created metal made with water to create a remarkably light material with incredible strength.
+    skills: "Shape Earth, Brick Craft, Chiselling",
+    rarity: 5,
+    effort: 8,
+    cost: 4250,
+    weight: 3,
+    wpnBonus: 4,
+    defBonus: 3,
+    flexibility: 0,
+    properties: "Complex, Dual Natured, Piercing, Sharp, Sturdy (5)"
+    };
+    case "mithral": 
+    return {
+    name: "Mithral",
+    type: "Legendary",
+    element: "Metal",
+    ac: 18,
+    dt: 35,
+    hb: 3,
+    specProp: 1,
+    desc: `A magically created metal made with water to create a remarkably light material with incredible strength.
     
     This material is aspected to Metal but is also resistant to Water.`,
-                    skills: "Shape Metal, Cold Forging, ",
-                    rarity: 5,
-                    effort: 4.5,
-                    cost: 3375,
-                    weight: 0.5,
-                    wpnBonus: 4,
-                    defBonus: 3,
-                    flexibility: 0,
-                    properties: "Complex, Dual Natured, Piercing, Sharp, Sturdy (4)"
-            };
-        case "white obsidian":
-            return {
-                name: "White Obsidian",
-                    type: "Legendary",
-                    element: "Metal",
-                    ac: 21,
-                    dt: 45,
-                    hb: 4,
-                    specProp: 1,
-                    desc: `This obsidian has a white, metallic sheen. It has been created magically and only by the most powerful of mages.
+    skills: "Shape Metal, Cold Forging, ",
+    rarity: 5,
+    effort: 4.5,
+    cost: 3375,
+    weight: 0.5,
+    wpnBonus: 4,
+    defBonus: 3,
+    flexibility: 0,
+    properties: "Complex, Dual Natured, Piercing, Sharp, Sturdy (4)"
+    };
+    case "white obsidian": 
+    return {
+    name: "White Obsidian",
+    type: "Legendary",
+    element: "Metal",
+    ac: 21,
+    dt: 45,
+    hb: 4,
+    specProp: 1,
+    desc: `This obsidian has a white, metallic sheen. It has been created magically and only by the most powerful of mages.
     
     This materials is aspected to Metal but is also resistant to Earth. This material is impossible to revert to dust.`,
-                    skills: "Shape Earth, Brick Craft, Chiselling",
-                    rarity: 5,
-                    effort: 10,
-                    cost: 9975,
-                    weight: 3,
-                    wpnBonus: 4,
-                    defBonus: 3,
-                    flexibility: 0,
-                    properties: "Complex, Dual Natured, Piercing, Sharp, Sturdy (5)"
-            };
-        case "albryst":
-            return {
-                name: "Albryst",
-                    type: "Legendary",
-                    element: "Water",
-                    ac: 19,
-                    dt: 38,
-                    hb: 3,
-                    specProp: 1,
-                    desc: `This magically created, pure white crystal-like substance is cold to the touch like ice but strangely doesn't melt.
+    skills: "Shape Earth, Brick Craft, Chiselling",
+    rarity: 5,
+    effort: 10,
+    cost: 9975,
+    weight: 3,
+    wpnBonus: 4,
+    defBonus: 3,
+    flexibility: 0,
+    properties: "Complex, Dual Natured, Piercing, Sharp, Sturdy (5)"
+    };
+    case "albryst": 
+    return {
+    name: "Albryst",
+    type: "Legendary",
+    element: "Water",
+    ac: 19,
+    dt: 38,
+    hb: 3,
+    specProp: 1,
+    desc: `This magically created, pure white crystal-like substance is cold to the touch like ice but strangely doesn't melt.
     
     This material is aspected to Water but is no longer weak to Earth and is also resistant to Fire.`,
-                    skills: "Shape Ice, Chiselling, ",
-                    rarity: 5,
-                    effort: 4,
-                    cost: 4050,
-                    weight: 0.5,
-                    wpnBonus: 4,
-                    defBonus: 3,
-                    flexibility: 0,
-                    properties: "Complex, Dual Natured, Piercing, Sharp, Sturdy (4)"
-            };
+    skills: "Shape Ice, Chiselling, ",
+    rarity: 5,
+    effort: 4,
+    cost: 4050,
+    weight: 0.5,
+    wpnBonus: 4,
+    defBonus: 3,
+    flexibility: 0,
+    properties: "Complex, Dual Natured, Piercing, Sharp, Sturdy (4)"
+    };
     }
     return {
-        name: "",
+    name: "",
     };
-}
+    }
+    
 
 function GetItemWeaponInfo(item) {
     switch (item.toLowerCase()) {
