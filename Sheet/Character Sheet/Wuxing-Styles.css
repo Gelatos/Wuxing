@@ -437,6 +437,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     border-bottom: 1px solid #FFF;
     border-image: linear-gradient(to right, #ffffffff 0%, #ffffff00 70%) 1;
@@ -598,6 +599,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     width: 12px;
     height: 12px;
 
+    appearance: checkbox;
     -webkit-appearance: checkbox;
     -moz-appearance: checkbox;
 
@@ -888,6 +890,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 .wuxSectionBlock .wuxFormHeaderResource input[type=number]
 {
     width: 28px;
+    appearance: textfield;
     -moz-appearance: textfield;
 }
 
@@ -1137,7 +1140,8 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 
 .wuxSectionBlock input[type=number].wuxFormInput 
 {
-  -moz-appearance: textfield;
+    appearance: textfield; 
+    -moz-appearance: textfield;
 }
 
 .wuxSectionBlock .wuxFormInput.wuxSizeMini,
@@ -1515,6 +1519,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     font-style: normal;
 
     -webkit-appearance: none;
+    appearance: none;
     background: #efefef;
 }
 
@@ -1542,7 +1547,8 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 .wuxInfoSection input[type=number].wuxInfoInput,
 .wuxInfoSection span.wuxInfoInput input[type=number].wuxInnerInfoInput
 {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .wuxInfoSection .wuxInfoSubdata
@@ -1830,6 +1836,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     box-shadow: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    appearance: none;
     -webkit-border-radius: 0px;
     border-radius: 0px;
 }
@@ -1862,6 +1869,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 .wuxAspectContainer .wuxCircleContainer input[type=number] 
 {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .wuxAspectContainer .wuxCircleContainer img
@@ -2035,6 +2043,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 .wuxAspectContainer .wuxSubContainer .wuxInput input[type=number] 
 {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .wuxAspectContainer .wuxSubContainer .wuxInput input.wuxSizeSmall
@@ -2409,6 +2418,7 @@ input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInput
 
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     border: none;
 }
@@ -3479,6 +3489,7 @@ input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeFiel
     box-shadow: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    appearance: none;
     -webkit-border-radius: 0px;
     border-radius: 0px;
     color: black; 
@@ -4147,6 +4158,7 @@ visibility: visible;
 
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -4161,6 +4173,7 @@ visibility: visible;
 
     background: linear-gradient(to bottom, #ffffdf, #f4dc83, #b0681b);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -4230,6 +4243,7 @@ visibility: visible;
 
     background: linear-gradient(to bottom, #ffffdf, #f4dc83, #b0681b);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     padding-left: 5px;
 }
@@ -4265,6 +4279,7 @@ visibility: visible;
 
     /* background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353); */
     /* -webkit-background-clip: text; */
+    /* background-clip: text; */
     /* -webkit-text-fill-color: transparent; */
     border: none;
 }
@@ -5199,6 +5214,7 @@ visibility: visible;
     text-transform: capitalize;
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -5228,6 +5244,7 @@ visibility: visible;
     font-family: "Candal";
     background: linear-gradient(to bottom, #ffffdf, #f4dc83, #b0681b);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     padding-left: 5px;
     padding-right: 10px;
@@ -5390,6 +5407,7 @@ visibility: visible;
     text-transform: capitalize;
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -5439,6 +5457,7 @@ visibility: visible;
     font-family: "Candal";
     background: linear-gradient(to bottom, #ffffdf, #f4dc83, #b0681b);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     padding-left: 5px;
 }
@@ -5686,6 +5705,7 @@ Quest Box
     line-height: 28px;
     background: linear-gradient(to right,  #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
