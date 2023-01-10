@@ -12316,15 +12316,15 @@ function GetFeatureInfo(feature) {
         case "distract":
             return {
                 name: "Distract",
-                    type: "Feature",
+                    type: "R",
                     traits: "Auditory, Emotion, Mental",
-                    desc: `You distract or confuse enemies with your performance. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, expend 2 rally points, roll 1d8, and subtract the number rolled from the creature’s roll. You can choose to use this feature after the creature makes its roll. `,
+                    desc: `You distract or confuse enemies with your performance. Expend 2 rally points, roll 1d8, and subtract the number rolled from the creature’s roll. You can choose to use this feature after the creature makes its roll. `,
                     shortdesc: ``,
                     critsuccess: "",
                     success: "",
                     failure: "",
                     critfailure: "",
-                    trigger: "",
+                    trigger: "When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll",
                     requirement: "",
                     prerequisites: "Virtuoso",
                     featType: "Archetype",
