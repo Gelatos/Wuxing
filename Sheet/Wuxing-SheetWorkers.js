@@ -1294,7 +1294,7 @@ on("change:repeating_customActions:atkname", function (eventinfo) {
 	update_actions(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_customActions"), true);
 });
 
-on("change:repeating_customActions:atkTargetStyle change:repeating_customActions:atkTraits change:repeating_customActions:atkActionCost change:repeating_customActions:atkConditionalsflag change:repeating_customActions:atkrange change:repeating_customActions:atkTrigger change:repeating_customActions:atkRequirement change:repeating_customActions:checkflag change:repeating_customActions:checkbase change:repeating_customActions:checkmod change:repeating_customActions:checkdef change:repeating_customActions:checkdefdc change:repeating_customActions:atkflag change:repeating_customActions:atkattr_base change:repeating_customActions:atkmod change:repeating_customActions:atkaskforroll change:repeating_customActions:proficiency_group change:repeating_customActions:proficiency_customrank change:repeating_customActions:dmgflag change:repeating_customActions:dmgbase change:repeating_customActions:dmgattr change:repeating_customActions:dmgmod change:repeating_customActions:dmgtype change:repeating_customActions:dmgelement change:repeating_customActions:dmg2flag change:repeating_customActions:dmg2base change:repeating_customActions:dmg2attr change:repeating_customActions:dmg2mod change:repeating_customActions:dmg2type change:repeating_customActions:dmg2element change:repeating_customActions:atkspellpower change:repeating_customActions:hldmg change:repeating_customActions:atkCritSuccess change:repeating_customActions:atkSuccess change:repeating_customActions:atkFailure change:repeating_customActions:atkCritFailure change:repeating_customActions:spellmana change:repeating_customActions:ammo change:repeating_customActions:resource change:repeating_customActions:consumable change:repeating_customActions:atk_desc", function (eventinfo) {
+on("change:repeating_customActions:atkTargetStyle change:repeating_customActions:atkTraits change:repeating_customActions:atkActionCost change:repeating_customActions:atkConditionalsflag change:repeating_customActions:atkrange change:repeating_customActions:atkTrigger change:repeating_customActions:atkRequirement change:repeating_customActions:checkflag change:repeating_customActions:checkbase change:repeating_customActions:checkmod change:repeating_customActions:checkdef change:repeating_customActions:checkdefdc change:repeating_customActions:atkflag change:repeating_customActions:atkattr_base change:repeating_customActions:atkmod change:repeating_customActions:atkaskforroll change:repeating_customActions:proficiency_group change:repeating_customActions:proficiency_customrank change:repeating_customActions:dmgflag change:repeating_customActions:dmgbase change:repeating_customActions:dmgattr change:repeating_customActions:dmgmod change:repeating_customActions:dmgtype change:repeating_customActions:dmgelement change:repeating_customActions:dmg2flag change:repeating_customActions:dmg2base change:repeating_customActions:dmg2attr change:repeating_customActions:dmg2mod change:repeating_customActions:dmg2type change:repeating_customActions:dmg2element change:repeating_customActions:atkspellpower change:repeating_customActions:hldmg change:repeating_customActions:atkCritSuccess change:repeating_customActions:atkSuccess change:repeating_customActions:atkFailure change:repeating_customActions:atkCritFailure change:repeating_customActions:spellmana change:repeating_customActions:ammo change:repeating_customActions:resource change:repeating_customActions:consumable change:repeating_customActions:autoDefense change:repeating_customActions:atk_desc", function (eventinfo) {
 	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
 		return;
 	}
@@ -1380,13 +1380,24 @@ on("change:repeating_barriers:isSelected", function (eventinfo) {
 
 
 // Vitals: Defense Modifiers
-on("change:repeating_acmodifiers:isSelected", function (eventinfo) {
-	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
-		return;
-	}
+on("change:repeating_acmodifiers:isSelected", function () {
 	update_ac();
 	update_weakness_and_resistance();
 	update_all_saves();
+});
+
+on("change:repeating_acmodifiers:autoOffTurn change:repeating_acmodifiers:autoOffBrief", function (eventinfo) {
+	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
+		return;
+	}
+	update_auto_defenses();
+});
+
+on("change:repeating_acmodifiers:name", function (eventinfo) {
+	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
+		return;
+	}
+	update_defense_list();
 });
 
 on("change:armorAddProficiency-unarmored change:armorAddProficiency-light change:armorAddProficiency-medium change:armorAddProficiency-heavy change:armorMaxMediumDex change:armorBACActiveState change:armorBACWithArmor change:repeating_acmodifiers:actsWithBarrier change:repeating_acmodifiers:acmod change:repeating_acmodifiers:acattr", function (eventinfo) {
@@ -1839,6 +1850,7 @@ var GetActionData = function () {
 		ammo: "",
 		resource: "",
 		consumable: "",
+		autoDefense: "",
 
 		toRoll: function (characterName) {
 
@@ -1943,7 +1955,7 @@ var GetActionData = function () {
 				output += this.critfailure != "" ? ` {{critfailure=${this.critfailure}}}` : "";
 			}
 
-			// add special conditions. These are single bracketted because they shouldn't be read by rolltemplates
+			// add special conditions
 			output += this.onCritSuccess != "" ? ` {{oncritsuccess=${this.onCritSuccess}}}` : "";
 			output += this.onSuccess != "" ? ` {{onsuccess=${this.onSuccess}}}` : "";
 			output += this.onFailure != "" ? ` {{onfailure=${this.onFailure}}}` : "";
@@ -1954,6 +1966,8 @@ var GetActionData = function () {
 			output += this.ammo != "" ? ` {{ammo=${this.ammo}}}` : "";
 			output += this.resource != "" ? ` {{resource=${this.resource}}}` : "";
 			output += this.consumable != "" ? ` {{consumable=${this.consumable}}}` : "";
+			output += this.autoDefense != "" ? ` {{autodefense=${this.autoDefense}}}` : "";
+			
 
 			return output;
 		}
@@ -7230,7 +7244,7 @@ var do_update_action = function (attackArray) {
 		"atkspellpower", "hldmg",
 		"atkCritSuccess", "atkSuccess", "atkFailure", "atkCritFailure",
 		"atkOnCritSuccess", "atkOnSuccess", "atkOnFailure", "atkOnCritFailure",
-		"spellmana", "ammo", "resource", "consumable", "atk_desc"
+		"spellmana", "ammo", "resource", "consumable", "autoDefense", "atk_desc"
 	]));
 
 	getAttrs(attack_attribs, function (v) {
@@ -7325,6 +7339,7 @@ var do_update_action = function (attackArray) {
 				actionData.ammo = v[GetSectionIdName(repeatingSection, id, "ammo")];
 				actionData.resource = v[GetSectionIdName(repeatingSection, id, "resource")];
 				actionData.consumable = v[GetSectionIdName(repeatingSection, id, "consumable")];
+				actionData.autoDefense = v[GetSectionIdName(repeatingSection, id, "autoDefense")];
 
 				// add checks
 				if (v[GetSectionIdName(repeatingSection, id, "checkflag")] == "1") {
@@ -8885,16 +8900,81 @@ var update_weakness_and_resistance = function () {
 			let resistances = "";
 
 			_.each(idarray, function (currentID) {
-				if (v[GetSectionIdName(repeatingSection, currentID, "weakness")] != "") {
-					weaknesses += (weaknesses != "" ? ", " : "") + v[GetSectionIdName(repeatingSection, currentID, "weakness")];
-				}
-				if (v[GetSectionIdName(repeatingSection, currentID, "resistance")] != "") {
-					resistances += (resistances != "" ? ", " : "") + v[GetSectionIdName(repeatingSection, currentID, "resistance")];
+				if (v[GetSectionIdName(repeatingSection, currentID, "isSelected")] == "1") {
+
+					if (v[GetSectionIdName(repeatingSection, currentID, "weakness")] != "") {
+						weaknesses += (weaknesses != "" ? ", " : "") + v[GetSectionIdName(repeatingSection, currentID, "weakness")];
+					}
+					if (v[GetSectionIdName(repeatingSection, currentID, "resistance")] != "") {
+						resistances += (resistances != "" ? ", " : "") + v[GetSectionIdName(repeatingSection, currentID, "resistance")];
+					}
 				}
 			});
 
 			update["weaknesses"] = weaknesses;
 			update["resistances"] = resistances;
+
+			setAttrs(update, {
+				silent: true
+			});
+
+		});
+	});
+
+}
+
+var update_defense_list = function () {
+	console.log("UPDATING DEFENSES LIST");
+
+	var mod_attrs = [];
+	var repeatingSection = "repeating_acmodifiers";
+
+	getSectionIDs(repeatingSection, function (idarray) {
+		mod_attrs = GetSectionIdValues(idarray, repeatingSection, ["name"]);
+
+		getAttrs(mod_attrs, function (v) {
+			let update = {};
+			let data = "";
+
+			_.each(idarray, function (currentID) {
+				data += (data != "" ? "@@" : "") + `${v[GetSectionIdName(repeatingSection, currentID, "name")]}$$${currentID}`;
+			});
+
+			update["defensesListData"] = data;
+
+			setAttrs(update, {
+				silent: true
+			});
+
+		});
+	});
+}
+
+var update_auto_defenses = function () {
+	console.log("UPDATING AUTO DEFENSES");
+
+	var mod_attrs = [];
+	var repeatingSection = "repeating_acmodifiers";
+
+	getSectionIDs(repeatingSection, function (idarray) {
+		mod_attrs = GetSectionIdValues(idarray, repeatingSection, ["autoOffTurn", "autoOffBrief"]);
+
+		getAttrs(mod_attrs, function (v) {
+			let update = {};
+			let turn = "";
+			let brief = "";
+
+			_.each(idarray, function (currentID) {
+				if (v[GetSectionIdName(repeatingSection, currentID, "autoOffTurn")] == "1") {
+					turn += (turn != "" ? "@@" : "") + currentID;
+				}
+				if (v[GetSectionIdName(repeatingSection, currentID, "autoOffBrief")] == "1") {
+					brief += (brief != "" ? "@@" : "") + currentID;
+				}
+			});
+
+			update["defAutoOffAtStartOfTurn"] = turn;
+			update["defAutoOffOnBriefRest"] = brief;
 
 			setAttrs(update, {
 				silent: true
@@ -13120,6 +13200,12 @@ function GetKiCapacityBonuses(pointObj, spellcasting_ability) {
 
 
 // Sheet Upgrades
+
+var upgrade_to_1_1_2 = function (doneupdating) {
+	update_defense_list();
+	doneupdating();
+};
+
 var upgrade_to_1_1_1 = function (doneupdating) {
 	update_pb();
 	finish_update_pb();
@@ -13172,8 +13258,14 @@ var versioning = function () {
 	getAttrs(["version"], function (v) {
 		console.log("Checking version " + v["version"]);
 
-		if (v["version"] === "1.1.1") {
+		if (v["version"] === "1.1.2") {
 			console.log("Wuxing Sheet modified from 5th Edition OGL by Roll20 v" + v["version"]);
+		} else if (v["version"] === "1.1.1") {
+			console.log("UPGRADING TO v1.1.2");
+			upgrade_to_1_1_2(function () {
+				setAttrs({version: "1.1.2"});
+				versioning();
+			});
 		} else if (v["version"] === "1.1.0") {
 			console.log("UPGRADING TO v1.1.1");
 			upgrade_to_1_1_1(function () {
@@ -13204,3 +13296,8 @@ var versioning = function () {
 	});
 };
 
+var autoRefresh = function() {
+
+	versioning();
+	// autoRefreshDefenses
+}

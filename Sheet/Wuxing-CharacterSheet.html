@@ -60912,13 +60912,6 @@
 											<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_atkspellpower" value="0">
 										</div>
 									</div>
-									<div class="wuxRow">&nbsp;</div>
-									<div class="wuxRow">
-										<span class="wuxFormHeader">Description</span>
-									</div>
-									<div class="wuxMultiRow">
-										<textarea class="wuxFormInput" name="attr_atk_desc"></textarea>
-									</div>
 
 									<div class="wuxRow">&nbsp;</div>
 
@@ -61000,6 +60993,20 @@
 									<div class="wuxRow">
 										<span class="wuxFormTitle">Consumable</span>
 										<input type="text" class="wuxFormInput" name="attr_consumable" placeholder="place resource cost in []">
+									</div>
+									<div class="wuxRow">
+										<span class="wuxFormHeader">Defenses</span>
+									</div>
+									<div class="wuxMultiRow">
+										<textarea class="wuxFormInput" style="height: 50px" name="attr_autoDefense" placeholder="List Vitals defenses to activate here. Comma Delimit multiple defenses."></textarea>
+									</div>
+
+									<div class="wuxRow">&nbsp;</div>
+									<div class="wuxRow">
+										<span class="wuxFormHeader">Description</span>
+									</div>
+									<div class="wuxMultiRow">
+										<textarea class="wuxFormInput" name="attr_atk_desc"></textarea>
 									</div>
 								</div>
 								<div class="display">
@@ -63406,6 +63413,10 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 					<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-DefenseModifiers" checked="checked" style="display: block">
 					<div class="wuxSectionHeader">Defense Modifiers</div>
 					<div class="wuxSectionContent">
+						<input type="hidden" name="attr_autoRefreshDefenses" value="0">
+						<input type="hidden" name="attr_defAutoOffAtStartOfTurn" value="">
+						<input type="hidden" name="attr_defAutoOffOnBriefRest" value="">
+						<input type="hidden" name="attr_defensesListData" value="">
 						<input type="hidden" name="attr_weaknesses" value="">
 						<input type="hidden" name="attr_resistances" value="">
 
@@ -63481,6 +63492,24 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 									<div class="wuxRow">
 										<span class="wuxFormTitle wuxSizeSmall">Resistance</span>
 										<input type="text" class="wuxFormInput" name="attr_resistance" placeholder="Place resistance value in [brackets] after resistance. Separate multiple resistances with commas">
+									</div>
+									<div class="wuxRow">&nbsp;</div>
+									<div class="wuxRow">
+										<span class="wuxFormHeader">Auto Disable</span>
+									</div>
+									<div class="wuxRow">
+										<span class="wuxFormTitle wuxSizeLarge">Start Of Turn</span>
+										<select class='wuxFormInput wuxSizeSmall' name='attr_autoOffTurn'>
+											<option value='0' selected="selected">No</option>
+											<option value='1'>Yes</option>
+										</select>
+									</div>
+									<div class="wuxRow">
+										<span class="wuxFormTitle wuxSizeLarge">On Brief Rest</span>
+										<select class='wuxFormInput wuxSizeSmall' name='attr_autoOffBrief'>
+											<option value='0' selected="selected">No</option>
+											<option value='1'>Yes</option>
+										</select>
 									</div>
 									<div class="wuxRow">&nbsp;</div>
 									<div class="wuxRow">

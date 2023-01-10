@@ -488,6 +488,98 @@ function HandleResourceCostFromTemplate(charId, resourceType, resourceIdsName, r
     return output;
 }
 
+function HandleAutoDefensesFromTemplate(msg, charId) {
+    let output = "";
+
+    // get the list of defenses available on the character
+    let defenseListObj = GetCharacterAttribute(charId, "defensesListData");
+    if (defenseListObj != undefined) {
+
+        // create a dictionary of defenses the character has
+        let defenseDictionary = {};
+        let defenseList = defenseListObj.get("current").split("@@");
+        let defData = "";
+        for (let i = 0; i < defenseList.length; i++) {
+            defData = defenseList[i].split("$$");
+            defenseDictionary[defData[0].trim().toLowerCase()] = defData[1];
+        }
+
+        // get the list of defenses to turn on
+        let defenseData = GetActionRollTempleteTrait(msg, /{{autodefense=.*?}}/g, "=");
+        let defenses = [];
+        if (defenseData.indexOf(",") >= 0) {
+            defenses = defenseData.split(",");
+        }
+        else {
+            defenses[0] = defenseData;
+        }
+
+        // iterate through defenses to activate and activate the associated defense
+        let defenseSelectObj = {};
+        let foundDefenses = false;
+        let key = "";
+        for (let i = 0; i < defenseList.length; i++) {
+            key = defenseList[i].trim().toLowerCase();
+            if (defenseDictionary.includes(key)) {
+                defenseSelectObj = GetCharacterAttribute(charId, GetSectionIdName("repeating_acmodifiers", defenseDictionary[key], "isSelected"));
+                if (defenseSelectObj != undefined) {
+                    defenseSelectObj.set("current", "1");
+                    foundDefenses = true;
+                }
+            }
+        }
+
+        // ensure the auto updater gets triggered
+        if (foundDefenses) {
+            let autoUpdateObj = GetCharacterAttribute(charId, "autoRefreshDefenses");
+            if (autoUpdateObj != undefined) {
+                autoUpdateObj.set("current", "1");
+            }
+            else {
+                autoUpdateObj = CreateNormalAttribute("autoRefreshDefenses", "1", charId);
+            }
+        }
+    }
+    
+    return output;
+    
+
+
+    let resourceVal = 0;
+    switch(actionCost) {
+        case "1":
+        case "2":
+        case "3":
+            let actionCountObj = GetCharacterAttribute(charId, "actioncount");
+            if (actionCountObj != undefined) {
+                log ("current action count: " + actionCountObj.get("current"));
+                resourceVal = isNaN(parseInt(actionCountObj.get("current"))) ? 0 : parseInt(actionCountObj.get("current"));
+                if (actionCost <= resourceVal) {
+                    resourceVal -= actionCost;
+                    output += "<div>" + resourceVal + " REMAINING ACTION(S)</div>";
+                    actionCountObj.set("current", resourceVal);
+                } else {
+                    output += "<div style='color:red;'>NOT ENOUGH ACTIONS (" + resourceVal + " ACTIONS)</div>";
+                }
+            }
+        break;
+        case "R":
+            let reactionCountObj = GetCharacterAttribute(charId, "reactioncount");
+            if (reactionCountObj != undefined) {
+                resourceVal = isNaN(parseInt(reactionCountObj.get("current"))) ? 0 : parseInt(reactionCountObj.get("current"));
+                if (actionCost <= resourceVal) {
+                    resourceVal -= actionCost;
+                    output += "<div>" + resourceVal + " REMAINING REACTION(S)</div>";
+                    reactionCountObj.set("current", resourceVal);
+                } else {
+                    output += "<div style='color:red;'>NOT ENOUGH REACTIONS (" + resourceVal + " REACTIONS)</div>";
+                }
+            }
+        break;
+    }
+    return output;
+}
+
 
 // ======= Action Data
 
