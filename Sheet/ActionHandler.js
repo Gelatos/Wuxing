@@ -381,6 +381,13 @@ function HandleManaCostFromTemplate(msg, charId) {
 
     // calculate mana cost
     let manaCost = GetActionRollTempleteTrait(msg, /{{mana=.*?}}/g, "=");
+
+    if (manaCost.indexOf("*")) {
+        let manaSplit = manaCost.split ("*");
+        let cost1 = isNaN(parseInt(manaSplit[0])) ? 0 : parseInt(manaSplit[0]);
+        let cost2 = isNaN(parseInt(manaSplit[1])) ? 0 : parseInt(manaSplit[1]);
+        manaCost = cost1 * cost2;
+    }
     manaCost = isNaN(parseInt(manaCost)) ? 0 : parseInt(manaCost);
 
     // add level adjustment
@@ -414,9 +421,10 @@ function HandleManaCostFromTemplate(msg, charId) {
             let kiValue = parseInt(ki.get("current"));
             if (manaCost <= kiValue) {
                 kiValue -= manaCost;
-                output += "<div>" + kiValue + " KI REMAINING</div>";
+                output += "<div>KI COST " + manaCost + " (" + kiValue + " REMAINING)</div>";
                 ki.set("current", kiValue);
             } else {
+                output += "<div>KI COST " + manaCost + "</div>";
                 output += "<div style='color:red;'>NOT ENOUGH KI (" + kiValue + " KI)</div>";
             }
         }
@@ -468,7 +476,7 @@ function HandleResourceCostFromTemplate(charId, resourceType, resourceIdsName, r
             } else if (count >= resourceCost) {
                 count += resourceCost;
                 resourceCount.set("current", count);
-                output += "<div>" + count + " " + resourceType.toUpperCase() + " REMAINING</div>";
+                output += "<div>COST " + Math.abs(resourceCost) + " " + resourceType.toUpperCase() + " (" + count + " REMAINING)</div>";
             } else {
                 output += "<div style='color:red;'>NOT ENOUGH " + resourceType.toUpperCase() + "</div>";
             }
