@@ -13243,6 +13243,7 @@ var upgrade_to_1_1_0 = function (doneupdating) {
 
 	});
 };
+
 var upgrade_to_1_0_1 = function (doneupdating) {
 	update_pb();
 	finish_update_pb();
@@ -13296,8 +13297,7 @@ var versioning = function () {
 	});
 };
 
-var autoRefresh = function() {
+var on_sheet_opened = function() {
 
 	versioning();
-	// autoRefreshDefenses
-}
+};

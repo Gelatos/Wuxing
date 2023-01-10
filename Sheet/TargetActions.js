@@ -281,7 +281,7 @@ function TargetStartTurn(targets) {
 
     // only one target can start their turn, so only target the first target
     let target = targets[0];
-
+    let infoPrintout = "";
     log ("Starting turn for " + target.displayName);
 
     // grab resource data
@@ -345,16 +345,44 @@ function TargetStartTurn(targets) {
         }
     }
 
-    // create a status update
-    let infoPrintout = "";
+    // print the current conditions on the token
     let tokenConditionInfo = GetTokenConditionInformation(target, true);
     if (tokenConditionInfo.conditions != "") {
         infoPrintout += tokenConditionInfo.display();
     }
+
+    // print any death information
     let deathInfo = GetDeathInformation(target);
     if (deathInfo.info != "") {
         infoPrintout += deathInfo.display();
     }
+
+    // turn off any auto off defenses
+    let autoOffDefenses = getAttrByName(target.charId, "defAutoOffAtStartOfTurn");
+    if (autoOffDefenses != undefined && autoOffDefenses != "") {
+
+        // create an array of each id
+        if (autoOffDefenses.indexOf("@@") >= 0) {
+            autoOffDefenses = autoOffDefenses.split("@@");
+        }
+        else {
+            autoOffDefenses = [autoOffDefenses];
+        }
+        let infoString = "";
+
+        // iterate through each id
+        for (let i = 0; i < autoOffDefenses.length; i++) {
+            if (DeactivateDefense(target.charId, autoOffDefenses[i])) {
+                infoString += `<div>Deactivating ${getAttrByName(target.charId, GetSectionIdName("repeating_acmodifiers", autoOffDefenses[i], "name"))}</div>`;
+            }
+        }
+
+        if (infoString != "") {
+            infoPrintout += `<div class="sheet-title" style="width: 270px;">Temporary Defenses</div>` + infoString;
+        }
+    }
+
+    // show the status update
     if (infoPrintout != "") {
         sendChat("CombatMaster", GetFormattedMessage("si", infoPrintout));
     }
@@ -647,6 +675,24 @@ function TargetSetBriefRested(sendTargets, targets) {
                     briefrestResource.set("current", briefrestResource.get("max"));
                 }
             });
+        }
+
+        // turn off any auto off defenses
+        let autoOffDefenses = getAttrByName(target.charId, "defAutoOffOnBriefRest");
+        if (autoOffDefenses != undefined && autoOffDefenses != "") {
+
+            // create an array of each id
+            if (autoOffDefenses.indexOf("@@") >= 0) {
+                autoOffDefenses = autoOffDefenses.split("@@");
+            }
+            else {
+                autoOffDefenses = [autoOffDefenses];
+            }
+
+            // iterate through each id
+            for (let i = 0; i < autoOffDefenses.length; i++) {
+                DeactivateDefense(target.charId, autoOffDefenses[i]);
+            }
         }
     });
 

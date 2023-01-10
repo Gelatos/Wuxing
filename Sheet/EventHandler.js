@@ -655,6 +655,37 @@ function GetSafeCharacterAttribute(characterId, attrName) {
     return returnVal;
 }
 
+function GetAttributeInt(charAtrr, state, defaultVal) {
+
+    if (state == undefined) {
+        state = "current";
+    }
+
+    return ParseInteger(charAtrr.get(state), defaultVal);
+}
+
+function ParseInteger(val, defaultVal) {
+    if (defaultVal == undefined) {
+        defaultVal = 0;
+    }
+    if (val == undefined) {
+        return defaultVal;
+    }
+    return isNaN(parseInt(val)) ? defaultVal : parseInt(val);
+}
+
+function AddToCharacterAttribute(charId, objName, value, state) {
+
+    if (state == undefined) {
+        state = "current";
+    }
+
+    let obj = GetCharacterAttribute(charId, objName);
+    if (obj != undefined) {
+        obj.set(state, GetAttributeInt(obj, state) + value);
+    }
+}
+
 function GetMessageTargetData(msg) {
     var output = [];
 

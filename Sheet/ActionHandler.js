@@ -332,6 +332,7 @@ function HandleResourceCosts(msg, charId, output) {
     output += HandleResourceCostFromTemplate(charId, GetActionRollTempleteTrait(msg, /{{ammo=.*?}}/g, "="), "allAmmunition", "repeating_gearAmmunition", "itemname", "itemcount");
     output += HandleResourceCostFromTemplate(charId, GetActionRollTempleteTrait(msg, /{{resource=.*?}}/g, "="), "allResources", "repeating_resources", "resourcename", "resourcecount");
     output += HandleResourceCostFromTemplate(charId, GetActionRollTempleteTrait(msg, /{{consumable=.*?}}/g, "="), "allConsumables", "repeating_gearConsumables", "itemname", "itemcount");
+    output += HandleAutoDefensesFromTemplate(msg, charId);
 
     return output;
 }
@@ -490,93 +491,63 @@ function HandleResourceCostFromTemplate(charId, resourceType, resourceIdsName, r
 
 function HandleAutoDefensesFromTemplate(msg, charId) {
     let output = "";
+    let defenseData = GetActionRollTempleteTrait(msg, /{{autodefense=.*?}}/g, "=");
 
-    // get the list of defenses available on the character
-    let defenseListObj = GetCharacterAttribute(charId, "defensesListData");
-    if (defenseListObj != undefined) {
+    if (defenseData != "") {
+        // get the list of defenses available on the character
+        let defenseListObj = GetCharacterAttribute(charId, "defensesListData");
+        if (defenseListObj != undefined) {
 
-        // create a dictionary of defenses the character has
-        let defenseDictionary = {};
-        let defenseList = defenseListObj.get("current").split("@@");
-        let defData = "";
-        for (let i = 0; i < defenseList.length; i++) {
-            defData = defenseList[i].split("$$");
-            defenseDictionary[defData[0].trim().toLowerCase()] = defData[1];
-        }
-
-        // get the list of defenses to turn on
-        let defenseData = GetActionRollTempleteTrait(msg, /{{autodefense=.*?}}/g, "=");
-        let defenses = [];
-        if (defenseData.indexOf(",") >= 0) {
-            defenses = defenseData.split(",");
-        }
-        else {
-            defenses[0] = defenseData;
-        }
-
-        // iterate through defenses to activate and activate the associated defense
-        let defenseSelectObj = {};
-        let foundDefenses = false;
-        let key = "";
-        for (let i = 0; i < defenseList.length; i++) {
-            key = defenseList[i].trim().toLowerCase();
-            if (defenseDictionary.includes(key)) {
-                defenseSelectObj = GetCharacterAttribute(charId, GetSectionIdName("repeating_acmodifiers", defenseDictionary[key], "isSelected"));
-                if (defenseSelectObj != undefined) {
-                    defenseSelectObj.set("current", "1");
-                    foundDefenses = true;
-                }
+            // create a dictionary of defenses the character has
+            let defenseDictionary = {};
+            let defenseList = defenseListObj.get("current").split("@@");
+            let defData = "";
+            for (let i = 0; i < defenseList.length; i++) {
+                defData = defenseList[i].split("$$");
+                defenseDictionary[defData[0].trim().toLowerCase()] = defData[1];
+                log (`creating [${defData[0].trim().toLowerCase()}] = ${defData[1]}`);
             }
-        }
 
-        // ensure the auto updater gets triggered
-        if (foundDefenses) {
-            let autoUpdateObj = GetCharacterAttribute(charId, "autoRefreshDefenses");
-            if (autoUpdateObj != undefined) {
-                autoUpdateObj.set("current", "1");
+            // get the list of defenses to turn on
+            let defenses = [];
+            if (defenseData.indexOf(",") >= 0) {
+                defenses = defenseData.split(",");
             }
             else {
+                defenses[0] = defenseData;
+            }
+
+            // iterate through defenses to activate and activate the associated defense
+            let foundDefenses = false;
+            let key = "";
+            for (let i = 0; i < defenses.length; i++) {
+                key = defenses[i].trim().toLowerCase();
+
+                if (defenseDictionary[key] != undefined) {
+                    if (ActivateDefense(charId, defenseDictionary[key])) {
+                        foundDefenses = true;
+                        output += `<div>Activating ${defenses[i]}</div>`;
+                    }
+                }
+            }
+
+            // ensure the auto updater gets triggered
+            if (foundDefenses) {
+                let autoUpdateObj = GetCharacterAttribute(charId, "autoRefreshDefenses");
+                if (autoUpdateObj != undefined) {
+                    autoUpdateObj.set("current", "1");
+                }
+            }
+            else {
+                output += "<div style='color:red;'>COULD NOT FIND DATA TO SELECT (" + defenseData + ")</div>";
                 autoUpdateObj = CreateNormalAttribute("autoRefreshDefenses", "1", charId);
             }
         }
+        else {
+            output += "<div style='color:red;'>DEFENSE LIST DATA IS EMPTY</div>";
+        }
     }
     
-    return output;
-    
-
-
-    let resourceVal = 0;
-    switch(actionCost) {
-        case "1":
-        case "2":
-        case "3":
-            let actionCountObj = GetCharacterAttribute(charId, "actioncount");
-            if (actionCountObj != undefined) {
-                log ("current action count: " + actionCountObj.get("current"));
-                resourceVal = isNaN(parseInt(actionCountObj.get("current"))) ? 0 : parseInt(actionCountObj.get("current"));
-                if (actionCost <= resourceVal) {
-                    resourceVal -= actionCost;
-                    output += "<div>" + resourceVal + " REMAINING ACTION(S)</div>";
-                    actionCountObj.set("current", resourceVal);
-                } else {
-                    output += "<div style='color:red;'>NOT ENOUGH ACTIONS (" + resourceVal + " ACTIONS)</div>";
-                }
-            }
-        break;
-        case "R":
-            let reactionCountObj = GetCharacterAttribute(charId, "reactioncount");
-            if (reactionCountObj != undefined) {
-                resourceVal = isNaN(parseInt(reactionCountObj.get("current"))) ? 0 : parseInt(reactionCountObj.get("current"));
-                if (actionCost <= resourceVal) {
-                    resourceVal -= actionCost;
-                    output += "<div>" + resourceVal + " REMAINING REACTION(S)</div>";
-                    reactionCountObj.set("current", resourceVal);
-                } else {
-                    output += "<div style='color:red;'>NOT ENOUGH REACTIONS (" + resourceVal + " REACTIONS)</div>";
-                }
-            }
-        break;
-    }
     return output;
 }
 
@@ -2104,6 +2075,175 @@ function SetTargetNotDying(targetData) {
         failureObj.set("current", "0");
     }
 }
+
+
+// ======= Defenses
+
+function ActivateDefense(charId, defenseId) {
+
+    // variables
+    let defenseSelectObj = {};
+    let repeatingSection = "repeating_acmodifiers";
+
+    // grab the defense's isSelected object
+    defenseSelectObj = GetCharacterAttribute(charId, GetSectionIdName(repeatingSection, defenseId, "isSelected"));
+    if (defenseSelectObj != undefined) {
+
+        // we can only move forward if the defense is not already on
+        if (defenseSelectObj.get("current") != "1") {
+            defenseSelectObj.set("current", "1");
+
+            // variables
+            let defBonus_ac = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "acmod")));
+            let defBonus_acattr = getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "acattr"));
+            if (defBonus_acattr != undefined && defBonus_acattr != "" && defBonus_acattr != "0") {
+                defBonus_ac += ParseInteger(getAttrByName(charId, defBonus_acattr + "_mod"));
+            }
+
+            let defBonus_acReqBarrier = getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "actsWithBarrier"));
+            let defBonus_strSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "strengthsavemod")));
+            let defBonus_dexSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "dexteritysavemod")));
+            let defBonus_conSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "constitutionsavemod")));
+            let defBonus_intSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "intelligencesavemod")));
+            let defBonus_wisSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "wisdomsavemod")));
+            let defBonus_chaSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "charismasavemod")));
+            let defBonus_weakness = getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "weakness"));
+            let defBonus_resistance = getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "resistance"));
+
+
+            // now check each of the defenses and add their modifiers to the character
+            if (defBonus_ac != 0) {
+                AddToCharacterAttribute(charId, "ac_barrier", defBonus_ac);
+
+                if (defBonus_acReqBarrier != "1") {
+                    AddToCharacterAttribute(charId, "ac_shatterbarrier", defBonus_ac);
+                }
+            }
+            if (defBonus_strSave != 0) {
+                AddToCharacterAttribute(charId, "strength_save", defBonus_strSave);
+            }
+            if (defBonus_dexSave != 0) {
+                AddToCharacterAttribute(charId, "dexterity_save", defBonus_strSave);
+            }
+            if (defBonus_conSave != 0) {
+                AddToCharacterAttribute(charId, "constitution_save", defBonus_strSave);
+            }
+            if (defBonus_intSave != 0) {
+                AddToCharacterAttribute(charId, "intelligence_save", defBonus_strSave);
+            }
+            if (defBonus_wisSave != 0) {
+                AddToCharacterAttribute(charId, "wisdom_save", defBonus_strSave);
+            }
+            if (defBonus_chaSave != 0) {
+                AddToCharacterAttribute(charId, "charisma_save", defBonus_strSave);
+            }
+            if (defBonus_weakness != undefined || defBonus_weakness != "") {
+                let weaknessesObj = GetCharacterAttribute(charId, "weaknesses");
+                if (weaknessesObj == undefined) {
+                    let weaknessString = weaknessesObj.get("current");
+                    weaknessString = (weaknessString != "" ? ", " : "") + defBonus_weakness;
+                    weaknessesObj.set("current", weaknessString);
+                }
+            }
+            if (defBonus_resistance != undefined || defBonus_resistance != "") {
+                let resistanceObj = GetCharacterAttribute(charId, "resistances");
+                if (resistanceObj == undefined) {
+                    let resistanceString = resistanceObj.get("current");
+                    resistanceString = (resistanceString != "" ? ", " : "") + defBonus_resistance;
+                    resistanceObj.set("current", resistanceString);
+                }
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+function DeactivateDefense(charId, defenseId) {
+
+    // variables
+    let defenseSelectObj = {};
+    let repeatingSection = "repeating_acmodifiers";
+
+    // grab the defense's isSelected object
+    defenseSelectObj = GetCharacterAttribute(charId, GetSectionIdName(repeatingSection, defenseId, "isSelected"));
+    if (defenseSelectObj != undefined) {
+
+        // we can only move forward if the defense is not already off
+        if (defenseSelectObj.get("current") == "1") {
+            defenseSelectObj.set("current", "0");
+
+            // variables
+            let defBonus_ac = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "acmod")));
+            let defBonus_acattr = getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "acattr"));
+            if (defBonus_acattr != undefined && defBonus_acattr != "" && defBonus_acattr != "0") {
+                defBonus_ac += ParseInteger(getAttrByName(charId, defBonus_acattr + "_mod"));
+            }
+            
+            let defBonus_acReqBarrier = getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "actsWithBarrier"));
+            let defBonus_strSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "strengthsavemod")));
+            let defBonus_dexSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "dexteritysavemod")));
+            let defBonus_conSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "constitutionsavemod")));
+            let defBonus_intSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "intelligencesavemod")));
+            let defBonus_wisSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "wisdomsavemod")));
+            let defBonus_chaSave = ParseInteger(getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "charismasavemod")));
+            let defBonus_weakness = getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "weakness"));
+            let defBonus_resistance = getAttrByName(charId, GetSectionIdName(repeatingSection, defenseId, "resistance"));
+
+            // now check each of the defenses and add their modifiers to the character
+            if (defBonus_ac != 0) {
+                AddToCharacterAttribute(charId, "ac_barrier", -1 * defBonus_ac);
+
+                if (defBonus_acReqBarrier != "1") {
+                    AddToCharacterAttribute(charId, "ac_shatterbarrier", -1 * defBonus_ac);
+                }
+            }
+            if (defBonus_strSave != 0) {
+                AddToCharacterAttribute(charId, "strength_save", -1 * defBonus_strSave);
+            }
+            if (defBonus_dexSave != 0) {
+                AddToCharacterAttribute(charId, "dexterity_save", -1 * defBonus_strSave);
+            }
+            if (defBonus_conSave != 0) {
+                AddToCharacterAttribute(charId, "constitution_save", -1 * defBonus_strSave);
+            }
+            if (defBonus_intSave != 0) {
+                AddToCharacterAttribute(charId, "intelligence_save", -1 * defBonus_strSave);
+            }
+            if (defBonus_wisSave != 0) {
+                AddToCharacterAttribute(charId, "wisdom_save", -1 * defBonus_strSave);
+            }
+            if (defBonus_chaSave != 0) {
+                AddToCharacterAttribute(charId, "charisma_save", -1 * defBonus_strSave);
+            }
+            if (defBonus_weakness != undefined || defBonus_weakness != "") {
+                let weaknessesObj = GetCharacterAttribute(charId, "weaknesses");
+                if (weaknessesObj == undefined) {
+                    let weaknessString = weaknessesObj.get("current");
+                    if (weaknessString.indexOf (defBonus_weakness) >= 0) {
+                        weaknessesObj.set("current", weaknessString.replace(defBonus_weakness, ""));
+                    }
+                }
+            }
+            if (defBonus_resistance != undefined || defBonus_resistance != "") {
+                let resistanceObj = GetCharacterAttribute(charId, "resistances");
+                if (resistanceObj == undefined) {
+                    let resistanceString = resistanceObj.get("current");
+                    if (resistanceString.indexOf (defBonus_resistance) >= 0) {
+                        resistanceObj.set("current", resistanceString.replace(defBonus_resistance, ""));
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 
 // ======= Crafting 
 
