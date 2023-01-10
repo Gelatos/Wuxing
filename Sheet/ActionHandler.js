@@ -8,7 +8,7 @@ function HandleAction(msg, charId, player) {
     let actionData = PopulateBaseActionDataFromRollTemplate(msg, charId, player);
 
     // handle resources
-    output = HandleResourceCosts(msg, charId, output);
+    output = HandleResourceCosts(msg, actionData, output);
 
     // determine if this is a target action
     let targetData = GetTargetDataFromRollTemplate(msg, charId);
@@ -325,14 +325,15 @@ function GetTargetDataFromRollTemplate(msg, charId) {
 
 // ======= Resource consumption
 
-function HandleResourceCosts(msg, charId, output) {
+function HandleResourceCosts(msg, actionData, output) {
 
-    output += HandleActionCostFromTemplate(msg, charId);
-    output += HandleManaCostFromTemplate(msg, charId);
-    output += HandleResourceCostFromTemplate(charId, GetActionRollTempleteTrait(msg, /{{ammo=.*?}}/g, "="), "allAmmunition", "repeating_gearAmmunition", "itemname", "itemcount");
-    output += HandleResourceCostFromTemplate(charId, GetActionRollTempleteTrait(msg, /{{resource=.*?}}/g, "="), "allResources", "repeating_resources", "resourcename", "resourcecount");
-    output += HandleResourceCostFromTemplate(charId, GetActionRollTempleteTrait(msg, /{{consumable=.*?}}/g, "="), "allConsumables", "repeating_gearConsumables", "itemname", "itemcount");
-    output += HandleAutoDefensesFromTemplate(msg, charId);
+    output += HandleActionCostFromTemplate(msg, actionData.charId);
+    output += HandleManaCostFromTemplate(msg, actionData.charId);
+    output += HandleVitalityCostFromTemplate(msg, actionData);
+    output += HandleResourceCostFromTemplate(actionData.charId, GetActionRollTempleteTrait(msg, /{{ammo=.*?}}/g, "="), "allAmmunition", "repeating_gearAmmunition", "itemname", "itemcount");
+    output += HandleResourceCostFromTemplate(actionData.charId, GetActionRollTempleteTrait(msg, /{{resource=.*?}}/g, "="), "allResources", "repeating_resources", "resourcename", "resourcecount");
+    output += HandleResourceCostFromTemplate(actionData.charId, GetActionRollTempleteTrait(msg, /{{consumable=.*?}}/g, "="), "allConsumables", "repeating_gearConsumables", "itemname", "itemcount");
+    output += HandleAutoDefensesFromTemplate(msg, actionData.charId);
 
     return output;
 }
@@ -382,8 +383,13 @@ function HandleManaCostFromTemplate(msg, charId) {
 
     // calculate mana cost
     let manaCost = GetActionRollTempleteTrait(msg, /{{mana=.*?}}/g, "=");
+    log ("manaCost: " + manaCost);
+    if (String(manaCost).indexOf("[[") >= 0) {
+        let check1 = String(manaCost).split("[[")[1].split("]]")[0];
+        manaCost = (msg.inlinerolls[check1].results.total != 0) ? parseInt(msg.inlinerolls[check1].results.total) : 0;
+    }
 
-    if (manaCost.indexOf("*")) {
+    if (String(manaCost).indexOf("*") >= 0) {
         let manaSplit = manaCost.split ("*");
         let cost1 = isNaN(parseInt(manaSplit[0])) ? 0 : parseInt(manaSplit[0]);
         let cost2 = isNaN(parseInt(manaSplit[1])) ? 0 : parseInt(manaSplit[1]);
@@ -396,7 +402,8 @@ function HandleManaCostFromTemplate(msg, charId) {
     castLvl = isNaN(parseInt(castLvl)) ? 0 : parseInt(castLvl);
     manaCost += castLvl * 100;
 
-    if (manaCost > 0) {
+
+    if (manaCost != 0) {
 
         // the character's plane determines which resource to check
         let plane = getAttrByName(charId, "isSpiritRealm");
@@ -407,27 +414,89 @@ function HandleManaCostFromTemplate(msg, charId) {
             // characters in the spirit plane use essence to cast spells
             let essence = GetCharacterAttribute(charId, "essence");
             let essValue = parseInt(essence.get("current"))
-            if (manaCost <= essValue) {
+            if (manaCost > 0) {
+                if (manaCost <= essValue) {
+                    essValue -= manaCost;
+                    output += "<div>ESSENCE COST " + manaCost + " (" + essValue + " REMAINING)</div>";
+                    essence.set("current", essValue);
+                } else {
+                    output += "<div style='color:red;'>NOT ENOUGH ESSENCE (" + essValue + " ESSENCE)</div>";
+                }
+            }
+            else {
                 essValue -= manaCost;
-                output += "<div>" + essValue + " ESSENCE REMAINING</div>";
+                if (essValue > GetAttributeInt(essence, "max")){ 
+                    essValue = GetAttributeInt(essence, "max");
+                }
+                output += "<div>GAINED " + Math.abs(manaCost) + " ESSENCE (" + essValue + " CURRENT)</div>";
                 essence.set("current", essValue);
-            } else {
-                output += "<div style='color:red;'>NOT ENOUGH ESSENCE (" + essValue + " ESSENCE)</div>";
             }
         } else {
-            output += "<div>KI COST " + manaCost + "</div>";
-
             // characters in the material plane use ki to cast spells
             let ki = GetCharacterAttribute(charId, "ki");
             let kiValue = parseInt(ki.get("current"));
-            if (manaCost <= kiValue) {
-                kiValue -= manaCost;
-                output += "<div>KI COST " + manaCost + " (" + kiValue + " REMAINING)</div>";
-                ki.set("current", kiValue);
-            } else {
-                output += "<div>KI COST " + manaCost + "</div>";
-                output += "<div style='color:red;'>NOT ENOUGH KI (" + kiValue + " KI)</div>";
+
+            if (manaCost > 0) {
+                if (manaCost <= kiValue) {
+                    kiValue -= manaCost;
+                    output += "<div>KI COST " + manaCost + " (" + kiValue + " REMAINING)</div>";
+                    ki.set("current", kiValue);
+                } else {
+                    output += "<div>KI COST " + manaCost + "</div>";
+                    output += "<div style='color:red;'>NOT ENOUGH KI (" + kiValue + " KI)</div>";
+                }
             }
+            else {
+                kiValue -= manaCost;
+                if (kiValue > GetAttributeInt(ki, "max")){ 
+                    kiValue = GetAttributeInt(ki, "max");
+                }
+                output += "<div>GAINED " + Math.abs(manaCost) + " KI (" + kiValue + " CURRENT)</div>";
+                ki.set("current", kiValue);
+            }
+        }
+    }
+
+    return output;
+}
+
+function HandleVitalityCostFromTemplate(msg, actionData) {
+
+    let output = "";
+
+    // calculate vitality cost
+    let vitalityCost = GetActionRollTempleteTrait(msg, /{{vitality=.*?}}/g, "=");
+    if (vitalityCost.indexOf("[[") >= 0) {
+        let check1 = vitalityCost.split("[[")[1].split("]]")[0];
+        vitalityCost = (msg.inlinerolls[check1].results.total != 0) ? parseInt(msg.inlinerolls[check1].results.total) : 0;
+    }
+    vitalityCost = ParseInteger(vitalityCost);
+
+    if (vitalityCost != 0) {
+        let vitalityObj = GetCharacterAttribute(actionData.charId, "vitality");
+        let vitality = GetAttributeInt(vitalityObj);
+        if (vitalityCost > 0) {
+            if (vitality > 0) {
+                vitality -= vitalityCost;
+                if (vitality < 0) {
+                    vitality = 0;
+                }
+                vitalityObj.set("current", vitality);
+                output += "<div>VITALITY COST " + vitalityCost + " (" + vitality + " REMAINING)</div>";
+            }
+
+            if (vitality <= 0) {
+                output += `<div style='color:red;'>${actionData.charDisplayName} has died from vitality loss.</div>`;
+            }
+        }
+        else {
+            vitality -= vitalityCost;
+            if (vitality > GetAttributeInt(vitalityObj, "max")) {
+                vitality = GetAttributeInt(vitalityObj, "max");
+            }
+            vitalityObj.set("current", vitality);
+            output += "<div>GAINED " + Math.abs(vitalityCost) + " VITALITY (" + vitality + " CURRENT)</div>";
+
         }
     }
 
@@ -2015,7 +2084,7 @@ function SetTargetDying(targetData) {
             if (successesObj == undefined) {
                 successesObj = CreateNormalAttribute("deathSaveSuccess", "0", targetData.charId);
             }
-            if (parseInt(successesObj.get("current")) < 3) {
+            if (parseInt(successesObj.get("current")) < 5) {
                 // creature is not stabilized and is therefore already dying
                 return false;
             }
@@ -2066,7 +2135,7 @@ function SetTargetNotDying(targetData) {
         if (successesObj == undefined) {
             successesObj = CreateNormalAttribute("deathSaveSuccess", "0", targetData.charId);
         }
-        successesObj.set("current", "3");
+        successesObj.set("current", "5");
 
         let failureObj = GetCharacterAttribute(targetData.charId, "deathSaveFailure");
         if (failureObj == undefined) {

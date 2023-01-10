@@ -109,14 +109,14 @@ function CommandDeathSave(content) {
     `;
     if ((rng + bonus) >= 10) {
         if (rng == 20) {
-            successes = 3;
+            successes = 5;
         }
-        else if (successes < 3) {
+        else if (successes < 5) {
             successes++;
             successesObj.set("current", successes);
         }
         output += `<div>Success!</div>`;
-        if (successes >= 3) {
+        if (successes >= 5) {
             output += `<div>${targetData.displayName} has stabilized!</div>`;
         }
         else {
@@ -127,13 +127,13 @@ function CommandDeathSave(content) {
         let failureObj = GetCharacterAttribute(targetData.charId, "deathSaveFailure");
         let failures = failureObj.get("current");
         failures = isNaN(parseInt(failures)) ? 0 : parseInt(failures);
-        if (failures < 3) {
+        if (failures < 5) {
             failures++;
             failureObj.set("current", failures);
         }
 
         let vitality = 10;
-        if (successes < 3) {
+        if (successes < 5) {
             let vitalityObj = GetCharacterAttribute(targetData.charId, "vitality");
             vitality = vitalityObj.get("current");
             vitality = isNaN(parseInt(vitality)) ? 0 : parseInt(vitality);
@@ -144,7 +144,7 @@ function CommandDeathSave(content) {
         }
 
         output += `<div>Failure.</div>`;
-        if (failures >= 3 || vitality <= 0) {
+        if (failures >= 5 || vitality <= 0) {
             output += `<div>${targetData.displayName} has died.</div>`;
         } 
         else {
@@ -167,13 +167,13 @@ function CommandDeathFailure(content) {
     let failureObj = GetCharacterAttribute(targetData.charId, "deathSaveFailure");
     let failures = failureObj.get("current");
     failures = isNaN(parseInt(failures)) ? 0 : parseInt(failures);
-    if (failures < 3) {
+    if (failures < 5) {
         failures++;
         failureObj.set("current", failures);
     }
 
     let vitality = 10;
-    if (successes < 3) {
+    if (successes < 5) {
         let vitalityObj = GetCharacterAttribute(targetData.charId, "vitality");
         vitality = vitalityObj.get("current");
         vitality = isNaN(parseInt(vitality)) ? 0 : parseInt(vitality);
@@ -183,7 +183,7 @@ function CommandDeathFailure(content) {
         }
     }
 
-    if (failures >= 3 || vitality <= 0) {
+    if (failures >= 5 || vitality <= 0) {
         output += `<div>${targetData.displayName} has died.</div>`;
     } 
     else {

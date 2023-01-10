@@ -993,6 +993,14 @@ on("clicked:createUnarmedStrike", function (eventinfo) {
 	make_unarmed_strike();
 });
 
+on("clicked:createSurge", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	make_surge_action();
+});
+
 on("change:gearUnarmoredIsSelected remove:repeating_gearArmor", function (eventinfo) {
 	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
 		return;
@@ -1294,7 +1302,7 @@ on("change:repeating_customActions:atkname", function (eventinfo) {
 	update_actions(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_customActions"), true);
 });
 
-on("change:repeating_customActions:atkTargetStyle change:repeating_customActions:atkTraits change:repeating_customActions:atkActionCost change:repeating_customActions:atkConditionalsflag change:repeating_customActions:atkrange change:repeating_customActions:atkTrigger change:repeating_customActions:atkRequirement change:repeating_customActions:checkflag change:repeating_customActions:checkbase change:repeating_customActions:checkmod change:repeating_customActions:checkdef change:repeating_customActions:checkdefdc change:repeating_customActions:atkflag change:repeating_customActions:atkattr_base change:repeating_customActions:atkmod change:repeating_customActions:atkaskforroll change:repeating_customActions:proficiency_group change:repeating_customActions:proficiency_customrank change:repeating_customActions:dmgflag change:repeating_customActions:dmgbase change:repeating_customActions:dmgattr change:repeating_customActions:dmgmod change:repeating_customActions:dmgtype change:repeating_customActions:dmgelement change:repeating_customActions:dmg2flag change:repeating_customActions:dmg2base change:repeating_customActions:dmg2attr change:repeating_customActions:dmg2mod change:repeating_customActions:dmg2type change:repeating_customActions:dmg2element change:repeating_customActions:atkspellpower change:repeating_customActions:hldmg change:repeating_customActions:atkCritSuccess change:repeating_customActions:atkSuccess change:repeating_customActions:atkFailure change:repeating_customActions:atkCritFailure change:repeating_customActions:spellmana change:repeating_customActions:ammo change:repeating_customActions:resource change:repeating_customActions:consumable change:repeating_customActions:autoDefense change:repeating_customActions:atk_desc", function (eventinfo) {
+on("change:repeating_customActions:atkTargetStyle change:repeating_customActions:atkTraits change:repeating_customActions:atkActionCost change:repeating_customActions:atkConditionalsflag change:repeating_customActions:atkrange change:repeating_customActions:atkTrigger change:repeating_customActions:atkRequirement change:repeating_customActions:checkflag change:repeating_customActions:checkbase change:repeating_customActions:checkmod change:repeating_customActions:checkdef change:repeating_customActions:checkdefdc change:repeating_customActions:atkflag change:repeating_customActions:atkattr_base change:repeating_customActions:atkmod change:repeating_customActions:atkaskforroll change:repeating_customActions:proficiency_group change:repeating_customActions:proficiency_customrank change:repeating_customActions:dmgflag change:repeating_customActions:dmgbase change:repeating_customActions:dmgattr change:repeating_customActions:dmgmod change:repeating_customActions:dmgtype change:repeating_customActions:dmgelement change:repeating_customActions:dmg2flag change:repeating_customActions:dmg2base change:repeating_customActions:dmg2attr change:repeating_customActions:dmg2mod change:repeating_customActions:dmg2type change:repeating_customActions:dmg2element change:repeating_customActions:atkspellpower change:repeating_customActions:hldmg change:repeating_customActions:atkCritSuccess change:repeating_customActions:atkSuccess change:repeating_customActions:atkFailure change:repeating_customActions:atkCritFailure change:repeating_customActions:spellmana change:repeating_customActions:vitality change:repeating_customActions:ammo change:repeating_customActions:resource change:repeating_customActions:consumable change:repeating_customActions:autoDefense change:repeating_customActions:atk_desc", function (eventinfo) {
 	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
 		return;
 	}
@@ -1847,6 +1855,7 @@ var GetActionData = function () {
 		mana: 0,
 		baseLvl: 0,
 		castLvl: 0,
+		vitality: "",
 		ammo: "",
 		resource: "",
 		consumable: "",
@@ -1963,6 +1972,7 @@ var GetActionData = function () {
 			output += this.mana != 0 ? ` {{mana=${this.mana}}}` : "";
 			output += this.baseLvl != 0 ? ` {{baselevel=${this.baseLvl}}}` : "";
 			output += this.castLvl != 0 ? ` {{castlevel=${this.castLvl}}}` : "";
+			output += this.vitality != "" ? ` {{vitality=${this.vitality}}}` : "";
 			output += this.ammo != "" ? ` {{ammo=${this.ammo}}}` : "";
 			output += this.resource != "" ? ` {{resource=${this.resource}}}` : "";
 			output += this.consumable != "" ? ` {{consumable=${this.consumable}}}` : "";
@@ -5697,6 +5707,32 @@ var make_unarmed_strike = function() {
 	make_attack_from_attack_data(attackData);
 }
 
+var make_surge_action = function() {
+
+	var update = {};
+
+	// create a new row in the custom actions section
+	var repeatingSection = "repeating_customActions";
+	var newrowid = generateRowID();
+
+	// set basics
+	update[GetSectionIdName(repeatingSection, newrowid, "options-flag")] = "0";
+	update[GetSectionIdName(repeatingSection, newrowid, "atkname")] = "Surge";
+	update[GetSectionIdName(repeatingSection, newrowid, "atkTargetStyle")] = "Self";
+	update[GetSectionIdName(repeatingSection, newrowid, "atkTraits")] = "Concentrate";
+	update[GetSectionIdName(repeatingSection, newrowid, "atkActionCost")] = "2";
+	update[GetSectionIdName(repeatingSection, newrowid, "atk_desc")] = `You push your body to its limits to regain Ki. When you surge you take 3 Vitality Damage. If your vitality is above zero and you have not fallen unconscious, you regain Ki equal to your Surge Value.`;
+	update[GetSectionIdName(repeatingSection, newrowid, "spellmana")] = "[[0-@{surge_bonus}]]";
+	update[GetSectionIdName(repeatingSection, newrowid, "vitality")] = "[[3-@{manaSurgeResistBonus}]]";
+
+	setAttrs(update, {
+		silent: true
+	}, function () {
+		update_actions(newrowid, true);
+	});
+
+}
+
 var make_attack_from_attack_data = function (attackData) {
 
 	var update = {};
@@ -7244,7 +7280,7 @@ var do_update_action = function (attackArray) {
 		"atkspellpower", "hldmg",
 		"atkCritSuccess", "atkSuccess", "atkFailure", "atkCritFailure",
 		"atkOnCritSuccess", "atkOnSuccess", "atkOnFailure", "atkOnCritFailure",
-		"spellmana", "ammo", "resource", "consumable", "autoDefense", "atk_desc"
+		"spellmana", "vitality", "ammo", "resource", "consumable", "autoDefense", "atk_desc"
 	]));
 
 	getAttrs(attack_attribs, function (v) {
@@ -7336,6 +7372,7 @@ var do_update_action = function (attackArray) {
 
 				// add resources
 				actionData.mana = v[GetSectionIdName(repeatingSection, id, "spellmana")];
+				actionData.vitality = v[GetSectionIdName(repeatingSection, id, "vitality")];
 				actionData.ammo = v[GetSectionIdName(repeatingSection, id, "ammo")];
 				actionData.resource = v[GetSectionIdName(repeatingSection, id, "resource")];
 				actionData.consumable = v[GetSectionIdName(repeatingSection, id, "consumable")];

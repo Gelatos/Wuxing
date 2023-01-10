@@ -835,6 +835,10 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 .wuxAspectContainer .wuxActionCost2,
 .wuxSectionBlock .wuxActionCost3,
 .wuxAspectContainer .wuxActionCost3,
+.wuxSectionBlock .wuxActionCost4,
+.wuxAspectContainer .wuxActionCost4,
+.wuxSectionBlock .wuxActionCost5,
+.wuxAspectContainer .wuxActionCost5,
 .wuxSectionBlock .wuxActionCostReaction,
 .wuxAspectContainer .wuxActionCostReaction
 {
@@ -849,6 +853,10 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 .wuxAspectContainer .wuxActionCost-flag[value="2"] ~ .wuxActionCost2,
 .wuxSectionBlock .wuxActionCost-flag[value="3"] ~ .wuxActionCost3,
 .wuxAspectContainer .wuxActionCost-flag[value="3"] ~ .wuxActionCost3,
+.wuxSectionBlock .wuxActionCost-flag[value="4"] ~ .wuxActionCost4,
+.wuxAspectContainer .wuxActionCost-flag[value="4"] ~ .wuxActionCost4,
+.wuxSectionBlock .wuxActionCost-flag[value="5"] ~ .wuxActionCost5,
+.wuxAspectContainer .wuxActionCost-flag[value="5"] ~ .wuxActionCost5,
 .wuxSectionBlock .wuxActionCost-flag[value="R"] ~ .wuxActionCostReaction,
 .wuxAspectContainer .wuxActionCost-flag[value="R"] ~ .wuxActionCostReaction
 {

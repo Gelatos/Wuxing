@@ -60333,7 +60333,7 @@
 										<select class="wuxFormInput wuxSizeMed" name="attr_atkTargetStyle">
 											<option value="0" selected="selected">None</option>
 											<option value="Token">Token</option>
-											<option value="Self">Self</option>
+											<option value="Self">Self/Modifier</option>
 											<option value="Field">Field</option>
 										</select>
 									</div>
@@ -60981,6 +60981,10 @@
 									<div class="wuxRow">
 										<span class="wuxFormTitle">Mana Cost</span>
 										<input type="text" class="wuxFormInput" name="attr_spellmana">
+									</div>
+									<div class="wuxRow">
+										<span class="wuxFormTitle">Vitality Cost</span>
+										<input type="text" class="wuxFormInput" name="attr_vitality">
 									</div>
 									<div class="wuxRow">
 										<span class="wuxFormTitle">Ammo Cost</span>
@@ -63002,7 +63006,21 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 						</div>
 						<div class="wuxCollapseField">
 							<div class="wuxMultiRow">
-								<button class="wuxFormButton wuxSizeLarge" name="act_createUnarmedStrike" type="action">Create Attack</button>
+								<button class="wuxFormButton wuxSizeLarge" name="act_createUnarmedStrike" type="action">Create Action</button>
+							</div>
+						</div>
+					</div>
+					<div class="wuxFieldSet">
+						<input type="checkbox" class="wuxCollapseField-flag" name="attr_featureDisplay-actionMakeSurge">
+						<div class="wuxMultiRow">
+							<div class="wuxFormEntry">
+								<span class="wuxFormHeaderLeadIcon">J</span>
+								<span name="">Basic Surge <img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
+							</div>
+						</div>
+						<div class="wuxCollapseField">
+							<div class="wuxMultiRow">
+								<button class="wuxFormButton wuxSizeLarge" name="act_createSurge" type="action">Create Action</button>
 							</div>
 						</div>
 					</div>
@@ -63256,6 +63274,8 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 								<img class="wuxFormHeaderActionSymbol wuxActionCost1" src="https://i.imgur.com/oVm5M7Y.png" />
 								<img class="wuxFormHeaderActionSymbol wuxActionCost2" src="https://i.imgur.com/71ElCEl.png" />
 								<img class="wuxFormHeaderActionSymbol wuxActionCost3" src="https://i.imgur.com/Sqy4Mex.png" />
+								<img class="wuxFormHeaderActionSymbol wuxActionCost4" src="https://i.imgur.com/q30TBpD.png" />
+								<img class="wuxFormHeaderActionSymbol wuxActionCost5" src="https://i.imgur.com/YQnFGEC.png" />
 							</div>
 						</div>
 						<div class="wuxSubContainer">
@@ -63265,6 +63285,8 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 								<img class="wuxFormHeaderActionSymbol wuxActionCost1" src="https://i.imgur.com/oVm5M7Y.png" />
 								<img class="wuxFormHeaderActionSymbol wuxActionCost2" src="https://i.imgur.com/71ElCEl.png" />
 								<img class="wuxFormHeaderActionSymbol wuxActionCost3" src="https://i.imgur.com/Sqy4Mex.png" />
+								<img class="wuxFormHeaderActionSymbol wuxActionCost4" src="https://i.imgur.com/q30TBpD.png" />
+								<img class="wuxFormHeaderActionSymbol wuxActionCost5" src="https://i.imgur.com/YQnFGEC.png" />
 							</div>
 						</div>
 					</div>
