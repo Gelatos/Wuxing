@@ -1264,6 +1264,15 @@ on("change:repeating_skillKnowledges:skillknowledgebase change:repeating_skillKn
 	update_knowledge_skills();
 });
 
+on("change:repeating_skillKnowledges:skillknowledgeproficiency", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	update_knowledge_skills();
+	update_knowledge_skill_proficiency_points();
+});
+
 // Skills: Languages
 
 on("change:repeating_skillLanguages:language", function (eventinfo) {
@@ -2571,27 +2580,29 @@ var update_classLevels_simple = function () {
 			startingSkills: "",
 			skillTier: 0,
 			classskillPts: 0,
+			classspecskillPts: 0,
 			archskillPts: 0,
 			knowledgeProf: "",
+			classknowskillPts: 0,
 			perceiveBarrier: 0,
 
 			features: [],
 			feats: []
 		};
 
-		var levelCp = 0;
+		let levelCp = 0;
 
-		var totalLevel = isNaN(parseInt(v["simpleLevelArchetypesLevel"])) ? 1 : parseInt(v["simpleLevelArchetypesLevel"]);
-		var totalHP = 0;
-		var totalBr = 0;
-		var totalSp = 0;
+		let totalLevel = isNaN(parseInt(v["simpleLevelArchetypesLevel"])) ? 1 : parseInt(v["simpleLevelArchetypesLevel"]);
+		let totalHP = 0;
+		let totalBr = 0;
+		let totalSp = 0;
 
 		// grab user data
 		levelHpMod = isNaN(parseInt(v["simpleLevelArchetypeHpBonus"])) ? 0 : parseInt(v["simpleLevelArchetypeHpBonus"]);
 		levelBrMod = isNaN(parseInt(v["simpleLevelArchetypeBrBonus"])) ? 0 : parseInt(v["simpleLevelArchetypeBrBonus"]);
 		levelSpMod = isNaN(parseInt(v["simpleLevelArchetypeSpBonus"])) ? 0 : parseInt(v["simpleLevelArchetypeSpBonus"]);
 
-		for (var i = 1; i <= totalLevel; i++) {
+		for (let i = 1; i <= totalLevel; i++) {
 
 			// add class data
 			if (classData.name != "") {
@@ -2753,6 +2764,8 @@ var update_classLevels_simple = function () {
 		update["setSkills-Class"] = "Class\n" + levelGrowth.startingSkills;
 		update["skillPointsMaxTier"] = levelGrowth.skillTier;
 		update["skillClassBonus"] = levelGrowth.classskillPts;
+		update["specSkillClassBonus"] = levelGrowth.classspecskillPts;
+		update["knowSkillClassBonus"] = levelGrowth.classknowskillPts;
 		update["skillArchetypeBonus"] = levelGrowth.archskillPts;
 
 		let featListSplit = [];
@@ -2805,6 +2818,7 @@ var update_classLevels_simple = function () {
 			update_weapon_proficiency_points();
 			update_armor_proficiency_points();
 			update_skill_proficiency_points();
+			update_knowledge_skill_proficiency_points();
 		});
 
 	});
@@ -3053,6 +3067,7 @@ var update_classLevels_complex_all = function () {
 				update_weapon_proficiency_points();
 				update_armor_proficiency_points();
 				update_skill_proficiency_points();
+				update_knowledge_skill_proficiency_points();
 				update_health_barrier();
 			});
 
@@ -3393,7 +3408,7 @@ var update_classLevels_complex_profs_and_feats = function (levelId) {
 
 		getAttrs(mod_attrs, function (v) {
 			let update = {};
-			update = do_update_classLevels_complex_profs_and_feats(update, idarray, v, levelId, false);
+			update = do_update_classLevels_complex_profs_and_feats(update, idarray, v, levelId, true);
 
 			setAttrs(update, {
 				silent: true
@@ -3404,6 +3419,7 @@ var update_classLevels_complex_profs_and_feats = function (levelId) {
 				update_weapon_proficiency_points();
 				update_armor_proficiency_points();
 				update_skill_proficiency_points();
+				update_knowledge_skill_proficiency_points();
 			});
 
 		});
@@ -3453,8 +3469,8 @@ var do_update_classLevels_complex_profs_and_feats = function (update, idarray, v
 		weaponProf: "",
 		weaponTier: isNaN(parseInt(v["weaponPointsMaxTier"])) ? 0 : parseInt(v["weaponPointsMaxTier"]),
 		startingWeapons: v["setWeaponProf-Class"],
-		classweaponPoints: isNaN(parseInt(v["weaponProfClassBonus"])) ? 0 : parseInt(v["weaponProfClassBonus"]),
-		archweaponPoints: isNaN(parseInt(v["weaponArchetypeBonus"])) ? 0 : parseInt(v["weaponArchetypeBonus"]),
+		classweaponPoints: 0,
+		archweaponPoints: 0,
 		unarmored: isNaN(parseInt(v["armor_profrank-unarmored"])) ? 0 : parseInt(v["armor_profrank-unarmored"]),
 		light: isNaN(parseInt(v["armor_profrank-light"])) ? 0 : parseInt(v["armor_profrank-light"]),
 		medium: isNaN(parseInt(v["armor_profrank-medium"])) ? 0 : parseInt(v["armor_profrank-medium"]),
@@ -3462,14 +3478,16 @@ var do_update_classLevels_complex_profs_and_feats = function (update, idarray, v
 		armorProf: "",
 		armorTier: isNaN(parseInt(v["armorPointsMaxTier"])) ? 0 : parseInt(v["armorPointsMaxTier"]),
 		startingArmor: v["setArmorProf-Class"],
-		classarmorPoints: isNaN(parseInt(v["armorProfClassBonus"])) ? 0 : parseInt(v["armorProfClassBonus"]),
-		archarmorPoints: isNaN(parseInt(v["armorArchetypeBonus"])) ? 0 : parseInt(v["armorArchetypeBonus"]),
+		classarmorPoints: 0,
+		archarmorPoints: 0,
 		skillProf: "",
 		startingSkills: v["setSkillProf-Class"],
 		skillTier: isNaN(parseInt(v["skillPointsMaxTier"])) ? 0 : parseInt(v["skillPointsMaxTier"]),
-		classskillPts: isNaN(parseInt(v["skillClassBonus"])) ? 0 : parseInt(v["skillClassBonus"]),
-		archskillPts: isNaN(parseInt(v["skillArchetypeBonus"])) ? 0 : parseInt(v["skillArchetypeBonus"]),
+		classskillPts: 0,
+		classspecskillPts: 0,
+		archskillPts: 0,
 		knowledgeProf: "",
+		classknowskillPts: 0,
 		perceiveBarrier: 0,
 
 		features: [],
@@ -3720,6 +3738,8 @@ var do_update_classLevels_complex_profs_and_feats = function (update, idarray, v
 	update["setSkills-Class"] = levelGrowth.startingSkills;
 	update["skillPointsMaxTier"] = levelGrowth.skillTier;
 	update["skillClassBonus"] = levelGrowth.classskillPts;
+	update["specSkillClassBonus"] = levelGrowth.classspecskillPts;
+	update["knowSkillClassBonus"] = levelGrowth.classknowskillPts;
 	update["skillArchetypeBonus"] = levelGrowth.archskillPts;
 
 	// set levels
@@ -3850,22 +3870,26 @@ var do_update_classLevels_complex_proficiencies = function (levelGrowth, v, sour
 		proficiencyPoints = skillProf.init.startRank * skillProf.init.startingCount;
 		proficiencyPoints += extraSkills;
 		proficiencyPoints += skillProf.init.additionalSkills;
-		proficiencyPoints += skillProf.init.specializationCount;
-		if (classType.toLowerCase() == "class" && classSubType.toLowerCase() == "heroic") {
-			proficiencyPoints++;
-		}
 		if (classType.toLowerCase() == "class" || classType.toLowerCase() == "beast" || classType.toLowerCase() == "spirit") {
 			levelGrowth.classskillPts += proficiencyPoints;
 		}
 		else {
 			levelGrowth.archskillPts += proficiencyPoints;
 		}
+
+		proficiencyPoints = skillProf.init.specializationCount;
+		if (classType.toLowerCase() == "class" && classSubType.toLowerCase() == "heroic") {
+			proficiencyPoints++;
+		}
+		levelGrowth.classspecskillPts += proficiencyPoints;
+
 		if (levelGrowth.skillTier < 2) {
 			levelGrowth.skillTier = 2;
 		}
 
 		// determine growths
-		let startingGrowth = `Become ${GetProficiencyRankTitle(skillProf.init.startRank)} in ${skillProf.init.startingCount} skills from ${skillProf.init.startingSkills}.\n`;
+		let startingGrowth = `Become ${GetProficiencyRankTitle(skillProf.init.startRank)} in ${skillProf.init.startingCount} skills from ${skillProf.init.startingSkills}.`;
+		levelGrowth.startingSkills = "Class\n" + startingGrowth;
 		if (skillProf.init.specializationCount > 0) {
 			startingGrowth += `\nBecome Trained in ${(skillProf.init.specializationCount)} specializations.`;
 		}
@@ -3873,11 +3897,11 @@ var do_update_classLevels_complex_proficiencies = function (levelGrowth, v, sour
 			levelGrowth.perceiveBarrier = 1;
 			startingGrowth += `\nSetting Perceive Barrier specialization to Trained.`;
 		}
-		levelGrowth.startingSkills = "Class\n" + startingGrowth;
 		levelGrowth.skillProf += (levelGrowth.skillProf != "" ? "\n" : "") + startingGrowth;
 
 		// Knowledge
 		levelGrowth.knowledgeProf += `Become Trained in ${(skillProf.init.bonusKnowledge)} knowledge(s) and/or language(s).`;
+		levelGrowth.classknowskillPts += parseInt(skillProf.init.bonusKnowledge);
 
 	}
 	else {
@@ -4003,9 +4027,11 @@ var do_update_classLevels_complex_proficiencies = function (levelGrowth, v, sour
 			}
 		}
 
+
 		// Knowledge Skills
 		if (classType.toLowerCase() == "class") {
 			levelGrowth.knowledgeProf += (levelGrowth.knowledgeProf != "" ? "\n" : "") + `[${sourceName}] Raise one knowledge or language by one rank or become trained in a new knowledge or language.`;
+			levelGrowth.classknowskillPts++;
 		}
 	}
 
@@ -6915,10 +6941,71 @@ var update_specializations_base_skill = function (prevValue, newValue, skill) {
 }
 
 var update_skill_proficiency_points = function() {
-	let profArray = PrefixAttributeArray("skillproficiency-", GetSkillProficiencyTypes());
-	profArray = profArray.concat(PrefixAttributeArray("skillspecproficiency-", GetSkillSpecializationTypes()));
-	let maxProfArray = ["skillAncestryBonus", "skillBackgroundBonus", "skillClassBonus", "skillArchetypeBonus", "skillFeatBonus", "intelligence_mod", "skillLifeBonus", "skillMiscBonus"];
-	update_proficiency_points("skillPoints", profArray, maxProfArray);
+	console.log("UPDATING SKILL PROFICIENCY POINT TOTALS");
+
+	let skillProfArray = PrefixAttributeArray("skillproficiency-", GetSkillProficiencyTypes());
+	let specProfArray = PrefixAttributeArray("skillspecproficiency-", GetSkillSpecializationTypes());
+	let skillMaxProfArray = ["skillAncestryBonus", "skillBackgroundBonus", "skillClassBonus", "skillArchetypeBonus", "skillFeatBonus", "intelligence_mod", "skillMiscBonus"];
+	let specMaxProfArray = ["specSkillClassBonus", "specSkillLifeBonus", "specSkillFeatBonus", "specSkillMiscBonus"];
+
+	let prof_attrs = skillProfArray.concat(specProfArray).concat(skillMaxProfArray).concat(specMaxProfArray);
+	getAttrs(prof_attrs, function (v) {
+		let update = {};
+		let skillPoints = 0;
+		let specPoints = 0;
+		let skillPointMax = 0;
+		let specPointMax = 0;
+
+		// get the points
+		for (let i = 0; i < skillProfArray.length; i++) {
+			skillPoints += isNaN(parseInt(v[skillProfArray[i]])) ? 0 : parseInt(v[skillProfArray[i]]);
+		}
+		for (let i = 0; i < specProfArray.length; i++) {
+			specPoints += isNaN(parseInt(v[specProfArray[i]])) ? 0 : parseInt(v[specProfArray[i]]);
+		}
+
+		// get their maximums
+		for (let i = 0; i < skillMaxProfArray.length; i++) {
+			skillPointMax += isNaN(parseInt(v[skillMaxProfArray[i]])) ? 0 : parseInt(v[skillMaxProfArray[i]]);
+		}
+		for (let i = 0; i < specMaxProfArray.length; i++) {
+			specPointMax += isNaN(parseInt(v[specMaxProfArray[i]])) ? 0 : parseInt(v[specMaxProfArray[i]]);
+		}
+
+		// any spec points in excess of the spec point max automatically become skill points
+		if (specPoints > specPointMax) {
+			skillPoints += (specPoints - specPointMax);
+			specPoints = specPointMax;
+		}
+
+		update["skillPoints"] = skillPoints;
+		update["skillPoints_max"] = skillPointMax;
+		update["skillPointsError"] = skillPoints > skillPointMax ? 1 : 0;
+		update["specSkillPoints"] = specPoints;
+		update["specSkillPoints_max"] = specPointMax;
+		update["specSkillPointsError"] = specPoints < specPointMax ? 1 : 0;
+
+		setAttrs(update, {
+			silent: true
+		});
+	});
+}
+
+var update_knowledge_skill_proficiency_points = function() {
+	console.log("UPDATING KNOWLEDGE SKILL PROFICIENCY POINT TOTALS");
+	
+	let repeatingKnowledges = "repeating_skillknowledges";
+	let repeatingLanguages = "repeating_skilllanguages";
+
+	getSectionIDs(repeatingKnowledges, function (idarray) {
+		getSectionIDs(repeatingLanguages, function (idarray2) {
+
+			let profArray = GetSectionIdValues(idarray, repeatingKnowledges, ["skillknowledgeproficiency"]);
+			profArray = profArray.concat(GetSectionIdValues(idarray2, repeatingLanguages, ["languageproficiency"]));
+			let maxProfArray = ["knowSkillAncestryBonus", "knowSkillBackgroundBonus", "knowSkillClassBonus", "knowSkillLifeBonus", "knowSkillFeatBonus", "knowSkillMiscBonus"];
+			update_proficiency_points("knowSkillPoints", profArray, maxProfArray);
+		});
+	});
 }
 
 // Skills: Knowledges
@@ -13238,6 +13325,25 @@ function GetKiCapacityBonuses(pointObj, spellcasting_ability) {
 
 // Sheet Upgrades
 
+var upgrade_to_1_1_3 = function (doneupdating) {
+
+	let skill_attrs = ["background"];
+	getAttrs(skill_attrs, function (v) {
+		let update = {};
+
+		let backgroundInfo = GetBackgroundInfo(v["background"]);
+		if (backgroundInfo.name != "") {
+			update["knowSkillBackgroundBonus"] = backgroundInfo.knowledgePoints;
+		}
+		setAttrs(update);
+
+		update_classLevels_complex_all();
+		doneupdating();
+
+	});
+	doneupdating();
+};
+
 var upgrade_to_1_1_2 = function (doneupdating) {
 	update_defense_list();
 	doneupdating();
@@ -13266,6 +13372,7 @@ var upgrade_to_1_1_0 = function (doneupdating) {
 		if (backgroundInfo.name != "") {
 			update["setSkills-Background"] = "Background\n" + backgroundInfo.skill;
 			update["skillBackgroundBonus"] = backgroundInfo.skillPoints;
+			update["knowSkillBackgroundBonus"] = backgroundInfo.knowledgePoints;
 		}
 		setAttrs(update);
 
@@ -13275,6 +13382,7 @@ var upgrade_to_1_1_0 = function (doneupdating) {
 		update_caster_points();
 		update_all_known_spells();
 		update_centered_spells();
+		update_defense_list();
 
 		doneupdating();
 
@@ -13296,8 +13404,14 @@ var versioning = function () {
 	getAttrs(["version"], function (v) {
 		console.log("Checking version " + v["version"]);
 
-		if (v["version"] === "1.1.2") {
+		if (v["version"] === "1.1.3") {
 			console.log("Wuxing Sheet modified from 5th Edition OGL by Roll20 v" + v["version"]);
+		} else if (v["version"] === "1.1.2") {
+			console.log("UPGRADING TO v1.1.3");
+			upgrade_to_1_1_3(function () {
+				setAttrs({version: "1.1.3"});
+				versioning();
+			});
 		} else if (v["version"] === "1.1.1") {
 			console.log("UPGRADING TO v1.1.2");
 			upgrade_to_1_1_2(function () {
@@ -13311,9 +13425,10 @@ var versioning = function () {
 				versioning();
 			});
 		} else if (v["version"] === "1.0.1" || v["version"] === "1.0.2") {
-			console.log("UPGRADING TO v1.1.0");
+			console.log("UPGRADING TO v1.1.3");
 			upgrade_to_1_1_0(function () {
-				setAttrs({version: "1.1.1"}); // the 1.1.1 fix is included in this update, so we skip it
+				 // the 1.1.1, 1.1.2, and 1.1.3 fixes are included in this update, so we skip them
+				setAttrs({version: "1.1.3"});
 				versioning();
 			});
 		} else if (v["version"] === "1.0") {

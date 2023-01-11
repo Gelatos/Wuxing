@@ -331,7 +331,7 @@
 		</div>
 
 		<div class="skills-main wuxFlexLayoutItem wuxTabSkill">
-			<div class="wuxLayoutItem">
+			<div class="wuxLargeLayoutItem">
 				<div class="skills-points wuxAspectContainer">
 
 					<input class="options-flag" type="checkbox" name="attr_options-SkillPointOptions-flag"><span>y</span>
@@ -357,29 +357,70 @@
 									<span class="wuxFormTitle">Ancestry</span>
 									<span class="wuxFormInput wuxSizeTiny" name="attr_skillAncestryBonus" value="0">0</span>
 									<span class="wuxPmSpacer">&nbsp;</span>
-									<span class="wuxFormTitle">Background</span>
-									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_skillBackgroundBonus" value="0">
-								</div>
-								<div class="wuxRow">
-									<span class="wuxFormTitle">Class</span>
-									<span class="wuxFormInput wuxSizeTiny" name="attr_skillClassBonus" value="0">0</span>
-									<span class="wuxPmSpacer">&nbsp;</span>
-									<span class="wuxFormTitle">Feats</span>
-									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_skillFeatBonus" value="0">
-								</div>
-								<div class="wuxRow">
 									<span class="wuxFormTitle">Archetype</span>
 									<span class="wuxFormInput wuxSizeTiny" name="attr_skillArchetypeBonus" value="0">0</span>
 									<span class="wuxPmSpacer">&nbsp;</span>
-									<span class="wuxFormTitle">Life</span>
-									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_skillLifeBonus" value="0">
-								</div>
-								<div class="wuxRow">
+									<span class="wuxFormTitle">Class</span>
+									<span class="wuxFormInput wuxSizeTiny" name="attr_skillClassBonus" value="0">0</span>
+									<span class="wuxPmSpacer">&nbsp;</span>
 									<span class="wuxFormTitle">Int Bonus</span>
 									<span class="wuxFormInput wuxSizeTiny" name="attr_intelligence_mod" value="0">0</span>
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle">Background</span>
+									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_skillBackgroundBonus" value="0">
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxFormTitle">Feats</span>
+									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_skillFeatBonus" value="0">
+									<span class="wuxPmSpacer">&nbsp;</span>
 									<span class="wuxPmSpacer">&nbsp;</span>
 									<span class="wuxFormTitle">Misc</span>
 									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_skillMiscBonus" value="0">
+								</div>
+								<div class="wuxRow">&nbsp;</div>
+								<div class="wuxRow">
+									<span class="wuxFormHeader">Specialization Points</span>
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle">Class</span>
+									<span class="wuxFormInput wuxSizeTiny" name="attr_specSkillClassBonus" value="0">0</span>
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxFormTitle">Life</span>
+									<span class="wuxFormInput wuxSizeTiny" name="attr_specSkillLifeBonus" value="0">0</span>
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxFormTitle">Feats</span>
+									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_specSkillFeatBonus" value="0">
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxFormTitle">Misc</span>
+									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_specSkillMiscBonus" value="0">
+								</div>
+								<div class="wuxRow">&nbsp;</div>
+								<div class="wuxRow">
+									<span class="wuxFormHeader">Knowledge Points</span>
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle">Starting Lang</span>
+									<span class="wuxFormInput wuxSizeTiny" name="attr_knowSkillAncestryBonus" value="6">6</span>
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxFormTitle">Class</span>
+									<span class="wuxFormInput wuxSizeTiny" name="attr_knowSkillClassBonus" value="0">0</span>
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxFormTitle">Life</span>
+									<span class="wuxFormInput wuxSizeTiny" name="attr_knowSkillLifeBonus" value="0">0</span>
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle">Background</span>
+									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_knowSkillBackgroundBonus" value="0">
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxFormTitle">Feats</span>
+									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_knowSkillFeatBonus" value="0">
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxPmSpacer">&nbsp;</span>
+									<span class="wuxFormTitle">Misc</span>
+									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_knowSkillMiscBonus" value="0">
 								</div>
 							</div>
 						</div>
@@ -404,12 +445,30 @@
 								</div>
 							</div>
 							<div class="wuxSubContainer">
-								<div class="wuxHeader">Points</div>
+								<div class="wuxHeader">Skill Pts</div>
 								<input type="hidden" class="wuxErrorField-flag" name="attr_skillPointsError" value="0" />
 								<div class="wuxInput wuxAspectInput wuxAspectDoubleInput wuxSizeSmall">
 									<span class="wuxSizeTiny" name="attr_skillPoints">0</span>
 									<span>|</span>
 									<span class="wuxSizeTiny" name="attr_skillPoints_max">0</span>
+								</div>
+							</div>
+							<div class="wuxSubContainer">
+								<div class="wuxHeader">Spc. Pts</div>
+								<input type="hidden" class="wuxErrorField-flag" name="attr_specSkillPointsError" value="0" />
+								<div class="wuxInput wuxAspectInput wuxAspectDoubleInput wuxSizeSmall">
+									<span class="wuxSizeTiny" name="attr_specSkillPoints">0</span>
+									<span>|</span>
+									<span class="wuxSizeTiny" name="attr_specSkillPoints_max">0</span>
+								</div>
+							</div>
+							<div class="wuxSubContainer">
+								<div class="wuxHeader">Kn. Pts</div>
+								<input type="hidden" class="wuxErrorField-flag" name="attr_knowSkillPointsError" value="0" />
+								<div class="wuxInput wuxAspectInput wuxAspectDoubleInput wuxSizeSmall">
+									<span class="wuxSizeTiny" name="attr_knowSkillPoints">0</span>
+									<span>|</span>
+									<span class="wuxSizeTiny" name="attr_knowSkillPoints_max">0</span>
 								</div>
 							</div>
 						</div>

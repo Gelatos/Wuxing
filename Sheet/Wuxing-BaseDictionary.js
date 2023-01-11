@@ -729,8 +729,9 @@ function GetBackgroundInfo(background) {
 					desc: `You have spent your life in the service of a temple to a specific god or pantheon of gods. You act as an intermediary between the realm of the holy and the mortal world, performing sacred rites and offering sacrifices in order to conduct worshipers into the presence of the divine.`,
 					gear: `A holy symbol of your religion, vestments, a set of common clothes, and a wallet containing 6,000 CP.`,
 					skill: `Become Adept in two skills from Arcana, Insight, Medicne, or Persuasion. 
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 4,
+					knowledgePoints: 4,
 					lifestyle: `You gain a vocation based on a position within your religion. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `As an acolyte you command the respect of those who share your faith, and you can perform the religious ceremonies of your religion. When performing the Community Service downtime activity with the vocation gained from your lifestyle bonus, you have advantage on your checks.`,
 					featName: "Spiritual Guidance"
@@ -739,21 +740,22 @@ Become Adept in two knowledges based on your background.`,
 			return {
 				name: "Aristocrat",
 					desc: `You understand wealth, power, and privilege. This background represents a person in a powerful position with a powerful name which may include nobility. You might be a pampered aristocrat unfamiliar with work or discomfort, a former merchant just elevating themselves to fortunes, or a disinherited scoundrel with a disproportionate sense of entitlement.
-
-Work with your DM to come up with an appropriate position of power and determine how much authority that title carries. A title doesn’t stand on its own—it’s connected to an entire family, and whatever title you hold, you will pass it down to your own children. Not only do you need to determine your title, but you should also work with the DM to describe your family and their influence on you.
-
-Due to the nature of adventuring while living in a powerful city, you may be starting with significantly fewer funds than this background may suggest. Work with your DM to determine a reason for your lack of funds.`,
+	
+	Work with your DM to come up with an appropriate position of power and determine how much authority that title carries. A title doesn’t stand on its own—it’s connected to an entire family, and whatever title you hold, you will pass it down to your own children. Not only do you need to determine your title, but you should also work with the DM to describe your family and their influence on you.
+	
+	Due to the nature of adventuring while living in a powerful city, you may be starting with significantly fewer funds than this background may suggest. Work with your DM to determine a reason for your lack of funds.`,
 					gear: `A set of fine clothes, a signet ring, and a wallet containing 10,000 CP.`,
 					skill: `Become Adept in one skill from Deception, Insight, or Persuasion. 
-Become Adept in two knowledges based on your background.
-Become Expert in one language.`,
+	Become Adept in two knowledges based on your background.
+	Become Expert in one language.`,
 					skillPoints: 2,
+					knowledgePoints: 7,
 					lifestyle: `You may immediately own a residence. The residence must fall within these restrictions:
-Base Value is maximized to 300,000 CP.
-You can only take rooms in the Living Space, Storage Rooms, Building Components, or Room Augmentation categories. Other rooms may be taken at the DM’s discretion.`,
+	Base Value is maximized to 300,000 CP.
+	You can only take rooms in the Living Space, Storage Rooms, Building Components, or Room Augmentation categories. Other rooms may be taken at the DM’s discretion.`,
 					featDesc: `You have the service of three retainers loyal to your family. These retainers can be attendants or messengers, and one might be a majordomo. Your retainers are commoners who can perform mundane tasks for you, but they do not fight for you and will leave if they are frequently endangered or abused.
-
-You may lose access to a retainer to gain 3,000 Jin per week. This 3,000 Jin may only be spent on travel, clothing, food, and lodging expenses. You may gain an extra 3,000 Jin for each retainer you do not maintain. This Jin is lost at the end of each week.`,
+	
+	You may lose access to a retainer to gain 3,000 Jin per week. This 3,000 Jin may only be spent on travel, clothing, food, and lodging expenses. You may gain an extra 3,000 Jin for each retainer you do not maintain. This Jin is lost at the end of each week.`,
 					featName: "Retainers"
 			};
 		case "artisan":
@@ -762,11 +764,12 @@ You may lose access to a retainer to gain 3,000 Jin per week. This 3,000 Jin may
 					desc: `You are skilled in a particular field and closely associated with other artisans. You are a well-established part of the mercantile world, freed by talent and wealth. You may have learned your skills as an apprentice to a master artisan, under the sponsorship of a guild, or by your own natural talent.`,
 					gear: `A set of artisan’s tools (your choice), A set of fine clothes, and a wallet containing 8,000 CP.`,
 					skill: `Become Adept in any three crafting skills.
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 6,
+					knowledgePoints: 4,
 					lifestyle: `There are many types of artisans in existence, from cobblers to chefs. Work with your GM to determine your type of craftsmanship. You may select your craft from the table to the left or roll randomly from the table.
-
-You gain a vocation based on your artistic talents. The vocation's core skill must be the skill you chose from this background.`,
+	
+	You gain a vocation based on your artistic talents. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `You are well versed in the making of a specific kind of structure or consumable. Choose one item related to your chosen craft from your lifestyle. When making this item you reduce all crafting time by half.`,
 					featName: "Practiced Craftsman"
 			};
@@ -776,8 +779,9 @@ You gain a vocation based on your artistic talents. The vocation's core skill mu
 					desc: `You have always had a way with people. You know what makes them tick, you can tease out their hearts’ desires after a few minutes of conversation, and with a few leading questions you can read them like they were children’s books. It’s a useful talent, and one that you’re perfectly willing to use for your advantage.`,
 					gear: `A set of fine clothes, a disguise kit, and a wallet containing 6,000 CP.`,
 					skill: `Become Adept in two skill from Deception, Disguise, Perception, or Thievery. 
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 4,
+					knowledgePoints: 4,
 					lifestyle: `You gain a vocation based on your type of deception. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `You have created a second identity that includes documentation, established acquaintances, and disguises that allow you to assume that persona. `,
 					featName: "False Identity"
@@ -788,11 +792,12 @@ Become Adept in two knowledges based on your background.`,
 					desc: `You are an experienced criminal with a history of breaking the law. You have spent a lot of time among other criminals and still have contacts within the criminal underworld. You’re far closer than most people to the world of murder, theft, and violence that pervades the underbelly of civilization, and you have survived up to this point by flouting the rules and regulations of society.`,
 					gear: `A crowbar, a set of dark common clothes including a hood, and a wallet containing 6,000 CP.`,
 					skill: `Become Adept in two skill from Deception, Disable Device, Stealth, or Thievery. 
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 4,
+					knowledgePoints: 4,
 					lifestyle: `There are many kinds of criminals, and within a thieves’ guild or similar criminal organization, individual members have particular specialties. Even criminals who operate outside of such organizations have strong preferences for certain kinds of crimes over others. Choose the role you played in your criminal life, or roll on the table.
-
-You gain a vocation based on your type of criminal activity. The vocation's core skill must be the skill you chose from this background.`,
+	
+	You gain a vocation based on your type of criminal activity. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `Having been a criminal for most of your life, you have grown accustomed to many of the complications that can occur while on criminal activity. When using the Crime Downtime activity, you gain one retry when failing a skill check. `,
 					featName: "Life of Crime"
 			};
@@ -802,11 +807,12 @@ You gain a vocation based on your type of criminal activity. The vocation's core
 					desc: `You thrive in front of an audience. You know how to entrance them, entertain them, and even inspire them. Your poetics can stir the hearts of those who hear you, awakening grief or joy, laughter or anger. Your music raises their spirits or captures their sorrow. Your dance steps captivate, your humor cuts to the quick. Whatever techniques you use, your art is your life.`,
 					gear: `A musical instrument (one of your choice), the favor of an admirer (love letter, lock of hair, or trinket), a costume, and a wallet containing 6,000 CP.`,
 					skill: `Become Adept in two skill from Acrobatics, Athletics, Disguise, or Performance
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 4,
+					knowledgePoints: 4,
 					lifestyle: `A good entertainer is versatile, spicing up every performance with a variety of different routines. Choose one to three routines or roll on the table below to define your expertise as an entertainer.
-
-You gain a vocation based on your type of entertainment. The vocation's core skill must be the skill you chose from this background.`,
+	
+	You gain a vocation based on your type of entertainment. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `You can always find a place to perform, usually in an inn or tavern but possibly with a circus, at a theater, or even in a noble’s court. Your performance makes you something of a local figure. When strangers recognize you in a town where you have performed, they typically take a liking to you.`,
 					featName: "By Popular Demand"
 			};
@@ -816,12 +822,13 @@ You gain a vocation based on your type of entertainment. The vocation's core ski
 					desc: `As a sell-sword who fought battles for coin, you’re well acquainted with risking life and limb for a chance at a share of treasure. Now, you look forward to fighting foes and reaping even greater rewards as an adventurer. Your experience makes you familiar with the ins and outs of mercenary life, and you likely have harrowing stories of events on the battlefield. You might have served with a large outfit such as the Zhentarim or the soldiers of Mint- arn, or a smaller band of sell-swords, maybe even more than one. (See the “Mercenaries of the North” sidebar for a collection of possibilities.)`,
 					gear: `A uniform of your company (traveler’s clothes in quality), an insignia of your rank, and a wallet containing 8,000 CP.`,
 					skill: `Become Adept in two skill from Athletics, Perception, Persuasion, or Pilot. 
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 4,
+					knowledgePoints: 4,
 					lifestyle: `You gain a vocation based on your type of mercenary work. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `You are able to identify mercenary companies by their emblems, and you know a little about any such company, such as the names and reputations of its commanders and leaders.
-
-You become Expert in the Mercenary Companies general knowledge.`,
+	
+	You become Expert in the Mercenary Companies general knowledge.`,
 					featName: "Mercenary Life"
 			};
 		case "merchant":
@@ -830,11 +837,12 @@ You become Expert in the Mercenary Companies general knowledge.`,
 					desc: `You are a member of a guild of traders, caravan masters, or shopkeepers. You don’t craft items yourself but earn a living by buying and selling the works of others (or the raw materials artisans need to practice their craft). Your guild might be a large merchant consortium (or family) with interests across the region. Perhaps you transported goods from one place to another, by ship, wagon, or caravan, or bought them from traveling traders and sold them in your own little shop. In some ways, the traveling merchant’s life lends itself to adventure.`,
 					gear: `A set of navigator’s tools and a wheeled cart, A set of fine clothes, and a wallet containing 8,000 CP.`,
 					skill: `Become Adept in two skill from Insight, Performance, Persuasion, or Survival.
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 4,
+					knowledgePoints: 4,
 					lifestyle: `There are many types of merchants in the world, however most specialized in a type of item to sell. Work with your GM to determine your ware specialization. You may select your specialization from the table to the left or roll randomly from the table.
-
-You gain a vocation based on your mercantile specialization. The vocation's core skill must be the skill you chose from this background.`,
+	
+	You gain a vocation based on your mercantile specialization. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `Due to business relationships with a variety of different businesspeople, the merchant can draw on these connections to obtain discounts on goods and services and acquire knowledge of local events and personages.`,
 					featName: "Networking"
 			};
@@ -844,11 +852,12 @@ You gain a vocation based on your mercantile specialization. The vocation's core
 					desc: `You grew up in the wilds, far from civilization and the comforts of town and technology. You’ve witnessed the migration of herds larger than forests, survived weather more extreme than any city-dweller could comprehend, and enjoyed the solitude of being the only thinking creature for miles in any direction. The wilds are in your blood, whether you were a nomad, an explorer, a recluse, a hunter-gatherer, or even a marauder. Even in places where you don’t know the specific features of the terrain, you know the ways of the wild.`,
 					gear: `A hunting trap, a trophy from an animal you killed, a set of traveler’s clothes, and a wallet containing 5,000 CP.`,
 					skill: `Become Adept in two skill from Athletics, Gathering, Nature, or Survival.
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 4,
+					knowledgePoints: 4,
 					lifestyle: `You’ve been to strange places and seen things that others cannot begin to fathom. Consider some of the distant lands you have visited, and how they impacted you. You can roll on the following table to determine your occupation during your time in the wild, or choose one that best fits your character.
-
-You gain a vocation based on your origin. The vocation's core skill must be the skill you chose from this background.`,
+	
+	You gain a vocation based on your origin. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `You have an excellent memory for maps and geography, and you can always recall the general layout of terrain, settlements, and other features around you. `,
 					featName: "Wanderer"
 			};
@@ -858,8 +867,9 @@ You gain a vocation based on your origin. The vocation's core skill must be the 
 					desc: `You sailed on a seagoing vessel for years. In that time, you faced down mighty storms, monsters of the deep, and those who wanted to sink your craft to the bottomless depths. Your first love is the distant line of the horizon, but the time has come to try your hand at something new.`,
 					gear: `50 feet of silk rope, a set of common clothes, and a wallet containing 6,000 CP.`,
 					skill: `Become Adept in two skill from Athletics, Nature, Perception, or Pilot. 
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 4,
+					knowledgePoints: 4,
 					lifestyle: `You gain a vocation based on your type of sailing work. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `When you need to, you can secure free passage on a sailing ship for yourself and your adventuring companions. You might sail on the ship you served on, or another ship you have good relations with (perhaps one captained by a former crewmate). Because you’re calling in a favor, you can’t be certain of a schedule or route that will meet your every need. Your Dungeon Master will determine how long it takes to get where you need to go. In return for your free passage, you and your companions are expected to assist the crew during the voyage.`,
 					featName: "Ship’s Passage"
@@ -870,12 +880,13 @@ Become Adept in two knowledges based on your background.`,
 					desc: `You have a knack for learning, and sequestered yourself from the outside world to learn all you could. You read about so many wondrous places and things in your books, and always dreamed about one day seeing the real things. Eventually, that curiosity led you to leave your studies and become an adventurer.`,
 					gear: `A bottle of black ink, a quill, a small knife, a set of common clothes, and a wallet containing 5,000 CP.`,
 					skill: `Become Adept in one skill from Arcana, Health, or Nature.
-Become Adept in five knowledges.
-Become Expert in one language.`,
+	Become Adept in five knowledges.
+	Become Expert in one language.`,
 					skillPoints: 2,
+					knowledgePoints: 13,
 					lifestyle: `Most scholars are placed in a position where they may have learned their scholarly pursuits. Work with your GM to determine your source. You may select your source from the table to the left or roll randomly from the table.
-
-You gain a vocation based on your source. The vocation's core skill must be the skill you chose from this background.`,
+	
+	You gain a vocation based on your source. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `Due to years of researching various subjects, you've learned ways to accelerate your study. Whenever performing the Research downtime activity, you always gain one additional skill increase.`,
 					featName: "Fast Research"
 			};
@@ -885,11 +896,12 @@ You gain a vocation based on your source. The vocation's core skill must be the 
 					desc: `Guarding has been your life for as long as you care to remember. You trained as a youth, studied the use of weapons and armor, learned basic survival techniques, including how to stay alive on the battlefield. You might have been part of a standing national army or perhaps a member of a local militia who rose to prominence during a recent war.`,
 					gear: `An insignia of rank, a set of bone dice or deck of cards, a set of common clothes, and a wallet containing 5,000 CP.`,
 					skill: `Become Adept in two skill from Athletics, Insight, Intimidation, or Pilot. 
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 4,
+					knowledgePoints: 4,
 					lifestyle: `During your time as a soldier, you had a specific role to play in your unit or army. Roll a d8 or choose from the options in the table to determine your role.
-
-You gain a vocation based on your rank. The vocation's core skill must be the skill you chose from this background.`,
+	
+	You gain a vocation based on your rank. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `You have an officer rank from your career as a guard. Guards loyal to your former organization still recognize your authority and influence, and they defer to you if they are of a lower rank. You can invoke your rank to exert influence over other guards and requisition simple equipment for temporary use. You can also usually gain access to friendly guard encampments and fortresses where your rank is recognized.`,
 					featName: "Officer Rank"
 			};
@@ -899,11 +911,12 @@ You gain a vocation based on your rank. The vocation's core skill must be the sk
 					desc: `You grew up on the streets alone, orphaned, and poor. You had no one to watch over you or to provide for you, so you learned to provide for yourself. You fought fiercely over food and kept a constant watch out for other desperate souls who might steal from you. You slept on rooftops and in alleyways, exposed to the elements, and endured sickness without the advantage of medicine or a place to recuperate. You’ve survived despite all odds, and did so through cunning, strength, speed, or some combination of each.`,
 					gear: `A map of the city you grew up in, a token to remember your parents by, a set of common clothes, and a wallet containing 4,000 CP.`,
 					skill: `Become Adept in two skill from Athletics, Gathering, Stealth, or Thievery. 
-Become Adept in two knowledges based on your background.`,
+	Become Adept in two knowledges based on your background.`,
 					skillPoints: 4,
+					knowledgePoints: 4,
 					lifestyle: `Having grown up in a life of poverty you are well suited to roughing it outside. You gain no morale penalty when not sleeping in propper lodgings and having no home as a lifestyle.
-
-In addition, you gain a vocation based on your history of living the streets. The vocation's core skill must be the skill you chose from this background.`,
+	
+	In addition, you gain a vocation based on your history of living the streets. The vocation's core skill must be the skill you chose from this background.`,
 					featDesc: `You know the secret patterns and flow to cities and can find passages through the urban sprawl that others would miss. When you are not in combat, you (and companions you lead) can travel between any two locations in the city twice as fast as your speed would normally allow.`,
 					featName: "City Secrets"
 			};

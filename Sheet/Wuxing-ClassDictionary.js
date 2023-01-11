@@ -10899,7 +10899,7 @@ function GetFeatureInfo(feature) {
                 name: "Vital Favor",
                     type: "Feature",
                     traits: "",
-                    desc: `Your favor stems from your intellect and clever mind. You can expend one vitality to generate a favor point when using a feature with the Favor trait.`,
+                    desc: `Your favor stems from your intellect and clever mind. You can expend one vitality to generate three favor points as a free action. These favor points are lost after a long rest.`,
                     shortdesc: ``,
                     critsuccess: "",
                     success: "",
