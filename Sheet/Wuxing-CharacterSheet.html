@@ -7059,11 +7059,11 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				</div>
 			</div>
 
-			<input type="hidden" class="wuxHiddenField-flag" name="attr_multipleBarriers" value="0">
+			<input type="hidden" class="wuxHiddenField-flag" name="attr_maintainsSpirits" value="0">
 			<div class="wuxHiddenField">
-				<div class="vitals-Barriers wuxSectionBlock wuxLayoutItem">
-					<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Barriers" checked="checked" style="display: block">
-					<div class="wuxSectionHeader">Barriers</div>
+				<div class="vitals-Spirits wuxSectionBlock wuxLayoutItem">
+					<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Spirits" checked="checked" style="display: block">
+					<div class="wuxSectionHeader">Spirits</div>
 					<input type="hidden" name="attr_barrier_list">
 					<input type="hidden" name="attr_active_barrier" value="current">
 
@@ -7073,7 +7073,7 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 								<input type="checkbox" class="wuxEquipField-flag" name="attr_classBarrierIsSelected" checked="checked" value="1">
 								<input type="hidden" class="wuxEquipField-flag" name="attr_classBarrierIsSelected" value="1">
 								<span class="wuxFormHeaderLeadIcon"></span>
-								<span>Class Barrier</span>
+								<span>Spiritless</span>
 								<span class="wuxFormHeaderLeadIcon">&nbsp;</span>
 								<span class="wuxSubheader">
 									<span name="attr_classBarrier">0</span>
@@ -7084,7 +7084,7 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 						</div>
 						<div class="wuxRow">&nbsp;</div>
 
-						<fieldset class="repeating_barriers">
+						<fieldset class="repeating_spirits">
 							<div class="wuxFieldSet wuxGearEquipGroup">
 								<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
 								<div class="options">
@@ -7092,12 +7092,33 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 										<span class="wuxFormTitle wuxSizeSmall">Name</span>
 										<input type="text" class="wuxFormInput" name="attr_atkname">
 									</div>
+									<div class="wuxRow">&nbsp;</div>
+									<div class="wuxRow">
+										<span class="wuxFormHeader">Statistics</span>
+									</div>
+									<div class="wuxRow">
+										<span class="wuxFormTitle wuxSizeSmall">Element</span>
+										<select class='wuxFormInput' name='attr_barrierElement' value="0">
+											<option value="0">-</option>
+											<option value="Wood">Wood</option>
+											<option value="Fire">Fire</option>
+											<option value="Earth">Earth</option>
+											<option value="Metal">Metal</option>
+											<option value="Water">Water</option>
+										</select>
+									</div>
+
 									<div class="wuxRow">
 										<span class="wuxFormTitle wuxSizeSmall">Barrier</span>
 										<input type="number" class="wuxFormInput" name="attr_barrier" value="0">
 										<span class="wuxFormData">/</span>
 										<input type="number" class="wuxFormInput" name="attr_barrier_max" value="0">
 									</div>
+									<div class="wuxRow">
+										<span class="wuxFormTitle wuxSizeSmall">Barrier AC</span>
+										<input type="number" class="wuxFormInput" name="attr_barrierAc" value="0">
+									</div>
+									<div class="wuxRow">&nbsp;</div>
 									<div class="wuxRow">
 										<span class="wuxFormHeader">Additional Notes</span>
 									</div>
@@ -11169,8 +11190,8 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 						</select>
 					</div>
 					<div class="wuxRow">
-						<span class="wuxFormTitle wuxSizeLarge">Multiple Barriers</span>
-						<select class='wuxFormInput wuxSizeSmall' name='attr_multipleBarriers' value="0">
+						<span class="wuxFormTitle wuxSizeLarge">Maintains Spirits</span>
+						<select class='wuxFormInput wuxSizeSmall' name='attr_maintainsSpirits' value="0">
 							<option value="0">No</option>
 							<option value="1">Yes</option>
 						</select>

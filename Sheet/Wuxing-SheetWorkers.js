@@ -1400,14 +1400,16 @@ on("change:classBarrierIsSelected", function (eventinfo) {
 	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
 		return;
 	}
-	update_selected_barrier("current");
+	update_selected_spirit("current");
+	update_ac();
 });
 
-on("change:repeating_barriers:isSelected", function (eventinfo) {
+on("change:repeating_spirits:isSelected", function (eventinfo) {
 	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
 		return;
 	}
-	update_selected_barrier(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_barriers"));
+	update_selected_spirit(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_spirits"));
+	update_ac();
 });
 
 
@@ -8801,7 +8803,7 @@ var update_health_barrier = function () {
 		"active_barrier", "usesClassBarrier", "classTotalBrPoints", "barrierBonus", "classTotalSpPoints", "spBonus", "characterType"
 	];
 
-	let repeatingBarriers = "repeating_barriers";
+	let repeatingBarriers = "repeating_spirits";
 
 	getSectionIDs(repeatingBarriers, function (idarray) {
 		health_attrs = health_attrs.concat(GetSectionIdValues(idarray, repeatingBarriers,
@@ -8895,151 +8897,162 @@ var update_health_barrier = function () {
 var update_ac = function () {
 	console.log("UPDATING AC");
 
-	var mod_attrs = ["pb", "spellcasting_ability", "gearEquippedArmorType", "gearEquippedArmorAc", "gearEquippedShieldRaised", "gearEquippedShieldAc",
+	let mod_attrs = ["pb", "spellcasting_ability", "gearEquippedArmorType", "gearEquippedArmorAc", "gearEquippedShieldRaised", "gearEquippedShieldAc",
 		"armor_prof-unarmored", "armor_prof-light", "armor_prof-medium", "armor_prof-heavy",
 		"strength_mod", "dexterity_mod", "constitution_mod", "intelligence_mod", "wisdom_mod", "charisma_mod",
-		"globalacmod", "armorMaxMediumDex", "armorBACActiveState", "armorBACWithArmor", 
+		"globalacmod", "armorMaxMediumDex", "armorBACActiveState", "armorBACWithArmor", "maintainsSpirits",
 		"armorAddProficiency-unarmored", "armorAddProficiency-light", "armorAddProficiency-medium", "armorAddProficiency-heavy"
 	];
 
-	var repeatingSection = "repeating_acmodifiers";
+	let repeatingSection = "repeating_acmodifiers";
+	let repeatingSpirits = "repeating_spirits";
 
 	getSectionIDs(repeatingSection, function (idarray) {
 		mod_attrs = mod_attrs.concat(GetSectionIdValues(idarray, repeatingSection, ["acmod", "acattr", "actsWithBarrier", "isSelected"]));
 
-		getAttrs(mod_attrs, function (v) {
-			var update = {};
+		getSectionIDs(repeatingSpirits, function (idarray2) {
+			mod_attrs = mod_attrs.concat(GetSectionIdValues(idarray2, repeatingSpirits, ["barrierAc", "isSelected"]));
 
-			// variables
-			let pbBonus = parseInt(v["pb"]);
-			let globalacmod = parseInt(v["globalacmod"]);
-			var baseAc = 0;
-			var barrierAc = 0;
-			var acType = 0;
+			getAttrs(mod_attrs, function (v) {
+				var update = {};
 
-			// calculate AC with the equipped armor 
-			baseAc = 10;
-			baseAc += (isNaN(parseInt(v["gearEquippedArmorAc"])) ? 0 : parseInt(v["gearEquippedArmorAc"]));
-			switch (v["gearEquippedArmorType"]) {
-				case "Unarmored":
-					acType = 0;
-					baseAc += parseInt(v["armor_prof-unarmored"]);
-					baseAc += parseInt(v["dexterity_mod"]);
+				// variables
+				let pbBonus = parseInt(v["pb"]);
+				let globalacmod = parseInt(v["globalacmod"]);
+				var baseAc = 0;
+				var barrierAc = 0;
+				var acType = 0;
 
-					switch (v["armorAddProficiency-unarmored"]) {
-						case "1":
-							baseAc += Math.floor(pbBonus / 2);
-						break;
-						case "2":
-							baseAc += pbBonus;
-						break;
-					}
-					break;
-				case "Light":
-					acType = 1;
-					baseAc += parseInt(v["armor_prof-light"]);
-					baseAc += parseInt(v["dexterity_mod"]);
-
-					switch (v["armorAddProficiency-light"]) {
-						case "1":
-							baseAc += Math.floor(pbBonus / 2);
-						break;
-						case "2":
-							baseAc += pbBonus;
-						break;
-					}
-					break;
-				case "Medium":
-					acType = 2;
-					baseAc += parseInt(v["armor_prof-medium"]);
-					if (parseInt(v["dexterity_mod"]) > parseInt(v["armorMaxMediumDex"])) {
-						baseAc += parseInt(v["armorMaxMediumDex"]);
-					} else {
+				// calculate AC with the equipped armor 
+				baseAc = 10;
+				baseAc += (isNaN(parseInt(v["gearEquippedArmorAc"])) ? 0 : parseInt(v["gearEquippedArmorAc"]));
+				switch (v["gearEquippedArmorType"]) {
+					case "Unarmored":
+						acType = 0;
+						baseAc += parseInt(v["armor_prof-unarmored"]);
 						baseAc += parseInt(v["dexterity_mod"]);
-					}
 
-					switch (v["armorAddProficiency-medium"]) {
-						case "1":
-							baseAc += Math.floor(pbBonus / 2);
+						switch (v["armorAddProficiency-unarmored"]) {
+							case "1":
+								baseAc += Math.floor(pbBonus / 2);
+							break;
+							case "2":
+								baseAc += pbBonus;
+							break;
+						}
 						break;
-						case "2":
-							baseAc += pbBonus;
+					case "Light":
+						acType = 1;
+						baseAc += parseInt(v["armor_prof-light"]);
+						baseAc += parseInt(v["dexterity_mod"]);
+
+						switch (v["armorAddProficiency-light"]) {
+							case "1":
+								baseAc += Math.floor(pbBonus / 2);
+							break;
+							case "2":
+								baseAc += pbBonus;
+							break;
+						}
 						break;
-					}
-					break;
-				case "Heavy":
-					acType = 3;
-					baseAc += parseInt(v["armor_prof-heavy"]);
+					case "Medium":
+						acType = 2;
+						baseAc += parseInt(v["armor_prof-medium"]);
+						if (parseInt(v["dexterity_mod"]) > parseInt(v["armorMaxMediumDex"])) {
+							baseAc += parseInt(v["armorMaxMediumDex"]);
+						} else {
+							baseAc += parseInt(v["dexterity_mod"]);
+						}
 
-					switch (v["armorAddProficiency-heavy"]) {
-						case "1":
-							baseAc += Math.floor(pbBonus / 2);
+						switch (v["armorAddProficiency-medium"]) {
+							case "1":
+								baseAc += Math.floor(pbBonus / 2);
+							break;
+							case "2":
+								baseAc += pbBonus;
+							break;
+						}
 						break;
-						case "2":
-							baseAc += pbBonus;
+					case "Heavy":
+						acType = 3;
+						baseAc += parseInt(v["armor_prof-heavy"]);
+
+						switch (v["armorAddProficiency-heavy"]) {
+							case "1":
+								baseAc += Math.floor(pbBonus / 2);
+							break;
+							case "2":
+								baseAc += pbBonus;
+							break;
+						}
 						break;
-					}
-					break;
-			}
-
-			// add shield bonus
-			if (v["gearEquippedShieldRaised"] == "1") {
-				baseAc += (isNaN(parseInt(v["gearEquippedShieldAc"])) ? 0 : parseInt(v["gearEquippedShieldAc"]));
-			}
-
-			if (!isNaN(globalacmod)) {
-				baseAc += globalacmod;
-			}
-
-			// add defense modifiers
-			let bonusAc = 0;
-			_.each(idarray, function (currentID) {
-
-				// see if the defense mod is active
-				if (v[GetSectionIdName(repeatingSection, currentID, "isSelected")] == "1") {
-
-					bonusAc = 0;
-					bonusAc += isNaN(parseInt(v[GetSectionIdName(repeatingSection, currentID, "acmod")])) ? 0 : parseInt(v[GetSectionIdName(repeatingSection, currentID, "acmod")]);
-
-					if (v[GetSectionIdName(repeatingSection, currentID, "acattr")] != "" && v[GetSectionIdName(repeatingSection, currentID, "acattr")] != "0") {
-						bonusAc += v[v[GetSectionIdName(repeatingSection, currentID, "acattr")] + "_mod"];
-					}
-
-					// see if it applies to barrier or base Ac
-					if (v[GetSectionIdName(repeatingSection, currentID, "actsWithBarrier")] == "1") {
-						barrierAc += bonusAc;
-					} else {
-						baseAc += bonusAc;
-					}
-					update[GetSectionIdName(repeatingSection, currentID, "acString")] = bonusAc + " AC bonus";
 				}
-			});
 
-			// see if barrier AC applies
-			console.log("armorBACActiveState: " + v["armorBACActiveState"] + " acType: " + acType + " <= " + parseInt(v["armorBACWithArmor"]));
-			if (v["armorBACActiveState"] == "1" || (acType <= parseInt(v["armorBACWithArmor"]) && v["armorBACActiveState"] == "0")) {
-				let spellMod = 0;
-				if (v["spellcasting_ability"].indexOf("intelligence") >= 0) {
-					spellMod += parseInt(v["intelligence_mod"]);
-				} else if (v["spellcasting_ability"].indexOf("wisdom") >= 0) {
-					spellMod += parseInt(v["wisdom_mod"]);
-				} else if (v["spellcasting_ability"].indexOf("charisma") >= 0) {
-					spellMod += parseInt(v["charisma_mod"]);
+				// add shield bonus
+				if (v["gearEquippedShieldRaised"] == "1") {
+					baseAc += (isNaN(parseInt(v["gearEquippedShieldAc"])) ? 0 : parseInt(v["gearEquippedShieldAc"]));
 				}
-				if (spellMod > pbBonus) {
-					spellMod = pbBonus;
+
+				if (!isNaN(globalacmod)) {
+					baseAc += globalacmod;
 				}
-				barrierAc += spellMod;
-			} else {
-				barrierAc = 0;
-			}
 
-			// update the ac values
-			update["ac_shatterbarrier"] = baseAc;
-			update["ac_barrier"] = baseAc + barrierAc;
+				// add defense modifiers
+				let bonusAc = 0;
+				_.each(idarray, function (currentID) {
 
-			setAttrs(update, {
-				silent: true
+					// see if the defense mod is active
+					if (v[GetSectionIdName(repeatingSection, currentID, "isSelected")] == "1") {
+
+						bonusAc = 0;
+						bonusAc += isNaN(parseInt(v[GetSectionIdName(repeatingSection, currentID, "acmod")])) ? 0 : parseInt(v[GetSectionIdName(repeatingSection, currentID, "acmod")]);
+
+						if (v[GetSectionIdName(repeatingSection, currentID, "acattr")] != "" && v[GetSectionIdName(repeatingSection, currentID, "acattr")] != "0") {
+							bonusAc += v[v[GetSectionIdName(repeatingSection, currentID, "acattr")] + "_mod"];
+						}
+
+						// see if it applies to barrier or base Ac
+						if (v[GetSectionIdName(repeatingSection, currentID, "actsWithBarrier")] == "1") {
+							barrierAc += bonusAc;
+						} else {
+							baseAc += bonusAc;
+						}
+						update[GetSectionIdName(repeatingSection, currentID, "acString")] = bonusAc + " AC bonus";
+					}
+				});
+
+				// see if barrier AC applies
+				if (v["maintainsSpirits"] == "1") {
+					_.each(idarray2, function (currentID) {
+						if (v[GetSectionIdName(repeatingSpirits, currentID, "isSelected")] == "1") {
+							barrierAc = isNaN(parseInt(v[GetSectionIdName(repeatingSpirits, currentID, "barrierAc")])) ? 0 : parseInt(v[GetSectionIdName(repeatingSpirits, currentID, "barrierAc")]);
+						}
+					});
+				}
+				else if (v["armorBACActiveState"] == "1" || (acType <= parseInt(v["armorBACWithArmor"]) && v["armorBACActiveState"] == "0")) {
+					let spellMod = 0;
+					if (v["spellcasting_ability"].indexOf("intelligence") >= 0) {
+						spellMod += parseInt(v["intelligence_mod"]);
+					} else if (v["spellcasting_ability"].indexOf("wisdom") >= 0) {
+						spellMod += parseInt(v["wisdom_mod"]);
+					} else if (v["spellcasting_ability"].indexOf("charisma") >= 0) {
+						spellMod += parseInt(v["charisma_mod"]);
+					}
+					if (spellMod > pbBonus) {
+						spellMod = pbBonus;
+					}
+					barrierAc += spellMod;
+				} else {
+					barrierAc = 0;
+				}
+
+				// update the ac values
+				update["ac_shatterbarrier"] = baseAc;
+				update["ac_barrier"] = baseAc + barrierAc;
+
+				setAttrs(update, {
+					silent: true
+				});
 			});
 		});
 	});
@@ -9306,15 +9319,15 @@ var update_active_injuries = function () {
 
 // Vitals: Barriers
 
-var update_selected_barrier = function (selectedId) {
+var update_selected_spirit = function (selectedId) {
 	console.log("UPDATING BARRIER to " + selectedId);
 
 	var health_attrs = ["barrier", "classBarrierIsSelected", "classBarrier"];
-	var repeatingBarriers = "repeating_barriers";
+	var repeatingBarriers = "repeating_spirits";
 
 	getSectionIDs(repeatingBarriers, function (idarray) {
 		health_attrs = health_attrs.concat(GetSectionIdValues(idarray, repeatingBarriers,
-			["barrier", "isSelected"]));
+			["barrier", "isSelected", "barrierElement"]));
 
 		getAttrs(health_attrs, function (v) {
 			var update = {};
@@ -9322,6 +9335,7 @@ var update_selected_barrier = function (selectedId) {
 			if (selectedId == "current") {
 				update["classBarrierIsSelected"] = "1";
 				update["active_barrier"] = "current";
+				update["prime_element"] = "0";
 				if (idarray.length > 0) {
 					update["barrier"] = v["classBarrier"];
 				}
@@ -9339,6 +9353,7 @@ var update_selected_barrier = function (selectedId) {
 					update[GetSectionIdName(repeatingBarriers, currentID, "isSelected")] = "1";
 					update["active_barrier"] = currentID;
 					update["barrier"] = v[GetSectionIdName(repeatingBarriers, currentID, "barrier")];
+					update["prime_element"] = v[GetSectionIdName(repeatingBarriers, currentID, "barrierElement")];
 				} else {
 					update[GetSectionIdName(repeatingBarriers, currentID, "isSelected")] = "0";
 
