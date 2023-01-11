@@ -11237,9 +11237,9 @@ function GetFeatureInfo(feature) {
                     traits: "",
                     desc: `You can more quickly change your active spirit companion. You gain a pact slot, a compartmented location in your being in which a spirit you are host to may reside. When you change your active spirit companion you can reduce the duration to 1 action if you choose a spirit in a pact slot. Doing so places your active spirit into the pact slot. 
     
-    Maintaining pact slots is difficult to maintain. When a spirit imbues their barrier to you, the amount of barrier granted is divided by the number of pacts slots with spirits within + 1. For example, if one pact slot contains a spirit, any barrier granted by spirits is divided by 2.
+    Maintaining pact slots is difficult. When a spirit imbues their barrier to you, the amount of barrier granted is reduced to 70% of the total. 
     
-    You can take this feat multiple times, gaining an additional pact slot each time.`,
+    You can take this feat multiple times, gaining an additional pact slot each time. Each additional pact slot reduces the percentage of barrier granted by 10%. For example, having three pact slots reduces you to 60% of each barrier, while five pact slots grants 40% of each barrier.`,
                     shortdesc: ``,
                     critsuccess: "",
                     success: "",
