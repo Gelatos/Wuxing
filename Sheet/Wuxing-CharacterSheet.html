@@ -8738,45 +8738,112 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				<input type="hidden" name="attr_speaking_language" value="Minere">
 
 				<div class="wuxSectionContent">
-					<fieldset class="repeating_languages">
+					<fieldset class="repeating_skilllanguages">
 						<div class="wuxFieldSet">
-							<div class="wuxMultiRow">
-								<div class="wuxFormEntry">
-									<input class="wuxEquipField-flag" type="checkbox" name="attr_isSelected" style="display: block">
-									<input class="wuxEquipField-flag" type="hidden" name="attr_isSelected" value="0">
-									<span class="wuxFormHeaderLeadIcon"></span>
-									<select name="attr_language" value="-">
-										<option value="-">-</option>
-										<option value="Minere">Minere</option>
-										<option value="Apollen">Apollen</option>
-										<option value="Junal">Junal</option>
+							<input type="hidden" name="attr_rollItem">
+							<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
+							<div class="options">
+								<div class="wuxRow">
+									<span class="wuxFormHeader">Statistics</span>
+	
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle wuxSizeSmall">Language</span>
+									<select class="wuxFormInput wuxSizeMed" name="attr_language">
+										<option>-</option>
+										<option value="Apollen">Apollen / Mons</option>
 										<option value="Cert">Cert</option>
+										<option value="Junal">Junal</option>
 										<option value="Lib">Lib</option>
-										<option value="Jovean">Jovean/Novan</option>
+										<option value="Minere">Minere</option>
 										<option value="-">---</option>
 										<option value="Byric">Byric</option>
 										<option value="Ciel">Ciel</option>
 										<option value="Citeq">Citeq</option>
-										<option value="Crinere">Crinere</option>
 										<option value="Dustell">Dustell</option>
 										<option value="Kleikan">Kleikan</option>
 										<option value="Manstan">Manstan</option>
 										<option value="Muralic">Muralic</option>
-										<option value="Mytikan">Mytikan</option>
 										<option value="Palmic">Palmic</option>
 										<option value="Salkan">Salkan</option>
 										<option value="Sansic">Sansic</option>
-										<option value="Shira">Shira</option>
 										<option value="Shorespeak">Shorespeak</option>
 										<option value="Silq">Silq</option>
-										<option value="Spirit">Spirit</option>
 										<option value="Verdeni">Verdeni</option>
-										<option value="Vulca">Vulca</option>
 										<option value="Wolfwarg">Wolfwarg</option>
+										<option value="Crinere">Crinere</option>
+										<option value="Shira">Shira</option>
+										<option value="Vulca">Vulca</option>
+										<option value="Emotion">Emotion</option>
+										<option value="Empathy">Empathy</option>
+										<option value="Jovean">Novan / Jovean</option>
+										<option value="Mytikan">Mytikan</option>
+	
 									</select>
+	
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle wuxSizeSmall">Rank</span>
+									<select class="wuxFormInput wuxSizeMed" name="attr_languageproficiency" value="0">
+										<option value="0">+0 - Untrained</option>
+										<option value="1">+1 - Trained</option>
+										<option value="2">+2 - Adept</option>
+										<option value="3">+3 - Expert</option>
+										<option value="4">+4 - Elite</option>
+										<option value="5">+5 - Master</option>
+										<option value="6">+6 - Legendary</option>
+	
+									</select>
+	
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle wuxSizeSmall">Base</span>
+									<select class="wuxFormInput wuxSizeSmall" name="attr_languagebase" value="intelligence">
+										<option value="intelligence" selected="selected">INT</option>
+										<option value="wisdom">WIS</option>
+										<option value="charisma">CHA</option>
+	
+									</select>
+	
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle wuxSizeSmall">Mods</span>
+									<input type="number" class="wuxFormInput wuxSizeSmall" name="attr_languagemod">
+	
+								</div>
+								<div class="wuxRow">
+									&nbsp;
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormHeader">Description</span>
+	
+								</div>
+								<div class="wuxMultiRow">
+									<textarea class="wuxFormInput" name="attr_languagedesc"></textarea>
+	
+								</div>
+							</div>
+							<div class="display">
+								<div class="wuxMultiRow">
+									<div class="wuxFormEntry">
+										<input class="wuxEquipField-flag" type="checkbox" name="attr_isSelected" style="display: block">
+										<input class="wuxEquipField-flag" type="hidden" name="attr_isSelected" value="0">
+										<span class="wuxFormHeaderLeadIcon"></span>
+										<select class="wuxFormHeaderSelect" name="attr_languageproficiency">
+											<option value="0">Untrained</option>
+											<option value="1">Trained</option>
+											<option value="2">Adept</option>
+											<option value="3">Expert</option>
+											<option value="4">Elite</option>
+											<option value="5">Master</option>
+											<option value="6">Legendary</option>
+										</select>
+										<span name="attr_language">Item</span>
+									</div>
 								</div>
 							</div>
 						</div>
+	
 					</fieldset>
 				</div>
 				<div class="wuxSectionContentCollapsed"></div>

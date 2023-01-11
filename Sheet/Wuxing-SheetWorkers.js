@@ -785,16 +785,27 @@ on("change:speaking_language", function (eventinfo) {
 		return;
 	};
 
-	update_language("speaking_language");
+	update_languages("speaking_language");
 });
 
-on("change:repeating_languages:isSelected change:repeating_languages:language", function (eventinfo) {
+on("change:repeating_skilllanguages:language", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
 
-	var item_id = eventinfo.sourceAttribute.substring(0, 40);
-	update_language(item_id + "_language");
+	let repeatingSection = "repeating_skilllanguages";
+	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+	update_languages(GetSectionIdName(repeatingSection, id, "language"));
+});
+
+on("change:repeating_skilllanguages:isSelected", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	let repeatingSection = "repeating_skilllanguages";
+	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+	update_selected_language(GetSectionIdName(repeatingSection, id, "language"));
 });
 
 on("change:emotePostContent", function (eventinfo) {
@@ -5194,33 +5205,54 @@ var update_emoteset_name = function (item_id) {
 	});
 }
 
-var update_language = function (item_id) {
+var update_languages = function (item_id) {
 	console.log("UPDATING LANGUAGE");
 	var update = {};
 	var attr_fields = [item_id];
-	getSectionIDs("repeating_languages", function (idarray) {
-		_.each(idarray, function (currentID, i) {
-			attr_fields.push("repeating_languages_" + currentID + "_language");
+	let repeatingSection = "repeating_skilllanguages";
+
+	getSectionIDs(repeatingSection, function (idarray) {
+		_.each(idarray, function (id) {
+			attr_fields.push(GetSectionIdName(repeatingSection, id, "language"));
 		});
 
 		getAttrs(attr_fields, function (v) {
 
+			let languageSet = "";
+			_.each(idarray, function (id) {
+				languageSet += v[GetSectionIdName(repeatingSection, id, "language")] + ",";
+			});
+			update["language_allLanguages"] = languageSet;
+			setAttrs(update);
+
+		});
+	});
+}
+
+var update_selected_language = function (item_id) {
+	console.log("UPDATING SELECTED LANGUAGE");
+	var update = {};
+	var attr_fields = [item_id];
+	let repeatingSection = "repeating_skilllanguages";
+
+	getSectionIDs(repeatingSection, function (idarray) {
+
+		attr_fields = attr_fields.concat();
+		_.each(idarray, function (currentID, i) {
+			attr_fields.push("repeating_skilllanguages_" + currentID + "_language");
+		});
+
+		getAttrs(attr_fields, function (v) {
 
 			update["speaking_language"] = v[item_id];
 			update["speaking_language_tag"] = GetLanguageTag(v[item_id].toLowerCase());
 
-			var languageSet = "";
-			_.each(idarray, function (currentID) {
+			_.each(idarray, function (id) {
 
-				if ("repeating_languages_" + currentID + "_language" == item_id) {
-					update["repeating_languages_" + currentID + "_isSelected"] = "1";
-				} else {
-					update["repeating_languages_" + currentID + "_isSelected"] = "0";
+				if (GetSectionIdName(repeatingSection, id, "language") != item_id) {
+					update[GetSectionIdName(repeatingSection, id, "isSelected")] = "0";
 				}
-
-				languageSet += v["repeating_languages_" + currentID + "_language"] + ",";
 			});
-			update["language_allLanguages"] = languageSet;
 			setAttrs(update);
 
 		});
