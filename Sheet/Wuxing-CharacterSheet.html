@@ -402,7 +402,8 @@
 								</div>
 								<div class="wuxRow">
 									<span class="wuxFormTitle">Starting Lang</span>
-									<span class="wuxFormInput wuxSizeTiny" name="attr_knowSkillAncestryBonus" value="6">6</span>
+									<input type="hidden" name="attr_knowSkillAncestryBonus" value="6" />
+									<span class="wuxFormInput wuxSizeTiny" name="attr_knowSkillAncestryBonus">6</span>
 									<span class="wuxPmSpacer">&nbsp;</span>
 									<span class="wuxFormTitle">Class</span>
 									<span class="wuxFormInput wuxSizeTiny" name="attr_knowSkillClassBonus" value="0">0</span>
@@ -8740,7 +8741,6 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				<div class="wuxSectionContent">
 					<fieldset class="repeating_skilllanguages">
 						<div class="wuxFieldSet">
-							<input type="hidden" name="attr_rollItem">
 							<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
 							<div class="options">
 								<div class="wuxRow">
@@ -8845,6 +8845,51 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 						</div>
 	
 					</fieldset>
+					<div class="wuxHiddenField">
+						<fieldset class="repeating_languages">
+							<div class="wuxFieldSet">
+								<div class="wuxMultiRow">
+									<div class="wuxFormEntry">
+										<input class="wuxEquipField-flag" type="checkbox" name="attr_isSelected" style="display: block">
+										<input class="wuxEquipField-flag" type="hidden" name="attr_isSelected" value="0">
+										<span class="wuxFormHeaderLeadIcon"></span>
+										<select name="attr_language" value="-">
+											<option>-</option>
+											<option value="Apollen">Apollen / Mons</option>
+											<option value="Cert">Cert</option>
+											<option value="Junal">Junal</option>
+											<option value="Lib">Lib</option>
+											<option value="Minere">Minere</option>
+											<option value="-">---</option>
+											<option value="Byric">Byric</option>
+											<option value="Ciel">Ciel</option>
+											<option value="Citeq">Citeq</option>
+											<option value="Dustell">Dustell</option>
+											<option value="Kleikan">Kleikan</option>
+											<option value="Manstan">Manstan</option>
+											<option value="Muralic">Muralic</option>
+											<option value="Palmic">Palmic</option>
+											<option value="Salkan">Salkan</option>
+											<option value="Sansic">Sansic</option>
+											<option value="Shorespeak">Shorespeak</option>
+											<option value="Silq">Silq</option>
+											<option value="Verdeni">Verdeni</option>
+											<option value="Wolfwarg">Wolfwarg</option>
+											<option value="Crinere">Crinere</option>
+											<option value="Shira">Shira</option>
+											<option value="Vulca">Vulca</option>
+											<option value="Emotion">Emotion</option>
+											<option value="Empathy">Empathy</option>
+											<option value="Jovean">Novan / Jovean</option>
+											<option value="Mytikan">Mytikan</option>
+		
+										</select>
+									</div>
+								</div>
+							</div>
+		
+						</fieldset>
+					</div>
 				</div>
 				<div class="wuxSectionContentCollapsed"></div>
 			</div>

@@ -1152,8 +1152,12 @@ on("change:repeating_gearCrafting:craftingAddItem", function (eventinfo) {
 
 // Skills: Skills updates
 
-on("change:skillClassBonus change:skillArchetypeBonus change:skillFeatBonus change:skillMiscBonus", function () {
+on("change:skillClassBonus change:skillArchetypeBonus change:skillFeatBonus change:skillMiscBonus change:skillBackgroundBonus change:specSkillFeatBonus change:specSkillMiscBonus", function () {
 	update_skill_proficiency_points();
+});
+
+on("change:knowSkillBackgroundBonus change:knowSkillFeatBonus change:knowSkillMiscBonus", function () {
+	update_knowledge_skill_proficiency_points();
 });
 
 on("change:skillproficiency-acrobatics change:skillmod-acrobatics change:skillproficiency-arcana change:skillmod-arcana change:skillproficiency-athletics change:skillmod-athletics change:skillproficiency-deception change:skillmod-deception change:skillproficiency-health change:skillmod-health change:skillproficiency-insight change:skillmod-insight change:skillproficiency-intimidation change:skillmod-intimidation change:skillproficiency-investigation change:skillmod-investigation change:skillproficiency-nature change:skillmod-nature change:skillproficiency-perception change:skillmod-perception change:skillproficiency-performance change:skillmod-performance change:skillproficiency-persuasion change:skillmod-persuasion change:skillproficiency-stealth change:skillmod-stealth change:skillproficiency-survival change:skillmod-survival change:skillproficiency-thievery change:skillmod-thievery change:skillproficiency-alchemy change:skillmod-alchemy change:skillproficiency-artistry change:skillmod-artistry change:skillproficiency-brewing change:skillmod-brewing change:skillproficiency-carving change:skillmod-carving change:skillproficiency-cooking change:skillmod-cooking change:skillproficiency-leatherworking change:skillmod-leatherworking change:skillproficiency-molding change:skillmod-molding change:skillproficiency-smithing change:skillmod-smithing change:skillproficiency-tinkering change:skillmod-tinkering change:skillproficiency-weaving change:skillmod-weaving change:skillproficiency-knowledgeskills change:skillmod-knowledgeskills change:skillproficiency-disabledevice change:skillmod-disabledevice change:skillproficiency-disguise change:skillmod-disguise change:skillproficiency-gathering change:skillmod-gathering change:skillproficiency-medicine change:skillmod-medicine change:skillproficiency-pilot change:skillmod-pilot", function (eventinfo) {
@@ -13357,6 +13361,59 @@ function GetKiCapacityBonuses(pointObj, spellcasting_ability) {
 
 // Sheet Upgrades
 
+var upgrade_to_1_1_4 = function (doneupdating) {
+	
+	// the language update
+	let repeatingLanguages = "repeating_skilllanguages";
+
+	getSectionIDs(repeatingLanguages, function (idarray) {
+
+		if (Array.isArray(idarray)) {
+			let update = {};
+			let skill_attrs = [];
+
+			if (idarray.length == 0) {
+
+				let repeatingOldLanguages = "repeating_languages";
+				getSectionIDs(repeatingOldLanguages, function (idarray2) {
+
+					if (Array.isArray(idarray2) && idarray2.length > 0) {
+						skill_attrs = GetSectionIdValues(idarray2, repeatingOldLanguages, ["language", "isSelected"]);
+
+						getAttrs(skill_attrs, function (v) {
+							
+							let newrowid = "";
+							_.each(idarray2, function (id) {
+
+								if (v[GetSectionIdName(repeatingOldLanguages, id, "language")] != "") {
+									newrowid = generateRowID();
+									update[GetSectionIdName(repeatingLanguages, newrowid, "options-flag")] = "0";
+									update[GetSectionIdName(repeatingLanguages, newrowid, "isSelected")] = v[GetSectionIdName(repeatingOldLanguages, id, "isSelected")];
+									update[GetSectionIdName(repeatingLanguages, newrowid, "language")] = v[GetSectionIdName(repeatingOldLanguages, id, "language")];
+									update[GetSectionIdName(repeatingLanguages, newrowid, "languageproficiency")] = "3";
+								}
+							});
+
+							setAttrs(update);
+						});
+					}
+				});
+			}
+			else {
+				update[GetSectionIdName(repeatingLanguages, idarray[0], "isSelected")] = "1";
+
+				setAttrs(update, {
+					silent: true
+				}, function () {
+					update_selected_language(GetSectionIdName(repeatingLanguages, idarray[0], "language"));
+				});
+				
+			}
+		}
+		doneupdating();
+	});
+};
+
 var upgrade_to_1_1_3 = function (doneupdating) {
 
 	let skill_attrs = ["background"];
@@ -13436,8 +13493,14 @@ var versioning = function () {
 	getAttrs(["version"], function (v) {
 		console.log("Checking version " + v["version"]);
 
-		if (v["version"] === "1.1.3") {
+		if (v["version"] === "1.1.4") {
 			console.log("Wuxing Sheet modified from 5th Edition OGL by Roll20 v" + v["version"]);
+		} else if (v["version"] === "1.1.3") {
+			console.log("UPGRADING TO v1.1.4");
+			upgrade_to_1_1_4(function () {
+				setAttrs({version: "1.1.4"});
+				versioning();
+			});
 		} else if (v["version"] === "1.1.2") {
 			console.log("UPGRADING TO v1.1.3");
 			upgrade_to_1_1_3(function () {
