@@ -555,7 +555,7 @@ function GetClassInfo(className) {
                     archetype: "Archetype",
                     prereq: "",
                     castType: "Any",
-                    cp: "4",
+                    cp: "2",
                     sp: "0",
                     hp: "0",
                     br: "1",
@@ -564,7 +564,7 @@ function GetClassInfo(className) {
                     armor: "0",
                     spell: "4",
                     spirit: "0",
-                    skill: "3",
+                    skill: "5",
                     features: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                     feats: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                     featList: [""]
@@ -617,20 +617,20 @@ function GetClassInfo(className) {
             return {
                 name: "Artisan",
                     type: "Archetype",
-                    subtype: "undefined",
+                    subtype: "Archetype",
                     archetype: "Archetype",
                     prereq: "",
                     castType: "Any",
-                    cp: "0",
+                    cp: "4",
                     sp: "0",
                     hp: "0",
-                    br: "0",
+                    br: "1",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
-                    spell: "0",
+                    spell: "4",
                     spirit: "0",
-                    skill: "0",
+                    skill: "3",
                     features: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                     feats: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                     featList: [""]
@@ -13132,7 +13132,7 @@ function GetFeatureInfo(feature) {
                     requirement: "",
                     prerequisites: "",
                     featType: "Archetype and Skill",
-                    className: "Character",
+                    className: "Artisan",
                     level: "02"
             };
         case "craftsmans elite training":
@@ -13150,7 +13150,7 @@ function GetFeatureInfo(feature) {
                     requirement: "",
                     prerequisites: "",
                     featType: "Archetype and Skill",
-                    className: "Character",
+                    className: "Artisan",
                     level: "04"
             };
         case "craftsmans master training":
@@ -13168,7 +13168,7 @@ function GetFeatureInfo(feature) {
                     requirement: "",
                     prerequisites: "",
                     featType: "Archetype and Skill",
-                    className: "Character",
+                    className: "Artisan",
                     level: "08"
             };
         case "craftsmans legendary training":
@@ -13186,7 +13186,7 @@ function GetFeatureInfo(feature) {
                     requirement: "",
                     prerequisites: "",
                     featType: "Archetype and Skill",
-                    className: "Character",
+                    className: "Artisan",
                     level: "12"
             };
         case "divine grace":
