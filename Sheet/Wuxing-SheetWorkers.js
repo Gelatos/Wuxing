@@ -147,9 +147,22 @@ on("change:globalsavemod", function (eventinfo) {
 on("change:characterSetupBase", function () {
 	let update = {};
 	update["characterBase-Basics-flag"] = "0";
-	update["characterBase-AbilityScores-flag"] = "on";
+	update["characterBase-Class-flag"] = "on";
 	setAttrs(update, {
 		silent: true
+	});
+});
+
+on("change:characterSetupClass", function () {
+
+	getAttrs(["characterType"], function (v) {
+		let update = {};
+		update["characterBase-Class-flag"] = "0";
+		update["characterBase-AbilityScores-flag"] = "on";
+
+		setAttrs(update, {
+			silent: true
+		});
 	});
 });
 
@@ -158,29 +171,6 @@ on("change:characterSetupAbilityScores", function () {
 	getAttrs(["characterType"], function (v) {
 		let update = {};
 		update["characterBase-AbilityScores-flag"] = "0";
-		switch(v["characterType"]) {
-			case "0":
-				update["characterBase-Ancestry-flag"] = "on";
-			break;
-			case "Spirit":
-				update["characterBase-MagicSection-flag"] = "on";
-			break;
-			case "Beast":
-				update["characterBase-Ancestry-flag"] = "on";
-			break;
-		}
-
-		setAttrs(update, {
-			silent: true
-		});
-	});
-});
-
-on("change:characterSetupAncestry", function () {
-
-	getAttrs(["characterType"], function (v) {
-		let update = {};
-		update["characterBase-Ancestry-flag"] = "0";
 		switch(v["characterType"]) {
 			case "0":
 				update["characterBase-Background-flag"] = "on";
@@ -285,6 +275,10 @@ on("change:characterEthnicity", function (eventinfo) {
 	update_character_ethnicity(eventinfo.newValue);
 });
 
+on("change:characterBeastAncestry", function (eventinfo) {
+	update_character_beast_ethnicity(eventinfo.newValue);
+});
+
 on("change:characterAncestry-abilityScores", function (eventinfo) {
 	update_character_ethnicity_abilityScores(eventinfo.newValue);
 });
@@ -302,6 +296,13 @@ on("change:ancestryFeatButton", function (eventinfo) {
 		return;
 	};
 	update_character_base_add_feature("ancestryFeatName");
+});
+
+on("change:ancestryFeatAddButton0 change:ancestryFeatAddButton1 change:ancestryFeatAddButton2 change:ancestryFeatAddButton3 change:ancestryFeatAddButton4 change:ancestryFeatAddButton5", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+	update_character_base_add_feature("ancestryFeat" + eventinfo.sourceAttribute.substring(eventinfo.sourceAttribute.length - 1) + "Name");
 });
 
 on("change:background", function (eventinfo) {
@@ -2168,13 +2169,13 @@ var update_character_roll_all = function () {
 				switch(rollStyle) {
 					case "Common":
 						for (let i = 0; i < 3; i++) {
-							rolls.push(total_rolls(roll_multiple_dice(2, 6)));
+							rolls.push(total_rolls(roll_multiple_dice(3, 4)));
 						}
 					break;
 					case "Heroic":
 						if (rerolls < 5) {
 							for (let i = 0; i < 3; i++) {
-								rolls.push(total_rolls(roll_multiple_dice_drop_lowest(3, 6)));
+								rolls.push(total_rolls(roll_multiple_dice_drop_lowest(4, 4)));
 							}
 						}
 					break;
@@ -2184,13 +2185,13 @@ var update_character_roll_all = function () {
 				switch(rollStyle) {
 					case "Common":
 						for (let i = 0; i < 6; i++) {
-							rolls.push(total_rolls(roll_multiple_dice(2, 6)));
+							rolls.push(total_rolls(roll_multiple_dice(3, 4)));
 						}
 					break;
 					case "Heroic":
 						if (rerolls < 5) {
 							for (let i = 0; i < 6; i++) {
-								rolls.push(total_rolls(roll_multiple_dice_drop_lowest(3, 6)));
+								rolls.push(total_rolls(roll_multiple_dice_drop_lowest(4, 4)));
 							}
 						}
 					break;
@@ -2287,6 +2288,7 @@ var update_character_ethnicity = function (ethnicity) {
 	let update = {};
 	
 	let ethnicityInfo = GetHumanEthnicityInfo(ethnicity);
+
 	if (ethnicityInfo.name != "") {
 		update["ancestryDescription"] = ethnicityInfo.desc;
 	}
@@ -2344,6 +2346,42 @@ var update_character_ethnicity_feats = function (ethnicity) {
 	setAttrs(update);
 }
 
+var update_character_beast_ethnicity = function (ethnicity) {
+	console.log("UPDATING BEAST TO " + ethnicity);
+	let update = {};
+	
+	let ethnicityInfo = GetBeastAncestryInfo(ethnicity);
+
+	if (ethnicityInfo.name != "") {
+		update["ancestryDescription"] = ethnicityInfo.desc;
+	}
+	update["beastClassRestriction"] = ethnicityInfo.class;
+	update["ancestryAbilityScoreBonus"] = ethnicityInfo.score;
+	update["characterAncestrySpeed"] = ethnicityInfo.speed;
+
+	for(let i = 0; i <= 5; i++) {
+		if (i < ethnicityInfo.features.length) {
+			update["ancestryFeat" + i] = ethnicityInfo.features[i].name;
+			update["ancestryFeatDesc" + i] = ethnicityInfo.features[i].desc;
+			update["ancestryFeat" + i + "Name"] = ethnicityInfo.features[i].featName;
+			update["ancestryFeatAddButton" + 1] = "0";
+		}
+		else {
+
+		}
+	}
+
+	setAttrs(update);
+
+	getAttrs(["skin"], function (v) {
+		let specupdate = {};
+		if (v["skin"] == undefined || v["skin"] == "") {
+			specupdate["skin"] = ethnicity;
+		}
+		setAttrs(specupdate);
+	});
+}
+
 var update_character_feat_list_add_feature = function (sourceAttr) {
 	console.log("ADDING FEATURE FROM " + sourceAttr);
 	let featId = "featlist-" + sourceAttr.substring(sourceAttr.indexOf("-") + 1);
@@ -2379,6 +2417,7 @@ var update_character_feat_types_from_list_checked = function (sourceAttr, newVal
 		case "spirit": featTypeId = "SpiritFeats"; break;
 		case "beast": featTypeId = "BeastFeats"; break;
 		case "ascension": featTypeId = "AscensionFeats"; break;
+		case "temperament": featTypeId = "TemperamentFeats"; break;
 	}
 
 	if (featTypeId != "") {
@@ -2418,6 +2457,7 @@ var update_character_feat_types_from_list_number = function (sourceAttr, oldValu
 		case "spirit": featTypeId = "SpiritFeats"; break;
 		case "beast": featTypeId = "BeastFeats"; break;
 		case "ascension": featTypeId = "AscensionFeats"; break;
+		case "temperament": featTypeId = "TemperamentFeats"; break;
 	}
 
 	if (featTypeId != "") {
@@ -2811,6 +2851,7 @@ var update_classLevels_simple = function () {
 				case "spirit": featTypeId = "SpiritFeat"; break;
 				case "beast": featTypeId = "BeastFeat"; break;
 				case "ascension": featTypeId = "AscensionFeat"; break;
+				case "temperament": featTypeId = "TemperamentFeat"; break;
 			}
 
 			featLevelCount = 0;
@@ -3048,6 +3089,7 @@ var update_class_restrictions = function (newClass) {
 		let update = {};
 		update["characterSetupCastTypeRestriction"] = classInfo.castType;
 		update["classArchetype"] = classInfo.archetype;
+		update["classDescription"] = classInfo.desc;
 
 		setAttrs(update, {
 			silent: true
@@ -3725,6 +3767,7 @@ var do_update_classLevels_complex_profs_and_feats = function (update, idarray, v
 			case "spirit": featTypeId = "SpiritFeat"; break;
 			case "beast": featTypeId = "BeastFeat"; break;
 			case "ascension": featTypeId = "AscensionFeat"; break;
+			case "temperament": featTypeId = "TemperamentFeat"; break;
 		}
 
 		featLevelCount = 0;

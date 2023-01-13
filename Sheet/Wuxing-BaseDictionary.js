@@ -690,6 +690,339 @@ function GetBeastAncestryInfo(beast) {
 			return {
 				name: ""
 			};
+		case "caranu":
+			return {
+				name: "Caranu",
+					desc: `Also known as a Shell Bear, the caranu is a ferocious carnivore that is often found in areas of dense trees or rivers. Most caranu are of the grasslands variation however a variant called the snow caranu can be found in colder environments. The caranu is often a solitary creature that prefers to venture on its own. When one is seen with others of its kind this is typically a family that is raising young.`,
+					score: `They gain a +6 bonus to Strength, a +2 bonus to Dexterity, a +6 bonus to Constitution, a -4 penalty to Intelligence, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All caranu start with a 25 foot land speed and a 15 foot swim speed.`,
+					class: `Caranu are of the Brute class. `,
+					features: [{
+							name: "Large Creature",
+							desc: `This creature is large sized. It gains a +2 bonus to Strength and a +2 bonus to Constitution, but suffers a -1 penalty to AC.`,
+							featName: "Large Creature",
+						},
+						{
+							name: "Carapice Armor",
+							desc: `This creature has a hardened shell to fend off attacks. It gains a +4 bonus to AC.`,
+							featName: "Carapice Armor",
+						}
+					]
+			};
+		case "cashmechong":
+			return {
+				name: "Cashmechong",
+					desc: `Also known as a Sheep Beetle, the cashmechong is commonly a normal creature sized armored insect. It is usually found in areas where it can easily burrow as it tends to live beneath the earth. While intimidating in appearance, the creature is often passive and easily spooked, causing it to burrow away to protect itself. The Cashmechong often pair up with other cashmechong however rarely more than two are seen together. Their young will typically remain in subterranian nests.`,
+					score: `They gain a +4 bonus to Strength, a +8 bonus to Constitution, a -4 penalty to Intelligence, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All cashmechong start with a 15 foot land speed and a 30 foot burrow speed.`,
+					class: `Cashmechong are of the Bulwark class. `,
+					features: [{
+							name: "Rolling Tackle",
+							desc: `You spring yourself into a ball and slam your body into another creature. As an action, move up to your speed in a straight line. If you move at least 10 feet and end your movement beside a creature, you may immediately attack that creature. This attack is an unarmed strike that deals 1d10 bludgeoning damage.`,
+							featName: "Rolling Tackle",
+						},
+						{
+							name: "Bite",
+							desc: `You dig your teeth into a target. This is an unarmed melee strike that deals 1d8 piercing damage.`,
+							featName: "Bite",
+						},
+						{
+							name: "Claws",
+							desc: `You swipe two claws at a target. This is an unarmed melee strike that deals 1d6 slashing damage.`,
+							featName: "Claws",
+						},
+						{
+							name: "Carapice Armor",
+							desc: `This creature has a hardened shell to fend off attacks. It gains a +4 bonus to AC.`,
+							featName: "Carapice Armor",
+						},
+						{
+							name: "Horn Ram",
+							desc: `You ram a target with horns. This is an unarmed melee strike that deals 1d6 piercing damage.`,
+							featName: "Horn Ram",
+						}
+					]
+			};
+		case "cesplang":
+			return {
+				name: "Cesplang",
+					desc: `Also known as a Feathered Wolf, the cesplang is a canine that often hunts throughout forested environments. It's known for its keen senses and uncanny ability to turn its head a full 360 degrees. The cesplang hunts in packs of anywhere between four and twelve wolves however variations or even solo cesplang can be found.`,
+					score: `They gain a +6 bonus to Strength, a +6 bonus to Dexterity, a +4 bonus to Constitution, a -4 penalty to Intelligence, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All cesplang start with a 35 foot land speed.`,
+					class: `Cesplaing are of the Prowler class. `,
+					features: [{
+							name: "Improved Scent",
+							desc: `This feature allows a creature to detect approaching enemies, sniff out hidden foes, and track by sense of smell. The creature can detect creatures within 60 feet by sense of smell. If the creature is upwind, the range increases to 120 feet; if downwind, it drops to 30 feet. Strong scents, such as smoke or rotting garbage, can be detected at twice the ranges noted above. Overpowering scents, such as skunk musk or troglodyte stench, can be detected at triple normal range. When a creature detects a scent, the exact location of the source is not revealed—only its presence somewhere within range. The creature can take a move action to note the direction of the scent. When the creature is within 5 feet of the source, it pinpoints the source’s location. A creature with the scent ability can follow tracks by smell. The typical DC for a fresh trail is reduced by 10 with the scent ability. Creatures tracking by scent ignore the effects of surface conditions and poor visibility.`,
+							featName: "Improved Scent",
+						},
+						{
+							name: "Improved Sight",
+							desc: `This creature has improved eyesight. While this creature can see, this creature gains a +4 bonus to Sense Pressence.`,
+							featName: "Improved Sight",
+						},
+						{
+							name: "Bite",
+							desc: `You dig your teeth into a target. This is an unarmed melee strike that deals 1d8 piercing damage.`,
+							featName: "Bite",
+						},
+						{
+							name: "Claws",
+							desc: `You swipe two claws at a target. This is an unarmed melee strike that deals 1d6 slashing damage.`,
+							featName: "Claws",
+						}
+					]
+			};
+		case "colosshu":
+			return {
+				name: "Colosshu",
+					desc: `Also known as an Elephant Mouse, the colloshu is an enormous creature that roams large open fields and landscapes for trees and nuts to feed off of. The colloshu often group together in large herds of ten or more, every member considered part of its family.`,
+					score: `They gain a +6 bonus to Strength, a -2 penalty to Dexterity, a +6 bonus to Constitution, a -4 penalty to Intelligence, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All colloshu start with a 30 foot land speed.`,
+					class: `Colloshu are of the Bulwark class. `,
+					features: [{
+							name: "Huge Creature",
+							desc: `This creature is huge sized. It gains a +4 bonus to Strength and a +2 bonus to Constitution, but suffers a -2 penalty to AC.`,
+							featName: "Huge Creature",
+						},
+						{
+							name: "Slam",
+							desc: `You swing two limbs, a powerful tail, or your body into a target. This is an unarmed melee strike that deals 1d8 bludgeoning damage.`,
+							featName: "Slam",
+						},
+						{
+							name: "Stomp",
+							desc: `You stomp at a creature beneath you. This can only target creatures two sizes below you or if the target is prone. This is an unarmed melee strike that deals 1d12 bludgeoning damage.`,
+							featName: "Stomp",
+						},
+						{
+							name: "Thick Skin",
+							desc: `This creature has a hardened skin that is difficult to puncture. This creature gains a +2 bonus to AC.`,
+							featName: "Thick Skin",
+						}
+					]
+			};
+		case "dekying":
+			return {
+				name: "Dekying",
+					desc: `Also known as a Carrion Eagle, the dekying soars the sky looking for dead animals to feed itself. It can often be found in mountainous areas where it can fly above its threats or in open plains where food can avoid hiding. This creature is often timid in nature when a creature is larger than this enormous bird, but becomes a menace to anything smaller. `,
+					score: `They gain a +4 bonus to Strength, a +6 bonus to Dexterity, a +2 bonus to Constitution, a -4 penalty to Intelligence, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All dekying start with a 10 foot land speed and a 30 foot fly speed.`,
+					class: `Dekying are of the Prowler class. `,
+					features: [{
+							name: "Small Creature",
+							desc: `This creature is small sized. `,
+							featName: "Small Creature",
+						},
+						{
+							name: "Improved Sight",
+							desc: `This creature has improved eyesight. While this creature can see, this creature gains a +4 bonus to Sense Pressence.`,
+							featName: "Improved Sight",
+						},
+						{
+							name: "Talons",
+							desc: `You dig two talons into a target. This is an unarmed melee strike that deals 1d6 piercing damage.`,
+							featName: "Talons",
+						}
+					]
+			};
+		case "geltingwa":
+			return {
+				name: "Geltingwa",
+					desc: `Also known as a Slime Frog, the geltingwa is a jellyfish-like amphibian can be found in large bodies of water or deep caves. While it is often associated with water or acid, the flame geltingwa variant can often be found in volcanoes where it lingers amongst magma and fire.`,
+					score: `They gain a +2 bonus to Strength, a +4 bonus to Dexterity, a +12 bonus to Constitution, a -6 penalty to Intelligence, and a -6 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All geltingwa start with a 10 foot land speed and a 20 foot swim speed.`,
+					class: `Geltingwa are of the Bulwark class. `,
+					features: [{
+							name: "Tiny Creature",
+							desc: `This creature is tiny sized. It gains a -2 penalty to Strength, a +2 bonus to Dexterity, and a +1 to AC.`,
+							featName: "Tiny Creature",
+						},
+						{
+							name: "Acid Sling",
+							desc: `You sling acid at a creature. This is an unarmed ranged strike with a range of 15/60 that deals 1d6 acid damage.`,
+							featName: "Acid Sling",
+						},
+						{
+							name: "Clear Body",
+							desc: `This creature's body is semi-translucent. When in water, the creature gains the invisible condition.`,
+							featName: "Clear Body",
+						},
+						{
+							name: "Acid Body",
+							desc: `This creature's body is highly acidic. This creature is immune to all acid damage. In addition, creatures that make contact with this creature take 1d6 acid damage. This creature can make an unarmed melee strike against a creature by slamming its body into them for 1d6 acid damage.`,
+							featName: "Acid Body",
+						}
+					]
+			};
+		case "holjo":
+			return {
+				name: "Holjo",
+					desc: `Alse known as a Mole Pig, this small and rotund creature burrows through the earth to jump out and surprise potential prey. The holjo is a solitary creature preferring to hunt on its own in environments where the earth is soft so that it can easily dig. The mountain holjo variant with heavy, steel claws can sometimes be found in mountainous environments.`,
+					score: `They gain a +6 bonus to Strength, a +2 bonus to Dexterity, a +4 bonus to Constitution, a -2 penalty to Intelligence, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All holjo start with a 20 foot land speed and a 20 foot burrow speed.`,
+					class: `Holjo are of the Brute class. `,
+					features: [{
+							name: "Small Creature",
+							desc: `This creature is small sized. `,
+							featName: "Small Creature",
+						},
+						{
+							name: "Tremorsense",
+							desc: `This creature can automatically pinpoint the location of anything that is in contact with the ground out to 60 feet.`,
+							featName: "Tremorsense",
+						},
+						{
+							name: "Claws",
+							desc: `You swipe two claws at a target. This is an unarmed melee strike that deals 1d6 slashing damage.`,
+							featName: "Claws",
+						}
+					]
+			};
+		case "hookma":
+			return {
+				name: "Hookma",
+					desc: `Also known as a Rhino Horse, this territorial beast is known for its fights in the plains where it will aggressively run down any creature it deems a threat. Hookma are found wherever leaves and grass can be found in plenty and preferably in open fields.`,
+					score: `They gain a +6 bonus to Strength, a +2 bonus to Dexterity, a +6 bonus to Constitution, a -4 penalty to Intelligence, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All hookma start with a 35 foot land speed.`,
+					class: `Hookma are of the Brute class. `,
+					features: [{
+							name: "Large Creature",
+							desc: `This creature is large sized. It gains a +2 bonus to Strength and a +2 bonus to Constitution, but suffers a -1 penalty to AC.`,
+							featName: "Large Creature",
+						},
+						{
+							name: "Thick Skin",
+							desc: `This creature has a hardened skin that is difficult to puncture. This creature gains a +2 bonus to AC.`,
+							featName: "Thick Skin",
+						},
+						{
+							name: "Horn Ram",
+							desc: `You ram a target with horns. This is an unarmed melee strike that deals 1d6 piercing damage.`,
+							featName: "Horn Ram",
+						},
+						{
+							name: "Stomp",
+							desc: `You stomp at a creature beneath you. This can only target creatures two sizes below you or if the target is prone. This is an unarmed melee strike that deals 1d12 bludgeoning damage.`,
+							featName: "Stomp",
+						}
+					]
+			};
+		case "plumhou":
+			return {
+				name: "Plumhou",
+					desc: `Also known as a Glide Monkey, this creature often ventures in large groups of twenty or more. The creature eats mostly nuts, tree sap, and fruit wherever it can. Known to be territorial, the plumhou is known to chuck rocks and hard seeds at those that approach their habitat by gliding over them between trees or other high locations. They are often found in mountains and warm climate forests where they can remain warm.`,
+					score: `They gain a +2 bonus to Strength, a +8 bonus to Dexterity, a +2 bonus to Constitution, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All plumhou start with a 20 foot land speed.`,
+					class: `Plumhou are of the Prowler class. `,
+					features: [{
+							name: "Small Creature",
+							desc: `This creature is small sized. `,
+							featName: "Small Creature",
+						},
+						{
+							name: "Aimed Throw",
+							desc: `You have a good throwing arm and can aim for weak points regardless of what you throw. When you throw a weapon, the minimum damage you deal with a weapon is 1d6. You now can add your Dexterity modifer instead of your Strength modifier to damage with thrown weapons.`,
+							featName: "Aimed Throw",
+						},
+						{
+							name: "Glide",
+							desc: `This creature can glide and stay aloft while in the air. The creature is treated as flying while in the air and moves at its normal speed. Every turn it decends at a rate of 10 feet per round. The creature can never gain altitude while gliding.`,
+							featName: "Glide",
+						},
+						{
+							name: "Talons",
+							desc: `You dig two talons into a target. This is an unarmed melee strike that deals 1d6 piercing damage.`,
+							featName: "Talons",
+						}
+					]
+			};
+		case "rackshur":
+			return {
+				name: "Rackshur",
+					desc: `Also known as a Horned Lion, this feline often travels on its own to hunt for prey. The rackshur is most common in mountainous regions but the jungle rackshur variant can be found in dense forested areas where it has plenty of locations it can hide and climb.`,
+					score: `They gain a +4 bonus to Strength, a +8 bonus to Dexterity, a +4 bonus to Constitution, a -2 penalty to Intelligence, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All rakshur start with a 30 foot land speed and a 20 foot climb speed.`,
+					class: `Rackshur are of the Prowler class. `,
+					features: [{
+							name: "Improved Sight",
+							desc: `This creature has improved eyesight. While this creature can see, this creature gains a +4 bonus to Sense Pressence.`,
+							featName: "Improved Sight",
+						},
+						{
+							name: "Claws",
+							desc: `You swipe two claws at a target. This is an unarmed melee strike that deals 1d6 slashing damage.`,
+							featName: "Claws",
+						},
+						{
+							name: "Horn Ram",
+							desc: `You ram a target with horns. This is an unarmed melee strike that deals 1d6 piercing damage.`,
+							featName: "Horn Ram",
+						},
+						{
+							name: "Hunter's Pounce",
+							desc: `You leap at a foe in an attempt to knock them to the ground. Move 10 feet. If you end your movement within melee reach of at least one enemy, you can make a melee Strike against that enemy. If you hit you may then push the target to the ground. Attempt an Athletics check against your target's Strength Saving Throw. On success they are knocked prone.`,
+							featName: "Hunter's Pounce",
+						}
+					]
+			};
+		case "serpelu":
+			return {
+				name: "Serpelu",
+					desc: `Also known as a Deer Snake, the serpelu is known to enjoys sunbathing with its enormous herds. The serpelu has few threats in its ocean dwellings and as such is often considered peaceful natured. However, angering a serpelu will often see a threat poisoned by this creature's stinger and coiled into a choking grab.`,
+					score: `They gain a +6 bonus to Strength, a +4 bonus to Dexterity, a +6 bonus to Constitution, a -2 penalty to Intelligence, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All serpelu start with a 10 foot land speed and a 30 foot swim speed.`,
+					class: `Serpelu are of the Brute class. `,
+					features: [{
+							name: "Large Creature",
+							desc: `This creature is large sized. It gains a +2 bonus to Strength and a +2 bonus to Constitution, but suffers a -1 penalty to AC.`,
+							featName: "Large Creature",
+						},
+						{
+							name: "Constrict",
+							desc: `You squeeze a grabbed foe tightly with your body. This is an unarmed melee strike that deals 1d6 bludgeoning damage. If the Strike hits, you grab the target. The creature remains grabbed until the end of your next turn or until it Escapes, whichever comes first.`,
+							featName: "Constrict",
+						},
+						{
+							name: "Slam",
+							desc: `You swing two limbs, a powerful tail, or your body into a target. This is an unarmed melee strike that deals 1d8 bludgeoning damage.`,
+							featName: "Slam",
+						},
+						{
+							name: "Poison Sting",
+							desc: `You sting a target with a sharpened stinger. This is an unarmed melee strike that deals 1d4 piercing damage. If the creature has no barrier, it also deals 1d4 poison damage.`,
+							featName: "Poison Sting",
+						}
+					]
+			};
+		case "stinbian":
+			return {
+				name: "Stinbian",
+					desc: `Also known as a Sting Bat, the stinbian is a hunter of small insects and drinker of sap. It often hunts in caves or forested areas, looking for any prey in the cloak of darkness. It often hunts on its own but always returns to one place to stay amongst its own kind. While it has a poisonous stinger it rarely uses it while hunting but instead is used as a defensive tool to fend off would be attackers.`,
+					score: `They gain a +8 bonus to Dexterity, a +2 bonus to Constitution, a -2 penalty to Intelligence, and a -4 penalty to Charisma. A penalty can never reduce a creature's ability score below 1.`,
+					speed: `All caranu start with a 20 foot land speed.`,
+					class: `Stinbian are of the Prowler class. `,
+					features: [{
+							name: "Tiny Creature",
+							desc: `This creature is tiny sized. It gains a -2 penalty to Strength, a +2 bonus to Dexterity, and a +1 to AC.`,
+							featName: "Tiny Creature",
+						},
+						{
+							name: "Echolocation",
+							desc: `This creature is unaffected by the blinded condition.`,
+							featName: "Echolocation",
+						},
+						{
+							name: "Claws",
+							desc: `You swipe two claws at a target. This is an unarmed melee strike that deals 1d6 slashing damage.`,
+							featName: "Claws",
+						},
+						{
+							name: "Poison Sting",
+							desc: `You sting a target with a sharpened stinger. This is an unarmed melee strike that deals 1d4 piercing damage. If the creature has no barrier, it also deals 1d4 poison damage.`,
+							featName: "Poison Sting",
+						}
+					]
+			};
 		case "soma":
 			return {
 				name: "Soma",
@@ -700,14 +1033,19 @@ function GetBeastAncestryInfo(beast) {
 					features: [{
 							name: "Soma Armor",
 							desc: `All soma have a hard plating made from sturdy material to help protect their interior components. The plating is kept light to allow mobility in the soma and to avoid interference with barriers.
-
-When creating a soma, choose a sturdy material. The soma's natural armor bonus is equal to 1 + the armor bonus of the chosen material. When a soma is unarmored they add their natural armor bonus to their AC. This does not block barrier AC from applying to a soma.`,
+	
+	When creating a soma, choose a sturdy material. The soma's natural armor bonus is equal to 1 + the armor bonus of the chosen material. When a soma is unarmored they add their natural armor bonus to their AC. This does not block barrier AC from applying to a soma.`,
 							featName: "Soma Armor",
 						},
 						{
 							name: "Clumsy",
 							desc: `This creature lacks nimbleness to perform precision actions. They suffer a -2 penalty to acrobatics, disable device, and thievery checks.`,
 							featName: "Clumsy",
+						},
+						{
+							name: "Slam",
+							desc: `You swing two limbs, a powerful tail, or your body into a target. This is an unarmed melee strike that deals 1d8 bludgeoning damage.`,
+							featName: "Slam",
 						}
 					]
 			};

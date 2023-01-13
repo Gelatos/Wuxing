@@ -2593,7 +2593,9 @@ input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInput
 .wuxFeatListClassDisplay-Esper,
 .wuxFeatListClassDisplay-Watcher,
 .wuxFeatListClassDisplay-Automaton,
-.wuxFeatListClassDisplay-SmallBeast,
+.wuxFeatListClassDisplay-Brute,
+.wuxFeatListClassDisplay-Bulwark,
+.wuxFeatListClassDisplay-Prowler,
 .wuxFeatListClassDisplay-flag
 {
     display: none;
@@ -2618,7 +2620,9 @@ input[type=hidden].wuxFeatListClassDisplay-flag[value="Eidolon"] + .wuxFeatListC
 input[type=hidden].wuxFeatListClassDisplay-flag[value="Esper"] + .wuxFeatListClassDisplay-Esper,
 input[type=hidden].wuxFeatListClassDisplay-flag[value="Watcher"] + .wuxFeatListClassDisplay-Watcher,
 input[type=hidden].wuxFeatListClassDisplay-flag[value="Automaton"] + .wuxFeatListClassDisplay-Automaton,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Small Beast"] + .wuxFeatListClassDisplay-SmallBeast
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Brute"] + .wuxFeatListClassDisplay-Brute,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Bulwark"] + .wuxFeatListClassDisplay-Bulwark,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Prowler"] + .wuxFeatListClassDisplay-Prowler
 {
     display: block;
 }
@@ -3322,8 +3326,8 @@ input[type=checkbox].wuxActionTabButton.wuxActionTabR + img
 .wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Archetype,
 .wuxSectionBlock .wuxCharacterTypeField-Phasma,
 .wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Phasma,
-.wuxSectionBlock .wuxCharacterTypeField-BeastStyle,
-.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-BeastStyle,
+.wuxSectionBlock .wuxCharacterTypeField-Temperament,
+.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Temperament,
 .wuxSectionBlock .wuxCharacterTypeField-flag,
 .wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-flag,
 
@@ -3366,7 +3370,7 @@ input[type=hidden].wuxElementTypeField-flag[value="Earth"] + .wuxElementTypeFiel
 input[type=hidden].wuxElementTypeField-flag[value="Metal"] + .wuxElementTypeField-Metal,
 input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeField-Water
 {
-    display: inherit;
+    display: block;
 }
 
 /*========================================
