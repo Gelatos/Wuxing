@@ -1390,7 +1390,7 @@ on("change:walk_speed change:climb_speed change:fly_speed change:burrow_speed", 
 	update_speed();
 });
 
-on("change:hpTrue change:hp_max change:barrierTrue change:barrier_max change:hpBonus change:barrierBonus change:vitalityBonus change:manaEssenceBonus", function (eventinfo) {
+on("change:hpTrue change:hp_max change:barrierTrue change:barrier_max change:hpBonus change:barrierBonus change:vitalityBonus change:manaEssenceBonus change:spBonus", function (eventinfo) {
 	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
 		return;
 	}
@@ -3090,6 +3090,7 @@ var update_class_restrictions = function (newClass) {
 		update["characterSetupCastTypeRestriction"] = classInfo.castType;
 		update["classArchetype"] = classInfo.archetype;
 		update["classDescription"] = classInfo.desc;
+		update["creatureAbilityScoreCaps"] = classInfo.ascap;
 
 		setAttrs(update, {
 			silent: true
@@ -4304,12 +4305,22 @@ var update_source_points = function() {
 					case "intelligence":
 					case "wisdom":
 					case "charisma":
-						subSpCost = 1;
+						subSpCost = 2;
 						increaseBonus = 12;
+						subIncrementer = 1;
 						for (let i = 0; i < qty; i++) {
 							while (increaseBonus < totalMod[sourceTyoe]) {
 								increaseBonus += 2;
-								subSpCost += 1;
+								if (increaseBonus < 16) {
+									subIncrementer = 1;
+								}
+								else if (increaseBonus < 20) {
+									subIncrementer = 2;
+								}
+								else {
+									subIncrementer += 1;
+								}
+								subSpCost += subIncrementer;
 							}
 							totalMod[sourceTyoe]++;
 							totalIncreaseMod[sourceTyoe]++;

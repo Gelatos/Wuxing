@@ -2,31 +2,31 @@
 on("clicked:addfeat-arcanist clicked:addfeat-type clicked:addfeat-caster clicked:addfeat-cp clicked:addfeat-hp clicked:addfeat-br clicked:addfeat-archetype clicked:addfeat-saves clicked:addfeat-skill clicked:addfeat-weapon clicked:addfeat-armor clicked:addfeat-spell clicked:addfeat-vocation clicked:addfeat-arcanistcorefeatures clicked:addfeat-archetypefeat clicked:addfeat-generalfeat clicked:addfeat-skillfeat clicked:addfeat-spellfeat clicked:addfeat-arcanepoints clicked:addfeat-arcanesurplus clicked:addfeat-empoweringreserves clicked:addfeat-improvedsurge clicked:addfeat-arcanemetamagic clicked:addfeat-abilityscoreincrease clicked:addfeat-thaumaturge clicked:addfeat-thaumaturgecorefeatures clicked:addfeat-ethersense clicked:addfeat-arcanebolt clicked:addfeat-etherealvoice clicked:addfeat-planeswalker clicked:addfeat-wizard clicked:addfeat-wizardcorefeatures clicked:addfeat-ideation clicked:addfeat-calculatedsurge clicked:addfeat-manafont clicked:addfeat-bountifulideas clicked:addfeat-inspiredknowledge clicked:addfeat-wizardsstudies clicked:addfeat-sustainingmagic clicked:addfeat-defender clicked:addfeat-defendercorefeatures clicked:addfeat-shieldblock clicked:addfeat-combatfeat clicked:addfeat-secondwind clicked:addfeat-protectally clicked:addfeat-focusedbreathing clicked:addfeat-blockingexpertise clicked:addfeat-waryfighter clicked:addfeat-safeguard clicked:addfeat-steadybreath clicked:addfeat-spellblade clicked:addfeat-spellbladecorefeatures clicked:addfeat-spellcharge clicked:addfeat-spellstrike clicked:addfeat-deadlyspellstrike clicked:addfeat-spellchargebattery clicked:addfeat-spellshielding clicked:addfeat-spellwardarmor clicked:addfeat-swiftspellstrike clicked:addfeat-warrior clicked:addfeat-warriorcorefeatures clicked:addfeat-etherealmantle clicked:addfeat-unarmoreddefense clicked:addfeat-deflectingmantle clicked:addfeat-fastmovement clicked:addfeat-vitalmantle clicked:addfeat-fighter clicked:addfeat-fightercorefeatures clicked:addfeat-combatsuperiority clicked:addfeat-fightersuperiority clicked:addfeat-powerstrike clicked:addfeat-maneuvermaster clicked:addfeat-deadlymaneuvers clicked:addfeat-deadlypowerstrike clicked:addfeat-superiorprowess clicked:addfeat-swiftpowerstrike clicked:addfeat-investigator ", function (eventinfo) {
     update_character_feat_list_add_feature(eventinfo.triggerName);
 });
-on("clicked:addfeat-investigatorcorefeatures clicked:addfeat-strategize clicked:addfeat-strategicstrike clicked:addfeat-strategicseek clicked:addfeat-assessmotive clicked:addfeat-intuitpresence clicked:addfeat-deadlystrategy clicked:addfeat-ongoingstrategy clicked:addfeat-pugilist clicked:addfeat-pugilistcorefeatures clicked:addfeat-chakra clicked:addfeat-flurryofblows clicked:addfeat-precisionattack clicked:addfeat-martialartist clicked:addfeat-evasivedash clicked:addfeat-patientdefense clicked:addfeat-openchakra clicked:addfeat-unarmoredmovement clicked:addfeat-slowfall clicked:addfeat-deadlyflurry clicked:addfeat-forbiddenrelease clicked:addfeat-rogue clicked:addfeat-roguecorefeatures clicked:addfeat-sneakattack clicked:addfeat-cunningaction clicked:addfeat-deadlysneakattack clicked:addfeat-uncannydodge clicked:addfeat-slystriker clicked:addfeat-commoner clicked:addfeat-commonercorefeatures clicked:addfeat-brawler clicked:addfeat-brawlercorefeatures clicked:addfeat-exemplar clicked:addfeat-exemplarcorefeatures clicked:addfeat-mage clicked:addfeat-magecorefeatures clicked:addfeat-soldier clicked:addfeat-soldiercorefeatures clicked:addfeat-watcher clicked:addfeat-sp clicked:addfeat-watchercorefeatures clicked:addfeat-spiriteffect clicked:addfeat-spiritspellcasting clicked:addfeat-spiritcantrips clicked:addfeat-spiritfeat clicked:addfeat-spiritgrowth clicked:addfeat- clicked:addfeat-creaturemanifest clicked:addfeat-imbuebarrier clicked:addfeat-releasemanifest clicked:addfeat-objectmanifest clicked:addfeat-esperascension clicked:addfeat-esper clicked:addfeat-espercorefeatures clicked:addfeat-esperbranch clicked:addfeat-esperforma clicked:addfeat-ascensionfeat clicked:addfeat-eidolon clicked:addfeat-spirit clicked:addfeat-eidoloncorefeatures clicked:addfeat-eidolonbranch clicked:addfeat-eidolonforma clicked:addfeat-automaton clicked:addfeat-automatoncorefeatures clicked:addfeat-constructcasterpoints clicked:addfeat-constructspellcasting clicked:addfeat-beastgrowth clicked:addfeat-brute clicked:addfeat-brutecorefeatures clicked:addfeat-beastfeat clicked:addfeat-temperamentfeat clicked:addfeat-bulwark clicked:addfeat-prowler clicked:addfeat-alert clicked:addfeat-blindfighting clicked:addfeat-criticalcrusher ", function (eventinfo) {
+on("clicked:addfeat-investigatorcorefeatures clicked:addfeat-strategize clicked:addfeat-strategicstrike clicked:addfeat-strategicseek clicked:addfeat-assessmotive clicked:addfeat-intuitpresence clicked:addfeat-deadlystrategy clicked:addfeat-ongoingstrategy clicked:addfeat-pugilist clicked:addfeat-pugilistcorefeatures clicked:addfeat-chakra clicked:addfeat-flurryofblows clicked:addfeat-precisionattack clicked:addfeat-martialartist clicked:addfeat-evasivedash clicked:addfeat-patientdefense clicked:addfeat-openchakra clicked:addfeat-unarmoredmovement clicked:addfeat-slowfall clicked:addfeat-deadlyflurry clicked:addfeat-forbiddenrelease clicked:addfeat-rogue clicked:addfeat-roguecorefeatures clicked:addfeat-sneakattack clicked:addfeat-cunningaction clicked:addfeat-deadlysneakattack clicked:addfeat-uncannydodge clicked:addfeat-slystriker clicked:addfeat-commoner clicked:addfeat-commonercorefeatures clicked:addfeat-brawler clicked:addfeat-brawlercorefeatures clicked:addfeat-exemplar clicked:addfeat-exemplarcorefeatures clicked:addfeat-mage clicked:addfeat-magecorefeatures clicked:addfeat-soldier clicked:addfeat-soldiercorefeatures clicked:addfeat-watcher clicked:addfeat-sp clicked:addfeat-ascap clicked:addfeat-watchercorefeatures clicked:addfeat-spiriteffect clicked:addfeat-spiritspellcasting clicked:addfeat-spiritcantrips clicked:addfeat-spiritfeat clicked:addfeat-spiritgrowth clicked:addfeat-watchergrowthcaps clicked:addfeat-creaturemanifest clicked:addfeat-imbuebarrier clicked:addfeat-releasemanifest clicked:addfeat-objectmanifest clicked:addfeat-esperascension clicked:addfeat-esper clicked:addfeat-espercorefeatures clicked:addfeat-esperbranch clicked:addfeat-esperforma clicked:addfeat- clicked:addfeat-ascensionfeat clicked:addfeat-eidolon clicked:addfeat-spirit clicked:addfeat-eidoloncorefeatures clicked:addfeat-eidolonbranch clicked:addfeat-eidolonforma clicked:addfeat-automaton clicked:addfeat-automatoncorefeatures clicked:addfeat-constructcasterpoints clicked:addfeat-constructspellcasting clicked:addfeat-brute clicked:addfeat-brutecorefeatures clicked:addfeat-beastfeat clicked:addfeat-beastgrowth clicked:addfeat-temperamentfeat clicked:addfeat-bulwark clicked:addfeat-prowler clicked:addfeat-alert ", function (eventinfo) {
     update_character_feat_list_add_feature(eventinfo.triggerName);
 });
-on("clicked:addfeat-criticalfollowup clicked:addfeat-criticalpiercer clicked:addfeat-criticalslasher clicked:addfeat-dualwielder clicked:addfeat-durable clicked:addfeat-fleet clicked:addfeat-interception clicked:addfeat-improvedinitiative clicked:addfeat-lunge clicked:addfeat-armorflexibility clicked:addfeat-impassablewallstance clicked:addfeat-quickdraw clicked:addfeat-keenshot clicked:addfeat-shieldbash clicked:addfeat-skirmisher clicked:addfeat-takeaim clicked:addfeat-tough clicked:addfeat-unarmedfighting clicked:addfeat-weaponlegend clicked:addfeat-axemastery clicked:addfeat-fellhanded clicked:addfeat-blademastery clicked:addfeat-bladedparry clicked:addfeat-flailmastery clicked:addfeat-shieldsweep clicked:addfeat-hammermastery clicked:addfeat-hammerstep clicked:addfeat-pistolmastery clicked:addfeat-pistolero clicked:addfeat-polearmmastery clicked:addfeat-breakthecharge clicked:addfeat-polearmbunt clicked:addfeat-riflemastery clicked:addfeat-marksmanssnipe clicked:addfeat-ambush clicked:addfeat-brace clicked:addfeat-evasivefootwork clicked:addfeat-parry clicked:addfeat-riposte clicked:addfeat-distractingstrike clicked:addfeat-menacingstrike clicked:addfeat-restrainingstrike clicked:addfeat-inspiringleader clicked:addfeat-alacritousmantle clicked:addfeat-mantleofprotection clicked:addfeat-spellparry clicked:addfeat-partingshot clicked:addfeat-momentofclarity clicked:addfeat-woundedmantle clicked:addfeat-cleave clicked:addfeat-friendlytoss clicked:addfeat-sharedstratagem clicked:addfeat-strategicassessment clicked:addfeat-emergencyward clicked:addfeat-exorcizingstrike clicked:addfeat-stunningfist clicked:addfeat-wallrun clicked:addfeat-waterstep clicked:addfeat-twisttheknife clicked:addfeat-debilitatingattack clicked:addfeat-analyzeweakness clicked:addfeat-extrasuperiority clicked:addfeat-dextrousinitiative clicked:addfeat-exactingstrike clicked:addfeat-suddencharge clicked:addfeat-assistingshot clicked:addfeat-barrelingcharge clicked:addfeat-doubleshot clicked:addfeat-dual-handedassault clicked:addfeat-quickreversal clicked:addfeat-tripleshot clicked:addfeat-disorientingopening clicked:addfeat-incredibleaim clicked:addfeat-mobileshotstance clicked:addfeat-leapingstrike clicked:addfeat-combatreflexes ", function (eventinfo) {
+on("clicked:addfeat-blindfighting clicked:addfeat-criticalcrusher clicked:addfeat-criticalfollowup clicked:addfeat-criticalpiercer clicked:addfeat-criticalslasher clicked:addfeat-dualwielder clicked:addfeat-durable clicked:addfeat-fleet clicked:addfeat-interception clicked:addfeat-improvedinitiative clicked:addfeat-lunge clicked:addfeat-armorflexibility clicked:addfeat-impassablewallstance clicked:addfeat-quickdraw clicked:addfeat-keenshot clicked:addfeat-shieldbash clicked:addfeat-skirmisher clicked:addfeat-takeaim clicked:addfeat-tough clicked:addfeat-unarmedfighting clicked:addfeat-weaponlegend clicked:addfeat-axemastery clicked:addfeat-fellhanded clicked:addfeat-blademastery clicked:addfeat-bladedparry clicked:addfeat-flailmastery clicked:addfeat-shieldsweep clicked:addfeat-hammermastery clicked:addfeat-hammerstep clicked:addfeat-pistolmastery clicked:addfeat-pistolero clicked:addfeat-polearmmastery clicked:addfeat-breakthecharge clicked:addfeat-polearmbunt clicked:addfeat-riflemastery clicked:addfeat-marksmanssnipe clicked:addfeat-ambush clicked:addfeat-brace clicked:addfeat-evasivefootwork clicked:addfeat-parry clicked:addfeat-riposte clicked:addfeat-distractingstrike clicked:addfeat-menacingstrike clicked:addfeat-restrainingstrike clicked:addfeat-inspiringleader clicked:addfeat-alacritousmantle clicked:addfeat-mantleofprotection clicked:addfeat-spellparry clicked:addfeat-partingshot clicked:addfeat-momentofclarity clicked:addfeat-woundedmantle clicked:addfeat-cleave clicked:addfeat-friendlytoss clicked:addfeat-sharedstratagem clicked:addfeat-strategicassessment clicked:addfeat-emergencyward clicked:addfeat-exorcizingstrike clicked:addfeat-stunningfist clicked:addfeat-wallrun clicked:addfeat-waterstep clicked:addfeat-twisttheknife clicked:addfeat-debilitatingattack clicked:addfeat-analyzeweakness clicked:addfeat-extrasuperiority clicked:addfeat-dextrousinitiative clicked:addfeat-exactingstrike clicked:addfeat-suddencharge clicked:addfeat-assistingshot clicked:addfeat-barrelingcharge clicked:addfeat-doubleshot clicked:addfeat-dual-handedassault clicked:addfeat-quickreversal clicked:addfeat-tripleshot clicked:addfeat-disorientingopening clicked:addfeat-incredibleaim clicked:addfeat-mobileshotstance ", function (eventinfo) {
     update_character_feat_list_add_feature(eventinfo.triggerName);
 });
-on("clicked:addfeat-debilitatingshot clicked:addfeat-disruptivestance clicked:addfeat-paragonsguard clicked:addfeat-springattack clicked:addfeat-desperatefinisher clicked:addfeat-shieldwarden clicked:addfeat-reflexiveshield clicked:addfeat-quickshieldblock clicked:addfeat-armormastery clicked:addfeat-determination clicked:addfeat-lucky clicked:addfeat-unlucky clicked:addfeat-moreluck clicked:addfeat-aimedthrow clicked:addfeat-hunterspounce clicked:addfeat-catfall clicked:addfeat-charmingliar clicked:addfeat-concealinglegerdemain clicked:addfeat-courtlygraces clicked:addfeat-experiencedtracker clicked:addfeat-fascinatingperformance clicked:addfeat-groupcoercion clicked:addfeat-groupinfluence clicked:addfeat-impressiveperformance clicked:addfeat-intimidatingglare clicked:addfeat-knowledgetraining clicked:addfeat-lengthydiversion clicked:addfeat-multilingual clicked:addfeat-pickpocket clicked:addfeat-quickcoercion clicked:addfeat-quickjump clicked:addfeat-skilltraining clicked:addfeat-steadybalance clicked:addfeat-streetwise clicked:addfeat-subtletheft clicked:addfeat-upstage clicked:addfeat-goldinfusion clicked:addfeat-armorassist clicked:addfeat-etherchargedathlete clicked:addfeat-knownweaknesses clicked:addfeat-thatsodd clicked:addfeat-nimblecrawl clicked:addfeat-foilsenses clicked:addfeat-influencenature clicked:addfeat-kipup clicked:addfeat-quickclimb clicked:addfeat-quickrecognition clicked:addfeat-recognizespell clicked:addfeat-quickswim clicked:addfeat-quickunlock clicked:addfeat-shamelessrequest clicked:addfeat-armoredstealth clicked:addfeat-backupdisguise clicked:addfeat-confabulator clicked:addfeat-quickdisguise clicked:addfeat-rapidmantel clicked:addfeat-swiftsneak clicked:addfeat-terrifiedretreat clicked:addfeat-walljump clicked:addfeat-carefulspell clicked:addfeat-concealspell clicked:addfeat-distantspell clicked:addfeat-extendedspell clicked:addfeat-memorycasting clicked:addfeat-quickenedspell clicked:addfeat-seekingspell clicked:addfeat-unerringspell clicked:addfeat-recoverspell clicked:addfeat-branchingout clicked:addfeat-signaturespell clicked:addfeat-quicksurge clicked:addfeat-slotsupport clicked:addfeat-dualelementalist clicked:addfeat-spellchargedconcentration clicked:addfeat-murksight ", function (eventinfo) {
+on("clicked:addfeat-leapingstrike clicked:addfeat-combatreflexes clicked:addfeat-debilitatingshot clicked:addfeat-disruptivestance clicked:addfeat-paragonsguard clicked:addfeat-springattack clicked:addfeat-desperatefinisher clicked:addfeat-shieldwarden clicked:addfeat-reflexiveshield clicked:addfeat-quickshieldblock clicked:addfeat-armormastery clicked:addfeat-determination clicked:addfeat-lucky clicked:addfeat-unlucky clicked:addfeat-moreluck clicked:addfeat-aimedthrow clicked:addfeat-hunterspounce clicked:addfeat-catfall clicked:addfeat-charmingliar clicked:addfeat-concealinglegerdemain clicked:addfeat-courtlygraces clicked:addfeat-experiencedtracker clicked:addfeat-fascinatingperformance clicked:addfeat-groupcoercion clicked:addfeat-groupinfluence clicked:addfeat-impressiveperformance clicked:addfeat-intimidatingglare clicked:addfeat-knowledgetraining clicked:addfeat-lengthydiversion clicked:addfeat-multilingual clicked:addfeat-pickpocket clicked:addfeat-quickcoercion clicked:addfeat-quickjump clicked:addfeat-skilltraining clicked:addfeat-steadybalance clicked:addfeat-streetwise clicked:addfeat-subtletheft clicked:addfeat-upstage clicked:addfeat-goldinfusion clicked:addfeat-armorassist clicked:addfeat-etherchargedathlete clicked:addfeat-knownweaknesses clicked:addfeat-thatsodd clicked:addfeat-nimblecrawl clicked:addfeat-foilsenses clicked:addfeat-influencenature clicked:addfeat-kipup clicked:addfeat-quickclimb clicked:addfeat-quickrecognition clicked:addfeat-recognizespell clicked:addfeat-quickswim clicked:addfeat-quickunlock clicked:addfeat-shamelessrequest clicked:addfeat-armoredstealth clicked:addfeat-backupdisguise clicked:addfeat-confabulator clicked:addfeat-quickdisguise clicked:addfeat-rapidmantel clicked:addfeat-swiftsneak clicked:addfeat-terrifiedretreat clicked:addfeat-walljump clicked:addfeat-carefulspell clicked:addfeat-concealspell clicked:addfeat-distantspell clicked:addfeat-extendedspell clicked:addfeat-memorycasting clicked:addfeat-quickenedspell clicked:addfeat-seekingspell clicked:addfeat-unerringspell clicked:addfeat-recoverspell clicked:addfeat-branchingout clicked:addfeat-signaturespell clicked:addfeat-quicksurge clicked:addfeat-slotsupport clicked:addfeat-dualelementalist ", function (eventinfo) {
     update_character_feat_list_add_feature(eventinfo.triggerName);
 });
-on("clicked:addfeat-extraideations clicked:addfeat-idealspellslots clicked:addfeat-dandy clicked:addfeat-distractingflattery clicked:addfeat-nevertire clicked:addfeat-fabricatedconnections clicked:addfeat-linguist clicked:addfeat-multilingualcipher clicked:addfeat-phonetictraining clicked:addfeat-spottranslate clicked:addfeat-analyzeidiolect clicked:addfeat-crudecommunication clicked:addfeat-loremaster clicked:addfeat-guidingknowledge clicked:addfeat-assuredknowledge clicked:addfeat-pirate clicked:addfeat-roperunner clicked:addfeat-walktheplank clicked:addfeat-ranger clicked:addfeat-acclimatization clicked:addfeat-surefoot clicked:addfeat-terrainmaster clicked:addfeat-tyrant clicked:addfeat-yourenext clicked:addfeat-conqueringpresence clicked:addfeat-subjugation clicked:addfeat-shatterdefenses clicked:addfeat-paralyzingfear clicked:addfeat-fearsomebrute clicked:addfeat-materialsight clicked:addfeat-extendedsight clicked:addfeat-horizonsight clicked:addfeat-spelltrainer clicked:addfeat-essential clicked:addfeat-extrasp clicked:addfeat-darksight clicked:addfeat-terranmovement clicked:addfeat-spiritssnarl clicked:addfeat-enhancedburrow clicked:addfeat-enhancedflight clicked:addfeat-enhancedclimb clicked:addfeat-enhancedswim clicked:addfeat-enhancedarmor clicked:addfeat-toxinshield clicked:addfeat-enhancedscent clicked:addfeat-bestowburrow clicked:addfeat-bestowflight clicked:addfeat-bestowfins clicked:addfeat-bestowhorn clicked:addfeat-remotemanifestation clicked:addfeat-planarbeacon clicked:addfeat-weakenwill clicked:addfeat-spiritstrikes clicked:addfeat-enhancedspiritstrikes clicked:addfeat-greaterspiritstrikes clicked:addfeat-bestowarmor clicked:addfeat-caranuform clicked:addfeat-cashmechongform clicked:addfeat-cesplangform clicked:addfeat-colosshuform clicked:addfeat-dekyingform clicked:addfeat-geltingwaform clicked:addfeat-holjoform clicked:addfeat-hookmaform clicked:addfeat-plumhouform clicked:addfeat-rackshurform clicked:addfeat-serpeluform clicked:addfeat-stinbianform clicked:addfeat-formaarmor clicked:addfeat-formaaquan clicked:addfeat-formaavian clicked:addfeat-formabite clicked:addfeat-formaclaws clicked:addfeat-formafossorian clicked:addfeat-formasense clicked:addfeat-formaspike ", function (eventinfo) {
+on("clicked:addfeat-spellchargedconcentration clicked:addfeat-murksight clicked:addfeat-extraideations clicked:addfeat-idealspellslots clicked:addfeat-dandy clicked:addfeat-distractingflattery clicked:addfeat-nevertire clicked:addfeat-fabricatedconnections clicked:addfeat-linguist clicked:addfeat-multilingualcipher clicked:addfeat-phonetictraining clicked:addfeat-spottranslate clicked:addfeat-analyzeidiolect clicked:addfeat-crudecommunication clicked:addfeat-loremaster clicked:addfeat-guidingknowledge clicked:addfeat-assuredknowledge clicked:addfeat-pirate clicked:addfeat-roperunner clicked:addfeat-walktheplank clicked:addfeat-ranger clicked:addfeat-acclimatization clicked:addfeat-surefoot clicked:addfeat-terrainmaster clicked:addfeat-tyrant clicked:addfeat-yourenext clicked:addfeat-conqueringpresence clicked:addfeat-subjugation clicked:addfeat-shatterdefenses clicked:addfeat-paralyzingfear clicked:addfeat-fearsomebrute clicked:addfeat-materialsight clicked:addfeat-extendedsight clicked:addfeat-horizonsight clicked:addfeat-spelltrainer clicked:addfeat-essential clicked:addfeat-extrasp clicked:addfeat-darksight clicked:addfeat-terranmovement clicked:addfeat-spiritssnarl clicked:addfeat-enhancedburrow clicked:addfeat-enhancedflight clicked:addfeat-enhancedclimb clicked:addfeat-enhancedswim clicked:addfeat-enhancedarmor clicked:addfeat-toxinshield clicked:addfeat-enhancedscent clicked:addfeat-bestowburrow clicked:addfeat-bestowflight clicked:addfeat-bestowfins clicked:addfeat-bestowhorn clicked:addfeat-remotemanifestation clicked:addfeat-planarbeacon clicked:addfeat-weakenwill clicked:addfeat-spiritstrikes clicked:addfeat-enhancedspiritstrikes clicked:addfeat-greaterspiritstrikes clicked:addfeat-bestowarmor clicked:addfeat-caranuform clicked:addfeat-cashmechongform clicked:addfeat-cesplangform clicked:addfeat-colosshuform clicked:addfeat-dekyingform clicked:addfeat-geltingwaform clicked:addfeat-holjoform clicked:addfeat-hookmaform clicked:addfeat-plumhouform clicked:addfeat-rackshurform clicked:addfeat-serpeluform clicked:addfeat-stinbianform clicked:addfeat-formaarmor clicked:addfeat-formaaquan clicked:addfeat-formaavian clicked:addfeat-formabite clicked:addfeat-formaclaws clicked:addfeat-formafossorian ", function (eventinfo) {
     update_character_feat_list_add_feature(eventinfo.triggerName);
 });
-on("clicked:addfeat-formaterran clicked:addfeat-formatoxin clicked:addfeat-unnoticed clicked:addfeat-sageknowledge clicked:addfeat-craftsmansadepttraining clicked:addfeat-craftsmanselitetraining clicked:addfeat-craftsmansmastertraining clicked:addfeat-craftsmanslegendarytraining clicked:addfeat-armedrest clicked:addfeat-deathdefiance clicked:addfeat-martialexercise clicked:addfeat-nimbleshieldhand clicked:addfeat-shieldedstride clicked:addfeat-defendersblade clicked:addfeat-gladiator clicked:addfeat-fancymoves clicked:addfeat-playtothecrowd clicked:addfeat-stagefighting clicked:addfeat-callyourshot clicked:addfeat-knight clicked:addfeat-harryingstrike clicked:addfeat-elegantcourtier clicked:addfeat-shouldercatastrophe clicked:addfeat-staveoffcatastrophe clicked:addfeat-zealot clicked:addfeat-zeal clicked:addfeat-devotedfocus clicked:addfeat-zealouspresence clicked:addfeat-surgebeyonddeath clicked:addfeat-extramantle clicked:addfeat-protectiveward clicked:addfeat-guardingspell clicked:addfeat-arcanephysique clicked:addfeat-durablewards clicked:addfeat-undyingsentinel clicked:addfeat-battlemagic clicked:addfeat-abjurant clicked:addfeat-wardingether clicked:addfeat-reactivewarding clicked:addfeat-nullifyingward clicked:addfeat-stormguard clicked:addfeat-lashingguard clicked:addfeat-restoringguard clicked:addfeat-whippingguard clicked:addfeat-unyieldingward clicked:addfeat-doublestrike clicked:addfeat-physicaltraining clicked:addfeat-runningtackle clicked:addfeat-brutalfinish clicked:addfeat-berserker clicked:addfeat-frenzy clicked:addfeat-noescape clicked:addfeat-mindlessrage clicked:addfeat-retaliation clicked:addfeat-duelist clicked:addfeat-fancyfootwork clicked:addfeat-alwaysready clicked:addfeat-duelistsstance clicked:addfeat-duelingparry clicked:addfeat-panache clicked:addfeat-duelingdance clicked:addfeat-masterduelist clicked:addfeat-mauler clicked:addfeat-knockaway clicked:addfeat-cleartheway clicked:addfeat-knockdown clicked:addfeat-avalanchestrike clicked:addfeat-wrestler clicked:addfeat-combatgrab clicked:addfeat-crushinggrab clicked:addfeat-suplex clicked:addfeat-clinchstrike clicked:addfeat-whirlingthrow clicked:addfeat-aerialpiledriver clicked:addfeat-naturalexplorer clicked:addfeat-exploitstrike ", function (eventinfo) {
+on("clicked:addfeat-formasense clicked:addfeat-formaspike clicked:addfeat-formaterran clicked:addfeat-formatoxin clicked:addfeat-unnoticed clicked:addfeat-sageknowledge clicked:addfeat-craftsmansadepttraining clicked:addfeat-craftsmanselitetraining clicked:addfeat-craftsmansmastertraining clicked:addfeat-craftsmanslegendarytraining clicked:addfeat-armedrest clicked:addfeat-deathdefiance clicked:addfeat-martialexercise clicked:addfeat-nimbleshieldhand clicked:addfeat-shieldedstride clicked:addfeat-defendersblade clicked:addfeat-gladiator clicked:addfeat-fancymoves clicked:addfeat-playtothecrowd clicked:addfeat-stagefighting clicked:addfeat-callyourshot clicked:addfeat-knight clicked:addfeat-harryingstrike clicked:addfeat-elegantcourtier clicked:addfeat-shouldercatastrophe clicked:addfeat-staveoffcatastrophe clicked:addfeat-zealot clicked:addfeat-zeal clicked:addfeat-devotedfocus clicked:addfeat-zealouspresence clicked:addfeat-surgebeyonddeath clicked:addfeat-extramantle clicked:addfeat-protectiveward clicked:addfeat-guardingspell clicked:addfeat-arcanephysique clicked:addfeat-durablewards clicked:addfeat-undyingsentinel clicked:addfeat-battlemagic clicked:addfeat-abjurant clicked:addfeat-wardingether clicked:addfeat-reactivewarding clicked:addfeat-nullifyingward clicked:addfeat-stormguard clicked:addfeat-lashingguard clicked:addfeat-restoringguard clicked:addfeat-whippingguard clicked:addfeat-unyieldingward clicked:addfeat-doublestrike clicked:addfeat-physicaltraining clicked:addfeat-runningtackle clicked:addfeat-brutalfinish clicked:addfeat-berserker clicked:addfeat-frenzy clicked:addfeat-noescape clicked:addfeat-mindlessrage clicked:addfeat-retaliation clicked:addfeat-duelist clicked:addfeat-fancyfootwork clicked:addfeat-alwaysready clicked:addfeat-duelistsstance clicked:addfeat-duelingparry clicked:addfeat-panache clicked:addfeat-duelingdance clicked:addfeat-masterduelist clicked:addfeat-mauler clicked:addfeat-knockaway clicked:addfeat-cleartheway clicked:addfeat-knockdown clicked:addfeat-avalanchestrike clicked:addfeat-wrestler clicked:addfeat-combatgrab clicked:addfeat-crushinggrab clicked:addfeat-suplex clicked:addfeat-clinchstrike clicked:addfeat-whirlingthrow clicked:addfeat-aerialpiledriver ", function (eventinfo) {
     update_character_feat_list_add_feature(eventinfo.triggerName);
 });
-on("clicked:addfeat-favoredenemy clicked:addfeat-perceptivetracker clicked:addfeat-precisionshot clicked:addfeat-superiormobility clicked:addfeat-swifttracker clicked:addfeat-camouflage clicked:addfeat-bountyhunter clicked:addfeat-markquarry clicked:addfeat-relentlesspursuit clicked:addfeat-stalker clicked:addfeat-unerringhunt clicked:addfeat-endthehunt clicked:addfeat-lowlandstalker clicked:addfeat-favoredterrain clicked:addfeat-hitandrun clicked:addfeat-speedy clicked:addfeat-wildstride clicked:addfeat-skirmishersstealth clicked:addfeat-suddenstrike clicked:addfeat-spellchargeanalysis clicked:addfeat-knowledgeispower clicked:addfeat-recognizethreat clicked:addfeat-cutthroughresistance clicked:addfeat-battlemage clicked:addfeat-mysticweapon clicked:addfeat-aspectedstrike clicked:addfeat-energyweapon clicked:addfeat-magicstrike clicked:addfeat-elementalfist clicked:addfeat-aspectedblow clicked:addfeat-skystepstance clicked:addfeat-flaringfists clicked:addfeat-skystepstrike clicked:addfeat-etherealblade clicked:addfeat-ghoststrike clicked:addfeat-astralsight clicked:addfeat-hiddencunning clicked:addfeat-consciousprojection clicked:addfeat-etherealassassin clicked:addfeat-improvedastralsight clicked:addfeat-clevergambit clicked:addfeat-catstance clicked:addfeat-climbersstance clicked:addfeat-flightstance clicked:addfeat-gracefulleaper clicked:addfeat-lightstep clicked:addfeat-follow-upstrike clicked:addfeat-flashstrike clicked:addfeat-acrobat clicked:addfeat-contortionist clicked:addfeat-dodgeaway clicked:addfeat-tumblingstrike clicked:addfeat-acrobaticreflexes clicked:addfeat-drunkenmaster clicked:addfeat-tipsysway clicked:addfeat-leaptoyourfeet clicked:addfeat-redirectattack clicked:addfeat-drunkardsluck clicked:addfeat-intoxicatedflurry clicked:addfeat-thief clicked:addfeat-fasthands clicked:addfeat-second-storywork clicked:addfeat-supremesneak clicked:addfeat-thiefsfinesse clicked:addfeat-rally clicked:addfeat-arcanerally clicked:addfeat-motivatingrally clicked:addfeat-tacticalrally clicked:addfeat-rallyresolve clicked:addfeat-marshalstrike clicked:addfeat-rallybattlefocus clicked:addfeat-snapoutofit clicked:addfeat-rallydeathdefiance clicked:addfeat-rallyingcharge clicked:addfeat-backtoback ", function (eventinfo) {
+on("clicked:addfeat-naturalexplorer clicked:addfeat-exploitstrike clicked:addfeat-favoredenemy clicked:addfeat-perceptivetracker clicked:addfeat-precisionshot clicked:addfeat-superiormobility clicked:addfeat-swifttracker clicked:addfeat-camouflage clicked:addfeat-bountyhunter clicked:addfeat-markquarry clicked:addfeat-relentlesspursuit clicked:addfeat-stalker clicked:addfeat-unerringhunt clicked:addfeat-endthehunt clicked:addfeat-lowlandstalker clicked:addfeat-favoredterrain clicked:addfeat-hitandrun clicked:addfeat-speedy clicked:addfeat-wildstride clicked:addfeat-skirmishersstealth clicked:addfeat-suddenstrike clicked:addfeat-spellchargeanalysis clicked:addfeat-knowledgeispower clicked:addfeat-recognizethreat clicked:addfeat-cutthroughresistance clicked:addfeat-battlemage clicked:addfeat-mysticweapon clicked:addfeat-aspectedstrike clicked:addfeat-energyweapon clicked:addfeat-magicstrike clicked:addfeat-elementalfist clicked:addfeat-aspectedblow clicked:addfeat-skystepstance clicked:addfeat-flaringfists clicked:addfeat-skystepstrike clicked:addfeat-etherealblade clicked:addfeat-ghoststrike clicked:addfeat-astralsight clicked:addfeat-hiddencunning clicked:addfeat-consciousprojection clicked:addfeat-etherealassassin clicked:addfeat-improvedastralsight clicked:addfeat-clevergambit clicked:addfeat-catstance clicked:addfeat-climbersstance clicked:addfeat-flightstance clicked:addfeat-gracefulleaper clicked:addfeat-lightstep clicked:addfeat-follow-upstrike clicked:addfeat-flashstrike clicked:addfeat-acrobat clicked:addfeat-contortionist clicked:addfeat-dodgeaway clicked:addfeat-tumblingstrike clicked:addfeat-acrobaticreflexes clicked:addfeat-drunkenmaster clicked:addfeat-tipsysway clicked:addfeat-leaptoyourfeet clicked:addfeat-redirectattack clicked:addfeat-drunkardsluck clicked:addfeat-intoxicatedflurry clicked:addfeat-thief clicked:addfeat-fasthands clicked:addfeat-second-storywork clicked:addfeat-supremesneak clicked:addfeat-thiefsfinesse clicked:addfeat-rally clicked:addfeat-arcanerally clicked:addfeat-motivatingrally clicked:addfeat-tacticalrally clicked:addfeat-rallyresolve clicked:addfeat-marshalstrike clicked:addfeat-rallybattlefocus clicked:addfeat-snapoutofit clicked:addfeat-rallydeathdefiance ", function (eventinfo) {
     update_character_feat_list_add_feature(eventinfo.triggerName);
 });
-on("clicked:addfeat-coordinatedcharge clicked:addfeat-bloodrager clicked:addfeat-rallybladethirst clicked:addfeat-deadlybladethirst clicked:addfeat-tactician clicked:addfeat-baitandswitch clicked:addfeat-rallyspeed clicked:addfeat-knowyourenemy clicked:addfeat-improvedcombatsuperiority clicked:addfeat-relentless clicked:addfeat-virtuoso clicked:addfeat-rallycompetence clicked:addfeat-distract clicked:addfeat-rallyresistance clicked:addfeat-peerlessskill clicked:addfeat-scoundrel clicked:addfeat-ambushartist clicked:addfeat-firstawareness clicked:addfeat-surpriseattack clicked:addfeat-fleetingshadow clicked:addfeat-deftstrike clicked:addfeat-opportunistic clicked:addfeat-assassin clicked:addfeat-infiltrationexpertise clicked:addfeat-deathstrike clicked:addfeat-assassinate clicked:addfeat-phantom clicked:addfeat-extendedcloak clicked:addfeat-cloakingexpert clicked:addfeat-unseenstrike clicked:addfeat-weasel clicked:addfeat-lostinthecrowd clicked:addfeat-crowdmastery clicked:addfeat-expeditiousadvance clicked:addfeat-ambushspell clicked:addfeat-tacticalwit clicked:addfeat-magicalambush clicked:addfeat-detective clicked:addfeat-earfordeceit clicked:addfeat-discerningeye clicked:addfeat-unerringeye clicked:addfeat-spellthief clicked:addfeat-stealspell clicked:addfeat-magicthief clicked:addfeat-greaterstealspell clicked:addfeat-whisper clicked:addfeat-quickchange clicked:addfeat-subtlespell clicked:addfeat-cloakingchakra clicked:addfeat-silentmessage clicked:addfeat-naturopath clicked:addfeat-paramedic clicked:addfeat-healthassessor clicked:addfeat-treatcondition clicked:addfeat-dutifulhealer clicked:addfeat-resuscitate clicked:addfeat-supremehealing clicked:addfeat-chirurgeon clicked:addfeat-quickcraftmedicine clicked:addfeat-strategicdiagnosis clicked:addfeat-supportedhealing clicked:addfeat-onsitesupport clicked:addfeat-debilitatingstrike clicked:addfeat-etherealist clicked:addfeat-companionbond clicked:addfeat-animalcompanion clicked:addfeat-managemcasting clicked:addfeat-astralcompanionship clicked:addfeat-tandemaction clicked:addfeat-exorcism clicked:addfeat-spiritshield clicked:addfeat-lifecleric clicked:addfeat-discipleoflife clicked:addfeat-blessedhealer clicked:addfeat-heroicrecovery clicked:addfeat-shieldsage ", function (eventinfo) {
+on("clicked:addfeat-rallyingcharge clicked:addfeat-backtoback clicked:addfeat-coordinatedcharge clicked:addfeat-bloodrager clicked:addfeat-rallybladethirst clicked:addfeat-deadlybladethirst clicked:addfeat-tactician clicked:addfeat-baitandswitch clicked:addfeat-rallyspeed clicked:addfeat-knowyourenemy clicked:addfeat-improvedcombatsuperiority clicked:addfeat-relentless clicked:addfeat-virtuoso clicked:addfeat-rallycompetence clicked:addfeat-distract clicked:addfeat-rallyresistance clicked:addfeat-peerlessskill clicked:addfeat-scoundrel clicked:addfeat-ambushartist clicked:addfeat-firstawareness clicked:addfeat-surpriseattack clicked:addfeat-fleetingshadow clicked:addfeat-deftstrike clicked:addfeat-opportunistic clicked:addfeat-assassin clicked:addfeat-infiltrationexpertise clicked:addfeat-deathstrike clicked:addfeat-assassinate clicked:addfeat-phantom clicked:addfeat-extendedcloak clicked:addfeat-cloakingexpert clicked:addfeat-unseenstrike clicked:addfeat-weasel clicked:addfeat-lostinthecrowd clicked:addfeat-crowdmastery clicked:addfeat-expeditiousadvance clicked:addfeat-ambushspell clicked:addfeat-tacticalwit clicked:addfeat-magicalambush clicked:addfeat-detective clicked:addfeat-earfordeceit clicked:addfeat-discerningeye clicked:addfeat-unerringeye clicked:addfeat-spellthief clicked:addfeat-stealspell clicked:addfeat-magicthief clicked:addfeat-greaterstealspell clicked:addfeat-whisper clicked:addfeat-quickchange clicked:addfeat-subtlespell clicked:addfeat-cloakingchakra clicked:addfeat-silentmessage clicked:addfeat-naturopath clicked:addfeat-paramedic clicked:addfeat-healthassessor clicked:addfeat-treatcondition clicked:addfeat-dutifulhealer clicked:addfeat-resuscitate clicked:addfeat-supremehealing clicked:addfeat-chirurgeon clicked:addfeat-quickcraftmedicine clicked:addfeat-strategicdiagnosis clicked:addfeat-supportedhealing clicked:addfeat-onsitesupport clicked:addfeat-debilitatingstrike clicked:addfeat-etherealist clicked:addfeat-companionbond clicked:addfeat-animalcompanion clicked:addfeat-managemcasting clicked:addfeat-astralcompanionship clicked:addfeat-tandemaction clicked:addfeat-exorcism clicked:addfeat-spiritshield clicked:addfeat-lifecleric clicked:addfeat-discipleoflife clicked:addfeat-blessedhealer ", function (eventinfo) {
     update_character_feat_list_add_feature(eventinfo.triggerName);
 });
-on("clicked:addfeat-wardingspell clicked:addfeat-barriercover clicked:addfeat-extendedcover clicked:addfeat-negatingcover clicked:addfeat-sage clicked:addfeat-branchedknowledge clicked:addfeat-incrediblerecollection clicked:addfeat-specializedspells clicked:addfeat-artificer clicked:addfeat-permanentitems clicked:addfeat-freestructure clicked:addfeat-durablestructures clicked:addfeat-warmage clicked:addfeat-sculptspell clicked:addfeat-elementalperfection clicked:addfeat-empoweredevocation clicked:addfeat-overchannelspell clicked:addfeat-sorcerer clicked:addfeat-empoweredspell clicked:addfeat-splitshot clicked:addfeat-steadyspellcasting clicked:addfeat-twinnedspell clicked:addfeat-echoingmagic clicked:addfeat-favoredsoul clicked:addfeat-arcanefavor clicked:addfeat-idealfavor clicked:addfeat-vitalfavor clicked:addfeat-favoredluck clicked:addfeat-bendfate clicked:addfeat-reactivefavor clicked:addfeat-doubledfavor clicked:addfeat-warlock clicked:addfeat-warlockcantrips clicked:addfeat-arcanedestruction clicked:addfeat-eldritchspear clicked:addfeat-eldritchburst clicked:addfeat-seekingbolt clicked:addfeat-eldritchmastery clicked:addfeat-spiritualist clicked:addfeat-emptyvessel clicked:addfeat-phantomshroud clicked:addfeat-accelerationshroud clicked:addfeat-evolutionshroud clicked:addfeat-conduit clicked:addfeat-multiplemanifestations clicked:addfeat-pactslot clicked:addfeat-reactivecompanion clicked:addfeat-synthesist clicked:addfeat-lockedvessel clicked:addfeat-suppressappearance clicked:addfeat-assumecontrol clicked:addfeat-trueformshroud clicked:addfeat-divinegrace clicked:addfeat-restoringveil clicked:addfeat-giftofheaven clicked:addfeat-mercy clicked:addfeat-armamentwall clicked:addfeat-greatermercy clicked:addfeat-spiritualguardian clicked:addfeat-hypnoticstare clicked:addfeat-alluringhypnotism clicked:addfeat-possession clicked:addfeat-hypnoticcharm clicked:addfeat-influencedisaster clicked:addfeat-shadowform clicked:addfeat-distanttether clicked:addfeat-shadowcaster clicked:addfeat-shadowjump clicked:addfeat-manifestshade clicked:addfeat-shadowwalk clicked:addfeat-attunedterrain clicked:addfeat-wildempathy clicked:addfeat-wildshape clicked:addfeat-greenempathy clicked:addfeat-communewithnature ", function (eventinfo) {
+on("clicked:addfeat-heroicrecovery clicked:addfeat-shieldsage clicked:addfeat-wardingspell clicked:addfeat-barriercover clicked:addfeat-extendedcover clicked:addfeat-negatingcover clicked:addfeat-sage clicked:addfeat-branchedknowledge clicked:addfeat-incrediblerecollection clicked:addfeat-specializedspells clicked:addfeat-artificer clicked:addfeat-permanentitems clicked:addfeat-freestructure clicked:addfeat-durablestructures clicked:addfeat-warmage clicked:addfeat-sculptspell clicked:addfeat-elementalperfection clicked:addfeat-empoweredevocation clicked:addfeat-overchannelspell clicked:addfeat-sorcerer clicked:addfeat-empoweredspell clicked:addfeat-splitshot clicked:addfeat-steadyspellcasting clicked:addfeat-twinnedspell clicked:addfeat-echoingmagic clicked:addfeat-favoredsoul clicked:addfeat-arcanefavor clicked:addfeat-idealfavor clicked:addfeat-vitalfavor clicked:addfeat-favoredluck clicked:addfeat-bendfate clicked:addfeat-reactivefavor clicked:addfeat-doubledfavor clicked:addfeat-warlock clicked:addfeat-warlockcantrips clicked:addfeat-arcanedestruction clicked:addfeat-eldritchspear clicked:addfeat-eldritchburst clicked:addfeat-seekingbolt clicked:addfeat-eldritchmastery clicked:addfeat-spiritualist clicked:addfeat-emptyvessel clicked:addfeat-phantomshroud clicked:addfeat-accelerationshroud clicked:addfeat-evolutionshroud clicked:addfeat-conduit clicked:addfeat-multiplemanifestations clicked:addfeat-pactslot clicked:addfeat-reactivecompanion clicked:addfeat-synthesist clicked:addfeat-lockedvessel clicked:addfeat-suppressappearance clicked:addfeat-assumecontrol clicked:addfeat-trueformshroud clicked:addfeat-divinegrace clicked:addfeat-restoringveil clicked:addfeat-giftofheaven clicked:addfeat-mercy clicked:addfeat-armamentwall clicked:addfeat-greatermercy clicked:addfeat-spiritualguardian clicked:addfeat-hypnoticstare clicked:addfeat-alluringhypnotism clicked:addfeat-possession clicked:addfeat-hypnoticcharm clicked:addfeat-influencedisaster clicked:addfeat-shadowform clicked:addfeat-distanttether clicked:addfeat-shadowcaster clicked:addfeat-shadowjump clicked:addfeat-manifestshade clicked:addfeat-shadowwalk clicked:addfeat-attunedterrain clicked:addfeat-wildempathy clicked:addfeat-wildshape ", function (eventinfo) {
     update_character_feat_list_add_feature(eventinfo.triggerName);
 });
-on("clicked:addfeat-bestialrush clicked:addfeat-elementalstrikes clicked:addfeat-hustle clicked:addfeat-spiritrage clicked:addfeat-spiritfrenzy clicked:addfeat-sunderspell clicked:addfeat-aggressive clicked:addfeat-twinswipes clicked:addfeat-graspingbite clicked:addfeat-batteringram clicked:addfeat-rangedsting clicked:addfeat-beastrun clicked:addfeat-honenaturalweapon clicked:addfeat-greaterhonenaturalweapon clicked:addfeat-defensive clicked:addfeat-deflectingcarapice clicked:addfeat-thickerskin clicked:addfeat-waryretreat clicked:addfeat-increasedacidity clicked:addfeat-beastdash clicked:addfeat-beastflight clicked:addfeat-beastswim clicked:addfeat-honenaturalarmor clicked:addfeat-greaterhonenaturalarmor ", function (eventinfo) {
+on("clicked:addfeat-greenempathy clicked:addfeat-communewithnature clicked:addfeat-bestialrush clicked:addfeat-elementalstrikes clicked:addfeat-hustle clicked:addfeat-spiritrage clicked:addfeat-spiritfrenzy clicked:addfeat-sunderspell clicked:addfeat-aggressive clicked:addfeat-twinswipes clicked:addfeat-graspingbite clicked:addfeat-batteringram clicked:addfeat-rangedsting clicked:addfeat-beastrun clicked:addfeat-honenaturalweapon clicked:addfeat-greaterhonenaturalweapon clicked:addfeat-defensive clicked:addfeat-deflectingcarapice clicked:addfeat-thickerskin clicked:addfeat-waryretreat clicked:addfeat-increasedacidity clicked:addfeat-beastdash clicked:addfeat-beastflight clicked:addfeat-beastswim clicked:addfeat-honenaturalarmor clicked:addfeat-greaterhonenaturalarmor ", function (eventinfo) {
     update_character_feat_list_add_feature(eventinfo.triggerName);
 });
 // Core: Feat Type Adder
@@ -123,6 +123,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "5",
+                    ascap: "",
                     saves: "Dexterity, Charisma, Constitution, Intelligence",
                     weapon: "2",
                     armor: "1",
@@ -148,13 +149,14 @@ function GetClassInfo(className) {
                     sp: "3",
                     hp: "6",
                     br: "0",
+                    ascap: "All automaton ability scores cap at 24",
                     saves: "Strength, Constitution, Dexterity, Intelligence",
                     weapon: "3",
                     armor: "5",
                     spell: "0",
                     spirit: "0",
                     skill: "3$Any skill",
-                    features: ["", "Construct Caster Points,Construct Spellcasting,Beast Growth,,", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                    features: ["", "Construct Caster Points,Construct Spellcasting", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                     feats: ["", "Archetype Feat,General Feat", "Archetype Feat", "", "Archetype Feat,General Feat", "", "Archetype Feat", "General Feat", "Archetype Feat", "", "Archetype Feat,General Feat", "", "Archetype Feat", "General Feat", "Archetype Feat", "", "Archetype Feat,General Feat", "", "Archetype Feat", "General Feat", "Archetype Feat"],
                     featList: ["", "Archetype-01, 02, 04, 06, 08, 10, 12, 14, 16, 18, 20", "General-01, 04, 07, 10, 13, 16, 19"]
             };
@@ -171,6 +173,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "2",
                     br: "3",
+                    ascap: "",
                     saves: "Strength, Dexterity",
                     weapon: "5",
                     armor: "2",
@@ -194,13 +197,14 @@ function GetClassInfo(className) {
                     sp: "3",
                     hp: "6",
                     br: "0",
+                    ascap: "For Brutes, Strength and Constitution cap at 30, Dexterity and Wisdom cap at 24, and Intelligence and Charisma cap at 18.",
                     saves: "Strength, Constitution, Dexterity, Wisdom",
                     weapon: "4",
                     armor: "4",
                     spell: "0",
                     spirit: "0",
                     skill: "3$Any skill",
-                    features: ["", "Beast Growth,,", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                    features: ["", "Beast Growth", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                     feats: ["", "Beast Feat", "Beast Feat", "Temperament Feat", "Beast Feat", "", "Beast Feat,Temperament Feat", "", "Beast Feat", "Temperament Feat", "Beast Feat", "", "Beast Feat,Temperament Feat", "", "Beast Feat", "Temperament Feat", "Beast Feat", "", "Beast Feat,Temperament Feat", "", "Beast Feat"],
                     featList: ["", "Beast-01, 02, 04, 06, 08, 10, 12, 14, 16, 18, 20", "Temperament-03, 06, 09, 12, 15, 18"]
             };
@@ -217,13 +221,14 @@ function GetClassInfo(className) {
                     sp: "3",
                     hp: "6",
                     br: "0",
+                    ascap: "For Bulwarks, Constitution and Wisdom cap at 30, Strength and Dexterity cap at 24, and Intelligence and Charisma cap at 18.",
                     saves: "Constitution, Wisdom, Strength, Dexterity",
                     weapon: "3",
                     armor: "5",
                     spell: "0",
                     spirit: "0",
                     skill: "3$Any skill",
-                    features: ["", "Beast Growth,,", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                    features: ["", "Beast Growth", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                     feats: ["", "Beast Feat", "Beast Feat", "Temperament Feat", "Beast Feat", "", "Beast Feat,Temperament Feat", "", "Beast Feat", "Temperament Feat", "Beast Feat", "", "Beast Feat,Temperament Feat", "", "Beast Feat", "Temperament Feat", "Beast Feat", "", "Beast Feat,Temperament Feat", "", "Beast Feat"],
                     featList: ["", "Beast-01, 02, 04, 06, 08, 10, 12, 14, 16, 18, 20", "Temperament-03, 06, 09, 12, 15, 18"]
             };
@@ -240,6 +245,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "2",
+                    ascap: "",
                     saves: "",
                     weapon: "0",
                     armor: "0",
@@ -265,6 +271,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "5",
                     br: "5",
+                    ascap: "",
                     saves: "Strength, Constitution, Dexterity, Charisma",
                     weapon: "4",
                     armor: "7",
@@ -288,6 +295,7 @@ function GetClassInfo(className) {
                     sp: "5",
                     hp: "0",
                     br: "5",
+                    ascap: "All eidolon ability scores cap at 32",
                     saves: "Wisdom, Charisma",
                     weapon: "0",
                     armor: "0",
@@ -311,6 +319,7 @@ function GetClassInfo(className) {
                     sp: "4",
                     hp: "0",
                     br: "4",
+                    ascap: "All esper ability scores cap at 22",
                     saves: "Wisdom, Charisma",
                     weapon: "0",
                     armor: "0",
@@ -334,6 +343,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "1",
                     br: "3",
+                    ascap: "",
                     saves: "Dexterity, Charisma",
                     weapon: "0",
                     armor: "0",
@@ -359,6 +369,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "3",
                     br: "5",
+                    ascap: "",
                     saves: "Strength, Constitution, Dexterity, Charisma",
                     weapon: "7",
                     armor: "4",
@@ -384,6 +395,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "2",
                     br: "4",
+                    ascap: "",
                     saves: "Dexterity, Intelligence, Wisdom, Charisma",
                     weapon: "5",
                     armor: "2",
@@ -407,6 +419,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "4",
+                    ascap: "",
                     saves: "Intelligence, Wisdom",
                     weapon: "0",
                     armor: "0",
@@ -430,13 +443,14 @@ function GetClassInfo(className) {
                     sp: "3",
                     hp: "6",
                     br: "0",
+                    ascap: "For Prowlers, Strength and Dexterity cap at 30, Constitution and Wisdom cap at 24, and Intelligence and Charisma cap at 18.",
                     saves: "Dexterity, Wisdom, Strength, Constitution",
                     weapon: "5",
                     armor: "3",
                     spell: "0",
                     spirit: "0",
                     skill: "3$Any skill",
-                    features: ["", "Beast Growth,,", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                    features: ["", "Beast Growth", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                     feats: ["", "Beast Feat", "Beast Feat", "Temperament Feat", "Beast Feat", "", "Beast Feat,Temperament Feat", "", "Beast Feat", "Temperament Feat", "Beast Feat", "", "Beast Feat,Temperament Feat", "", "Beast Feat", "Temperament Feat", "Beast Feat", "", "Beast Feat,Temperament Feat", "", "Beast Feat"],
                     featList: ["", "Beast-01, 02, 04, 06, 08, 10, 12, 14, 16, 18, 20", "Temperament-03, 06, 09, 12, 15, 18"]
             };
@@ -453,6 +467,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "3",
                     br: "4",
+                    ascap: "",
                     saves: "Dexterity, Wisdom, Strength, Charisma",
                     weapon: "3",
                     armor: "2",
@@ -480,6 +495,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "2",
                     br: "5",
+                    ascap: "",
                     saves: "Dexterity, Charisma, Intelligence, Wisdom",
                     weapon: "5",
                     armor: "2",
@@ -503,6 +519,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "3",
                     br: "4",
+                    ascap: "",
                     saves: "Strength, Constitution",
                     weapon: "4",
                     armor: "4",
@@ -528,6 +545,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "2",
                     br: "6",
+                    ascap: "",
                     saves: "Strength, Intelligence, Dexterity, Wisdom",
                     weapon: "6",
                     armor: "4",
@@ -553,6 +571,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "5",
+                    ascap: "",
                     saves: "Dexterity, Wisdom, Strength, Intelligence",
                     weapon: "2",
                     armor: "1",
@@ -578,6 +597,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "4",
                     br: "6",
+                    ascap: "",
                     saves: "Strength, Constitution, Dexterity, Wisdom",
                     weapon: "4",
                     armor: "6",
@@ -601,13 +621,14 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "3",
+                    ascap: "All watcher ability scores cap at 18",
                     saves: "Wisdom, Charisma",
                     weapon: "0",
                     armor: "0",
                     spell: "3",
                     spirit: "0",
                     skill: "0$Perception",
-                    features: ["", "Spirit Effect,Spirit Spellcasting,Spirit Cantrips,Spirit Growth,,", "Creature Manifest,Imbue Barrier,Release Manifest", "Object Manifest", "", "Esper Ascension", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                    features: ["", "Spirit Effect,Spirit Spellcasting,Spirit Cantrips,Spirit Growth,Watcher Growth Caps", "Creature Manifest,Imbue Barrier,Release Manifest", "Object Manifest", "", "Esper Ascension", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                     feats: ["", "Spirit Feat", "Spirit Feat", "", "Spirit Feat", "", "Spirit Feat", "", "Spirit Feat", "", "Spirit Feat", "", "Spirit Feat", "", "Spirit Feat", "", "Spirit Feat", "", "Spirit Feat", "", "Spirit Feat"],
                     featList: ["", "Spirit-01, 02, 04, 06, 08, 10, 12, 14, 16, 18, 20"]
             };
@@ -626,6 +647,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "5",
+                    ascap: "",
                     saves: "Intelligence, Wisdom, Dexterity, Constitution",
                     weapon: "2",
                     armor: "1",
@@ -649,6 +671,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "1",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -670,8 +693,9 @@ function GetClassInfo(className) {
                     castType: "Any",
                     cp: "0",
                     sp: "5",
-                    hp: "5",
+                    hp: "2",
                     br: "0",
+                    ascap: "",
                     saves: "0",
                     weapon: "7",
                     armor: "0",
@@ -695,6 +719,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "1",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -718,6 +743,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "1",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -741,6 +767,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "5",
                     br: "5",
+                    ascap: "",
                     saves: "0",
                     weapon: "3",
                     armor: "6",
@@ -764,6 +791,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "3",
                     br: "3",
+                    ascap: "",
                     saves: "0",
                     weapon: "6",
                     armor: "3",
@@ -785,8 +813,9 @@ function GetClassInfo(className) {
                     castType: "Any",
                     cp: "0",
                     sp: "3",
-                    hp: "0",
+                    hp: "5",
                     br: "0",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "7",
@@ -810,6 +839,7 @@ function GetClassInfo(className) {
                     sp: "3",
                     hp: "0",
                     br: "7",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -833,6 +863,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "2",
                     br: "3",
+                    ascap: "",
                     saves: "0",
                     weapon: "5",
                     armor: "0",
@@ -856,6 +887,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "1",
                     br: "5",
+                    ascap: "",
                     saves: "0",
                     weapon: "4",
                     armor: "0",
@@ -879,6 +911,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "2",
                     br: "3",
+                    ascap: "",
                     saves: "0",
                     weapon: "4",
                     armor: "0",
@@ -902,6 +935,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "2",
                     br: "4",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -925,6 +959,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "6",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -948,6 +983,7 @@ function GetClassInfo(className) {
                     sp: "2",
                     hp: "0",
                     br: "3",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -971,6 +1007,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "5",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -994,6 +1031,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "1",
                     br: "4",
+                    ascap: "",
                     saves: "0",
                     weapon: "5",
                     armor: "0",
@@ -1017,6 +1055,7 @@ function GetClassInfo(className) {
                     sp: "3",
                     hp: "0",
                     br: "5",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -1040,6 +1079,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "4",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -1063,6 +1103,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "4",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -1086,6 +1127,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "0",
                     br: "4",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -1109,6 +1151,7 @@ function GetClassInfo(className) {
                     sp: "0",
                     hp: "2",
                     br: "7",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "6",
@@ -1132,6 +1175,7 @@ function GetClassInfo(className) {
                     sp: "5",
                     hp: "0",
                     br: "4",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -1155,6 +1199,7 @@ function GetClassInfo(className) {
                     sp: "7",
                     hp: "0",
                     br: "4",
+                    ascap: "",
                     saves: "0",
                     weapon: "0",
                     armor: "0",
@@ -7533,7 +7578,43 @@ function GetFeatureInfo(feature) {
                 name: "Spirit Growth",
                     type: "Feature",
                     traits: "",
-                    desc: `When a spirit begins play or gains a level they gain an amount of SP. A spirit can spend this SP to increase their own abilities and proficiencies. Spirits can spend their SP as follows.`,
+                    desc: `When a spirit begins play or gains a level they gain an amount of SP. A spirit can spend this SP to increase their own abilities and proficiencies. Spirits can spend their SP as follows.
+    
+    <table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+    <tr><th>Score</th><th>SP<br />Cost</th><th>Score</th><th>SP<br />Cost</th></tr>
+    <tr><td>7-13</td><td>2</td><td>22-23</td><td>14</td></tr>
+    <tr><td>14-15</td><td>3</td><td>24-25</td><td>19</td></tr>
+    <tr><td>16-17</td><td>5</td><td>26-27</td><td>25</td></tr>
+    <tr><td>18-19</td><td>7</td><td>28-29</td><td>32</td></tr>
+    <tr><td>20-21</td><td>10</td><td>30</td><td>40</td></tr>
+    </table>
+    
+    <p><strong>Ability Scores.</strong> A spirit may increase any of their ability scores at the cost of SP. See the Spirit Ability Scores table for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
+    
+    <p><strong>Skills.</strong> A spirit can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. Watchers can only train skills that are based on intelligence, wisdom, or charisma ability scores.<br />
+    A spirit can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
+    At 6th level a spirit can spend 3 SP to increase rank of Adept skills and specializations.<br />
+    At 10th level a spirit can spend 4 SP to increase rank of Expert skills and specializations.</p>
+    
+    <p><strong>Languages.</strong> A spirit may learn a language for 3 SP.</p>`,
+                    shortdesc: ``,
+                    critsuccess: "",
+                    success: "",
+                    failure: "",
+                    critfailure: "",
+                    trigger: "",
+                    requirement: "",
+                    prerequisites: "",
+                    featType: "",
+                    className: "Character",
+                    level: "01"
+            };
+        case "watcher growth caps":
+            return {
+                name: "Watcher Growth Caps",
+                    type: "Feature",
+                    traits: "",
+                    desc: `Watcher spirits have `,
                     shortdesc: ``,
                     critsuccess: "",
                     success: "",
@@ -7898,6 +7979,24 @@ function GetFeatureInfo(feature) {
                     className: "Character",
                     level: ""
             };
+        case "ascap":
+            return {
+                name: "ASCap",
+                    type: "Growth",
+                    traits: "",
+                    desc: `All automaton ability scores cap at 24`,
+                    shortdesc: ``,
+                    critsuccess: "",
+                    success: "",
+                    failure: "",
+                    critfailure: "",
+                    trigger: "",
+                    requirement: "",
+                    prerequisites: "",
+                    featType: "",
+                    className: "Character",
+                    level: ""
+            };
         case "archetype":
             return {
                 name: "Archetype",
@@ -8121,52 +8220,20 @@ function GetFeatureInfo(feature) {
         case "beast growth":
             return {
                 name: "Beast Growth",
-                    type: "Feature",
-                    traits: "",
-                    desc: `When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.`,
-                    shortdesc: ``,
-                    critsuccess: "",
-                    success: "",
-                    failure: "",
-                    critfailure: "",
-                    trigger: "",
-                    requirement: "",
-                    prerequisites: "",
-                    featType: "",
-                    className: "Character",
-                    level: "01"
-            };
-        case "":
-            return {
-                name: "",
                     type: "Table",
                     traits: "",
-                    desc: `<table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+                    desc: `<p>When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</p>
+    
+    <table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
     <tr><th>Score</th><th>SP<br />Cost</th><th>Score</th><th>SP<br />Cost</th></tr>
-    <tr><td>7-13</td><td>1</td><td>22-23</td><td>6</td></tr>
-    <tr><td>14-15</td><td>2</td><td>24-25</td><td>7</td></tr>
-    <tr><td>16-17</td><td>3</td><td>26-27</td><td>8</td></tr>
-    <tr><td>18-19</td><td>4</td><td>28-29</td><td>9</td></tr>
-    <tr><td>20-21</td><td>5</td><td>30</td><td>10</td></tr>
-    </table>`,
-                    shortdesc: ``,
-                    critsuccess: "",
-                    success: "",
-                    failure: "",
-                    critfailure: "",
-                    trigger: "",
-                    requirement: "",
-                    prerequisites: "",
-                    featType: "",
-                    className: "Character",
-                    level: "01"
-            };
-        case "":
-            return {
-                name: "",
-                    type: "Table",
-                    traits: "",
-                    desc: `<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
+    <tr><td>7-13</td><td>2</td><td>22-23</td><td>14</td></tr>
+    <tr><td>14-15</td><td>3</td><td>24-25</td><td>19</td></tr>
+    <tr><td>16-17</td><td>5</td><td>26-27</td><td>25</td></tr>
+    <tr><td>18-19</td><td>7</td><td>28-29</td><td>32</td></tr>
+    <tr><td>20-21</td><td>10</td><td>30</td><td>40</td></tr>
+    </table>
+    
+    <p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. See the table above for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
     
     <p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
     A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
@@ -8184,7 +8251,7 @@ function GetFeatureInfo(feature) {
                     requirement: "",
                     prerequisites: "",
                     featType: "",
-                    className: "Character",
+                    className: "",
                     level: "01"
             };
         case "brute":
@@ -8313,12 +8380,30 @@ function GetFeatureInfo(feature) {
                     className: "Character",
                     level: ""
             };
+        case "ascap":
+            return {
+                name: "ASCap",
+                    type: "Growth",
+                    traits: "",
+                    desc: `For Brutes, Strength and Constitution cap at 30, Dexterity and Wisdom cap at 24, and Intelligence and Charisma cap at 18.`,
+                    shortdesc: ``,
+                    critsuccess: "",
+                    success: "",
+                    failure: "",
+                    critfailure: "",
+                    trigger: "",
+                    requirement: "",
+                    prerequisites: "",
+                    featType: "",
+                    className: "Character",
+                    level: ""
+            };
         case "archetype":
             return {
                 name: "Archetype",
                     type: "Proficiency",
                     traits: "Archetype",
-                    desc: `At 1st level and every level thereafter, gain a level in a beast style of your choice.`,
+                    desc: `At 1st level and every level thereafter, gain a level in a temperament of your choice.`,
                     shortdesc: ``,
                     critsuccess: "",
                     success: "",
@@ -8460,52 +8545,20 @@ function GetFeatureInfo(feature) {
         case "beast growth":
             return {
                 name: "Beast Growth",
-                    type: "Feature",
-                    traits: "",
-                    desc: `When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.`,
-                    shortdesc: ``,
-                    critsuccess: "",
-                    success: "",
-                    failure: "",
-                    critfailure: "",
-                    trigger: "",
-                    requirement: "",
-                    prerequisites: "",
-                    featType: "",
-                    className: "Character",
-                    level: "01"
-            };
-        case "":
-            return {
-                name: "",
                     type: "Table",
                     traits: "",
-                    desc: `<table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+                    desc: `<p>When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</p>
+    
+    <table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
     <tr><th>Score</th><th>SP<br />Cost</th><th>Score</th><th>SP<br />Cost</th></tr>
-    <tr><td>7-13</td><td>1</td><td>22-23</td><td>6</td></tr>
-    <tr><td>14-15</td><td>2</td><td>24-25</td><td>7</td></tr>
-    <tr><td>16-17</td><td>3</td><td>26-27</td><td>8</td></tr>
-    <tr><td>18-19</td><td>4</td><td>28-29</td><td>9</td></tr>
-    <tr><td>20-21</td><td>5</td><td>30</td><td>10</td></tr>
-    </table>`,
-                    shortdesc: ``,
-                    critsuccess: "",
-                    success: "",
-                    failure: "",
-                    critfailure: "",
-                    trigger: "",
-                    requirement: "",
-                    prerequisites: "",
-                    featType: "",
-                    className: "Character",
-                    level: "01"
-            };
-        case "":
-            return {
-                name: "",
-                    type: "Table",
-                    traits: "",
-                    desc: `<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
+    <tr><td>7-13</td><td>2</td><td>22-23</td><td>14</td></tr>
+    <tr><td>14-15</td><td>3</td><td>24-25</td><td>19</td></tr>
+    <tr><td>16-17</td><td>5</td><td>26-27</td><td>25</td></tr>
+    <tr><td>18-19</td><td>7</td><td>28-29</td><td>32</td></tr>
+    <tr><td>20-21</td><td>10</td><td>30</td><td>40</td></tr>
+    </table>
+    
+    <p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. See the table above for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
     
     <p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
     A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
@@ -8670,12 +8723,30 @@ function GetFeatureInfo(feature) {
                     className: "Character",
                     level: ""
             };
+        case "ascap":
+            return {
+                name: "ASCap",
+                    type: "Growth",
+                    traits: "",
+                    desc: `For Bulwarks, Constitution and Wisdom cap at 30, Strength and Dexterity cap at 24, and Intelligence and Charisma cap at 18.`,
+                    shortdesc: ``,
+                    critsuccess: "",
+                    success: "",
+                    failure: "",
+                    critfailure: "",
+                    trigger: "",
+                    requirement: "",
+                    prerequisites: "",
+                    featType: "",
+                    className: "Character",
+                    level: ""
+            };
         case "archetype":
             return {
                 name: "Archetype",
                     type: "Proficiency",
                     traits: "Archetype",
-                    desc: `At 1st level and every level thereafter, gain a level in a beast style of your choice.`,
+                    desc: `At 1st level and every level thereafter, gain a level in a temperament of your choice.`,
                     shortdesc: ``,
                     critsuccess: "",
                     success: "",
@@ -8817,52 +8888,20 @@ function GetFeatureInfo(feature) {
         case "beast growth":
             return {
                 name: "Beast Growth",
-                    type: "Feature",
-                    traits: "",
-                    desc: `When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.`,
-                    shortdesc: ``,
-                    critsuccess: "",
-                    success: "",
-                    failure: "",
-                    critfailure: "",
-                    trigger: "",
-                    requirement: "",
-                    prerequisites: "",
-                    featType: "",
-                    className: "Character",
-                    level: "01"
-            };
-        case "":
-            return {
-                name: "",
                     type: "Table",
                     traits: "",
-                    desc: `<table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+                    desc: `<p>When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</p>
+    
+    <table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
     <tr><th>Score</th><th>SP<br />Cost</th><th>Score</th><th>SP<br />Cost</th></tr>
-    <tr><td>7-13</td><td>1</td><td>22-23</td><td>6</td></tr>
-    <tr><td>14-15</td><td>2</td><td>24-25</td><td>7</td></tr>
-    <tr><td>16-17</td><td>3</td><td>26-27</td><td>8</td></tr>
-    <tr><td>18-19</td><td>4</td><td>28-29</td><td>9</td></tr>
-    <tr><td>20-21</td><td>5</td><td>30</td><td>10</td></tr>
-    </table>`,
-                    shortdesc: ``,
-                    critsuccess: "",
-                    success: "",
-                    failure: "",
-                    critfailure: "",
-                    trigger: "",
-                    requirement: "",
-                    prerequisites: "",
-                    featType: "",
-                    className: "Character",
-                    level: "01"
-            };
-        case "":
-            return {
-                name: "",
-                    type: "Table",
-                    traits: "",
-                    desc: `<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
+    <tr><td>7-13</td><td>2</td><td>22-23</td><td>14</td></tr>
+    <tr><td>14-15</td><td>3</td><td>24-25</td><td>19</td></tr>
+    <tr><td>16-17</td><td>5</td><td>26-27</td><td>25</td></tr>
+    <tr><td>18-19</td><td>7</td><td>28-29</td><td>32</td></tr>
+    <tr><td>20-21</td><td>10</td><td>30</td><td>40</td></tr>
+    </table>
+    
+    <p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. See the table above for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
     
     <p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
     A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
@@ -9009,6 +9048,24 @@ function GetFeatureInfo(feature) {
                     className: "Character",
                     level: ""
             };
+        case "ascap":
+            return {
+                name: "ASCap",
+                    type: "Growth",
+                    traits: "",
+                    desc: `For Prowlers, Strength and Dexterity cap at 30, Constitution and Wisdom cap at 24, and Intelligence and Charisma cap at 18.`,
+                    shortdesc: ``,
+                    critsuccess: "",
+                    success: "",
+                    failure: "",
+                    critfailure: "",
+                    trigger: "",
+                    requirement: "",
+                    prerequisites: "",
+                    featType: "",
+                    className: "Character",
+                    level: ""
+            };
         case "br":
             return {
                 name: "BR",
@@ -9032,7 +9089,7 @@ function GetFeatureInfo(feature) {
                 name: "Archetype",
                     type: "Proficiency",
                     traits: "Archetype",
-                    desc: `At 1st level and every level thereafter, gain a level in a beast style of your choice.`,
+                    desc: `At 1st level and every level thereafter, gain a level in a temperament of your choice.`,
                     shortdesc: ``,
                     critsuccess: "",
                     success: "",
@@ -9174,52 +9231,20 @@ function GetFeatureInfo(feature) {
         case "beast growth":
             return {
                 name: "Beast Growth",
-                    type: "Feature",
-                    traits: "",
-                    desc: `When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.`,
-                    shortdesc: ``,
-                    critsuccess: "",
-                    success: "",
-                    failure: "",
-                    critfailure: "",
-                    trigger: "",
-                    requirement: "",
-                    prerequisites: "",
-                    featType: "",
-                    className: "Character",
-                    level: "01"
-            };
-        case "":
-            return {
-                name: "",
                     type: "Table",
                     traits: "",
-                    desc: `<table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+                    desc: `<p>When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</p>
+    
+    <table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
     <tr><th>Score</th><th>SP<br />Cost</th><th>Score</th><th>SP<br />Cost</th></tr>
-    <tr><td>7-13</td><td>1</td><td>22-23</td><td>6</td></tr>
-    <tr><td>14-15</td><td>2</td><td>24-25</td><td>7</td></tr>
-    <tr><td>16-17</td><td>3</td><td>26-27</td><td>8</td></tr>
-    <tr><td>18-19</td><td>4</td><td>28-29</td><td>9</td></tr>
-    <tr><td>20-21</td><td>5</td><td>30</td><td>10</td></tr>
-    </table>`,
-                    shortdesc: ``,
-                    critsuccess: "",
-                    success: "",
-                    failure: "",
-                    critfailure: "",
-                    trigger: "",
-                    requirement: "",
-                    prerequisites: "",
-                    featType: "",
-                    className: "Character",
-                    level: "01"
-            };
-        case "":
-            return {
-                name: "",
-                    type: "Table",
-                    traits: "",
-                    desc: `<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
+    <tr><td>7-13</td><td>2</td><td>22-23</td><td>14</td></tr>
+    <tr><td>14-15</td><td>3</td><td>24-25</td><td>19</td></tr>
+    <tr><td>16-17</td><td>5</td><td>26-27</td><td>25</td></tr>
+    <tr><td>18-19</td><td>7</td><td>28-29</td><td>32</td></tr>
+    <tr><td>20-21</td><td>10</td><td>30</td><td>40</td></tr>
+    </table>
+    
+    <p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. See the table above for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
     
     <p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
     A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
@@ -15032,8 +15057,8 @@ function GetFeatureInfo(feature) {
 }
 
 function SearchFeatureNames(feature) {
-    let featuresList = ["", "Skill Feat", "Combat Feat", "Spell Feat", "Arcane Physique", "Elegant Courtier", "Health Assessor", "Hidden Cunning", "Magic Thief", "Martial Exercise", "Perceptive Tracker", "Physical Training", "Improved Surge", "Safeguard", "Battle Magic", "Dark Sight", "Subtle Spell", "Wary Fighter", "Speedy", "Natural Explorer", "Favored Terrain", "Wild Stride", "Tactical Wit", "Double Strike", "Companion Bond", "Favored Enemy", "Arcane Destruction", "Precision Attack", "Precision Shot", "Protective Ward", "Tandem Action", "Determination", "Lucky", "Unlucky", "More Luck", "Alert", "Blind Fighting", "Critical Crusher", "Critical Follow Up", "Critical Piercer", "Critical Slasher", "Dual Wielder", "Durable", "Fleet", "Interception", "Improved Initiative", "Lunge", "Armor Flexibility", "Impassable Wall Stance", "Quick Draw", "Keen Shot", "Shield Bash", "Skirmisher", "Take Aim", "Tough", "Unarmed Fighting", "Weapon Legend", "Axe Mastery", "Fell Handed", "Blade Mastery", "Bladed Parry", "Flail Mastery", "Shield Sweep", "Hammer Mastery", "Hammer Step", "Pistol Mastery", "Pistolero", "Polearm Mastery", "Break the Charge", "Polearm Bunt", "Rifle Mastery", "Marksmans Snipe", "Ambush", "Brace", "Evasive Footwork", "Parry", "Riposte", "Distracting Strike", "Menacing Strike", "Restraining Strike", "Inspiring Leader", "Alacritous Mantle", "Mantle of Protection", "Spell Parry", "Parting Shot", "Moment of Clarity", "Wounded Mantle", "Cleave", "Friendly Toss", "Shared Stratagem", "Strategic Assessment", "Emergency Ward", "Exorcizing Strike", "Stunning Fist", "Wall Run", "Water Step", "Twist the Knife", "Debilitating Attack", "Analyze Weakness", "Extra Superiority", "Dextrous Initiative", "Exacting Strike", "Sudden Charge", "Assisting Shot", "Barreling Charge", "Double Shot", "Dual-Handed Assault", "Quick Reversal", "Triple Shot", "Disorienting Opening", "Incredible Aim", "Mobile Shot Stance", "Leaping Strike", "Combat Reflexes", "Debilitating Shot", "Disruptive Stance", "Paragons Guard", "Spring Attack", "Desperate Finisher", "Shield Warden", "Reflexive Shield", "Quick Shield Block", "Armor Mastery", "Determination", "Lucky", "Unlucky", "More Luck", "Aimed Throw", "Hunters Pounce", "Cat Fall", "Charming Liar", "Concealing Legerdemain", "Courtly Graces", "Experienced Tracker", "Fascinating Performance", "Group Coercion", "Group Influence", "Impressive Performance", "Intimidating Glare", "Knowledge Training", "Lengthy Diversion", "Multilingual", "Pickpocket", "Quick Coercion", "Quick Jump", "Skill Training", "Steady Balance", "Streetwise", "Subtle Theft", "Upstage", "Gold Infusion", "Armor Assist", "Ethercharged Athlete", "Known Weaknesses", "Thats Odd", "Nimble Crawl", "Foil Senses", "Influence Nature", "Kip Up", "Quick Climb", "Quick Recognition", "Recognize Spell", "Quick Swim", "Quick Unlock", "Shameless Request", "Armored Stealth", "Backup Disguise", "Confabulator", "Quick Disguise", "Rapid Mantel", "Swift Sneak", "Terrified Retreat", "Wall Jump", "Careful Spell", "Conceal Spell", "Distant Spell", "Extended Spell", "Memory Casting", "Quickened Spell", "Seeking Spell", "Unerring Spell", "Recover Spell", "Branching Out", "Signature Spell", "Quick Surge", "Slot Support", "Dual Elementalist", "Spellcharged Concentration", "Murksight", "Extra Ideations", "Ideal Spellslots", "Dandy", "Distracting Flattery", "Never Tire", "Fabricated Connections", "Linguist", "Multilingual Cipher", "Phonetic Training", "Spot Translate", "Analyze Idiolect", "Crude Communication", "Loremaster", "Guiding Knowledge", "Assured Knowledge", "Pirate", "Rope Runner", "Walk the Plank", "Ranger", "Acclimatization", "Sure Foot", "Terrain Master", "Tyrant", "Youre Next", "Conquering Presence", "Subjugation", "Shatter Defenses", "Paralyzing Fear", "Fearsome Brute", "Keen Instinct", "Relentless Endurance", "Pounce", "Thick Skin", "Specialized Training", "Ki Battery", "City Secrets", "Officer Rank", "Fast Research", "Ships Passage", "Wanderer", "Networking", "Mercenary Life", "By Popular Demand", "Life of Crime", "False Identity", "Practiced Craftsman", "Retainers", "Spiritual Guidance", "Slam", "Claws", "Talons", "Bite", "Horn Ram", "Stomp", "Acid Sling", "Soma Armor", "Clumsy", "Glide", "Tiny Creature", "Small Creature", "Large Creature", "Carapice Armor", "Improved Scent", "Improved Sight", "Echolocation", "Rolling Tackle", "Tremorsense", "Clear Body", "Acid Body", "Constrict", "Material Sight", "Extended Sight", "Horizon Sight", "Spell Trainer", "Essential", "Extra SP", "Caranu Form", "Cashmechong Form", "Cesplang Form", "Colosshu Form", "Dekying Form", "Geltingwa Form", "Holjo Form", "Hookma Form", "Plumhou Form", "Rackshur Form", "Serpelu Form", "Stinbian Form", "Forma Armor", "Forma Aquan", "Forma Avian", "Forma Bite", "Forma Claws", "Forma Fossorian", "Forma Sense", "Forma Spike", "Forma Terran", "Forma Toxin", "Dark Sight", "Terran Movement", "Spirits Snarl", "Enhanced Burrow", "Enhanced Flight", "Enhanced Climb", "Enhanced Swim", "Enhanced Armor", "Toxin Shield", "Enhanced Scent", "Bestow Burrow", "Bestow Flight", "Bestow Fins", "Bestow Horn", "Remote Manifestation", "Planar Beacon", "Weaken Will", "Spirit Strikes", "Enhanced Spirit Strikes", "Greater Spirit Strikes", "Bestow Armor", "Arcane Surplus", "Empowering Reserves", "Arcane Bolt", "Ethereal Voice", "Calculated Surge", "Mana Font", "Bountiful Ideas", "Wizards Studies", "Focused Breathing", "Blocking Expertise", "Steady Breath", "Deadly Spellstrike", "Spellcharge Battery", "Spellward Armor", "Swift Spellstrike", "Unarmored Defense", "Vital Mantle", "Fighter Superiority", "Maneuver Master", "Deadly Maneuvers", "Deadly Power Strike", "Superior Prowess", "Swift Power Strike", "Deadly Strategy", "Ongoing Strategy", "Martial Artist", "Patient Defense", "Open Chakra", "Unarmored Movement", "Deadly Flurry", "Forbidden Release", "Deadly Sneak Attack", "Sly Striker", "Watcher", "Spirit Effect", "Spirit Spellcasting", "Spirit Cantrips", "Spirit Feat", "Spirit Growth", "Creature Manifest", "Imbue Barrier", "Release Manifest", "Object Manifest", "Esper Ascension", "Esper", "Esper Branch", "Esper Forma", "Ascension Feat", "Eidolon", "Eidolon Branch", "Eidolon Forma", "Automaton", "Type", "Caster", "CP", "SP", "HP", "BR", "Archetype", "Saves", "Weapon", "Armor", "Skill", "Spell", "Automaton Core Features", "Archetype Feat", "General Feat", "Construct Caster Points", "Construct Mentality", "Construct Spellcasting", "Beast Growth", "", "", "Brute", "Type", "Caster", "CP", "SP", "HP", "BR", "Archetype", "Saves", "Weapon", "Armor", "Skill", "Spell", "Brute Core Features", "Beast Feat", "Beast Growth", "", "", "Temperament Feat", "Bulwark", "Type", "Caster", "CP", "SP", "HP", "BR", "Archetype", "Saves", "Weapon", "Armor", "Skill", "Spell", "Brute Core Features", "Beast Feat", "Beast Growth", "", "", "Temperament Feat", "Prowler", "Type", "Caster", "CP", "SP", "HP", "BR", "Archetype", "Saves", "Weapon", "Armor", "Skill", "Spell", "Brute Core Features", "Beast Feat", "Beast Growth", "", "", "Temperament Feat", "Armed Rest", "Shield Block", "Death Defiance", "Protect Ally", "Second Wind", "Nimble Shield Hand", "Shielded Stride", "Defenders Blade", "Gladiator", "Fancy Moves", "Play to the Crowd", "Stage Fighting", "Call Your Shot", "Knight", "Harrying Strike", "Shoulder Catastrophe", "Stave Off Catastrophe", "Zealot", "Zeal", "Devoted Focus", "Zealous Presence", "Surge Beyond Death", "Ethereal Mantle", "Extra Mantle", "Guarding Spell", "Deflecting Mantle", "Durable Wards", "Undying Sentinel", "Fast Movement", "Abjurant", "Warding Ether", "Reactive Warding", "Nullifying Ward", "Stormguard", "Lashing Guard", "Restoring Guard", "Whipping Guard", "Unyielding Ward", "Combat Superiority", "Power Strike", "Running Tackle", "Brutal Finish", "Berserker", "Frenzy", "No Escape", "Mindless Rage", "Retaliation", "Duelist", "Fancy Footwork", "Always Ready", "Duelists Stance", "Dueling Parry", "Panache", "Dueling Dance", "Master Duelist", "Mauler", "Knock Away", "Clear the Way", "Knock Down", "Avalanche Strike", "Wrestler", "Combat Grab", "Crushing Grab", "Suplex", "Clinch Strike", "Whirling Throw", "Aerial Piledriver", "Exploit Strike", "Superior Mobility", "Swift Tracker", "Camouflage", "Bounty Hunter", "Mark Quarry", "Relentless Pursuit", "Stalker", "Unerring Hunt", "End the Hunt", "Lowland Stalker", "Hit And Run", "Skirmishers Stealth", "Sudden Strike", "Spellcharge", "Spellcharge Analysis", "Spellstrike", "Knowledge is Power", "Spellshielding", "Recognize Threat", "Cut Through Resistance", "Battlemage", "Mystic Weapon", "Aspected Strike", "Energy Weapon", "Magic Strike", "Elemental Fist", "Aspected Blow", "Skystep Stance", "Flaring Fists", "Skystep Strike", "Ethereal Blade", "Ghost Strike", "Astral Sight", "Conscious Projection", "Ethereal Assassin", "Improved Astral Sight", "Ether Sense", "Paramedic", "Treat Condition", "Dutiful Healer", "Planes Walker", "Resuscitate", "Supreme Healing", "Chirurgeon", "Quickcraft Medicine", "Strategic Diagnosis", "Supported Healing", "On Site Support", "Debilitating Strike", "Etherealist", "Animal Companion", "Mana Gem Casting", "Astral Companionship", "Exorcism", "Spirit Shield", "Life Cleric", "Disciple of Life", "Blessed Healer", "Heroic Recovery", "Shield Sage", "Warding Spell", "Barrier Cover", "Extended Cover", "Negating Cover", "Ideation", "Sage Knowledge", "Inspired Knowledge", "Branched Knowledge", "Incredible Recollection", "Sustaining Magic", "Specialized Spells", "Artificer", "Permanent Items", "Free Structure", "Durable Structures", "War Mage", "Sculpt Spell", "Elemental Perfection", "Empowered Evocation", "Overchannel Spell", "Arcane Points", "Empowered Spell", "Split Shot", "Arcane Metamagic", "Steady Spellcasting", "Twinned Spell", "Echoing Magic", "Favored Soul", "Arcane Favor", "Ideal Favor", "Vital Favor", "Favored Luck", "Bend Fate", "Reactive Favor", "Doubled Favor", "Warlock", "Warlock Cantrips", "Eldritch Spear", "Eldritch Burst", "Seeking Bolt", "Eldritch Mastery", "Empty Vessel", "Phantom Shroud", "Acceleration Shroud", "Evolution Shroud", "Conduit", "Multiple Manifestations", "Pact Slot", "Reactive Companion", "Synthesist", "Locked Vessel", "Suppress Appearance", "Assume Control", "True Form Shroud", "Chakra", "Clever Gambit", "Cat Stance", "Climbers Stance", "Flight Stance", "Flurry of Blows", "Evasive Dash", "Graceful Leaper", "Light Step", "Follow-up Strike", "Slow Fall", "Flash Strike", "Acrobat", "Contortionist", "Dodge Away", "Tumbling Strike", "Acrobatic Reflexes", "Drunken Master", "Tipsy Sway", "Leap To Your Feet", "Redirect Attack", "Drunkards Luck", "Intoxicated Flurry", "Thief", "Fast Hands", "Second-Story Work", "Supreme Sneak", "Thiefs Finesse", "Rally", "Arcane Rally", "Motivating Rally", "Tactical Rally", "Rally Resolve", "Marshal Strike", "Rally Battle Focus", "Snap Out Of It", "Rally Death Defiance", "Rallying Charge", "Back to Back", "Coordinated Charge", "Bloodrager", "Rally Blade Thirst", "Deadly Blade Thirst", "Tactician", "Bait and Switch", "Rally Speed", "Know Your Enemy", "Improved Combat Superiority", "Relentless", "Virtuoso", "Rally Competence", "Distract", "Rally Resistance", "Peerless Skill", "Ambush Artist", "Sneak Attack", "First Awareness", "Surprise Attack", "Cunning Action", "Fleeting Shadow", "Deft Strike", "Uncanny Dodge", "Opportunistic", "Assassin", "Infiltration Expertise", "Death Strike", "Assassinate", "Phantom", "Extended Cloak", "Cloaking Expert", "Unseen Strike", "Weasel", "Lost in the Crowd", "Crowd Mastery", "Expeditious Advance", "Strategize", "Ambush Spell", "Strategic Strike", "Strategic Seek", "Assess Motive", "Intuit Presence", "Magical Ambush", "Detective", "Ear for Deceit", "Discerning Eye", "Unerring Eye", "Spellthief", "Steal Spell", "Greater Steal Spell", "Whisper", "Quick Change", "Cloaking Chakra", "Silent Message", "Unnoticed", "Craftsmans Adept Training", "Craftsmans Elite Training", "Craftsmans Master Training", "Craftsmans Legendary Training", "Divine Grace", "Restoring Veil", "Gift of Heaven", "Mercy", "Armament Wall", "Greater Mercy", "Spiritual Guardian", "Hypnotic Stare", "Alluring Hypnotism", "Possession", "Hypnotic Charm", "Influence Disaster", "Shadow Form", "Distant Tether", "Shadowcaster", "Shadow Jump", "Manifest Shade", "Shadow Walk", "Attuned Terrain", "Wild Empathy", "Wild Shape", "Green Empathy", "Commune with Nature", "Bestial Rush", "Elemental Strikes", "Hustle", "Spirit Rage", "Spirit Frenzy", "Sunder Spell"];
-    let searchFeaturesList = ["", "skill feat", "combat feat", "spell feat", "arcane physique", "elegant courtier", "health assessor", "hidden cunning", "magic thief", "martial exercise", "perceptive tracker", "physical training", "improved surge", "safeguard", "battle magic", "dark sight", "subtle spell", "wary fighter", "speedy", "natural explorer", "favored terrain", "wild stride", "tactical wit", "double strike", "companion bond", "favored enemy", "arcane destruction", "precision attack", "precision shot", "protective ward", "tandem action", "determination", "lucky", "unlucky", "more luck", "alert", "blind fighting", "critical crusher", "critical follow up", "critical piercer", "critical slasher", "dual wielder", "durable", "fleet", "interception", "improved initiative", "lunge", "armor flexibility", "impassable wall stance", "quick draw", "keen shot", "shield bash", "skirmisher", "take aim", "tough", "unarmed fighting", "weapon legend", "axe mastery", "fell handed", "blade mastery", "bladed parry", "flail mastery", "shield sweep", "hammer mastery", "hammer step", "pistol mastery", "pistolero", "polearm mastery", "break the charge", "polearm bunt", "rifle mastery", "marksmans snipe", "ambush", "brace", "evasive footwork", "parry", "riposte", "distracting strike", "menacing strike", "restraining strike", "inspiring leader", "alacritous mantle", "mantle of protection", "spell parry", "parting shot", "moment of clarity", "wounded mantle", "cleave", "friendly toss", "shared stratagem", "strategic assessment", "emergency ward", "exorcizing strike", "stunning fist", "wall run", "water step", "twist the knife", "debilitating attack", "analyze weakness", "extra superiority", "dextrous initiative", "exacting strike", "sudden charge", "assisting shot", "barreling charge", "double shot", "dual-handed assault", "quick reversal", "triple shot", "disorienting opening", "incredible aim", "mobile shot stance", "leaping strike", "combat reflexes", "debilitating shot", "disruptive stance", "paragons guard", "spring attack", "desperate finisher", "shield warden", "reflexive shield", "quick shield block", "armor mastery", "determination", "lucky", "unlucky", "more luck", "aimed throw", "hunters pounce", "cat fall", "charming liar", "concealing legerdemain", "courtly graces", "experienced tracker", "fascinating performance", "group coercion", "group influence", "impressive performance", "intimidating glare", "knowledge training", "lengthy diversion", "multilingual", "pickpocket", "quick coercion", "quick jump", "skill training", "steady balance", "streetwise", "subtle theft", "upstage", "gold infusion", "armor assist", "ethercharged athlete", "known weaknesses", "thats odd", "nimble crawl", "foil senses", "influence nature", "kip up", "quick climb", "quick recognition", "recognize spell", "quick swim", "quick unlock", "shameless request", "armored stealth", "backup disguise", "confabulator", "quick disguise", "rapid mantel", "swift sneak", "terrified retreat", "wall jump", "careful spell", "conceal spell", "distant spell", "extended spell", "memory casting", "quickened spell", "seeking spell", "unerring spell", "recover spell", "branching out", "signature spell", "quick surge", "slot support", "dual elementalist", "spellcharged concentration", "murksight", "extra ideations", "ideal spellslots", "dandy", "distracting flattery", "never tire", "fabricated connections", "linguist", "multilingual cipher", "phonetic training", "spot translate", "analyze idiolect", "crude communication", "loremaster", "guiding knowledge", "assured knowledge", "pirate", "rope runner", "walk the plank", "ranger", "acclimatization", "sure foot", "terrain master", "tyrant", "youre next", "conquering presence", "subjugation", "shatter defenses", "paralyzing fear", "fearsome brute", "keen instinct", "relentless endurance", "pounce", "thick skin", "specialized training", "ki battery", "city secrets", "officer rank", "fast research", "ships passage", "wanderer", "networking", "mercenary life", "by popular demand", "life of crime", "false identity", "practiced craftsman", "retainers", "spiritual guidance", "slam", "claws", "talons", "bite", "horn ram", "stomp", "acid sling", "soma armor", "clumsy", "glide", "tiny creature", "small creature", "large creature", "carapice armor", "improved scent", "improved sight", "echolocation", "rolling tackle", "tremorsense", "clear body", "acid body", "constrict", "material sight", "extended sight", "horizon sight", "spell trainer", "essential", "extra sp", "caranu form", "cashmechong form", "cesplang form", "colosshu form", "dekying form", "geltingwa form", "holjo form", "hookma form", "plumhou form", "rackshur form", "serpelu form", "stinbian form", "forma armor", "forma aquan", "forma avian", "forma bite", "forma claws", "forma fossorian", "forma sense", "forma spike", "forma terran", "forma toxin", "dark sight", "terran movement", "spirits snarl", "enhanced burrow", "enhanced flight", "enhanced climb", "enhanced swim", "enhanced armor", "toxin shield", "enhanced scent", "bestow burrow", "bestow flight", "bestow fins", "bestow horn", "remote manifestation", "planar beacon", "weaken will", "spirit strikes", "enhanced spirit strikes", "greater spirit strikes", "bestow armor", "arcane surplus", "empowering reserves", "arcane bolt", "ethereal voice", "calculated surge", "mana font", "bountiful ideas", "wizards studies", "focused breathing", "blocking expertise", "steady breath", "deadly spellstrike", "spellcharge battery", "spellward armor", "swift spellstrike", "unarmored defense", "vital mantle", "fighter superiority", "maneuver master", "deadly maneuvers", "deadly power strike", "superior prowess", "swift power strike", "deadly strategy", "ongoing strategy", "martial artist", "patient defense", "open chakra", "unarmored movement", "deadly flurry", "forbidden release", "deadly sneak attack", "sly striker", "watcher", "spirit effect", "spirit spellcasting", "spirit cantrips", "spirit feat", "spirit growth", "creature manifest", "imbue barrier", "release manifest", "object manifest", "esper ascension", "esper", "esper branch", "esper forma", "ascension feat", "eidolon", "eidolon branch", "eidolon forma", "automaton", "type", "caster", "cp", "sp", "hp", "br", "archetype", "saves", "weapon", "armor", "skill", "spell", "automaton core features", "archetype feat", "general feat", "construct caster points", "construct mentality", "construct spellcasting", "beast growth", "", "", "brute", "type", "caster", "cp", "sp", "hp", "br", "archetype", "saves", "weapon", "armor", "skill", "spell", "brute core features", "beast feat", "beast growth", "", "", "temperament feat", "bulwark", "type", "caster", "cp", "sp", "hp", "br", "archetype", "saves", "weapon", "armor", "skill", "spell", "brute core features", "beast feat", "beast growth", "", "", "temperament feat", "prowler", "type", "caster", "cp", "sp", "hp", "br", "archetype", "saves", "weapon", "armor", "skill", "spell", "brute core features", "beast feat", "beast growth", "", "", "temperament feat", "armed rest", "shield block", "death defiance", "protect ally", "second wind", "nimble shield hand", "shielded stride", "defenders blade", "gladiator", "fancy moves", "play to the crowd", "stage fighting", "call your shot", "knight", "harrying strike", "shoulder catastrophe", "stave off catastrophe", "zealot", "zeal", "devoted focus", "zealous presence", "surge beyond death", "ethereal mantle", "extra mantle", "guarding spell", "deflecting mantle", "durable wards", "undying sentinel", "fast movement", "abjurant", "warding ether", "reactive warding", "nullifying ward", "stormguard", "lashing guard", "restoring guard", "whipping guard", "unyielding ward", "combat superiority", "power strike", "running tackle", "brutal finish", "berserker", "frenzy", "no escape", "mindless rage", "retaliation", "duelist", "fancy footwork", "always ready", "duelists stance", "dueling parry", "panache", "dueling dance", "master duelist", "mauler", "knock away", "clear the way", "knock down", "avalanche strike", "wrestler", "combat grab", "crushing grab", "suplex", "clinch strike", "whirling throw", "aerial piledriver", "exploit strike", "superior mobility", "swift tracker", "camouflage", "bounty hunter", "mark quarry", "relentless pursuit", "stalker", "unerring hunt", "end the hunt", "lowland stalker", "hit and run", "skirmishers stealth", "sudden strike", "spellcharge", "spellcharge analysis", "spellstrike", "knowledge is power", "spellshielding", "recognize threat", "cut through resistance", "battlemage", "mystic weapon", "aspected strike", "energy weapon", "magic strike", "elemental fist", "aspected blow", "skystep stance", "flaring fists", "skystep strike", "ethereal blade", "ghost strike", "astral sight", "conscious projection", "ethereal assassin", "improved astral sight", "ether sense", "paramedic", "treat condition", "dutiful healer", "planes walker", "resuscitate", "supreme healing", "chirurgeon", "quickcraft medicine", "strategic diagnosis", "supported healing", "on site support", "debilitating strike", "etherealist", "animal companion", "mana gem casting", "astral companionship", "exorcism", "spirit shield", "life cleric", "disciple of life", "blessed healer", "heroic recovery", "shield sage", "warding spell", "barrier cover", "extended cover", "negating cover", "ideation", "sage knowledge", "inspired knowledge", "branched knowledge", "incredible recollection", "sustaining magic", "specialized spells", "artificer", "permanent items", "free structure", "durable structures", "war mage", "sculpt spell", "elemental perfection", "empowered evocation", "overchannel spell", "arcane points", "empowered spell", "split shot", "arcane metamagic", "steady spellcasting", "twinned spell", "echoing magic", "favored soul", "arcane favor", "ideal favor", "vital favor", "favored luck", "bend fate", "reactive favor", "doubled favor", "warlock", "warlock cantrips", "eldritch spear", "eldritch burst", "seeking bolt", "eldritch mastery", "empty vessel", "phantom shroud", "acceleration shroud", "evolution shroud", "conduit", "multiple manifestations", "pact slot", "reactive companion", "synthesist", "locked vessel", "suppress appearance", "assume control", "true form shroud", "chakra", "clever gambit", "cat stance", "climbers stance", "flight stance", "flurry of blows", "evasive dash", "graceful leaper", "light step", "follow-up strike", "slow fall", "flash strike", "acrobat", "contortionist", "dodge away", "tumbling strike", "acrobatic reflexes", "drunken master", "tipsy sway", "leap to your feet", "redirect attack", "drunkards luck", "intoxicated flurry", "thief", "fast hands", "second-story work", "supreme sneak", "thiefs finesse", "rally", "arcane rally", "motivating rally", "tactical rally", "rally resolve", "marshal strike", "rally battle focus", "snap out of it", "rally death defiance", "rallying charge", "back to back", "coordinated charge", "bloodrager", "rally blade thirst", "deadly blade thirst", "tactician", "bait and switch", "rally speed", "know your enemy", "improved combat superiority", "relentless", "virtuoso", "rally competence", "distract", "rally resistance", "peerless skill", "ambush artist", "sneak attack", "first awareness", "surprise attack", "cunning action", "fleeting shadow", "deft strike", "uncanny dodge", "opportunistic", "assassin", "infiltration expertise", "death strike", "assassinate", "phantom", "extended cloak", "cloaking expert", "unseen strike", "weasel", "lost in the crowd", "crowd mastery", "expeditious advance", "strategize", "ambush spell", "strategic strike", "strategic seek", "assess motive", "intuit presence", "magical ambush", "detective", "ear for deceit", "discerning eye", "unerring eye", "spellthief", "steal spell", "greater steal spell", "whisper", "quick change", "cloaking chakra", "silent message", "unnoticed", "craftsmans adept training", "craftsmans elite training", "craftsmans master training", "craftsmans legendary training", "divine grace", "restoring veil", "gift of heaven", "mercy", "armament wall", "greater mercy", "spiritual guardian", "hypnotic stare", "alluring hypnotism", "possession", "hypnotic charm", "influence disaster", "shadow form", "distant tether", "shadowcaster", "shadow jump", "manifest shade", "shadow walk", "attuned terrain", "wild empathy", "wild shape", "green empathy", "commune with nature", "bestial rush", "elemental strikes", "hustle", "spirit rage", "spirit frenzy", "sunder spell"];
+    let featuresList = ["", "Skill Feat", "Combat Feat", "Spell Feat", "Arcane Physique", "Elegant Courtier", "Health Assessor", "Hidden Cunning", "Magic Thief", "Martial Exercise", "Perceptive Tracker", "Physical Training", "Improved Surge", "Safeguard", "Battle Magic", "Dark Sight", "Subtle Spell", "Wary Fighter", "Speedy", "Natural Explorer", "Favored Terrain", "Wild Stride", "Tactical Wit", "Double Strike", "Companion Bond", "Favored Enemy", "Arcane Destruction", "Precision Attack", "Precision Shot", "Protective Ward", "Tandem Action", "Determination", "Lucky", "Unlucky", "More Luck", "Alert", "Blind Fighting", "Critical Crusher", "Critical Follow Up", "Critical Piercer", "Critical Slasher", "Dual Wielder", "Durable", "Fleet", "Interception", "Improved Initiative", "Lunge", "Armor Flexibility", "Impassable Wall Stance", "Quick Draw", "Keen Shot", "Shield Bash", "Skirmisher", "Take Aim", "Tough", "Unarmed Fighting", "Weapon Legend", "Axe Mastery", "Fell Handed", "Blade Mastery", "Bladed Parry", "Flail Mastery", "Shield Sweep", "Hammer Mastery", "Hammer Step", "Pistol Mastery", "Pistolero", "Polearm Mastery", "Break the Charge", "Polearm Bunt", "Rifle Mastery", "Marksmans Snipe", "Ambush", "Brace", "Evasive Footwork", "Parry", "Riposte", "Distracting Strike", "Menacing Strike", "Restraining Strike", "Inspiring Leader", "Alacritous Mantle", "Mantle of Protection", "Spell Parry", "Parting Shot", "Moment of Clarity", "Wounded Mantle", "Cleave", "Friendly Toss", "Shared Stratagem", "Strategic Assessment", "Emergency Ward", "Exorcizing Strike", "Stunning Fist", "Wall Run", "Water Step", "Twist the Knife", "Debilitating Attack", "Analyze Weakness", "Extra Superiority", "Dextrous Initiative", "Exacting Strike", "Sudden Charge", "Assisting Shot", "Barreling Charge", "Double Shot", "Dual-Handed Assault", "Quick Reversal", "Triple Shot", "Disorienting Opening", "Incredible Aim", "Mobile Shot Stance", "Leaping Strike", "Combat Reflexes", "Debilitating Shot", "Disruptive Stance", "Paragons Guard", "Spring Attack", "Desperate Finisher", "Shield Warden", "Reflexive Shield", "Quick Shield Block", "Armor Mastery", "Determination", "Lucky", "Unlucky", "More Luck", "Aimed Throw", "Hunters Pounce", "Cat Fall", "Charming Liar", "Concealing Legerdemain", "Courtly Graces", "Experienced Tracker", "Fascinating Performance", "Group Coercion", "Group Influence", "Impressive Performance", "Intimidating Glare", "Knowledge Training", "Lengthy Diversion", "Multilingual", "Pickpocket", "Quick Coercion", "Quick Jump", "Skill Training", "Steady Balance", "Streetwise", "Subtle Theft", "Upstage", "Gold Infusion", "Armor Assist", "Ethercharged Athlete", "Known Weaknesses", "Thats Odd", "Nimble Crawl", "Foil Senses", "Influence Nature", "Kip Up", "Quick Climb", "Quick Recognition", "Recognize Spell", "Quick Swim", "Quick Unlock", "Shameless Request", "Armored Stealth", "Backup Disguise", "Confabulator", "Quick Disguise", "Rapid Mantel", "Swift Sneak", "Terrified Retreat", "Wall Jump", "Careful Spell", "Conceal Spell", "Distant Spell", "Extended Spell", "Memory Casting", "Quickened Spell", "Seeking Spell", "Unerring Spell", "Recover Spell", "Branching Out", "Signature Spell", "Quick Surge", "Slot Support", "Dual Elementalist", "Spellcharged Concentration", "Murksight", "Extra Ideations", "Ideal Spellslots", "Dandy", "Distracting Flattery", "Never Tire", "Fabricated Connections", "Linguist", "Multilingual Cipher", "Phonetic Training", "Spot Translate", "Analyze Idiolect", "Crude Communication", "Loremaster", "Guiding Knowledge", "Assured Knowledge", "Pirate", "Rope Runner", "Walk the Plank", "Ranger", "Acclimatization", "Sure Foot", "Terrain Master", "Tyrant", "Youre Next", "Conquering Presence", "Subjugation", "Shatter Defenses", "Paralyzing Fear", "Fearsome Brute", "Keen Instinct", "Relentless Endurance", "Pounce", "Thick Skin", "Specialized Training", "Ki Battery", "City Secrets", "Officer Rank", "Fast Research", "Ships Passage", "Wanderer", "Networking", "Mercenary Life", "By Popular Demand", "Life of Crime", "False Identity", "Practiced Craftsman", "Retainers", "Spiritual Guidance", "Slam", "Claws", "Talons", "Bite", "Horn Ram", "Stomp", "Acid Sling", "Soma Armor", "Clumsy", "Glide", "Tiny Creature", "Small Creature", "Large Creature", "Carapice Armor", "Improved Scent", "Improved Sight", "Echolocation", "Rolling Tackle", "Tremorsense", "Clear Body", "Acid Body", "Constrict", "Material Sight", "Extended Sight", "Horizon Sight", "Spell Trainer", "Essential", "Extra SP", "Caranu Form", "Cashmechong Form", "Cesplang Form", "Colosshu Form", "Dekying Form", "Geltingwa Form", "Holjo Form", "Hookma Form", "Plumhou Form", "Rackshur Form", "Serpelu Form", "Stinbian Form", "Forma Armor", "Forma Aquan", "Forma Avian", "Forma Bite", "Forma Claws", "Forma Fossorian", "Forma Sense", "Forma Spike", "Forma Terran", "Forma Toxin", "Dark Sight", "Terran Movement", "Spirits Snarl", "Enhanced Burrow", "Enhanced Flight", "Enhanced Climb", "Enhanced Swim", "Enhanced Armor", "Toxin Shield", "Enhanced Scent", "Bestow Burrow", "Bestow Flight", "Bestow Fins", "Bestow Horn", "Remote Manifestation", "Planar Beacon", "Weaken Will", "Spirit Strikes", "Enhanced Spirit Strikes", "Greater Spirit Strikes", "Bestow Armor", "Arcane Surplus", "Empowering Reserves", "Arcane Bolt", "Ethereal Voice", "Calculated Surge", "Mana Font", "Bountiful Ideas", "Wizards Studies", "Focused Breathing", "Blocking Expertise", "Steady Breath", "Deadly Spellstrike", "Spellcharge Battery", "Spellward Armor", "Swift Spellstrike", "Unarmored Defense", "Vital Mantle", "Fighter Superiority", "Maneuver Master", "Deadly Maneuvers", "Deadly Power Strike", "Superior Prowess", "Swift Power Strike", "Deadly Strategy", "Ongoing Strategy", "Martial Artist", "Patient Defense", "Open Chakra", "Unarmored Movement", "Deadly Flurry", "Forbidden Release", "Deadly Sneak Attack", "Sly Striker", "Watcher", "Spirit Effect", "Spirit Spellcasting", "Spirit Cantrips", "Spirit Feat", "Spirit Growth", "Watcher Growth Caps", "Creature Manifest", "Imbue Barrier", "Release Manifest", "Object Manifest", "Esper Ascension", "Esper", "Esper Branch", "Esper Forma", "Ascension Feat", "Eidolon", "Eidolon Branch", "Eidolon Forma", "Automaton", "Type", "Caster", "CP", "SP", "HP", "BR", "ASCap", "Archetype", "Saves", "Weapon", "Armor", "Skill", "Spell", "Automaton Core Features", "Archetype Feat", "General Feat", "Construct Caster Points", "Construct Mentality", "Construct Spellcasting", "Beast Growth", "Brute", "Type", "Caster", "CP", "SP", "HP", "BR", "ASCap", "Archetype", "Saves", "Weapon", "Armor", "Skill", "Spell", "Brute Core Features", "Beast Feat", "Beast Growth", "Temperament Feat", "Bulwark", "Type", "Caster", "CP", "SP", "HP", "BR", "ASCap", "Archetype", "Saves", "Weapon", "Armor", "Skill", "Spell", "Brute Core Features", "Beast Feat", "Beast Growth", "Temperament Feat", "Prowler", "Type", "Caster", "CP", "SP", "HP", "ASCap", "BR", "Archetype", "Saves", "Weapon", "Armor", "Skill", "Spell", "Brute Core Features", "Beast Feat", "Beast Growth", "Temperament Feat", "Armed Rest", "Shield Block", "Death Defiance", "Protect Ally", "Second Wind", "Nimble Shield Hand", "Shielded Stride", "Defenders Blade", "Gladiator", "Fancy Moves", "Play to the Crowd", "Stage Fighting", "Call Your Shot", "Knight", "Harrying Strike", "Shoulder Catastrophe", "Stave Off Catastrophe", "Zealot", "Zeal", "Devoted Focus", "Zealous Presence", "Surge Beyond Death", "Ethereal Mantle", "Extra Mantle", "Guarding Spell", "Deflecting Mantle", "Durable Wards", "Undying Sentinel", "Fast Movement", "Abjurant", "Warding Ether", "Reactive Warding", "Nullifying Ward", "Stormguard", "Lashing Guard", "Restoring Guard", "Whipping Guard", "Unyielding Ward", "Combat Superiority", "Power Strike", "Running Tackle", "Brutal Finish", "Berserker", "Frenzy", "No Escape", "Mindless Rage", "Retaliation", "Duelist", "Fancy Footwork", "Always Ready", "Duelists Stance", "Dueling Parry", "Panache", "Dueling Dance", "Master Duelist", "Mauler", "Knock Away", "Clear the Way", "Knock Down", "Avalanche Strike", "Wrestler", "Combat Grab", "Crushing Grab", "Suplex", "Clinch Strike", "Whirling Throw", "Aerial Piledriver", "Exploit Strike", "Superior Mobility", "Swift Tracker", "Camouflage", "Bounty Hunter", "Mark Quarry", "Relentless Pursuit", "Stalker", "Unerring Hunt", "End the Hunt", "Lowland Stalker", "Hit And Run", "Skirmishers Stealth", "Sudden Strike", "Spellcharge", "Spellcharge Analysis", "Spellstrike", "Knowledge is Power", "Spellshielding", "Recognize Threat", "Cut Through Resistance", "Battlemage", "Mystic Weapon", "Aspected Strike", "Energy Weapon", "Magic Strike", "Elemental Fist", "Aspected Blow", "Skystep Stance", "Flaring Fists", "Skystep Strike", "Ethereal Blade", "Ghost Strike", "Astral Sight", "Conscious Projection", "Ethereal Assassin", "Improved Astral Sight", "Ether Sense", "Paramedic", "Treat Condition", "Dutiful Healer", "Planes Walker", "Resuscitate", "Supreme Healing", "Chirurgeon", "Quickcraft Medicine", "Strategic Diagnosis", "Supported Healing", "On Site Support", "Debilitating Strike", "Etherealist", "Animal Companion", "Mana Gem Casting", "Astral Companionship", "Exorcism", "Spirit Shield", "Life Cleric", "Disciple of Life", "Blessed Healer", "Heroic Recovery", "Shield Sage", "Warding Spell", "Barrier Cover", "Extended Cover", "Negating Cover", "Ideation", "Sage Knowledge", "Inspired Knowledge", "Branched Knowledge", "Incredible Recollection", "Sustaining Magic", "Specialized Spells", "Artificer", "Permanent Items", "Free Structure", "Durable Structures", "War Mage", "Sculpt Spell", "Elemental Perfection", "Empowered Evocation", "Overchannel Spell", "Arcane Points", "Empowered Spell", "Split Shot", "Arcane Metamagic", "Steady Spellcasting", "Twinned Spell", "Echoing Magic", "Favored Soul", "Arcane Favor", "Ideal Favor", "Vital Favor", "Favored Luck", "Bend Fate", "Reactive Favor", "Doubled Favor", "Warlock", "Warlock Cantrips", "Eldritch Spear", "Eldritch Burst", "Seeking Bolt", "Eldritch Mastery", "Empty Vessel", "Phantom Shroud", "Acceleration Shroud", "Evolution Shroud", "Conduit", "Multiple Manifestations", "Pact Slot", "Reactive Companion", "Synthesist", "Locked Vessel", "Suppress Appearance", "Assume Control", "True Form Shroud", "Chakra", "Clever Gambit", "Cat Stance", "Climbers Stance", "Flight Stance", "Flurry of Blows", "Evasive Dash", "Graceful Leaper", "Light Step", "Follow-up Strike", "Slow Fall", "Flash Strike", "Acrobat", "Contortionist", "Dodge Away", "Tumbling Strike", "Acrobatic Reflexes", "Drunken Master", "Tipsy Sway", "Leap To Your Feet", "Redirect Attack", "Drunkards Luck", "Intoxicated Flurry", "Thief", "Fast Hands", "Second-Story Work", "Supreme Sneak", "Thiefs Finesse", "Rally", "Arcane Rally", "Motivating Rally", "Tactical Rally", "Rally Resolve", "Marshal Strike", "Rally Battle Focus", "Snap Out Of It", "Rally Death Defiance", "Rallying Charge", "Back to Back", "Coordinated Charge", "Bloodrager", "Rally Blade Thirst", "Deadly Blade Thirst", "Tactician", "Bait and Switch", "Rally Speed", "Know Your Enemy", "Improved Combat Superiority", "Relentless", "Virtuoso", "Rally Competence", "Distract", "Rally Resistance", "Peerless Skill", "Ambush Artist", "Sneak Attack", "First Awareness", "Surprise Attack", "Cunning Action", "Fleeting Shadow", "Deft Strike", "Uncanny Dodge", "Opportunistic", "Assassin", "Infiltration Expertise", "Death Strike", "Assassinate", "Phantom", "Extended Cloak", "Cloaking Expert", "Unseen Strike", "Weasel", "Lost in the Crowd", "Crowd Mastery", "Expeditious Advance", "Strategize", "Ambush Spell", "Strategic Strike", "Strategic Seek", "Assess Motive", "Intuit Presence", "Magical Ambush", "Detective", "Ear for Deceit", "Discerning Eye", "Unerring Eye", "Spellthief", "Steal Spell", "Greater Steal Spell", "Whisper", "Quick Change", "Cloaking Chakra", "Silent Message", "Unnoticed", "Craftsmans Adept Training", "Craftsmans Elite Training", "Craftsmans Master Training", "Craftsmans Legendary Training", "Divine Grace", "Restoring Veil", "Gift of Heaven", "Mercy", "Armament Wall", "Greater Mercy", "Spiritual Guardian", "Hypnotic Stare", "Alluring Hypnotism", "Possession", "Hypnotic Charm", "Influence Disaster", "Shadow Form", "Distant Tether", "Shadowcaster", "Shadow Jump", "Manifest Shade", "Shadow Walk", "Attuned Terrain", "Wild Empathy", "Wild Shape", "Green Empathy", "Commune with Nature", "Bestial Rush", "Elemental Strikes", "Hustle", "Spirit Rage", "Spirit Frenzy", "Sunder Spell"];
+    let searchFeaturesList = ["", "skill feat", "combat feat", "spell feat", "arcane physique", "elegant courtier", "health assessor", "hidden cunning", "magic thief", "martial exercise", "perceptive tracker", "physical training", "improved surge", "safeguard", "battle magic", "dark sight", "subtle spell", "wary fighter", "speedy", "natural explorer", "favored terrain", "wild stride", "tactical wit", "double strike", "companion bond", "favored enemy", "arcane destruction", "precision attack", "precision shot", "protective ward", "tandem action", "determination", "lucky", "unlucky", "more luck", "alert", "blind fighting", "critical crusher", "critical follow up", "critical piercer", "critical slasher", "dual wielder", "durable", "fleet", "interception", "improved initiative", "lunge", "armor flexibility", "impassable wall stance", "quick draw", "keen shot", "shield bash", "skirmisher", "take aim", "tough", "unarmed fighting", "weapon legend", "axe mastery", "fell handed", "blade mastery", "bladed parry", "flail mastery", "shield sweep", "hammer mastery", "hammer step", "pistol mastery", "pistolero", "polearm mastery", "break the charge", "polearm bunt", "rifle mastery", "marksmans snipe", "ambush", "brace", "evasive footwork", "parry", "riposte", "distracting strike", "menacing strike", "restraining strike", "inspiring leader", "alacritous mantle", "mantle of protection", "spell parry", "parting shot", "moment of clarity", "wounded mantle", "cleave", "friendly toss", "shared stratagem", "strategic assessment", "emergency ward", "exorcizing strike", "stunning fist", "wall run", "water step", "twist the knife", "debilitating attack", "analyze weakness", "extra superiority", "dextrous initiative", "exacting strike", "sudden charge", "assisting shot", "barreling charge", "double shot", "dual-handed assault", "quick reversal", "triple shot", "disorienting opening", "incredible aim", "mobile shot stance", "leaping strike", "combat reflexes", "debilitating shot", "disruptive stance", "paragons guard", "spring attack", "desperate finisher", "shield warden", "reflexive shield", "quick shield block", "armor mastery", "determination", "lucky", "unlucky", "more luck", "aimed throw", "hunters pounce", "cat fall", "charming liar", "concealing legerdemain", "courtly graces", "experienced tracker", "fascinating performance", "group coercion", "group influence", "impressive performance", "intimidating glare", "knowledge training", "lengthy diversion", "multilingual", "pickpocket", "quick coercion", "quick jump", "skill training", "steady balance", "streetwise", "subtle theft", "upstage", "gold infusion", "armor assist", "ethercharged athlete", "known weaknesses", "thats odd", "nimble crawl", "foil senses", "influence nature", "kip up", "quick climb", "quick recognition", "recognize spell", "quick swim", "quick unlock", "shameless request", "armored stealth", "backup disguise", "confabulator", "quick disguise", "rapid mantel", "swift sneak", "terrified retreat", "wall jump", "careful spell", "conceal spell", "distant spell", "extended spell", "memory casting", "quickened spell", "seeking spell", "unerring spell", "recover spell", "branching out", "signature spell", "quick surge", "slot support", "dual elementalist", "spellcharged concentration", "murksight", "extra ideations", "ideal spellslots", "dandy", "distracting flattery", "never tire", "fabricated connections", "linguist", "multilingual cipher", "phonetic training", "spot translate", "analyze idiolect", "crude communication", "loremaster", "guiding knowledge", "assured knowledge", "pirate", "rope runner", "walk the plank", "ranger", "acclimatization", "sure foot", "terrain master", "tyrant", "youre next", "conquering presence", "subjugation", "shatter defenses", "paralyzing fear", "fearsome brute", "keen instinct", "relentless endurance", "pounce", "thick skin", "specialized training", "ki battery", "city secrets", "officer rank", "fast research", "ships passage", "wanderer", "networking", "mercenary life", "by popular demand", "life of crime", "false identity", "practiced craftsman", "retainers", "spiritual guidance", "slam", "claws", "talons", "bite", "horn ram", "stomp", "acid sling", "soma armor", "clumsy", "glide", "tiny creature", "small creature", "large creature", "carapice armor", "improved scent", "improved sight", "echolocation", "rolling tackle", "tremorsense", "clear body", "acid body", "constrict", "material sight", "extended sight", "horizon sight", "spell trainer", "essential", "extra sp", "caranu form", "cashmechong form", "cesplang form", "colosshu form", "dekying form", "geltingwa form", "holjo form", "hookma form", "plumhou form", "rackshur form", "serpelu form", "stinbian form", "forma armor", "forma aquan", "forma avian", "forma bite", "forma claws", "forma fossorian", "forma sense", "forma spike", "forma terran", "forma toxin", "dark sight", "terran movement", "spirits snarl", "enhanced burrow", "enhanced flight", "enhanced climb", "enhanced swim", "enhanced armor", "toxin shield", "enhanced scent", "bestow burrow", "bestow flight", "bestow fins", "bestow horn", "remote manifestation", "planar beacon", "weaken will", "spirit strikes", "enhanced spirit strikes", "greater spirit strikes", "bestow armor", "arcane surplus", "empowering reserves", "arcane bolt", "ethereal voice", "calculated surge", "mana font", "bountiful ideas", "wizards studies", "focused breathing", "blocking expertise", "steady breath", "deadly spellstrike", "spellcharge battery", "spellward armor", "swift spellstrike", "unarmored defense", "vital mantle", "fighter superiority", "maneuver master", "deadly maneuvers", "deadly power strike", "superior prowess", "swift power strike", "deadly strategy", "ongoing strategy", "martial artist", "patient defense", "open chakra", "unarmored movement", "deadly flurry", "forbidden release", "deadly sneak attack", "sly striker", "watcher", "spirit effect", "spirit spellcasting", "spirit cantrips", "spirit feat", "spirit growth", "watcher growth caps", "creature manifest", "imbue barrier", "release manifest", "object manifest", "esper ascension", "esper", "esper branch", "esper forma", "ascension feat", "eidolon", "eidolon branch", "eidolon forma", "automaton", "type", "caster", "cp", "sp", "hp", "br", "ascap", "archetype", "saves", "weapon", "armor", "skill", "spell", "automaton core features", "archetype feat", "general feat", "construct caster points", "construct mentality", "construct spellcasting", "beast growth", "brute", "type", "caster", "cp", "sp", "hp", "br", "ascap", "archetype", "saves", "weapon", "armor", "skill", "spell", "brute core features", "beast feat", "beast growth", "temperament feat", "bulwark", "type", "caster", "cp", "sp", "hp", "br", "ascap", "archetype", "saves", "weapon", "armor", "skill", "spell", "brute core features", "beast feat", "beast growth", "temperament feat", "prowler", "type", "caster", "cp", "sp", "hp", "ascap", "br", "archetype", "saves", "weapon", "armor", "skill", "spell", "brute core features", "beast feat", "beast growth", "temperament feat", "armed rest", "shield block", "death defiance", "protect ally", "second wind", "nimble shield hand", "shielded stride", "defenders blade", "gladiator", "fancy moves", "play to the crowd", "stage fighting", "call your shot", "knight", "harrying strike", "shoulder catastrophe", "stave off catastrophe", "zealot", "zeal", "devoted focus", "zealous presence", "surge beyond death", "ethereal mantle", "extra mantle", "guarding spell", "deflecting mantle", "durable wards", "undying sentinel", "fast movement", "abjurant", "warding ether", "reactive warding", "nullifying ward", "stormguard", "lashing guard", "restoring guard", "whipping guard", "unyielding ward", "combat superiority", "power strike", "running tackle", "brutal finish", "berserker", "frenzy", "no escape", "mindless rage", "retaliation", "duelist", "fancy footwork", "always ready", "duelists stance", "dueling parry", "panache", "dueling dance", "master duelist", "mauler", "knock away", "clear the way", "knock down", "avalanche strike", "wrestler", "combat grab", "crushing grab", "suplex", "clinch strike", "whirling throw", "aerial piledriver", "exploit strike", "superior mobility", "swift tracker", "camouflage", "bounty hunter", "mark quarry", "relentless pursuit", "stalker", "unerring hunt", "end the hunt", "lowland stalker", "hit and run", "skirmishers stealth", "sudden strike", "spellcharge", "spellcharge analysis", "spellstrike", "knowledge is power", "spellshielding", "recognize threat", "cut through resistance", "battlemage", "mystic weapon", "aspected strike", "energy weapon", "magic strike", "elemental fist", "aspected blow", "skystep stance", "flaring fists", "skystep strike", "ethereal blade", "ghost strike", "astral sight", "conscious projection", "ethereal assassin", "improved astral sight", "ether sense", "paramedic", "treat condition", "dutiful healer", "planes walker", "resuscitate", "supreme healing", "chirurgeon", "quickcraft medicine", "strategic diagnosis", "supported healing", "on site support", "debilitating strike", "etherealist", "animal companion", "mana gem casting", "astral companionship", "exorcism", "spirit shield", "life cleric", "disciple of life", "blessed healer", "heroic recovery", "shield sage", "warding spell", "barrier cover", "extended cover", "negating cover", "ideation", "sage knowledge", "inspired knowledge", "branched knowledge", "incredible recollection", "sustaining magic", "specialized spells", "artificer", "permanent items", "free structure", "durable structures", "war mage", "sculpt spell", "elemental perfection", "empowered evocation", "overchannel spell", "arcane points", "empowered spell", "split shot", "arcane metamagic", "steady spellcasting", "twinned spell", "echoing magic", "favored soul", "arcane favor", "ideal favor", "vital favor", "favored luck", "bend fate", "reactive favor", "doubled favor", "warlock", "warlock cantrips", "eldritch spear", "eldritch burst", "seeking bolt", "eldritch mastery", "empty vessel", "phantom shroud", "acceleration shroud", "evolution shroud", "conduit", "multiple manifestations", "pact slot", "reactive companion", "synthesist", "locked vessel", "suppress appearance", "assume control", "true form shroud", "chakra", "clever gambit", "cat stance", "climbers stance", "flight stance", "flurry of blows", "evasive dash", "graceful leaper", "light step", "follow-up strike", "slow fall", "flash strike", "acrobat", "contortionist", "dodge away", "tumbling strike", "acrobatic reflexes", "drunken master", "tipsy sway", "leap to your feet", "redirect attack", "drunkards luck", "intoxicated flurry", "thief", "fast hands", "second-story work", "supreme sneak", "thiefs finesse", "rally", "arcane rally", "motivating rally", "tactical rally", "rally resolve", "marshal strike", "rally battle focus", "snap out of it", "rally death defiance", "rallying charge", "back to back", "coordinated charge", "bloodrager", "rally blade thirst", "deadly blade thirst", "tactician", "bait and switch", "rally speed", "know your enemy", "improved combat superiority", "relentless", "virtuoso", "rally competence", "distract", "rally resistance", "peerless skill", "ambush artist", "sneak attack", "first awareness", "surprise attack", "cunning action", "fleeting shadow", "deft strike", "uncanny dodge", "opportunistic", "assassin", "infiltration expertise", "death strike", "assassinate", "phantom", "extended cloak", "cloaking expert", "unseen strike", "weasel", "lost in the crowd", "crowd mastery", "expeditious advance", "strategize", "ambush spell", "strategic strike", "strategic seek", "assess motive", "intuit presence", "magical ambush", "detective", "ear for deceit", "discerning eye", "unerring eye", "spellthief", "steal spell", "greater steal spell", "whisper", "quick change", "cloaking chakra", "silent message", "unnoticed", "craftsmans adept training", "craftsmans elite training", "craftsmans master training", "craftsmans legendary training", "divine grace", "restoring veil", "gift of heaven", "mercy", "armament wall", "greater mercy", "spiritual guardian", "hypnotic stare", "alluring hypnotism", "possession", "hypnotic charm", "influence disaster", "shadow form", "distant tether", "shadowcaster", "shadow jump", "manifest shade", "shadow walk", "attuned terrain", "wild empathy", "wild shape", "green empathy", "commune with nature", "bestial rush", "elemental strikes", "hustle", "spirit rage", "spirit frenzy", "sunder spell"];
     let foundFeatures = [];
 
     let arbitrarySearchLimit = 6;

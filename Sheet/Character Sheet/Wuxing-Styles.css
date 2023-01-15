@@ -3337,7 +3337,6 @@ input[type=checkbox].wuxActionTabButton.wuxActionTabR + img
 .wuxAspectContainer .wuxAspectInput .wuxRollTypeField-Heroic,
 .wuxSectionBlock .wuxRollTypeField-flag,
 .wuxAspectContainer .wuxAspectInput .wuxRollTypeField-flag,
-
 .wuxSectionBlock .wuxElementTypeField-Wood,
 .wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Wood,
 .wuxSectionBlock .wuxElementTypeField-Fire,
@@ -3359,18 +3358,20 @@ input[type=hidden].wuxCharacterTypeField-flag[value="Spirit"] + .wuxCharacterTyp
 input[type=hidden].wuxCharacterTypeField-flag[value="Beast"] + .wuxCharacterTypeField-Beast,
 input[type=hidden].wuxCharacterTypeField-flag[value="Archetype"] + .wuxCharacterTypeField-Archetype,
 input[type=hidden].wuxCharacterTypeField-flag[value="Phasma"] + .wuxCharacterTypeField-Phasma,
-input[type=hidden].wuxCharacterTypeField-flag[value="BeastStyle"] + .wuxCharacterTypeField-BeastStyle,
+input[type=hidden].wuxCharacterTypeField-flag[value="BeastStyle"] + .wuxCharacterTypeField-BeastStyle
+{
+    display: block;
+}
 
 input[type=hidden].wuxRollTypeField-flag[value="Common"] + .wuxRollTypeField-Common,
 input[type=hidden].wuxRollTypeField-flag[value="Heroic"] + .wuxRollTypeField-Heroic,
-
 input[type=hidden].wuxElementTypeField-flag[value="Wood"] + .wuxElementTypeField-Wood,
 input[type=hidden].wuxElementTypeField-flag[value="Fire"] + .wuxElementTypeField-Fire,
 input[type=hidden].wuxElementTypeField-flag[value="Earth"] + .wuxElementTypeField-Earth,
 input[type=hidden].wuxElementTypeField-flag[value="Metal"] + .wuxElementTypeField-Metal,
 input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeField-Water
 {
-    display: block;
+    display: inherit;
 }
 
 /*========================================

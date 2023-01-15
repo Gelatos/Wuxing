@@ -1970,16 +1970,35 @@
 					</div>
 				</div>
 
+				<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_creatureAbilityScoreCaps" value="">
+				<div class="wuxHiddenField">
+					<div class="wuxMultiRow">
+						<span class="wuxFormSubheader">Ability Score Caps</span>
+					</div>
+					<div class="wuxMultiRow">
+						<span class="wuxDescription" name="attr_creatureAbilityScoreCaps"></span>
+					</div>
+				</div>
+
 				<div class="core-CastingTracks wuxLayoutItem wuxSectionBlock">
 					<div class="wuxInfoRow">
 						<div class="wuxInfoSection">
-							<div class="wuxInfoField">
-								<span class="wuxInfoTitle">Source Pts.</span>
-								<input type="number" class="wuxInfoInput" name="attr_sp" value="0">
+							<input class="options-flag" type="checkbox" name="attr_options-SpellSlotOptions-flag"><span>y</span>
+							<div class="options">
+								<div class="wuxRow">
+									<span class="wuxFormTitle">Bonus SP</span>
+									<input type="number" class="wuxFormInput wuxSizeTiny" name="attr_spBonus" value="0">
+								</div>
 							</div>
-							<div class="wuxInfoSubField">
-								<span class="wuxInfoSubtitle">total</span>
-								<span class="wuxInfoSubdata" name="attr_sp_max" value="1">1</span>
+							<div class="display">
+								<div class="wuxInfoField">
+									<span class="wuxInfoTitle">Source Pts.</span>
+									<input type="number" class="wuxInfoInput" name="attr_sp" value="0">
+								</div>
+								<div class="wuxInfoSubField">
+									<span class="wuxInfoSubtitle">total</span>
+									<span class="wuxInfoSubdata" name="attr_sp_max" value="1">1</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -20945,98 +20964,6 @@
 								</div>
 							</div>
 							<div class="wuxCollapseField">
-								<div class="wuxSubCategory featlist-">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-">
-										<input type="hidden" name="attr_featlist-" value="">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-" value=""></span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader"></span>
-												</div>
-												<div class="wuxMultiRow">
-													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
-
-													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
-														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
-														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
-														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
-														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
-
-													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="wuxSubCategory featlist-">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-">
-										<input type="hidden" name="attr_featlist-" value="">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-" value=""></span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader"></span>
-												</div>
-												<div class="wuxMultiRow">
-													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
-
-													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
-														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
-														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
-														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
-														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
-
-													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="wuxSubCategory featlist-BeastGrowth">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-BeastGrowth">
-										<input type="hidden" name="attr_featlist-BeastGrowth" value="Beast Growth">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-BeastGrowth"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-BeastGrowth" value="Beast Growth">Beast Growth</span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader">Beast Growth</span>
-												</div>
-												<div class="wuxMultiRow">When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</div>
-											</div>
-										</div>
-									</div>
-								</div>
 								<div class="wuxSubCategory featlist-ConstructCasterPoints">
 									<div class="wuxFieldSet">
 										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ConstructCasterPoints">
@@ -21110,74 +21037,6 @@
 								</div>
 							</div>
 							<div class="wuxCollapseField">
-								<div class="wuxSubCategory featlist-">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-">
-										<input type="hidden" name="attr_featlist-" value="">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-" value=""></span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader"></span>
-												</div>
-												<div class="wuxMultiRow">
-													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
-
-													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
-														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
-														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
-														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
-														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
-
-													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="wuxSubCategory featlist-">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-">
-										<input type="hidden" name="attr_featlist-" value="">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-" value=""></span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader"></span>
-												</div>
-												<div class="wuxMultiRow">
-													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
-
-													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
-														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
-														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
-														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
-														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
-
-													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
 								<div class="wuxSubCategory featlist-BeastGrowth">
 									<div class="wuxFieldSet">
 										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-BeastGrowth">
@@ -21197,7 +21056,58 @@
 												<div class="wuxRow">
 													<span class="wuxFormHeader">Beast Growth</span>
 												</div>
-												<div class="wuxMultiRow">When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</div>
+												<div class="wuxMultiRow">
+													<p>When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</p>
+
+													<table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+														<tr>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+														</tr>
+														<tr>
+															<td>7-13</td>
+															<td>2</td>
+															<td>22-23</td>
+															<td>14</td>
+														</tr>
+														<tr>
+															<td>14-15</td>
+															<td>3</td>
+															<td>24-25</td>
+															<td>19</td>
+														</tr>
+														<tr>
+															<td>16-17</td>
+															<td>5</td>
+															<td>26-27</td>
+															<td>25</td>
+														</tr>
+														<tr>
+															<td>18-19</td>
+															<td>7</td>
+															<td>28-29</td>
+															<td>32</td>
+														</tr>
+														<tr>
+															<td>20-21</td>
+															<td>10</td>
+															<td>30</td>
+															<td>40</td>
+														</tr>
+													</table>
+
+													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. See the table above for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
+
+													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
+														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
+														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
+														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
+														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
+
+													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -21225,74 +21135,6 @@
 								</div>
 							</div>
 							<div class="wuxCollapseField">
-								<div class="wuxSubCategory featlist-">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-">
-										<input type="hidden" name="attr_featlist-" value="">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-" value=""></span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader"></span>
-												</div>
-												<div class="wuxMultiRow">
-													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
-
-													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
-														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
-														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
-														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
-														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
-
-													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="wuxSubCategory featlist-">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-">
-										<input type="hidden" name="attr_featlist-" value="">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-" value=""></span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader"></span>
-												</div>
-												<div class="wuxMultiRow">
-													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
-
-													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
-														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
-														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
-														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
-														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
-
-													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
 								<div class="wuxSubCategory featlist-BeastGrowth">
 									<div class="wuxFieldSet">
 										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-BeastGrowth">
@@ -21312,7 +21154,58 @@
 												<div class="wuxRow">
 													<span class="wuxFormHeader">Beast Growth</span>
 												</div>
-												<div class="wuxMultiRow">When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</div>
+												<div class="wuxMultiRow">
+													<p>When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</p>
+
+													<table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+														<tr>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+														</tr>
+														<tr>
+															<td>7-13</td>
+															<td>2</td>
+															<td>22-23</td>
+															<td>14</td>
+														</tr>
+														<tr>
+															<td>14-15</td>
+															<td>3</td>
+															<td>24-25</td>
+															<td>19</td>
+														</tr>
+														<tr>
+															<td>16-17</td>
+															<td>5</td>
+															<td>26-27</td>
+															<td>25</td>
+														</tr>
+														<tr>
+															<td>18-19</td>
+															<td>7</td>
+															<td>28-29</td>
+															<td>32</td>
+														</tr>
+														<tr>
+															<td>20-21</td>
+															<td>10</td>
+															<td>30</td>
+															<td>40</td>
+														</tr>
+													</table>
+
+													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. See the table above for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
+
+													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
+														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
+														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
+														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
+														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
+
+													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -21745,7 +21638,56 @@
 												<div class="wuxRow">
 													<span class="wuxFormHeader">Spirit Growth</span>
 												</div>
-												<div class="wuxMultiRow">When a spirit begins play or gains a level they gain an amount of SP. A spirit can spend this SP to increase their own abilities and proficiencies. Spirits can spend their SP as follows.</div>
+												<div class="wuxMultiRow">When a spirit begins play or gains a level they gain an amount of SP. A spirit can spend this SP to increase their own abilities and proficiencies. Spirits can spend their SP as follows.
+
+													<table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+														<tr>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+														</tr>
+														<tr>
+															<td>7-13</td>
+															<td>2</td>
+															<td>22-23</td>
+															<td>14</td>
+														</tr>
+														<tr>
+															<td>14-15</td>
+															<td>3</td>
+															<td>24-25</td>
+															<td>19</td>
+														</tr>
+														<tr>
+															<td>16-17</td>
+															<td>5</td>
+															<td>26-27</td>
+															<td>25</td>
+														</tr>
+														<tr>
+															<td>18-19</td>
+															<td>7</td>
+															<td>28-29</td>
+															<td>32</td>
+														</tr>
+														<tr>
+															<td>20-21</td>
+															<td>10</td>
+															<td>30</td>
+															<td>40</td>
+														</tr>
+													</table>
+
+													<p><strong>Ability Scores.</strong> A spirit may increase any of their ability scores at the cost of SP. See the Spirit Ability Scores table for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
+
+													<p><strong>Skills.</strong> A spirit can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. Watchers can only train skills that are based on intelligence, wisdom, or charisma ability scores.<br />
+														A spirit can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
+														At 6th level a spirit can spend 3 SP to increase rank of Adept skills and specializations.<br />
+														At 10th level a spirit can spend 4 SP to increase rank of Expert skills and specializations.</p>
+
+													<p><strong>Languages.</strong> A spirit may learn a language for 3 SP.</p>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -22089,7 +22031,56 @@
 												<div class="wuxRow">
 													<span class="wuxFormHeader">Spirit Growth</span>
 												</div>
-												<div class="wuxMultiRow">When a spirit begins play or gains a level they gain an amount of SP. A spirit can spend this SP to increase their own abilities and proficiencies. Spirits can spend their SP as follows.</div>
+												<div class="wuxMultiRow">When a spirit begins play or gains a level they gain an amount of SP. A spirit can spend this SP to increase their own abilities and proficiencies. Spirits can spend their SP as follows.
+
+													<table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+														<tr>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+														</tr>
+														<tr>
+															<td>7-13</td>
+															<td>2</td>
+															<td>22-23</td>
+															<td>14</td>
+														</tr>
+														<tr>
+															<td>14-15</td>
+															<td>3</td>
+															<td>24-25</td>
+															<td>19</td>
+														</tr>
+														<tr>
+															<td>16-17</td>
+															<td>5</td>
+															<td>26-27</td>
+															<td>25</td>
+														</tr>
+														<tr>
+															<td>18-19</td>
+															<td>7</td>
+															<td>28-29</td>
+															<td>32</td>
+														</tr>
+														<tr>
+															<td>20-21</td>
+															<td>10</td>
+															<td>30</td>
+															<td>40</td>
+														</tr>
+													</table>
+
+													<p><strong>Ability Scores.</strong> A spirit may increase any of their ability scores at the cost of SP. See the Spirit Ability Scores table for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
+
+													<p><strong>Skills.</strong> A spirit can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. Watchers can only train skills that are based on intelligence, wisdom, or charisma ability scores.<br />
+														A spirit can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
+														At 6th level a spirit can spend 3 SP to increase rank of Adept skills and specializations.<br />
+														At 10th level a spirit can spend 4 SP to increase rank of Expert skills and specializations.</p>
+
+													<p><strong>Languages.</strong> A spirit may learn a language for 3 SP.</p>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -22660,74 +22651,6 @@
 								</div>
 							</div>
 							<div class="wuxCollapseField">
-								<div class="wuxSubCategory featlist-">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-">
-										<input type="hidden" name="attr_featlist-" value="">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-" value=""></span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader"></span>
-												</div>
-												<div class="wuxMultiRow">
-													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
-
-													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
-														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
-														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
-														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
-														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
-
-													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="wuxSubCategory featlist-">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-">
-										<input type="hidden" name="attr_featlist-" value="">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-" value=""></span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader"></span>
-												</div>
-												<div class="wuxMultiRow">
-													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. Beasts have limitations on their ability score caps. They cannot have any ability score higher than 22 at level 10, and none higher than 30 at level 20. In addition, a beast may have additional caps determined by their ancestry. See the Beast Ability Scores table for information on SP costs.</p>
-
-													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
-														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
-														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
-														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
-														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
-
-													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
 								<div class="wuxSubCategory featlist-BeastGrowth">
 									<div class="wuxFieldSet">
 										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-BeastGrowth">
@@ -22747,7 +22670,58 @@
 												<div class="wuxRow">
 													<span class="wuxFormHeader">Beast Growth</span>
 												</div>
-												<div class="wuxMultiRow">When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</div>
+												<div class="wuxMultiRow">
+													<p>When a beast begins play or gains a level they gain an amount of SP. A beast can spend this SP to increase their own abilities and proficiencies. Beasts can spend their SP as follows.</p>
+
+													<table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+														<tr>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+														</tr>
+														<tr>
+															<td>7-13</td>
+															<td>2</td>
+															<td>22-23</td>
+															<td>14</td>
+														</tr>
+														<tr>
+															<td>14-15</td>
+															<td>3</td>
+															<td>24-25</td>
+															<td>19</td>
+														</tr>
+														<tr>
+															<td>16-17</td>
+															<td>5</td>
+															<td>26-27</td>
+															<td>25</td>
+														</tr>
+														<tr>
+															<td>18-19</td>
+															<td>7</td>
+															<td>28-29</td>
+															<td>32</td>
+														</tr>
+														<tr>
+															<td>20-21</td>
+															<td>10</td>
+															<td>30</td>
+															<td>40</td>
+														</tr>
+													</table>
+
+													<p><strong>Ability Scores.</strong> A beast may increase any of their ability scores at the cost of SP. See the table above for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
+
+													<p><strong>Skills.</strong> A beast can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. <br />
+														A can can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
+														At 6th level a can can spend 3 SP to increase rank of Adept skills and specializations.<br />
+														At 10th level a can can spend 4 SP to increase rank of Expert skills and specializations.<br />
+														At 14th level a can can spend 5 SP to increase rank of Elite skills and specializations.</p>
+
+													<p><strong>HP.</strong> A beast may gain 5 HP for 2 SP.</p>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -23776,72 +23750,6 @@
 								</div>
 							</div>
 							<div class="wuxCollapseField">
-								<div class="wuxSubCategory featlist-">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-">
-										<input type="hidden" name="attr_featlist-" value="">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-" value=""></span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader"></span>
-												</div>
-												<div class="wuxMultiRow">
-													<p><strong>Ability Scores.</strong> A spirit may increase any of their ability scores at the cost of SP. Spirits have greater limitations on their ability score caps, able to gain a maximum of 18 in any ability score. See the Spirit Ability Scores table for information on SP costs.</p>
-
-													<p><strong>Skills.</strong> A spirit can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. Watchers can only train skills that are based on intelligence, wisdom, or charisma ability scores.<br />
-														A spirit can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
-														At 6th level a spirit can spend 3 SP to increase rank of Adept skills and specializations.<br />
-														At 10th level a spirit can spend 4 SP to increase rank of Expert skills and specializations.</p>
-
-													<p><strong>Languages.</strong> A spirit may learn a language for 3 SP.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="wuxSubCategory featlist-">
-									<div class="wuxFieldSet">
-										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-">
-										<input type="hidden" name="attr_featlist-" value="">
-										<div class="wuxFeatEntry">
-											<div class="wuxFormEntry">
-												<span class="wuxFormHeaderLeadIcon">J</span>
-												<button class="wuxSpellAddButton" type="action" name="act_addfeat-"><span>Add</span></button>
-												<span class="wuxFeatLevel">Character 01</span>
-												<span name="attr_featlist-" value=""></span>
-											</div>
-										</div>
-
-
-										<div class="wuxCollapseField">
-											<div class="wuxDescription">
-												<div class="wuxRow">
-													<span class="wuxFormHeader"></span>
-												</div>
-												<div class="wuxMultiRow">
-													<p><strong>Ability Scores.</strong> A spirit may increase any of their ability scores at the cost of SP. Spirits have greater limitations on their ability score caps, able to gain a maximum of 18 in any ability score. See the Spirit Ability Scores table for information on SP costs.</p>
-
-													<p><strong>Skills.</strong> A spirit can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. Watchers can only train skills that are based on intelligence, wisdom, or charisma ability scores.<br />
-														A spirit can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
-														At 6th level a spirit can spend 3 SP to increase rank of Adept skills and specializations.<br />
-														At 10th level a spirit can spend 4 SP to increase rank of Expert skills and specializations.</p>
-
-													<p><strong>Languages.</strong> A spirit may learn a language for 3 SP.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
 								<div class="wuxSubCategory featlist-SpiritCantrips">
 									<div class="wuxFieldSet">
 										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-SpiritCantrips">
@@ -23909,7 +23817,56 @@
 												<div class="wuxRow">
 													<span class="wuxFormHeader">Spirit Growth</span>
 												</div>
-												<div class="wuxMultiRow">When a spirit begins play or gains a level they gain an amount of SP. A spirit can spend this SP to increase their own abilities and proficiencies. Spirits can spend their SP as follows.</div>
+												<div class="wuxMultiRow">When a spirit begins play or gains a level they gain an amount of SP. A spirit can spend this SP to increase their own abilities and proficiencies. Spirits can spend their SP as follows.
+
+													<table cellpadding="0" cellspacing="0" dir="ltr" class="right" style="margin: 0px 10px 10px 10px">
+														<tr>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+															<th>Score</th>
+															<th>SP<br />Cost</th>
+														</tr>
+														<tr>
+															<td>7-13</td>
+															<td>2</td>
+															<td>22-23</td>
+															<td>14</td>
+														</tr>
+														<tr>
+															<td>14-15</td>
+															<td>3</td>
+															<td>24-25</td>
+															<td>19</td>
+														</tr>
+														<tr>
+															<td>16-17</td>
+															<td>5</td>
+															<td>26-27</td>
+															<td>25</td>
+														</tr>
+														<tr>
+															<td>18-19</td>
+															<td>7</td>
+															<td>28-29</td>
+															<td>32</td>
+														</tr>
+														<tr>
+															<td>20-21</td>
+															<td>10</td>
+															<td>30</td>
+															<td>40</td>
+														</tr>
+													</table>
+
+													<p><strong>Ability Scores.</strong> A spirit may increase any of their ability scores at the cost of SP. See the Spirit Ability Scores table for information on SP costs. While costs are displayed up to 30, each class has different ability score capstones limiting their maximum score possible. See the class' stats for more information.</p>
+
+													<p><strong>Skills.</strong> A spirit can spend 2 SP to raise the rank of a skill or specialization by one and can only be used on rank Trained or lower skills and specializations. Watchers can only train skills that are based on intelligence, wisdom, or charisma ability scores.<br />
+														A spirit can spend 1 SP to learn a knowledge skill or raise the rank of any knowledge skill they know by one.<br />
+														At 6th level a spirit can spend 3 SP to increase rank of Adept skills and specializations.<br />
+														At 10th level a spirit can spend 4 SP to increase rank of Expert skills and specializations.</p>
+
+													<p><strong>Languages.</strong> A spirit may learn a language for 3 SP.</p>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -23936,6 +23893,30 @@
 												<div class="wuxMultiRow">A spirit is an ethereal caster. Although a spirit gains ki through their caster tracks they do not have any ability to use this ki. It is instead used for the purposes of calculating essence. A spirit can cast spells normally while in the spirit realm through spirit realm casting rules.
 
 													Once in the material plane spirits can only cast spells while manifested into a creature with the ability to utilize ki. While manifesting in this way, a spirit can only cast spells that both the host and the spirit know. The spirit and host must also be able to cast the spell, therefore they both must have requisite branch rank and spell power. Only the spirit needs to have the spells prepared in spell slots to have a shorter cast time. All other aspects of casting a spell in the material plane are based on the creature the spirit has manifested into. This includes their spellcasting ability modifier, spell effect rank, and branch rank. </div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="wuxSubCategory featlist-WatcherGrowthCaps">
+									<div class="wuxFieldSet">
+										<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-WatcherGrowthCaps">
+										<input type="hidden" name="attr_featlist-WatcherGrowthCaps" value="Watcher Growth Caps">
+										<div class="wuxFeatEntry">
+											<div class="wuxFormEntry">
+												<span class="wuxFormHeaderLeadIcon">J</span>
+												<button class="wuxSpellAddButton" type="action" name="act_addfeat-WatcherGrowthCaps"><span>Add</span></button>
+												<span class="wuxFeatLevel">Character 01</span>
+												<span name="attr_featlist-WatcherGrowthCaps" value="Watcher Growth Caps">Watcher Growth Caps</span>
+											</div>
+										</div>
+
+
+										<div class="wuxCollapseField">
+											<div class="wuxDescription">
+												<div class="wuxRow">
+													<span class="wuxFormHeader">Watcher Growth Caps</span>
+												</div>
+												<div class="wuxMultiRow">Watcher spirits have </div>
 											</div>
 										</div>
 									</div>
