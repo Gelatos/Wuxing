@@ -146,7 +146,7 @@ on("change:globalsavemod", function (eventinfo) {
 
 on("change:characterSetupBase", function () {
 	let update = {};
-	update["characterBase-Basics-flag"] = "0";
+	update["characterBase-Base-flag"] = "0";
 	update["characterBase-Class-flag"] = "on";
 	setAttrs(update, {
 		silent: true
@@ -13460,6 +13460,7 @@ var upgrade_to_1_1_4 = function (doneupdating) {
 									update[GetSectionIdName(repeatingLanguages, newrowid, "isSelected")] = v[GetSectionIdName(repeatingOldLanguages, id, "isSelected")];
 									update[GetSectionIdName(repeatingLanguages, newrowid, "language")] = v[GetSectionIdName(repeatingOldLanguages, id, "language")];
 									update[GetSectionIdName(repeatingLanguages, newrowid, "languageproficiency")] = "3";
+									removeRepeatingRow(`${repeatingOldLanguages}_${id}`);
 								}
 							});
 
@@ -13485,7 +13486,7 @@ var upgrade_to_1_1_4 = function (doneupdating) {
 
 var upgrade_to_1_1_3 = function (doneupdating) {
 
-	let skill_attrs = ["background"];
+	let skill_attrs = ["background", "class"];
 	getAttrs(skill_attrs, function (v) {
 		let update = {};
 
@@ -13495,6 +13496,7 @@ var upgrade_to_1_1_3 = function (doneupdating) {
 		}
 		setAttrs(update);
 
+		update_class_restrictions(v["class"]);
 		update_classLevels_complex_all();
 		doneupdating();
 
@@ -13534,6 +13536,7 @@ var upgrade_to_1_1_0 = function (doneupdating) {
 		}
 		setAttrs(update);
 
+		update_class_restrictions(v["class"]);
 		update_classLevels_complex_all();
 		update_branch_proficiency_points();
 		update_health_barrier();
