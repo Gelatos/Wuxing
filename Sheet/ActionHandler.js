@@ -1362,7 +1362,9 @@ function HandleTargettedAction(actionData, targetData) {
 }
 
 function GetRetargetButton(actionData) {
-    return `<div>[Choose Another Target](!tatk &#64;{target||token_id}$$$${SanitizeSheetRoll(actionData.toString())})</div>`;
+    let output = `<div>[Choose Another Target](!tatk &#64;{target||token_id}$$$${SanitizeSheetRoll(actionData.toString())})</div>`;
+    log ("Retarget: " + output);
+    return output;
 }
 
 

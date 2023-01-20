@@ -789,7 +789,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:While in a forested area, gain advantage on Stealth@e:Caster concentration up to 10 minutes]",
+                    onSuccess: "[Spec@d>While in a forested area, gain advantage on Stealth@e>Caster concentration up to 10 minutes]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -833,7 +833,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Invisible@d:Whenever the affected target moves, they become lightly obscurred@e:Caster concentration up to 1 minute]",
+                    onSuccess: "[Invisible@d>Whenever the affected target moves, they become lightly obscurred@e>Caster concentration up to 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -877,7 +877,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Invisible@e:Effect ends when not in dim or darker light. Effect ends when creature takes any action or when attacked. Caster concentration up to 1 minute]",
+                    onSuccess: "[Invisible@e>Effect ends when not in dim or darker light. Effect ends when creature takes any action or when attacked. Caster concentration up to 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -921,7 +921,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:While in an earthen area, gain advantage on Stealth@e:Caster concentration up to 10 minutes]",
+                    onSuccess: "[Spec@d>While in an earthen area, gain advantage on Stealth@e>Caster concentration up to 10 minutes]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -965,7 +965,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Invisible@e:Effect ends when not in dim or darker light, Effect ends when creature takes any action, Caster concentration up to 10 minutes]",
+                    onSuccess: "[Invisible@e>Effect ends when not in dim or darker light, Effect ends when creature takes any action, Caster concentration up to 10 minutes]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -1009,7 +1009,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:While in water, gain advantage on Stealth@e:Caster concentration up to 10 minutes]",
+                    onSuccess: "[Spec@d>While in water, gain advantage on Stealth@e>Caster concentration up to 10 minutes]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -1053,7 +1053,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Become heavily obscurred@e:Caster concentration up to 1 hour]",
+                    onSuccess: "[Spec@d>Become heavily obscurred@e>Caster concentration up to 1 hour]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -1097,7 +1097,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Invisible@e:Effect ends when not in dim or darker light. Caster concentration up to 1 minute]",
+                    onSuccess: "[Invisible@e>Effect ends when not in dim or darker light. Caster concentration up to 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -1237,8 +1237,8 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Blinded@e:Ends when the creature exits the wall of sand.]",
-                    onFailure: "[Blinded@e:Ends when the creature exits the wall of sand.]",
+                    onSuccess: "[Blinded@e>Ends when the creature exits the wall of sand.]",
+                    onFailure: "[Blinded@e>Ends when the creature exits the wall of sand.]",
                     onCritFailure: "",
 
                     desc: `You conjure up a wall of swirling sand on the ground that deals 2d8 rending (Earth) damage. You can make the wall up of six 5 feet long, 10 feet high, and 10 feet thick sections. Everything on each side of the wall is concealed from creatures on the opposite side. 
@@ -2043,7 +2043,7 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Prone][Slowed@e:Ends after 1 minute]",
+                    onCritSuccess: "[Prone][Slowed@e>Ends after 1 minute]",
                     onSuccess: "[Prone]",
                     onFailure: "",
                     onCritFailure: "",
@@ -2090,7 +2090,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Staggered@d:Staggered 1@e:Ends at the start of the caster's turn]",
+                    onSuccess: "[Staggered@d>Staggered 1@e>Ends at the start of the caster's turn]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -2398,7 +2398,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Restrained@e:The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
+                    onSuccess: "[Restrained@e>The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -2854,7 +2854,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Restrained@e:Ends after 1 round. The creature may use the Break Free or Escape Artist action against {DC} to escape]",
+                    onSuccess: "[Restrained@e>Ends after 1 round. The creature may use the Break Free or Escape Artist action against {DC} to escape]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -3619,9 +3619,9 @@ function GetSpellInformation(spell) {
                     failure: "The target is pushed 10 feet from the source",
                     critFailure: "The target is not pushed.",
 
-                    onCritSuccess: "[Pushed@d:40 feet from source]",
-                    onSuccess: "[Pushed@d:30 feet from source]",
-                    onFailure: "[Pushed@d:10 feet from source]",
+                    onCritSuccess: "[Pushed@d>40 feet from source]",
+                    onSuccess: "[Pushed@d>30 feet from source]",
+                    onFailure: "[Pushed@d>10 feet from source]",
                     onCritFailure: "[]",
 
                     desc: `A powerful wind pushes away from you in one direction. The gust disperses gas or vapor, and it extinguishes candles, torches, and similar unprotected flames in the area. It causes protected flames, such as those of lanterns, to dance wildly and has a 50 percent chance to extinguish them. Movement while within the area of force is difficult terrain.
@@ -3709,9 +3709,9 @@ function GetSpellInformation(spell) {
                     failure: "The target is pushed 10 feet from the source",
                     critFailure: "The target is not pushed.",
 
-                    onCritSuccess: "[Pushed@d:30 feet from source][Restrained@e:Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
-                    onSuccess: "[Pushed@d:10 feet from source][Restrained@e:Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
-                    onFailure: "[Pushed@d:10 feet from source]",
+                    onCritSuccess: "[Pushed@d>30 feet from source][Restrained@e>Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
+                    onSuccess: "[Pushed@d>10 feet from source][Restrained@e>Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
+                    onFailure: "[Pushed@d>10 feet from source]",
                     onCritFailure: "[]",
 
                     desc: `A large wave of sand engulfs a large area away from you in one direction. The sand smothers flames and buries those it rolls over.
@@ -3799,9 +3799,9 @@ function GetSpellInformation(spell) {
                     failure: "The target is pushed 10 feet from the source",
                     critFailure: "The target is not pushed.",
 
-                    onCritSuccess: "[Pushed@d:40 feet from source]",
-                    onSuccess: "[Pushed@d:30 feet from source]",
-                    onFailure: "[Pushed@d:10 feet from source]",
+                    onCritSuccess: "[Pushed@d>40 feet from source]",
+                    onSuccess: "[Pushed@d>30 feet from source]",
+                    onFailure: "[Pushed@d>10 feet from source]",
                     onCritFailure: "[]",
 
                     desc: `Call forth a continuous blast of water before the caster that pushes forwards knocking back all in its way. The waver douses flames and makes the area difficult terrain due to the slipperiness of the water.
@@ -3845,9 +3845,9 @@ function GetSpellInformation(spell) {
                     failure: "The target is pushed 10 feet from the source",
                     critFailure: "The target is not pushed.",
 
-                    onCritSuccess: "[Pushed@d:40 feet from source]",
-                    onSuccess: "[Pushed@d:30 feet from source]",
-                    onFailure: "[Pushed@d:10 feet from source]",
+                    onCritSuccess: "[Pushed@d>40 feet from source]",
+                    onSuccess: "[Pushed@d>30 feet from source]",
+                    onFailure: "[Pushed@d>10 feet from source]",
                     onCritFailure: "[]",
 
                     desc: `A chilling wind pushes away from you in one direction. The wind deals 2d8 cold (Water) damage in its area. The gust disperses gas or vapor, and it extinguishes candles, torches, and similar unprotected flames in the area. It causes protected flames, such as those of lanterns, to dance wildly and has a 50 percent chance to extinguish them. Movement while within the area of force is difficult terrain.
@@ -5629,8 +5629,8 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Spec@d:Take a 1d4 penalty on all attack rolls and saving throws.@e:The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
-                    onSuccess: "[Spec@d:Take a -1 penalty on all attack rolls and saving throws.@e:The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onCritSuccess: "[Spec@d>Take a 1d4 penalty on all attack rolls and saving throws.@e>The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onSuccess: "[Spec@d>Take a -1 penalty on all attack rolls and saving throws.@e>The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -5674,7 +5674,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Restrained@e:Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
+                    onSuccess: "[Restrained@e>Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -5718,8 +5718,8 @@ function GetSpellInformation(spell) {
                     critFailure: "No effect.",
 
                     onCritSuccess: "",
-                    onSuccess: "[Staggered@d:Staggered 1@e: Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect and the associated Slow effect.][Slowed@e:Ends with the staggered condition]",
-                    onFailure: "[Staggered@d:Staggered 1@e: Ends at the start of their turn]",
+                    onSuccess: "[Staggered@d>Staggered 1@e> Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect and the associated Slow effect.][Slowed@e>Ends with the staggered condition]",
+                    onFailure: "[Staggered@d>Staggered 1@e> Ends at the start of their turn]",
                     onCritFailure: "[]",
 
                     desc: `One chosen target within range becomes more sluggish as gravity has a greater effect on them. The effect is determined by the target's save.`,
@@ -5805,8 +5805,8 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Spec@d:Take a 1d4 penalty on all attack rolls and saving throws.@e:The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
-                    onSuccess: "[Spec@d:Take a -1 penalty on all attack rolls and saving throws@e:The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onCritSuccess: "[Spec@d>Take a 1d4 penalty on all attack rolls and saving throws.@e>The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onSuccess: "[Spec@d>Take a -1 penalty on all attack rolls and saving throws@e>The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -5849,8 +5849,8 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Blinded@e:Ends after 1 minute.]",
-                    onSuccess: "[Blinded@e:Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onCritSuccess: "[Blinded@e>Ends after 1 minute.]",
+                    onSuccess: "[Blinded@e>Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -5894,7 +5894,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Blinded@e:Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect. Ends after 1 minute][Spec@e:Take 1d6 burn (Fire) damage@e:Ends with the blind effect]",
+                    onSuccess: "[Blinded@e>Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect. Ends after 1 minute][Spec@e>Take 1d6 burn (Fire) damage@e>Ends with the blind effect]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -5941,8 +5941,8 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Blinded@e:Ends after 1 minute.]",
-                    onSuccess: "[Blinded@e:Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onCritSuccess: "[Blinded@e>Ends after 1 minute.]",
+                    onSuccess: "[Blinded@e>Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -5985,8 +5985,8 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Spec@d:Fly speed is reduced to 0. @e:Ends after 1 hour]",
-                    onSuccess: "[Spec@d:Fly speed is reduced to 0. @e:Ends after 1 minute]",
+                    onCritSuccess: "[Spec@d>Fly speed is reduced to 0. @e>Ends after 1 hour]",
+                    onSuccess: "[Spec@d>Fly speed is reduced to 0. @e>Ends after 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -6029,9 +6029,9 @@ function GetSpellInformation(spell) {
                     failure: "The target creature is staggered (1) until the end of their turn.",
                     critFailure: "No effect.",
 
-                    onCritSuccess: "[Staggered@d:Staggered 2@e: Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect and the associated Slow effect.][Slowed@e:Ends with the staggered condition]",
-                    onSuccess: "[Staggered@d:Staggered 1@e: Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect and the associated Slow effect.][Slowed@e:Ends with the staggered condition]",
-                    onFailure: "[Staggered@d:Staggered 1@e: Ends at the start of their turn]",
+                    onCritSuccess: "[Staggered@d>Staggered 2@e> Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect and the associated Slow effect.][Slowed@e>Ends with the staggered condition]",
+                    onSuccess: "[Staggered@d>Staggered 1@e> Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect and the associated Slow effect.][Slowed@e>Ends with the staggered condition]",
+                    onFailure: "[Staggered@d>Staggered 1@e> Ends at the start of their turn]",
                     onCritFailure: "[]",
 
                     desc: `The target becomes more sluggish as gravity has a greater effect on the targets. The effect is determined by the target's save.`,
@@ -6073,9 +6073,9 @@ function GetSpellInformation(spell) {
                     failure: "The target creature is blinded until the start of their turn",
                     critFailure: "No effect.",
 
-                    onCritSuccess: "[Blinded@e: Ends after 1 hour]",
-                    onSuccess: "[Blinded@e: Ends after 1 minute]",
-                    onFailure: "[Blinded@e: Ends at the start of their turn]",
+                    onCritSuccess: "[Blinded@e> Ends after 1 hour]",
+                    onSuccess: "[Blinded@e> Ends after 1 minute]",
+                    onFailure: "[Blinded@e> Ends at the start of their turn]",
                     onCritFailure: "[]",
 
                     desc: `You point at a creature causing magical darkness to shroud their eyes. The effect is determined by the target's save.`,
@@ -6117,9 +6117,9 @@ function GetSpellInformation(spell) {
                     failure: "The target creature is blinded until the start of their turn",
                     critFailure: "No effect.",
 
-                    onCritSuccess: "[Blinded@e: Ends after 1 hour]",
-                    onSuccess: "[Blinded@e: Ends after 1 minute]",
-                    onFailure: "[Blinded@e: Ends at the start of their turn]",
+                    onCritSuccess: "[Blinded@e> Ends after 1 hour]",
+                    onSuccess: "[Blinded@e> Ends after 1 minute]",
+                    onFailure: "[Blinded@e> Ends at the start of their turn]",
                     onCritFailure: "[]",
 
                     desc: `You cut off blood to the eyes causing temporary blindness. The effect is determined by the target's save.`,
@@ -6162,8 +6162,8 @@ function GetSpellInformation(spell) {
                     critFailure: "No effect.",
 
                     onCritSuccess: "",
-                    onSuccess: "[Restrained@e:Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
-                    onFailure: "[Restrained@e: Ends at the start of their turn]",
+                    onSuccess: "[Restrained@e>Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
+                    onFailure: "[Restrained@e> Ends at the start of their turn]",
                     onCritFailure: "[]",
 
                     desc: `You bind creatures to the ground or another sturdy surface by covering it in ice. The creature must be adjacent to a sturdy surface. The effect is determined by the target's save.`,
@@ -6205,9 +6205,9 @@ function GetSpellInformation(spell) {
                     failure: "The target creature is staggered (1) until the end of their turn.",
                     critFailure: "No effect.",
 
-                    onCritSuccess: "[Staggered@d:Staggered 1@e: Ends after 1 minute.][Slowed@e:Ends with the staggered condition]",
-                    onSuccess: "[Staggered@d:Staggered 1@e: Ends after 3 rounds.][Slowed@e:Ends with the staggered condition]",
-                    onFailure: "[Staggered@d:Staggered 1@e: Ends at the start of their turn]",
+                    onCritSuccess: "[Staggered@d>Staggered 1@e> Ends after 1 minute.][Slowed@e>Ends with the staggered condition]",
+                    onSuccess: "[Staggered@d>Staggered 1@e> Ends after 3 rounds.][Slowed@e>Ends with the staggered condition]",
+                    onFailure: "[Staggered@d>Staggered 1@e> Ends at the start of their turn]",
                     onCritFailure: "[]",
 
                     desc: `You alter the time of each target and how they perceive what is around them. The effect is determined by the target's save.`,
@@ -6249,9 +6249,9 @@ function GetSpellInformation(spell) {
                     failure: "The target creature is deafened until the start of their turn.",
                     critFailure: "No effect.",
 
-                    onCritSuccess: "[Deafened@e:Ends after 1 minute.]",
-                    onSuccess: "[Deafened@e:Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
-                    onFailure: "[Deafened@e: Ends at the start of their turn]",
+                    onCritSuccess: "[Deafened@e>Ends after 1 minute.]",
+                    onSuccess: "[Deafened@e>Ends after 1 minute. The creature may make a {DC} Strength Save at the end of their turn to remove the effect.]",
+                    onFailure: "[Deafened@e> Ends at the start of their turn]",
                     onCritFailure: "[]",
 
                     desc: `You call down a thunderous boom upon your enemies. The effect is determined by the target's save.`,
@@ -6294,8 +6294,8 @@ function GetSpellInformation(spell) {
                     critFailure: "No effect.",
 
                     onCritSuccess: "",
-                    onSuccess: "[Prone][Restrained@e:Ends after 1 minute. The creature may use an action to make a {DC} Strength Save to remove the effect.]",
-                    onFailure: "[Prone][Restrained@e: Ends at the start of their turn]",
+                    onSuccess: "[Prone][Restrained@e>Ends after 1 minute. The creature may use an action to make a {DC} Strength Save to remove the effect.]",
+                    onFailure: "[Prone][Restrained@e> Ends at the start of their turn]",
                     onCritFailure: "[]",
 
                     desc: `As you finish casting your spell you heavily force gravity down on your targets. The effect is determined by the target's save.`,
@@ -6514,7 +6514,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Whenever a creature hits you with a melee attack they are pushed 5 feet away from you and their speed drops to zero until the beginning of their next turn.@e:The effect lasts for 1 minute or until your barrier is shattered.]",
+                    onSuccess: "[Spec@d>Whenever a creature hits you with a melee attack they are pushed 5 feet away from you and their speed drops to zero until the beginning of their next turn.@e>The effect lasts for 1 minute or until your barrier is shattered.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -6558,7 +6558,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Whenever a creature hits you with a melee attack they take 5 burn (Fire) damage.@e:The effect lasts for 1 minute or until your barrier is shattered.]",
+                    onSuccess: "[Spec@d>Whenever a creature hits you with a melee attack they take 5 burn (Fire) damage.@e>The effect lasts for 1 minute or until your barrier is shattered.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -6602,7 +6602,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:At the start of your turn you heal 1d6 barrier.@e:The effect lasts for 1 minute or until your barrier is shattered.]",
+                    onSuccess: "[Spec@d>At the start of your turn you heal 1d6 barrier.@e>The effect lasts for 1 minute or until your barrier is shattered.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -6646,7 +6646,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Whenever a creature hits you with a melee attack they take 1d8 lightning (Metal) damage.@e:The effect lasts for 1 minute or until your barrier is shattered.]",
+                    onSuccess: "[Spec@d>Whenever a creature hits you with a melee attack they take 1d8 lightning (Metal) damage.@e>The effect lasts for 1 minute or until your barrier is shattered.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -6690,7 +6690,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Whenever a creature hits you with a melee attack they take 1d4 cold (Water) damage and their speed is reduced to zero until the beginning of their next turn.@e:The effect lasts for 1 minute or until your barrier is shattered.]",
+                    onSuccess: "[Spec@d>Whenever a creature hits you with a melee attack they take 1d4 cold (Water) damage and their speed is reduced to zero until the beginning of their next turn.@e>The effect lasts for 1 minute or until your barrier is shattered.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -6822,7 +6822,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:You have partial cover while this spell is active.@e:The effect lasts for 1 minute or until your barrier is shattered.]",
+                    onSuccess: "[Spec@d>You have partial cover while this spell is active.@e>The effect lasts for 1 minute or until your barrier is shattered.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -6882,7 +6882,7 @@ function GetSpellInformation(spell) {
                     family: "Etherealism",
                     element: "Metal",
 
-                    spellslotcost: 2,
+                    spellslotcost: 0,
                     actionCost: "0",
                     trigger: "",
                     mana: 100,
@@ -6928,7 +6928,7 @@ function GetSpellInformation(spell) {
                     family: "Etherealism",
                     element: "Metal",
 
-                    spellslotcost: 2,
+                    spellslotcost: 0,
                     actionCost: "0",
                     trigger: "",
                     mana: 200,
@@ -7088,7 +7088,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Pushed@d:10 feet from center]",
+                    onSuccess: "[Pushed@d>10 feet from center]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -7355,8 +7355,8 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Pushed@d:40 feet into the air]",
-                    onSuccess: "[Pushed@d:20 feet into the air]",
+                    onCritSuccess: "[Pushed@d>40 feet into the air]",
+                    onSuccess: "[Pushed@d>20 feet into the air]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -7490,7 +7490,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Take 6d10 acid (Wood) damage at the end of the turn@e:Effect ends at the end of the creature's turn.]",
+                    onSuccess: "[Spec@d>Take 6d10 acid (Wood) damage at the end of the turn@e>Effect ends at the end of the creature's turn.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -7534,7 +7534,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Blinded@e:Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onSuccess: "[Blinded@e>Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -7580,7 +7580,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Staggered,Staggered 1@e:Ends at the start of the caster's turn]",
+                    onSuccess: "[Staggered,Staggered 1@e>Ends at the start of the caster's turn]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -8245,8 +8245,8 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Pushed@d:20 feet from source][Prone]",
-                    onSuccess: "[Pushed@d:10 feet from source]",
+                    onCritSuccess: "[Pushed@d>20 feet from source][Prone]",
+                    onSuccess: "[Pushed@d>10 feet from source]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -8468,7 +8468,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Take 3d10 acid (Wood) damage at the end of the turn. @e:Ends at the end of the turn.]",
+                    onSuccess: "[Spec@d>Take 3d10 acid (Wood) damage at the end of the turn. @e>Ends at the end of the turn.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -8512,7 +8512,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Take 5d10 acid (Wood) damage at the end of the turn@e:Ends at the end of the turn.]",
+                    onSuccess: "[Spec@d>Take 5d10 acid (Wood) damage at the end of the turn@e>Ends at the end of the turn.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -8555,8 +8555,8 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Blinded@e:Ends after 1 minute.]",
-                    onSuccess: "[Blinded@e:Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onCritSuccess: "[Blinded@e>Ends after 1 minute.]",
+                    onSuccess: "[Blinded@e>Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -8599,9 +8599,9 @@ function GetSpellInformation(spell) {
                     failure: "The target is pushed 10 feet from the source",
                     critFailure: "The target is not pushed.",
 
-                    onCritSuccess: "[Pushed@d:40 feet from source][Prone]",
-                    onSuccess: "[Pushed@d:30 feet from source][Prone]",
-                    onFailure: "[Pushed@d:10 feet from source]",
+                    onCritSuccess: "[Pushed@d>40 feet from source][Prone]",
+                    onSuccess: "[Pushed@d>30 feet from source][Prone]",
+                    onFailure: "[Pushed@d>10 feet from source]",
                     onCritFailure: "[]",
 
                     desc: `You conjure up a wave of water that crashes down for 12d8 force (Water) damage.
@@ -9052,7 +9052,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Pushed@d:5 feet from source]",
+                    onSuccess: "[Pushed@d>5 feet from source]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -9316,7 +9316,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Slowed@e: Ends after 1 round]",
+                    onSuccess: "[Slowed@e> Ends after 1 round]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -9360,7 +9360,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Take 2d10 acid (Wood) damage at the end of the turn@e:Ends at the end of the turn.]",
+                    onSuccess: "[Spec@d>Take 2d10 acid (Wood) damage at the end of the turn@e>Ends at the end of the turn.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -9624,7 +9624,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Pushed@d:10 feet from source]",
+                    onSuccess: "[Pushed@d>10 feet from source]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -9800,7 +9800,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Pushed@d:10 feet from source]",
+                    onSuccess: "[Pushed@d>10 feet from source]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -9975,8 +9975,8 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Prone][Deafened@e: Ends after 1 minute]",
-                    onSuccess: "[Prone][Deafened@e:Ends at the start of the caster's next round]",
+                    onCritSuccess: "[Prone][Deafened@e> Ends after 1 minute]",
+                    onSuccess: "[Prone][Deafened@e>Ends at the start of the caster's next round]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -10556,7 +10556,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Advantage on saves against poison effects@e:Ends after 1 hour]",
+                    onSuccess: "[Spec@d>Advantage on saves against poison effects@e>Ends after 1 hour]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -10646,7 +10646,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Advantage on saves against radiation effects@e:Ends after 1 hour]",
+                    onSuccess: "[Spec@d>Advantage on saves against radiation effects@e>Ends after 1 hour]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -10706,7 +10706,7 @@ function GetSpellInformation(spell) {
                     family: "Heal Injury",
                     element: "Wood",
 
-                    spellslotcost: 1,
+                    spellslotcost: 0,
                     actionCost: "0",
                     trigger: "",
                     mana: 0,
@@ -10838,7 +10838,7 @@ function GetSpellInformation(spell) {
                     family: "Heal Injury",
                     element: "Fire",
 
-                    spellslotcost: 1,
+                    spellslotcost: 0,
                     actionCost: "0",
                     trigger: "",
                     mana: 0,
@@ -10970,7 +10970,7 @@ function GetSpellInformation(spell) {
                     family: "Heal Injury",
                     element: "Water",
 
-                    spellslotcost: 1,
+                    spellslotcost: 0,
                     actionCost: "0",
                     trigger: "",
                     mana: 0,
@@ -11856,7 +11856,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Creature does not take any of the disadvantages for being in an area with a high temperature. This does not provide protection from flame or burn damage.@e:Ends after 8 hours]",
+                    onSuccess: "[Spec@d>Creature does not take any of the disadvantages for being in an area with a high temperature. This does not provide protection from flame or burn damage.@e>Ends after 8 hours]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -11944,7 +11944,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Encumbrance is increased by 5 times their normal value.@e:Ends after 8 hours.]",
+                    onSuccess: "[Spec@d>Encumbrance is increased by 5 times their normal value.@e>Ends after 8 hours.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -11988,7 +11988,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Encumbrance is increased by 4 times their normal value.@e:Ends after 4 hours.]",
+                    onSuccess: "[Spec@d>Encumbrance is increased by 4 times their normal value.@e>Ends after 4 hours.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12076,7 +12076,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Creature does not take any of the disadvantages for being in an area with a low temperature. This does not provide protection from ice or cold damage.@e:Ends after 8 hours]",
+                    onSuccess: "[Spec@d>Creature does not take any of the disadvantages for being in an area with a low temperature. This does not provide protection from ice or cold damage.@e>Ends after 8 hours]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12164,7 +12164,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Creature suffers no ill effects from natural airborne irritants or contaminants and gains a +4 bonus on saving throws against magical effects that involve any of these contaminants. In addition, the creature can see through obscuring effects caused by dense ash, smoke, fog, or similar concealment up to a distance of 60 feet, although this spell does nothing to enhance sight in dark or shadowy conditions.@e:Ends after This effect lasts for 1 hour]",
+                    onSuccess: "[Spec@d>Creature suffers no ill effects from natural airborne irritants or contaminants and gains a +4 bonus on saving throws against magical effects that involve any of these contaminants. In addition, the creature can see through obscuring effects caused by dense ash, smoke, fog, or similar concealment up to a distance of 60 feet, although this spell does nothing to enhance sight in dark or shadowy conditions.@e>Ends after This effect lasts for 1 hour]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12208,7 +12208,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Quickened@d:Extra action can only be used for Strike and Stride actions.@e:Ends after 1 minute]",
+                    onSuccess: "[Quickened@d>Extra action can only be used for Strike and Stride actions.@e>Ends after 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12252,7 +12252,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Creature can freely use any breath weapon, speak, or other abilities while submerged.@e:Ends after 8 hours]",
+                    onSuccess: "[Spec@d>Creature can freely use any breath weapon, speak, or other abilities while submerged.@e>Ends after 8 hours]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12296,7 +12296,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Quickened@d:Extra action can only be used for Interact, Step, Strike, and Stride actions@e:Caster concentration up to 1 minute]",
+                    onSuccess: "[Quickened@d>Extra action can only be used for Interact, Step, Strike, and Stride actions@e>Caster concentration up to 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12340,7 +12340,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Gains a +2 bonus to all Strength, Dexterity, and Constitution based attack rolls, saving throws, and skill checks@e:Ends after 1 minute]",
+                    onSuccess: "[Spec@d>Gains a +2 bonus to all Strength, Dexterity, and Constitution based attack rolls, saving throws, and skill checks@e>Ends after 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12384,7 +12384,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Creature gains a +4 bonus to Strength saving throws@e:Ends after 1 round.]",
+                    onSuccess: "[Spec@d>Creature gains a +4 bonus to Strength saving throws@e>Ends after 1 round.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12428,7 +12428,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Creature gains a +4 bonus to Dexterity saving throws @e:Ends after 1 round]",
+                    onSuccess: "[Spec@d>Creature gains a +4 bonus to Dexterity saving throws @e>Ends after 1 round]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12472,7 +12472,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:The first time creature makes an attack roll or skill check, they roll with advantage @e:Ends after 1 round] ",
+                    onSuccess: "[Spec@d>The first time creature makes an attack roll or skill check, they roll with advantage @e>Ends after 1 round] ",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12560,7 +12560,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:When creture takes the long jump or high jump action action their leap distance is tripled@e:Ends after 1 minute.]",
+                    onSuccess: "[Spec@d>When creture takes the long jump or high jump action action their leap distance is tripled@e>Ends after 1 minute.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12648,7 +12648,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:When creture takes the long jump or high jump action action their leap distance is doubled@e:Ends after 1 minute.]",
+                    onSuccess: "[Spec@d>When creture takes the long jump or high jump action action their leap distance is doubled@e>Ends after 1 minute.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12692,7 +12692,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Whenever the target fails a check to resist being pushed, they may attempt the check again in order to resist the forced movement effects of the check. Anything else associated with the effects like damage still apply.@e:Caster concentration up to 1 minute]",
+                    onSuccess: "[Spec@d>Whenever the target fails a check to resist being pushed, they may attempt the check again in order to resist the forced movement effects of the check. Anything else associated with the effects like damage still apply.@e>Caster concentration up to 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -12868,7 +12868,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Creature can walk on air as if it were solid ground. It can ascend and descend in this way at a maximum of a 45-degree angle. @e:Ends after 1 minute]",
+                    onSuccess: "[Spec@d>Creature can walk on air as if it were solid ground. It can ascend and descend in this way at a maximum of a 45-degree angle. @e>Ends after 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -13052,7 +13052,7 @@ function GetSpellInformation(spell) {
                     onFailure: "",
                     onCritFailure: "",
 
-                    desc: `This spell allows a creature to detect approaching enemies, sniff out hidden foes, and track by sense of smell. The creature can detect opponents within 30 feet by sense of smell. If the opponent is upwind, the range increases to 60 feet; if downwind, it drops to 15 feet. Strong scents, such as smoke or rotting garbage, can be detected at twice the ranges noted above. Overpowering scents, such as skunk musk or troglodyte stench, can be detected at triple normal range. When a creature detects a scent, the exact location of the source is not revealed—only its presence somewhere within range. The creature can take a move action to note the direction of the scent. When the creature is within 5 feet of the source, it pinpoints the source’s location. A creature with the scent ability can follow tracks by smell, making a Survival (Wisdom) check to find or follow a track. The typical DC for a fresh trail is reduced by 10 with the scent ability. Creatures tracking by scent ignore the effects of surface conditions and poor visibility.`,
+                    desc: `This spell allows a creature to detect approaching enemies, sniff out hidden foes, and track by sense of smell. The creature can detect creatures within 60 feet by sense of smell. If the creature is upwind, the range increases to 120 feet; if downwind, it drops to 30 feet. Strong scents, such as smoke or rotting garbage, can be detected at twice the ranges noted above. Overpowering scents, such as skunk musk or troglodyte stench, can be detected at triple normal range. When a creature detects a scent, the exact location of the source is not revealed—only its presence somewhere within range. The creature can take a move action to note the direction of the scent. When the creature is within 5 feet of the source, it pinpoints the source’s location. A creature with the scent ability can follow tracks by smell. The typical DC for a fresh trail is reduced by 10 with the scent ability. Creatures tracking by scent ignore the effects of surface conditions and poor visibility.`,
                     heightenDesc: ``,
             };
         case "darkvision":
@@ -13446,7 +13446,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:After 1 minute of running, targets gain 20 feet of movement until they stop striding. @e:Ends after 4 hours]",
+                    onSuccess: "[Spec@d>After 1 minute of running, targets gain 20 feet of movement until they stop striding. @e>Ends after 4 hours]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -13490,7 +13490,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: " ",
-                    onSuccess: "[Spec@d:Gain +10 to speed. @e:Ends after 1 minute]",
+                    onSuccess: "[Spec@d>Gain +10 to speed. @e>Ends after 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -13534,7 +13534,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Gain 30 foot swim speed or 10 additional swim speed. @e:Ends after 4 hours]",
+                    onSuccess: "[Spec@d>Gain 30 foot swim speed or 10 additional swim speed. @e>Ends after 4 hours]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -13578,7 +13578,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Gain a 30 feet fly speed. Targets must remain in the range of the caster to remain in flight or else the spell will end prematurely. @e:Ends after 10 minutes]",
+                    onSuccess: "[Spec@d>Gain a 30 feet fly speed. Targets must remain in the range of the caster to remain in flight or else the spell will end prematurely. @e>Ends after 10 minutes]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -13622,7 +13622,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Gain a 40 feet fly speed @e:Ends after 10 minutes]",
+                    onSuccess: "[Spec@d>Gain a 40 feet fly speed @e>Ends after 10 minutes]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -13666,7 +13666,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Gain a climbing speed equal to land speed and can move up, down, and across vertical surfacesand upside down along ceilings, while leaving its hands free @e:Ends after 1 minute.]",
+                    onSuccess: "[Spec@d>Gain a climbing speed equal to land speed and can move up, down, and across vertical surfacesand upside down along ceilings, while leaving its hands free @e>Ends after 1 minute.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -13710,7 +13710,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Gain a climbing speed equal to 15 feet and can move up, down, and across vertical surfaces while leaving its hands free @e:Ends after 1 minute.]",
+                    onSuccess: "[Spec@d>Gain a climbing speed equal to 15 feet and can move up, down, and across vertical surfaces while leaving its hands free @e>Ends after 1 minute.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -13797,9 +13797,9 @@ function GetSpellInformation(spell) {
                     failure: "The creature takes a -1 penalty to Perception checks for 1 round.",
                     critFailure: "",
 
-                    onCritSuccess: "[Unconscious@e:Can wake up with a DC 10 sense pressence check. If still unconscious after 1 hour, it wakes up automatically]",
-                    onSuccess: "[Unconscious@e:Can wake up with a DC 10 sense pressence check. If still unconscious after 1 minute, it wakes up automatically]",
-                    onFailure: "[Spec@d:The creature takes a -1 penalty to Perception checks @e:Ends after 1 round]",
+                    onCritSuccess: "[Unconscious@e>Can wake up with a DC 10 sense pressence check. If still unconscious after 1 hour, it wakes up automatically]",
+                    onSuccess: "[Unconscious@e>Can wake up with a DC 10 sense pressence check. If still unconscious after 1 minute, it wakes up automatically]",
+                    onFailure: "[Spec@d>The creature takes a -1 penalty to Perception checks @e>Ends after 1 round]",
                     onCritFailure: "",
 
                     desc: `Spores fill the area causing drowziness and might cause sleep. The effect is determined by the target's save.
@@ -13843,9 +13843,9 @@ function GetSpellInformation(spell) {
                     failure: "The creature takes a -1 penalty to Perception checks for 1 round.",
                     critFailure: "",
 
-                    onCritSuccess: "[Unconscious@e:Ends if it takes any damage or if someone else uses an action to shake the creature. If still unconscious after 1 hour, it wakes up automatically]",
-                    onSuccess: "[Staggered, Staggered 1@e: The creature must make a {DC} Constitution Save at the end of their turn. On a failure the creature falls unconscious]",
-                    onFailure: "[Spec@d:The creature takes a -1 penalty to Perception checks @e:Ends after 1 round]",
+                    onCritSuccess: "[Unconscious@e>Ends if it takes any damage or if someone else uses an action to shake the creature. If still unconscious after 1 hour, it wakes up automatically]",
+                    onSuccess: "[Staggered, Staggered 1@e> The creature must make a {DC} Constitution Save at the end of their turn. On a failure the creature falls unconscious]",
+                    onFailure: "[Spec@d>The creature takes a -1 penalty to Perception checks @e>Ends after 1 round]",
                     onCritFailure: "",
 
                     desc: `Powerful sleep spores emerge from your finger tips. The effect is determined by the target's save.
@@ -13890,7 +13890,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Paralyzed@e:Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onSuccess: "[Paralyzed@e>Ends after 1 minute. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -13933,8 +13933,8 @@ function GetSpellInformation(spell) {
                     failure: "",
                     critFailure: "",
 
-                    onCritSuccess: "[Prone][Paralyzed@e:Ends after 3 rounds]",
-                    onSuccess: "[Paralyzed@e:Ends after 3 rounds. If the target is harmed, the creature may make a {DC} Constitution Save at the end of their turns to remove the effect.]",
+                    onCritSuccess: "[Prone][Paralyzed@e>Ends after 3 rounds]",
+                    onSuccess: "[Paralyzed@e>Ends after 3 rounds. If the target is harmed, the creature may make a {DC} Constitution Save at the end of their turns to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -13978,7 +13978,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Stunned@e:The creature may make a {DC} Constitution Save at the start of their turn to remove the effect.]",
+                    onSuccess: "[Stunned@e>The creature may make a {DC} Constitution Save at the start of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -14288,7 +14288,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:Gain an extra 200 ki when surging. @e:Ends after 1 minute]",
+                    onSuccess: "[Spec@d>Gain an extra 200 ki when surging. @e>Ends after 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -14464,7 +14464,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:{Name} deals an extra 1d6 damage with strikes@e:Caster concentration up to 1 hour]",
+                    onSuccess: "[Spec@d>{Name} deals an extra 1d6 damage with strikes@e>Caster concentration up to 1 hour]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -14508,7 +14508,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:{Name} deals an extra 1d6 damage with strikes@e:Caster concentration up to 1 hour]",
+                    onSuccess: "[Spec@d>{Name} deals an extra 1d6 damage with strikes@e>Caster concentration up to 1 hour]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -14554,7 +14554,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:{Name} deals an extra 1d6 damage with strikes@e:Caster concentration up to 1 hour]",
+                    onSuccess: "[Spec@d>{Name} deals an extra 1d6 damage with strikes@e>Caster concentration up to 1 hour]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16158,7 +16158,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Restrained@e:At the start of their turm, the creature may make a {DC} Strength Save to end the effect. The creature may use the Break Free or Escape Artist action against {DC} to end the effects of ensnaring vines and no longer be restrained. Ends after 1 minute][Spec@d:At the start of their turn takes 1d6 stab (Wood) damage.@e:Ends with the Restrained Effect]",
+                    onSuccess: "[Restrained@e>At the start of their turm, the creature may make a {DC} Strength Save to end the effect. The creature may use the Break Free or Escape Artist action against {DC} to end the effects of ensnaring vines and no longer be restrained. Ends after 1 minute][Spec@d>At the start of their turn takes 1d6 stab (Wood) damage.@e>Ends with the Restrained Effect]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16204,7 +16204,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Pushed@d:20 feet from source]",
+                    onSuccess: "[Pushed@d>20 feet from source]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16292,7 +16292,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Pushed@d:10 feet from source][Prone]",
+                    onSuccess: "[Pushed@d>10 feet from source][Prone]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16336,7 +16336,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Pushed@d:10 feet from source][Prone]",
+                    onSuccess: "[Pushed@d>10 feet from source][Prone]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16380,7 +16380,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Restrained@e:At the start of their turm, the creature may make a {DC} Strength Save to end the effect. The creature may use the Break Free or Escape Artist action against {DC} to end the effects of ensnaring vines and no longer be restrained. Ends after 1 minute][Spec@d:At the start of their turn takes 1d6 cold (Water) damage.@e:Ends with the Restrained Effect]",
+                    onSuccess: "[Restrained@e>At the start of their turm, the creature may make a {DC} Strength Save to end the effect. The creature may use the Break Free or Escape Artist action against {DC} to end the effects of ensnaring vines and no longer be restrained. Ends after 1 minute][Spec@d>At the start of their turn takes 1d6 cold (Water) damage.@e>Ends with the Restrained Effect]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16426,7 +16426,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Pushed@d:20 feet from source]",
+                    onSuccess: "[Pushed@d>20 feet from source]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16470,7 +16470,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Restrained@e:At the start of their turn, the creature must make a {DC} Strength Save to end the effect. Ends after 1 minute.][Prone@e:Ends with the Restrained Effect]",
+                    onSuccess: "[Restrained@e>At the start of their turn, the creature must make a {DC} Strength Save to end the effect. Ends after 1 minute.][Prone@e>Ends with the Restrained Effect]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16516,7 +16516,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Spec@d:At the start of their turn takes 2d6 lightning (Metal) damage. @e: At the start of their turm, the creature may make a {DC} Constitution Save to end the effect. Ends after 1 minute]",
+                    onSuccess: "[Spec@d>At the start of their turn takes 2d6 lightning (Metal) damage. @e> At the start of their turm, the creature may make a {DC} Constitution Save to end the effect. Ends after 1 minute]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16608,7 +16608,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Blinded@e:Ends after 1 round. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onSuccess: "[Blinded@e>Ends after 1 round. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16654,7 +16654,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Blinded@e:Ends after 1 round. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
+                    onSuccess: "[Blinded@e>Ends after 1 round. The creature may make a {DC} Constitution Save at the end of their turn to remove the effect.]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16700,7 +16700,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Pushed@d:20 feet from source]",
+                    onSuccess: "[Pushed@d>20 feet from source]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16746,7 +16746,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Staggered@d:Staggered 1@e: Ends after 1 round]",
+                    onSuccess: "[Staggered@d>Staggered 1@e> Ends after 1 round]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16792,7 +16792,7 @@ function GetSpellInformation(spell) {
                     critFailure: "",
 
                     onCritSuccess: "",
-                    onSuccess: "[Staggered@d:Staggered 1@e: Ends after 1 round]",
+                    onSuccess: "[Staggered@d>Staggered 1@e> Ends after 1 round]",
                     onFailure: "",
                     onCritFailure: "",
 
@@ -16944,7 +16944,7 @@ function GetSpellInformation(spell) {
                     family: "Time Stop",
                     element: "Water",
 
-                    spellslotcost: 3,
+                    spellslotcost: 0,
                     actionCost: "0",
                     trigger: "",
                     mana: 350,

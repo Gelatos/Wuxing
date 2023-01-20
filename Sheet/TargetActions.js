@@ -1504,9 +1504,9 @@ function GetTokenSourceConditionData() {
             for (let i = 0; i < contentData.length; i++) {
                 data = contentData[i];
                 dataType = "";
-                if (data.indexOf(":") > 0) {
-                    dataType = data.substring(0, data.indexOf(":")).toLowerCase().trim();
-                    data = data.substring(data.indexOf(":") + 1);
+                if (data.indexOf(">") > 0) {
+                    dataType = data.substring(0, data.indexOf(">")).toLowerCase().trim();
+                    data = data.substring(data.indexOf(">") + 1);
                 }
                 switch(dataType) {
                     case "n":
@@ -1615,9 +1615,9 @@ function GetTokenConditionData() {
             for (let i = 0; i < contentData.length; i++) {
                 data = contentData[i];
                 dataType = "";
-                if (data.indexOf(":") > 0) {
-                    dataType = data.substring(0, data.indexOf(":")).toLowerCase().trim();
-                    data = data.substring(data.indexOf(":") + 1);
+                if (data.indexOf(">") > 0) {
+                    dataType = data.substring(0, data.indexOf(">")).toLowerCase().trim();
+                    data = data.substring(data.indexOf(">") + 1);
                 }
                 switch(dataType) {
                     case "d":

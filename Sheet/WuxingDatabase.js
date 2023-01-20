@@ -393,8 +393,8 @@ function GetNameList(nationality, nameType) {
                     "Nadine", "Nata", "Nele", "Nicole", "Ninel", "Nora",
                     "Oda", "Oksana", "Olesya", "Ortrun", "Ottilie",
                     "Phillomena", "Phyllis", "Pia", "Priska",
-                    "Rada", "Regine", "Reinhild", "Renate", "Rita", "Rosalie", "Roza", "Rufina",
-                    "Salome", "Selena", "Senta", "Sibylla", "Sieglinde", "Silke", "Sofya", "Sveta",
+                    "Rada", "Regine", "Reinhild", "Renate", "Rita", "Rosalie",
+                    "Salome", "Selena", "Sibylla", "Sieglinde", "Silke", "Sofya", "Sveta",
                     "Taisiya", "Tresa", "Theda", "Tonya",
                     "Ulrike", "Ursel", "Uschi", "Ute", "Varya", "Vaska", "Veron", "Vreni",
                     "Wenke", "Wilhemina", "Yesfir", "Yvonne", "Zella", "Zina", " Ziska", "Zoya"

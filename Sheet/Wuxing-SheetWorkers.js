@@ -13429,6 +13429,10 @@ function GetKiCapacityBonuses(pointObj, spellcasting_ability) {
 
 
 // Sheet Upgrades
+var upgrade_to_1_1_5 = function (doneupdating) {
+	update_all_known_spells();
+	doneupdating();
+}
 
 var upgrade_to_1_1_4 = function (doneupdating) {
 	
@@ -13565,8 +13569,14 @@ var versioning = function () {
 	getAttrs(["version"], function (v) {
 		console.log("Checking version " + v["version"]);
 
-		if (v["version"] === "1.1.4") {
+		if (v["version"] === "1.1.5") {
 			console.log("Wuxing Sheet modified from 5th Edition OGL by Roll20 v" + v["version"]);
+		} else if (v["version"] === "1.1.4") {
+			console.log("UPGRADING TO v1.1.5");
+			upgrade_to_1_1_5(function () {
+				setAttrs({version: "1.1.5"});
+				versioning();
+			});
 		} else if (v["version"] === "1.1.3") {
 			console.log("UPGRADING TO v1.1.4");
 			upgrade_to_1_1_4(function () {

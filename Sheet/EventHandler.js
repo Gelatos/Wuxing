@@ -850,6 +850,8 @@ function SanitizeSheetRoll(roll) {
     sheetRoll = sheetRoll.replace(/%/g, "&#37;");
     sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
     sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+    sheetRoll = sheetRoll.replace(/\</g, "&#60;");
+    sheetRoll = sheetRoll.replace(/\>/g, "&#62;");
     sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
     sheetRoll = sheetRoll.replace(/@/g, "&#64;");
     sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
