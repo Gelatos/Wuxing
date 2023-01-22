@@ -707,7 +707,7 @@ function GetTokenIdTargetData(tokenId) {
     if (token != undefined) {
         id = token.get('represents');
         displayName = getAttrByName(id, "nickname");
-        if (displayName == undefined || displayName.trim() == "") {
+        if (getAttrByName(id, "difficultyStyle") == "3" || displayName == undefined || displayName.trim() == "") {
             displayName = token.get("name");
         }
         return FormTargetData(id, getObj("character", token.get('represents')).get("name"), tokenId, displayName);
@@ -728,7 +728,7 @@ function GetTokenIdListTargetData(idList) {
             if (token) {
                 id = token.get('represents');
                 displayName = getAttrByName(id, "nickname");
-                if (displayName == undefined || displayName.trim() == "") {
+                if (getAttrByName(id, "difficultyStyle") == "3" || displayName == undefined || displayName.trim() == "") {
                     displayName = token.get("name");
                 }
                 output.push(FormTargetData(id, getObj("character", token.get('represents')).get("name"), tokenIds[i], displayName));

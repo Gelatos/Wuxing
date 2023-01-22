@@ -1,3 +1,20 @@
+// Core: Add Spells
+on("clicked:addspell-shimmer clicked:addspell-distortion clicked:addspell-dustwood clicked:addspell-dustglass clicked:addspell-dustearth clicked:addspell-dustmetal clicked:addspell-dustice clicked:addspell-dustironwood clicked:addspell-excavate clicked:addspell-dustglacial clicked:addspell-dustfireglass clicked:addspell-dustadamantine clicked:addspell-dustplatinum clicked:addspell-dustviridium clicked:addspell-dustobsidian clicked:addspell-dustmithral clicked:addspell-dustalbryst clicked:addspell-forestguise clicked:addspell-lightblindness clicked:addspell-shadowwalk clicked:addspell-earthguise clicked:addspell-shadowsteps clicked:addspell-waterguise clicked:addspell-cloudofshadow clicked:addspell-shadowstalker clicked:addspell-windwall clicked:addspell-walloffire clicked:addspell-wallofsand clicked:addspell-bladebarrier clicked:addspell-wallofwater clicked:addspell-wallofforce clicked:addspell-fogcloud clicked:addspell-congregateclouds clicked:addspell-mistyterrain clicked:addspell-smokecloud clicked:addspell-sandstorm clicked:addspell-ashencloud clicked:addspell-solidsmoke clicked:addspell-incendiarycloud clicked:addspell-produceheat clicked:addspell-staticshock clicked:addspell-producecold clicked:addspell-petalstorm clicked:addspell-spore clicked:addspell-silence clicked:addspell-sleetstorm clicked:addspell-irradiate clicked:addspell-soundbuffer clicked:addspell-diamonddust clicked:addspell-updraft clicked:addspell-alleviate clicked:addspell-calmair clicked:addspell-downdraft clicked:addspell-pressure clicked:addspell-zerogravity clicked:addspell-reversegravity clicked:addspell-light clicked:addspell-dancinglights clicked:addspell-dancingdarkness clicked:addspell-burninglight clicked:addspell-darkness clicked:addspell-deeperdarkness clicked:addspell-dawn clicked:addspell-entangle clicked:addspell-seism clicked:addspell-icefloor clicked:addspell-eruption clicked:addspell-twister clicked:addspell-quicksand clicked:addspell-whirlpool clicked:addspell-flamewhirl clicked:addspell-tornado clicked:addspell-flamecyclone clicked:addspell-antlionpit clicked:addspell-maelstrom clicked:addspell-blizzard clicked:addspell-nubikinesis clicked:addspell-forcehand clicked:addspell-catapult clicked:addspell-floatingdisk ", function (eventinfo) {
+    update_character_branches_add_spell(eventinfo.triggerName);
+});
+on("clicked:addspell-gustofwind clicked:addspell-partsand clicked:addspell-sandtunnel clicked:addspell-partwater clicked:addspell-tidalsurge clicked:addspell-stormgust clicked:addspell-kinetichaul clicked:addspell-createforgeduplicate clicked:addspell-createglassduplicate clicked:addspell-createiceduplicate clicked:addspell-createplantduplicate clicked:addspell-createrockduplicate clicked:addspell-quickcraftwood clicked:addspell-quickcraftglass clicked:addspell-quickcraftearth clicked:addspell-quickcraftmetal clicked:addspell-quickcraftice clicked:addspell-createpine clicked:addspell-createcloth clicked:addspell-createmaple clicked:addspell-createclay clicked:addspell-createglass clicked:addspell-createstone clicked:addspell-createcrystal clicked:addspell-createiron clicked:addspell-createsteel clicked:addspell-createsnow clicked:addspell-createice clicked:addspell-createironwood clicked:addspell-createglacial clicked:addspell-createfireglass clicked:addspell-createadamantine clicked:addspell-createplatinum clicked:addspell-createviridium clicked:addspell-createobsidian clicked:addspell-createmithral clicked:addspell-createalbryst clicked:addspell-stalagmite clicked:addspell-pinespear clicked:addspell-wildwood clicked:addspell-glacier clicked:addspell-woodshield clicked:addspell-rockcover clicked:addspell-iceblock clicked:addspell-sicken clicked:addspell-restrain clicked:addspell-subdue clicked:addspell-trip clicked:addspell-attenuate clicked:addspell-flash clicked:addspell-ashenveil clicked:addspell-sandman clicked:addspell-earthbind clicked:addspell-encumber clicked:addspell-cloudedeyes clicked:addspell-blindness clicked:addspell-freezebind clicked:addspell-lethargy clicked:addspell-soundboom clicked:addspell-weight clicked:addspell-arcanehealing clicked:addspell-barrierhealer clicked:addspell-greaterbarrierhealer clicked:addspell-convalescence clicked:addspell-windbarrier clicked:addspell-flamebarrier clicked:addspell-etherbarrier clicked:addspell-staticbarrier clicked:addspell-coldbarrier clicked:addspell-barrierrestorer clicked:addspell-greaterbarrierrestorer clicked:addspell-sandbarrier clicked:addspell-etherbuffer clicked:addspell-spiritbeacon clicked:addspell-spiritwalk clicked:addspell-expelessence ", function (eventinfo) {
+    update_character_branches_add_spell(eventinfo.triggerName);
+});
+on("clicked:addspell-arcaneburst clicked:addspell-windburst clicked:addspell-fireball clicked:addspell-flamepyre clicked:addspell-eruptingearth clicked:addspell-balllightning clicked:addspell-shatter clicked:addspell-geyser clicked:addspell-fireblast clicked:addspell-plasmablast clicked:addspell-causticeruption clicked:addspell-sunburst clicked:addspell-horridwilting clicked:addspell-rockslide clicked:addspell-daggerfall clicked:addspell-hail clicked:addspell-stormofglass clicked:addspell-daggerstorm clicked:addspell-arcanestrike clicked:addspell-woodburst clicked:addspell-fireburst clicked:addspell-glassburst clicked:addspell-quake clicked:addspell-bladeburst clicked:addspell-staticburst clicked:addspell-lightningpulse clicked:addspell-thunderclap clicked:addspell-repellingpulse clicked:addspell-rollingfire clicked:addspell-glasssurge clicked:addspell-defoliate clicked:addspell-lightningbolt clicked:addspell-causticrebuke clicked:addspell-acidspray clicked:addspell-sunbeam clicked:addspell-tidalwave clicked:addspell-diffuse clicked:addspell-calllightning clicked:addspell-wither clicked:addspell-coagulate clicked:addspell-spiritblast clicked:addspell-harm clicked:addspell-atrophy clicked:addspell-chainlightning clicked:addspell-arcanebolt clicked:addspell-windbullet clicked:addspell-repulse clicked:addspell-flamearrow clicked:addspell-rockbullets clicked:addspell-lightningshaft clicked:addspell-icedarts clicked:addspell-rayoffrost clicked:addspell-acidarrow clicked:addspell-fulgor clicked:addspell-acidblast clicked:addspell-brickbarrage clicked:addspell-burninghands clicked:addspell-glassslasher clicked:addspell-sandblast clicked:addspell-stoneshower clicked:addspell-lightningburst clicked:addspell-rainofdaggers clicked:addspell-waterblast clicked:addspell-freezingblast clicked:addspell-thunderwave clicked:addspell-coneofcold clicked:addspell-boomburst clicked:addspell-kinesis clicked:addspell-diakopy clicked:addspell-katapeltis clicked:addspell-chlorotheurgy clicked:addspell-pyrotheurgy clicked:addspell-geotheurgy clicked:addspell-ferrotheurgy clicked:addspell-hydrotheurgy clicked:addspell-healaffliction clicked:addspell-purifyfoodanddrink clicked:addspell-healvitality clicked:addspell-restorevitality ", function (eventinfo) {
+    update_character_branches_add_spell(eventinfo.triggerName);
+});
+on("clicked:addspell-removeradiation clicked:addspell-poisonward clicked:addspell-rejuvenate clicked:addspell-radiationward clicked:addspell-healinjury clicked:addspell-curelighttrauma clicked:addspell-passivehealing clicked:addspell-cureinjury clicked:addspell-mendlightwounds clicked:addspell-passivemending clicked:addspell-mendinjuries clicked:addspell-curelightwounds clicked:addspell-passiverestoration clicked:addspell-curewounds clicked:addspell-lesserlifeweave clicked:addspell-curefractures clicked:addspell-curesevers clicked:addspell-masscureinjuries clicked:addspell-mend clicked:addspell-masscurewounds clicked:addspell-rhapsody clicked:addspell-heal clicked:addspell-lifeweave clicked:addspell-purify clicked:addspell-nightingale clicked:addspell-truerestoration clicked:addspell-mirage clicked:addspell-minorreflection clicked:addspell-mirrorimage clicked:addspell-greaterreflection clicked:addspell-instantfake clicked:addspell-improveability clicked:addspell-heatadaption clicked:addspell-resistance clicked:addspell-unencumbered clicked:addspell-lift clicked:addspell-grasp clicked:addspell-coldadaption clicked:addspell-truestrike clicked:addspell-ashenpath clicked:addspell-unburden clicked:addspell-waterbreathing clicked:addspell-alacrity clicked:addspell-embolden clicked:addspell-overcome clicked:addspell-nimbledodge clicked:addspell-foresight clicked:addspell-improvemovement clicked:addspell-featherfall clicked:addspell-leap clicked:addspell-featherstep clicked:addspell-ascent clicked:addspell-root clicked:addspell-zephyr clicked:addspell-reposition clicked:addspell-levitate clicked:addspell-airwalk clicked:addspell-floatingice clicked:addspell-improvesenses clicked:addspell-detectradiation clicked:addspell-knowweather clicked:addspell-scent clicked:addspell-darkvision clicked:addspell-darksight clicked:addspell-tremorsense clicked:addspell-blindsense clicked:addspell-aquasense clicked:addspell-truesight clicked:addspell-greatertremorsense clicked:addspell-improvespeed clicked:addspell-fleetfooted clicked:addspell-longstrider clicked:addspell-fleetstep clicked:addspell-swiftswim clicked:addspell-soar clicked:addspell-jet clicked:addspell-fastclimb clicked:addspell-groupclimb clicked:addspell-burrow ", function (eventinfo) {
+    update_character_branches_add_spell(eventinfo.triggerName);
+});
+on("clicked:addspell-sleep clicked:addspell-slumber clicked:addspell-holdperson clicked:addspell-seize clicked:addspell-cardiacseizure clicked:addspell-calmedsurge clicked:addspell-manarelease clicked:addspell-etherrelease clicked:addspell-duplicateevocation clicked:addspell-counterspell clicked:addspell-innervate clicked:addspell-boostsurge clicked:addspell-manabattery clicked:addspell-manadrain clicked:addspell-sustainedmana clicked:addspell-venom clicked:addspell-bloodmark clicked:addspell-etherealmark clicked:addspell-distantwhisper clicked:addspell-whisper clicked:addspell-message clicked:addspell-ghostsound clicked:addspell-transmission clicked:addspell-whisperingwind clicked:addspell-skywrite clicked:addspell-sculptsound clicked:addspell-telegram clicked:addspell-telepathy clicked:addspell-shapefiber clicked:addspell-shapewood clicked:addspell-shapeclay clicked:addspell-shapeglass clicked:addspell-shapeearth clicked:addspell-shapemetal clicked:addspell-shapeice clicked:addspell-shapeironwood clicked:addspell-shapeglacial clicked:addspell-shapefireglass clicked:addspell-shapeadamantine clicked:addspell-shapeplatinum clicked:addspell-shapeviridium clicked:addspell-shapeobsidian clicked:addspell-shapemithral clicked:addspell-shapealbryst clicked:addspell-cultivate clicked:addspell-torch clicked:addspell-drench clicked:addspell-earthquake clicked:addspell-bleed clicked:addspell-stabilize clicked:addspell-revitalize clicked:addspell-resuscitate clicked:addspell-feigndeath clicked:addspell-ensnaringstrike clicked:addspell-howlingstrike clicked:addspell-searingstrike clicked:addspell-sandimpact clicked:addspell-buffetingwater clicked:addspell-freezingstrike clicked:addspell-thunderoussmite clicked:addspell-heavyblade clicked:addspell-lightningblade clicked:addspell-arcaneblade clicked:addspell-flashingblade clicked:addspell-sandstrike clicked:addspell-boomingstrike clicked:addspell-toxicstrike clicked:addspell-sparkblade clicked:addspell-zephyrstrike clicked:addspell-timestop clicked:addspell-timeleap clicked:addspell-quickstop clicked:addspell-rewindingstep clicked:addspell-blink clicked:addspell-truestop ", function (eventinfo) {
+    update_character_branches_add_spell(eventinfo.triggerName);
+});
+// Spell Dictionary
 function GetSpellInformation(spell) {
     switch (spell.toLowerCase().replace("'", "")) {
         case "":
@@ -1890,7 +1907,7 @@ function GetSpellInformation(spell) {
                     mana: 200,
 
                     range: "150 feet",
-                    area: "15-foot-radius, 20-foot-high cylinder",
+                    area: "10-foot-radius, 20-foot-high cylinder",
                     targets: "",
                     targerCode: "Field",
 
@@ -2068,7 +2085,7 @@ function GetSpellInformation(spell) {
                     mana: 350,
 
                     range: "60 feet",
-                    area: "15-foot-radius, 20-foot-high cylinder",
+                    area: "10-foot-radius, 20-foot-high cylinder",
                     targets: "",
                     targerCode: "Field",
 
@@ -2156,7 +2173,7 @@ function GetSpellInformation(spell) {
                     mana: 500,
 
                     range: "300 feet",
-                    area: "30-foot-radius, 40-foot-high cylinder",
+                    area: "20-foot-radius, 40-foot-high cylinder",
                     targets: "",
                     targerCode: "Field",
 
@@ -2740,7 +2757,7 @@ function GetSpellInformation(spell) {
                     mana: 350,
 
                     range: "60 feet",
-                    area: "30-foot-radius sphere",
+                    area: "20-foot-radius sphere",
                     targets: "",
                     targerCode: "",
 
@@ -2788,7 +2805,7 @@ function GetSpellInformation(spell) {
                     mana: 500,
 
                     range: "60 feet",
-                    area: "30-foot-radius, 40-foot-high cylinder",
+                    area: "20-foot-radius, 40-foot-high cylinder",
                     targets: "",
                     targerCode: "Field",
 
@@ -5828,7 +5845,7 @@ function GetSpellInformation(spell) {
                     mana: 200,
 
                     range: "90 feet",
-                    area: "15-foot-radius sphere",
+                    area: "10-foot-radius sphere",
                     targets: "",
                     targerCode: "Token",
 
@@ -5920,7 +5937,7 @@ function GetSpellInformation(spell) {
                     mana: 200,
 
                     range: "60 feet",
-                    area: "15-foot-radius sphere",
+                    area: "10-foot-radius sphere",
                     targets: "",
                     targerCode: "Token",
 
@@ -6228,7 +6245,7 @@ function GetSpellInformation(spell) {
                     mana: 200,
 
                     range: "60 feet",
-                    area: "15-foot-radius sphere",
+                    area: "10-foot-radius sphere",
                     targets: "",
                     targerCode: "Token",
 
@@ -7512,7 +7529,7 @@ function GetSpellInformation(spell) {
                     mana: 650,
 
                     range: "150 feet",
-                    area: "40-foot-radius sphere",
+                    area: "20-foot-radius sphere",
                     targets: "",
                     targerCode: "Token",
 
@@ -7558,7 +7575,7 @@ function GetSpellInformation(spell) {
                     mana: 650,
 
                     range: "300 feet",
-                    area: "20-foot-radius sphere",
+                    area: "10-foot-radius sphere",
                     targets: "",
                     targerCode: "Token",
 
@@ -7740,7 +7757,7 @@ function GetSpellInformation(spell) {
                     mana: 500,
 
                     range: "120 feet",
-                    area: "30-foot-radius, 40-foot-high cylinder",
+                    area: "20-foot-radius, 40-foot-high cylinder",
                     targets: "",
                     targerCode: "Token",
 
@@ -7784,7 +7801,7 @@ function GetSpellInformation(spell) {
                     mana: 500,
 
                     range: "120 feet",
-                    area: "25-foot-radius, 40-foot-high cylinder",
+                    area: "15-foot-radius, 40-foot-high cylinder",
                     targets: "",
                     targerCode: "Token",
 
@@ -8224,7 +8241,7 @@ function GetSpellInformation(spell) {
                     mana: 350,
 
                     range: "Self",
-                    area: "30-foot-radius",
+                    area: "20-foot-radius",
                     targets: "",
                     targerCode: "Token",
 
