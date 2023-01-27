@@ -258,6 +258,25 @@ on("chat:message", function(msg) {
     }
 });
 
+on('change:campaign:turnorder', function(obj, prev) {
+
+    log ("here");
+    if(obj.get('turnorder') === prev.turnorder) return;
+
+    let turnorder = (obj.get('turnorder') === "") ? [] : JSON.parse(obj.get('turnorder'));
+    let prevTurnorder = (prev.turnorder === "") ? [] : JSON.parse(prev.turnorder);
+
+    log ("here too");
+    if(turnorder.length && prevTurnorder.length && turnorder[0].id !== prevTurnorder[0].id){
+        let tokenObj = findObjs({_id:turn.id, _pageid:Campaign().get("playerpageid"), _type: 'graphic'})[0];
+        let targets = GetTokenTargetData(tokenObj);
+        log ("here with " + targets[0].displayName);
+        StartCharacterTurn(targets);
+    }
+});
+
+
+
 function SendChatMessage(snd, msg, alt, opt) {
     
     if (alt == undefined) {
@@ -703,16 +722,27 @@ function GetMessageTargetData(msg) {
 
 function GetTokenIdTargetData(tokenId) {
     let token = getObj('graphic', tokenId);
-    let displayName, id;
+    if (token != undefined) {
+        return GetTokenTargetData(token);
+    }
+    log (`[EventData] No token with id ${tokenId} exists.`);
+    return undefined;
+}
+
+function GetTokenTargetData(token) {
+    let displayName, id, tokenName;
     if (token != undefined) {
         id = token.get('represents');
         displayName = getAttrByName(id, "nickname");
         if (getAttrByName(id, "difficultyStyle") == "3" || displayName == undefined || displayName.trim() == "") {
-            displayName = token.get("name");
+            tokenName = token.get("name");
+            if (tokenName != "") {
+                displayName = tokenName;
+            }
         }
-        return FormTargetData(id, getObj("character", token.get('represents')).get("name"), tokenId, displayName);
+        return FormTargetData(id, getObj("character", token.get('represents')).get("name"), token.get("_id"), displayName);
     }
-    log (`[EventData] No token with id ${tokenId} exists.`);
+    log (`[EventData] No token exists.`);
     return undefined;
 }
 
@@ -720,7 +750,7 @@ function GetTokenIdListTargetData(idList) {
     var output = [];
 
     let tokenIds = idList.split(",");
-    let displayName, id;
+    let displayName, id, tokenName;
     for (let i = 0; i < tokenIds.length; i++) {
         tokenIds[i] = tokenIds[i].trim();
         if (tokenIds[i] != "") {
@@ -729,7 +759,10 @@ function GetTokenIdListTargetData(idList) {
                 id = token.get('represents');
                 displayName = getAttrByName(id, "nickname");
                 if (getAttrByName(id, "difficultyStyle") == "3" || displayName == undefined || displayName.trim() == "") {
-                    displayName = token.get("name");
+                    tokenName = token.get("name");
+                    if (tokenName != "") {
+                        displayName = tokenName;
+                    }
                 }
                 output.push(FormTargetData(id, getObj("character", token.get('represents')).get("name"), tokenIds[i], displayName));
             }
