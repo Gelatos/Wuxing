@@ -532,6 +532,11 @@ var TurnMarker = TurnMarker || (function(){
             ){
                 sendGMPing(currentToken.get('left'),currentToken.get('top'),currentToken.get('pageid'),null,true);
             }
+
+			let target = GetTokenTargetData(currentToken);
+			if (target != undefined) {
+				StartCharacterTurn(target);
+			}
         }
     },
 

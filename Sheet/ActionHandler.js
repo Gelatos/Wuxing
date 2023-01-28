@@ -2393,10 +2393,9 @@ function HandleCraftBlueprintAction(actionData) {
 
 // ======= Start Turn
 // =================================================
-function StartCharacterTurn(targets) {
+function StartCharacterTurn(target) {
 
     // only one target can start their turn, so only target the first target
-    let target = targets[0];
     let infoPrintout = "";
     log ("Starting turn for " + target.displayName);
 

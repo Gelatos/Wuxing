@@ -260,18 +260,17 @@ on("chat:message", function(msg) {
 
 on('change:campaign:turnorder', function(obj, prev) {
 
-    log ("here");
     if(obj.get('turnorder') === prev.turnorder) return;
 
     let turnorder = (obj.get('turnorder') === "") ? [] : JSON.parse(obj.get('turnorder'));
     let prevTurnorder = (prev.turnorder === "") ? [] : JSON.parse(prev.turnorder);
 
-    log ("here too");
     if(turnorder.length && prevTurnorder.length && turnorder[0].id !== prevTurnorder[0].id){
-        let tokenObj = findObjs({_id:turn.id, _pageid:Campaign().get("playerpageid"), _type: 'graphic'})[0];
-        let targets = GetTokenTargetData(tokenObj);
-        log ("here with " + targets[0].displayName);
-        StartCharacterTurn(targets);
+        let tokenObj = findObjs({_id:turnorder[0].id, _pageid:Campaign().get("playerpageid"), _type: 'graphic'})[0];
+        let target = GetTokenTargetData(tokenObj);
+        if (target != undefined) {
+            StartCharacterTurn(target);
+        }
     }
 });
 
@@ -733,14 +732,20 @@ function GetTokenTargetData(token) {
     let displayName, id, tokenName;
     if (token != undefined) {
         id = token.get('represents');
-        displayName = getAttrByName(id, "nickname");
-        if (getAttrByName(id, "difficultyStyle") == "3" || displayName == undefined || displayName.trim() == "") {
-            tokenName = token.get("name");
-            if (tokenName != "") {
-                displayName = tokenName;
+        if (id != undefined && id != "") {
+            displayName = getAttrByName(id, "nickname");
+            if (getAttrByName(id, "difficultyStyle") == "3" || displayName == undefined || displayName.trim() == "") {
+                tokenName = token.get("name");
+                if (tokenName != "") {
+                    displayName = tokenName;
+                }
             }
+            return FormTargetData(id, getObj("character", token.get('represents')).get("name"), token.get("_id"), displayName);
         }
-        return FormTargetData(id, getObj("character", token.get('represents')).get("name"), token.get("_id"), displayName);
+        else {
+            log (`[EventData] This token has no representative character.`);
+            return undefined;
+        }
     }
     log (`[EventData] No token exists.`);
     return undefined;
