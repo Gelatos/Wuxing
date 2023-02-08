@@ -446,7 +446,6 @@ function SetToken(tokens, options, tokenType) {
     if (Array.isArray(tokens) && tokens.length > 0) {
 
         let token = {};
-        let tokenStatusMarkers = "";
         let element = "";
         let charId;
 
@@ -479,27 +478,9 @@ function SetToken(tokens, options, tokenType) {
                 tokenName = "";
 
                 if (tokenType == "Generic") {
-                    tokenStatusMarkers = token.get("statusmarkers").split(",");
                     
                     // get current token status
-                    for (var i = 0; i < tokenStatusMarkers.length; i++) {
-                        
-                        if (tokenStatusMarkers[i].indexOf("green") == 0) {
-                            element = "wood";
-                        }
-                        else if (tokenStatusMarkers[i].indexOf("red") == 0) {
-                            element = "fire";
-                        }
-                        else if (tokenStatusMarkers[i].indexOf("brown") == 0) {
-                            element = "earth";
-                        }
-                        else if (tokenStatusMarkers[i].indexOf("purple") == 0) {
-                            element = "metal";
-                        }
-                        else if (tokenStatusMarkers[i].indexOf("blue") == 0) {
-                            element = "water";
-                        }
-                    }
+                    element = GetTokenElement(token).toLowerCase();
                     
                     // set the npc element
                     if (options.includes ("n")) {
@@ -600,12 +581,7 @@ function SetToken(tokens, options, tokenType) {
                 token.set("bar_location", "overlap_bottom");
 
                 // set the token element
-                token.set("status_red", (element.toLowerCase() == "fire" ? true : false));
-                token.set("status_blue", (element.toLowerCase() == "water" ? true : false));
-                token.set("status_green", (element.toLowerCase() == "wood" ? true : false));
-                token.set("status_purple", (element.toLowerCase() == "metal" ? true : false));
-                token.set("status_brown", (element.toLowerCase() == "earth" ? true : false));
-                token.set("status_yellow", (element.toLowerCase() == "" ? true : false));
+                SetTokenElement(token, element);
             }
         });
     } else {
@@ -672,6 +648,17 @@ function GetTokenElement(token) {
     }
 
     return tokenElement;
+}
+
+function SetTokenElement(token, element) {
+
+    // set the token element
+    token.set("status_red", (element.toLowerCase() == "fire" ? true : false));
+    token.set("status_blue", (element.toLowerCase() == "water" ? true : false));
+    token.set("status_green", (element.toLowerCase() == "wood" ? true : false));
+    token.set("status_purple", (element.toLowerCase() == "metal" ? true : false));
+    token.set("status_brown", (element.toLowerCase() == "earth" ? true : false));
+
 }
 
 function CommandSetToken(msg) {
@@ -847,6 +834,20 @@ function CommandCastNPC(msg) {
                     barrierObj.set("current", barrier);
                 }
                 barrierObj.set("bar2_link", barrierObj.get("_id"));
+            }
+
+            // get element
+            elementObj = GetCharacterAttribute(charId, "prime_element");
+            if (elementObj == undefined) {
+                elementObj = CreateNormalAttribute("prime_element", "", charId);
+            }
+            if (elementObj.get("current") == "") {
+                // if the element is clear, we're setting the element based on the current token's element
+                elementObj.set("current", GetTokenElement(token));
+            }
+            else {
+                // set the token's element based on the primary element
+                SetTokenElement(token, elementObj.get("current"));
             }
 
             // set character data
