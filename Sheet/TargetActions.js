@@ -1358,7 +1358,7 @@ function GetTokenSourceConditionData() {
         },
 
         getSourceConditionDataString: function () {
-            let output = `${this.conditionIndex}|n:${this.sourceName}|sid:${this.sourceCharId}|scn:${this.sourceCharName}|sdc:${this.sourceDC}|sp:${this.sourcePower}|si:${this.sourceImage}|r:${this.rounds}|cd:`;
+            let output = `${this.conditionIndex}|n>${this.sourceName}|sid>${this.sourceCharId}|scn>${this.sourceCharName}|sdc>${this.sourceDC}|sp>${this.sourcePower}|si>${this.sourceImage}|r>${this.rounds}|cd>`;
             for (let i = 0; i < this.conditions.length; i++) {
                 output += this.conditions[i].getConditionDataString();
             }
@@ -1455,7 +1455,7 @@ function GetTokenConditionData() {
         },
         
         getConditionDataString: function() {
-            return `[${this.name}@d:${this.desc}@e:${this.endConditions}]`;
+            return `[${this.name}@d>${this.desc}@e>${this.endConditions}]`;
         },
 
         getPrintoutData: function() {
@@ -1479,7 +1479,7 @@ function GetTokenConditionData() {
             }
 
             if (this.endConditions != "") {
-                output.desc += `\nEnd Conditions: ${this.endConditions}`;
+                output.desc += `\n<strong>End Conditions:</strong> ${this.endConditions}`;
             }
             return output;
         }

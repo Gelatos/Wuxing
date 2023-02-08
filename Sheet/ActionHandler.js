@@ -356,7 +356,7 @@ function HandleActionCostFromTemplate(msg, charId) {
                     output += "<div>" + resourceVal + " REMAINING ACTION(S)</div>";
                     actionCountObj.set("current", resourceVal);
                 } else {
-                    output += "<div style='color:red;'>NOT ENOUGH ACTIONS (" + resourceVal + " ACTIONS)</div>";
+                    // output += "<div style='color:red;'>NOT ENOUGH ACTIONS (" + resourceVal + " ACTIONS)</div>";
                 }
             }
         break;
@@ -369,7 +369,7 @@ function HandleActionCostFromTemplate(msg, charId) {
                     output += "<div>" + resourceVal + " REMAINING REACTION(S)</div>";
                     reactionCountObj.set("current", resourceVal);
                 } else {
-                    output += "<div style='color:red;'>NOT ENOUGH REACTIONS (" + resourceVal + " REACTIONS)</div>";
+                    // output += "<div style='color:red;'>NOT ENOUGH REACTIONS (" + resourceVal + " REACTIONS)</div>";
                 }
             }
         break;
@@ -434,7 +434,9 @@ function HandleManaCostFromTemplate(msg, charId) {
         } else {
             // characters in the material plane use ki to cast spells
             let ki = GetCharacterAttribute(charId, "ki");
-            let kiValue = parseInt(ki.get("current"));
+            log ("found: " + ki);
+            log ("found this too: " + ki.get("current") + "/" + ki.get("max"));
+            let kiValue = isNaN(parseInt(ki.get("current"))) ? 0 : parseInt(ki.get("current"));
 
             if (manaCost > 0) {
                 if (manaCost <= kiValue) {
@@ -2393,11 +2395,43 @@ function HandleCraftBlueprintAction(actionData) {
 
 // ======= Start Turn
 // =================================================
-function StartCharacterTurn(target) {
-
-    // only one target can start their turn, so only target the first target
-    let infoPrintout = "";
+function StartCharacterTurn(target, output) {
     log ("Starting turn for " + target.displayName);
+
+    // setup variables
+    if (output == undefined) {
+        output = "";
+    }
+
+    // refresh resources and set minion data
+    RefreshBasicActionCosts(target);
+    RefreshRoundResources(target);
+    RefreshRaisedShieldState(target);
+    SetMinionNameOnCharacterSheet(target);
+
+    // print the current conditions on the token
+    let tokenConditionInfo = GetTokenConditionInformation(target, true);
+    if (tokenConditionInfo.conditions != "") {
+        log (`conditions: ${tokenConditionInfo.conditions}`);
+        output += tokenConditionInfo.display();
+    }
+
+    // print any death information
+    let deathInfo = GetDeathInformation(target);
+    if (deathInfo.info != "") {
+        output += deathInfo.display();
+    }
+
+    // print auto off defenses
+    output += GetAutoOffDefenses(target);
+
+    // show the status update
+    if (output != "") {
+        sendChat("CombatMaster", GetFormattedMessage("si", output));
+    }
+}
+
+function RefreshBasicActionCosts(target) {
 
     // grab resource data
     let actionCountObj = GetCharacterAttribute(target.charId, "actioncount");
@@ -2414,6 +2448,9 @@ function StartCharacterTurn(target) {
     else {
         reactionCountObj = CreateNormalAttribute("reactioncount", "1", target.charId, "1");
     }
+}
+
+function RefreshRoundResources(target) {
 
     // restore their resources that accumulate each round
     let roundResources, roundResource;
@@ -2428,6 +2465,9 @@ function StartCharacterTurn(target) {
             }
         });
     }
+}
+
+function RefreshRaisedShieldState(target) {
 
     // lower their shield
     let raisedShieldObj = GetCharacterAttribute(target.charId, "gearEquippedShieldRaised");
@@ -2451,60 +2491,11 @@ function StartCharacterTurn(target) {
         }
     }
 
-    // set minion data
-    let difficultyStyleObj = GetCharacterAttribute(target.charId, "difficultyStyle");
-    if (difficultyStyleObj != undefined && difficultyStyleObj == "3") {
-        let nicknameObj = GetCharacterAttribute(target.charId, "nickname");
-        if (nicknameObj != undefined) {
-            nicknameObj.set("current", target.getToken().get("name"));
-        }
-    }
-
-    // print the current conditions on the token
-    let tokenConditionInfo = GetTokenConditionInformation(target, true);
-    if (tokenConditionInfo.conditions != "") {
-        infoPrintout += tokenConditionInfo.display();
-    }
-
-    // print any death information
-    let deathInfo = GetDeathInformation(target);
-    if (deathInfo.info != "") {
-        infoPrintout += deathInfo.display();
-    }
-
-    // turn off any auto off defenses
-    let autoOffDefenses = getAttrByName(target.charId, "defAutoOffAtStartOfTurn");
-    if (autoOffDefenses != undefined && autoOffDefenses != "") {
-
-        // create an array of each id
-        if (autoOffDefenses.indexOf("@@") >= 0) {
-            autoOffDefenses = autoOffDefenses.split("@@");
-        }
-        else {
-            autoOffDefenses = [autoOffDefenses];
-        }
-        let infoString = "";
-
-        // iterate through each id
-        for (let i = 0; i < autoOffDefenses.length; i++) {
-            if (DeactivateDefense(target.charId, autoOffDefenses[i])) {
-                infoString += `<div>Deactivating ${getAttrByName(target.charId, GetSectionIdName("repeating_acmodifiers", autoOffDefenses[i], "name"))}</div>`;
-            }
-        }
-
-        if (infoString != "") {
-            infoPrintout += `<div class="sheet-title" style="width: 270px;">Temporary Defenses</div>` + infoString;
-        }
-    }
-
-    // show the status update
-    if (infoPrintout != "") {
-        sendChat("CombatMaster", GetFormattedMessage("si", infoPrintout));
-    }
 }
 
 function GetTokenConditionInformation(targetData, showNameplate) {
 
+    // create the output
     let output = {
         header: `${showNameplate ? `[${targetData.displayName}] ` : ""}Active Conditions`,
         conditions: "",
@@ -2522,11 +2513,12 @@ function GetTokenConditionInformation(targetData, showNameplate) {
         }
     };
 
+    // 
     let conditionData = GetTokenActiveConditionsPrintout(targetData.getToken());
     if (conditionData.length > 0) {
 
         for (let i = 0; i < conditionData.length; i++) {
-            if (conditionData.title != "") {
+            if (conditionData[i].title != "") {
                 output.conditions += `<div style="font-weight: bold;">${conditionData[i].title}<img style="display: inline-block; width: 20px; margin-left: 5px;" src="${conditionData[i].getStatusMarkerImage()}" /></div><div><span style="font-weight: bold">Source: </span><span>${conditionData[i].source}</span><div><div>${conditionData[i].desc}</div>`;
             }
         }
@@ -2579,4 +2571,34 @@ function GetDeathInformation(targetData) {
     }
 
     return output;
+}
+
+function GetAutoOffDefenses(target) {
+
+    // turn off any auto off defenses
+    let autoOffDefenses = getAttrByName(target.charId, "defAutoOffAtStartOfTurn");
+    if (autoOffDefenses != undefined && autoOffDefenses != "") {
+
+        // create an array of each id
+        if (autoOffDefenses.indexOf("@@") >= 0) {
+            autoOffDefenses = autoOffDefenses.split("@@");
+        }
+        else {
+            autoOffDefenses = [autoOffDefenses];
+        }
+        let infoString = "";
+
+        // iterate through each id
+        for (let i = 0; i < autoOffDefenses.length; i++) {
+            if (DeactivateDefense(target.charId, autoOffDefenses[i])) {
+                infoString += `<div>Deactivating ${getAttrByName(target.charId, GetSectionIdName("repeating_acmodifiers", autoOffDefenses[i], "name"))}</div>`;
+            }
+        }
+
+        if (infoString != "") {
+            return `<div class="sheet-title" style="width: 270px;">Temporary Defenses</div>` + infoString;
+        }
+    }
+
+    return "";
 }

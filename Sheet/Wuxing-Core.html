@@ -2090,8 +2090,17 @@
 								<span class="wuxFormHeader">Strength Save</span>
 							</div>
 							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Mods</span>
+								<span class="wuxFormTitle">Mods</span>
 								<input type="number" class="wuxFormInput wuxSizeSmall" name="attr_strength_save_mod" value="0">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Proficiency</span>
+								<select class="wuxFormInput wuxSizeSmall" name="attr_strength_save_prof_style" value="0">
+									<option value="0" selected="selected">Full</option>
+									<option value="1">Full + Half</option>
+									<option value="2">2x Full</option>
+									<option value="3">None</option>
+								</select>
 							</div>
 						</div>
 						<div class="display">
@@ -2123,8 +2132,17 @@
 								<span class="wuxFormHeader">Dexterity Save</span>
 							</div>
 							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Mods</span>
+								<span class="wuxFormTitle">Mods</span>
 								<input type="number" class="wuxFormInput wuxSizeSmall" name="attr_dexterity_save_mod" value="0">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Proficiency</span>
+								<select class="wuxFormInput wuxSizeSmall" name="attr_dexterity_save_prof_style" value="0">
+									<option value="0" selected="selected">Full</option>
+									<option value="1">Full + Half</option>
+									<option value="2">2x Full</option>
+									<option value="3">None</option>
+								</select>
 							</div>
 						</div>
 						<div class="display">
@@ -2156,8 +2174,17 @@
 								<span class="wuxFormHeader">Constitution Save</span>
 							</div>
 							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Mods</span>
+								<span class="wuxFormTitle">Mods</span>
 								<input type="number" class="wuxFormInput wuxSizeSmall" name="attr_constitution_save_mod" value="0">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Proficiency</span>
+								<select class="wuxFormInput wuxSizeSmall" name="attr_constitution_save_prof_style" value="0">
+									<option value="0" selected="selected">Full</option>
+									<option value="1">Full + Half</option>
+									<option value="2">2x Full</option>
+									<option value="3">None</option>
+								</select>
 							</div>
 						</div>
 						<div class="display">
@@ -2189,8 +2216,17 @@
 								<span class="wuxFormHeader">Intelligence Save</span>
 							</div>
 							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Mods</span>
+								<span class="wuxFormTitle">Mods</span>
 								<input type="number" class="wuxFormInput wuxSizeSmall" name="attr_intelligence_save_mod" value="0">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Proficiency</span>
+								<select class="wuxFormInput wuxSizeSmall" name="attr_intelligence_save_prof_style" value="0">
+									<option value="0" selected="selected">Full</option>
+									<option value="1">Full + Half</option>
+									<option value="2">2x Full</option>
+									<option value="3">None</option>
+								</select>
 							</div>
 						</div>
 						<div class="display">
@@ -2225,6 +2261,15 @@
 								<span class="wuxFormTitle wuxSizeSmall">Mods</span>
 								<input type="number" class="wuxFormInput wuxSizeSmall" name="attr_wisdom_save_mod" value="0">
 							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Proficiency</span>
+								<select class="wuxFormInput wuxSizeSmall" name="attr_wisdom_save_prof_style" value="0">
+									<option value="0" selected="selected">Full</option>
+									<option value="1">Full + Half</option>
+									<option value="2">2x Full</option>
+									<option value="3">None</option>
+								</select>
+							</div>
 						</div>
 						<div class="display">
 							<div class="wuxMultiRow">
@@ -2257,6 +2302,15 @@
 							<div class="wuxRow">
 								<span class="wuxFormTitle wuxSizeSmall">Mods</span>
 								<input type="number" class="wuxFormInput wuxSizeSmall" name="attr_charisma_save_mod" value="0">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle">Proficiency</span>
+								<select class="wuxFormInput wuxSizeSmall" name="attr_charisma_save_prof_style" value="0">
+									<option value="0" selected="selected">Full</option>
+									<option value="1">Full + Half</option>
+									<option value="2">2x Full</option>
+									<option value="3">None</option>
+								</select>
 							</div>
 						</div>
 						<div class="display">
@@ -24389,161 +24443,34 @@
 										</div>
 									</div>
 								</div>
-								<div class="core-featList-ActionCombatGeneralFeats wuxSubCategory wuxFieldSet">
-									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-ActionCombatGeneralFeats">
+								<div class="core-featList-ArmorCombatGeneralFeats wuxSubCategory wuxFieldSet">
+									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-ArmorCombatGeneralFeats">
 									<div class="wuxMultiRow">
 										<div class="wuxFormEntry">
 											<span class="wuxFormHeaderLeadIcon">J</span>
 											<span class="wuxPmSpacer">&nbsp;</span>
 											<span class="wuxPmSpacer">&nbsp;</span>
-											<span>Action</span>
+											<span>Armor</span>
 										</div>
 									</div>
 									<div class="wuxCollapseField">
-										<div class="wuxSubCategory featlist-ExactingStrike">
+										<div class="wuxSubCategory featlist-ArmorFlexibility">
 											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ExactingStrike">
-												<input type="hidden" name="attr_featlist-ExactingStrike" value="Exacting Strike">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ArmorFlexibility">
+												<input type="hidden" name="attr_featlist-ArmorFlexibility" value="Armor Flexibility">
 												<div class="wuxFeatEntry">
 													<div class="wuxFormEntry">
 														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-ExactingStrike"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-ExactingStrike" value="Exacting Strike">Exacting Strike</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ExactingStrike-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ExactingStrike-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Exacting Strike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
-														</div>
-														<div class="wuxMultiRow">You make a controlled attack, fully accounting for your momentum. Make a Strike. The Strike gains the following failure effect.</div>
-														<div class='wuxMultiRow'><span><strong>Failure: </strong>This attack does not count toward your multiple attack penalty.</span></div>
-
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-Lunge">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Lunge">
-												<input type="hidden" name="attr_featlist-Lunge" value="Lunge">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Lunge"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Lunge" value="Lunge">Lunge</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Lunge-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Lunge-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Lunge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
-														</div>
-														<div class="wuxMultiRow">You can increase your reach by 5 feet for the rest of your turn. Doing so grants you a -2 penalty on all attack rolls this turn.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-SuddenCharge">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-SuddenCharge">
-												<input type="hidden" name="attr_featlist-SuddenCharge" value="Sudden Charge">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-SuddenCharge"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-SuddenCharge" value="Sudden Charge">Sudden Charge</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-SuddenCharge-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-SuddenCharge-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Sudden Charge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class="wuxMultiRow">With a quick sprint, you dash up to your foe and swing. Stride twice. If you end your movement within melee reach of at least one enemy, you can make a melee Strike against that enemy. You can use Sudden Charge while Burrowing, Climbing, Flying, or Swimming instead of Striding if you have the corresponding movement type.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-TakeAim">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-TakeAim">
-												<input type="hidden" name="attr_featlist-TakeAim" value="Take Aim">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-TakeAim"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-TakeAim" value="Take Aim">Take Aim</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-TakeAim-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-TakeAim-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Take Aim<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You must be wielding a bow.</span></div>
-														<div class="wuxMultiRow">You concentrate on aiming your next attack. Your next attack is made without Multiple Attack Penalty but still contributes to the increasing penalty.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-AssistingShot">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-AssistingShot">
-												<input type="hidden" name="attr_featlist-AssistingShot" value="Assisting Shot">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-AssistingShot"><span>Add</span></button>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-ArmorFlexibility"><span>Add</span></button>
 														<span class="wuxFeatLevel">Character 02</span>
-														<span name="attr_featlist-AssistingShot" value="Assisting Shot">Assisting Shot</span>
+														<span name="attr_featlist-ArmorFlexibility" value="Armor Flexibility">Armor Flexibility</span>
 													</div>
 												</div>
 
 												<div class="wuxMultiRow">
 													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-AssistingShot-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-AssistingShot-General">General</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ArmorFlexibility-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ArmorFlexibility-General">General</label>
 
 													</div>
 												</div>
@@ -24551,224 +24478,37 @@
 												<div class="wuxCollapseField">
 													<div class="wuxDescription">
 														<div class="wuxRow">
-															<span class="wuxFormHeader">Assisting Shot<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+															<span class="wuxFormHeader">Armor Flexibility</span>
 														</div>
-														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are wielding a ranged weapon.</span></div>
-														<div class="wuxMultiRow">With a quick shot, you interfere with a foe in combat. Make a Strike with a ranged weapon. If the Strike hits, the next creature other than you to attack the same target before the start of your next turn gains a +1 circumstance bonus to their roll, or a +2 circumstance bonus if your Strike was a critical hit.</div>
+														<div class="wuxMultiRow">While wearing armor you reduce any skill check penalty by 2.</div>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="wuxSubCategory featlist-BarrelingCharge">
+										<div class="wuxSubCategory featlist-ArmorMastery">
 											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-BarrelingCharge">
-												<input type="hidden" name="attr_featlist-BarrelingCharge" value="Barreling Charge">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ArmorMastery">
+												<input type="hidden" name="attr_featlist-ArmorMastery" value="Armor Mastery">
 												<div class="wuxFeatEntry">
 													<div class="wuxFormEntry">
 														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-BarrelingCharge"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-BarrelingCharge" value="Barreling Charge">Barreling Charge</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-BarrelingCharge-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-BarrelingCharge-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Barreling Charge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Prerequisites: </strong>Trained in Athletics</span></div>
-														<div class="wuxRow">&nbsp;</div>
-														<div class="wuxMultiRow">You rush forward, moving enemies aside to reach your foe. You Stride, attempting to move through your enemies' spaces and make a melee Strike. Roll an Athletics check and compare the result to the Strength saving throw of each creature whose space you attempt to move through during your Stride, moving through its space on a success but ending your movement before entering its space on a failure. You can use Barreling Charge to Burrow, Climb, Fly, or Swim instead of Stride, as long as you have the corresponding movement type.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-DoubleShot">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DoubleShot">
-												<input type="hidden" name="attr_featlist-DoubleShot" value="Double Shot">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DoubleShot"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-DoubleShot" value="Double Shot">Double Shot</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DoubleShot-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DoubleShot-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Double Shot<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are wielding a ranged weapon.</span></div>
-														<div class="wuxMultiRow">You shoot twice in blindingly fast succession. Make two Strikes, each against a separate target and with a –2 penalty. Both attacks count toward your multiple attack penalty, but the penalty doesn’t increase until after you’ve made both of them.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-Dual-HandedAssault">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Dual-HandedAssault">
-												<input type="hidden" name="attr_featlist-Dual-HandedAssault" value="Dual-Handed Assault">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Dual-HandedAssault"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-Dual-HandedAssault" value="Dual-Handed Assault">Dual-Handed Assault</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Dual-HandedAssault-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Dual-HandedAssault-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Dual-Handed Assault<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are wielding a one-handed melee weapon and have a free hand.</span></div>
-														<div class="wuxMultiRow">You snap your free hand over to grip your weapon just long enough to add momentum and deliver a more powerful blow to your opponent. Make a Strike with the required weapon. You quickly switch your grip during the Strike in order to make the attack with two hands. Increase the weapon damage die by one step for this attack. When the Strike is complete, you resume gripping the weapon with only one hand. This action doesn't end any stance or fighter feat effect that requires you to have one hand free.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-HuntersPounce">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-HuntersPounce">
-												<input type="hidden" name="attr_featlist-HuntersPounce" value="Hunter's Pounce">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-HuntersPounce"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-HuntersPounce" value="Hunter's Pounce">Hunter's Pounce</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-HuntersPounce-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-HuntersPounce-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Hunter's Pounce<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Requirement: </strong>Must have a speed of 10 or more.</span></div>
-														<div class="wuxMultiRow">You leap at a foe in an attempt to knock them to the ground. Move 10 feet. If you end your movement within melee reach of at least one enemy, you can make a melee Strike against that enemy. If you hit you may then push the target to the ground. Attempt an Athletics check against your target's Strength Saving Throw. On success they are knocked prone.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-Interception">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Interception">
-												<input type="hidden" name="attr_featlist-Interception" value="Interception">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Interception"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-Interception" value="Interception">Interception</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Interception-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Interception-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Interception<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You must be wielding a shield or a melee weapon</span></div>
-														<div class="wuxMultiRow">When a creature you can see hits a target that is within 5 feet of you with an attack, you can reduce the damage the target takes by 1d10 + your proficiency bonus (to a minimum of 0 damage).</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-QuickReversal">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-QuickReversal">
-												<input type="hidden" name="attr_featlist-QuickReversal" value="Quick Reversal">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-QuickReversal"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-QuickReversal" value="Quick Reversal">Quick Reversal</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-QuickReversal-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-QuickReversal-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Quick Reversal<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are flanked by at least two enemies.</span></div>
-														<div class="wuxMultiRow">You turn your foes’ flanking against them with a quick reverse. Make a melee Strike against one of the flanking enemies and make a second Strike with the same weapon or unarmed attack against a different enemy that is flanking you. This second Strike has the same multiple attack penalty of the initial attack and doesn’t count toward your multiple attack penalty.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-TripleShot">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-TripleShot">
-												<input type="hidden" name="attr_featlist-TripleShot" value="Triple Shot">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-TripleShot"><span>Add</span></button>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-ArmorMastery"><span>Add</span></button>
 														<span class="wuxFeatLevel">Character 06</span>
-														<span name="attr_featlist-TripleShot" value="Triple Shot">Triple Shot</span>
+														<span name="attr_featlist-ArmorMastery" value="Armor Mastery">Armor Mastery</span>
 													</div>
 												</div>
 
 												<div class="wuxMultiRow">
 													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-TripleShot-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-TripleShot-General">General</label>
+														<input type="number" class="wuxFormInput wuxSizeMini" name="attr_featlist-ArmorMastery-Archetype" value=0>
+														<span class="wuxPmSpacer">&nbsp;</span>
+														<span class="wuxFeatTypeName">Archetype</span>
+														<input type="number" class="wuxFormInput wuxSizeMini" name="attr_featlist-ArmorMastery-Combat" value=0>
+														<span class="wuxPmSpacer">&nbsp;</span>
+														<span class="wuxFeatTypeName">Combat</span>
+														<input type="number" class="wuxFormInput wuxSizeMini" name="attr_featlist-ArmorMastery-General" value=0>
+														<span class="wuxPmSpacer">&nbsp;</span>
+														<span class="wuxFeatTypeName">General</span>
 
 													</div>
 												</div>
@@ -24776,168 +24516,11 @@
 												<div class="wuxCollapseField">
 													<div class="wuxDescription">
 														<div class="wuxRow">
-															<span class="wuxFormHeader">Triple Shot</span>
+															<span class="wuxFormHeader">Armor Mastery</span>
 														</div>
-														<div class='wuxMultiRow'><span><strong>Prerequisites: </strong>Double Shot</span></div>
-														<div class="wuxRow">&nbsp;</div>
-														<div class="wuxMultiRow">You can quickly fire multiple shots with greater control. When you use Double Shot, you can make the attacks against the same target. You can add an additional action to Double Shot to make three ranged Strikes instead of two. If you do, the penalty is –4. All attacks count toward your multiple attack penalty, but the penalty doesn’t increase until after you’ve made all of them.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-IncredibleAim">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-IncredibleAim">
-												<input type="hidden" name="attr_featlist-IncredibleAim" value="Incredible Aim">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-IncredibleAim"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 08</span>
-														<span name="attr_featlist-IncredibleAim" value="Incredible Aim">Incredible Aim</span>
-													</div>
-												</div>
+														<div class="wuxMultiRow">Choose a type of armor proficiency. You add half your proficiency bonus to your AC while wearing that type of armor. Normally, proficiency is not added to AC. If you already have a source to add your proficiency bonus to AC with the selected type of armor, this feat does not have any effect.
 
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-IncredibleAim-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-IncredibleAim-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Incredible Aim<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class="wuxMultiRow">By spending a moment to focus, you can ensure your attack strikes true. Make a ranged weapon Strike. On this Strike, you gain a +2 circumstance bonus to the attack roll and ignore the target’s concealed condition.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-LeapingStrike">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-LeapingStrike">
-												<input type="hidden" name="attr_featlist-LeapingStrike" value="Leaping Strike">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-LeapingStrike"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 08</span>
-														<span name="attr_featlist-LeapingStrike" value="Leaping Strike">Leaping Strike</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-LeapingStrike-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-LeapingStrike-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Leaping Strike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class="wuxMultiRow">You make an impressive leap and swing while you soar. Make a Leap, High Jump, or Long Jump and attempt one melee Strike at any point during your jump. Immediately after the Strike, you fall to the ground if you're in the air, even if you haven't reached the maximum distance of your jump. If the distance you fall is no more than the height of your jump, you take no damage and land upright.
-
-															When attempting a High Jump or Long Jump during a Sudden Leap, determine the DC using the Long Jump DCs, and increase your maximum distance to double your Speed.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-DebilitatingShot">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DebilitatingShot">
-												<input type="hidden" name="attr_featlist-DebilitatingShot" value="Debilitating Shot">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DebilitatingShot"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 10</span>
-														<span name="attr_featlist-DebilitatingShot" value="Debilitating Shot">Debilitating Shot</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DebilitatingShot-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DebilitatingShot-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Debilitating Shot<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class="wuxMultiRow">Aiming for a weak point, you impede your foe with a precise shot. Make a ranged weapon Strike. If it hits and deals damage, the target is staggered 1 until the end of its next turn.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-SpringAttack">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-SpringAttack">
-												<input type="hidden" name="attr_featlist-SpringAttack" value="Spring Attack">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-SpringAttack"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 12</span>
-														<span name="attr_featlist-SpringAttack" value="Spring Attack">Spring Attack</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-SpringAttack-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-SpringAttack-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Spring Attack<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
-														</div>
-														<div class="wuxMultiRow">Springing away from one foe, you Strike at another. Stride up to your Speed, but you must end that movement within melee reach of a different enemy. At the end of your movement, make a melee Strike against an enemy now within reach. You can use Spring Attack while Burrowing, Climbing, Flying, or Swimming instead of Striding if you have the corresponding movement type.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-DesperateFinisher">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DesperateFinisher">
-												<input type="hidden" name="attr_featlist-DesperateFinisher" value="Desperate Finisher">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DesperateFinisher"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 14</span>
-														<span name="attr_featlist-DesperateFinisher" value="Desperate Finisher">Desperate Finisher</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DesperateFinisher-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DesperateFinisher-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Desperate Finisher<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
-														</div>
-														<div class="wuxMultiRow">You throw everything into one last press. Use a single action that you know with the press trait as part of Desperate Finisher.</div>
+															You may select this feat multiple times, each time selecting a new armor proficiency.</div>
 													</div>
 												</div>
 											</div>
@@ -25197,6 +24780,281 @@
 										</div>
 									</div>
 								</div>
+								<div class="core-featList-FighterCombatGeneralFeats wuxSubCategory wuxFieldSet">
+									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-FighterCombatGeneralFeats">
+									<div class="wuxMultiRow">
+										<div class="wuxFormEntry">
+											<span class="wuxFormHeaderLeadIcon">J</span>
+											<span class="wuxPmSpacer">&nbsp;</span>
+											<span class="wuxPmSpacer">&nbsp;</span>
+											<span>Fighter</span>
+										</div>
+									</div>
+									<div class="wuxCollapseField">
+										<div class="wuxSubCategory featlist-Ambush">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Ambush">
+												<input type="hidden" name="attr_featlist-Ambush" value="Ambush">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Ambush"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Ambush" value="Ambush">Ambush</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Ambush-Archetype">Archetype</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Ambush-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Ambush-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Ambush</span>
+														</div>
+														<div class="wuxMultiRow">When you make a Dexterity (Stealth) check or an initiative roll, you can expend one superiority die and add the die to the roll.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-Brace">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Brace">
+												<input type="hidden" name="attr_featlist-Brace" value="Brace">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Brace"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Brace" value="Brace">Brace</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Brace-Archetype">Archetype</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Brace-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Brace-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Brace<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
+														</div>
+														<div class="wuxMultiRow">When an enemy you can see moves within 5 feet of you, you can expend one superiority die and make a melee strike against that creature, adding the following effects in addition to the normal effects of the Strike.</div>
+														<div class='wuxMultiRow'><span><strong>Critical Success: </strong>Roll your superiority die again and add both results to your damage.</span></div>
+														<div class='wuxMultiRow'><span><strong>Success: </strong>Deal extra damage equal to the roll on your superiority die.</span></div>
+
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-EvasiveFootwork">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-EvasiveFootwork">
+												<input type="hidden" name="attr_featlist-EvasiveFootwork" value="Evasive Footwork">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-EvasiveFootwork"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-EvasiveFootwork" value="Evasive Footwork">Evasive Footwork</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-EvasiveFootwork-Archetype">Archetype</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-EvasiveFootwork-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-EvasiveFootwork-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Evasive Footwork<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														</div>
+														<div class="wuxMultiRow">Stride and expend one superiority die, rolling the die and adding the number rolled to your AC until you stop moving.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-Parry">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Parry">
+												<input type="hidden" name="attr_featlist-Parry" value="Parry">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Parry"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Parry" value="Parry">Parry</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Parry-Archetype">Archetype</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Parry-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Parry-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Parry<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
+														</div>
+														<div class="wuxMultiRow">When another creature damages you with a melee attack, you can expend one superiority die to reduce the damage by the number you roll on your superiority die + your Dexterity modifier.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-Riposte">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Riposte">
+												<input type="hidden" name="attr_featlist-Riposte" value="Riposte">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Riposte"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Riposte" value="Riposte">Riposte</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Riposte-Archetype">Archetype</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Riposte-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Riposte-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Riposte<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
+														</div>
+														<div class="wuxMultiRow">When a creature misses you with a melee attack, you can expend one superiority die to make a melee strike against that creature, adding the following effects in addition to the normal effects of the Strike.</div>
+														<div class='wuxMultiRow'><span><strong>Critical Success: </strong>Roll your superiority die again and add both results to your damage.</span></div>
+														<div class='wuxMultiRow'><span><strong>Success: </strong>Deal extra damage equal to the roll on your superiority die.</span></div>
+
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-DistractingStrike">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DistractingStrike">
+												<input type="hidden" name="attr_featlist-DistractingStrike" value="Distracting Strike">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DistractingStrike"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-DistractingStrike" value="Distracting Strike">Distracting Strike</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DistractingStrike-Archetype">Archetype</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DistractingStrike-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DistractingStrike-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Distracting Strike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
+														</div>
+														<div class="wuxMultiRow">You strike as part of an elaborate diversion. Make a melee Strike. If it hits and deals damage, choose a friendly creature and roll your superiority die. That ally can use their reaction to attempt to Create a Diversion adding the number rolled to their check. </div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-RestrainingStrike">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-RestrainingStrike">
+												<input type="hidden" name="attr_featlist-RestrainingStrike" value="Restraining Strike">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-RestrainingStrike"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-RestrainingStrike" value="Restraining Strike">Restraining Strike</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-RestrainingStrike-Archetype">Archetype</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-RestrainingStrike-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-RestrainingStrike-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Restraining Strike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
+														</div>
+														<div class="wuxMultiRow">You maneuver to grapple a creature after striking them. Make a melee Strike. If it hits and deals damage, you can roll your superiority die then attempt to Grapple the creature you hit adding the number rolled to your check. Both attacks count toward your multiple attack penalty, but the penalty doesn’t increase until after you’ve made both of them.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-MenacingStrike">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-MenacingStrike">
+												<input type="hidden" name="attr_featlist-MenacingStrike" value="Menacing Strike">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-MenacingStrike"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 06</span>
+														<span name="attr_featlist-MenacingStrike" value="Menacing Strike">Menacing Strike</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-MenacingStrike-Archetype">Archetype</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-MenacingStrike-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-MenacingStrike-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Menacing Strike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
+														</div>
+														<div class="wuxMultiRow">You attack with ferocity to intimidate a foe. Make a melee Strike. If it hits and deals damage, you can roll your superiority die then attempt to Demoralize the creature you hit adding the number rolled to your check.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 								<div class="core-featList-Fighting StyleCombatGeneralFeats wuxSubCategory wuxFieldSet">
 									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-Fighting StyleCombatGeneralFeats">
 									<div class="wuxMultiRow">
@@ -25239,23 +25097,23 @@
 												</div>
 											</div>
 										</div>
-										<div class="wuxSubCategory featlist-DualWielder">
+										<div class="wuxSubCategory featlist-ExactingStrike">
 											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DualWielder">
-												<input type="hidden" name="attr_featlist-DualWielder" value="Dual Wielder">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ExactingStrike">
+												<input type="hidden" name="attr_featlist-ExactingStrike" value="Exacting Strike">
 												<div class="wuxFeatEntry">
 													<div class="wuxFormEntry">
 														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DualWielder"><span>Add</span></button>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-ExactingStrike"><span>Add</span></button>
 														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-DualWielder" value="Dual Wielder">Dual Wielder</span>
+														<span name="attr_featlist-ExactingStrike" value="Exacting Strike">Exacting Strike</span>
 													</div>
 												</div>
 
 												<div class="wuxMultiRow">
 													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DualWielder-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DualWielder-General">General</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ExactingStrike-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ExactingStrike-General">General</label>
 
 													</div>
 												</div>
@@ -25263,30 +25121,32 @@
 												<div class="wuxCollapseField">
 													<div class="wuxDescription">
 														<div class="wuxRow">
-															<span class="wuxFormHeader">Dual Wielder</span>
+															<span class="wuxFormHeader">Exacting Strike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
 														</div>
-														<div class="wuxMultiRow">You can use two-weapon fighting even when the one-handed melee weapons you are wielding aren’t light. You can also draw or stow two one-handed weapons when you would normally be able to draw or stow only one.</div>
+														<div class="wuxMultiRow">You make a controlled attack, fully accounting for your momentum. Make a Strike. The Strike gains the following failure effect.</div>
+														<div class='wuxMultiRow'><span><strong>Failure: </strong>This attack does not count toward your multiple attack penalty.</span></div>
+
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="wuxSubCategory featlist-KeenShot">
+										<div class="wuxSubCategory featlist-SuddenCharge">
 											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-KeenShot">
-												<input type="hidden" name="attr_featlist-KeenShot" value="Keen Shot">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-SuddenCharge">
+												<input type="hidden" name="attr_featlist-SuddenCharge" value="Sudden Charge">
 												<div class="wuxFeatEntry">
 													<div class="wuxFormEntry">
 														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-KeenShot"><span>Add</span></button>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-SuddenCharge"><span>Add</span></button>
 														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-KeenShot" value="Keen Shot">Keen Shot</span>
+														<span name="attr_featlist-SuddenCharge" value="Sudden Charge">Sudden Charge</span>
 													</div>
 												</div>
 
 												<div class="wuxMultiRow">
 													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-KeenShot-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-KeenShot-General">General</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-SuddenCharge-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-SuddenCharge-General">General</label>
 
 													</div>
 												</div>
@@ -25294,30 +25154,30 @@
 												<div class="wuxCollapseField">
 													<div class="wuxDescription">
 														<div class="wuxRow">
-															<span class="wuxFormHeader">Keen Shot</span>
+															<span class="wuxFormHeader">Sudden Charge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
 														</div>
-														<div class="wuxMultiRow">Attacking at long range doesn't impose disadvantage on your ranged weapon attack rolls and your ranged weapon attacks ignore half cover and three-quarters cover.</div>
+														<div class="wuxMultiRow">With a quick sprint, you dash up to your foe and swing. Stride twice. If you end your movement within melee reach of at least one enemy, you can make a melee Strike against that enemy. You can use Sudden Charge while Burrowing, Climbing, Flying, or Swimming instead of Striding if you have the corresponding movement type.</div>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="wuxSubCategory featlist-UnarmedFighting">
+										<div class="wuxSubCategory featlist-BarrelingCharge">
 											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-UnarmedFighting">
-												<input type="hidden" name="attr_featlist-UnarmedFighting" value="Unarmed Fighting">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-BarrelingCharge">
+												<input type="hidden" name="attr_featlist-BarrelingCharge" value="Barreling Charge">
 												<div class="wuxFeatEntry">
 													<div class="wuxFormEntry">
 														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-UnarmedFighting"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-UnarmedFighting" value="Unarmed Fighting">Unarmed Fighting</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-BarrelingCharge"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-BarrelingCharge" value="Barreling Charge">Barreling Charge</span>
 													</div>
 												</div>
 
 												<div class="wuxMultiRow">
 													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-UnarmedFighting-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-UnarmedFighting-General">General</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-BarrelingCharge-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-BarrelingCharge-General">General</label>
 
 													</div>
 												</div>
@@ -25325,42 +25185,11 @@
 												<div class="wuxCollapseField">
 													<div class="wuxDescription">
 														<div class="wuxRow">
-															<span class="wuxFormHeader">Unarmed Fighting</span>
+															<span class="wuxFormHeader">Barreling Charge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
 														</div>
-														<div class="wuxMultiRow">Your unarmed strikes can deal bludgeoning damage equal to 1d6 + your Strength modifier. If you strike with two free hands, the d6 becomes a d8.
-
-															When you successfully start a grapple, you can deal 1d4 bludgeoning damage to the grappled creature. Until the grapple ends, you can also deal this damage to the creature whenever you hit it with a melee attack.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-AimedThrow">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-AimedThrow">
-												<input type="hidden" name="attr_featlist-AimedThrow" value="Aimed Throw">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-AimedThrow"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 02</span>
-														<span name="attr_featlist-AimedThrow" value="Aimed Throw">Aimed Throw</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-AimedThrow-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-AimedThrow-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Aimed Throw</span>
-														</div>
-														<div class="wuxMultiRow">You have a good throwing arm and can aim for weak points regardless of what you throw. When you throw a weapon, the minimum damage you deal with a weapon is 1d6. You now can add your Dexterity modifer instead of your Strength modifier to damage with thrown weapons.</div>
+														<div class='wuxMultiRow'><span><strong>Prerequisites: </strong>Trained in Athletics</span></div>
+														<div class="wuxRow">&nbsp;</div>
+														<div class="wuxMultiRow">You rush forward, moving enemies aside to reach your foe. You Stride, attempting to move through your enemies' spaces and make a melee Strike. Roll an Athletics check and compare the result to the Strength saving throw of each creature whose space you attempt to move through during your Stride, moving through its space on a success but ending your movement before entering its space on a failure. You can use Barreling Charge to Burrow, Climb, Fly, or Swim instead of Stride, as long as you have the corresponding movement type.</div>
 													</div>
 												</div>
 											</div>
@@ -25392,69 +25221,6 @@
 															<span class="wuxFormHeader">Quick Draw<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
 														</div>
 														<div class="wuxMultiRow">You draw your weapon and attack with the same motion. You Interact to draw a weapon, then Strike with that weapon.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-Skirmisher">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Skirmisher">
-												<input type="hidden" name="attr_featlist-Skirmisher" value="Skirmisher">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Skirmisher"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-Skirmisher" value="Skirmisher">Skirmisher</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Skirmisher-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Skirmisher-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Skirmisher</span>
-														</div>
-														<div class="wuxMultiRow">When you make a melee attack against a creature, whether you hit or not, you don’t provoke opportunity attacks from that creature for the rest of the turn.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-Cleave">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Cleave">
-												<input type="hidden" name="attr_featlist-Cleave" value="Cleave">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Cleave"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 06</span>
-														<span name="attr_featlist-Cleave" value="Cleave">Cleave</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Cleave-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Cleave-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Cleave<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Trigger: </strong>Your melee Strike kills a creature or knocks it unconscious, and another foe is adjacent to that creature.</span></div>
-														<div class="wuxMultiRow">You swing clear through one foe and into another. Make a melee Strike against the second foe.</div>
 													</div>
 												</div>
 											</div>
@@ -25493,23 +25259,23 @@
 												</div>
 											</div>
 										</div>
-										<div class="wuxSubCategory featlist-DisorientingOpening">
+										<div class="wuxSubCategory featlist-DesperateFinisher">
 											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DisorientingOpening">
-												<input type="hidden" name="attr_featlist-DisorientingOpening" value="Disorienting Opening">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DesperateFinisher">
+												<input type="hidden" name="attr_featlist-DesperateFinisher" value="Desperate Finisher">
 												<div class="wuxFeatEntry">
 													<div class="wuxFormEntry">
 														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DisorientingOpening"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 08</span>
-														<span name="attr_featlist-DisorientingOpening" value="Disorienting Opening">Disorienting Opening</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DesperateFinisher"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 14</span>
+														<span name="attr_featlist-DesperateFinisher" value="Desperate Finisher">Desperate Finisher</span>
 													</div>
 												</div>
 
 												<div class="wuxMultiRow">
 													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DisorientingOpening-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DisorientingOpening-General">General</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DesperateFinisher-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DesperateFinisher-General">General</label>
 
 													</div>
 												</div>
@@ -25517,40 +25283,9 @@
 												<div class="wuxCollapseField">
 													<div class="wuxDescription">
 														<div class="wuxRow">
-															<span class="wuxFormHeader">Disorienting Opening</span>
+															<span class="wuxFormHeader">Desperate Finisher<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
 														</div>
-														<div class="wuxMultiRow">You use your foes' openings to expose even greater weaknesses. When you hit a creature as part of an Attack of Opportunity, that creature becomes flat-footed until the start of your next turn.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-CombatReflexes">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-CombatReflexes">
-												<input type="hidden" name="attr_featlist-CombatReflexes" value="Combat Reflexes">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-CombatReflexes"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 10</span>
-														<span name="attr_featlist-CombatReflexes" value="Combat Reflexes">Combat Reflexes</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-CombatReflexes-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-CombatReflexes-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Combat Reflexes</span>
-														</div>
-														<div class="wuxMultiRow">You are particularly swift at punishing foes who leave you openings. At the start of each of your turns when you regain your actions, you gain an additional reaction that can be used only to make an Opportunity Attack.</div>
+														<div class="wuxMultiRow">You throw everything into one last press. Use a single action that you know with the press trait as part of Desperate Finisher.</div>
 													</div>
 												</div>
 											</div>
@@ -25801,105 +25536,6 @@
 									</div>
 									<div class="wuxCollapseField">
 										<div class="wuxDescription">These feats grant additional actions that can be used in combat. They all require that superiority dice be spent in order to use them.</div>
-										<div class="wuxSubCategory featlist-Ambush">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Ambush">
-												<input type="hidden" name="attr_featlist-Ambush" value="Ambush">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Ambush"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Ambush" value="Ambush">Ambush</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Ambush-Archetype">Archetype</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Ambush-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Ambush-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Ambush</span>
-														</div>
-														<div class="wuxMultiRow">When you make a Dexterity (Stealth) check or an initiative roll, you can expend one superiority die and add the die to the roll.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-Brace">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Brace">
-												<input type="hidden" name="attr_featlist-Brace" value="Brace">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Brace"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Brace" value="Brace">Brace</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Brace-Archetype">Archetype</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Brace-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Brace-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Brace<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
-														</div>
-														<div class="wuxMultiRow">When an enemy you can see moves within 5 feet of you, you can expend one superiority die and make a melee strike against that creature, adding the following effects in addition to the normal effects of the Strike.</div>
-														<div class='wuxMultiRow'><span><strong>Critical Success: </strong>Roll your superiority die again and add both results to your damage.</span></div>
-														<div class='wuxMultiRow'><span><strong>Success: </strong>Deal extra damage equal to the roll on your superiority die.</span></div>
-
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-EvasiveFootwork">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-EvasiveFootwork">
-												<input type="hidden" name="attr_featlist-EvasiveFootwork" value="Evasive Footwork">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-EvasiveFootwork"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-EvasiveFootwork" value="Evasive Footwork">Evasive Footwork</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-EvasiveFootwork-Archetype">Archetype</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-EvasiveFootwork-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-EvasiveFootwork-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Evasive Footwork<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
-														</div>
-														<div class="wuxMultiRow">Stride and expend one superiority die, rolling the die and adding the number rolled to your AC until you stop moving.</div>
-													</div>
-												</div>
-											</div>
-										</div>
 										<div class="wuxSubCategory featlist-ExtraSuperiority">
 											<div class="wuxFieldSet">
 												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ExtraSuperiority">
@@ -25934,199 +25570,36 @@
 												</div>
 											</div>
 										</div>
-										<div class="wuxSubCategory featlist-Parry">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Parry">
-												<input type="hidden" name="attr_featlist-Parry" value="Parry">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Parry"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Parry" value="Parry">Parry</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Parry-Archetype">Archetype</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Parry-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Parry-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Parry<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
-														</div>
-														<div class="wuxMultiRow">When another creature damages you with a melee attack, you can expend one superiority die to reduce the damage by the number you roll on your superiority die + your Dexterity modifier.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-Riposte">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Riposte">
-												<input type="hidden" name="attr_featlist-Riposte" value="Riposte">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Riposte"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Riposte" value="Riposte">Riposte</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Riposte-Archetype">Archetype</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Riposte-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Riposte-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Riposte<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
-														</div>
-														<div class="wuxMultiRow">When a creature misses you with a melee attack, you can expend one superiority die to make a melee strike against that creature, adding the following effects in addition to the normal effects of the Strike.</div>
-														<div class='wuxMultiRow'><span><strong>Critical Success: </strong>Roll your superiority die again and add both results to your damage.</span></div>
-														<div class='wuxMultiRow'><span><strong>Success: </strong>Deal extra damage equal to the roll on your superiority die.</span></div>
-
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-DistractingStrike">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DistractingStrike">
-												<input type="hidden" name="attr_featlist-DistractingStrike" value="Distracting Strike">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DistractingStrike"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-DistractingStrike" value="Distracting Strike">Distracting Strike</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DistractingStrike-Archetype">Archetype</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DistractingStrike-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DistractingStrike-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Distracting Strike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class="wuxMultiRow">You strike as part of an elaborate diversion. Make a melee Strike. If it hits and deals damage, choose a friendly creature and roll your superiority die. That ally can use their reaction to attempt to Create a Diversion adding the number rolled to their check. </div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-RestrainingStrike">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-RestrainingStrike">
-												<input type="hidden" name="attr_featlist-RestrainingStrike" value="Restraining Strike">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-RestrainingStrike"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-RestrainingStrike" value="Restraining Strike">Restraining Strike</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-RestrainingStrike-Archetype">Archetype</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-RestrainingStrike-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-RestrainingStrike-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Restraining Strike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class="wuxMultiRow">You maneuver to grapple a creature after striking them. Make a melee Strike. If it hits and deals damage, you can roll your superiority die then attempt to Grapple the creature you hit adding the number rolled to your check. Both attacks count toward your multiple attack penalty, but the penalty doesn’t increase until after you’ve made both of them.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-MenacingStrike">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-MenacingStrike">
-												<input type="hidden" name="attr_featlist-MenacingStrike" value="Menacing Strike">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-MenacingStrike"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 06</span>
-														<span name="attr_featlist-MenacingStrike" value="Menacing Strike">Menacing Strike</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-MenacingStrike-Archetype">Archetype</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-MenacingStrike-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-MenacingStrike-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Menacing Strike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class="wuxMultiRow">You attack with ferocity to intimidate a foe. Make a melee Strike. If it hits and deals damage, you can roll your superiority die then attempt to Demoralize the creature you hit adding the number rolled to your check.</div>
-													</div>
-												</div>
-											</div>
-										</div>
 									</div>
 								</div>
-								<div class="core-featList-MovementCombatGeneralFeats wuxSubCategory wuxFieldSet">
-									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-MovementCombatGeneralFeats">
+								<div class="core-featList-MeleeCombatGeneralFeats wuxSubCategory wuxFieldSet">
+									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-MeleeCombatGeneralFeats">
 									<div class="wuxMultiRow">
 										<div class="wuxFormEntry">
 											<span class="wuxFormHeaderLeadIcon">J</span>
 											<span class="wuxPmSpacer">&nbsp;</span>
 											<span class="wuxPmSpacer">&nbsp;</span>
-											<span>Movement</span>
+											<span>Melee</span>
 										</div>
 									</div>
 									<div class="wuxCollapseField">
-										<div class="wuxSubCategory featlist-Fleet">
+										<div class="wuxSubCategory featlist-DualWielder">
 											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Fleet">
-												<input type="hidden" name="attr_featlist-Fleet" value="Fleet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DualWielder">
+												<input type="hidden" name="attr_featlist-DualWielder" value="Dual Wielder">
 												<div class="wuxFeatEntry">
 													<div class="wuxFormEntry">
 														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Fleet"><span>Add</span></button>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DualWielder"><span>Add</span></button>
 														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Fleet" value="Fleet">Fleet</span>
+														<span name="attr_featlist-DualWielder" value="Dual Wielder">Dual Wielder</span>
 													</div>
 												</div>
 
 												<div class="wuxMultiRow">
 													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Fleet-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Fleet-General">General</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DualWielder-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DualWielder-General">General</label>
 
 													</div>
 												</div>
@@ -26134,30 +25607,253 @@
 												<div class="wuxCollapseField">
 													<div class="wuxDescription">
 														<div class="wuxRow">
-															<span class="wuxFormHeader">Fleet</span>
+															<span class="wuxFormHeader">Dual Wielder</span>
 														</div>
-														<div class="wuxMultiRow">Your speed increases by 5 feet.</div>
+														<div class="wuxMultiRow">You can use two-weapon fighting even when the one-handed melee weapons you are wielding aren’t light. You can also draw or stow two one-handed weapons when you would normally be able to draw or stow only one.</div>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="wuxSubCategory featlist-MobileShotStance">
+										<div class="wuxSubCategory featlist-Lunge">
 											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-MobileShotStance">
-												<input type="hidden" name="attr_featlist-MobileShotStance" value="Mobile Shot Stance">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Lunge">
+												<input type="hidden" name="attr_featlist-Lunge" value="Lunge">
 												<div class="wuxFeatEntry">
 													<div class="wuxFormEntry">
 														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-MobileShotStance"><span>Add</span></button>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Lunge"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Lunge" value="Lunge">Lunge</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Lunge-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Lunge-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Lunge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														</div>
+														<div class="wuxMultiRow">You can increase your reach by 5 feet for the rest of your turn. Doing so grants you a -2 penalty on all attack rolls this turn.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-UnarmedFighting">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-UnarmedFighting">
+												<input type="hidden" name="attr_featlist-UnarmedFighting" value="Unarmed Fighting">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-UnarmedFighting"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-UnarmedFighting" value="Unarmed Fighting">Unarmed Fighting</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-UnarmedFighting-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-UnarmedFighting-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Unarmed Fighting</span>
+														</div>
+														<div class="wuxMultiRow">Your unarmed strikes can deal bludgeoning damage equal to 1d6 + your Strength modifier. If you strike with two free hands, the d6 becomes a d8.
+
+															When you successfully start a grapple, you can deal 1d4 bludgeoning damage to the grappled creature. Until the grapple ends, you can also deal this damage to the creature whenever you hit it with a melee attack.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-Dual-HandedAssault">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Dual-HandedAssault">
+												<input type="hidden" name="attr_featlist-Dual-HandedAssault" value="Dual-Handed Assault">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Dual-HandedAssault"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-Dual-HandedAssault" value="Dual-Handed Assault">Dual-Handed Assault</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Dual-HandedAssault-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Dual-HandedAssault-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Dual-Handed Assault<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														</div>
+														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are wielding a one-handed melee weapon and have a free hand.</span></div>
+														<div class="wuxMultiRow">You snap your free hand over to grip your weapon just long enough to add momentum and deliver a more powerful blow to your opponent. Make a Strike with the required weapon. You quickly switch your grip during the Strike in order to make the attack with two hands. Increase the weapon damage die by one step for this attack. When the Strike is complete, you resume gripping the weapon with only one hand. This action doesn't end any stance or fighter feat effect that requires you to have one hand free.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-HuntersPounce">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-HuntersPounce">
+												<input type="hidden" name="attr_featlist-HuntersPounce" value="Hunter's Pounce">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-HuntersPounce"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-HuntersPounce" value="Hunter's Pounce">Hunter's Pounce</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-HuntersPounce-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-HuntersPounce-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Hunter's Pounce<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
+														</div>
+														<div class='wuxMultiRow'><span><strong>Requirement: </strong>Must have a speed of 10 or more.</span></div>
+														<div class="wuxMultiRow">You leap at a foe in an attempt to knock them to the ground. Move 10 feet. If you end your movement within melee reach of at least one enemy, you can make a melee Strike against that enemy. If you hit you may then push the target to the ground. Attempt an Athletics check against your target's Strength Saving Throw. On success they are knocked prone.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-QuickReversal">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-QuickReversal">
+												<input type="hidden" name="attr_featlist-QuickReversal" value="Quick Reversal">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-QuickReversal"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-QuickReversal" value="Quick Reversal">Quick Reversal</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-QuickReversal-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-QuickReversal-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Quick Reversal<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														</div>
+														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are flanked by at least two enemies.</span></div>
+														<div class="wuxMultiRow">You turn your foes’ flanking against them with a quick reverse. Make a melee Strike against one of the flanking enemies and make a second Strike with the same weapon or unarmed attack against a different enemy that is flanking you. This second Strike has the same multiple attack penalty of the initial attack and doesn’t count toward your multiple attack penalty.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-Skirmisher">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Skirmisher">
+												<input type="hidden" name="attr_featlist-Skirmisher" value="Skirmisher">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Skirmisher"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-Skirmisher" value="Skirmisher">Skirmisher</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Skirmisher-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Skirmisher-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Skirmisher</span>
+														</div>
+														<div class="wuxMultiRow">When you make a melee attack against a creature, whether you hit or not, you don’t provoke opportunity attacks from that creature for the rest of the turn.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-Cleave">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Cleave">
+												<input type="hidden" name="attr_featlist-Cleave" value="Cleave">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Cleave"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 06</span>
+														<span name="attr_featlist-Cleave" value="Cleave">Cleave</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Cleave-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Cleave-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Cleave<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
+														</div>
+														<div class='wuxMultiRow'><span><strong>Trigger: </strong>Your melee Strike kills a creature or knocks it unconscious, and another foe is adjacent to that creature.</span></div>
+														<div class="wuxMultiRow">You swing clear through one foe and into another. Make a melee Strike against the second foe.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-LeapingStrike">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-LeapingStrike">
+												<input type="hidden" name="attr_featlist-LeapingStrike" value="Leaping Strike">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-LeapingStrike"><span>Add</span></button>
 														<span class="wuxFeatLevel">Character 08</span>
-														<span name="attr_featlist-MobileShotStance" value="Mobile Shot Stance">Mobile Shot Stance</span>
+														<span name="attr_featlist-LeapingStrike" value="Leaping Strike">Leaping Strike</span>
 													</div>
 												</div>
 
 												<div class="wuxMultiRow">
 													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-MobileShotStance-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-MobileShotStance-General">General</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-LeapingStrike-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-LeapingStrike-General">General</label>
 
 													</div>
 												</div>
@@ -26165,43 +25861,76 @@
 												<div class="wuxCollapseField">
 													<div class="wuxDescription">
 														<div class="wuxRow">
-															<span class="wuxFormHeader">Mobile Shot Stance<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+															<span class="wuxFormHeader">Leaping Strike<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
 														</div>
-														<div class="wuxMultiRow">Your shots become nimble and deadly. While you’re in this stance, your ranged Strikes don’t trigger Opportunity Attacks or other reactions that are triggered by a ranged attack. You can make Opportunity Attacks with a loaded ranged weapon you’re wielding. The triggering creature must be within 5 feet of you for you to do so.</div>
+														<div class="wuxMultiRow">You make an impressive leap and swing while you soar. Make a Leap, High Jump, or Long Jump and attempt one melee Strike at any point during your jump. Immediately after the Strike, you fall to the ground if you're in the air, even if you haven't reached the maximum distance of your jump. If the distance you fall is no more than the height of your jump, you take no damage and land upright.
+
+															When attempting a High Jump or Long Jump during a Sudden Leap, determine the DC using the Long Jump DCs, and increase your maximum distance to double your Speed.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-SpringAttack">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-SpringAttack">
+												<input type="hidden" name="attr_featlist-SpringAttack" value="Spring Attack">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-SpringAttack"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 12</span>
+														<span name="attr_featlist-SpringAttack" value="Spring Attack">Spring Attack</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-SpringAttack-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-SpringAttack-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Spring Attack<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														</div>
+														<div class="wuxMultiRow">Springing away from one foe, you Strike at another. Stride up to your Speed, but you must end that movement within melee reach of a different enemy. At the end of your movement, make a melee Strike against an enemy now within reach. You can use Spring Attack while Burrowing, Climbing, Flying, or Swimming instead of Striding if you have the corresponding movement type.</div>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="core-featList-ProtectionCombatGeneralFeats wuxSubCategory wuxFieldSet">
-									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-ProtectionCombatGeneralFeats">
+								<div class="core-featList-Opportunity AttackCombatGeneralFeats wuxSubCategory wuxFieldSet">
+									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-Opportunity AttackCombatGeneralFeats">
 									<div class="wuxMultiRow">
 										<div class="wuxFormEntry">
 											<span class="wuxFormHeaderLeadIcon">J</span>
 											<span class="wuxPmSpacer">&nbsp;</span>
 											<span class="wuxPmSpacer">&nbsp;</span>
-											<span>Protection</span>
+											<span>Opportunity Attack</span>
 										</div>
 									</div>
 									<div class="wuxCollapseField">
-										<div class="wuxSubCategory featlist-Durable">
+										<div class="wuxSubCategory featlist-Interception">
 											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Durable">
-												<input type="hidden" name="attr_featlist-Durable" value="Durable">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Interception">
+												<input type="hidden" name="attr_featlist-Interception" value="Interception">
 												<div class="wuxFeatEntry">
 													<div class="wuxFormEntry">
 														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Durable"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Durable" value="Durable">Durable</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Interception"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-Interception" value="Interception">Interception</span>
 													</div>
 												</div>
 
 												<div class="wuxMultiRow">
 													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Durable-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Durable-General">General</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Interception-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Interception-General">General</label>
 
 													</div>
 												</div>
@@ -26209,142 +25938,10 @@
 												<div class="wuxCollapseField">
 													<div class="wuxDescription">
 														<div class="wuxRow">
-															<span class="wuxFormHeader">Durable</span>
+															<span class="wuxFormHeader">Interception<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
 														</div>
-														<div class="wuxMultiRow">Your barrier maximum increases by an amount equal to your level when you gain this feat. Whenever you gain a level thereafter, your barrier maximum increases by an additional hit point.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-ShieldBash">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ShieldBash">
-												<input type="hidden" name="attr_featlist-ShieldBash" value="Shield Bash">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-ShieldBash"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-ShieldBash" value="Shield Bash">Shield Bash</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ShieldBash-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ShieldBash-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Shield Bash<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/EirCfmI.png" /></span>
-														</div>
-														<div class="wuxMultiRow">When you use the Raise a Shield action, you may also use the Shove action.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-Tough">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Tough">
-												<input type="hidden" name="attr_featlist-Tough" value="Tough">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Tough"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Tough" value="Tough">Tough</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Tough-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Tough-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Tough</span>
-														</div>
-														<div class="wuxMultiRow">Your hit point maximum increases by an amount equal to your level when you gain this feat. Whenever you gain a level thereafter, your hit point maximum increases by an additional hit point.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-ArmorFlexibility">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ArmorFlexibility">
-												<input type="hidden" name="attr_featlist-ArmorFlexibility" value="Armor Flexibility">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-ArmorFlexibility"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 02</span>
-														<span name="attr_featlist-ArmorFlexibility" value="Armor Flexibility">Armor Flexibility</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ArmorFlexibility-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ArmorFlexibility-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Armor Flexibility</span>
-														</div>
-														<div class="wuxMultiRow">While wearing armor you reduce any skill check penalty by 2.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-ArmorMastery">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ArmorMastery">
-												<input type="hidden" name="attr_featlist-ArmorMastery" value="Armor Mastery">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-ArmorMastery"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 06</span>
-														<span name="attr_featlist-ArmorMastery" value="Armor Mastery">Armor Mastery</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<input type="number" class="wuxFormInput wuxSizeMini" name="attr_featlist-ArmorMastery-Archetype" value=0>
-														<span class="wuxPmSpacer">&nbsp;</span>
-														<span class="wuxFeatTypeName">Archetype</span>
-														<input type="number" class="wuxFormInput wuxSizeMini" name="attr_featlist-ArmorMastery-Combat" value=0>
-														<span class="wuxPmSpacer">&nbsp;</span>
-														<span class="wuxFeatTypeName">Combat</span>
-														<input type="number" class="wuxFormInput wuxSizeMini" name="attr_featlist-ArmorMastery-General" value=0>
-														<span class="wuxPmSpacer">&nbsp;</span>
-														<span class="wuxFeatTypeName">General</span>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Armor Mastery</span>
-														</div>
-														<div class="wuxMultiRow">Choose a type of armor proficiency. You add half your proficiency bonus to your AC while wearing that type of armor. Normally, proficiency is not added to AC. If you already have a source to add your proficiency bonus to AC with the selected type of armor, this feat does not have any effect.
-
-															You may select this feat multiple times, each time selecting a new armor proficiency.</div>
+														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You must be wielding a shield or a melee weapon</span></div>
+														<div class="wuxMultiRow">When a creature you can see hits a target that is within 5 feet of you with an attack, you can reduce the damage the target takes by 1d10 + your proficiency bonus (to a minimum of 0 damage).</div>
 													</div>
 												</div>
 											</div>
@@ -26380,6 +25977,68 @@
 												</div>
 											</div>
 										</div>
+										<div class="wuxSubCategory featlist-DisorientingOpening">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DisorientingOpening">
+												<input type="hidden" name="attr_featlist-DisorientingOpening" value="Disorienting Opening">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DisorientingOpening"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 08</span>
+														<span name="attr_featlist-DisorientingOpening" value="Disorienting Opening">Disorienting Opening</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DisorientingOpening-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DisorientingOpening-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Disorienting Opening</span>
+														</div>
+														<div class="wuxMultiRow">You use your foes' openings to expose even greater weaknesses. When you hit a creature as part of an Attack of Opportunity, that creature becomes flat-footed until the start of your next turn.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-CombatReflexes">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-CombatReflexes">
+												<input type="hidden" name="attr_featlist-CombatReflexes" value="Combat Reflexes">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-CombatReflexes"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 10</span>
+														<span name="attr_featlist-CombatReflexes" value="Combat Reflexes">Combat Reflexes</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-CombatReflexes-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-CombatReflexes-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Combat Reflexes</span>
+														</div>
+														<div class="wuxMultiRow">You are particularly swift at punishing foes who leave you openings. At the start of each of your turns when you regain your actions, you gain an additional reaction that can be used only to make an Opportunity Attack.</div>
+													</div>
+												</div>
+											</div>
+										</div>
 										<div class="wuxSubCategory featlist-DisruptiveStance">
 											<div class="wuxFieldSet">
 												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DisruptiveStance">
@@ -26407,38 +26066,6 @@
 															<span class="wuxFormHeader">Disruptive Stance<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
 														</div>
 														<div class="wuxMultiRow">The slightest distraction can provoke your wrath, and you’re prepared to foil enemies’ actions. As long as you are in this stance, you can use Attack of Opportunity when a creature within your reach uses a concentrate action, in addition to manipulate and move actions. Furthermore, you disrupt a triggering concentrate or manipulate action if your Strike hits (not only if it’s a critical hit).</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-ParagonsGuard">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ParagonsGuard">
-												<input type="hidden" name="attr_featlist-ParagonsGuard" value="Paragon's Guard">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-ParagonsGuard"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 12</span>
-														<span name="attr_featlist-ParagonsGuard" value="Paragon's Guard">Paragon's Guard</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ParagonsGuard-Combat">Combat</label>
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ParagonsGuard-General">General</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Paragon's Guard<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are wielding a shield.</span></div>
-														<div class="wuxMultiRow">Once you've had a moment to set your stance, you always have your shield ready without a thought. While you are in this stance, you constantly have your shield raised as if you'd used the Raise a Shield action, as long as you meet that action's requirements.</div>
 													</div>
 												</div>
 											</div>
@@ -26609,6 +26236,164 @@
 										</div>
 									</div>
 									<div class="wuxCollapseField">
+										<div class="wuxSubCategory featlist-KeenShot">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-KeenShot">
+												<input type="hidden" name="attr_featlist-KeenShot" value="Keen Shot">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-KeenShot"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-KeenShot" value="Keen Shot">Keen Shot</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-KeenShot-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-KeenShot-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Keen Shot</span>
+														</div>
+														<div class="wuxMultiRow">Attacking at long range doesn't impose disadvantage on your ranged weapon attack rolls and your ranged weapon attacks ignore half cover and three-quarters cover.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-TakeAim">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-TakeAim">
+												<input type="hidden" name="attr_featlist-TakeAim" value="Take Aim">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-TakeAim"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-TakeAim" value="Take Aim">Take Aim</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-TakeAim-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-TakeAim-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Take Aim<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														</div>
+														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You must be wielding a bow.</span></div>
+														<div class="wuxMultiRow">You concentrate on aiming your next attack. Your next attack is made without Multiple Attack Penalty but still contributes to the increasing penalty.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-AimedThrow">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-AimedThrow">
+												<input type="hidden" name="attr_featlist-AimedThrow" value="Aimed Throw">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-AimedThrow"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 02</span>
+														<span name="attr_featlist-AimedThrow" value="Aimed Throw">Aimed Throw</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-AimedThrow-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-AimedThrow-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Aimed Throw</span>
+														</div>
+														<div class="wuxMultiRow">You have a good throwing arm and can aim for weak points regardless of what you throw. When you throw a weapon, the minimum damage you deal with a weapon is 1d6. You now can add your Dexterity modifer instead of your Strength modifier to damage with thrown weapons.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-AssistingShot">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-AssistingShot">
+												<input type="hidden" name="attr_featlist-AssistingShot" value="Assisting Shot">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-AssistingShot"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 02</span>
+														<span name="attr_featlist-AssistingShot" value="Assisting Shot">Assisting Shot</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-AssistingShot-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-AssistingShot-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Assisting Shot<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														</div>
+														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are wielding a ranged weapon.</span></div>
+														<div class="wuxMultiRow">With a quick shot, you interfere with a foe in combat. Make a Strike with a ranged weapon. If the Strike hits, the next creature other than you to attack the same target before the start of your next turn gains a +1 circumstance bonus to their roll, or a +2 circumstance bonus if your Strike was a critical hit.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-DoubleShot">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DoubleShot">
+												<input type="hidden" name="attr_featlist-DoubleShot" value="Double Shot">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DoubleShot"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-DoubleShot" value="Double Shot">Double Shot</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DoubleShot-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DoubleShot-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Double Shot<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
+														</div>
+														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are wielding a ranged weapon.</span></div>
+														<div class="wuxMultiRow">You shoot twice in blindingly fast succession. Make two Strikes, each against a separate target and with a –2 penalty. Both attacks count toward your multiple attack penalty, but the penalty doesn’t increase until after you’ve made both of them.</div>
+													</div>
+												</div>
+											</div>
+										</div>
 										<div class="wuxSubCategory featlist-PartingShot">
 											<div class="wuxFieldSet">
 												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-PartingShot">
@@ -26637,6 +26422,132 @@
 														</div>
 														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are wielding a loaded ranged weapon or a ranged weapon without reload.</span></div>
 														<div class="wuxMultiRow">You jump back and fire a quick shot that catches your opponent off guard. You Step and then make a ranged Strike with the required weapon. Your target is flat-footed against the attack.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-TripleShot">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-TripleShot">
+												<input type="hidden" name="attr_featlist-TripleShot" value="Triple Shot">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-TripleShot"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 06</span>
+														<span name="attr_featlist-TripleShot" value="Triple Shot">Triple Shot</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-TripleShot-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-TripleShot-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Triple Shot</span>
+														</div>
+														<div class='wuxMultiRow'><span><strong>Prerequisites: </strong>Double Shot</span></div>
+														<div class="wuxRow">&nbsp;</div>
+														<div class="wuxMultiRow">You can quickly fire multiple shots with greater control. When you use Double Shot, you can make the attacks against the same target. You can add an additional action to Double Shot to make three ranged Strikes instead of two. If you do, the penalty is –4. All attacks count toward your multiple attack penalty, but the penalty doesn’t increase until after you’ve made all of them.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-IncredibleAim">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-IncredibleAim">
+												<input type="hidden" name="attr_featlist-IncredibleAim" value="Incredible Aim">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-IncredibleAim"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 08</span>
+														<span name="attr_featlist-IncredibleAim" value="Incredible Aim">Incredible Aim</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-IncredibleAim-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-IncredibleAim-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Incredible Aim<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
+														</div>
+														<div class="wuxMultiRow">By spending a moment to focus, you can ensure your attack strikes true. Make a ranged weapon Strike. On this Strike, you gain a +2 circumstance bonus to the attack roll and ignore the target’s concealed condition.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-MobileShotStance">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-MobileShotStance">
+												<input type="hidden" name="attr_featlist-MobileShotStance" value="Mobile Shot Stance">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-MobileShotStance"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 08</span>
+														<span name="attr_featlist-MobileShotStance" value="Mobile Shot Stance">Mobile Shot Stance</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-MobileShotStance-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-MobileShotStance-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Mobile Shot Stance<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														</div>
+														<div class="wuxMultiRow">Your shots become nimble and deadly. While you’re in this stance, your ranged Strikes don’t trigger Opportunity Attacks or other reactions that are triggered by a ranged attack. You can make Opportunity Attacks with a loaded ranged weapon you’re wielding. The triggering creature must be within 5 feet of you for you to do so.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-DebilitatingShot">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-DebilitatingShot">
+												<input type="hidden" name="attr_featlist-DebilitatingShot" value="Debilitating Shot">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-DebilitatingShot"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 10</span>
+														<span name="attr_featlist-DebilitatingShot" value="Debilitating Shot">Debilitating Shot</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DebilitatingShot-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-DebilitatingShot-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Debilitating Shot<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
+														</div>
+														<div class="wuxMultiRow">Aiming for a weak point, you impede your foe with a precise shot. Make a ranged weapon Strike. If it hits and deals damage, the target is staggered 1 until the end of its next turn.</div>
 													</div>
 												</div>
 											</div>
@@ -26870,6 +26781,82 @@
 										</div>
 									</div>
 								</div>
+								<div class="core-featList-ShieldCombatGeneralFeats wuxSubCategory wuxFieldSet">
+									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-ShieldCombatGeneralFeats">
+									<div class="wuxMultiRow">
+										<div class="wuxFormEntry">
+											<span class="wuxFormHeaderLeadIcon">J</span>
+											<span class="wuxPmSpacer">&nbsp;</span>
+											<span class="wuxPmSpacer">&nbsp;</span>
+											<span>Shield</span>
+										</div>
+									</div>
+									<div class="wuxCollapseField">
+										<div class="wuxSubCategory featlist-ShieldBash">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ShieldBash">
+												<input type="hidden" name="attr_featlist-ShieldBash" value="Shield Bash">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-ShieldBash"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-ShieldBash" value="Shield Bash">Shield Bash</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ShieldBash-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ShieldBash-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Shield Bash<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/EirCfmI.png" /></span>
+														</div>
+														<div class="wuxMultiRow">When you use the Raise a Shield action, you may also use the Shove action.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-ParagonsGuard">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-ParagonsGuard">
+												<input type="hidden" name="attr_featlist-ParagonsGuard" value="Paragon's Guard">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-ParagonsGuard"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 12</span>
+														<span name="attr_featlist-ParagonsGuard" value="Paragon's Guard">Paragon's Guard</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ParagonsGuard-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-ParagonsGuard-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Paragon's Guard<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														</div>
+														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You are wielding a shield.</span></div>
+														<div class="wuxMultiRow">Once you've had a moment to set your stance, you always have your shield ready without a thought. While you are in this stance, you constantly have your shield raised as if you'd used the Raise a Shield action, as long as you meet that action's requirements.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 								<div class="core-featList-SpellbladeCombatGeneralFeats wuxSubCategory wuxFieldSet">
 									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-SpellbladeCombatGeneralFeats">
 									<div class="wuxMultiRow">
@@ -26962,6 +26949,152 @@
 														<div class='wuxMultiRow'><span><strong>Trigger: </strong>An enemy hits you with a melee Strike or a melee spell attack roll, or you fail a save against an enemy's spell.</span></div>
 														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You have at least 1 spellcharge</span></div>
 														<div class="wuxMultiRow">Your charged magic flares. You may immediately spend a spellcharge to gain +2 AC until the start of your next turn. The bonus applies to your defenses when determining the outcome of the triggering attack or spell.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="core-featList-VitalsCombatGeneralFeats wuxSubCategory wuxFieldSet">
+									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-VitalsCombatGeneralFeats">
+									<div class="wuxMultiRow">
+										<div class="wuxFormEntry">
+											<span class="wuxFormHeaderLeadIcon">J</span>
+											<span class="wuxPmSpacer">&nbsp;</span>
+											<span class="wuxPmSpacer">&nbsp;</span>
+											<span>Vitals</span>
+										</div>
+									</div>
+									<div class="wuxCollapseField">
+										<div class="wuxSubCategory featlist-Durable">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Durable">
+												<input type="hidden" name="attr_featlist-Durable" value="Durable">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Durable"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Durable" value="Durable">Durable</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Durable-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Durable-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Durable</span>
+														</div>
+														<div class="wuxMultiRow">Your barrier maximum increases by an amount equal to your level when you gain this feat. Whenever you gain a level thereafter, your barrier maximum increases by an additional hit point.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-Fleet">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Fleet">
+												<input type="hidden" name="attr_featlist-Fleet" value="Fleet">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Fleet"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Fleet" value="Fleet">Fleet</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Fleet-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Fleet-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Fleet</span>
+														</div>
+														<div class="wuxMultiRow">Your speed increases by 5 feet.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-Tough">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Tough">
+												<input type="hidden" name="attr_featlist-Tough" value="Tough">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Tough"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Tough" value="Tough">Tough</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Tough-Combat">Combat</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Tough-General">General</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Tough</span>
+														</div>
+														<div class="wuxMultiRow">Your hit point maximum increases by an amount equal to your level when you gain this feat. Whenever you gain a level thereafter, your hit point maximum increases by an additional hit point.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-SaveMastery">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-SaveMastery">
+												<input type="hidden" name="attr_featlist-SaveMastery" value="Save Mastery">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-SaveMastery"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 06</span>
+														<span name="attr_featlist-SaveMastery" value="Save Mastery">Save Mastery</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<input type="number" class="wuxFormInput wuxSizeMini" name="attr_featlist-SaveMastery-Archetype" value=0>
+														<span class="wuxPmSpacer">&nbsp;</span>
+														<span class="wuxFeatTypeName">Archetype</span>
+														<input type="number" class="wuxFormInput wuxSizeMini" name="attr_featlist-SaveMastery-Combat" value=0>
+														<span class="wuxPmSpacer">&nbsp;</span>
+														<span class="wuxFeatTypeName">Combat</span>
+														<input type="number" class="wuxFormInput wuxSizeMini" name="attr_featlist-SaveMastery-General" value=0>
+														<span class="wuxPmSpacer">&nbsp;</span>
+														<span class="wuxFeatTypeName">General</span>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Save Mastery</span>
+														</div>
+														<div class="wuxMultiRow">Choose a type of saving throw. You add half your proficiency bonus to your selected saving throw. If you already have a source to add your proficiency bonus to your saving throw, this feat does not have any effect.
+
+															You may select this feat multiple times, each time selecting a new saving throw.</div>
 													</div>
 												</div>
 											</div>
@@ -33572,111 +33705,6 @@
 							</div>
 							<div class="wuxCollapseField">
 								<div class="wuxDescription">Feats with the combat trait improve your battle prowess or gives you new actions for a skill. A feat with this trait can be selected when a class grants a combat feat or general feat. </div>
-								<div class="core-featList-ActionCombatBeastFeats wuxSubCategory wuxFieldSet">
-									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-ActionCombatBeastFeats">
-									<div class="wuxMultiRow">
-										<div class="wuxFormEntry">
-											<span class="wuxFormHeaderLeadIcon">J</span>
-											<span class="wuxPmSpacer">&nbsp;</span>
-											<span class="wuxPmSpacer">&nbsp;</span>
-											<span>Action</span>
-										</div>
-									</div>
-									<div class="wuxCollapseField">
-										<div class="wuxSubCategory featlist-Lunge">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Lunge">
-												<input type="hidden" name="attr_featlist-Lunge" value="Lunge">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Lunge"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Lunge" value="Lunge">Lunge</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Lunge-Beast">Beast</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Lunge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
-														</div>
-														<div class="wuxMultiRow">You can increase your reach by 5 feet for the rest of your turn. Doing so grants you a -2 penalty on all attack rolls this turn.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-HuntersPounce">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-HuntersPounce">
-												<input type="hidden" name="attr_featlist-HuntersPounce" value="Hunter's Pounce">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-HuntersPounce"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-HuntersPounce" value="Hunter's Pounce">Hunter's Pounce</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-HuntersPounce-Beast">Beast</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Hunter's Pounce<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Requirement: </strong>Must have a speed of 10 or more.</span></div>
-														<div class="wuxMultiRow">You leap at a foe in an attempt to knock them to the ground. Move 10 feet. If you end your movement within melee reach of at least one enemy, you can make a melee Strike against that enemy. If you hit you may then push the target to the ground. Attempt an Athletics check against your target's Strength Saving Throw. On success they are knocked prone.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-Interception">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Interception">
-												<input type="hidden" name="attr_featlist-Interception" value="Interception">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Interception"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 04</span>
-														<span name="attr_featlist-Interception" value="Interception">Interception</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Interception-Beast">Beast</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Interception<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
-														</div>
-														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You must be wielding a shield or a melee weapon</span></div>
-														<div class="wuxMultiRow">When a creature you can see hits a target that is within 5 feet of you with an attack, you can reduce the damage the target takes by 1d10 + your proficiency bonus (to a minimum of 0 damage).</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
 								<div class="core-featList-CriticalCombatBeastFeats wuxSubCategory wuxFieldSet">
 									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-CriticalCombatBeastFeats">
 									<div class="wuxMultiRow">
@@ -33853,6 +33881,80 @@
 												</div>
 											</div>
 										</div>
+									</div>
+								</div>
+								<div class="core-featList-MeleeCombatBeastFeats wuxSubCategory wuxFieldSet">
+									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-MeleeCombatBeastFeats">
+									<div class="wuxMultiRow">
+										<div class="wuxFormEntry">
+											<span class="wuxFormHeaderLeadIcon">J</span>
+											<span class="wuxPmSpacer">&nbsp;</span>
+											<span class="wuxPmSpacer">&nbsp;</span>
+											<span>Melee</span>
+										</div>
+									</div>
+									<div class="wuxCollapseField">
+										<div class="wuxSubCategory featlist-Lunge">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Lunge">
+												<input type="hidden" name="attr_featlist-Lunge" value="Lunge">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Lunge"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Lunge" value="Lunge">Lunge</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Lunge-Beast">Beast</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Lunge<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/oVm5M7Y.png" /></span>
+														</div>
+														<div class="wuxMultiRow">You can increase your reach by 5 feet for the rest of your turn. Doing so grants you a -2 penalty on all attack rolls this turn.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-HuntersPounce">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-HuntersPounce">
+												<input type="hidden" name="attr_featlist-HuntersPounce" value="Hunter's Pounce">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-HuntersPounce"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-HuntersPounce" value="Hunter's Pounce">Hunter's Pounce</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-HuntersPounce-Beast">Beast</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Hunter's Pounce<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/71ElCEl.png" /></span>
+														</div>
+														<div class='wuxMultiRow'><span><strong>Requirement: </strong>Must have a speed of 10 or more.</span></div>
+														<div class="wuxMultiRow">You leap at a foe in an attempt to knock them to the ground. Move 10 feet. If you end your movement within melee reach of at least one enemy, you can make a melee Strike against that enemy. If you hit you may then push the target to the ground. Attempt an Athletics check against your target's Strength Saving Throw. On success they are knocked prone.</div>
+													</div>
+												</div>
+											</div>
+										</div>
 										<div class="wuxSubCategory featlist-Skirmisher">
 											<div class="wuxFieldSet">
 												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Skirmisher">
@@ -33916,33 +34018,33 @@
 										</div>
 									</div>
 								</div>
-								<div class="core-featList-MovementCombatBeastFeats wuxSubCategory wuxFieldSet">
-									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-MovementCombatBeastFeats">
+								<div class="core-featList-Opportunity AttackCombatBeastFeats wuxSubCategory wuxFieldSet">
+									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-Opportunity AttackCombatBeastFeats">
 									<div class="wuxMultiRow">
 										<div class="wuxFormEntry">
 											<span class="wuxFormHeaderLeadIcon">J</span>
 											<span class="wuxPmSpacer">&nbsp;</span>
 											<span class="wuxPmSpacer">&nbsp;</span>
-											<span>Movement</span>
+											<span>Opportunity Attack</span>
 										</div>
 									</div>
 									<div class="wuxCollapseField">
-										<div class="wuxSubCategory featlist-Fleet">
+										<div class="wuxSubCategory featlist-Interception">
 											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Fleet">
-												<input type="hidden" name="attr_featlist-Fleet" value="Fleet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Interception">
+												<input type="hidden" name="attr_featlist-Interception" value="Interception">
 												<div class="wuxFeatEntry">
 													<div class="wuxFormEntry">
 														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Fleet"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Fleet" value="Fleet">Fleet</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Interception"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 04</span>
+														<span name="attr_featlist-Interception" value="Interception">Interception</span>
 													</div>
 												</div>
 
 												<div class="wuxMultiRow">
 													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Fleet-Beast">Beast</label>
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Interception-Beast">Beast</label>
 
 													</div>
 												</div>
@@ -33950,82 +34052,10 @@
 												<div class="wuxCollapseField">
 													<div class="wuxDescription">
 														<div class="wuxRow">
-															<span class="wuxFormHeader">Fleet</span>
+															<span class="wuxFormHeader">Interception<img class="wuxFormHeaderActionSymbol" src="https://i.imgur.com/bkD6NXY.png" /></span>
 														</div>
-														<div class="wuxMultiRow">Your speed increases by 5 feet.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="core-featList-ProtectionCombatBeastFeats wuxSubCategory wuxFieldSet">
-									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-ProtectionCombatBeastFeats">
-									<div class="wuxMultiRow">
-										<div class="wuxFormEntry">
-											<span class="wuxFormHeaderLeadIcon">J</span>
-											<span class="wuxPmSpacer">&nbsp;</span>
-											<span class="wuxPmSpacer">&nbsp;</span>
-											<span>Protection</span>
-										</div>
-									</div>
-									<div class="wuxCollapseField">
-										<div class="wuxSubCategory featlist-Durable">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Durable">
-												<input type="hidden" name="attr_featlist-Durable" value="Durable">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Durable"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Durable" value="Durable">Durable</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Durable-Beast">Beast</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Durable</span>
-														</div>
-														<div class="wuxMultiRow">Your barrier maximum increases by an amount equal to your level when you gain this feat. Whenever you gain a level thereafter, your barrier maximum increases by an additional hit point.</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxSubCategory featlist-Tough">
-											<div class="wuxFieldSet">
-												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Tough">
-												<input type="hidden" name="attr_featlist-Tough" value="Tough">
-												<div class="wuxFeatEntry">
-													<div class="wuxFormEntry">
-														<span class="wuxFormHeaderLeadIcon">J</span>
-														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Tough"><span>Add</span></button>
-														<span class="wuxFeatLevel">Character 01</span>
-														<span name="attr_featlist-Tough" value="Tough">Tough</span>
-													</div>
-												</div>
-
-												<div class="wuxMultiRow">
-													<div class="wuxFormEntry">
-														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Tough-Beast">Beast</label>
-
-													</div>
-												</div>
-
-												<div class="wuxCollapseField">
-													<div class="wuxDescription">
-														<div class="wuxRow">
-															<span class="wuxFormHeader">Tough</span>
-														</div>
-														<div class="wuxMultiRow">Your hit point maximum increases by an amount equal to your level when you gain this feat. Whenever you gain a level thereafter, your hit point maximum increases by an additional hit point.</div>
+														<div class='wuxMultiRow'><span><strong>Requirement: </strong>You must be wielding a shield or a melee weapon</span></div>
+														<div class="wuxMultiRow">When a creature you can see hits a target that is within 5 feet of you with an attack, you can reduce the damage the target takes by 1d10 + your proficiency bonus (to a minimum of 0 damage).</div>
 													</div>
 												</div>
 											</div>
@@ -34099,6 +34129,109 @@
 															<span class="wuxFormHeader">Improved Initiative</span>
 														</div>
 														<div class="wuxMultiRow">You react more quickly than others can. You gain a +2 circumstance bonus to initiative rolls.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="core-featList-VitalsCombatBeastFeats wuxSubCategory wuxFieldSet">
+									<input type="checkbox" class="wuxCollapseField-flag" name="attr_featList-VitalsCombatBeastFeats">
+									<div class="wuxMultiRow">
+										<div class="wuxFormEntry">
+											<span class="wuxFormHeaderLeadIcon">J</span>
+											<span class="wuxPmSpacer">&nbsp;</span>
+											<span class="wuxPmSpacer">&nbsp;</span>
+											<span>Vitals</span>
+										</div>
+									</div>
+									<div class="wuxCollapseField">
+										<div class="wuxSubCategory featlist-Durable">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Durable">
+												<input type="hidden" name="attr_featlist-Durable" value="Durable">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Durable"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Durable" value="Durable">Durable</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Durable-Beast">Beast</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Durable</span>
+														</div>
+														<div class="wuxMultiRow">Your barrier maximum increases by an amount equal to your level when you gain this feat. Whenever you gain a level thereafter, your barrier maximum increases by an additional hit point.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-Fleet">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Fleet">
+												<input type="hidden" name="attr_featlist-Fleet" value="Fleet">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Fleet"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Fleet" value="Fleet">Fleet</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Fleet-Beast">Beast</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Fleet</span>
+														</div>
+														<div class="wuxMultiRow">Your speed increases by 5 feet.</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxSubCategory featlist-Tough">
+											<div class="wuxFieldSet">
+												<input type="checkbox" class="wuxCollapseField-flag" name="attr_featDisplay-Tough">
+												<input type="hidden" name="attr_featlist-Tough" value="Tough">
+												<div class="wuxFeatEntry">
+													<div class="wuxFormEntry">
+														<span class="wuxFormHeaderLeadIcon">J</span>
+														<button class="wuxSpellAddButton" type="action" name="act_addfeat-Tough"><span>Add</span></button>
+														<span class="wuxFeatLevel">Character 01</span>
+														<span name="attr_featlist-Tough" value="Tough">Tough</span>
+													</div>
+												</div>
+
+												<div class="wuxMultiRow">
+													<div class="wuxFormEntry">
+														<label class="wuxFeatTypeName"><input type="checkbox" name="attr_featlist-Tough-Beast">Beast</label>
+
+													</div>
+												</div>
+
+												<div class="wuxCollapseField">
+													<div class="wuxDescription">
+														<div class="wuxRow">
+															<span class="wuxFormHeader">Tough</span>
+														</div>
+														<div class="wuxMultiRow">Your hit point maximum increases by an amount equal to your level when you gain this feat. Whenever you gain a level thereafter, your hit point maximum increases by an additional hit point.</div>
 													</div>
 												</div>
 											</div>

@@ -493,9 +493,9 @@ var TurnMarker = TurnMarker || (function(){
             currentChar = getObj('character', (currentToken||{get:_.noop}).get('represents'));
         if(currentToken) {
 
-            if(FirstTurnChanged) {
-                handleAnnounceTurnChange();
-            }
+            // if(FirstTurnChanged) {
+            //     handleAnnounceTurnChange();
+            // }
             
             var size = Math.max(currentToken.get("height"),currentToken.get("width")) * state.TurnMarker.scale;
               
@@ -535,7 +535,7 @@ var TurnMarker = TurnMarker || (function(){
 
 			let target = GetTokenTargetData(currentToken);
 			if (target != undefined) {
-				StartCharacterTurn(target);
+				StartCharacterTurn(target, getAnnounceTurnChange());
 			}
         }
     },
@@ -601,9 +601,9 @@ var TurnMarker = TurnMarker || (function(){
             }
         }
     },
-    handleAnnounceTurnChange = function(){
 
-        if(state.TurnMarker.announceTurnChange ) {
+	getAnnounceTurnChange = function() {
+		if(state.TurnMarker.announceTurnChange ) {
             var marker = getMarker();
             var turnOrder = TurnOrder.Get();
             var currentToken = getObj("graphic", turnOrder[0].id);
@@ -701,30 +701,33 @@ var TurnMarker = TurnMarker || (function(){
             }
             
             var tokenSize=70;
-            sendChat(
-                '', 
-                "/direct "+
-                "<div style='border: 3px solid #808080; background-color: #4B0082; color: white; padding: 1px 1px;'>"+
-                    '<div style="text-align: left;  margin: 5px 5px;">'+
-                        '<a style="position:relative;z-index:1000;float:left; background-color:transparent;border:0;padding:0;margin:0;display:block;" href="!tm ping-target '+previousToken.id+'">'+
-                            "<img src='"+pImage+"' style='width:"+Math.round(tokenSize*pRatio)+"px; height:"+tokenSize+"px; padding: 0px 2px;' />"+
-                        '</a>'+
-                         pNameString+
-                    '</div>'+
-                    '<div style="text-align: right; margin: 5px 5px; position: relative; vertical-align: text-bottom;">'+
-                        '<a style="position:relative;z-index:1000;float:right; background-color:transparent;border:0;padding:0;margin:0;display:block;" href="!tm ping-target '+currentToken.id+'">'+
-                            "<img src='"+cImage+"' style='width:"+Math.round(tokenSize*cRatio)+"px; height:"+tokenSize+"px; padding: 0px 2px;' />"+
-                        '</a>'+
-                         '<span style="position:absolute; bottom: 0;right:'+Math.round((tokenSize*cRatio)+6)+'px;">'+
-                            cNameString+
-                         '</span>'+
-                        '<div style="clear:both;"></div>'+
-                    '</div>'+
-                     PlayerAnnounceExtra+
-                    '<div style="clear:both;"></div>'+
-                "</div>"
-            );
-        }
+
+			return '<div style="text-align: left;  margin: 5px 5px;">'+
+					'<a style="position:relative;z-index:1000;float:left; background-color:transparent;border:0;padding:0;margin:0;display:block;" href="!tm ping-target '+previousToken.id+'">'+
+						"<img src='"+pImage+"' style='width:"+Math.round(tokenSize*pRatio)+"px; height:"+tokenSize+"px; padding: 0px 2px;' />"+
+					'</a>'+
+					pNameString+
+				'</div>'+
+				'<div style="text-align: right; margin: 5px 5px; position: relative; vertical-align: text-bottom;">'+
+					'<a style="position:relative;z-index:1000;float:right; background-color:transparent;border:0;padding:0;margin:0;display:block;" href="!tm ping-target '+currentToken.id+'">'+
+						"<img src='"+cImage+"' style='width:"+Math.round(tokenSize*cRatio)+"px; height:"+tokenSize+"px; padding: 0px 2px;' />"+
+					'</a>'+
+					'<span style="position:absolute; bottom: 0;right:'+Math.round((tokenSize*cRatio)+6)+'px;">'+
+						cNameString+
+					'</span>'+
+					'<div style="clear:both;"></div>'+
+				'</div>'+
+				PlayerAnnounceExtra+
+				'<div style="clear:both;"></div>';
+		}
+	},
+    handleAnnounceTurnChange = function(){
+
+		sendChat('',  "/direct "+ 
+			"<div style='border: 3px solid #808080; background-color: #4B0082; color: white; padding: 1px 1px;'>" +
+			getAnnounceTurnChange()+
+			"</div>"
+		);
     },
     resetMarker = function() {
         active=false;

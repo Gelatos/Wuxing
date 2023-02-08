@@ -108,27 +108,27 @@ on("change:charisma_mod", function () {
 	update_class_spellcasting();
 });
 
-on("change:strength_save_prof change:strength_save_mod change:repeating_acmodifiers:strengthsavemod", function () {
+on("change:strength_save_prof change:strength_save_prof_style change:strength_save_mod change:repeating_acmodifiers:strengthsavemod", function () {
 	update_save("strength");
 });
 
-on("change:dexterity_save_prof change:dexterity_save_mod change:repeating_acmodifiers:dexteritysavemod", function () {
+on("change:dexterity_save_prof change:dexterity_save_prof_style change:dexterity_save_mod change:repeating_acmodifiers:dexteritysavemod", function () {
 	update_save("dexterity");
 });
 
-on("change:constitution_save_prof change:constitution_save_mod change:repeating_acmodifiers:constitutionsavemod", function () {
+on("change:constitution_save_prof change:constitution_save_prof_style change:constitution_save_mod change:repeating_acmodifiers:constitutionsavemod", function () {
 	update_save("constitution");
 });
 
-on("change:intelligence_save_prof change:intelligence_save_mod change:repeating_acmodifiers:intelligencesavemod", function () {
+on("change:intelligence_save_prof change:intelligence_save_prof_style change:intelligence_save_mod change:repeating_acmodifiers:intelligencesavemod", function () {
 	update_save("intelligence");
 });
 
-on("change:wisdom_save_prof change:wisdom_save_mod change:repeating_acmodifiers:wisdomsavemod", function () {
+on("change:wisdom_save_prof change:wisdom_save_prof_style change:wisdom_save_mod change:repeating_acmodifiers:wisdomsavemod", function () {
 	update_save("wisdom");
 });
 
-on("change:charisma_save_prof change:charisma_save_mod change:repeating_acmodifiers:charismasavemod", function () {
+on("change:charisma_save_prof change:charisma_save_prof_style change:charisma_save_mod change:repeating_acmodifiers:charismasavemod", function () {
 	update_save("charisma");
 });
 
@@ -2991,10 +2991,6 @@ var update_classLevels_simple_push = function () {
 
 			// close the simplify leveling panel
 			update["simplifyLeveling"] = "0";
-			update["magicSpellforce"] = "1";
-			update["magicAffinityControl"] = "1";
-			update["magicWillpower"] = "1";
-			update["magicKiCapacity"] = "1";
 
 			setAttrs(update, {
 				silent: true
@@ -4448,7 +4444,7 @@ var update_save = function (attributeArray) {
 		for (let i = 0; i < attributeArray.length; i++) {
 			attr = attributeArray[i];
 			save_attrs = save_attrs.concat(GetSectionIdValues(idarray, repeatingSection, [attr + "savemod"]));
-			save_attrs = save_attrs.concat([attr + "_mod", attr + "_save_prof", attr + "_save_mod"]);
+			save_attrs = save_attrs.concat([attr + "_mod", attr + "_save_prof", attr + "_save_mod", attr + "_save_prof_style"]);
 		}
 
 		getAttrs(save_attrs, function (v) {
@@ -4460,9 +4456,27 @@ var update_save = function (attributeArray) {
 				attr = attributeArray[i];
 
 				// calculate the prof bonus
-				prof = GetProfRankBonus(v[attr + "_save_prof"], false, v["pb"]);
-				// prof += GetProfRankBonus(v[attr + "_save_prof"], true, v["pb"]);
-				prof += isNaN(parseInt(v[attr + "_save_prof"])) ? 0 : parseInt(v[attr + "_save_prof"]);
+				prof = 0;
+
+				pb = isNaN(parseInt(v["pb"])) ? 2 : parseInt(v["pb"]);
+				switch(v[attr + "_save_prof_style"]) {
+					case "0":
+						prof += pb;
+					break;
+					case "1":
+						prof += pb + Math.floor(pb / 2);
+					break;
+					case "2":
+						prof += pb * 2;
+					break;
+					case "3":
+						prof += 0;
+					break;
+					default:
+						prof += pb;
+					break;
+				}
+				prof += (GetProfRankBonus(v[attr + "_save_prof"], false, 0) * 2);
 				prof += isNaN(parseInt(v[attr + "_save_mod"])) ? 0 : parseInt(v[attr + "_save_mod"]);
 				total = prof + (isNaN(parseInt(v[attr + "_mod"])) ? 0 : parseInt(v[attr + "_mod"]));
 
@@ -8908,12 +8922,6 @@ var update_health_barrier = function () {
 			if (vitality > vitalityMax) {
 				vitality = vitalityMax;
 				update["vitality"] = vitality;
-			}
-
-			// modify the max hp based on current vitality stats
-			let vitalityBonus = Math.floor((vitality - 10) / 2);
-			if (vitalityBonus < 0) {
-				totalHp += Math.ceil(totalHp * (vitalityBonus / 5));
 			}
 
 			// hp cannot drop below 0 at this point
@@ -13420,6 +13428,10 @@ function GetKiCapacityBonuses(pointObj, spellcasting_ability) {
 
 
 // Sheet Upgrades
+var upgrade_to_1_1_6 = function (doneupdating) {
+	update_all_saves();
+	doneupdating();
+}
 var upgrade_to_1_1_5 = function (doneupdating) {
 	update_all_known_spells();
 	doneupdating();
@@ -13560,8 +13572,14 @@ var versioning = function () {
 	getAttrs(["version"], function (v) {
 		console.log("Checking version " + v["version"]);
 
-		if (v["version"] === "1.1.5") {
+		if (v["version"] === "1.1.6") {
 			console.log("Wuxing Sheet modified from 5th Edition OGL by Roll20 v" + v["version"]);
+		} else if (v["version"] === "1.1.5") {
+			console.log("UPGRADING TO v1.1.6");
+			upgrade_to_1_1_6(function () {
+				setAttrs({version: "1.1.6"});
+				versioning();
+			});
 		} else if (v["version"] === "1.1.4") {
 			console.log("UPGRADING TO v1.1.5");
 			upgrade_to_1_1_5(function () {

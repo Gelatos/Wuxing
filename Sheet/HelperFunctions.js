@@ -87,6 +87,7 @@ function GetCharactersListFromTargetsMessage(targets) {
     return characters;
 }
 
+
 // ======= On Kill Functions
 // =================================================
 
@@ -316,6 +317,7 @@ function GetRandomDrop(character) {
 
 }
 
+
 // ======= Stat Roll Functions
 // =================================================
 
@@ -433,6 +435,7 @@ function RollMultipleDice(quantity, dieType) {
 
     return rolls;
 }
+
 
 // ======= Token Functions
 // =================================================
@@ -916,6 +919,18 @@ function CommandSetAltitude(msg) {
         });
     }
 }
+
+function SetMinionNameOnCharacterSheet(target) {
+    // set minion data
+    let difficultyStyleObj = GetCharacterAttribute(target.charId, "difficultyStyle");
+    if (difficultyStyleObj != undefined && difficultyStyleObj == "3") {
+        let nicknameObj = GetCharacterAttribute(target.charId, "nickname");
+        if (nicknameObj != undefined) {
+            nicknameObj.set("current", target.getToken().get("name"));
+        }
+    }
+}
+
 
 // ======= OnTrigger Functions
 // =================================================

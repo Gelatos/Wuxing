@@ -258,23 +258,6 @@ on("chat:message", function(msg) {
     }
 });
 
-on('change:campaign:turnorder', function(obj, prev) {
-
-    if(obj.get('turnorder') === prev.turnorder) return;
-
-    let turnorder = (obj.get('turnorder') === "") ? [] : JSON.parse(obj.get('turnorder'));
-    let prevTurnorder = (prev.turnorder === "") ? [] : JSON.parse(prev.turnorder);
-
-    if(turnorder.length && prevTurnorder.length && turnorder[0].id !== prevTurnorder[0].id){
-        let tokenObj = findObjs({_id:turnorder[0].id, _pageid:Campaign().get("playerpageid"), _type: 'graphic'})[0];
-        let target = GetTokenTargetData(tokenObj);
-        if (target != undefined) {
-            StartCharacterTurn(target);
-        }
-    }
-});
-
-
 
 function SendChatMessage(snd, msg, alt, opt) {
     
