@@ -11316,9 +11316,9 @@ function GetFeatureInfo(feature) {
         case "ghost strike":
             return {
                 name: "Ghost Strike",
-                    type: "1",
-                    traits: "Extrasensory, Flourish",
-                    desc: `Ether helps direct your attack to weaknesses in your foe’s defenses. Make a melee Strike against the required target. On a hit, you deal an extra 1d10 arcane damage. If you’re at least 10th level, increase this to 2d10 damage.`,
+                    type: "0",
+                    traits: "Extrasensory, Round",
+                    desc: `Ether helps direct your attack to weaknesses in your foe’s defenses. You deal an extra 1d10 arcane damage to one creature you hit with an attack. If you’re at least 10th level, increase this to 2d10 damage.`,
                     shortdesc: ``,
                     critsuccess: "",
                     success: "",
@@ -13991,7 +13991,7 @@ function GetFeatureInfo(feature) {
                 name: "Sneak Attack",
                     type: "0",
                     traits: "Round",
-                    desc: `You know how to strike subtly and exploit a foe’s distraction. You can deal an extra 1d6 weapon damage to one creature you hit with an attack if you are within 15 feet of the target and either have advantage on the attack roll or the creature is flatfooted. The attack must use a finesse weapon, ranged weapon, or be an unarmed melee strike. You don’t need advantage on the attack roll if another enemy of the target is within 5 feet of it and on opposite sides from you, that enemy isn’t incapacitated, and you don’t have disadvantage on the attack roll.
+                    desc: `You know how to strike subtly and exploit a foe’s distraction. You deal an extra 1d6 weapon damage to one creature you hit with an attack. 
     
     The damage of Sneak Attack increases as you level. At 5th level and every four levels thereafter, increase the number of dice by one.`,
                     shortdesc: ``,
@@ -14000,7 +14000,7 @@ function GetFeatureInfo(feature) {
                     failure: "",
                     critfailure: "",
                     trigger: "",
-                    requirement: "",
+                    requirement: "You are within 15 feet of the target and either have advantage on the attack roll or the creature is flat-footed. The attack must use a finesse weapon, ranged weapon, or be an unarmed melee strike. You don’t need advantage on the attack roll if another enemy of the target is within 5 feet of it and on opposite sides from you, that enemy isn’t incapacitated, and you don’t have disadvantage on the attack roll.",
                     prerequisites: "",
                     featType: "Archetype and Combat",
                     className: "Scoundrel",

@@ -9253,6 +9253,7 @@ var update_injury_from_preset = function (repeatingDataSet, injuryid, injuryName
 
 	if (injuryPreset.name != "") {
 		update = {};
+		update[repeatingDataSet + "_" + injuryid + "_injury"] = injuryPreset.name;
 		update[repeatingDataSet + "_" + injuryid + "_injuryName"] = injuryPreset.name;
 		update[repeatingDataSet + "_" + injuryid + "_injuryType"] = injuryPreset.type;
 		update[repeatingDataSet + "_" + injuryid + "_injurySubtype"] = injuryPreset.subtype;

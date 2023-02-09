@@ -814,7 +814,7 @@ function CommandCastNPC(msg) {
             hp = isNaN(parseInt(token.get("bar1_value"))) ? 0 : parseInt(token.get("bar1_value"));
             hpObj = GetCharacterAttribute(charId, "hp");
             if (hpObj != undefined && hpObj != "") {
-                if (hp == 0 && parseInt(hpObj.get("current")) == 0) 
+                if (hp == undefined || (hp == 0 && parseInt(hpObj.get("current"))) == 0) 
                 {
                     hpObj.set("current", hpObj.get("max"));
                 }
@@ -826,14 +826,14 @@ function CommandCastNPC(msg) {
             barrier = isNaN(parseInt(token.get("bar2_value"))) ? 0 : parseInt(token.get("bar2_value"));
             barrierObj = GetCharacterAttribute(charId, "barrier");
             if (barrierObj != undefined && barrierObj != "") {
-                if (barrier == 0 && parseInt(barrierObj.get("current")) == 0) 
+                if (barrier == undefined || (barrier == 0 && parseInt(barrierObj.get("current"))) == 0) 
                 {
                     barrierObj.set("current", barrierObj.get("max"));
                 }
                 else {
                     barrierObj.set("current", barrier);
                 }
-                barrierObj.set("bar2_link", barrierObj.get("_id"));
+                token.set("bar2_link", barrierObj.get("_id"));
             }
 
             // get element
@@ -848,6 +848,12 @@ function CommandCastNPC(msg) {
             else {
                 // set the token's element based on the primary element
                 SetTokenElement(token, elementObj.get("current"));
+            }
+
+            //set bio
+            ageObj = GetCharacterAttribute(charId, "age");
+            if (ageObj != undefined) {
+                ageObj.set("current", options[1]);
             }
 
             // set character data
