@@ -920,7 +920,6 @@ function CommandSetAltitude(msg) {
             var token;
             token = getObj('graphic', obj._id);
             if (token) {
-                log ("setting to pink " + (altitude == 0 ? false : altitude));
                 token.set("status_pink", (altitude == 0 ? false : altitude));
             }
         });
@@ -980,7 +979,6 @@ function OnTriggerDyingInjury(injuryData) {
     if (injuryPreset.name != "") {
         let newInjuryData = GetInjuryData();
         newInjuryData.setData("Active", characterName, charId, injuryPreset.name, injuryHp);
-        log ("newInjuryData: " + newInjuryData.state);
         TargetAddInjury(newInjuryData, true);
 
         // set the injury on the token
@@ -1081,7 +1079,6 @@ function OnTriggerResetWeek(msg, content) {
         var sectionId = options[1];
 
         if (character != undefined) {
-            log ("OnTriggerResetWeek: " + character.name);
                  
             var mainActivity = GetSafeCharacterAttribute(character.id, sectionId + "_mainActivityDetails");
             if (mainActivity != undefined) {
@@ -1261,7 +1258,6 @@ function JukeboxStop(msg) {
         if (state.jukebox.trackDetails[state.jukebox.currentlyPlaying] != undefined) {
             var track = getObj('jukeboxtrack', state.jukebox.trackDetails[state.jukebox.currentlyPlaying].id);
             if (track != undefined) {
-                log ("got track " + track.get('title') + ": " + track.get('playing') + " softstop: " + track.get('softstop'));
                 track.set('playing', false);
             }
         }

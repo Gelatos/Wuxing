@@ -230,7 +230,6 @@ on("chat:message", function(msg) {
     }
 
     if (msg.playerid.toLowerCase() != "api" && msg.rolltemplate) {
-        log ("rolltemplate: " + msg.content);
 
         if (["action"].indexOf(msg.rolltemplate) > -1 && msg.content.indexOf("charname=") > -1) {
             let cnamebase = msg.content.split("charname=")[1].split("}")[0];
@@ -782,7 +781,6 @@ function GetIdListTargetData(idList) {
 
 function GetActorTargetData(actorList) {
     var output = [];
-    log ("actorList: " + actorList);
 
     let actors = actorList.split(",");
     let id;

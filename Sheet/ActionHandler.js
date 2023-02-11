@@ -59,7 +59,6 @@ function HandleHiddenAction(msg, charId, playerid) {
     if (msg.content.indexOf("{{r1=") >= 0) {
         output = GetHiddenCheckOutput(msg, output);
     } 
-    log ("sending " + output);
 
     if ((msg.target != undefined && msg.target.toLowerCase() == "gm") || msg.content.indexOf("{{whispered=1}}") >= 0) {
         output = "/w GM " + output;
@@ -117,7 +116,6 @@ function PerformSurgeOutput(msg, charId) {
     // calculate surge resist
     let surgeResist = GetActionRollTempleteTrait(msg, /{{surgeResist=.*?}}/g, "=");
     surgeResist = isNaN(parseInt(surgeResist)) ? 0 : parseInt(surgeResist);
-    log (`surgeValue: ${surgeValue} cost: ${surgeCost} resist: ${surgeResist}`);
     surgeCost -= surgeResist;
     if (surgeCost < 1) {
         surgeCost = 1;
@@ -349,7 +347,6 @@ function HandleActionCostFromTemplate(msg, charId) {
         case "3":
             let actionCountObj = GetCharacterAttribute(charId, "actioncount");
             if (actionCountObj != undefined) {
-                log ("current action count: " + actionCountObj.get("current"));
                 resourceVal = isNaN(parseInt(actionCountObj.get("current"))) ? 0 : parseInt(actionCountObj.get("current"));
                 if (actionCost <= resourceVal) {
                     resourceVal -= actionCost;
@@ -383,7 +380,6 @@ function HandleManaCostFromTemplate(msg, charId) {
 
     // calculate mana cost
     let manaCost = GetActionRollTempleteTrait(msg, /{{mana=.*?}}/g, "=");
-    log ("manaCost: " + manaCost);
     if (String(manaCost).indexOf("[[") >= 0) {
         let check1 = String(manaCost).split("[[")[1].split("]]")[0];
         manaCost = (msg.inlinerolls[check1].results.total != 0) ? parseInt(msg.inlinerolls[check1].results.total) : 0;
@@ -434,8 +430,6 @@ function HandleManaCostFromTemplate(msg, charId) {
         } else {
             // characters in the material plane use ki to cast spells
             let ki = GetCharacterAttribute(charId, "ki");
-            log ("found: " + ki);
-            log ("found this too: " + ki.get("current") + "/" + ki.get("max"));
             let kiValue = isNaN(parseInt(ki.get("current"))) ? 0 : parseInt(ki.get("current"));
 
             if (manaCost > 0) {
@@ -576,7 +570,6 @@ function HandleAutoDefensesFromTemplate(msg, charId) {
             for (let i = 0; i < defenseList.length; i++) {
                 defData = defenseList[i].split("$$");
                 defenseDictionary[defData[0].trim().toLowerCase()] = defData[1];
-                log (`creating [${defData[0].trim().toLowerCase()}] = ${defData[1]}`);
             }
 
             // get the list of defenses to turn on
@@ -1220,7 +1213,6 @@ function HandleTargettedAction(actionData, targetData) {
                 endBrackIndex = weaknesses.substring(drIndex).indexOf("]");
                 dr = weaknesses.substring(drIndex).substring(brackIndex + 1, endBrackIndex);
                 dr = isNaN(parseInt(dr)) ? 0 : parseInt(dr);
-                log (`dr: ${dr} brackIndex: ${brackIndex} endBrackIndex: ${endBrackIndex}`);
                 
                 if (dr != 0) {
                     damage1Total += dr;
@@ -1365,7 +1357,6 @@ function HandleTargettedAction(actionData, targetData) {
 
 function GetRetargetButton(actionData) {
     let output = `<div>[Choose Another Target](!tatk &#64;{target||token_id}$$$${SanitizeSheetRoll(actionData.toString())})</div>`;
-    log ("Retarget: " + output);
     return output;
 }
 
@@ -1605,7 +1596,6 @@ function HandleActionResults(actionResults, actionTargetData) {
         let sourceData = FormTargetData(actionResults.executorId, actionResults.executor, "", actionResults.executor);
         let printoutData = AddTokenCondition(actionTargetData.token, coreEffect, actionResults.rname, sourceData, actionResults.attack1, effectPower);
 
-        log ("setting core effect:" + ` {{condition=Adding Condition}} {{conditionResult=${printoutData.title}}} {{cond-${printoutData.img}=1}} {{conditionDetails=${printoutData.desc}}}`);
         output += ` {{condition=Adding Condition}} {{conditionResult=${printoutData.title}}} {{cond-${printoutData.img.toLowerCase()}=1}} {{conditionDetails=${printoutData.desc}}}`;
     }
 
@@ -1759,7 +1749,6 @@ function CreateHealInjuriesOutput(actionResults) {
 
                 // create output
                 injuryName = `${injuryName.trim()} (Damage: ${injuryHp} -> ${remainingDamage})`;
-                log ("healing: " + SanitizeSheetRollAction(healingResults.toString()));
                 output += `<div>[${injuryName}](!healinj ${SanitizeSheetRollAction(healingResults.toString())})</div>`;
             }
         }
@@ -1803,8 +1792,6 @@ function CommandTargetHealInjury(content) {
     output += ` {{damage=Healing}}`;
     output += ` {{damageResult=${healingString}}}`;
     output += ` {{damageDetails=${healingResults.healingMods}}}`;
-
-    log (output);
 
     // send the output
     sendChat("Battle Manager", output);
@@ -2396,7 +2383,6 @@ function HandleCraftBlueprintAction(actionData) {
 // ======= Start Turn
 // =================================================
 function StartCharacterTurn(target, output) {
-    log ("Starting turn for " + target.displayName);
 
     // setup variables
     if (output == undefined) {
@@ -2412,7 +2398,6 @@ function StartCharacterTurn(target, output) {
     // print the current conditions on the token
     let tokenConditionInfo = GetTokenConditionInformation(target, true);
     if (tokenConditionInfo.conditions != "") {
-        log (`conditions: ${tokenConditionInfo.conditions}`);
         output += tokenConditionInfo.display();
     }
 
@@ -2481,7 +2466,6 @@ function RefreshRaisedShieldState(target) {
 
             // add to ac values
             let ac = GetCharacterAttribute(target.charId, "ac_shatterbarrier");
-            log ("ac: " + ac.get("current"));
             let acValue = ac.get("current") - shieldAc;
             ac.set("current", acValue);
     
