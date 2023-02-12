@@ -547,7 +547,14 @@ function SetToken(tokens, options, tokenType) {
                     // set vitals
                     hp = GetCharacterAttribute(charId, "hp");
                     br = GetCharacterAttribute(charId, "barrier");
+
+                    if (parseInt(token.get("bar1_value")) == parseInt(token.get("bar1_max"))) {
+                        token.set("bar1_value", hp.get("max"));
+                    }
                     token.set("bar1_max", hp.get("max"));
+                    if (parseInt(token.get("bar2_value")) == parseInt(token.get("bar2_max"))) {
+                        token.set("bar2_value", br.get("max"));
+                    }
                     token.set("bar2_max", br.get("max"));
                 }
                 else if (charId != undefined && charId != "") {
@@ -600,7 +607,28 @@ function ShowNameplates(msg) {
             
             // set token variables
             token = getObj('graphic', obj._id);
-            token.set("showname", true);
+            if (token != undefined) {
+                let difficultyStyleObj = getAttrByName(token.get("represents"), "difficultyStyle");
+                if (difficultyStyleObj != undefined && difficultyStyleObj == "3") {
+                    token.set("showname", true);
+                }
+            }
+        });
+    }
+}
+
+function HideNameplates(msg) {
+    // iterate through the selected tokens
+    if (msg.selected != undefined && msg.selected != "" && msg.selected.length > 0) {
+
+        let token = {};
+        _.each(msg.selected, function (obj) {
+            
+            // set token variables
+            token = getObj('graphic', obj._id);
+            if (token != undefined) {
+                token.set("showname", false);
+            }
         });
     }
 }
@@ -814,7 +842,7 @@ function CommandCastNPC(msg) {
             hp = isNaN(parseInt(token.get("bar1_value"))) ? 0 : parseInt(token.get("bar1_value"));
             hpObj = GetCharacterAttribute(charId, "hp");
             if (hpObj != undefined && hpObj != "") {
-                if (hp == undefined || (hp == 0 && parseInt(hpObj.get("current"))) == 0) 
+                if (hp == undefined || hp == parseInt(token.get("bar1_max")) || (hp == 0 && parseInt(hpObj.get("current")) == 0)) 
                 {
                     hpObj.set("current", hpObj.get("max"));
                 }
@@ -826,7 +854,7 @@ function CommandCastNPC(msg) {
             barrier = isNaN(parseInt(token.get("bar2_value"))) ? 0 : parseInt(token.get("bar2_value"));
             barrierObj = GetCharacterAttribute(charId, "barrier");
             if (barrierObj != undefined && barrierObj != "") {
-                if (barrier == undefined || (barrier == 0 && parseInt(barrierObj.get("current"))) == 0) 
+                if (barrier == undefined || barrier == parseInt(token.get("bar2_max")) || (barrier == 0 && parseInt(barrierObj.get("current"))) == 0) 
                 {
                     barrierObj.set("current", barrierObj.get("max"));
                 }
@@ -941,14 +969,18 @@ function SetMinionNameOnCharacterSheet(target) {
 // ======= OnTrigger Functions
 // =================================================
 
-function OnTriggerSpellLookup(msg) {
-    var sendingPlayer = getObj('player', msg.playerid);
-    var sendingPlayerName = sendingPlayer.get("_displayname").split(" ")[0];
-    var sendString = "/w " + sendingPlayerName + " &{template:spell}" + msg.content.substr(12);
+function OnTriggerCreateAbility(data) {
 
-    sendChat('player|' + msg.playerid, sendString, null, {
-        noarchive: true
-    });
+    log ("OnTriggerCreateAbility: " + data);
+
+    data = data.split("@@");
+    let target = GetActorTargetData(data[0])[0];
+
+    let name = data[1];
+    name = name.replace(/ /g, "-");
+
+    let template = "&{template:" + data[2];
+    CreateAbility(name, template, target.charId);
 }
 
 function OnTriggerDyingInjury(injuryData) {

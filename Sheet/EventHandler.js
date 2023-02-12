@@ -88,9 +88,10 @@ on("chat:message", function(msg) {
         }
         
         // Triggered Events
-        else if (msg.content.indexOf("!spelllookup ") !== -1) {
+        else if (msg.content.indexOf("!createability ") !== -1) {
             
-            OnTriggerSpellLookup(msg);
+            var content = msg.content.replace("!createability ", "");
+            OnTriggerCreateAbility(content);
         }
         else if (msg.content.indexOf("!linger ") !== -1) {
             
@@ -192,8 +193,11 @@ on("chat:message", function(msg) {
             else if (msg.content.indexOf("!castnpc") !== -1) {
                 CommandCastNPC(msg);
             }
-            else if (msg.content.indexOf("!show") !== -1) {
+            else if (msg.content.indexOf("!showname") !== -1) {
                 ShowNameplates(msg);
+            }
+            else if (msg.content.indexOf("!hidename") !== -1) {
+                HideNameplates(msg);
             }
             else if (msg.content.indexOf("!img") !== -1) {
                 PrintTokenImageURL(msg);
@@ -906,4 +910,25 @@ function CreateNormalAttribute(name, value, charId, max) {
     }
 
     return createObj("attribute", {"name": name, "current": value, "_characterid": charId});
+}
+
+function CreateAbility (name, pattern, charId) {
+    var checkAbility = findObjs({
+        _type: 'ability',
+        _characterid: charId,
+        name: name
+    });
+
+    if (checkAbility[0]) {
+        checkAbility[0].set({
+            action: pattern
+        });
+    } else {
+        createObj('ability', {
+            name: name,
+            action: pattern,
+            characterid: charId,
+            istokenaction: true
+        });
+    }
 }

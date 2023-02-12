@@ -3851,6 +3851,9 @@
 											<option value='1'>Yes</option>
 										</select>
 									</div>
+									<div class="wuxActionRow">
+										<button type="roll" name="roll_create_ability" value="!createability @{character_name}@@?{Name of the Ability|@{atkname}}@@@{rollbase}">Create Ability</button>
+									</div>
 									<div class="wuxRow">&nbsp;</div>
 
 									<div class="wuxRow"><span class="wuxFormHeader">Conditionals</span></div>
@@ -4246,6 +4249,13 @@
 												<span class="wuxFormTitle wuxSizeSmall">Total</span>
 												<span class="wuxFormData wuxSizeSmall" name="attr_atkbonus">0</span>
 											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle wuxSizeLarge">Randomize Roll?</span>
+												<select class='wuxFormInput wuxSizeSmall' name='attr_atkaskforroll'>
+													<option value='0'>Yes</option>
+													<option value="1">No</option>
+												</select>
+											</div>
 										</div>
 									</div>
 									<div class="wuxRow">&nbsp;</div>
@@ -4467,7 +4477,6 @@
 										<div class="wuxRow">
 											<span class="wuxFormSubheader">Rollbase</span>
 										</div>
-										<input type="text" class="wuxFormInput" name="attr_rollbase" value="">
 									</div>
 									<div class="wuxRow">&nbsp;</div>
 
