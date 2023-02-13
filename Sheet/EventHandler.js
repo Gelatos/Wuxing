@@ -1,234 +1,237 @@
 on("chat:message", function(msg) {
     if (msg.type == "api" && msg.content != null) {
 
-        if (msg.content.toLowerCase().indexOf("!m ") == 0 || msg.content.toLowerCase().indexOf("!w ") == 0 
-            || msg.content.toLowerCase().indexOf("!y ") == 0 || msg.content.toLowerCase().indexOf("!t ") == 0 
-            || msg.content.toLowerCase().indexOf("!d ") == 0 || msg.content.toLowerCase().indexOf("!de ") == 0) {
-            
-            CommandGetEmoteMessageOptions(msg);
+        let firstSpace = msg.content.indexOf(" ");
+        if (firstSpace == -1) {
+            firstSpace = msg.content.length;
         }
-        else if (msg.content.toLowerCase().indexOf("!h ") !== -1 || msg.content.toLowerCase().indexOf("!r ") !== -1 || 
-                 msg.content.toLowerCase().indexOf("!ry ") !== -1 || 
-                 msg.content.toLowerCase().indexOf("!i ") !== -1 || msg.content.toLowerCase().indexOf("!a ") !== -1 || 
-                 msg.content.toLowerCase().indexOf("!l ") !== -1 || msg.content.toLowerCase().indexOf("!s ") !== -1) {
-            
-            CommandSendFormattedMessage(msg);
-        }
-        else if (msg.content.toLowerCase().indexOf("!emoteMessage ") != -1) {
-            
-            CommandSendEmoteMessage(msg);
-        }
-        else if (msg.content.toLowerCase().indexOf("!markernames") != -1) {
-            let tokenMarkers = JSON.parse(Campaign().get("token_markers"));
-            let chatMessage = '';
-            _.each(tokenMarkers, marker => {
-                chatMessage += `<p><img src='${marker.url}'> ${marker.id}: ${marker.name}</p>`;
-            });
-            sendChat("Token Markers", chatMessage);
-        } 
-        else if(msg.content.split(" ")[0].toLowerCase() === '!clearmarkers') {
-            if (!msg.selected && msg.selected[0]._type == "graphic") return;
-            obj = getObj(msg.selected[0]._type, msg.selected[0]._id);
-            obj.set("statusmarkers", "");
-            SanitizeTokenConditions(obj, true);
-        }
-        else if(msg.content.split(" ")[0].toLowerCase() === '!gettokenmarkers') {
-            if (!msg.selected) return;
-            if (msg.selected[0]._type !== "graphic") return;
-            obj = getObj(msg.selected[0]._type, msg.selected[0]._id);
-            currentMarkers = obj.get("statusmarkers");
-            sendChat("Token Markers", currentMarkers);
-        }
-        else if (msg.content.indexOf("!target ") !== -1 || msg.content.indexOf("!targetw ") !== -1) {
-            
-            CommandTargetFunction(msg);
-        }
-        else if (msg.content.indexOf("!token ") !== -1 || msg.content.indexOf("!tokenw ") !== -1) {
-            
-            CommandTokenFunction(msg);
-        }
-        else if (msg.content.indexOf("!c ") !== -1 || msg.content.indexOf("!cw ") !== -1) {
-            
-            CommandCharacterFunction(msg);
-        }
-        else if (msg.content.indexOf("!alt ") !== -1) {
-            
-            CommandSetAltitude(msg);
-        }
-        else if (msg.content.indexOf("!j") !== -1) {
-            
-            CommandJukebox(msg);
-        }
-        else if (msg.content.indexOf("!setoutfit ") !== -1) {
-            
-            CommandSetOutfit(msg);
-        }
-        else if (msg.content.indexOf("!setlang ") !== -1) {
-            
-            CommandSetLanguage(msg);
-        }
-        else if (msg.content.indexOf("!help") !== -1) {
-            
-            var options = msg.content.replace("!help", "").trim().toLowerCase();
-            CommandHelpCommands(msg, options);
-        }
-        else if (msg.content.indexOf("!deathsave ") !== -1) {
-            
-            var content = msg.content.replace("!deathsave ", "");
-            CommandDeathSave(content);
-        }
-        else if (msg.content.indexOf("!deathfailure ") !== -1) {
-            
-            var content = msg.content.replace("!deathfailure ", "");
-            CommandDeathFailure(content);
-        }
-        else if (msg.content.indexOf("!roll20AM ") !== -1) {
-
-            Roll20AM.InputController(msg);
-        }
-        
-        // Triggered Events
-        else if (msg.content.indexOf("!createability ") !== -1) {
-            
-            var content = msg.content.replace("!createability ", "");
-            OnTriggerCreateAbility(content);
-        }
-        else if (msg.content.indexOf("!linger ") !== -1) {
-            
-            var content = msg.content.replace("!linger ", "");
-            OnTriggerDyingInjury(content);
-        }
-        else if (msg.content.indexOf("!surge ") !== -1) {
-            
-            var content = msg.content.replace("!surge ", "");
-            OnTriggerSurge(msg, content);
-        }
-        else if (msg.content.indexOf("!insp ") !== -1) {
-            
-            var content = msg.content.replace("!insp ", "");
-            OnTriggerInspiration(content);
-        }
-        else if (msg.content.indexOf("!spendresolve ") !== -1) {
-            
-            var content = msg.content.replace("!spendresolve ", "");
-            OnTriggerResolve(content);
-        }
-        else if (msg.content.indexOf("!spendfate ") !== -1) {
-            
-            var content = msg.content.replace("!spendfate ", "");
-            OnTriggerFate(content);
-        }
-        else if (msg.content.indexOf("!resetweek ") !== -1) {
-            
-            var content = msg.content.replace("!resetweek ", "");
-            OnTriggerResetWeek(msg, content);
-        }
-        else if (msg.content.indexOf("!check ") !== -1) {
-            
-            var content = msg.content.replace("!check ", "");
-            OnTriggerInteractTarget(msg, content);
-        }
-        else if (msg.content.indexOf("!interactopt ") !== -1) {
-            
-            var content = msg.content.replace("!interactopt ", "");
-            GetInteractionOptions(msg, content);
-        }
-        else if (msg.content.indexOf("!interactgenshop ") !== -1) {
-            
-            var content = msg.content.replace("!interactgenshop ", "");
-            PurchaseGenericShopItem(msg, content);
-        }
-        else if (msg.content.indexOf("!ctemplate ") !== -1) {
-            
-            var content = msg.content.replace("!ctemplate ", "");
-            OnTriggerCallTemplate(msg, content);
+        let tag = msg.content.substring(0, firstSpace).toLowerCase().trim();
+        let content = "";
+        if (firstSpace < msg.content.length) {
+             content = msg.content.substring(firstSpace).trim();
         }
 
-        // Token Triggered Events
-        else if (msg.content.indexOf("!tatk ") !== -1) {
-            var content = msg.content.replace("!tatk ", "");
-            var contentSplit = content.split("$$$");
-            CreateActionOutput(contentSplit[0], contentSplit[1]);
+        switch(tag) {
+            case "!m":
+            case "!w":
+            case "!y":
+            case "!t":
+            case "!d":
+            case "!de":
+                CommandGetEmoteMessageOptions(msg);
+            return;
+            case "!h":
+            case "!r":
+            case "!ry":
+            case "!i":
+            case "!a":
+            case "!l":
+            case "!s":
+                CommandSendFormattedMessage(msg);
+            return;
+            case "!emoteMessage":
+                CommandSendEmoteMessage(msg);
+
+            return;
+            case "!markernames":
+                let tokenMarkers = JSON.parse(Campaign().get("token_markers"));
+                let chatMessage = '';
+                _.each(tokenMarkers, marker => {
+                    chatMessage += `<p><img src='${marker.url}'> ${marker.id}: ${marker.name}</p>`;
+                });
+                sendChat("Token Markers", chatMessage);
+
+            return;
+            case "!clearmarkers":
+                if (!msg.selected && msg.selected[0]._type == "graphic") return;
+                obj = getObj(msg.selected[0]._type, msg.selected[0]._id);
+                obj.set("statusmarkers", "");
+                SanitizeTokenConditions(obj, true);
+                
+            return;
+            case "!gettokenmarkers":
+                if (!msg.selected) return;
+                if (msg.selected[0]._type !== "graphic") return;
+                obj = getObj(msg.selected[0]._type, msg.selected[0]._id);
+                currentMarkers = obj.get("statusmarkers");
+                sendChat("Token Markers", currentMarkers);
+                
+            return;
+            case "!target":
+            case "!targetw":
+                CommandTargetFunction(msg);
+                
+            return;
+            case "!token":
+            case "!tokenw":  
+                CommandTokenFunction(msg);  
+
+            return;
+            case "!c":
+            case "!cw":
+                CommandCharacterFunction(msg);
+                
+            return;
+            case "!jp":
+            case "!jpl":
+            case "!jps":
+            case "!jsa":
+            case "!js":
+            case "!ja":
+            case "!jd":
+            case "!jia":
+                CommandJukebox(msg);
+                
+            return;
+            case "!setlang":
+                CommandSetLanguage(msg);
+                
+            return;
+            case "!help":
+                CommandHelpCommands(msg, content);
+                
+            return;
+            case "!deathsave":
+                CommandDeathSave(content);
+                
+            return;
+            case "!deathfailure":
+                CommandDeathFailure(content);
+                
+            return;
+
+            // Triggered Events
+            case "!createability":
+                OnTriggerCreateAbility(content);
+                
+            return;
+            case "!linger":
+                OnTriggerDyingInjury(content);
+                
+            return;
+            case "!insp":
+                OnTriggerInspiration(content);
+                
+            return;
+            case "!spendresolve":
+                OnTriggerResolve(content);
+                
+            return;
+            case "!spendfate":
+                OnTriggerFate(content);
+                
+            return;
+            case "!check":
+                OnTriggerInteractTarget(msg, content);
+                
+            return;
+            case "!ctemplate":
+                OnTriggerCallTemplate(msg, content);
+                
+            return;
+
+            // Token Triggered Events
+            case "!tatk":
+                let contentSplit = content.split("$$$");
+                CreateActionOutput(contentSplit[0], contentSplit[1]);
+                
+            return;
+            case "!actionResults":
+                CommandHandleActionResults(content);
+                
+            return;
+            case "!healinj":
+                CommandTargetHealInjury(content);
+                
+            return;
         }
-        else if (msg.content.indexOf("!actionResults ") !== -1) {
-            var content = msg.content.replace("!actionResults ", "");
-            CommandHandleActionResults(content);
-        }
-        else if (msg.content.indexOf("!healinj ") !== -1) {
-            var content = msg.content.replace("!healinj ", "");
-            CommandTargetHealInjury(content);
-        }
-        
+
         // GM Events
-        else if (playerIsGM(msg.playerid)) {
-            if (msg.content.indexOf("!p ") !== -1 || msg.content.indexOf("!ps ") !== -1 ||
-                msg.content.indexOf("!pc ") !== -1 || msg.content.indexOf("!pcs ") !== -1) {
-                CommandPartyFunction(msg);
-            }
-            else if (msg.content.indexOf("!startsession ") !== -1) {
-                var options = msg.content.replace("!startsession ", "").trim();
-                CommandStartSession(options);
-            }
-            else if (msg.content.indexOf("!pta") !== -1) {
-                CommandAddToParty(msg);
-            }
-            else if (msg.content.indexOf("!pt") !== -1) {
-                CommandSetParty(msg);
-            }
-            else if (msg.content.indexOf("!sta") !== -1) {
-                CommandSetTokenAlly(msg);
-            }
-            else if (msg.content.indexOf("!st") !== -1) {
-                CommandSetToken(msg);
-            }
-            else if (msg.content.indexOf("!npc") !== -1) {
-                CommandSetNPC(msg);
-            }
-            else if (msg.content.indexOf("!rndnpc") !== -1) {
-                CommandRandomizeNPC(msg);
-            }
-            else if (msg.content.indexOf("!recast") !== -1) {
-                CommandRecastNPC(msg);
-            }
-            else if (msg.content.indexOf("!castnpc") !== -1) {
-                CommandCastNPC(msg);
-            }
-            else if (msg.content.indexOf("!showname") !== -1) {
-                ShowNameplates(msg);
-            }
-            else if (msg.content.indexOf("!hidename") !== -1) {
-                HideNameplates(msg);
-            }
-            else if (msg.content.indexOf("!img") !== -1) {
-                PrintTokenImageURL(msg);
-            }
-            else if (msg.content.indexOf("!fail") !== -1) {
-                CommandCritFail();
-            }
-            else if (msg.content.indexOf("!generateNPC") !== -1) {
-                CommandGenerateNPC(msg);
-            }
-            else if (msg.content.indexOf("!assignToken") !== -1) {
-                CommandAssignToken(msg);
-            }
-            else if (msg.content.indexOf("!gainmorale ") !== -1) {
-                var options = msg.content.replace("!gainmorale ", "").trim();
-                TargetGainMorale(options);
-            }
-            else if (msg.content.indexOf("!gainkarma ") !== -1) {
-                var options = msg.content.replace("!gainkarma ", "").trim();
-                TargetGainKarma(options);
-            }
-            else if (msg.content.indexOf("!completeMission ") !== -1) {
-                var options = msg.content.replace("!completeMission ", "").trim();
-                CommandCompleteMission(msg, options);
-            }
-            else if (msg.content.indexOf("!setmissionxp ") !== -1) {
-                var options = msg.content.replace("!setmissionxp ", "").trim();
-                CommandSetMissionXp(msg, options);
-            }
-            else if (msg.content.indexOf("!importPartyStats") !== -1) {
-                CommandImportPartyStats(msg);
+        if (playerIsGM(msg.playerid)) {
+            switch(tag) {
+                case "!p":
+                case "!ps":
+                case "!pc":
+                case "!pcs":
+                    CommandPartyFunction(msg);
+                    
+                return;
+                case "!startsession":
+                    CommandStartSession(content);
+                    
+                return;
+                case "!pta":
+                    CommandAddToParty(msg);
+                    
+                return;
+                case "!pt":
+                    CommandSetParty(msg);
+                    
+                return;
+                case "!sta":
+                    CommandSetTokenAlly(msg);
+                    
+                return;
+                case "!st":
+                    CommandSetToken(msg);
+                    
+                return;
+                case "!npc":
+                    CommandSetNPC(msg);
+                    
+                return;
+                case "!rndnpc":
+                    CommandRandomizeNPC(msg);
+                    
+                return;
+                case "!recast":
+                    CommandRecastNPC(msg);
+                    
+                return;
+                case "!castnpc":
+                    CommandCastNPC(msg);
+                    
+                return;
+                case "!showname":
+                    ShowNameplates(msg);
+                    
+                return;
+                case "!hidename":
+                    HideNameplates(msg);
+                    
+                return;
+                case "!img":
+                    PrintTokenImageURL(msg);
+                    
+                return;
+                case "!generateNPC":
+                    CommandGenerateNPC(msg);
+                    
+                return;
+                case "!assignToken":
+                    CommandAssignToken(msg);
+                    
+                return;
+                case "!gainmorale":
+                    TargetGainMorale(content);
+                    
+                return;
+                case "!gainkarma":
+                    TargetGainKarma(content);
+                    
+                return;
+                case "!completeMission":
+                    CommandCompleteMission(msg, content);
+                    
+                return;
+                case "!setmissionxp":
+                    CommandSetMissionXp(msg, content);
+                    
+                return;
+                case "!importPartyStats":
+                    CommandImportPartyStats(msg);
+                    
+                return;
             }
         }
     }
