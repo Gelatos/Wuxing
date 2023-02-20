@@ -153,7 +153,8 @@ var TurnMarker = TurnMarker || (function(){
 
         switch(command) {
             case "!tm":
-            case "!turnmarker": {
+            case "!turnmarker": 
+				{
                     let tokens=_.rest(tokenized),marker,value;
                     switch (tokens[0]) {
                         case 'reset':
@@ -774,11 +775,11 @@ var TurnMarker = TurnMarker || (function(){
         }
     },
     registerEventHandlers = function(){        
-        on("change:campaign:initiativepage", dispatchInitiativePage );
-        on("change:campaign:turnorder", handleTurnOrderChange );
-        on("change:graphic:lastmove", checkForTokenMove );
-        on("destroy:graphic", handleDestroyGraphic );
-        on("chat:message", handleInput );
+        // on("change:campaign:initiativepage", dispatchInitiativePage );
+        // on("change:campaign:turnorder", handleTurnOrderChange );
+        // on("change:graphic:lastmove", checkForTokenMove );
+        // on("destroy:graphic", handleDestroyGraphic );
+        // on("chat:message", handleInput );
 
         dispatchInitiativePage();
     }

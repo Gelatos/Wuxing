@@ -99,6 +99,11 @@ on("chat:message", function(msg) {
                 CommandDeathFailure(content);
                 
             return;
+            case "!roll20AM":
+                Roll20AM.InputController(msg);
+                
+            return;
+    
 
             // Triggered Events
             case "!createability":
@@ -143,6 +148,19 @@ on("chat:message", function(msg) {
             case "!healinj":
                 CommandTargetHealInjury(content);
                 
+            return;
+            case "!tm":
+            case "!turnmarker":
+                TurnMarker.handleInput(msg);
+
+            return;
+            case "!eot":
+                TurnMarker.requestTurnAdvancement(msg);
+
+            return;
+            case "!pot":
+                TurnMarker.requestTurnRetreat(msg);
+
             return;
         }
 
