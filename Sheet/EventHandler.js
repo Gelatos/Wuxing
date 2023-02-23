@@ -210,6 +210,10 @@ on("chat:message", function(msg) {
                     CommandCastNPC(msg);
                     
                 return;
+                case "!intro":
+                    IntroduceNPC(msg);
+                    
+                return;
                 case "!showname":
                     ShowNameplates(msg);
                     

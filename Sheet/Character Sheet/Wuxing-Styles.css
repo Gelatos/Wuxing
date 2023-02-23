@@ -4362,7 +4362,8 @@ visibility: visible;
 .sheet-rolltemplate-ctyell .sheet-chattable,
 .sheet-rolltemplate-ctthk .sheet-chattable,
 .sheet-rolltemplate-ctdesc .sheet-chattable,
-.sheet-rolltemplate-ctinteract .sheet-chattable
+.sheet-rolltemplate-ctinteract .sheet-chattable,
+.sheet-rolltemplate-ctintro .sheet-chattable
 {
     border: 0px solid black; 
     margin: 0px -40px 0px -40px;
@@ -4373,7 +4374,8 @@ visibility: visible;
 .sheet-rolltemplate-ctyell .sheet-chatimage,
 .sheet-rolltemplate-ctthk .sheet-chatimage,
 .sheet-rolltemplate-ctdesc .sheet-chatimage,
-.sheet-rolltemplate-ctinteract .sheet-chatimage
+.sheet-rolltemplate-ctinteract .sheet-chatimage,
+.sheet-rolltemplate-ctintro .sheet-chatimage
 {
     display: inline-block; 
     vertical-align: top; 
@@ -4482,7 +4484,8 @@ visibility: visible;
 .sheet-rolltemplate-ctyell .sheet-chattd, 
 .sheet-rolltemplate-ctthk .sheet-chattd, 
 .sheet-rolltemplate-ctdesc .sheet-chattd,
-.sheet-rolltemplate-ctinteract .sheet-chattd
+.sheet-rolltemplate-ctinteract .sheet-chattd,
+.sheet-rolltemplate-ctintro .sheet-chattd
 {
     border: 0px; 
     padding: 0px; 
@@ -4496,7 +4499,8 @@ visibility: visible;
 .sheet-rolltemplate-ctwsp .sheet-chatsub,
 .sheet-rolltemplate-ctyell .sheet-chatsub, 
 .sheet-rolltemplate-ctthk .sheet-chatsub, 
-.sheet-rolltemplate-ctdesc .sheet-chatsub
+.sheet-rolltemplate-ctdesc .sheet-chatsub, 
+.sheet-rolltemplate-ctintro .sheet-chatsub
 {
     padding: 5px 10px 5px 10px; 
     min-width: 30px; 
@@ -4658,6 +4662,33 @@ visibility: visible;
     box-shadow:3px 3px 0 #222;
 }
 
+.sheet-rolltemplate-ctintro .sheet-message
+{
+    display: inline-block; 
+    min-width: 30px; 
+    padding: 5px; 
+    margin: 8px 50px 0px 25px; 
+    vertical-align: top;
+
+    font-family: "Contrail One";
+    letter-spacing: 0.1ch;
+    padding: 4px 6px;
+    color: #000;
+
+    font-size: 12px;
+    line-height: 16px;
+
+    /* font-family: "Courier New", monospace;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0.1ch;
+    padding: 5px 8px; */
+
+    border: 2px solid #000;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    background: #fff;
+}
+
 .sheet-rolltemplate-ctwsp .sheet-message
 {
     padding: 4px 6px;
@@ -4815,7 +4846,9 @@ visibility: visible;
     text-align: left;
 }
 
-.sheet-rolltemplate-ctdesc .sheet-message
+.sheet-rolltemplate-ctdesc .sheet-message,
+.sheet-rolltemplate-ctintro .sheet-chattitle,
+.sheet-rolltemplate-ctintro .sheet-message
 {
     display: inline-block; 
     margin: 30px 50px 0px -40px; 
@@ -4826,15 +4859,29 @@ visibility: visible;
     border-image: linear-gradient(45deg, #ffda11, #FCF6BA, #ffda11, #FBF5B7, #ffda11) 1;
 }
 
-.sheet-rolltemplate-ctdesc .sheet-inner-border 
+.sheet-rolltemplate-ctintro .sheet-chattitle
+{
+    background-image: linear-gradient(320deg, #002800 0%, #001e00 20%, #002800 50%, #001e00 80%, #002800 100%);
+}
+
+.sheet-rolltemplate-ctintro .sheet-message
+{
+    margin: 0px 50px 0px -40px; 
+}
+
+.sheet-rolltemplate-ctdesc .sheet-inner-border,
+.sheet-rolltemplate-ctintro .sheet-inner-border
 {
     position: relative;
     border: 2px solid #ddc957;
     border-image: linear-gradient(45deg, #ffda11, #FCF6BA, #ffda11, #FBF5B7, #ffda11) 1;
     padding: 8px;
 }
+
 .sheet-rolltemplate-ctdesc .sheet-inner-border::before,
-.sheet-rolltemplate-ctdesc .sheet-inner-border::after 
+.sheet-rolltemplate-ctdesc .sheet-inner-border::after,
+.sheet-rolltemplate-ctintro .sheet-inner-border::before,
+.sheet-rolltemplate-ctintro .sheet-inner-border::after 
 {
     content: "";
     position: absolute;
@@ -4845,14 +4892,21 @@ visibility: visible;
     right: -2px;
 }
 
-.sheet-rolltemplate-ctdesc .sheet-inner-border::before {
+.sheet-rolltemplate-ctdesc .sheet-inner-border::before,
+.sheet-rolltemplate-ctintro .sheet-inner-border::before 
+{
     bottom: -2px;
 }
-.sheet-rolltemplate-ctdesc .sheet-inner-border::after {
+
+.sheet-rolltemplate-ctdesc .sheet-inner-border::after,
+.sheet-rolltemplate-ctintro .sheet-inner-border::after 
+{
     top: -2px;
 }
 
-.sheet-rolltemplate-ctdesc .sheet-message .sheet-inner-border span
+.sheet-rolltemplate-ctdesc .sheet-message .sheet-inner-border span,
+.sheet-rolltemplate-ctintro .sheet-chattitle span,
+.sheet-rolltemplate-ctintro .sheet-message .sheet-inner-border span
 {
     display: block;
     padding: 0px;
@@ -4863,6 +4917,15 @@ visibility: visible;
     color: white;
     font-family: "Patrick Hand", cursive;
     letter-spacing: 0.1ch;
+}
+
+.sheet-rolltemplate-ctintro .sheet-chattitle span
+{
+    padding: 5px;
+    padding-left: 40px; 
+
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .sheet-rolltemplate-ctthk .sheet-thoughtBubble1
@@ -4887,7 +4950,8 @@ visibility: visible;
 
 .sheet-rolltemplate-action .sheet-descimage,
 .sheet-rolltemplate-results .sheet-descimage,
-.sheet-rolltemplate-ctdesc .sheet-descimage
+.sheet-rolltemplate-ctdesc .sheet-descimage,
+.sheet-rolltemplate-ctintro .sheet-descimage
 {
     position: absolute; 
     top: 0px; 

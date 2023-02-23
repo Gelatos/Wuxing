@@ -397,7 +397,11 @@ function GetLanguageButtons(target, chatType, message) {
     return languageButtons;
 }
 
-function GetEmoteMessage(target, chatType, message, imageUrl, useTemplate, element) {
+function GetEmoteMessage(target, chatType, message, imageUrl, useTemplate, element, chattemplateTitle) {
+
+    if (chattemplateTitle == undefined) {
+        chattemplateTitle = target.displayName;
+    }
 
     // get the language
     let language = GetSelectedLanguage(target.charId);
@@ -420,7 +424,6 @@ function GetEmoteMessage(target, chatType, message, imageUrl, useTemplate, eleme
 
     // format the output
     var chattemplate = "ctmsg";
-    var chattemplateTitle = target.displayName;
     switch (chatType) {
         case "m":
             chattemplate = "ctmsg";
@@ -447,6 +450,9 @@ function GetEmoteMessage(target, chatType, message, imageUrl, useTemplate, eleme
         case "interact":
             chattemplate = "ctinteract";
             chattemplateTitle += " says";
+            break;
+        case "intro":
+            chattemplate = "ctintro";
             break;
     }
     chattemplateTitle += messageTarget;

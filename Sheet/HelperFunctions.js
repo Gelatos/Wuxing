@@ -811,9 +811,12 @@ function CommandCastNPC(msg) {
     for (var i = 0; i < options.length; i++) {
         options[i] = options[i].trim();
     }
+    let charTitle = options[0];
+    let charAge = options[1];
+    let charDesc = options[2];
 
     let tokenName, fullname, bio, hp, hpMax, hpCurrent, barrier, barrierMax, barrierCurrent = "";
-    let chracters, charObj, nicknameObj, fullnameObj, hpObj, barrierObj;
+    let chracters, charObj, nicknameObj, fullnameObj, hpObj, barrierObj, titleObj, ageObj;
 
     _.each(msg.selected, function (obj) {
             
@@ -896,9 +899,13 @@ function CommandCastNPC(msg) {
             }
 
             //set bio
+            titleObj = GetCharacterAttribute(charId, "introduction_title");
+            if (titleObj != undefined) {
+                titleObj.set("current", charTitle);
+            }
             ageObj = GetCharacterAttribute(charId, "age");
             if (ageObj != undefined) {
-                ageObj.set("current", options[1]);
+                ageObj.set("current", charAge);
             }
 
             // set character data
@@ -909,10 +916,9 @@ function CommandCastNPC(msg) {
             
             if (chracters.length > 0) {
                 charObj = chracters[0];
-                charObj.set("name", fullname);
-                charObj.set("inplayerjournals", "all");
+                charObj.set("name", tokenName);
                 if (options.length > 0) {
-                    bio = `<p><b>${tokenName}</b><br><i>${options[0]}</i></p><p>Age ${options[1]}</p><p>${options[2]}</p>`;
+                    bio = `<p><b>${fullname}</b><br><i>${charTitle}</i></p><p>Age ${charAge}</p><p>${charDesc}</p>`;
                     charObj.set("bio", bio);
                 }
             }
@@ -923,6 +929,51 @@ function CommandCastNPC(msg) {
     var newMsg = msg;
     newMsg.content = "!token-mod --set defaulttoken";
     TokenMod.HandleInput(newMsg);
+}
+
+function IntroduceNPC(msg) {
+    let output, fullname, newNickname, introEmote, introTitle, age = "";
+    let chracters, charObj, charId, nicknameObj, targetData;
+
+    _.each(msg.selected, function (obj) {
+            
+        // set token variables
+        token = getObj('graphic', obj._id);
+
+        if (token != undefined) {
+            charId = token.get("represents");
+            displayStyle = getAttrByName(charId, "emoteDisplayStyle");
+            
+            nicknameObj = GetCharacterAttribute(charId, "nickname");
+            fullname = getAttrByName(charId, "full_name");
+            newNickname = getAttrByName(charId, "introduction_nickname");
+            if (nicknameObj != undefined && newNickname != "") {
+                nicknameObj.set("current", newNickname);
+            }
+
+            introEmote = getAttrByName(charId, "introduction_emote");
+            if (introEmote == "") {
+                introEmote = "Serious";
+            }
+            introTitle = getAttrByName(charId, "introduction_title");
+            age = getAttrByName(charId, "age");
+
+            // set character data
+            chracters = findObjs({
+                _id: charId,
+                _type: "character"
+            }, {caseInsensitive: true});
+            
+            if (chracters.length > 0) {
+                charObj = chracters[0];
+                charObj.set("inplayerjournals", "all");
+            }
+            targetData = GetTokenTargetData(token);
+
+            output = GetEmoteMessage(targetData, "intro", `${introTitle}\nAge ${age}`, GetEmoteURL(charId, introEmote), true, "", fullname);
+            sendChat("Wuxing Manager", output);
+        }
+    });
 }
 
 function CommandAssignToken(msg) {

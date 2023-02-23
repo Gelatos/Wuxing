@@ -2056,7 +2056,8 @@ var update_nickname = function (newName) {
 	console.log("CHANGING NICKNAME TO " + newName);
 	var update = {};
 	var name = newName.split(" ")[0];
-	update["nickname"] = name;
+	update["introduction_nickname"] = name;
+	update["introduction_title"] = "-";
 	setAttrs(update, {
 		silent: true
 	});

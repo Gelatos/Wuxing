@@ -573,6 +573,27 @@
         {{#sub}}<div class="chatsub">{{sub}}</div>{{/sub}}
     </rolltemplate>
 
+    <rolltemplate class="sheet-rolltemplate-ctintro">
+        <div>&nbsp;</div>
+        <table class='chattable' style='position: relative'>
+            <tr>
+                <td class='chatimage'> <span>[text]({{url}})</span></td>
+                <td class='chattd'>
+                    <div class="chattitle">
+                        <span>{{title}}</span>
+                    </div>
+                    <div class='message'>
+                        <div class="inner-border">
+                            <span>{{message}}</span>
+                        </div>
+                    </div>
+                    <div class='descimage'>[text]({{url}})</div>
+                </td>
+            </tr>
+        </table>
+        {{#sub}}<div class="chatsub">{{sub}}</div>{{/sub}}
+    </rolltemplate>
+
     <rolltemplate class="sheet-rolltemplate-attackBox">
         <div>&nbsp;</div>
         <div class="formattedTextbox">{{message}}</div>
