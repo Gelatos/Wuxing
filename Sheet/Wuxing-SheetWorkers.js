@@ -16,7 +16,7 @@ on("change:strength", function () {
 });
 
 on("change:dexterity_base change:dexterity_bonus", function () {
-	update_attr("dexterity");
+	update_mod("dexterity");
 });
 
 on("change:dexterity", function () {
@@ -4232,6 +4232,9 @@ var update_ability_score_totals = function() {
 				if (v["characterType"] != "0") {
 					update_source_points();
 				}
+				update_health_barrier();
+				update_weight();
+				update_initiative();
 			});
 
 		});

@@ -812,7 +812,7 @@ function CommandCastNPC(msg) {
         options[i] = options[i].trim();
     }
 
-    let tokenName, bio, hp, barrier = "";
+    let tokenName, fullname, bio, hp, hpMax, hpCurrent, barrier, barrierMax, barrierCurrent = "";
     let chracters, charObj, nicknameObj, fullnameObj, hpObj, barrierObj;
 
     _.each(msg.selected, function (obj) {
@@ -826,42 +826,59 @@ function CommandCastNPC(msg) {
             
             // set name
             tokenName = token.get("name");
+            fullname = tokenName;
             nicknameObj = GetCharacterAttribute(charId, "nickname");
             if (nicknameObj != undefined && nicknameObj != "") {
                 if (nicknameObj.get("current").trim() == "" || nicknameObj.get("current").trim() == "-") {
                     nicknameObj.set("current", tokenName);
 
                     fullnameObj = GetCharacterAttribute(charId, "full_name");
-                    if (fullnameObj != undefined && fullnameObj != "") {
-                        fullnameObj.set("current", tokenName);
+                    if (fullnameObj != undefined) {
+                        if (fullnameObj.get("current") == "") {
+                            fullnameObj.set("current", tokenName);
+                        }
+                        else {
+                            fullname = fullnameObj.get("current");
+                        }
                     }
                 }
             }
             
             // set hp and barrier
             hp = isNaN(parseInt(token.get("bar1_value"))) ? 0 : parseInt(token.get("bar1_value"));
+            hpMax = isNaN(parseInt(token.get("bar1_max"))) ? 0 : parseInt(token.get("bar1_max"));
             hpObj = GetCharacterAttribute(charId, "hp");
             if (hpObj != undefined && hpObj != "") {
-                if (hp == undefined || hp == parseInt(token.get("bar1_max")) || (hp == 0 && parseInt(hpObj.get("current")) == 0)) 
+                hpCurrent = isNaN(parseInt(hpObj.get("current"))) ? 0 : parseInt(hpObj.get("current"));
+
+                token.set("bar1_link", hpObj.get("_id"));
+                if (hp == hpMax || (hp == 0 && hpCurrent == 0)) 
                 {
                     hpObj.set("current", hpObj.get("max"));
+                    token.set("bar1_value", hpObj.get("max"));
                 }
                 else {
                     hpObj.set("current", hp);
+                    token.set("bar1_value", hp);
                 }
-                token.set("bar1_link", hpObj.get("_id"));
             }
+            
             barrier = isNaN(parseInt(token.get("bar2_value"))) ? 0 : parseInt(token.get("bar2_value"));
+            barrierMax = isNaN(parseInt(token.get("bar2_max"))) ? 0 : parseInt(token.get("bar2_max"));
             barrierObj = GetCharacterAttribute(charId, "barrier");
             if (barrierObj != undefined && barrierObj != "") {
-                if (barrier == undefined || barrier == parseInt(token.get("bar2_max")) || (barrier == 0 && parseInt(barrierObj.get("current"))) == 0) 
+                barrierCurrent = isNaN(parseInt(barrierObj.get("current"))) ? 0 : parseInt(barrierObj.get("current"));
+
+                token.set("bar2_link", barrierObj.get("_id"));
+                if (barrier == barrierMax || (barrier == 0 && barrierCurrent == 0))
                 {
                     barrierObj.set("current", barrierObj.get("max"));
+                    token.set("bar2_value", barrierObj.get("max"));
                 }
                 else {
                     barrierObj.set("current", barrier);
+                    token.set("bar2_value", barrier);
                 }
-                token.set("bar2_link", barrierObj.get("_id"));
             }
 
             // get element
@@ -892,7 +909,7 @@ function CommandCastNPC(msg) {
             
             if (chracters.length > 0) {
                 charObj = chracters[0];
-                charObj.set("name", tokenName);
+                charObj.set("name", fullname);
                 charObj.set("inplayerjournals", "all");
                 if (options.length > 0) {
                     bio = `<p><b>${tokenName}</b><br><i>${options[0]}</i></p><p>Age ${options[1]}</p><p>${options[2]}</p>`;
