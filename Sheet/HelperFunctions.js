@@ -1044,10 +1044,12 @@ function OnTriggerCreateAbility(data) {
     data = data.split("@@");
     let target = GetActorTargetData(data[0])[0];
 
-    let name = data[1];
+    let atk_id = data[1];
+    let name = getAttrByName(target.charId, GetSectionIdName("repeating_customactions", atk_id, "atkname"));
     name = name.replace(/ /g, "-");
 
-    let template = "&{template:" + data[2];
+    let template = "&{template:";
+    template += getAttrByName(target.charId, GetSectionIdName("repeating_customactions", atk_id, "rollbase"));
     CreateAbility(name, template, target.charId);
 }
 

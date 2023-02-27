@@ -458,17 +458,14 @@ function TargetSetBriefRested(sendTargets, targets) {
     
     // declare variables
     var sceneMessages = [];
-    var barrierObj, briefrestResources, briefrestResource;
+    var briefrestResources, briefrestResource;
     let repeatingSection = "repeating_resources";
 
     // iterate through targets
     _.each(targets, function(target) {
 
         // recover their barrier
-        barrierObj = GetCharacterAttribute(target.charId, "barrier");
-        if (barrierObj != undefined) {
-            barrierObj.set("current", barrierObj.get("max"));
-        }
+        target.getToken().set("bar2_value", target.getToken().get("bar2_max"));
 
         // restore their short rest recovery values
         briefrestResources = getAttrByName(target.charId, "briefRestResources");
