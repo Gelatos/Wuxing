@@ -779,7 +779,7 @@ var TurnMarker = TurnMarker || (function(){
         // on("change:campaign:turnorder", handleTurnOrderChange );
         // on("change:graphic:lastmove", checkForTokenMove );
         // on("destroy:graphic", handleDestroyGraphic );
-        // on("chat:message", handleInput );
+        on("chat:message", handleInput );
 
         dispatchInitiativePage();
     }

@@ -29,7 +29,7 @@ on("chat:message", function(msg) {
             case "!s":
                 CommandSendFormattedMessage(msg);
             return;
-            case "!emoteMessage":
+            case "!emotemessage":
                 CommandSendEmoteMessage(msg);
 
             return;
@@ -99,7 +99,7 @@ on("chat:message", function(msg) {
                 CommandDeathFailure(content);
                 
             return;
-            case "!roll20AM":
+            case "!roll20am":
                 Roll20AM.InputController(msg);
                 
             return;
@@ -141,26 +141,13 @@ on("chat:message", function(msg) {
                 CreateActionOutput(contentSplit[0], contentSplit[1]);
                 
             return;
-            case "!actionResults":
+            case "!actionresults":
                 CommandHandleActionResults(content);
                 
             return;
             case "!healinj":
                 CommandTargetHealInjury(content);
                 
-            return;
-            case "!tm":
-            case "!turnmarker":
-                TurnMarker.handleInput(msg);
-
-            return;
-            case "!eot":
-                TurnMarker.requestTurnAdvancement(msg);
-
-            return;
-            case "!pot":
-                TurnMarker.requestTurnRetreat(msg);
-
             return;
         }
 
@@ -226,11 +213,11 @@ on("chat:message", function(msg) {
                     PrintTokenImageURL(msg);
                     
                 return;
-                case "!generateNPC":
+                case "!generatenpc":
                     CommandGenerateNPC(msg);
                     
                 return;
-                case "!assignToken":
+                case "!assigntoken":
                     CommandAssignToken(msg);
                     
                 return;
@@ -242,7 +229,7 @@ on("chat:message", function(msg) {
                     TargetGainKarma(content);
                     
                 return;
-                case "!completeMission":
+                case "!completemission":
                     CommandCompleteMission(msg, content);
                     
                 return;
@@ -250,7 +237,7 @@ on("chat:message", function(msg) {
                     CommandSetMissionXp(msg, content);
                     
                 return;
-                case "!importPartyStats":
+                case "!importpartystats":
                     CommandImportPartyStats(msg);
                     
                 return;
@@ -858,6 +845,7 @@ function RemoveRowData(charId, rowId) {
     }
 }
 
+// uuid generation
 var generateUUID = (function() {
     "use strict";
 
@@ -907,6 +895,7 @@ function SanitizeSheetRoll(roll) {
     sheetRoll = sheetRoll.replace(/\n/g, "<br />");
     return sheetRoll;
 }
+
 function SanitizeSheetRollAction(roll) {
     var sheetRoll = roll;
     sheetRoll = sheetRoll.replace(/%/g, "&#37;");
@@ -922,6 +911,7 @@ function SanitizeSheetRollAction(roll) {
     return sheetRoll;
 }
 
+// asset creation
 function CreateRepeatingRowAttribute(repeatingSection, id, name, value, charId) {
 
     return createObj("attribute", {"name": GetSectionIdName(repeatingSection, id, name), "current": value, "_characterid": charId});
