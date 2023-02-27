@@ -7859,6 +7859,7 @@ var do_update_action = function (attackArray) {
 				update[GetSectionIdName(repeatingSection, id, "damageString")] = damageString;
 				update[GetSectionIdName(repeatingSection, id, "damage2String")] = damage2String;
 				update[GetSectionIdName(repeatingSection, id, "rollbase")] = actionData.toRoll(p["character_name"]);
+				update[GetSectionIdName(repeatingSection, id, "atkid")] = id;
 			});
 
 			setAttrs(update, {
@@ -13433,6 +13434,18 @@ function GetKiCapacityBonuses(pointObj, spellcasting_ability) {
 
 
 // Sheet Upgrades
+var upgrade_to_1_1_9 = function (doneupdating) {
+	let update = {};
+	update["deathSaveSuccess"] = "0";
+	update["deathSaveFailure"] = "0";
+	update["fate"] = "0";
+	update["resolve"] = "0";
+	update["morale"] = "0";
+	update["karma"] = "0";
+	update["activeinjury_list"] = "";
+	setAttrs(update);
+	doneupdating();
+}
 var upgrade_to_1_1_8 = function (doneupdating) {
 	let update = {};
 	update["difficultyStyle"] = "0";
@@ -13584,8 +13597,14 @@ var versioning = function () {
 	getAttrs(["version"], function (v) {
 		console.log("Checking version " + v["version"]);
 
-		if (v["version"] === "1.1.8") {
+		if (v["version"] === "1.1.9") {
 			console.log("Wuxing Sheet modified from 5th Edition OGL by Roll20 v" + v["version"]);
+		} else if (v["version"] === "1.1.8") {
+			console.log("UPGRADING TO v1.1.9");
+			upgrade_to_1_1_9(function () {
+				setAttrs({version: "1.1.9"});
+				versioning();
+			});
 		} else if (v["version"] === "1.1.6" || v["version"] === "1.1.7") {
 			console.log("UPGRADING TO v1.1.8");
 			upgrade_to_1_1_8(function () {

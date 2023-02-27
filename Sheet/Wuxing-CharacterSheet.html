@@ -3815,6 +3815,7 @@
 							<div class="wuxFieldSet">
 								<input type="hidden" name="attr_rollbase" value="">
 								<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
+								<input type="hidden" name="attr_atkid" value="">
 								<div class="options">
 									<div class="wuxRow">
 										<span class="wuxFormTitle wuxSizeSmall">Name</span>
@@ -3852,7 +3853,7 @@
 										</select>
 									</div>
 									<div class="wuxActionRow">
-										<button type="roll" name="roll_create_ability" value="!createability @{character_name}@@?{Name of the Ability|@{atkname}}@@@{rollbase}">Create Ability</button>
+										<button type="roll" name="roll_create_ability" value="!createability @{character_name}@@@{atkid}">Create Ability</button>
 									</div>
 									<div class="wuxRow">&nbsp;</div>
 
