@@ -694,20 +694,14 @@
 					<div class="wuxTabRow">
 						<input class="wuxTabButton wuxPmCol1" type="radio" name="attr_options-jukeboxSceneOptions" value="Scene-Casual"><span>Common</span>
 						<input class="wuxTabButton wuxPmCol2" type="radio" name="attr_options-jukeboxSceneOptions" value="Scene-Emotional"><span>Cinematic</span>
-						<input class="wuxTabButton wuxPmCol3" type="radio" name="attr_options-jukeboxSceneOptions" value="Leitmotif-Minerva"><span>Minerva</span>
-						<input class="wuxTabButton wuxPmCol4" type="radio" name="attr_options-jukeboxSceneOptions" value="Leitmotif-Apollo"><span>Apollo</span>
+						<input class="wuxTabButton wuxPmCol3" type="radio" name="attr_options-jukeboxSceneOptions" value="Scene-Battle"><span>Battle</span>
+						<input class="wuxTabButton wuxPmCol4" type="radio" name="attr_options-jukeboxSceneOptions" value="UniqueLocales"><span>Unq. Locales</span>
 					</div>
 					<div class="wuxTabRow">
 						<input class="wuxTabButton wuxPmCol1" type="radio" name="attr_options-jukeboxSceneOptions" value="Scene-Scenario"><span>Scenario</span>
-						<input class="wuxTabButton wuxPmCol2" type="radio" name="attr_options-jukeboxSceneOptions" value="UniqueLocales"><span>Unq. Locales</span>
-						<input class="wuxTabButton wuxPmCol3" type="radio" name="attr_options-jukeboxSceneOptions" value="Leitmotif-Juno"><span>Juno</span>
-						<input class="wuxTabButton wuxPmCol4" type="radio" name="attr_options-jukeboxSceneOptions" value="Leitmotif-Ceres"><span>Ceres</span>
-					</div>
-					<div class="wuxTabRow">
-						<input class="wuxTabButton wuxPmCol1" type="radio" name="attr_options-jukeboxSceneOptions" value="Cities"><span>Cities</span>
-						<input class="wuxTabButton wuxPmCol2" type="radio" name="attr_options-jukeboxSceneOptions" value="Fields"><span>Fields</span>
-						<input class="wuxTabButton wuxPmCol3" type="radio" name="attr_options-jukeboxSceneOptions" value="Leitmotif-Liber"><span>Liber</span>
-						<input class="wuxTabButton wuxPmCol4" type="radio" name="attr_options-jukeboxSceneOptions" value="Leitmotif-Wilds"><span>Wilds</span>
+						<input class="wuxTabButton wuxPmCol2" type="radio" name="attr_options-jukeboxSceneOptions" value="Scene-Character"><span>Character</span>
+						<input class="wuxTabButton wuxPmCol3" type="radio" name="attr_options-jukeboxSceneOptions" value="Cities"><span>Cities</span>
+						<input class="wuxTabButton wuxPmCol4" type="radio" name="attr_options-jukeboxSceneOptions" value="Fields"><span>Fields</span>
 					</div>
 				</div>
 			</div>
@@ -3814,8 +3808,8 @@
 						<fieldset class="repeating_customactions">
 							<div class="wuxFieldSet">
 								<input type="hidden" name="attr_rollbase" value="">
-								<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
 								<input type="hidden" name="attr_atkid" value="">
+								<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
 								<div class="options">
 									<div class="wuxRow">
 										<span class="wuxFormTitle wuxSizeSmall">Name</span>
@@ -3853,7 +3847,7 @@
 										</select>
 									</div>
 									<div class="wuxActionRow">
-										<button type="roll" name="roll_create_ability" value="!createability @{character_name}@@@{atkid}">Create Ability</button>
+										<button type="roll" name="roll_create_ability" value="!createability @{character_name}@@repeating_customactions@@@{atkid}">Create Ability</button>
 									</div>
 									<div class="wuxRow">&nbsp;</div>
 
@@ -4736,6 +4730,7 @@
 				<div class="wuxSheetHeader"><span>Spells</span></div>
 				<fieldset class="repeating_spells">
 					<div class="wuxFieldSet">
+						<input type="hidden" name="attr_spellid" value="">
 						<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
 						<div class="options">
 							<div class="wuxRow">
@@ -4813,6 +4808,10 @@
 									<option value="1">Yes</option>
 								</select>
 							</div>
+							<div class="wuxActionRow">
+								<button type="roll" name="roll_create_ability" value="!createability @{character_name}@@repeating_spells@@@{spellid}">Create Ability</button>
+							</div>
+							<div class="wuxRow">&nbsp;</div>
 
 							<div class="wuxRow">
 								<span class="wuxFormSubheader">Casting</span>
@@ -9349,7 +9348,7 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 		</div>
 	</div>
 	<div class="wuxTabQuest wuxTab">
-		<div class="npc-generator wuxSectionBlock wuxLayoutItem">
+		<div class="wuxSectionBlock wuxLayoutItem">
 			<div class="wuxSectionContent">
 				<fieldset class="repeating_mainchaptermissions">
 					<div class="wuxFieldSet wuxToolsTab">
@@ -9357,7 +9356,20 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 						<button class="wuxPmToolsHoverButton" type="roll" name="roll_missionShow" value="&{template:quest} {{@{style}}} {{header=@{type}}} {{title=@{title}}} {{sub=@{subtitle}}} {{footer=@{exp}XP @{rewards}}}">s</button>
 						<input class="options-flag" type="checkbox" name="attr_missionOptions" checked="checked"><span>y</span>
 						<div class="options">
-							<div class="wuxRow"><span class="wuxFormHeader">Style</span></div>
+							<div class="wuxRow"><span class="wuxFormHeader">Quest Data</span></div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Title</span>
+								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_title">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Sub</span>
+								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_subtitle">
+							</div>
+							<div class="wuxRow"><span class="wuxFormHeader">Desc</span></div>
+							<div class="wuxMultiRow">
+								<textarea class="wuxFormInput wuxSizeSmall" type="text" name="attr_desc"></textarea>
+							</div>
+							<div class="wuxRow">&nbsp;</div><div class="wuxRow"><span class="wuxFormHeader">Style</span></div>
 							<div class="wuxRow">
 								<span class="wuxFormTitle">Template</span>
 								<select class="wuxFormInput wuxSizeMed" name="attr_defaultTypes">
@@ -9390,17 +9402,6 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 									<option value="majorStyle=1">Major</option>
 									<option value="epicStyle=1">Epic</option>
 								</select>
-							</div>
-							<div class="wuxRow">&nbsp;</div>
-
-							<div class="wuxRow"><span class="wuxFormHeader">Quest Name</span></div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Title</span>
-								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_title">
-							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Sub</span>
-								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_subtitle">
 							</div>
 							<div class="wuxRow">&nbsp;</div>
 
@@ -9550,6 +9551,49 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 	</div>
 	<div class="wuxTabNotes wuxTab">
 		<div class="wuxLayoutItem">
+			<div class="notes-Chapters wuxSectionBlock wuxLayoutItem">
+				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-tools-SideChapters" checked="checked" style="display: block">
+				<div class="wuxSectionHeader">Chapters</div>
+
+				<div class="wuxSectionContent">
+					<fieldset class="repeating_chapterselect">
+						<div class="wuxFieldSet wuxNotesTab">
+							<div class="wuxRow">
+								<input class="wuxFormInput" type="text" name="attr_StartSessionTitle" placeholder="Chapter Name">
+								<button class="wuxToolButton wuxPmSpacer" type="roll" name="roll_startSession" value="!startsession @{StartSessionTitle}@@@{StartSessionChapter}@@@{StartSessionPart}@@@{StartSessionHistory}@@@{StartSessionNewChapter}@@@{StartSessionParty}@@@{StartSessionQuestIds}"><span>Post</span></button>
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Chapter </span>
+								<input class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionChapter">
+								<span class="wuxFormTitle wuxSizeTiny">Part </span>
+								<input class="wuxFormInput wuxSizeTiny" type="text" name="attr_StartSessionPart">
+							</div>
+							<div class="wuxActionRow">
+								<span class="wuxFormTitle wuxSizeLarge">Chapter Start</span>
+								<select class='wuxFormInput wuxSizeSmall' name='attr_StartSessionNewChapter'>
+									<option value='0' selected="selected">No</option>
+									<option value='1'>Yes</option>
+								</select>
+							</div>
+							<div class="wuxMultRow">
+								<textarea class="wuxFormInput" name="attr_StartSessionHistory" placeholder="separate new lines with / and columns with @"></textarea>
+							</div>
+
+							<div class="wuxRow"><span class="wuxFormHeader">Party</span></div>
+							<div class="wuxMultiRow">
+								<textarea class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionParty"></textarea>
+							</div>
+							<div class="wuxRow"><span class="wuxFormHeader">Active Quests</span></div>
+							<div class="wuxMultiRow">
+								<input type="hidden" name="attr_StartSessionQuestIds" value="">
+								<textarea class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionQuests"></textarea>
+							</div>
+							<div class="wuxRow">&nbsp;</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="wuxSectionContentCollapsed"></div>
+			</div>
 			<div class="notes-Common wuxSectionBlock wuxLayoutItem">
 				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-tools-Common" checked="checked" style="display: block">
 				<div class="wuxSectionHeader">Common</div>
@@ -9601,70 +9645,7 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				</div>
 				<div class="wuxSectionContentCollapsed"></div>
 			</div>
-			<div class="notes-Locations wuxSectionBlock wuxLayoutItem">
-				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-tools-Locations" checked="checked" style="display: block">
-				<div class="wuxSectionHeader">Locations</div>
-
-				<div class="wuxSectionContent">
-					<fieldset class="repeating_locreferences">
-						<div class="wuxFieldSet wuxNotesTab">
-							<div class="wuxRow">
-								<input type="hidden" name="attr_postText">
-								<input type="hidden" name="attr_type" value="Location">
-								<input class="wuxFormInput wuxSizeMed wuxPmSpacer" name="attr_title" value="">
-								<button type="roll" class="wuxToolButton wuxPmSpacer" name="roll_post" value="@{postText}"><span>Post</span></button>
-							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Header</span>
-								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_header" placeholder="header">
-							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Sub</span>
-								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_sub" placeholder="subheader">
-							</div>
-							<div class="wuxMultRow">
-								<textarea class="wuxFormInput wuxSizeSmall" name="attr_location-notes" placeholder="separate new lines with /"></textarea>
-							</div>
-							<div class="wuxRow">&nbsp;</div>
-						</div>
-					</fieldset>
-				</div>
-				<div class="wuxSectionContentCollapsed"></div>
-			</div>
-			<div class="notes-SideChapters wuxSectionBlock wuxLayoutItem">
-				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-tools-SideChapters" checked="checked" style="display: block">
-				<div class="wuxSectionHeader">Chapters</div>
-
-				<div class="wuxSectionContent">
-					<fieldset class="repeating_chapterselect">
-						<div class="wuxFieldSet wuxNotesTab">
-							<div class="wuxRow">
-								<input class="wuxFormInput" type="text" name="attr_StartSessionTitle" placeholder="Chapter Name">
-								<button class="wuxToolButton wuxPmSpacer" type="roll" name="roll_startSession" value="!startsession @{StartSessionTitle}@@@{StartSessionChapter}@@@{StartSessionPart}@@@{StartSessionHistory}@@@{StartSessionNewChapter}"><span>Post</span></button>
-							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Chapter </span>
-								<input class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionChapter">
-								<span class="wuxFormTitle wuxSizeTiny">Part </span>
-								<input class="wuxFormInput wuxSizeTiny" type="text" name="attr_StartSessionPart">
-							</div>
-							<div class="wuxActionRow">
-								<span class="wuxFormTitle wuxSizeLarge">Chapter Start</span>
-								<select class='wuxFormInput wuxSizeSmall' name='attr_StartSessionNewChapter'>
-									<option value='0' selected="selected">No</option>
-									<option value='1'>Yes</option>
-								</select>
-							</div>
-							<div class="wuxMultRow">
-								<textarea class="wuxFormInput wuxSizeSmall" name="attr_StartSessionHistory" placeholder="separate new lines with / and columns with @"></textarea>
-							</div>
-							<div class="wuxRow">&nbsp;</div>
-						</div>
-					</fieldset>
-				</div>
-				<div class="wuxSectionContentCollapsed"></div>
-			</div>
-			<div class="notes-MainChapters wuxSectionBlock wuxLayoutItem">
+			<div class="notes-Notes wuxSectionBlock wuxLayoutItem">
 				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-tools-MainChapters" checked="checked" style="display: block">
 				<div class="wuxSectionHeader">Notes</div>
 
@@ -9708,6 +9689,36 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 							</div>
 							<div class="wuxMultRow">
 								<textarea class="wuxFormInput wuxSizeSmall" name="attr_location" placeholder="separate new lines with /"></textarea>
+							</div>
+							<div class="wuxRow">&nbsp;</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="wuxSectionContentCollapsed"></div>
+			</div>
+			<div class="notes-Locations wuxSectionBlock wuxLayoutItem">
+				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-tools-Locations" checked="checked" style="display: block">
+				<div class="wuxSectionHeader">Locations</div>
+
+				<div class="wuxSectionContent">
+					<fieldset class="repeating_locreferences">
+						<div class="wuxFieldSet wuxNotesTab">
+							<div class="wuxRow">
+								<input type="hidden" name="attr_postText">
+								<input type="hidden" name="attr_type" value="Location">
+								<input class="wuxFormInput wuxSizeMed wuxPmSpacer" name="attr_title" value="">
+								<button type="roll" class="wuxToolButton wuxPmSpacer" name="roll_post" value="@{postText}"><span>Post</span></button>
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Header</span>
+								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_header" placeholder="header">
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Sub</span>
+								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_sub" placeholder="subheader">
+							</div>
+							<div class="wuxMultRow">
+								<textarea class="wuxFormInput wuxSizeSmall" name="attr_location-notes" placeholder="separate new lines with /"></textarea>
 							</div>
 							<div class="wuxRow">&nbsp;</div>
 						</div>
@@ -9981,8 +9992,59 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 						</fieldset>
 					</div>
 
-					<div class="wuxJbxCategory wuxJbxCategoryLeitmotif-Minerva">
-						<fieldset class="repeating_minervanleitmotifsongs">
+					<div class="wuxJbxCategory wuxJbxCategoryScene-Battle">
+						<input type="hidden" name="attr_battlesongList" value="">
+						<input type="checkbox" class="wuxCollapseField-flag" name="attr_battlesongCollapsedSection" checked="checked">
+						<div class="wuxMultiRow">
+							<div class="wuxFormEntry">
+								<span class="wuxFormHeaderLeadIcon">J</span>
+								<button type="roll" name="roll_music" value="!jbt">
+									<span>Battle Music</span>
+								</button>
+							</div>
+						</div>
+						<div class="wuxCollapseField" style="margin-left: 15px">
+							<fieldset class="repeating_battlesongs">
+								<div class="wuxFieldSet">
+									<input class="options-flag" type="checkbox" name="attr_missionOptions" checked="checked"><span>y</span>
+									<div class="options">
+										<div class="wuxRow">
+											<span class="wuxFormTitle wuxSizeSmall">Song:</span>
+											<input class="wuxFormInput" type="text" name="attr_song">
+										</div>
+										<div class="wuxRow">
+											<span class="wuxFormTitle wuxSizeSmall">Desc:</span>
+											<input class="wuxFormInput" type="text" name="attr_songdesc">
+										</div>
+										<div class="wuxRow">
+											<span class="wuxFormTitle wuxSizeSmall">Style</span>
+											<select class='wuxFormInput wuxSizeMed' name='attr_songtype' value="!jp ">
+												<option value="!jp " selected="selected">Loop</option>
+												<option value="!jpl ">Shuffle</option>
+												<option value="!jps ">RNG Single</option>
+											</select>
+										</div>
+										<div class="wuxRow">
+											<span class="wuxFormTitle wuxSizeSmall">Notes:</span>
+											<input class="wuxFormInput" type="text" name="attr_songnotes">
+										</div>
+										<div class="wuxRow">
+											<span class="wuxFormTitle wuxSizeSmall">Prct:</span>
+											<input class="wuxFormInput" type="text" name="attr_songVolume">
+										</div>
+									</div>
+									<div class="wuxMultiRow">
+										<div class="wuxFormEntry wuxJukeboxEntry">
+											<button type="roll" name="roll_music" value="@{songtype} @{song}@{songdesc}">
+												<span name="attr_song">Song</span>
+											</button>
+											<span class="wuxSubheader" name="attr_songnotes">Notes</span>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<fieldset class="repeating_specialbattlesongs">
 							<div class="wuxFieldSet">
 								<input class="options-flag" type="checkbox" name="attr_missionOptions" checked="checked"><span>y</span>
 								<div class="options">
@@ -10022,7 +10084,7 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 							</div>
 						</fieldset>
 					</div>
-					<div class="wuxJbxCategory wuxJbxCategoryLeitmotif-Apollo">
+					<div class="wuxJbxCategory wuxJbxCategoryScene-Character">
 						<fieldset class="repeating_apolloleitmotifsongs">
 							<div class="wuxFieldSet">
 								<input class="options-flag" type="checkbox" name="attr_missionOptions" checked="checked"><span>y</span>
