@@ -3546,8 +3546,8 @@ input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeFiel
     color: #DE9B72;
 }
 
-.wuxSectionBlock .wuxToolsTab .wuxPmToolsHoverButton:before,
-.wuxSectionBlock .wuxBattleTabs .wuxPmToolsHoverButton:before 
+.wuxSectionBlock .wuxToolsTab button.wuxPmToolsHoverButton:before,
+.wuxSectionBlock .wuxBattleTabs button.wuxPmToolsHoverButton:before 
 {
     content: "";
 }
@@ -3663,12 +3663,8 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Scenario"] ~ div.wuxJbx
 input[type=hidden].wuxTabButton.wuxTabGroup[value="UniqueLocales"] ~ div.wuxJbxCategoryUniqueLocales,
 input[type=hidden].wuxTabButton.wuxTabGroup[value="Cities"] ~ div.wuxJbxCategoryCities,
 input[type=hidden].wuxTabButton.wuxTabGroup[value="Fields"] ~ div.wuxJbxCategoryFields,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="Leitmotif-Minerva"] ~ div.wuxJbxCategoryLeitmotif-Minerva,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="Leitmotif-Apollo"] ~ div.wuxJbxCategoryLeitmotif-Apollo,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="Leitmotif-Juno"] ~ div.wuxJbxCategoryLeitmotif-Juno,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="Leitmotif-Ceres"] ~ div.wuxJbxCategoryLeitmotif-Ceres,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="Leitmotif-Liber"] ~ div.wuxJbxCategoryLeitmotif-Liber,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="Leitmotif-Wilds"] ~ div.wuxJbxCategoryLeitmotif-Wilds
+input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Battle"] ~ div.wuxJbxCategoryScene-Battle,
+input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJbxCategoryScene-Character
 {
     display: block;
 }
@@ -5740,7 +5736,7 @@ Quest Box
 .sheet-rolltemplate-quest h1 
 {
 	color: #FFF;
-	font-family: Apple Chancery, fantasy;
+	font-family: "Kaushan Script", fantasy;
 	font-weight: 400;
 	font-style: normal;
 	font-size: 20px;
