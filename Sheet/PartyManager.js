@@ -510,7 +510,7 @@ function ShowChapterActiveQuests(questIds) {
                     message += `<div class="sheet-wuxSubheader">${messageData[i].subTitle}</div>`;
                 }
                 if (messageData[i].xp != undefined && messageData[i].xp != "") {
-                    message += `<div class="sheet-wuxDesc">${messageData[i].xp} exp${messageData[i].rewards != undefined && messageData[i].rewards != "" ? ", " + messageData[i].rewards : ""}</div>`;
+                    message += `<div class="sheet-wuxDesc">Rewards: ${messageData[i].xp} exp${messageData[i].rewards != undefined && messageData[i].rewards != "" ? ", " + messageData[i].rewards : ""}</div>`;
                 }
                 
             }
