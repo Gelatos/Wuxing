@@ -5163,6 +5163,9 @@ visibility: visible;
 
 .sheet-rolltemplate-infoBox .sheet-wuxHeader
 {
+    padding-bottom: 5px;
+
+    text-decoration: underline;
     font-size: 16px;
     font-weight: bold;
 }
@@ -5170,6 +5173,7 @@ visibility: visible;
 .sheet-rolltemplate-infoBox .sheet-wuxSubheader
 {
     padding-left: 5px;
+    padding-bottom: 5px;
     font-size: 14px;
     font-style: italic;
     color: #f1f1f1;

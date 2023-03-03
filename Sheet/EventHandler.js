@@ -235,7 +235,11 @@ on("chat:message", function(msg) {
                     
                 return;
                 case "!setmissionxp":
-                    CommandSetMissionXp(msg, content);
+                    CommandSetMissionXp(content);
+                    
+                return;
+                case "!setmissioncurrency":
+                    CommandSetMissionCurrency(content);
                     
                 return;
                 case "!importpartystats":

@@ -491,6 +491,8 @@ function ShowChapterActiveQuests(questIds) {
                         subTitle: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "subtitle")),
                         actors: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "actors")),
                         xp: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "exp")),
+                        currency: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "questCurrency")),
+                        currencyType: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "questCurrencyType")),
                         rewards: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "otherrewards"))
                     });
 
@@ -509,8 +511,44 @@ function ShowChapterActiveQuests(questIds) {
                 if (messageData[i].subTitle != undefined && messageData[i].subTitle != "") {
                     message += `<div class="sheet-wuxSubheader">${messageData[i].subTitle}</div>`;
                 }
-                if (messageData[i].xp != undefined && messageData[i].xp != "") {
-                    message += `<div class="sheet-wuxDesc">Rewards: ${messageData[i].xp} exp${messageData[i].rewards != undefined && messageData[i].rewards != "" ? ", " + messageData[i].rewards : ""}</div>`;
+                if (messageData[i].actors != undefined && messageData[i].actors != "") {
+                    message += `<div class="sheet-wuxDesc">Party: ${FormatPartyList(messageData[i].actors)}</div>`;
+
+                    if (messageData[i].xp != undefined && messageData[i].xp != "") {
+                        let partymembers = messageData[i].actors.split(",");
+                        let exp = Math.floor(parseInt(messageData[i].xp) / partymembers.length);
+                        let currency = "";
+                        
+                        if (messageData[i].currency != undefined && messageData[i].currency != "0") {
+                            currency = Math.floor(parseInt(messageData[i].currency) / partymembers.length);
+                            switch (messageData[i].currencyType) {
+                                case "gp": 
+                                case "gps": 
+                                    currency += " Gold "; break;
+                                case "cp": 
+                                case "cps": 
+                                    currency += " CP "; break;
+                                case "jin": 
+                                case "jins": 
+                                    currency += " Jin "; break;
+                                case "frt": 
+                                case "frts": 
+                                    currency += " Forta "; break;
+                                case "syr": 
+                                case "syrs": 
+                                    currency += " Syre "; break;
+                            }
+                            currency = "and " + currency;
+                        }
+                        
+                        if (messageData[i].rewards != undefined && messageData[i].rewards != "") {
+                            messageData[i].rewards = ", " + messageData[i].rewards;
+                        }
+                        else {
+                            messageData[i].rewards = "";
+                        }
+                        message += `<div class="sheet-wuxDesc">Rewards: ${exp} EXP ${currency}each<br />${messageData[i].rewards}</div>`;
+                    }
                 }
                 
             }
@@ -657,8 +695,10 @@ function CommandCompleteMission(msg, options) {
     let title = data[2];
     let subtitle = data[3];
     let exp = data[4];
-    let otherRewards = data[5];
-    let targets = GetActorTargetData(data[6]);
+    let currency = isNaN(parseInt(data[5])) ? 0 : parseInt(data[5]);
+    let currencyType = data[6];
+    let otherRewards = data[7];
+    let targets = GetActorTargetData(data[8]);
     
     // send the mission complete message
     let missionOutput = "&{template:quest} {{" + style + "}} ";
@@ -672,11 +712,50 @@ function CommandCompleteMission(msg, options) {
     // calculate and grant the exp
     exp = Math.floor(parseInt(exp, 10) / targets.length);
     TargetAddExp("", targets, exp);
+
+    // calculate and grant the currency
+    if (currency > 0) {
+        currency = Math.floor(currency / targets.length);
+        switch(currencyType) {
+            case "jin":
+                TargetModifyValue("", targets, "Jin", false, "jin", currency);
+                break;
+            case "jins":
+                TargetModifyValue("", targets, "Jin", true, "jin_storage", currency);
+                break;
+            case "frt":
+                TargetModifyValue("", targets, "Forta", false, "frt", currency);
+                break;
+            case "frts":
+                TargetModifyValue("", targets, "Forta", true, "frt_storage", currency);
+                break;
+            case "syr":
+                TargetModifyValue("", targets, "Syre", false, "syr", currency);
+                break;
+            case "syrs":
+                TargetModifyValue("", targets, "Syre", true, "syr_storage", currency);
+                break;
+            case "gp":
+                TargetModifyValue("", targets, "Gold", false, "gp", currency);
+                break;
+            case "gps":
+                TargetModifyValue("", targets, "Gold", true, "gp_storage", currency);
+                break;
+            case "cp":
+                TargetModifyValue("", targets, "CP", false, "cp", currency);
+                break;
+            case "cps":
+                TargetModifyValue("", targets, "CP", true, "cp_storage", currency);
+                break;
+
+        }
+    }
+
+
 }
 
-function CommandSetMissionXp(msg, options) {
+function CommandSetMissionXp(options) {
     
-    log ("options: " + options);
     // split up the options
     let data = options.split(" @@ ");
     let id = data[0];
@@ -686,7 +765,7 @@ function CommandSetMissionXp(msg, options) {
     let xp = 0;
 
     _.each(targets, function(target) {
-        charLevel = getAttrByName(target.charId, "level");
+        charLevel = getAttrByName(target.charId, "base_level");
 
         switch(charLevel) {
             case 1:
@@ -894,9 +973,25 @@ function CommandSetMissionXp(msg, options) {
 
     // set the xp
     var partyManager = FindCharacter("PartyManager");
-    var missionXpObj = GetCharacterAttribute(partyManager.get("_id"), "repeating_mainchaptermissions_" + id + "_exp");
+    var missionXpObj = GetCharacterAttribute(partyManager.get("_id"), GetSectionIdName("repeating_mainchaptermissions", id, "exp"));
     if (missionXpObj != undefined) {
         missionXpObj.set("current", xp);
+    }
+}
+
+function CommandSetMissionCurrency(options) {
+    
+    // split up the options
+    let data = options.split(" @@ ");
+    let id = data[0];
+    let currencyBase = data[1];
+    let targets = GetActorTargetData(data[2]);
+
+    // set the xp
+    let partyManager = FindCharacter("PartyManager");
+    let questCurrencyObj = GetCharacterAttribute(partyManager.get("_id"), GetSectionIdName("repeating_mainchaptermissions", id, "questCurrency"));
+    if (questCurrencyObj != undefined) {
+        questCurrencyObj.set("current", currencyBase * targets.length);
     }
 }
 
@@ -940,13 +1035,18 @@ function SetParty(partyList) {
         let currentMembers = GetCharacterAttribute(partyManager.id, "current_party_members");
         if (currentMembers != undefined) {
             currentMembers.set("current", partyList);
-            let partyTextList = "";
-            partyList = partyList.split(",");
-            for (let i = 0; i < partyList.length; i++) {
-                partyTextList += (partyTextList != "" ? ", " : "") + partyList[i].trim(); 
-            }
+            let partyTextList = FormatPartyList(partyList);
             SendChatMessageToTargets("Setting the party to " + partyTextList, "GM");
         }
     }
 
+}
+
+function FormatPartyList(partyList) {
+    let partyTextList = "";
+    let partymembers = partyList.split(",").sort();
+    for (let i = 0; i < partymembers.length; i++) {
+        partyTextList += (partyTextList != "" ? ", " : "") + partymembers[i].trim(); 
+    }
+    return partyTextList;
 }

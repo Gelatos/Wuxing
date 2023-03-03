@@ -9601,6 +9601,8 @@ var update_missionType = function (updateId) {
 			update["repeating_mainchaptermissions_" + updateId + "_actors"] = v["current_party_members"];
 			update["repeating_mainchaptermissions_" + updateId + "_missionid"] = updateId;
 			update["repeating_mainchaptermissions_" + updateId + "_exp"] = 10;
+			update["repeating_mainchaptermissions_" + updateId + "_questCurrency"] = "00";
+			update["repeating_mainchaptermissions_" + updateId + "_questCurrencyType"] = "jin";
 		}
 		setAttrs(update);
 	});

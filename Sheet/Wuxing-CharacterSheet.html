@@ -9352,7 +9352,7 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 			<div class="wuxSectionContent">
 				<fieldset class="repeating_mainchaptermissions">
 					<div class="wuxFieldSet wuxToolsTab">
-						<button class="wuxPmToolsHoverButton" style="right:34px" type="roll" name="roll_missionComplete" value="!completeMission @{style} @@ @{type} @@ @{title} @@ @{subtitle} @@ @{exp} @@ @{rewards} @@ @{actors}">3</button>
+						<button class="wuxPmToolsHoverButton" style="right:34px" type="roll" name="roll_missionComplete" value="!completeMission @{style} @@ @{type} @@ @{title} @@ @{subtitle} @@ @{exp} @@ @{questCurrency} @@ @{questCurrencyType} @@ @{rewards} @@ @{actors}">3</button>
 						<button class="wuxPmToolsHoverButton" type="roll" name="roll_missionShow" value="&{template:quest} {{@{style}}} {{header=@{type}}} {{title=@{title}}} {{sub=@{subtitle}}} {{footer=@{exp}XP @{rewards}}}">s</button>
 						<input class="options-flag" type="checkbox" name="attr_missionOptions" checked="checked"><span>y</span>
 						<div class="options">
@@ -9428,6 +9428,30 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 								<span class="wuxFormTitle wuxSizeSmall">Exp</span>
 								<input class="wuxFormInput wuxSizeSmall" type="text" name="attr_exp">
 								<input type="hidden" name="attr_missionid">
+							</div>
+							<div class="wuxRow">&nbsp;</div>
+							
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Style</span>
+								<input class="wuxFormInput wuxSizeSmall" type="text" name="attr_questCurrencyMultiplier">
+								<button class="wuxToolButton" type="roll" name="roll_missionComplete" value="!setmissioncurrency @{missionid} @@ @{questCurrencyMultiplier} @@ @{actors}"><span>Set</span></button>
+							</div>
+							<div class="wuxRow">
+								<span class="wuxFormTitle wuxSizeSmall">Money</span>
+								<input class="wuxFormInput wuxSizeSmall" type="text" name="attr_questCurrency" value="">
+								<span class="wuxFormSpacer">&nbsp;</span>
+								<select class="wuxFormInput wuxSizeSmall" name="attr_questCurrencyType" value="jin">
+									<option value="jin">Jin</option>
+									<option value="gp">Gold</option>
+									<option value="cp">CP</option>
+									<option value="frt">Forta</option>
+									<option value="syr">Syre</option>
+									<option value="jins">[S]Jin</option>
+									<option value="gps">[S]Gold</option>
+									<option value="cps">[S]CP</option>
+									<option value="frts">[S]Forta</option>
+									<option value="syrs">[S]Syre</option>
+								</select>
 							</div>
 							<div class="wuxRow">
 								<span class="wuxFormTitle wuxSizeSmall">Others</span>
@@ -9558,37 +9582,46 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				<div class="wuxSectionContent">
 					<fieldset class="repeating_chapterselect">
 						<div class="wuxFieldSet wuxNotesTab">
-							<div class="wuxRow">
-								<input class="wuxFormInput" type="text" name="attr_StartSessionTitle" placeholder="Chapter Name">
-								<button class="wuxToolButton wuxPmSpacer" type="roll" name="roll_startSession" value="!startsession @{StartSessionTitle}@@@{StartSessionChapter}@@@{StartSessionPart}@@@{StartSessionHistory}@@@{StartSessionNewChapter}@@@{StartSessionParty}@@@{StartSessionQuestIds}"><span>Post</span></button>
+							<input type="checkbox" class="wuxCollapseField-flag" name="attr_chapterCollapsedSection" checked="checked">
+							<div class="wuxMultiRow">
+								<div class="wuxFormEntry">
+									<span class="wuxFormHeaderLeadIcon">J</span>
+									<span name="attr_StartSessionTitle"></span>
+								</div>
 							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Chapter </span>
-								<input class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionChapter">
-								<span class="wuxFormTitle wuxSizeTiny">Part </span>
-								<input class="wuxFormInput wuxSizeTiny" type="text" name="attr_StartSessionPart">
-							</div>
-							<div class="wuxActionRow">
-								<span class="wuxFormTitle wuxSizeLarge">Chapter Start</span>
-								<select class='wuxFormInput wuxSizeSmall' name='attr_StartSessionNewChapter'>
-									<option value='0' selected="selected">No</option>
-									<option value='1'>Yes</option>
-								</select>
-							</div>
-							<div class="wuxMultRow">
-								<textarea class="wuxFormInput" name="attr_StartSessionHistory" placeholder="separate new lines with / and columns with @"></textarea>
-							</div>
+							<div class="wuxCollapseField">
+								<div class="wuxRow">
+									<input class="wuxFormInput" type="text" name="attr_StartSessionTitle" placeholder="Chapter Name">
+									<button class="wuxToolButton wuxPmSpacer" type="roll" name="roll_startSession" value="!startsession @{StartSessionTitle}@@@{StartSessionChapter}@@@{StartSessionPart}@@@{StartSessionHistory}@@@{StartSessionNewChapter}@@@{StartSessionParty}@@@{StartSessionQuestIds}"><span>Post</span></button>
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle wuxSizeSmall">Chapter </span>
+									<input class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionChapter">
+									<span class="wuxFormTitle wuxSizeTiny">Part </span>
+									<input class="wuxFormInput wuxSizeTiny" type="text" name="attr_StartSessionPart">
+								</div>
+								<div class="wuxActionRow">
+									<span class="wuxFormTitle wuxSizeLarge">Chapter Start</span>
+									<select class='wuxFormInput wuxSizeSmall' name='attr_StartSessionNewChapter'>
+										<option value='0' selected="selected">No</option>
+										<option value='1'>Yes</option>
+									</select>
+								</div>
+								<div class="wuxMultRow">
+									<textarea class="wuxFormInput" name="attr_StartSessionHistory" placeholder="separate new lines with / and columns with @"></textarea>
+								</div>
 
-							<div class="wuxRow"><span class="wuxFormHeader">Party</span></div>
-							<div class="wuxMultiRow">
-								<textarea class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionParty"></textarea>
+								<div class="wuxRow"><span class="wuxFormHeader">Party</span></div>
+								<div class="wuxMultiRow">
+									<textarea class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionParty"></textarea>
+								</div>
+								<div class="wuxRow"><span class="wuxFormHeader">Active Quests</span></div>
+								<div class="wuxMultiRow">
+									<input type="hidden" name="attr_StartSessionQuestIds" value="">
+									<textarea class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionQuests"></textarea>
+								</div>
+								<div class="wuxRow">&nbsp;</div>
 							</div>
-							<div class="wuxRow"><span class="wuxFormHeader">Active Quests</span></div>
-							<div class="wuxMultiRow">
-								<input type="hidden" name="attr_StartSessionQuestIds" value="">
-								<textarea class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionQuests"></textarea>
-							</div>
-							<div class="wuxRow">&nbsp;</div>
 						</div>
 					</fieldset>
 				</div>
