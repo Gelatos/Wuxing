@@ -5131,20 +5131,56 @@ visibility: visible;
     right: -2px;
 }
 
+.sheet-rolltemplate-infoBox h1,
 .sheet-rolltemplate-infoBox .sheet-wuxTitle,
+.sheet-rolltemplate-infoBox .sheet-wuxHeader,
+.sheet-rolltemplate-infoBox .sheet-wuxSubheader,
+.sheet-rolltemplate-infoBox .sheet-wuxDesc,
 .sheet-rolltemplate-systemInfoBox .sheet-wuxTitle,
 .sheet-rolltemplate-systemInfoAuxBox .sheet-wuxTitle
 {
     margin: 0px;
     padding: 0px;
     
-    display:block;
+    display: block;
     font-size: 14px;
     line-height: 16px;
     color: white;
     font-family: "Patrick Hand", cursive;
     letter-spacing: 0.1ch;
 } 
+
+.sheet-rolltemplate-infoBox h1
+{
+    width: 235px;
+    padding-bottom: 2px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+
+    border-bottom: 1px solid white;
+}
+
+.sheet-rolltemplate-infoBox .sheet-wuxHeader
+{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.sheet-rolltemplate-infoBox .sheet-wuxSubheader
+{
+    padding-left: 5px;
+    font-size: 14px;
+    font-style: italic;
+    color: #f1f1f1;
+}
+
+.sheet-rolltemplate-infoBox .sheet-wuxDesc
+{
+    padding-left: 5px;
+    font-size: 12px;
+    color: #f1f1f1;
+}
 
 .sheet-rolltemplate-systemInfoBox .sheet-wuxTitle,
 .sheet-rolltemplate-systemInfoBox .sheet-formattedTextbox,

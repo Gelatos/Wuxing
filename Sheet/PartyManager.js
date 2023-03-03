@@ -414,27 +414,37 @@ function AddPartyManagerCloneSpellOptions(partyManagerId, charId) {
 function CommandStartSession(options) {
 
     // get party manager
-    var partyManager = FindCharacter("PartyManager");
+    let partyManager = FindCharacter("PartyManager");
 
     // grab data
     options = options.trim().split("@@");
-    var StartSessionTitle = options[0];
-    var StartSessionChapter = options[1];
-    var StartSessionPart = options[2];
-    var StartSessionHistory = options[3];
-    var StartSessionNewChapter = options[4];
-    let message = `&{template:quest} {{chapter=1}} {{title=${StartSessionTitle}}} {{sub=Chapter ${StartSessionChapter}}} {{footer= Part ${StartSessionPart}}} `;
-    SendChatMessageToTargets(message, "");
+    let startSessionTitle = options[0];
+    let startSessionChapter = options[1];
+    let startSessionPart = options[2];
+    let startSessionHistory = options[3];
+    let startSessionNewChapter = options[4];
+    let startSessionNewParty = options[5];
+    let startSessionNewQuestIds = options[6];
 
-    if (StartSessionHistory != "") {
-        StartSessionHistory = StartSessionHistory.replace(/\//g, "</p><p>");
-        SendChatMessageToTargets(`&{template:historyBox} {{message=<p>${StartSessionHistory}</p>}}`, "");
-    }
+    // display chapter information
+    ShowChapterStart(startSessionTitle, startSessionChapter, startSessionPart);
+    ShowChapterHistoryUpdate(startSessionHistory);
+    ShowChapterActiveQuests(startSessionNewQuestIds);
 
-    if (StartSessionNewChapter == "1") {
+    // set the party
+    SetParty(startSessionNewParty);
+
+    // if the new chapter toggle is on, give all party members inspiration
+    if (startSessionNewChapter == "1") {
         
         let sceneMessages = [];
-        let targets = GetActorTargetData(getAttrByName(partyManager.id, "current_party_members"));
+        let targets = "";
+        if (startSessionNewParty != "") {
+            targets = GetActorTargetData(startSessionNewParty);
+        }
+        else {
+            GetActorTargetData(getAttrByName(partyManager.id, "current_party_members"));
+        }
         let resourceObj;
 
         _.each(targets, function(target) {
@@ -445,6 +455,68 @@ function CommandStartSession(options) {
             }
         });
         SendSystemMessage(sceneMessages, "GM");
+    }
+}
+
+function ShowChapterStart(title, chapter, part) {
+
+    SendChatMessageToTargets(`&{template:quest} {{chapter=1}} {{title=${title}}} {{sub=Chapter ${chapter}}} {{footer= Part ${part}}} `, "");
+}
+
+function ShowChapterHistoryUpdate(historyText) {
+
+    if (historyText != "") {
+        historyText = historyText.replace(/\//g, "</p><p>");
+        SendChatMessageToTargets(`&{template:historyBox} {{message=<p>${historyText}</p>}}`, "");
+    }
+}
+
+function ShowChapterActiveQuests(questIds) {
+
+    if (questIds != "") {
+        questIds = questIds.split("##");
+        let questId, questTitle = "";
+        let partyManager = FindCharacter("PartyManager");
+        let repeatingSection = "repeating_mainchaptermissions";
+        let messageData = [];
+
+        // populate the messageData
+        for (let i = 0; i < questIds.length; i++) {
+            questId = questIds[i].trim();
+            if (questId != "") {
+                questTitle = getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "title"));
+                if (questTitle != undefined && questTitle != "") {
+                    messageData.push({
+                        title: questTitle,
+                        subTitle: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "subtitle")),
+                        actors: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "actors")),
+                        xp: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "exp")),
+                        rewards: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "otherrewards"))
+                    });
+
+                }
+            }
+        }
+
+        // display message data
+        if (messageData.length > 0) {
+            let message = "";
+            for (let i = 0; i < messageData.length; i++) {
+                if (message != "") {
+                    message += `<div class="sheet-wuxRow">&nbsp;</div>`;
+                }
+                message += `<div class="sheet-wuxHeader">${messageData[i].title}</div>`;
+                if (messageData[i].subTitle != undefined && messageData[i].subTitle != "") {
+                    message += `<div class="sheet-wuxSubheader">${messageData[i].subTitle}</div>`;
+                }
+                if (messageData[i].xp != undefined && messageData[i].xp != "") {
+                    message += `<div class="sheet-wuxDesc">${messageData[i].xp} exp${messageData[i].rewards != undefined && messageData[i].rewards != "" ? ", " + messageData[i].rewards : ""}</div>`;
+                }
+                
+            }
+
+            SendChatMessageToTargets(GetFormattedMessage("i", `<h1>Active Quests</h1>${message}`), "");
+        }
     }
 }
 
@@ -864,12 +936,17 @@ function AddSelectedTokensToPartyList(msg, targetList) {
 function SetParty(partyList) {
 
     if (partyList != "") {
-        var partyManager = FindCharacter("PartyManager");
+        let partyManager = FindCharacter("PartyManager");
         let currentMembers = GetCharacterAttribute(partyManager.id, "current_party_members");
         if (currentMembers != undefined) {
             currentMembers.set("current", partyList);
+            let partyTextList = "";
+            partyList = partyList.split(",");
+            for (let i = 0; i < partyList.length; i++) {
+                partyTextList += (partyTextList != "" ? ", " : "") + partyList[i].trim(); 
+            }
+            SendChatMessageToTargets("Setting the party to " + partyTextList, "GM");
         }
-        SendChatMessageToTargets("Setting the party to " + partyList, "GM");
     }
 
 }
