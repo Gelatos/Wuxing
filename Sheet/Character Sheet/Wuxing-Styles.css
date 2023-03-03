@@ -5181,7 +5181,7 @@ visibility: visible;
 
 .sheet-rolltemplate-infoBox .sheet-wuxDesc
 {
-    padding-left: 5px;
+    padding: 0px 5px;
     font-size: 12px;
     color: #f1f1f1;
 }
@@ -6053,7 +6053,8 @@ Quest Box
 
 .sheet-rolltemplate-quest .sheet-questComplete 
 {
-    top: 0px;
+    top: -10px;
+    left: -20px;
     position: absolute; 
     width: 280px;
 }

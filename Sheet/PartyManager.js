@@ -512,14 +512,14 @@ function ShowChapterActiveQuests(questIds) {
                     message += `<div class="sheet-wuxSubheader">${messageData[i].subTitle}</div>`;
                 }
                 if (messageData[i].actors != undefined && messageData[i].actors != "") {
-                    message += `<div class="sheet-wuxDesc">Party: ${FormatPartyList(messageData[i].actors)}</div>`;
+                    message += `<table style="max-width: 230px; margin-left: 5px;"><tr><td style="vertical-align: top">Party:</td><td class="sheet-wuxDesc">${FormatPartyList(messageData[i].actors)}</td></tr>`;
 
                     if (messageData[i].xp != undefined && messageData[i].xp != "") {
                         let partymembers = messageData[i].actors.split(",");
                         let exp = Math.floor(parseInt(messageData[i].xp) / partymembers.length);
-                        let currency = "";
+                        let currency = isNaN(parseInt(messageData[i].currency)) || parseInt(messageData[i].currency) <= 0 ? "" : parseInt(messageData[i].currency);
                         
-                        if (messageData[i].currency != undefined && messageData[i].currency != "0") {
+                        if (currency != "") {
                             currency = Math.floor(parseInt(messageData[i].currency) / partymembers.length);
                             switch (messageData[i].currencyType) {
                                 case "gp": 
@@ -541,14 +541,12 @@ function ShowChapterActiveQuests(questIds) {
                             currency = "and " + currency;
                         }
                         
-                        if (messageData[i].rewards != undefined && messageData[i].rewards != "") {
-                            messageData[i].rewards = ", " + messageData[i].rewards;
-                        }
-                        else {
+                        if (messageData[i].rewards == undefined) {
                             messageData[i].rewards = "";
                         }
-                        message += `<div class="sheet-wuxDesc">Rewards: ${exp} EXP ${currency}each<br />${messageData[i].rewards}</div>`;
+                        message += `<tr><td style="vertical-align: top">Rewards:</td><td class="sheet-wuxDesc">${exp} EXP ${currency}each<br />${messageData[i].rewards}</td>`;
                     }
+                    message += "</table>";
                 }
                 
             }
@@ -705,7 +703,31 @@ function CommandCompleteMission(msg, options) {
     missionOutput += "{{header=" + type + "}} ";
     missionOutput += "{{title=" + title + "}} ";
     missionOutput += "{{sub=" + subtitle + "}} ";
-    missionOutput += "{{footer=" + exp + "XP " + otherRewards + "}} ";
+    let footer = "";
+    if (exp != "") {
+        footer += `${exp} EXP`;
+    }
+    if (currency > 0) {
+        switch (messageData[i].currencyType) {
+            case "gp": 
+            case "gps": 
+                currency += " Gold"; break;
+            case "cp": 
+            case "cps": 
+                currency += " CP"; break;
+            case "jin": 
+            case "jins": 
+                currency += " Jin"; break;
+            case "frt": 
+            case "frts": 
+                currency += " Forta"; break;
+            case "syr": 
+            case "syrs": 
+                currency += " Syre"; break;
+        }
+        footer += ` and ${currency}`;
+    }
+    missionOutput += "{{footer=" + footer + "}} ";
     missionOutput += "{{complete=1}}";
     sendChat('Game Manager', missionOutput);
     

@@ -9592,13 +9592,15 @@ var update_chapter_quests = function(repeatingSectionId, quests) {
 }
 
 var update_missionType = function (updateId) {
-	getAttrs(["repeating_mainchaptermissions_" + updateId + "_defaultTypes", "current_party_members"], function (v) {
+	getAttrs(["repeating_mainchaptermissions_" + updateId + "_defaultTypes", "repeating_mainchaptermissions_" + updateId + "_actors", "current_party_members"], function (v) {
 		var update = {};
 		if (v["repeating_mainchaptermissions_" + updateId + "_defaultTypes"] !== "-") {
 			var defaultType = v["repeating_mainchaptermissions_" + updateId + "_defaultTypes"].split("-");
 			update["repeating_mainchaptermissions_" + updateId + "_type"] = defaultType[0];
 			update["repeating_mainchaptermissions_" + updateId + "_style"] = defaultType[1];
-			update["repeating_mainchaptermissions_" + updateId + "_actors"] = v["current_party_members"];
+			if (v["repeating_mainchaptermissions_" + updateId + "_actors"] == "") {
+				update["repeating_mainchaptermissions_" + updateId + "_actors"] = v["current_party_members"];
+			}
 			update["repeating_mainchaptermissions_" + updateId + "_missionid"] = updateId;
 			update["repeating_mainchaptermissions_" + updateId + "_exp"] = 10;
 			update["repeating_mainchaptermissions_" + updateId + "_questCurrency"] = "00";
