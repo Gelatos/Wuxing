@@ -9683,14 +9683,6 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				<div class="wuxSectionHeader">Notes</div>
 
 				<div class="wuxSectionContent">
-					<div class="wuxFieldSet wuxToolsTab">
-						<span class="wuxFormHeader">Notes</span>
-						<div class="wuxMultiRow">
-							<textarea class="wuxFormInput wuxSizeSmall" name="attr_mainchapter-notes"></textarea>
-						</div>
-						<div class="wuxRow">&nbsp;</div>
-						<span class="wuxFormHeader">Post Area</span>
-					</div>
 					<fieldset class="repeating_preparedmainchapters">
 						<div class="wuxFieldSet wuxNotesTab">
 							<div class="wuxRow">
@@ -9739,19 +9731,17 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 							<div class="wuxRow">
 								<input type="hidden" name="attr_postText">
 								<input type="hidden" name="attr_type" value="Location">
-								<input class="wuxFormInput wuxSizeMed wuxPmSpacer" name="attr_title" value="">
+								<span class="wuxFormTitle wuxSizeSmall">Name</span>
+								<input class="wuxFormInput wuxSizeMed" type="text" name="attr_header" placeholder="header">
 								<button type="roll" class="wuxToolButton wuxPmSpacer" name="roll_post" value="@{postText}"><span>Post</span></button>
 							</div>
 							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Header</span>
-								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_header" placeholder="header">
+								<span class="wuxFormTitle wuxSizeSmall">Area</span>
+								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_sub" placeholder="Aldejove, Io District">
 							</div>
 							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Sub</span>
-								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_sub" placeholder="subheader">
-							</div>
-							<div class="wuxMultRow">
-								<textarea class="wuxFormInput wuxSizeSmall" name="attr_location-notes" placeholder="separate new lines with /"></textarea>
+								<span class="wuxFormTitle wuxSizeSmall">Time</span>
+								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_location" placeholder="Autumn 1, 1:00pm">
 							</div>
 							<div class="wuxRow">&nbsp;</div>
 						</div>
