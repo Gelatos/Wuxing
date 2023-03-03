@@ -80,6 +80,7 @@ on("chat:message", function(msg) {
             case "!ja":
             case "!jd":
             case "!jia":
+            case "!jbt":
                 CommandJukebox(msg);
                 
             return;

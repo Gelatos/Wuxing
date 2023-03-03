@@ -1039,18 +1039,35 @@ function SetMinionNameOnCharacterSheet(target) {
 
 function OnTriggerCreateAbility(data) {
 
-    log ("OnTriggerCreateAbility: " + data);
-
     data = data.split("@@");
     let target = GetActorTargetData(data[0])[0];
+    let repeatingSection = data[1];
+    let repeatingId = data[2];
+    CreateAbilityOnTarget(target, repeatingSection, repeatingId);
+}
 
-    let atk_id = data[1];
-    let name = getAttrByName(target.charId, GetSectionIdName("repeating_customactions", atk_id, "atkname"));
-    name = name.replace(/ /g, "-");
+function CreateAbilityOnTarget(target, repeatingSection, repeatingId) {
 
-    let template = "&{template:";
-    template += getAttrByName(target.charId, GetSectionIdName("repeating_customactions", atk_id, "rollbase"));
-    CreateAbility(name, template, target.charId);
+    let name = "";
+    let template = "";
+
+    switch(repeatingSection) {
+        case "repeating_customactions":
+            name = getAttrByName(target.charId, GetSectionIdName(repeatingSection, repeatingId, "atkname"));
+            template += getAttrByName(target.charId, GetSectionIdName(repeatingSection, repeatingId, "rollbase"));
+        break;
+        case "repeating_spells":
+            name = getAttrByName(target.charId, GetSectionIdName(repeatingSection, repeatingId, "spellname"));
+            template += getAttrByName(target.charId, GetSectionIdName(repeatingSection, repeatingId, "rollcontent"));
+        break;
+    }
+
+    if (name != "" && template != "") {
+        name = name.replace(/ /g, "-");
+        template = `&{template:${template}`;
+        CreateAbility(name, template, target.charId);
+    }
+
 }
 
 function OnTriggerDyingInjury(injuryData) {
@@ -1270,6 +1287,25 @@ function CommandJukebox(msg) {
         else if (msg.content.indexOf("!jsa") !== -1) {
             Roll20AM.StopAll(msg.who);
             // JukeboxStop(msg);
+        }
+        else if (msg.content.indexOf("!jbt") !== -1) {
+            let partyManager = FindCharacter("PartyManager");
+            let list = getAttrByName(partyManager.id, "battlesongList");
+            if (list != undefined && list != "") {
+                let newlist = list.split("@@");
+                let rnd = randomInteger(newlist.length) - 1;
+                let content = newlist[rnd];
+                let newMsg = msg;
+
+                newMsg.content = "!roll20AM --edit,mode,shuffle|";
+                newMsg.content += content;
+                
+                Roll20AM.StopAll(msg.who);
+                Roll20AM.InputController(msg);
+                newMsg.content = "!roll20AM --audio,play|" + content;
+                Roll20AM.InputController(msg);
+
+            }
         }
         else if (msg.content.indexOf("!js") !== -1) {
             var content = msg.content.replace("!js ", "");
