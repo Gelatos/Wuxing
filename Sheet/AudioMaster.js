@@ -1586,7 +1586,7 @@ var Roll20AM = Roll20AM || (function() {
     removeJukebox = function(who){  
         state.Roll20AM.playLists = {}   
         state.Roll20AM.trackDetails = {}  
-        sendChat(who,'All Playlists and Tracks have been removed from Roll20AM',null,{noarchive:true});
+        sendChat(who,'/w GM All Playlists and Tracks have been removed from Roll20AM',null,{noarchive:true});
     },    
     //Import everything from Jukebox
     importJukebox = function(who){
@@ -1640,7 +1640,7 @@ var Roll20AM = Roll20AM || (function() {
         importList("Tag3")
         importList("Tag4")        
 
-        sendChat(who,'All Playlists and Tracks have been imported',null,{noarchive:true});
+        sendChat(who,'/w GM All Playlists and Tracks have been imported',null,{noarchive:true});
     },	
     importList = function(listName,who){
         if (debug){
