@@ -378,7 +378,7 @@ function GetNameList(nationality, nameType) {
             } else if (nameType.toLowerCase() == "female") {
                 return [
                     "Adelina", "Agnes", "Aksinya", "Alexa", "Alida", "Amalya", "Anfisa", "Arina", "Ava",
-                    "Barbel", "Beate", "Boleslava", "Brunhilde",
+                    "Barbel", "Boleslava", "Brunhilde",
                     "Cacilie", "Cathrin", "Celine", "Christel", "Clara", "Cora", "Cornelia",
                     "Darya", "Diana", "Dietlinde", "Dorothea", "Dunya",
                     "Edel", "Elena", "Elfriede", "Emilia", "Erna", "Esfir", "Evelin",
@@ -394,7 +394,7 @@ function GetNameList(nationality, nameType) {
                     "Oda", "Oksana", "Olesya", "Ortrun", "Ottilie",
                     "Phillomena", "Phyllis", "Pia", "Priska",
                     "Rada", "Regine", "Reinhild", "Renate", "Rita", "Rosalie",
-                    "Salome", "Selena", "Sibylla", "Sieglinde", "Silke", "Sofya", "Sveta",
+                    "Salome", "Selena", "Sieglinde", "Silke", "Sofya", "Sveta",
                     "Taisiya", "Tresa", "Theda", "Tonya",
                     "Ulrike", "Ursel", "Uschi", "Ute", "Varya", "Vaska", "Veron", "Vreni",
                     "Wenke", "Wilhemina", "Yesfir", "Yvonne", "Zella", "Zina", " Ziska", "Zoya"
@@ -486,7 +486,7 @@ function GetNameList(nationality, nameType) {
             if (nameType.toLowerCase() == "male") {
                 return [
                     "Aamir", "Abhay", "Adel", "Ajit", "Ala", "Almas", "Amrit", "Anik", "Anwer", "Aseem", "Atif", "Ayaz",
-                    "Babur", "Baha", "Bahij", "Baki", "Baldev", "Basant", "Bibek", "Bilal", "Botros", "Bulis", "Burhan",
+                    "Babur", "Baha", "Bahij", "Baki", "Baldev", "Basant", "Bilal", "Botros", "Bulis", "Burhan",
                     "Chand", "Chander", "Chandra", "Cheten", "Chiranjeevi", "Chiranjivi", 
                     "Daniyal", "Darshan", "Dawud", "Danyal", "Debdas", "Deo", "Dharma", "Dilip", "Diya", "Durai", "Dushyant",
                     "Ebrahim", "Eesa", "Esmail", "Essa", "Ezhil",
@@ -502,7 +502,7 @@ function GetNameList(nationality, nameType) {
                     "Om", "Omar", "Omran", "Othman", "Othmane", "Oualid",
                     "Padma", "Parth", "Parveen", "Pitambar", "Prabhat", "Prakash", "Pran", "Pratap", "Prem", "Punit",
                     "Qadir", "Qamar", "Qays", "Qismat", "Qusay",
-                    "Rabi", "Radha", "Rafiq", "Rajesh", "Ramiz", "Rehman", "Riaz", "Rifat", "Rohan", "Ruh", "Rusul",
+                    "Rabi", "Radha", "Rafiq", "Rajesh", "Ramiz", "Rehman", "Riaz", "Rifat", "Ruh", "Rusul",
                     "Sabri", "Safi", "Saleh", "Sandeep", "Satish", "Shadi", "Shakeel", "Sib", "Sri", "Suhayl", "Suresh",
                     "Tabassum", "Tahir", "Tahmid", "Talib", "Tariq", "Tayyib", "Thamir", "Toufik", "Tufayl", "Tushar",
                     "Umar", "Umran", "Usama", "Usman", "Uthman", "Uttar",
@@ -523,13 +523,13 @@ function GetNameList(nationality, nameType) {
                     "Habiba", "Hadil", "Hafza", "Hagir", "Hana", "Hema", "Hind", "Hooda", "Hosni", "Husna", "Husniya",
                     "Ihab", "Ihsan", "Ikram", "Ila", "Inas", "Indira", "Iqra", "Isha", "Ishani", "Isra", "Izdihar",
                     "Jalila", "Jameela", "Janan", "Jannat", "Jasvinder", "Jawdat", "Jinan", "Jothi", "Jumanah", "Jyoti",
-                    "Kajal", "Kalyani", "Kamatchi", "Kamini", "Kashi", "Kasi", "Khadija", "Kirtida", "Kubra", "Kumari",
+                    "Kajal", "Kalyani", "Kamatchi", "Kamini", "Kashi", "Khadija", "Kirtida", "Kubra", "Kumari",
                     "Laila", "Lamis", "Lateefah", "Leela", "Leila", "Lina", "Lochana", "Lubna", "Lujayn",
                     "Maha", "Mahinder", "Mala", "Malati", "Manisha", "Maya", "Mira", "Mitra", "Mohini", "Mubina", "Munya",
                     "Nadia", "Narinder", "Neela", "Nida", "Nihal", "Nisha", "Noor", "Noora", "Nour", "Nuha", "Nurul",
                     "Padma", "Pallabi", "Parminder", "Parveen", "Pooja", "Prachi", "Preethi", "Priya", "Punita", "Pushpa",
                     "Rabab", "Rachana", "Radha", "Raisa", "Rajani", "Rakshi", "Reem", "Reva", "Ritika", "Ruba", "Ruya",
-                    "Sabah", "Sadaf", "Sadia", "Sakshi", "Samar", "Seema", "Shadya", "Shanti", "Shreya", "Shukriyya", 
+                    "Sabah", "Sadaf", "Sadia", "Samar", "Seema", "Shadya", "Shanti", "Shreya", "Shukriyya", 
                     "Shweta", "Shyama", "Sita", "Sitara", "Somaya", "Sona", "Souad", "Sri", "Suad", "Suha", "Sujata",
                     "Tabassum", "Tahira", "Taliba", "Tara", "Tejal", "Thamina", "Thana", "Thurayya", "Trishna", "Tuba", 
                     "Uma", "Upasana", "Urvi", "Usha", "Uttara", "Uzma",
@@ -1535,7 +1535,7 @@ function GetProficiencyAttr(attr) {
         case "charisma":
             return "charisma_save_bonus";
         case "spell":
-            return "spell_profrank-effect";
+            return "spell_prof-effect";
         case "axe":
             return "weapon_prof-axe";
         case "blade":
@@ -2087,6 +2087,12 @@ function GetLanguageName(language) {
             return "Vulca";
         case "wolfwarg":
             return "Wolfwarg";
+        case "beast":
+            return "Beast";
+        case "emotion":
+            return "Emotion";
+        case "empathy":
+            return "Empathy";
 
         default:
             return "";
@@ -2140,6 +2146,9 @@ function GetLanguageTag(language) {
             return "{{language-rare=1}}{{language-ancient=1}}";
 
         case "wolfwarg":
+        case "beast":
+        case "empathy":
+        case "emotion":
         case "spirit":
             return "{{language-special=1}}";
 

@@ -2075,6 +2075,7 @@ var update_nickname = function (newName) {
 	var name = newName.split(" ")[0];
 	update["introduction_nickname"] = name;
 	update["introduction_title"] = "-";
+	update["nickname"] = "???";
 	setAttrs(update, {
 		silent: true
 	});
@@ -8343,7 +8344,7 @@ var do_update_spell = function (spellArray) {
 	]));
 
 	getAttrs(attack_attribs, function (v) {
-		var prof_attribs = ["pb", "character_name", "spell_power", "spell_effect"];
+		var prof_attribs = ["pb", "character_name", "spell_power", "spell_effect", "spell_profrank-effect", "spell_prof-effect"];
 		var profs_added = [];
 
 		_.each(spellArray, function (id) {
