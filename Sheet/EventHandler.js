@@ -313,7 +313,6 @@ function CommandHelpCommands(msg, options) {
             sendString += "These are various commands useful to all players.";
             sendString += "</span>";
             sendString += "<hr /><table style='border: 0px;'>";
-            sendString += GetHelpTableLine("!rollstats", "Roll a set of stats for a new character.");
             if (playerIsGM(msg.playerid)) {
                 sendString += GetHelpTableLine("start", "Starts the session");
                 sendString += GetHelpTableLine("fail", "Randomly selects a critical fail event");

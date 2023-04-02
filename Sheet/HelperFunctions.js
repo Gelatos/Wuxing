@@ -318,125 +318,6 @@ function GetRandomDrop(character) {
 }
 
 
-// ======= Stat Roll Functions
-// =================================================
-
-function CommandRollStats(rollData) {
-
-    // split the data
-    var previousRolls = rollData.split(",");
-    var rollType = 4;
-
-    // get the rolls
-    var rolls = [];
-    if (previousRolls.length <= 1) {
-
-        if (previousRolls[0] != "") {
-            rollType = Math.abs(Number(previousRolls[0]));
-        }
-
-        // new set of rolls. Time to get dice
-        for (var i = 0; i < 6; i++) {
-            rolls[i] = Roll4d6DropLowest();
-        }
-    } else {
-        rollType = Number(previousRolls[0]);
-
-        // determine what to do with these values
-        if (rollType == 0) {
-            rolls[0] = Number(previousRolls[1]);
-        } else {
-            rolls[0] = Roll4d6DropLowest();
-        }
-
-        // get the rest of the numbers
-        for (var i = 1; i < previousRolls.length; i++) {
-            rolls[i] = Number(previousRolls[i + 1]);
-        }
-    }
-
-    // now determine how we output this data
-    var output = "";
-    if (rollType == 0) {
-        // final roll
-        output += "Stat Roll: Final Stats /";
-        for (var i = 0; i < 5; i++) {
-            output += rolls[i] + ", ";
-        }
-        output += rolls[5];
-        output += "/ Add 1 to two separate values and these will be your final stats after racial modifiers.";
-    } else {
-        var newRerollCount = Number(rollType) - 1;
-
-        // print the intro
-        output += "Stat Roll /";
-        output += rollType + " rerolls remaining /";
-        output += "Your rolls are displayed on the section below. /";
-        output += "You have a number of rerolls displayed above. /";
-        output += "Any reroll must be kept. /";
-        output += "Press a number to reroll that value /";
-        output += "or select 'reroll all' or 'keep' /";
-
-        // make a button for each value
-        for (var i = 0; i < 6; i++) {
-
-            // begin the button
-            output += "[" + rolls[i] + "](!rollstats ";
-            output += newRerollCount + ",";
-            output += rolls[i] + ",";
-
-            // get the rest of the values
-            for (var j = 0; j < 6; j++) {
-                if (j != i) {
-                    output += rolls[j] + ",";
-                }
-            }
-            output += ")";
-        }
-
-        // make the reroll all button
-        output += "/ [Reroll All](!rollstats -" + newRerollCount + ") ";
-
-        // make the keep button
-        output += "[Keep](!rollstats 0,";
-        for (var i = 0; i < 5; i++) {
-            output += rolls[i] + ",";
-        }
-        output += rolls[5] + ")";
-    }
-
-    SendFormattedMessage("Stat Roll Manager", "h", output, false);
-}
-
-function Roll4d6DropLowest() {
-
-    var rolls = RollMultipleDice(4, 6);
-
-    // sort the dice
-    rolls.sort();
-    rolls.reverse();
-
-    // now total and return
-    var result = rolls[0] + rolls[1] + rolls[2];
-    return result;
-}
-
-function RollMultipleDice(quantity, dieType) {
-
-    var rolls = [];
-
-    // get 3 dice
-    var k = 0;
-    var outputString = "";
-    for (k = 0; k < quantity; k++) {
-        rolls[k] = Math.ceil(Math.random() * dieType);
-        outputString += " + " + rolls[k];
-    }
-
-    return rolls;
-}
-
-
 // ======= Token Functions
 // =================================================
 
@@ -925,10 +806,6 @@ function CommandCastNPC(msg) {
 
         }
     });
-
-    var newMsg = msg;
-    newMsg.content = "!token-mod --set defaulttoken";
-    TokenMod.HandleInput(newMsg);
 }
 
 function IntroduceNPC(msg) {

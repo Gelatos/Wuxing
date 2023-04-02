@@ -3108,10 +3108,10 @@ long: `A poisoned creature has disadvantage on attack rolls and ability checks.`
 case "prone": 
 return {
 name: "Prone",
-short: `Attacks have disadv. Attacks against creature have adv if within 5 feet, otherwise they have disadv.`,
-long: `A prone creature’s only movement option is to crawl, unless it stands up and thereby ends the condition.
-The creature has disadvantage on attack rolls.
-An attack roll against the creature has advantage if the attacker is within 5 feet of the creature. Otherwise, the attack roll has disadvantage.`
+short: `You are flat-footed and have -2 on attacks.`,
+long: `You’re lying on the ground. The only move actions you can use while you’re prone are Crawl and Stand. Standing up ends the prone condition.
+You are flat-footed and take a –2 circumstance penalty to attack rolls.
+You can Take Cover while prone to hunker down and gain greater cover against ranged attacks, even if you don’t have an object to get behind, gaining a +4 circumstance bonus to AC against ranged attacks (but you remain flat-footed).`
 };
 case "quickened": 
 return {
