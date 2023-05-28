@@ -9515,6 +9515,10 @@ var update_postbox_text = function (repeatingSectionId) {
 				usesHeader = "1";
 				usesSubheader = "1";
 				break;
+			case "History":
+				postText = "&{template:historyBox}";
+				postText += " {{message=" + v[repeatingSectionId + "_location"] + "\n\n}}";
+				break;
 			case "Grid":
 				postText = "&{template:graphBox}";
 				postText += " {{type=" + v[repeatingSectionId + "_header"] + "}}";
