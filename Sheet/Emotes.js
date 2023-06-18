@@ -149,7 +149,10 @@ function CommandSetLanguage(msg) {
     let chatData = GetChatData();
     chatData.setChatDataFromMsg(msg);
 
-    SetLanguage(chatData.target, messageParts[0]);
+    var sendingPlayer = getObj('player', msg.playerid);
+    var sendingPlayerName = sendingPlayer.get("_displayname").split(" ")[0];
+
+    SetLanguage(sendingPlayerName, chatData.target, messageParts[0]);
     chatData.setChatMessageFromMsgContent(messageParts[1]);
     chatData.sendEmoteOption();
 }
@@ -251,7 +254,7 @@ function SetOutfit(sendingPlayerName, character, modifier) {
 
 }
 
-function SetLanguage(target, language) {
+function SetLanguage(sendingPlayerName, target, language) {
     
     // get the language name
     if (language == "" || language == undefined) {
@@ -260,7 +263,12 @@ function SetLanguage(target, language) {
     language = GetLanguageName(language);
 
     let languageObj = GetCharacterAttribute(target.charId, "speaking_language");
-    languageObj.set("current", language);
+    if (languageObj != null) {
+        languageObj.set("current", language);
+    }
+    else {
+        sendChat("Emote Manager", "/w " + sendingPlayerName + " There was an error in your message. This character doesn't have speaking_language set.", null, {noarchive:true});
+    }
 }
 
 // ======= Send Functions

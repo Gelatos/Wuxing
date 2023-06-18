@@ -10383,6 +10383,13 @@ function GetKiCapacityBonuses(pointObj, spellcasting_ability) {
 
 
 // Sheet Upgrades
+var upgrade_to_1_1_10 = function (doneupdating) {
+	let update = {};
+	update["speaking_language"] = "Minere";
+	setAttrs(update);
+	doneupdating();
+}
+
 var upgrade_to_1_1_9 = function (doneupdating) {
 	let update = {};
 	update["deathSaveSuccess"] = "0";
@@ -10548,8 +10555,14 @@ var versioning = function () {
 	getAttrs(["version"], function (v) {
 		console.log("Checking version " + v["version"]);
 
-		if (v["version"] === "1.1.9") {
+		if (v["version"] === "1.1.10") {
 			console.log("Wuxing Sheet modified from 5th Edition OGL by Roll20 v" + v["version"]);
+		} else if (v["version"] === "1.1.9") {
+			console.log("UPGRADING TO v1.1.10");
+			upgrade_to_1_1_9(function () {
+				setAttrs({version: "1.1.10"});
+				versioning();
+			});
 		} else if (v["version"] === "1.1.8") {
 			console.log("UPGRADING TO v1.1.9");
 			upgrade_to_1_1_9(function () {
