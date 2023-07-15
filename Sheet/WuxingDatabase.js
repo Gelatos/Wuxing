@@ -438,7 +438,7 @@ function GetNameList(nationality, nameType) {
                     "Gadisa", "Gudina", "Gwandoya",
                     "Iakkopa", "Idir", "Ifa", "Ikaia", "Imamu", "Ime", "Inyene", "Itoro", "Izem",
                     "Jatau", "Jengo", "Jumaane",
-                    "Kabelo", "Kaipo", "Kalei", "Kato", "Keanu", "Kekoa", "Keoni", "Kibwe", "Kojo", "Kweku",
+                    "Kaipo", "Kalei", "Kato", "Keanu", "Kekoa", "Keoni", "Kibwe", "Kojo", "Kweku",
                     "Lanre", "Lekan", "Lencho", "Lishan",
                     "Maina", "Makaio", "Maui", "Melisizwe", "Mikala", "Moana", "Mwangi", "Mwenye",
                     "Nalani", "Neo", "Ngozi", "Nijinga", "Noa", "Nsia", "Nthanda",
@@ -456,7 +456,7 @@ function GetNameList(nationality, nameType) {
                     "Baako", "Babirye", "Berhane", "Bolanle", "Bontu", "Bosede", "Buhle",
                     "Charlize", "Chichi", "Chika", "Chioma", "Chisomo", "Chizoba",
                     "Dada", "Dayo", "Desta", "Dikeledi", "Dubaku",
-                    "Ebele", "Efemena", "Ejiro", "Ekene", "Ekua", "Emem", "Enu", "Eshe", "Esi",
+                    "Ebele", "Efemena", "Ejiro", "Ekene", "Ekua", "Emem", "Enu", "Eshe",
                     "Dadumo", "Farai", "Fatsani", "Folami", "Funanya", "Fungai", "Furaha",
                     "Gadise", "Ganizani", "Gugulethu",
                     "Hadiza", "Haukea", "Hibo", "Hiwot", "Hodan", "Hokulani",
@@ -471,7 +471,7 @@ function GetNameList(nationality, nameType) {
                     "Sauda", "Saynab", "Seble", "Sibongile", "Simisola", "Subira",
                     "Tadala", "Taonga", "Tapiwa", "Thema", "Tidir", "Titrit", "Tumelo",
                     "Uzoma", "Wairimu", "Wangari", "Wikolia",
-                    "Yamikani", "Yejide", "Yewande", "Zodwa", "Zola", "Zuri"
+                    "Yamikani", "Yejide", "Yewande", "Zodwa", "Zola"
                 ];
             } else {
                 return [
@@ -519,7 +519,7 @@ function GetNameList(nationality, nameType) {
                     "Dalal", "Dalia", "Danya", "Deepa", "Deepti", "Dema", "devi", "Dipali", "Drishti", "Dua", "Durga",
                     "Eman", "Ezhil",
                     "Fadia", "Fadila", "Fahima", "Fahmida", "Fairuz", "Faiza", "Fareeha", "Farida", "Fikriyya", "Fizza",
-                    "Galila", "Gargi", "Gayatri", "Ghadir", "Gita", "Gowri", "Grishma", "Gulnaz", "Gulrukh", "Gurmeet",
+                    "Galila", "Gargi", "Gayatri", "Ghadir", "Gowri", "Grishma", "Gulnaz", "Gulrukh", "Gurmeet",
                     "Habiba", "Hadil", "Hafza", "Hagir", "Hana", "Hema", "Hind", "Hooda", "Hosni", "Husna", "Husniya",
                     "Ihab", "Ihsan", "Ikram", "Ila", "Inas", "Indira", "Iqra", "Isha", "Ishani", "Isra", "Izdihar",
                     "Jalila", "Jameela", "Janan", "Jannat", "Jasvinder", "Jawdat", "Jinan", "Jothi", "Jumanah", "Jyoti",
@@ -529,7 +529,7 @@ function GetNameList(nationality, nameType) {
                     "Nadia", "Narinder", "Neela", "Nida", "Nihal", "Nisha", "Noor", "Noora", "Nour", "Nuha", "Nurul",
                     "Padma", "Pallabi", "Parminder", "Parveen", "Pooja", "Prachi", "Preethi", "Priya", "Punita", "Pushpa",
                     "Rabab", "Rachana", "Radha", "Raisa", "Rajani", "Rakshi", "Reem", "Reva", "Ritika", "Ruba", "Ruya",
-                    "Sabah", "Sadaf", "Sadia", "Samar", "Seema", "Shadya", "Shanti", "Shreya", "Shukriyya", 
+                    "Sabah", "Sadaf", "Sadia", "Samar", "Seema", "Shadya", "Shreya", "Shukriyya", 
                     "Shweta", "Shyama", "Sita", "Sitara", "Somaya", "Sona", "Souad", "Sri", "Suad", "Suha", "Sujata",
                     "Tabassum", "Tahira", "Taliba", "Tara", "Tejal", "Thamina", "Thana", "Thurayya", "Trishna", "Tuba", 
                     "Uma", "Upasana", "Urvi", "Usha", "Uttara", "Uzma",

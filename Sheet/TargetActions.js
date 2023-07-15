@@ -10,7 +10,15 @@ function CommandCharacterFunction(msg) {
     if (msg.content.indexOf("!cw ") == 0) {
         content = msg.content.replace("!cw ", "");
         sendTargets = "GM";
-    } else {
+    }
+    else if (msg.content.indexOf("!cp ") == 0) {
+        content = msg.content.replace("!cp ", "");
+        sendTargets = "GM";
+    } 
+    else if (msg.content.indexOf("!cps ") == 0) {
+        content = msg.content.replace("!cp ", "");
+    } 
+    else {
         content = msg.content.replace("!c ", "");
     }
 
@@ -81,7 +89,29 @@ function CommandTargetFunction(msg) {
     // split the content
     var contentSplit = content.split("@@@");
     let targets = GetIdListTargetData(contentSplit[0]);
+    GetTargetOptionsFromTargetList(msg, sendTargets, contentSplit, targets);
+}
 
+function CommandTargetNameFunction(msg) {
+
+    var content = "";
+    let sendTargets = "";
+
+    if (msg.content.indexOf("!targetname ") !== -1) {
+        content = msg.content.replace("!targetname ", "").trim();
+    }
+    else if (msg.content.indexOf("!targetnamew ") !== -1) {
+        sendTargets = "GM";
+        content = msg.content.replace("!targetnamew ", "").trim();
+    }
+
+    // split the content
+    var contentSplit = content.split("@@@");
+    let targets = GetActorTargetData(contentSplit[0]);
+    GetTargetOptionsFromTargetList(msg, sendTargets, contentSplit, targets);
+}
+
+function GetTargetOptionsFromTargetList(msg, sendTargets, contentSplit, targets) {
     if (targets.length > 0) {
         log ("Grabbing Targetting data for " + `${targets[0].charName}/${targets[0].charId}`);
 
@@ -101,6 +131,18 @@ function CommandTargetFunction(msg) {
     }
 }
 
+function CommandTargetPartyFunction(msg) {
+    // this calls a character target function if there are targets selected,
+    // otherwise, calls a party target function
+
+    if (msg.selected == undefined) {
+        CommandPartyFunction(msg);
+    }
+    else {
+        CommandCharacterFunction(msg);
+    }
+}
+
 function CommandPartyFunction(msg) {
 
     // get variables
@@ -109,6 +151,7 @@ function CommandPartyFunction(msg) {
     let targets = GetActorTargetData(getAttrByName(partyManager.id, "current_party_members"));
     let sendTargets = "";
 
+    
     if (msg.content.indexOf("!p") !== -1) {
         if (msg.content.indexOf("!ps ") !== -1) {
             content = msg.content.replace("!ps ", "");
@@ -116,6 +159,13 @@ function CommandPartyFunction(msg) {
             sendTargets = "GM";
             content = msg.content.replace("!p ", "");
         }
+    }
+    else if (msg.content.indexOf("!cps") !== -1) {
+        content = msg.content.replace("!cp ", "");
+    }
+    else if (msg.content.indexOf("!cp") !== -1) {
+        sendTargets = "GM";
+        content = msg.content.replace("!cp ", "");
     }
 
     // get the action and modifiers
@@ -846,11 +896,10 @@ function TargetSpendResolve(sendTargets, targets) {
             TargetSetMorale(target.charId, target.displayName, 0, -1);
 
             // send message
-            message = "Gain an inspiration and immediately spend it. ";
+            message = "Gain advantage on your last roll. ";
             if (dieRoll != "") {
-                message += "<br />Add [[" + dieRoll + "]] to the highest result of your inspiration roll.";
+                message += "<br />Add [[" + dieRoll + "]] to the highest result of your roll.";
             }
-            log ("adding cut in scene");
             SendChatMessageToTargets(GetCutInMessage(target.displayName, target.charId, "Resolve", message), sendTargets);
             
 
@@ -923,7 +972,7 @@ function TargetSpendFate(sendTargets, targets) {
             resourceObj.set("current", parseInt(resourceObj.get("current")) - 1);
 
             // send the message
-            message = "(a) Reroll their last check and add [[3d4]] to the result; or";
+            message = "(a) Choose to automatically succeed on your last check; or";
             message += "<br />(b) If dying, immediately stabilize.";
             SendChatMessageToTargets(GetCutInMessage(target.displayName, target.charId, "Fate", message), sendTargets);
 

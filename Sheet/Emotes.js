@@ -668,7 +668,7 @@ function GetCutInMessage(charName, charId, message, subMessage) {
 
 function GetSkilledActionMessage(charName, imageUrl, message, subMessage) {
 
-    return "&{template:skillact} {{username=" + charName + "}} {{image=" + imageUrl + "}} {{rname=" + message + "}} {{description=" + subMessage + "}}";
+    return "&{template:action} {{username=" + charName + "}} {{image=" + imageUrl + "}} {{rname=" + message + "}} {{description=" + subMessage + "}}";
 }
 
 function GetFoldingMessaage(header, contents) {

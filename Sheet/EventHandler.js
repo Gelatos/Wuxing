@@ -62,6 +62,11 @@ on("chat:message", function(msg) {
                 CommandTargetFunction(msg);
                 
             return;
+            case "!targetname":
+            case "!targetnamew":
+                CommandTargetNameFunction(msg);
+                
+            return;
             case "!token":
             case "!tokenw":  
                 CommandTokenFunction(msg);  
@@ -155,6 +160,10 @@ on("chat:message", function(msg) {
         // GM Events
         if (playerIsGM(msg.playerid)) {
             switch(tag) {
+                case "!cp":
+                case "!cps":
+                    CommandTargetPartyFunction(msg);
+                return;
                 case "!p":
                 case "!ps":
                 case "!pc":

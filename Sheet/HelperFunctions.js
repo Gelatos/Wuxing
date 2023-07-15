@@ -786,6 +786,9 @@ function CommandCastNPC(msg) {
             }
             ageObj = GetCharacterAttribute(charId, "age");
             if (ageObj != undefined) {
+                if (charAge == "") {
+                    charAge = ageObj.get("current");
+                }
                 ageObj.set("current", charAge);
             }
 
