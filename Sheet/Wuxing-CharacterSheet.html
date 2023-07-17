@@ -9350,12 +9350,14 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 		</div>
 	</div>
 	<div class="wuxTabQuest wuxTab">
+		<input type="hidden" name="attr_allQuestActors">
+		<input type="hidden" name="attr_allQuestIds">
 		<div class="wuxSectionBlock wuxLayoutItem">
 			<div class="wuxSectionContent">
 				<fieldset class="repeating_mainchaptermissions">
 					<div class="wuxFieldSet wuxToolsTab">
-						<button class="wuxPmToolsHoverButton" style="right:34px" type="roll" name="roll_missionComplete" value="!completeMission @{style} @@ @{type} @@ @{title} @@ @{subtitle} @@ @{exp} @@ @{questCurrency} @@ @{questCurrencyType} @@ @{rewards} @@ @{actors}">3</button>
-						<button class="wuxPmToolsHoverButton" type="roll" name="roll_missionShow" value="&{template:quest} {{@{style}}} {{header=@{type}}} {{title=@{title}}} {{sub=@{subtitle}}} {{footer=@{exp}XP @{rewards}}}">s</button>
+						<button class="wuxPmToolsHoverButton" style="right:34px" type="roll" name="roll_missionComplete" value="!completeMission @{style} @@ @{type} @@ @{title} @@ @{exp} @@ @{questCurrency} @@ @{questCurrencyType} @@ @{rewards} @@ @{actors}">3</button>
+						<button class="wuxPmToolsHoverButton" type="roll" name="roll_missionShow" value="!showMission @{style} @@ @{type} @@ @{title} @@ @{missionid}">s</button>
 						<input class="options-flag" type="checkbox" name="attr_missionOptions" checked="checked"><span>y</span>
 						<div class="options">
 							<div class="wuxRow"><span class="wuxFormHeader">Quest Data</span></div>
@@ -9363,44 +9365,44 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 								<span class="wuxFormTitle wuxSizeSmall">Title</span>
 								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_title">
 							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Sub</span>
-								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_subtitle">
-							</div>
 							<div class="wuxRow"><span class="wuxFormHeader">Desc</span></div>
 							<div class="wuxMultiRow">
 								<textarea class="wuxFormInput wuxSizeSmall" type="text" name="attr_desc"></textarea>
+							</div>
+							<div class="wuxRow"><span class="wuxFormHeader">Sub Tasks</span></div>
+							<div class="wuxRow">
+								<input type="checkbox" name="attr_subtask1Complete">
+								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_subtitle">
+							</div>
+							<div class="wuxRow">
+								<input type="checkbox" name="attr_subtask2Complete">
+								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_subtitle2">
+							</div>
+							<div class="wuxRow">
+								<input type="checkbox" name="attr_subtask3Complete">
+								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_subtitle3">
 							</div>
 							<div class="wuxRow">&nbsp;</div><div class="wuxRow"><span class="wuxFormHeader">Style</span></div>
 							<div class="wuxRow">
 								<span class="wuxFormTitle">Template</span>
 								<select class="wuxFormInput wuxSizeMed" name="attr_defaultTypes">
+									<option value="Quest-normalStyle=1">Quest</option>
+									<option value="Encounter-normalStyle=1">Encounter</option>
 									<option value="-">-</option>
-									<option value="Battle Venture-normalStyle=1">Battle Venture</option>
-									<option value="Defend Venture-normalStyle=1">Defend Venture</option>
-									<option value="Escort Venture-normalStyle=1">Escort Venture</option>
-									<option value="Help Venture-normalStyle=1">Help Venture</option>
-									<option value="Kill Venture-normalStyle=1">Kill Venture</option>
-									<option value="Knowledge Venture-normalStyle=1">Knowledge Venture</option>
-									<option value="Retrieval Venture-normalStyle=1">Retrieval Venture</option>
-									<option value="Travel Venture-normalStyle=1">Travel Venture</option>
-									<option value="Combat Quest-majorStyle=1">Combat Quest</option>
-									<option value="Fetch Quest-majorStyle=1">Fetch Quest</option>
-									<option value="Guard Quest-majorStyle=1">Guard Quest</option>
-									<option value="Hunt Quest-majorStyle=1">Hunt Quest</option>
-									<option value="Investigate Quest-majorStyle=1">Investigate Quest</option>
-									<option value="Rescue Quest-majorStyle=1">Rescue Quest</option>
-									<option value="Emergency Objective-epicStyle=1">Emergency Objective</option>
+									<option value="Venture-majorStyle=1">Venture</option>
+									<option value="Engagement-majorStyle=1">Engagement</option>
+									<option value="-">-</option>
+									<option value="Emergency Encounter-epicStyle=1">Emergency</option>
 								</select>
 							</div>
 							<div class="wuxRow">
 								<span class="wuxFormTitle">Type</span>
-								<input class="wuxFormInput" type="text" name="attr_type">
+								<input class="wuxFormInput" type="text" name="attr_type" value="Quest">
 							</div>
 							<div class="wuxRow">
 								<span class="wuxFormTitle">Style</span>
 								<select class="wuxFormInput" name="attr_style">
-									<option value="normalStyle=1">Normal</option>
+									<option value="normalStyle=1">Normal</option selected="selected">
 									<option value="majorStyle=1">Major</option>
 									<option value="epicStyle=1">Epic</option>
 								</select>
@@ -9465,9 +9467,6 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 						<div class="display wuxMultiRow">
 							<div class="wuxMultiRow">
 								<span class="wuxHeader" name="attr_title">Title</span>
-								<span>&nbsp;</span>
-								<span class="wuxSubheader" name="attr_exp">XP</span>
-								<span class="wuxSubheader">XP</span>
 							</div>
 							<div class="wuxMultiRow">
 								<span class="wuxSubheader" style="display: block; width: 196px; word-wrap: break-word;" name="attr_actors">Actors</span>
@@ -9487,9 +9486,8 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				<div class="wuxSectionContent">
 					<div class="wuxFieldSet wuxToolsTab">
 						<div class="wuxRow">
-							<button class="wuxToolButton" type="roll" name="roll_check" value="!ps brief"><span>Brief</span></button>
-							<button class="wuxToolButton" type="roll" name="roll_check" value="!ps short"><span>Short</span></button>
-							<button class="wuxToolButton" type="roll" name="roll_check" value="!ps long"><span>Long</span></button>
+							<button class="wuxToolButton" type="roll" name="roll_check" value="!cps brief"><span>Brief</span></button>
+							<button class="wuxToolButton" type="roll" name="roll_check" value="!cps short"><span>Short</span></button>
 						</div>
 						<div class="wuxRow">&nbsp;</div>
 						<div class="wuxRow">
@@ -9502,10 +9500,13 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 							<div class="wuxRow">
 								<input class="wuxFormInput" style="width: 145px" type="text" name="attr_title">
 								<input class="wuxFormInput wuxPmSpacer" style="width: 30px" type="text" name="attr_mod">
-								<button class="wuxToolButton wuxPmSpacer" type="roll" name="roll_check" value="!ps long @{title}@@@@{mod}"><span>Rest</span></button>
+								<button class="wuxToolButton wuxPmSpacer" type="roll" name="roll_check" value="!cps long @{title}@@@@{mod}"><span>Rest</span></button>
 							</div>
 						</div>
 					</fieldset>
+					<div class="wuxRow">
+						<button class="wuxToolButton" type="roll" name="roll_check" value="!cps long"><span>Long At Home</span></button>
+					</div>
 				</div>
 				<div class="wuxSectionContentCollapsed"></div>
 			</div>
@@ -9519,8 +9520,8 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 							<div class="wuxRow">
 								<input class="wuxFormInput" style="width: 90px" type="text" name="attr_title">
 								<input class="wuxFormInput wuxPmSpacer" style="width: 70px" type="text" name="attr_mod">
-								<button class="wuxToolButton wuxSizeSmall wuxPmSpacer" type="roll" name="roll_check" value="!p @{title} @{mod}"><span>prv</span></button>
-								<button class="wuxToolButton wuxSizeSmall" type="roll" name="roll_check" value="!ps @{title} @{mod}"><span>pblc</span></button>
+								<button class="wuxToolButton wuxSizeSmall wuxPmSpacer" type="roll" name="roll_check" value="!cp @{title} @{mod}"><span>prv</span></button>
+								<button class="wuxToolButton wuxSizeSmall" type="roll" name="roll_check" value="!cps @{title} @{mod}"><span>pblc</span></button>
 							</div>
 						</div>
 					</fieldset>
@@ -9594,7 +9595,7 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 							<div class="wuxCollapseField">
 								<div class="wuxRow">
 									<input class="wuxFormInput" type="text" name="attr_StartSessionTitle" placeholder="Chapter Name">
-									<button class="wuxToolButton wuxPmSpacer" type="roll" name="roll_startSession" value="!startsession @{StartSessionTitle}@@@{StartSessionChapter}@@@{StartSessionPart}@@@{StartSessionHistory}@@@{StartSessionNewChapter}@@@{StartSessionParty}@@@{StartSessionQuestIds}"><span>Post</span></button>
+									<button class="wuxToolButton wuxPmSpacer" type="roll" name="roll_startSession" value="!startsession @{StartSessionTitle}@@@{StartSessionChapter}@@@{StartSessionPart}@@@{StartSessionHistory}@@@{StartSessionNewChapter}@@@{StartSessionParty}"><span>Post</span></button>
 								</div>
 								<div class="wuxRow">
 									<span class="wuxFormTitle wuxSizeSmall">Chapter </span>
@@ -9616,11 +9617,6 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 								<div class="wuxRow"><span class="wuxFormHeader">Party</span></div>
 								<div class="wuxMultiRow">
 									<textarea class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionParty"></textarea>
-								</div>
-								<div class="wuxRow"><span class="wuxFormHeader">Active Quests</span></div>
-								<div class="wuxMultiRow">
-									<input type="hidden" name="attr_StartSessionQuestIds" value="">
-									<textarea class="wuxFormInput wuxSizeSmall" type="text" name="attr_StartSessionQuests"></textarea>
 								</div>
 								<div class="wuxRow">&nbsp;</div>
 							</div>

@@ -47,6 +47,36 @@ function GetAdjustedFateAndKarma(baseFate, baseKarma, gainedKarma) {
     return fateObj;
 }
 
+function GetPlayerCharactersList() {
+    return GetWuxingPlayerDirectMessageData();
+}
+
+function GetWuxingPlayerDirectMessageData() {
+    let playerDirectMessageData = [];
+    
+    playerDirectMessageData.push(CreatePlayerCharacterData("GM", []));
+    playerDirectMessageData.push(CreatePlayerCharacterData("Jacob", ["arete", "cagar", "edward", "flora", "ivan", "leo", "othin", "shivali"]));
+    playerDirectMessageData.push(CreatePlayerCharacterData("Matthew", ["ajna", "chirapa", "cure", "dheval", "kit", "lorna", "marigold", "mitr", "nageem", "samiel", "vinaya"]));
+    playerDirectMessageData.push(CreatePlayerCharacterData("Nick", ["ajay", "baxter", "maxwell", "soma", "tashi"]));
+    playerDirectMessageData.push(CreatePlayerCharacterData("Isaac", ["fahim", "ineke", "lizzy", "logan"]));
+    playerDirectMessageData.push(CreatePlayerCharacterData("Braden", ["kana"]));
+
+    return playerDirectMessageData;
+}
+
+function CreatePlayerCharacterData(playerName, characterList) {
+    return {
+        player: playerName,
+        characters: characterList,
+        messageData: [],
+
+        hasActor: function (actor) {
+            actor = actor.trim().toLowerCase();
+            return this.characters.includes(actor);
+        }
+    };
+}
+
 // ===== Generators
 // =================================================
 

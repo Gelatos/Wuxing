@@ -424,12 +424,11 @@ function CommandStartSession(options) {
     let startSessionHistory = options[3];
     let startSessionNewChapter = options[4];
     let startSessionNewParty = options[5];
-    let startSessionNewQuestIds = options[6];
 
     // display chapter information
     ShowChapterStart(startSessionTitle, startSessionChapter, startSessionPart);
     ShowChapterHistoryUpdate(startSessionHistory);
-    ShowChapterActiveQuests(startSessionNewQuestIds);
+    ShowChapterActiveQuests(startSessionNewParty);
 
     // set the party
     SetParty(startSessionNewParty);
@@ -471,88 +470,15 @@ function ShowChapterHistoryUpdate(historyText) {
     }
 }
 
-function ShowChapterActiveQuests(questIds) {
+function ShowChapterActiveQuests(chapterActors) {
 
-    if (questIds != "") {
-        questIds = questIds.split("##");
-        let questId, questTitle = "";
-        let partyManager = FindCharacter("PartyManager");
-        let repeatingSection = "repeating_mainchaptermissions";
-        let messageData = [];
+    let playerQuestData = CreateActiveQuestsMessageData(chapterActors);
+    let messageData = "";
 
-        // populate the messageData
-        for (let i = 0; i < questIds.length; i++) {
-            questId = questIds[i].trim();
-            if (questId != "") {
-                questTitle = getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "title"));
-                if (questTitle != undefined && questTitle != "") {
-                    messageData.push({
-                        title: questTitle,
-                        subTitle: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "subtitle")),
-                        actors: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "actors")),
-                        xp: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "exp")),
-                        currency: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "questCurrency")),
-                        currencyType: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "questCurrencyType")),
-                        rewards: getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "otherrewards"))
-                    });
-
-                }
-            }
-        }
-
-        // display message data
-        if (messageData.length > 0) {
-            let message = "";
-            for (let i = 0; i < messageData.length; i++) {
-                if (message != "") {
-                    message += `<div class="sheet-wuxRow">&nbsp;</div>`;
-                }
-                message += `<div class="sheet-wuxHeader">${messageData[i].title}</div>`;
-                if (messageData[i].subTitle != undefined && messageData[i].subTitle != "") {
-                    message += `<div class="sheet-wuxSubheader">${messageData[i].subTitle}</div>`;
-                }
-                if (messageData[i].actors != undefined && messageData[i].actors != "") {
-                    message += `<table style="max-width: 230px; margin-left: 5px;"><tr><td style="vertical-align: top">Party:</td><td class="sheet-wuxDesc">${FormatPartyList(messageData[i].actors)}</td></tr>`;
-
-                    if (messageData[i].xp != undefined && messageData[i].xp != "") {
-                        let partymembers = messageData[i].actors.split(",");
-                        let exp = Math.floor(parseInt(messageData[i].xp) / partymembers.length);
-                        let currency = isNaN(parseInt(messageData[i].currency)) || parseInt(messageData[i].currency) <= 0 ? "" : parseInt(messageData[i].currency);
-                        
-                        if (currency != "") {
-                            currency = Math.floor(parseInt(messageData[i].currency) / partymembers.length);
-                            switch (messageData[i].currencyType) {
-                                case "gp": 
-                                case "gps": 
-                                    currency += " Gold "; break;
-                                case "cp": 
-                                case "cps": 
-                                    currency += " CP "; break;
-                                case "jin": 
-                                case "jins": 
-                                    currency += " Jin "; break;
-                                case "frt": 
-                                case "frts": 
-                                    currency += " Forta "; break;
-                                case "syr": 
-                                case "syrs": 
-                                    currency += " Syre "; break;
-                            }
-                            currency = "and " + currency;
-                        }
-                        
-                        if (messageData[i].rewards == undefined) {
-                            messageData[i].rewards = "";
-                        }
-                        message += `<tr><td style="vertical-align: top">Rewards:</td><td class="sheet-wuxDesc">${exp} EXP ${currency}each<br />${messageData[i].rewards}</td>`;
-                    }
-                    message += "</table>";
-                }
-                
-            }
-
-            SendChatMessageToTargets(GetFormattedMessage("i", `<h1>Active Quests</h1>${message}`), "");
-        }
+    // display message data
+    for(let playerDataIndex = 0; playerDataIndex < playerQuestData.length; playerDataIndex++) {
+        messageData = CreateActiveQuestsDisplayData(playerQuestData[playerDataIndex].messageData);
+        SendChatMessageToTargets(messageData, playerQuestData[playerDataIndex].player);
     }
 }
 
@@ -684,52 +610,42 @@ function CommandGenerateNPC(msg) {
 // ======= Mission
 // =================================================
 
-function CommandCompleteMission(msg, options) {
+function CommandShowMission(options) {
+    
+    // split up the options
+    let data = options.split(" @@ ");
+    let style = data[0];
+    let questType = data[1];
+    let questName = data[2];
+    let questId = data[3];
+    
+    // send the mission messages
+    switch (questType) {
+        case "Quest":
+        case "Venture": 
+            SendChatMessageToTargets(GetFormattedMessage("i", CreateQuestDetailsDisplayData(CreateQuestData(questId))), "");
+        break;
+        default: 
+            SendChatMessageToTargets(CreateQuestDisplayData(style, questType, questName, false), "");
+        break;
+    }
+}
+
+function CommandCompleteMission(options) {
     
     // split up the options
     let data = options.split(" @@ ");
     let style = data[0];
     let type = data[1];
     let title = data[2];
-    let subtitle = data[3];
-    let exp = data[4];
-    let currency = isNaN(parseInt(data[5])) ? 0 : parseInt(data[5]);
-    let currencyType = data[6];
-    let otherRewards = data[7];
-    let targets = GetActorTargetData(data[8]);
+    let exp = data[3];
+    let currency = isNaN(parseInt(data[4])) ? 0 : parseInt(data[4]);
+    let currencyType = data[5];
+    let otherRewards = data[6];
+    let targets = GetActorTargetData(data[7]);
     
     // send the mission complete message
-    let missionOutput = "&{template:quest} {{" + style + "}} ";
-    missionOutput += "{{header=" + type + "}} ";
-    missionOutput += "{{title=" + title + "}} ";
-    missionOutput += "{{sub=" + subtitle + "}} ";
-    let footer = "";
-    if (exp != "") {
-        footer += `${exp} EXP`;
-    }
-    if (currency > 0) {
-        switch (messageData[i].currencyType) {
-            case "gp": 
-            case "gps": 
-                currency += " Gold"; break;
-            case "cp": 
-            case "cps": 
-                currency += " CP"; break;
-            case "jin": 
-            case "jins": 
-                currency += " Jin"; break;
-            case "frt": 
-            case "frts": 
-                currency += " Forta"; break;
-            case "syr": 
-            case "syrs": 
-                currency += " Syre"; break;
-        }
-        footer += ` and ${currency}`;
-    }
-    missionOutput += "{{footer=" + footer + "}} ";
-    missionOutput += "{{complete=1}}";
-    sendChat('Game Manager', missionOutput);
+    SendChatMessageToTargets(CreateQuestDisplayData(style, type, title, true), "");
     
     // calculate and grant the exp
     exp = Math.floor(parseInt(exp, 10) / targets.length);
@@ -772,8 +688,6 @@ function CommandCompleteMission(msg, options) {
 
         }
     }
-
-
 }
 
 function CommandSetMissionXp(options) {
@@ -1015,6 +929,222 @@ function CommandSetMissionCurrency(options) {
     if (questCurrencyObj != undefined) {
         questCurrencyObj.set("current", currencyBase * targets.length);
     }
+}
+
+function CreateActiveQuestsMessageData(actors) {
+
+    // get party manager data
+    let partyManager = FindCharacter("PartyManager");
+    let allQuestIds = getAttrByName(partyManager.id, "allQuestIds");
+    if (allQuestIds != undefined && allQuestIds != "") {
+        allQuestIds = allQuestIds.split("@@");
+    }
+    else {
+        return;
+    }
+    let allQuestActors = getAttrByName(partyManager.id, "allQuestActors");
+    if (allQuestActors != undefined && allQuestActors != "") {
+        allQuestActors = allQuestActors.split("@@");
+    }
+    else {
+        return;
+    }
+
+    // setup data
+    let questId, questTitle = "";
+    let questActorList = [];
+    let questValid = false;
+    let messageDataObj = {};
+    let repeatingSection = "repeating_mainchaptermissions";
+    let playerQuestData = GetPlayerCharactersList();
+
+    // clean up the actor list
+    let actorList = actors.toLowerCase();
+    actorList = actorList.split(",");
+    for (let i = 0; i < actorList.length; i++) {
+        actorList[i] = actorList[i].trim();
+    }
+
+    // populate the playerQuestData
+    for (let i = 0; i < allQuestIds.length; i++) {
+        questId = allQuestIds[i];
+        questActorList = allQuestActors[i];
+        if (questId == "") {
+            log (`Error: No quest Id`);
+        }
+        else if (questActorList == "") {
+            log (`Error: ${questId} has no actors`);
+        }
+        else {
+            questTitle = getAttrByName(partyManager.id, GetSectionIdName(repeatingSection, questId, "title"));
+            if (questTitle == undefined || questTitle == "") {
+                log (`Error: ${questId} has no title`);
+            }
+            else {
+                // verify this quest is valid for display
+                questActorList = allQuestActors[i].split(",");
+                questValid = false;
+                for(let actorIndex = 0; actorIndex < questActorList.length; actorIndex++) {
+                    if (actorList.includes(questActorList[actorIndex])) {
+                        questValid = true;
+                        break;
+                    }
+                }
+                
+                if (questValid) {
+
+                    // create message data object and populate it with quest data
+                    messageDataObj = CreateQuestData(questId, partyManager.id, questTitle);
+
+                    // iterate through each player and add the quest data to their message data
+                    for(let playerDataIndex = 0; playerDataIndex < playerQuestData.length; playerDataIndex++) {
+
+                        if (playerQuestData[playerDataIndex].player == "GM") {
+                            playerQuestData[playerDataIndex].messageData.push(messageDataObj);
+                        }
+                        else {
+                            for(let actorIndex = 0; actorIndex < questActorList.length; actorIndex++) {
+
+                                if (playerQuestData[playerDataIndex].hasActor(questActorList[actorIndex])) {
+                                    log (`Quest '${questTitle}' has been added to ${playerQuestData[playerDataIndex].player}'s quests`);
+                                    playerQuestData[playerDataIndex].messageData.push(messageDataObj);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    log (`Warning: ${questTitle} is not in the actorlist`);
+                }
+            }
+        }
+    }
+
+    return playerQuestData;
+}
+
+function CreateQuestData(questId, partyManagerid, questTitle) {
+
+    let repeatingSection = "repeating_mainchaptermissions";
+
+    if (partyManagerid == undefined) {
+        let partyManager = FindCharacter("PartyManager");
+        partyManagerid = partyManager.id;
+    }
+    if (questTitle == undefined) {
+        questTitle = getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "title"));
+    }
+
+    return {
+        title: questTitle,
+        desc: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "desc")),
+        subTitle: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "subtitle")),
+        subTitle2: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "subtitle2")),
+        subTitle3: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "subtitle3")),
+        sub1Complete: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "subtask1Complete")),
+        sub2Complete: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "subtask2Complete")),
+        sub3Complete: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "subtask3Complete")),
+        actors: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "actors")),
+        xp: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "exp")),
+        currency: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "questCurrency")),
+        currencyType: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "questCurrencyType")),
+        rewards: getAttrByName(partyManagerid, GetSectionIdName(repeatingSection, questId, "otherrewards"))
+    };
+
+}
+
+function CreateActiveQuestsDisplayData(messageData) {
+
+    let message = "<h1>Active Quests</h1>";
+    if (messageData.length > 0) {
+        for (let i = 0; i < messageData.length; i++) {
+            if (message != "") {
+                message += `<div class="sheet-wuxRow">&nbsp;</div>`;
+            }
+            message += CreateQuestDetailsDisplayData(messageData[i]);
+        }
+    }
+    else {
+        message += "<div>No Active Quests</div>";
+    }
+
+    return GetFormattedMessage("i", message);
+}
+
+function CreateQuestDetailsDisplayData(questData) {
+
+    let message = "";
+    message += `<div class="sheet-wuxHeader">${questData.title}</div>`;
+    if (questData.desc != undefined && questData.desc != "") {
+        message += `<div class="sheet-wuxSubheader" style="font-style: italics">"${questData.desc}"</div>`;
+    }
+    if (questData.subTitle != undefined && questData.subTitle != "") {
+
+        message += `<div class="sheet-wuxSubheader" style="text-decoration: underline;">Tasks</div>`;
+        message += `<table style="max-width: 230px; margin-left: 10px; margin-bottom: 10px">`;
+        message += `<tr><td style="vertical-align: top">- <span ${questData.sub1Complete == "on" ? `style="text-decoration: line-through"` : ""}>${questData.subTitle}</span></td></tr>`;
+
+        if (questData.subTitle2 != undefined && questData.subTitle2 != "") {
+            message += `<tr><td style="vertical-align: top">- <span ${questData.sub2Complete == "on" ? `style="text-decoration: line-through"` : ""}>${questData.subTitle2}</span></td></tr>`;
+        }
+        if (questData.subTitle3 != undefined && questData.subTitle3 != "") {
+            message += `<tr><td style="vertical-align: top">- <span ${questData.sub3Complete == "on" ? `style="text-decoration: line-through"` : ""}>${questData.subTitle3}</span></td></tr>`;
+        }
+        message += "</table>";
+    }
+    if (questData.actors != undefined && questData.actors != "") {
+        message += `<table style="max-width: 230px; margin-left: 5px;"><tr><td style="vertical-align: top">Party:</td><td class="sheet-wuxDesc">${FormatPartyList(questData.actors)}</td></tr>`;
+
+        if (questData.xp != undefined && questData.xp != "") {
+            let partymembers = questData.actors.split(",");
+            let exp = Math.floor(parseInt(questData.xp) / partymembers.length);
+            let currency = isNaN(parseInt(questData.currency)) || parseInt(questData.currency) <= 0 ? "" : parseInt(questData.currency);
+            
+            if (currency != "") {
+                currency = Math.floor(parseInt(questData.currency) / partymembers.length);
+                switch (questData.currencyType) {
+                    case "gp": 
+                    case "gps": 
+                        currency += " Gold "; break;
+                    case "cp": 
+                    case "cps": 
+                        currency += " CP "; break;
+                    case "jin": 
+                    case "jins": 
+                        currency += " Jin "; break;
+                    case "frt": 
+                    case "frts": 
+                        currency += " Forta "; break;
+                    case "syr": 
+                    case "syrs": 
+                        currency += " Syre "; break;
+                }
+                currency = "and " + currency;
+            }
+            
+            if (questData.rewards == undefined) {
+                questData.rewards = "";
+            }
+            message += `<tr><td style="vertical-align: top">Rewards:</td><td class="sheet-wuxDesc">${exp} EXP ${currency}each<br />${questData.rewards}</td>`;
+        }
+        message += "</table>";
+    }
+
+    return message;
+}
+
+function CreateQuestDisplayData(style, header, questName, isComplete) {
+
+    let missionOutput = "&{template:quest} {{" + style + "}} ";
+    missionOutput += "{{header=" + header + "}} ";
+    missionOutput += "{{title=" + questName + "}} ";
+    
+    if (isComplete) {
+        missionOutput += "{{complete=1}}";
+    }
+
+    return missionOutput;
 }
 
 // ======= Party

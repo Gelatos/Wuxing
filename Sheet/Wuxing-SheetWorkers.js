@@ -1601,15 +1601,32 @@ on("clicked:generateNPC", function () {
 
 
 // Party Manager : Tools
+on("remove:repeating_mainchaptermissions", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+	update_all_quest_data();
+});
+
+on("change:repeating_mainchaptermissions:actors", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+	update_all_quest_data();
+});
+
+on("change:repeating_mainchaptermissions:title", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+	update_questData(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_mainchaptermissions"));
+});
 
 on("change:repeating_mainchaptermissions:defaultTypes", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
-
-	var actionid = eventinfo.sourceAttribute.substring(30, 50);
-	console.log("Set Default Type: " + eventinfo.sourceAttribute + " to " + actionid);
-	update_missionType(actionid);
+	update_questType(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_mainchaptermissions"));
 });
 
 on("change:repeating_battlesongs:song change:repeating_battlesongs:songdesc", function (eventinfo) {
@@ -1638,16 +1655,6 @@ on("change:repeating_preparedsidechapters:type change:repeating_preparedsidechap
 on("change:repeating_dmPostingSection:type change:repeating_dmPostingSection:header change:repeating_dmPostingSection:sub change:repeating_dmPostingSection:location", function (eventinfo) {
 	update_postbox_text(eventinfo.sourceAttribute.substring(0, 47));
 });
-
-on("change:repeating_chapterselect:StartSessionQuests", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_chapter_quests(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_chapterselect"), eventinfo.newValue);
-	
-});
-
 
 
 // Battle Log : Battle
@@ -9562,50 +9569,93 @@ var update_postbox_text = function (repeatingSectionId) {
 	});
 };
 
-var update_chapter_quests = function(repeatingSectionId, quests) {
-	console.log("UPDATING CHAPTER QUESTS");
+var update_all_quest_data = function () {
+	console.log("UPDATING ALL QUESTS");
 
 	var mod_attrs = [];
-	var repeatingChapters = "repeating_chapterselect";
 	var repeatingQuests = "repeating_mainchaptermissions";
 
 	getSectionIDs(repeatingQuests, function (idarray) {
-		mod_attrs = GetSectionIdValues(idarray, repeatingQuests, ["title"]);
+		mod_attrs = GetSectionIdValues(idarray, repeatingQuests, ["actors"]);
 
 		getAttrs(mod_attrs, function (v) {
-			let update = {};
-			let data = "";
-			let questData = quests.split(",");
-			for (let i = 0; i < questData.length; i++) {
-				questData[i] = questData[i].trim();
-			}
-
-			_.each(idarray, function (currentID) {
-				if (questData.includes(v[GetSectionIdName(repeatingQuests, currentID, "title")])) {
-					data += (data != "" ? "##" : "") + currentID;
+			var update = {};
+			let playerQuestData = GetPlayerCharactersList();
+			let playerActors = [];
+			let questActors = [];
+			let questActorIds = [];
+			let questActorList = "";
+			_.each(playerQuestData, function (playerData) {
+				if (playerData == undefined) {
+					console.log ("ERROR! PlayerData is undefined");
+				}
+				else if (playerData.characters == undefined) {
+					console.log (`ERROR! PlayerData for ${playerData.player} has an undefined character list`);
+				}
+				else if (playerData.characters == undefined) {
+					console.log (`PlayerData for ${playerData.player} has no characters`);
+				}
+				else {
+					playerActors = playerActors.concat(playerData.characters);
 				}
 			});
 
-			update[GetSectionIdName(repeatingChapters, repeatingSectionId, "StartSessionQuestIds")] = data;
+			// compile the quest data
+			let actorList = [];
+			_.each(idarray, function (currentID) {
 
-			setAttrs(update, {
-				silent: true
+				questActorIds.push(currentID);
+				actorList = v[GetSectionIdName(repeatingQuests, currentID, "actors")].split(",");
+				questActorList = "";
+				_.each(actorList, function (actor) {
+					actor = actor.trim().toLowerCase();
+					if (playerActors.includes(actor)) {
+						if (questActorList != "") {
+							questActorList += ",";
+						}
+						questActorList += actor;
+					}
+				});
+				questActors.push(questActorList);
 			});
-		});
-	});
 
+			// create the quest data output
+			let allQuestActors, allQuestIds = "";
+			let  = "";
+			for (let i = 0; i < questActors.length; i++) {
+				if (allQuestActors != "") {
+					allQuestActors += "@@";
+					allQuestIds += "@@";
+				}
+				allQuestActors += questActors[i];
+				allQuestIds += questActorIds[i];
+			}
+
+			update["allQuestActors"] = allQuestActors;
+			update["allQuestIds"] = allQuestIds;
+			setAttrs(update);
+		});
+
+	});
 }
 
-var update_missionType = function (updateId) {
-	getAttrs(["repeating_mainchaptermissions_" + updateId + "_defaultTypes", "repeating_mainchaptermissions_" + updateId + "_actors", "current_party_members"], function (v) {
+var update_questType = function (updateId) {
+	getAttrs(["repeating_mainchaptermissions_" + updateId + "_defaultTypes"], function (v) {
 		var update = {};
 		if (v["repeating_mainchaptermissions_" + updateId + "_defaultTypes"] !== "-") {
 			var defaultType = v["repeating_mainchaptermissions_" + updateId + "_defaultTypes"].split("-");
 			update["repeating_mainchaptermissions_" + updateId + "_type"] = defaultType[0];
 			update["repeating_mainchaptermissions_" + updateId + "_style"] = defaultType[1];
-			if (v["repeating_mainchaptermissions_" + updateId + "_actors"] == "") {
-				update["repeating_mainchaptermissions_" + updateId + "_actors"] = v["current_party_members"];
-			}
+		}
+		setAttrs(update);
+	});
+}
+
+var update_questData = function (updateId) {
+	getAttrs(["repeating_mainchaptermissions_" + updateId + "_actors", "current_party_members"], function (v) {
+		var update = {};
+		if (v["repeating_mainchaptermissions_" + updateId + "_actors"] == "") {
+			update["repeating_mainchaptermissions_" + updateId + "_actors"] = v["current_party_members"];
 			update["repeating_mainchaptermissions_" + updateId + "_missionid"] = updateId;
 			update["repeating_mainchaptermissions_" + updateId + "_exp"] = 10;
 			update["repeating_mainchaptermissions_" + updateId + "_questCurrency"] = "00";

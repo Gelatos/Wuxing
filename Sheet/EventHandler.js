@@ -239,8 +239,12 @@ on("chat:message", function(msg) {
                     TargetGainKarma(content);
                     
                 return;
+                case "!showmission":
+                    CommandShowMission(content);
+                    
+                return;
                 case "!completemission":
-                    CommandCompleteMission(msg, content);
+                    CommandCompleteMission(content);
                     
                 return;
                 case "!setmissionxp":

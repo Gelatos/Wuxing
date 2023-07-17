@@ -422,11 +422,14 @@ function GetEmoteMessage(target, chatType, message, imageUrl, useTemplate, eleme
         var messageTargetSubStr = message.substr(messageTargetCheck + 1);
         var endOfMessage = messageTargetSubStr.indexOf("/");
         messageTarget = messageTargetSubStr.substr(0, endOfMessage);
-        if (messageTarget.toLowerCase().indexOf("to") != 0)
+        if (!messageTarget.startsWith(",") && messageTarget.toLowerCase().indexOf("to") != 0)
         {
             messageTarget = "to " + messageTarget;
         }
-        messageTarget = " " + messageTarget;
+        // punctuation
+        if (!messageTarget.startsWith(",") && !messageTarget.startsWith(" ")) {
+            messageTarget = " " + messageTarget;
+        }
         message = message.substr(messageTargetCheck + endOfMessage + 2).trim();
     }
 

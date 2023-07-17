@@ -16,7 +16,7 @@ function CommandCharacterFunction(msg) {
         sendTargets = "GM";
     } 
     else if (msg.content.indexOf("!cps ") == 0) {
-        content = msg.content.replace("!cp ", "");
+        content = msg.content.replace("!cps ", "");
     } 
     else {
         content = msg.content.replace("!c ", "");
@@ -161,7 +161,7 @@ function CommandPartyFunction(msg) {
         }
     }
     else if (msg.content.indexOf("!cps") !== -1) {
-        content = msg.content.replace("!cp ", "");
+        content = msg.content.replace("!cps ", "");
     }
     else if (msg.content.indexOf("!cp") !== -1) {
         sendTargets = "GM";
@@ -555,7 +555,7 @@ function TargetSetBriefRested(sendTargets, targets) {
     else {
         sceneMessages.push(GetCharactersListFromTargetsMessage(targets) + " has finished a brief rest.");
     }
-    sceneMessages.push("All barrier has been fully recovered.");
+    sceneMessages.push("\nAll barrier has been fully recovered.");
     SendSystemMessage(sceneMessages, sendTargets);
 
 }
@@ -602,7 +602,7 @@ function TargetSetShortRested(sendTargets, targets) {
     else {
         sceneMessages.push(GetCharactersListFromTargetsMessage(targets) + " has finished a short rest.");
     }
-    sceneMessages.push("All barrier and ki have been fully recovered.");
+    sceneMessages.push("\nAll barrier and ki have been fully recovered.");
     SendSystemMessage(sceneMessages, sendTargets);
 }
 
@@ -632,14 +632,22 @@ function TargetSetLongRested(sendTargets, targets, modifiers) {
         lodgingName = "at Home";
     }
 
+    // punctuation
+    if (!lodgingName.startsWith(",") && !lodgingName.startsWith(" ")) {
+        lodgingName = " " + lodgingName;
+    }
+    if (!lodgingName.endsWith(".") && !lodgingName.endsWith("!") && !lodgingName.endsWith("?")) {
+        lodgingName = lodgingName + ".";
+    }
+
     // format the scene message
     if (targets.length > 1) {
-        sceneMessages.push(GetCharactersListFromTargetsMessage(targets) + " have finished a long rest " + lodgingName);
+        sceneMessages.push(GetCharactersListFromTargetsMessage(targets) + " have finished a long rest" + lodgingName);
     }
     else {
-        sceneMessages.push(GetCharactersListFromTargetsMessage(targets) + " has finished a long rest " + lodgingName);
+        sceneMessages.push(GetCharactersListFromTargetsMessage(targets) + " has finished a long rest" + lodgingName);
     }
-    sceneMessages.push("Some vitality, and all barrier and ki have been recovered.");
+    sceneMessages.push("\nSome vitality, and all barrier and ki have been recovered.");
     SendSystemMessage(sceneMessages, sendTargets);
 
     // iterate through targets
@@ -1097,6 +1105,10 @@ function TargetInspirationOptions(targets, sendingPlayerName) {
         token = getObj('graphic', targets[i].tokenId);
         SendInspirationOptions(token.get('name'), getAttrByName(targets[i].charId, "emote_activesetimageurl"), targets[i].charId, sendingPlayerName);
     }
+}
+
+function TargetShowActiveQuests(targets, sendingPlayerName) {
+
 }
 
 // Create Options
