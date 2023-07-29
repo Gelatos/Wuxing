@@ -1115,7 +1115,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     width: 150px;
 
     color: #1d1e1f;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 16px;
 
     background: #efefef;
@@ -1193,7 +1193,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     width: calc(100% - 10px);
     height: 160px;
 
-    font-size: 10px;
+    font-size: 11px;
 }
 
 .wuxSectionBlock textarea.wuxFormInput.wuxSizeSmall
