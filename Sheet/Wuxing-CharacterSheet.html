@@ -9682,21 +9682,24 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				<div class="wuxSectionHeader">Notes</div>
 
 				<div class="wuxSectionContent">
-					<fieldset class="repeating_preparedmainchapters">
+					<fieldset class="repeating_preparednotes">
 						<div class="wuxFieldSet wuxNotesTab">
 							<div class="wuxRow">
-								<select class="wuxFormInput wuxSizeSmall" name="attr_type" value="-">
+								<select class="wuxFormInput wuxSizeTiny" name="attr_type" value="-">
 									<option value="-" selected="selected">-</option>
-									<option value="Info">Info</option>
-									<option value="Attack">Attack</option>
-									<option value="System">System</option>
-									<option value="Location">Location</option>
-									<option value="Header">Header</option>
-									<option value="History">History</option>
+									<option value="Info">I - Info</option>
+									<option value="Attack">A - Attack</option>
+									<option value="System">S - System</option>
+									<option value="Location">L - Location</option>
+									<option value="History">H - History</option>
 								</select>
 								<input type="hidden" name="attr_postText">
-								<input class="wuxFormInput wuxSizeMed wuxPmSpacer" name="attr_title" value="">
+								<input class="wuxFormInput wuxSizeMedSmall wuxPmSpacer" name="attr_title" value="">
 								<button type="roll" class="wuxToolButton wuxPmSpacer" name="roll_post" value="@{postText}"><span>Post</span></button>
+								<div class="wuxFormButton wuxSizeTiny wuxPmSpacer wuxDelButton">
+									<input type="checkbox" class="" name="attr_postDelete" value="1">
+									<span class="">Del</span>
+								</div>
 							</div>
 							<input type="hidden" class="wuxHiddenField-flag" name="attr_usesHeader" value="0">
 							<div class="wuxHiddenField">
@@ -9733,7 +9736,10 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 								<input type="hidden" name="attr_type" value="Location">
 								<span class="wuxFormTitle wuxSizeSmall">Name</span>
 								<input class="wuxFormInput wuxSizeMed" type="text" name="attr_header" placeholder="header">
-								<button type="roll" class="wuxToolButton wuxPmSpacer" name="roll_post" value="@{postText}"><span>Post</span></button>
+								<div class="wuxFormButton wuxSizeTiny wuxPmSpacer">
+									<input type="checkbox" class="" name="attr_postAdd" value="1">
+									<span class="">Add</span>
+								</div>
 							</div>
 							<div class="wuxRow">
 								<span class="wuxFormTitle wuxSizeSmall">Area</span>

@@ -1170,6 +1170,12 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     width: 60px;
 }
 
+.wuxSectionBlock .wuxFormInput.wuxSizeMedSmall,
+.wuxSectionBlock input[type=number].wuxFormInput.wuxSizeMed
+{
+    width: 90px;
+}
+
 .wuxSectionBlock .wuxFormInput.wuxSizeMed,
 .wuxSectionBlock input[type=number].wuxFormInput.wuxSizeMed
 {
@@ -1320,6 +1326,12 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
     cursor: pointer;
+}
+
+.wuxSectionBlock .wuxFormButton.wuxDelButton span
+{
+    color: white;
+    background-color: red;
 }
 
 .wuxSectionBlock .wuxFormSearchButton
@@ -3418,6 +3430,7 @@ input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeFiel
     background: #8a8b8e;
 }
 
+.wuxSectionContent .wuxNotesTab button.wuxToolButton[type=roll],
 .wuxSectionContent .wuxBattleTabs button.wuxToolButton[type=roll]
 {
     background-image: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%); 
@@ -3467,6 +3480,7 @@ input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeFiel
     border: 0px;
 }
 
+.wuxSectionContent .wuxNotesTab button.wuxToolButton span,
 .wuxSectionContent .wuxBattleTabs button.wuxToolButton span,
 .wuxSectionContent button.wuxToolButton.wuxToolLock span
 {

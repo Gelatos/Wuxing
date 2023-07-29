@@ -1640,12 +1640,17 @@ on("change:repeating_battlesongs:song change:repeating_battlesongs:songdesc", fu
 
 // Party Manager : Notes
 
-on("change:repeating_preparedmainchapters:type change:repeating_preparedmainchapters:header change:repeating_preparedmainchapters:sub change:repeating_preparedmainchapters:location", function (eventinfo) {
-	update_postbox_text(eventinfo.sourceAttribute.substring(0, 51));
+on("change:repeating_preparednotes:type change:repeating_preparednotes:header change:repeating_preparednotes:sub change:repeating_preparednotes:location", function (eventinfo) {
+	update_postbox_text("repeating_preparednotes" + GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_preparednotes"));
 });
 
 on("change:repeating_locreferences:type change:repeating_locreferences:header change:repeating_locreferences:sub change:repeating_locreferences:location", function (eventinfo) {
 	update_postbox_text(eventinfo.sourceAttribute.substring(0, 44));
+});
+
+on("change:repeating_locreferences:postAdd", function (eventinfo) {
+
+	move_locreference(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_locreferences"));
 });
 
 on("change:repeating_preparedsidechapters:type change:repeating_preparedsidechapters:header change:repeating_preparedsidechapters:sub change:repeating_preparedsidechapters:location", function (eventinfo) {
@@ -1654,6 +1659,10 @@ on("change:repeating_preparedsidechapters:type change:repeating_preparedsidechap
 
 on("change:repeating_dmPostingSection:type change:repeating_dmPostingSection:header change:repeating_dmPostingSection:sub change:repeating_dmPostingSection:location", function (eventinfo) {
 	update_postbox_text(eventinfo.sourceAttribute.substring(0, 47));
+});
+on("change:repeating_preparednotes:postDelete", function (eventinfo) {
+
+	remove_postbox("repeating_preparednotes", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_preparednotes"));
 });
 
 
@@ -9568,6 +9577,30 @@ var update_postbox_text = function (repeatingSectionId) {
 		setAttrs(update, {});
 	});
 };
+
+var move_locreference = function (repeatingSectionId) {
+	console.log("ADDING LOCATION TO NOTES");
+
+	let repeatingLocReferences = "repeating_locreferences";
+	let repeatingNotesSection = "repeating_preparednotes";
+	let post_attrs = GetSectionIdValues([repeatingSectionId], repeatingLocReferences, ["header", "sub", "location"]);
+
+	getAttrs(post_attrs, function (v) {
+		var update = {};
+		newrowid = generateRowID();
+		update[GetSectionIdName(repeatingNotesSection, newrowid, "type")] = "Location";
+		update[GetSectionIdName(repeatingNotesSection, newrowid, "header")] = v[GetSectionIdName(repeatingLocReferences, repeatingSectionId, "header")];
+		update[GetSectionIdName(repeatingNotesSection, newrowid, "sub")] = v[GetSectionIdName(repeatingLocReferences, repeatingSectionId, "sub")];
+		update[GetSectionIdName(repeatingNotesSection, newrowid, "location")] = v[GetSectionIdName(repeatingLocReferences, repeatingSectionId, "location")];
+
+		setAttrs(update, {});
+	});
+};
+
+var remove_postbox = function (repeatingSection, repeatingSectionId) {
+
+	removeRepeatingRow(`${repeatingSection}_${repeatingSectionId}`);
+}
 
 var update_all_quest_data = function () {
 	console.log("UPDATING ALL QUESTS");
