@@ -482,14 +482,32 @@ function ShowChapterActiveQuests(chapterActors) {
     }
 }
 
-function CommandSendPmNote(content) {
+function CommandSendPmNote(options) {
+    
+    options = options.trim().split("@@");
+    let emotePostType = options[0];
+    let url = options[1];
+    let emotePostTarget = options[2];
+    let speaking_language = options[3];
+    let emotePostMessage = options[4];
 
     var partyManager = FindCharacter("PartyManager");
     newId = generateRowID();
-    newRowRef = "repeating_preparednotes_" + newId;
-    content = `&${content.trim()}`;
-    createObj("attribute", {"name": newRowRef + "_postText", "current": content, "_characterid": partyManager.id});
-    createObj("attribute", {"name": newRowRef + "_location", "current": content, "_characterid": partyManager.id});
+    newRowRef = "repeating_preparednotes_" + newId + "_";
+    let postText = GeneratePmNotesPostText("Character", emotePostTarget, url, emotePostMessage, emotePostType, speaking_language).postText;
+    log ("postText: " + postText);
+
+    createObj("attribute", {"name": newRowRef + "type", "current": "Character", "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "header", "current": emotePostTarget, "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "sub", "current": url, "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "template", "current": emotePostType, "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "language", "current": speaking_language, "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "location", "current": emotePostMessage, "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "usesTitle", "current": "1", "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "usesURL", "current": "1", "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "usesTemplate", "current": "1", "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "usesLanguage", "current": "1", "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "postText", "current": postText, "_characterid": partyManager.id});
 
 }
 

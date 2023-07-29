@@ -47,6 +47,101 @@ function GetAdjustedFateAndKarma(baseFate, baseKarma, gainedKarma) {
     return fateObj;
 }
 
+function GeneratePmNotesPostText(type, header, sub, location, template, language) {
+
+	let output = {
+		postText: "",
+		usesHeader: "0",
+		usesTitle: "0",
+		usesSubheader: "0",
+		usesURL: "0",
+		usesTemplate: "0",
+		usesLanguage: "0"
+	};
+
+	switch (type) {
+		case "-":
+			output.postText = location;
+			break;
+		case "Info":
+			output.postText = "&{template:infoBox}";
+			output.postText += " {{message=" + location + "}}";
+			break;
+		case "Attack":
+			output.postText = "&{template:attackBox}";
+			output.postText += " {{message=" + location + "}}";
+			break;
+		case "Location":
+			output.postText = "&{template:locationBox}";
+			output.postText += " {{location=" + header + "}}";
+			output.postText += " {{area=" + sub + "}}";
+			output.postText += " {{time=" + location + "}}";
+			output.usesHeader = "1";
+			output.usesSubheader = "1";
+			break;
+		case "System":
+			output.postText = "&{template:systemBox}";
+			output.postText += " {{message=" + location + "}}";
+			break;
+		case "Header":
+			output.postText = "&{template:headerBox}";
+			output.postText += " {{head=" + header + "}}";
+			output.postText += " {{sub=" + sub + "}}";
+			output.postText += " {{m=" + location + "}}";
+			output.usesHeader = "1";
+			output.usesSubheader = "1";
+			break;
+		case "History":
+			output.postText = "&{template:historyBox}";
+			output.postText += " {{message=" + location + "\n\n}}";
+			break;
+		case "Character":
+			output.postText = `&{template:${template}} {{url=${sub}}} {{title=${header}}} {{language=${language}}} {{message=${location}}} ${GetLanguageTag(language)}`;
+			output.usesTitle = "1";
+			output.usesURL = "1";
+			output.usesTemplate = "1";
+			output.usesLanguage = "1";
+			break;
+		case "Grid":
+			let dataSplit = [];
+			output.postText = "&{template:graphBox}";
+			output.postText += " {{type=" + header + "}}";
+
+			if (location != undefined && location != null && location != "") {
+				dataSplit = location.split("/");
+
+				for (var i = 0; i < dataSplit.length; i++) {
+					var infoSplit = dataSplit[i].split("@");
+					if (infoSplit != undefined && infoSplit.length > 1) {
+						output.postText += " {{m" + i + "=" + infoSplit[0].trim() + "}}";
+						output.postText += " {{d" + i + "=" + infoSplit[1].trim() + "}}";
+					}
+				}
+			}
+			output.usesHeader = "1";
+			break;
+		case "Start":
+			output.postText = "&{template:startBox}";
+			output.postText += " {{head=" + header + "}}";
+			output.postText += " {{sub=" + sub + "}}";
+
+			if (location != undefined && location != null && location != "") {
+				dataSplit = location.split("/");
+				for (var j = 0; j < dataSplit.length; j++) {
+					output.postText += " {{m" + j + "=" + dataSplit[j].trim() + "}}";
+				}
+			}
+			output.usesHeader = "1";
+			output.usesSubheader = "1";
+			break;
+			case "Comment":
+				output.postText = "";
+				break;
+	}
+
+	return output;
+}
+
 function GetPlayerCharactersList() {
     return GetWuxingPlayerDirectMessageData();
 }

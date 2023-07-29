@@ -1643,11 +1643,6 @@ on("change:repeating_locreferences:type change:repeating_locreferences:header ch
 	update_postbox_text(eventinfo.sourceAttribute.substring(0, 44));
 });
 
-on("change:repeating_locreferences:postAdd", function (eventinfo) {
-
-	move_locreference(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_locreferences"));
-});
-
 on("change:repeating_preparedsidechapters:type change:repeating_preparedsidechapters:header change:repeating_preparedsidechapters:sub change:repeating_preparedsidechapters:location", function (eventinfo) {
 	update_postbox_text(eventinfo.sourceAttribute.substring(0, 51));
 });
@@ -1655,9 +1650,44 @@ on("change:repeating_preparedsidechapters:type change:repeating_preparedsidechap
 on("change:repeating_dmPostingSection:type change:repeating_dmPostingSection:header change:repeating_dmPostingSection:sub change:repeating_dmPostingSection:location", function (eventinfo) {
 	update_postbox_text(eventinfo.sourceAttribute.substring(0, 47));
 });
+
+on("change:repeating_cutscenenotes:type change:repeating_cutscenenotes:header change:repeating_cutscenenotes:sub change:repeating_cutscenenotes:location", function (eventinfo) {
+	update_postbox_text("repeating_cutscenenotes" + GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenenotes"));
+});
+
+on("change:repeating_locreferences:postAdd", function (eventinfo) {
+
+	move_locreference(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_locreferences"));
+});
+
 on("change:repeating_preparednotes:postDelete", function (eventinfo) {
 
 	remove_postbox("repeating_preparednotes", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_preparednotes"));
+});
+
+on("change:repeating_cutscenedata:postgenNotes", function (eventinfo) {
+
+	generate_cutscene_from_notes(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenedata"));
+});
+
+on("change:repeating_cutscenedata:postgenCutscene", function (eventinfo) {
+
+	generate_cutscene_from_cutscene(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenedata"));
+});
+
+on("change:repeating_cutscenedata:postuse", function (eventinfo) {
+
+	use_cutscene_data(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenedata"));
+});
+
+on("change:repeating_cutscenedata:postDelete", function (eventinfo) {
+
+	remove_postbox("repeating_cutscenedata", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenedata"));
+});
+
+on("change:repeating_cutscenenotes:postDelete", function (eventinfo) {
+
+	remove_postbox("repeating_cutscenenotes", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenenotes"));
 });
 
 
@@ -9465,93 +9495,21 @@ var update_selected_spirit = function (selectedId) {
 var update_postbox_text = function (repeatingSectionId) {
 	console.log("UPDATING POSTBOX TEXT");
 
-	var post_attrs = [repeatingSectionId + "_type", repeatingSectionId + "_header", repeatingSectionId + "_sub", repeatingSectionId + "_location"];
+	var post_attrs = [repeatingSectionId + "_type", repeatingSectionId + "_header", repeatingSectionId + "_sub", repeatingSectionId + "_location", repeatingSectionId + "_template", repeatingSectionId + "_language"];
 
 	getAttrs(post_attrs, function (v) {
 		var update = {};
 
-		var postText = "";
-		var usesHeader = "0";
-		var usesSubheader = "0";
-		var dataSplit = [];
+		let postTextData = GeneratePmNotesPostText(v[repeatingSectionId + "_type"], v[repeatingSectionId + "_header"], v[repeatingSectionId + "_sub"], 
+			v[repeatingSectionId + "_location"], v[repeatingSectionId + "_template"], v[repeatingSectionId + "_language"]);
 
-		switch (v[repeatingSectionId + "_type"]) {
-			case "-":
-				postText = v[repeatingSectionId + "_location"];
-				break;
-			case "Info":
-				postText = "&{template:infoBox}";
-				postText += " {{message=" + v[repeatingSectionId + "_location"] + "}}";
-				break;
-			case "Attack":
-				postText = "&{template:attackBox}";
-				postText += " {{message=" + v[repeatingSectionId + "_location"] + "}}";
-				break;
-			case "Location":
-				postText = "&{template:locationBox}";
-				postText += " {{location=" + v[repeatingSectionId + "_header"] + "}}";
-				postText += " {{area=" + v[repeatingSectionId + "_sub"] + "}}";
-				postText += " {{time=" + v[repeatingSectionId + "_location"] + "}}";
-				usesHeader = "1";
-				usesSubheader = "1";
-				break;
-			case "System":
-				postText = "&{template:systemBox}";
-				postText += " {{message=" + v[repeatingSectionId + "_location"] + "}}";
-				break;
-			case "Header":
-				postText = "&{template:headerBox}";
-				postText += " {{head=" + v[repeatingSectionId + "_header"] + "}}";
-				postText += " {{sub=" + v[repeatingSectionId + "_sub"] + "}}";
-				postText += " {{m=" + v[repeatingSectionId + "_location"] + "}}";
-				usesHeader = "1";
-				usesSubheader = "1";
-				break;
-			case "History":
-				postText = "&{template:historyBox}";
-				postText += " {{message=" + v[repeatingSectionId + "_location"] + "\n\n}}";
-				break;
-			case "Grid":
-				postText = "&{template:graphBox}";
-				postText += " {{type=" + v[repeatingSectionId + "_header"] + "}}";
-
-				if (v[repeatingSectionId + "_location"] != undefined && v[repeatingSectionId + "_location"] != null && v[repeatingSectionId + "_location"] != "") {
-					dataSplit = v[repeatingSectionId + "_location"].split("/");
-
-					for (var i = 0; i < dataSplit.length; i++) {
-						var infoSplit = dataSplit[i].split("@");
-						if (infoSplit != undefined && infoSplit.length > 1) {
-							postText += " {{m" + i + "=" + infoSplit[0].trim() + "}}";
-							postText += " {{d" + i + "=" + infoSplit[1].trim() + "}}";
-						}
-					}
-				}
-				usesHeader = "1";
-				break;
-			case "Start":
-				postText = "&{template:startBox}";
-				postText += " {{head=" + v[repeatingSectionId + "_header"] + "}}";
-				postText += " {{sub=" + v[repeatingSectionId + "_sub"] + "}}";
-
-				if (v[repeatingSectionId + "_location"] != undefined && v[repeatingSectionId + "_location"] != null && v[repeatingSectionId + "_location"] != "") {
-					dataSplit = v[repeatingSectionId + "_location"].split("/");
-					for (var j = 0; j < dataSplit.length; j++) {
-						postText += " {{m" + j + "=" + dataSplit[j].trim() + "}}";
-					}
-				}
-				usesHeader = "1";
-				usesSubheader = "1";
-				break;
-				case "Comment":
-					postText = "";
-					break;
-		}
-
-		console.log("setting to: " + postText);
-
-		update[repeatingSectionId + "_postText"] = postText;
-		update[repeatingSectionId + "_usesHeader"] = usesHeader;
-		update[repeatingSectionId + "_usesSubheader"] = usesSubheader;
+		update[repeatingSectionId + "_postText"] = postTextData.postText;
+		update[repeatingSectionId + "_usesHeader"] = postTextData.usesHeader;
+		update[repeatingSectionId + "_usesTitle"] = postTextData.usesTitle;
+		update[repeatingSectionId + "_usesSubheader"] = postTextData.usesSubheader;
+		update[repeatingSectionId + "_usesURL"] = postTextData.usesURL;
+		update[repeatingSectionId + "_usesTemplate"] = postTextData.usesTemplate;
+		update[repeatingSectionId + "_usesLanguage"] = postTextData.usesLanguage;
 
 		setAttrs(update, {});
 	});
@@ -9575,6 +9533,111 @@ var move_locreference = function (repeatingSectionId) {
 		setAttrs(update, {});
 	});
 };
+
+var generate_cutscene_from_notes = function (repeatingSectionId) {
+	console.log("Generating cutscene from notes");
+
+	let mod_attrs = [];
+	let repeatingCutscene = "repeating_cutscenedata";
+	let repeatingNotes = "repeating_preparednotes";
+
+	getSectionIDs(repeatingNotes, function (idarray) {
+		mod_attrs = GetSectionIdValues(idarray, repeatingNotes, ["type", "header", "sub", "location", "template", "language"]);
+
+		getAttrs(mod_attrs, function (v) {
+			generate_cutscene_data(repeatingNotes, repeatingSectionId, idarray, v);
+		});
+	});
+};
+
+var generate_cutscene_from_cutscene = function (repeatingSectionId) {
+	console.log("Generating cutscene from cutscene data");
+
+	let mod_attrs = [];
+	let repeatingCutsceneNotes = "repeating_cutscenenotes";
+
+	getSectionIDs(repeatingCutsceneNotes, function (idarray) {
+		mod_attrs = GetSectionIdValues(idarray, repeatingCutsceneNotes, ["type", "header", "sub", "location", "template", "language"]);
+
+		getAttrs(mod_attrs, function (v) {
+			generate_cutscene_data(repeatingCutsceneNotes, repeatingSectionId, idarray, v);
+		});
+	});
+};
+
+var generate_cutscene_data = function (repeatingSection, repeatingSectionId, idarray, v) {
+	let update = {};
+	let cutscenes = [];
+	let cutscenedata = {};
+	let repeatingCutsceneData = "repeating_cutscenedata";
+
+	_.each(idarray, function (currentID) {
+		cutscenedata = get_cutscene_data();
+		cutscenedata.type = v[GetSectionIdName(repeatingSection, currentID, "type")];
+		cutscenedata.header = v[GetSectionIdName(repeatingSection, currentID, "header")];
+		cutscenedata.sub = v[GetSectionIdName(repeatingSection, currentID, "sub")];
+		cutscenedata.location = v[GetSectionIdName(repeatingSection, currentID, "location")];
+		cutscenedata.template = v[GetSectionIdName(repeatingSection, currentID, "template")];
+		cutscenedata.language = v[GetSectionIdName(repeatingSection, currentID, "language")];
+		cutscenes.push (cutscenedata);
+	});
+
+	let cutsceneData = JSON.stringify(cutscenes);
+	update[GetSectionIdName(repeatingCutsceneData, repeatingSectionId, "notes")] = cutsceneData;
+
+	setAttrs(update, {silent: true});
+}
+
+
+var use_cutscene_data = function (repeatingSectionId) {
+	console.log("Generating cutscene data");
+
+	let repeatingCutsceneData = "repeating_cutscenedata";
+	let repeatingCutsceneNotes = "repeating_cutscenenotes";
+	let mod_attrs = GetSectionIdValues([repeatingSectionId], repeatingCutsceneData, ["notes"]);
+
+	getSectionIDs(repeatingCutsceneNotes, function (idarray) {
+
+		getAttrs(mod_attrs, function (v) {
+
+			let update = {};
+			let cutscenes = JSON.parse(v[GetSectionIdName(repeatingCutsceneData, repeatingSectionId, "notes")]);
+			let newrowid = "";
+
+			// delete every cutscene note
+			_.each(idarray, function (currentID) {
+				remove_postbox(repeatingCutsceneNotes, currentID);
+			});
+
+			// add a new cutscene note from cutscene data
+			_.each(cutscenes, function (cutscene) {
+				newrowid = generateRowID();
+				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "type")] = cutscene.type;
+				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "header")] = cutscene.header;
+				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "sub")] = cutscene.sub;
+				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "location")] = cutscene.location;
+				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "postText")] = GeneratePmNotesPostText(cutscene.type, cutscene.header, cutscene.sub, cutscene.location, 
+					cutscene.template, cutscene.language).postText;
+			});
+
+			setAttrs(update, {silent: true});
+
+		});
+	});
+	
+
+};
+
+var get_cutscene_data = function () {
+	return {
+		type: "",
+		header: "",
+		sub: "",
+		location: "",
+		template: "",
+		language: ""
+	};
+}
 
 var remove_postbox = function (repeatingSection, repeatingSectionId) {
 
