@@ -482,6 +482,17 @@ function ShowChapterActiveQuests(chapterActors) {
     }
 }
 
+function CommandSendPmNote(content) {
+
+    var partyManager = FindCharacter("PartyManager");
+    newId = generateRowID();
+    newRowRef = "repeating_preparednotes_" + newId;
+    content = `&${content.trim()}`;
+    createObj("attribute", {"name": newRowRef + "_postText", "current": content, "_characterid": partyManager.id});
+    createObj("attribute", {"name": newRowRef + "_location", "current": content, "_characterid": partyManager.id});
+
+}
+
 // ======= NPC Generation
 // =================================================
 

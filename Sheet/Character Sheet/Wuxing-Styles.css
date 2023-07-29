@@ -2749,6 +2749,7 @@ input[type=hidden].wuxFeatListClassDisplay-flag[value="Prowler"] + .wuxFeatListC
     display: inline-block;
 }
 
+.wuxEmotePostGroup div.wuxEmoteButton,
 .wuxEmotePostGroup button.wuxEmoteButton[type=roll]
 {
     position: relative;
@@ -2759,13 +2760,17 @@ input[type=hidden].wuxFeatListClassDisplay-flag[value="Prowler"] + .wuxFeatListC
     width: calc(100% - 10px);
 
     text-shadow: none;
+}
 
+.wuxEmotePostGroup button.wuxEmoteButton[type=roll]
+{
     background: none;
     background-image: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
     border-width: 0px;
     border-radius: 5px;
 }
 
+.wuxEmotePostGroup div.wuxEmoteButton span,
 .wuxEmotePostGroup button.wuxEmoteButton[type=roll] span
 {
     position: relative;
@@ -2776,11 +2781,14 @@ input[type=hidden].wuxFeatListClassDisplay-flag[value="Prowler"] + .wuxFeatListC
     width: 100%;
     padding: 0px 6px;
 
+    border: 0px;
+}
+
+.wuxEmotePostGroup button.wuxEmoteButton[type=roll] span
+{
     color: #f4f6f8;
     font-weight: normal;
     font-size: 10px;
-
-    border: 0px;
 }
 
 .wuxEmotePostGroup button.wuxEmoteButton[type=roll]::before

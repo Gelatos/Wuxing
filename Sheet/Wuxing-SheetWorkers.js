@@ -1572,15 +1572,6 @@ on("change:repeating_lifestyleexpenses:type", function (eventinfo) {
 
 // Settings
 
-on("change:jack_of_all_trades", function (eventinfo) {
-	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
-		return;
-	}
-	update_jack_attr();
-	update_initiative();
-	update_all_skills();
-});
-
 on("change:initmod change:initabilityscore", function (eventinfo) {
 	if (eventinfo.sourceType && eventinfo.sourceType === "sheetworker") {
 		return;
@@ -1590,6 +1581,10 @@ on("change:initmod change:initabilityscore", function (eventinfo) {
 
 on("change:difficultyStyle", function () {
 	update_health_barrier();
+});
+
+on("change:exportCharacterData", function () {
+	generate_character_data();
 });
 
 
@@ -4459,7 +4454,6 @@ var finish_update_pb = function () {
 		update_all_proficiencies(allProfCallback);
 	}
 
-	update_jack_attr();
 	update_ac();
 	update_initiative();
 	update_all_saves();
@@ -5383,6 +5377,9 @@ var update_recast_list = function () {
 	});
 }
 
+var generate_character_data = function () {
+	
+}
 
 
 // Life: Downtime Calendar
@@ -7333,22 +7330,6 @@ var update_language_skills = function (idarray) {
 	});
 }
 
-var update_jack_attr = function () {
-	var update = {};
-	getAttrs(["jack_of_all_trades", "jack"], function (v) {
-		if (v["jack_of_all_trades"] && v["jack_of_all_trades"] != 0) {
-			update["jack_bonus"] = "+" + v["jack"];
-			update["jack_attr"] = "+" + v["jack"] + "@{pbd_safe}";
-		} else {
-			update["jack_bonus"] = "";
-			update["jack_attr"] = "";
-		}
-		setAttrs(update, {
-			silent: true
-		});
-	});
-};
-
 
 
 
@@ -9266,7 +9247,7 @@ var update_auto_defenses = function () {
 }
 
 var update_initiative = function () {
-	getAttrs(["initmod", "initabilityscore", "jack_of_all_trades", "jack",
+	getAttrs(["initmod", "initabilityscore",
 	"strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma",
 	"strength_mod", "dexterity_mod", "constitution_mod", "intelligence_mod", "wisdom_mod", "charisma_mod"], function (v) {
 		var update = {};
@@ -9282,11 +9263,6 @@ var update_initiative = function () {
 
 		totalInitiative = totalInitiative + (parseInt(v["wisdom"], 10) / 100);
 
-		if (v["jack_of_all_trades"] && v["jack_of_all_trades"] != 0) {
-			if (v["jack"] && !isNaN(parseInt(v["jack"], 10))) {
-				totalInitiative = totalInitiative + parseInt(v["jack"], 10);
-			}
-		}
 		if (totalInitiative % 1 != 0) {
 			totalInitiative = parseFloat(totalInitiative.toPrecision(2)); // ROUNDING ERROR BUGFIX
 		}
@@ -9566,6 +9542,9 @@ var update_postbox_text = function (repeatingSectionId) {
 				usesHeader = "1";
 				usesSubheader = "1";
 				break;
+				case "Comment":
+					postText = "";
+					break;
 		}
 
 		console.log("setting to: " + postText);

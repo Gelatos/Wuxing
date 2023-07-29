@@ -259,6 +259,11 @@ on("chat:message", function(msg) {
                     CommandImportPartyStats(msg);
                     
                 return;
+                case "!sendpmnote":
+                    log ("sending note");
+                    CommandSendPmNote(content);
+                    
+                return;
             }
         }
     }
