@@ -2226,6 +2226,10 @@ function GetLanguageName(language) {
 
 function GetLanguageTag(language) {
 
+    if (language == undefined) {
+        return "{{language-default=1}}";
+    }
+
     switch (language.toLowerCase()) {
         case "minere":
             return "{{language-coastal=1}}";

@@ -1655,14 +1655,22 @@ on("change:repeating_cutscenenotes:type change:repeating_cutscenenotes:header ch
 	update_postbox_text("repeating_cutscenenotes" + GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenenotes"));
 });
 
+on("change:clearPreparedNotes", function (eventinfo) {
+	ClearAllSectionIds("repeating_preparednotes");
+});
+
+on("change:repeating_preparednotes:postDelete", function (eventinfo) {
+
+	RemoveSectionId("repeating_preparednotes", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_preparednotes"));
+});
+
 on("change:repeating_locreferences:postAdd", function (eventinfo) {
 
 	move_locreference(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_locreferences"));
 });
 
-on("change:repeating_preparednotes:postDelete", function (eventinfo) {
-
-	remove_postbox("repeating_preparednotes", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_preparednotes"));
+on("change:clearCutsceneNotes", function (eventinfo) {
+	ClearAllSectionIds("repeating_cutscenenotes");
 });
 
 on("change:repeating_cutscenedata:postgenNotes", function (eventinfo) {
@@ -1682,12 +1690,12 @@ on("change:repeating_cutscenedata:postuse", function (eventinfo) {
 
 on("change:repeating_cutscenedata:postDelete", function (eventinfo) {
 
-	remove_postbox("repeating_cutscenedata", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenedata"));
+	RemoveSectionId("repeating_cutscenedata", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenedata"));
 });
 
 on("change:repeating_cutscenenotes:postDelete", function (eventinfo) {
 
-	remove_postbox("repeating_cutscenenotes", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenenotes"));
+	RemoveSectionId("repeating_cutscenenotes", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenenotes"));
 });
 
 
@@ -1744,12 +1752,12 @@ on("change:repeating_battleLog:logApplyDmg2", function (eventinfo) {
 
 on("change:repeating_battleLog:logDelete", function (eventinfo) {
 
-	remove_battle_log(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_battleLog"));
+	RemoveSectionId("repeating_battleLog", GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_battleLog"));
 });
 
 on("change:clearbattlelog", function (eventinfo) {
 
-	remove_all_battle_logs();
+	ClearAllSectionIds("repeating_battleLog");
 });
 
 on("change:refreshActions", function (eventinfo) {
@@ -1790,6 +1798,20 @@ var GetSectionIdValues = function (idarray, sectionName, variableArray) {
 var GetRepeatingSectionIdFromId = function (id, repeatingSection) {
 	var len = repeatingSection.length + 1;
 	return id.substr(len, 20);
+}
+
+function ClearAllSectionIds(repeatingSection) {
+
+	getSectionIDs(repeatingSection, function (idarray) {
+		_.each(idarray, function (currentID) {
+			RemoveSectionId(repeatingSection, currentID);
+		});
+	});
+}
+
+var RemoveSectionId = function (repeatingSection, repeatingSectionId) {
+
+	removeRepeatingRow(`${repeatingSection}_${repeatingSectionId}`);
 }
 
 var update_mod = function (attr) {
@@ -9606,7 +9628,7 @@ var use_cutscene_data = function (repeatingSectionId) {
 
 			// delete every cutscene note
 			_.each(idarray, function (currentID) {
-				remove_postbox(repeatingCutsceneNotes, currentID);
+				RemoveSectionId(repeatingCutsceneNotes, currentID);
 			});
 
 			// add a new cutscene note from cutscene data
@@ -9616,6 +9638,8 @@ var use_cutscene_data = function (repeatingSectionId) {
 				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "header")] = cutscene.header;
 				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "sub")] = cutscene.sub;
 				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "location")] = cutscene.location;
+				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "template")] = cutscene.template;
+				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "language")] = cutscene.language;
 				update[GetSectionIdName(repeatingCutsceneNotes, newrowid, "postText")] = GeneratePmNotesPostText(cutscene.type, cutscene.header, cutscene.sub, cutscene.location, 
 					cutscene.template, cutscene.language).postText;
 			});
@@ -9637,11 +9661,6 @@ var get_cutscene_data = function () {
 		template: "",
 		language: ""
 	};
-}
-
-var remove_postbox = function (repeatingSection, repeatingSectionId) {
-
-	removeRepeatingRow(`${repeatingSection}_${repeatingSectionId}`);
 }
 
 var update_all_quest_data = function () {
@@ -10334,21 +10353,6 @@ var battle_log_apply_dmg2_mod = function(repeatingSectionId) {
 		});
 	});
 
-}
-
-var remove_battle_log = function (repeatingSectionId) {
-
-	let repeatingSection = "repeating_battleLog";
-	removeRepeatingRow(`${repeatingSection}_${repeatingSectionId}`);
-}
-
-var remove_all_battle_logs = function () {
-
-	getSectionIDs("repeating_battleLog", function (idarray) {
-		_.each(idarray, function (currentID) {
-			remove_battle_log(currentID);
-		});
-	});
 }
 
 // ======= Basics DB Section
