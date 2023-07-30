@@ -30,6 +30,8 @@ function SaveEmotes() {
     var outfitName = outfitLayer.toString().substring(10);
     outfitName = outfitName.substring(0, outfitName.length - 1);
     var docName = charName + " (" + outfitName + ")";
+    var saveTextData = [];
+    var emoteTextData = {};
 
     // save the document before we make changes
     app.activeDocument.save();
@@ -72,6 +74,10 @@ function SaveEmotes() {
                     SelectLayerByName(overlayEmotes, emotes.layers[k].name.toLowerCase(), false);
                   }
                   Save(docName, emotes.layers[k].name);
+                  emoteTextData = GetEmoteTextData();
+                  emoteTextData.name = emotes.layers[k].name;
+                  emoteTextData.outfit = outfitName;
+                  saveTextData.push(emoteTextData);
                 }
               }
               Revert();
@@ -84,6 +90,11 @@ function SaveEmotes() {
       Revert();
 
     }
+
+    // create the emote data
+    var txt = JSON.stringify(saveTextData);
+    txt = txt.replace(/},/g, "},\n");
+    SaveTxt(docName, txt);
 
     // create a copy of the currently visible character. This is for token creation later
     if (app.activeDocument.layerSets.length >= 2) {
@@ -99,6 +110,14 @@ function SaveEmotes() {
   else {
     alert("You must select the base folder of the outfit you wish to export to save out emotes.");
   }
+}
+
+function GetEmoteTextData() {
+  return {
+    name: "",
+    url: "",
+    outfit: ""
+  };
 }
 
 function CreateToken(newCharacterEntryLayer) {
@@ -144,6 +163,21 @@ function Save(documentName, emote) {
   app.activeDocument.saveAs(saveFile, pngSaveOptions, true, Extension.LOWERCASE);
 }
 
+function SaveTxt(documentName, txt) {
+  var outFolder = app.activeDocument; // psd name
+  var outPath = outFolder.path;
+  var f = new Folder(outPath + "/" + documentName);
+  if ( ! f.exists ) {
+    f.create();
+  }
+  
+  var saveFile = new File(outPath + "/" + documentName +"/0-Data.txt");
+  saveFile.encoding = "UTF8";
+  saveFile.open("e", "TEXT", "????");
+  saveFile.writeln(txt);
+  saveFile.close();
+}
+
 function Revert(){
    var idRvrt = charIDToTypeID( "Rvrt" );
    executeAction( idRvrt, undefined, DialogModes.NO );
@@ -151,5 +185,6 @@ function Revert(){
 
 // ====== Run Script
 #include "/Users/vincent/Projects/Wuxing/Sheet/Extend Scripts/[PS]Support.jsx";
+#include "/Users/vincent/Projects/Wuxing/Sheet/Extend Scripts/[PS]json2.js";
 SaveEmotes();
 

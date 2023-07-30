@@ -1584,7 +1584,11 @@ on("change:difficultyStyle", function () {
 });
 
 on("change:exportCharacterData", function () {
-	generate_character_data();
+	export_character_data();
+});
+
+on("change:importCharacterData", function () {
+	import_character_emote_data();
 });
 
 
@@ -5429,8 +5433,33 @@ var update_recast_list = function () {
 	});
 }
 
-var generate_character_data = function () {
+var export_character_data = function () {
 	
+}
+
+var import_character_emote_data = function () {
+	
+	var mod_attrs = ["storytellerExportField"];
+
+	var repeatingEmotes = "repeating_emotes";
+	getAttrs(mod_attrs, function (v) {
+
+		let update = {};
+		let emoteData = JSON.parse(v["storytellerExportField"]);
+		let newrowid = "";
+
+		// add a new emote for each emote data available
+		_.each(emoteData, function (emote) {
+			newrowid = generateRowID();
+			update[GetSectionIdName(repeatingEmotes, newrowid, "emote_name")] = emote.name;
+			update[GetSectionIdName(repeatingEmotes, newrowid, "options-flag")] = "0";
+			update[GetSectionIdName(repeatingEmotes, newrowid, "url")] = emote.url;
+			update[GetSectionIdName(repeatingEmotes, newrowid, "emote_set")] = emote.outfit;
+		});
+
+		setAttrs(update, {silent: true});
+
+	});
 }
 
 
