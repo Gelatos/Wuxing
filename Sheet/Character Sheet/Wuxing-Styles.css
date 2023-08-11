@@ -5612,6 +5612,37 @@ visibility: visible;
     letter-spacing: 0.1ch;
 } 
 
+.sheet-rolltemplate-systemBox .sheet-experienceBox 
+{
+    position: relative;
+    width: 215px;
+    padding: 2px;
+    margin: 0px;
+
+    border: 2px solid #33ff4d;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    background: #313235;
+} 
+
+.sheet-rolltemplate-systemBox .sheet-experienceBoxInner 
+{
+    background-color: #33ff4d;
+} 
+
+.sheet-rolltemplate-systemBox .sheet-experienceBoxExp
+{
+    position: absolute;
+    right: 5px;
+    top: 6px;
+
+    font-family: "Courier New", monospace;
+    font-size: 10px;
+    line-height: 10px;
+    letter-spacing: 0.1ch;
+    font-weight: bold;
+    color: #777;
+} 
+
 /* ============================
 Roll template modified roll button
 ============================= */

@@ -328,7 +328,8 @@ function TargetAddExp(sendTargets, targets, xp) {
 
     // declare variables
     var sceneMessages = [];
-    let xpObj, xpMod, newXp, val;
+    let xpObj, xpMod, newXp, val, level, nextLevelExp, currentlevelExp, percent;
+    let expBar;
     let subtargets = [];
 
     // iterate through targets
@@ -347,12 +348,28 @@ function TargetAddExp(sendTargets, targets, xp) {
                 
             if (xpObj != undefined) {
                 newXp = Math.floor(xp * xpMod);
-                val = Number(xpObj.get("current")) + Number(newXp);
+                val = parseInt(xpObj.get("current")) + parseInt(newXp);
                 xpObj.set("current", val);
                 sceneMessages.push(target.displayName + " earned " + newXp + " exp");
-                log (target.displayName + " earned " + newXp + " exp");
+                
+                // get level data
+                level = isNaN(parseInt(getAttrByName(target.charId, "base_level"))) ? 1 : parseInt(getAttrByName(target.charId, "base_level"));
+                currentlevelExp = parseInt(GetExpToNextLevel(level - 1));
+                nextLevelExp = parseInt(GetExpToNextLevel(level));
+                expBar = `${val}/${nextLevelExp}`;
+                nextLevelExp -= currentlevelExp;
+                val -= currentlevelExp;
+                if (val > nextLevelExp) {
+                    val = nextLevelExp;
+                }
+                if (val < 0) {
+                    val = 0;
+                }
+                percent = parseInt(val * 100 / nextLevelExp);
+                log (`percent: ${percent} from ${val} / ${nextLevelExp}`);
+                sceneMessages.push(`<div class="sheet-experienceBox"><div class="sheet-experienceBoxInner" style="width:${percent}%">&nbsp;</div><div class="sheet-experienceBoxExp">${expBar}</div></div>`);
 
-                if (val > Number(getAttrByName(target.charId, "next_level_exp"))) {
+                if (val >= nextLevelExp) {
                     sceneMessages.push("<span style='color:red'>" + target.displayName + " has leveled up!</span>");
                 }
             }
