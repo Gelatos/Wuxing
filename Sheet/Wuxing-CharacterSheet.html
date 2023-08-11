@@ -9641,87 +9641,16 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				</div>
 				<div class="wuxSectionContentCollapsed"></div>
 			</div>
-			<div class="notes-Common wuxSectionBlock wuxLayoutItem">
-				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-tools-Common" checked="checked" style="display: block">
-				<div class="wuxSectionHeader">Common</div>
+			<div class="notes-Scratchpad wuxSectionBlock wuxLayoutItem">
+				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-tools-Scratchpad" checked="checked" style="display: block">
+				<div class="wuxSectionHeader">Scratchpad</div>
 
 				<div class="wuxSectionContent">
 					<div class="wuxFieldSet wuxToolsTab">
-						<span class="wuxFormHeader">Notes</span>
 						<div class="wuxMultiRow">
 							<textarea class="wuxFormInput" name="attr_quick-notes"></textarea>
 						</div>
-						<div class="wuxRow">&nbsp;</div>
-						<span class="wuxFormHeader">Post Area</span>
 					</div>
-					<fieldset class="repeating_dmPostingSection">
-						<div class="wuxFieldSet wuxNotesTab">
-							<div class="wuxRow">
-								<select class="wuxFormInput wuxSizeMed" name="attr_type" value="-">
-									<option value="-" selected="selected">-</option>
-									<option value="Info">Info</option>
-									<option value="Attack">Attack</option>
-									<option value="System">System</option>
-									<option value="Location">Location</option>
-									<option value="History">History</option>
-									<option value="Character">Character</option>
-									<option value="Comments">Comments</option>
-								</select>
-								<input type="hidden" name="attr_postText">
-								<button type="roll" class="wuxToolButton wuxPmSpacer" name="roll_post" value="@{postText}"><span>Post</span></button>
-								<div class="wuxFormButton wuxSizeTiny wuxPmSpacer wuxDelButton">
-									<input type="checkbox" class="" name="attr_postDelete" value="1">
-									<span class="">Del</span>
-								</div>
-							</div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_usesHeader" value="0">
-							<div class="wuxHiddenField">
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeSmall">Header</span>
-									<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_header" placeholder="header">
-								</div>
-							</div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_usesTitle" value="0">
-							<div class="wuxHiddenField">
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeSmall">Title</span>
-									<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_header" placeholder="header">
-								</div>
-							</div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_usesSubheader" value="0">
-							<div class="wuxHiddenField">
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeSmall">Sub</span>
-									<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_sub" placeholder="subheader">
-								</div>
-							</div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_usesUrl" value="0">
-							<div class="wuxHiddenField">
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeSmall">URL</span>
-									<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_sub" placeholder="subheader">
-								</div>
-							</div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_usesTemplate" value="0">
-							<div class="wuxHiddenField">
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeSmall">Template</span>
-									<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_template" placeholder="subheader">
-								</div>
-							</div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_usesLanguage" value="0">
-							<div class="wuxHiddenField">
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeSmall">Language</span>
-									<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_language" placeholder="subheader">
-								</div>
-							</div>
-							<div class="wuxMultRow">
-								<textarea class="wuxFormInput wuxSizeSmall" name="attr_location" placeholder="separate new lines with /"></textarea>
-							</div>
-							<div class="wuxRow">&nbsp;</div>
-						</div>
-					</fieldset>
 				</div>
 				<div class="wuxSectionContentCollapsed"></div>
 			</div>
@@ -9814,25 +9743,36 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 				<div class="wuxSectionContent">
 					<fieldset class="repeating_locreferences">
 						<div class="wuxFieldSet wuxNotesTab">
-							<div class="wuxRow">
-								<input type="hidden" name="attr_postText">
-								<input type="hidden" name="attr_type" value="Location">
-								<span class="wuxFormTitle wuxSizeSmall">Name</span>
-								<input class="wuxFormInput wuxSizeMed" type="text" name="attr_header" placeholder="header">
-								<div class="wuxFormButton wuxSizeTiny wuxPmSpacer">
-									<input type="checkbox" class="" name="attr_postAdd" value="1">
-									<span class="">Add</span>
+							<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
+							<div class="options">
+								<div class="wuxRow">
+									<input type="hidden" name="attr_postText">
+									<input type="hidden" name="attr_type" value="Location">
+									<span class="wuxFormTitle wuxSizeSmall">Name</span>
+									<input class="wuxFormInput wuxSizeMed" type="text" name="attr_header" placeholder="header">
+									<div class="wuxFormButton wuxSizeTiny wuxPmSpacer">
+										<input type="checkbox" class="" name="attr_postAdd" value="1">
+										<span class="">Add</span>
+									</div>
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle wuxSizeSmall">Area</span>
+									<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_sub" placeholder="Aldejove, Io District">
+								</div>
+								<div class="wuxRow">
+									<span class="wuxFormTitle wuxSizeSmall">Time</span>
+									<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_location" placeholder="Autumn 1, 1:00pm">
 								</div>
 							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Area</span>
-								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_sub" placeholder="Aldejove, Io District">
+							<div class="display">
+								<div class="wuxFormEntry">
+									<span name="attr_header">Location</span>
+								</div>
+								<div class="wuxFormSubsection">
+									<span name="attr_sub"></span> - 
+									<span name="attr_location"></span>
+								</div>
 							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeSmall">Time</span>
-								<input class="wuxFormInput wuxSizeLarge" type="text" name="attr_location" placeholder="Autumn 1, 1:00pm">
-							</div>
-							<div class="wuxRow">&nbsp;</div>
 						</div>
 					</fieldset>
 				</div>
@@ -9846,31 +9786,40 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 					<span class="wuxFormHeader">Cutscene Data</span>
 					<fieldset class="repeating_cutscenedata">
 						<div class="wuxFieldSet wuxNotesTab">
-							<div class="wuxRow">
-								<input type="text" class="wuxFormInput wuxPmSpacer" name="attr_cutsceneName">
+							<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
+							<div class="options">
+								<div class="wuxRow">
+									<input type="text" class="wuxFormInput wuxPmSpacer" name="attr_cutsceneName">
+									<div class="wuxFormButton wuxSizeTiny wuxPmSpacer">
+										<input type="checkbox" class="" name="attr_postuse" value="1">
+										<span class="">Use</span>
+									</div>
+								</div>
+								<div class="wuxRow">
+									<div class="wuxFormButton wuxPmSpacer">
+										<input type="checkbox" class="" name="attr_postgenNotes" value="1">
+										<span class="">Gen Notes</span>
+									</div>
+									<div class="wuxFormButton wuxPmSpacer">
+										<input type="checkbox" class="" name="attr_postgenCutscene" value="1">
+										<span class="">Gen Scene</span>
+									</div>
+									<div class="wuxFormButton wuxSizeTiny wuxPmSpacer wuxDelButton">
+										<input type="checkbox" class="" name="attr_postDelete" value="1">
+										<span class="">Del</span>
+									</div>
+								</div>
+								<div class="wuxMultRow">
+									<textarea class="wuxFormInput wuxSizeSmall" name="attr_notes" placeholder=""></textarea>
+								</div>
+							</div>
+							<div class="display">
 								<div class="wuxFormButton wuxSizeTiny wuxPmSpacer">
 									<input type="checkbox" class="" name="attr_postuse" value="1">
 									<span class="">Use</span>
 								</div>
+								<span class="wuxSubheader" name="attr_cutsceneName">Cutscene Name</span>
 							</div>
-							<div class="wuxRow">
-								<div class="wuxFormButton wuxPmSpacer">
-									<input type="checkbox" class="" name="attr_postgenNotes" value="1">
-									<span class="">Gen Notes</span>
-								</div>
-								<div class="wuxFormButton wuxPmSpacer">
-									<input type="checkbox" class="" name="attr_postgenCutscene" value="1">
-									<span class="">Gen Scene</span>
-								</div>
-								<div class="wuxFormButton wuxSizeTiny wuxPmSpacer wuxDelButton">
-									<input type="checkbox" class="" name="attr_postDelete" value="1">
-									<span class="">Del</span>
-								</div>
-							</div>
-							<div class="wuxMultRow">
-								<textarea class="wuxFormInput wuxSizeSmall" name="attr_notes" placeholder=""></textarea>
-							</div>
-							<div class="wuxRow">&nbsp;</div>
 						</div>
 					</fieldset>
 					<div class="wuxRow">&nbsp;</div>
@@ -11508,6 +11457,24 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 			<div class="wuxSectionHeader">Storyteller</div>
 
 			<div class="wuxSectionContent">
+				<div class="options-StorytellerPostBox chat-chatBox">
+					<div class="wuxSectionContent wuxEmotePostGroup">
+						<div class="wuxFieldSet">
+							<input type="text" class="wuxFormInput wuxSizeHuge" name="attr_emotePostContent" placeholder="Type your post here then select an emote to use from the options below">
+
+							<div class="wuxRow">&nbsp;</div>
+							<fieldset class="repeating_emotesSet2">
+								<div>
+									<button class="wuxEmoteButton" type="roll" value="!sendPmNote @{emotePostType}@@@{url}@@@{emotePostTarget}@@@{speaking_language}@@@{emotePostMessage}">
+										<span name="attr_emote_name">emote</span>
+									</button>
+									<input type="hidden" name="attr_url">
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+				<div class="wuxRow">&nbsp;</div>
 				<div class="options-StorytellerExport">
 					<span class='wuxHeader'>Storyteller Exporter</span>
 					
@@ -11549,13 +11516,6 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 					<div class="wuxRow">
 						<span class="wuxFormTitle wuxSizeLarge">Maintains Spirits</span>
 						<select class='wuxFormInput wuxSizeSmall' name='attr_maintainsSpirits' value="0">
-							<option value="0">No</option>
-							<option value="1">Yes</option>
-						</select>
-					</div>
-					<div class="wuxRow">
-						<span class="wuxFormTitle wuxSizeLarge">Party Manager Post</span>
-						<select class='wuxFormInput wuxSizeSmall' name='attr_showStoryTellerPosts' value="0">
 							<option value="0">No</option>
 							<option value="1">Yes</option>
 						</select>

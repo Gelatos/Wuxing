@@ -1651,10 +1651,6 @@ on("change:repeating_preparedsidechapters:type change:repeating_preparedsidechap
 	update_postbox_text(eventinfo.sourceAttribute.substring(0, 51));
 });
 
-on("change:repeating_dmPostingSection:type change:repeating_dmPostingSection:header change:repeating_dmPostingSection:sub change:repeating_dmPostingSection:location", function (eventinfo) {
-	update_postbox_text(eventinfo.sourceAttribute.substring(0, 47));
-});
-
 on("change:repeating_cutscenenotes:type change:repeating_cutscenenotes:header change:repeating_cutscenenotes:sub change:repeating_cutscenenotes:location", function (eventinfo) {
 	update_postbox_text("repeating_cutscenenotes" + GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_cutscenenotes"));
 });
@@ -5442,22 +5438,31 @@ var import_character_emote_data = function () {
 	var mod_attrs = ["storytellerExportField"];
 
 	var repeatingEmotes = "repeating_emotes";
+	var repeatingEmoteOutfits = "repeating_emoteOutfits";
+
 	getAttrs(mod_attrs, function (v) {
 
 		let update = {};
 		let emoteData = JSON.parse(v["storytellerExportField"]);
 		let newrowid = "";
 
+		newrowid = generateRowID();
+		update[GetSectionIdName(repeatingEmoteOutfits, newrowid, "tempName")] = emoteData.outfit;
+		update[GetSectionIdName(repeatingEmoteOutfits, newrowid, "name")] = emoteData.outfit;
+
+
 		// add a new emote for each emote data available
-		_.each(emoteData, function (emote) {
+		_.each(emoteData.emotes, function (emote) {
 			newrowid = generateRowID();
 			update[GetSectionIdName(repeatingEmotes, newrowid, "emote_name")] = emote.name;
 			update[GetSectionIdName(repeatingEmotes, newrowid, "options-flag")] = "0";
 			update[GetSectionIdName(repeatingEmotes, newrowid, "url")] = emote.url;
-			update[GetSectionIdName(repeatingEmotes, newrowid, "emote_set")] = emote.outfit;
+			update[GetSectionIdName(repeatingEmotes, newrowid, "emote_set")] = emoteData.outfit;
 		});
 
-		setAttrs(update, {silent: true});
+		setAttrs(update, {silent: true}, function() {
+			update_emotes();
+		});
 
 	});
 }

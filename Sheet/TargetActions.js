@@ -981,7 +981,7 @@ function TargetSpendFate(sendTargets, targets) {
 
             // send the message
             message = "(a) Choose to automatically succeed on your last check; or";
-            message += "<br />(b) If dying, immediately stabilize.";
+            message += "<br />(b) If dying, immediately gain 1 Hit Point.";
             SendChatMessageToTargets(GetCutInMessage(target.displayName, target.charId, "Fate", message), sendTargets);
 
         } else {

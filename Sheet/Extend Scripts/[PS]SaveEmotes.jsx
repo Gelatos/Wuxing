@@ -30,7 +30,10 @@ function SaveEmotes() {
     var outfitName = outfitLayer.toString().substring(10);
     outfitName = outfitName.substring(0, outfitName.length - 1);
     var docName = charName + " (" + outfitName + ")";
-    var saveTextData = [];
+    var saveTextData = {
+      outfit: outfitName,
+      emotes: []
+    };
     var emoteTextData = {};
 
     // save the document before we make changes
@@ -76,8 +79,7 @@ function SaveEmotes() {
                   Save(docName, emotes.layers[k].name);
                   emoteTextData = GetEmoteTextData();
                   emoteTextData.name = emotes.layers[k].name;
-                  emoteTextData.outfit = outfitName;
-                  saveTextData.push(emoteTextData);
+                  saveTextData.emotes.push(emoteTextData);
                 }
               }
               Revert();
@@ -115,8 +117,7 @@ function SaveEmotes() {
 function GetEmoteTextData() {
   return {
     name: "",
-    url: "",
-    outfit: ""
+    url: ""
   };
 }
 
