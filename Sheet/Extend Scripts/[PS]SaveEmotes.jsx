@@ -95,7 +95,8 @@ function SaveEmotes() {
 
     // create the emote data
     var txt = JSON.stringify(saveTextData);
-    txt = txt.replace(/},/g, "},\n");
+    // txt = txt.replace(/},/g, "},\n");
+    txt = txt.replace(/{"/g, '\n{"');
     SaveTxt(docName, txt);
 
     // create a copy of the currently visible character. This is for token creation later

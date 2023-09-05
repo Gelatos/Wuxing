@@ -366,7 +366,6 @@ function TargetAddExp(sendTargets, targets, xp) {
                     val = 0;
                 }
                 percent = parseInt(val * 100 / nextLevelExp);
-                log (`percent: ${percent} from ${val} / ${nextLevelExp}`);
                 sceneMessages.push(`<div class="sheet-experienceBox"><div class="sheet-experienceBoxInner" style="width:${percent}%">&nbsp;</div><div class="sheet-experienceBoxExp">${expBar}</div></div>`);
 
                 if (val >= nextLevelExp) {

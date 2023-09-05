@@ -5449,6 +5449,7 @@ var import_character_emote_data = function () {
 		newrowid = generateRowID();
 		update[GetSectionIdName(repeatingEmoteOutfits, newrowid, "tempName")] = emoteData.outfit;
 		update[GetSectionIdName(repeatingEmoteOutfits, newrowid, "name")] = emoteData.outfit;
+		update[GetSectionIdName(repeatingEmoteOutfits, newrowid, "options-flag")] = "0";
 
 
 		// add a new emote for each emote data available
