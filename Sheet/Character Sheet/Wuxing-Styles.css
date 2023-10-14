@@ -3528,10 +3528,12 @@ input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeFiel
     -webkit-border-radius: 0px;
     border-radius: 0px;
     color: black; 
-    z-index: 12;
+    z-index: 100;
 }
 
 .wuxSectionBlock .wuxToolsTab:hover .wuxPmToolsHoverButton,
+.wuxSectionBlock .wuxNotesTab:hover .wuxPmToolsHoverButton,
+.wuxSectionBlock .wuxNotesTab:hover .wuxPmToolsHoverButton + span,
 .wuxSectionBlock .wuxBattleTabs:hover .wuxPmToolsHoverButton
 {
     opacity: 1;
@@ -3539,6 +3541,7 @@ input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeFiel
 }
 
 .wuxSectionBlock .wuxToolsTab .wuxPmToolsHoverButton,
+.wuxSectionBlock .wuxNotesTab .wuxPmToolsHoverButton,
 .wuxSectionBlock .wuxBattleTabs .wuxPmToolsHoverButton
 {
     position: absolute;
@@ -3546,13 +3549,33 @@ input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeFiel
     right: 14px;
     width: 18px;
     height: 18px;
-    z-index: 12;
     background: none;
     border: none;
     font-family: pictos;
     font-size: 16px;
     color: #A0A0A0;
     display: none;
+    z-index: 100;
+}
+
+.wuxSectionBlock .wuxNotesTab .wuxPmToolsHoverButton + span
+{
+    position: absolute;
+    top: -5px;
+    right: 14px;
+    white-space: nowrap;
+    width: 18px;
+    height: 18px;
+    font-size: 20px;
+    font-family: pictos;
+    color: #d0d0d0;
+    cursor: pointer;
+    margin-top: 0px;
+    display: none;
+    opacity: 0;
+    border-bottom: 0px;
+    background-color: transparent;
+    z-index: 99;
 }
 
 .wuxSectionBlock .wuxToolsTab.wuxEmotePosts .wuxPmToolsHoverButton,
@@ -3563,12 +3586,14 @@ input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeFiel
 }
 
 .wuxSectionBlock .wuxToolsTab .wuxPmToolsHoverButton:hover,
+.wuxSectionBlock .wuxNotesTab .wuxPmToolsHoverButton:hover + span,
 .wuxSectionBlock .wuxBattleTabs .wuxPmToolsHoverButton:hover
 {
     color: #DE9B72;
 }
 
 .wuxSectionBlock .wuxToolsTab button.wuxPmToolsHoverButton:before,
+.wuxSectionBlock .wuxNotesTab button.wuxPmToolsHoverButton:before,
 .wuxSectionBlock .wuxBattleTabs button.wuxPmToolsHoverButton:before 
 {
     content: "";
