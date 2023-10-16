@@ -4560,7 +4560,7 @@ var update_save = function (attributeArray) {
 						prof += pb;
 					break;
 				}
-				prof += (GetProfRankBonus(v[attr + "_save_prof"], false, 0) * 2);
+				prof += GetProfRankBonus(v[attr + "_save_prof"], false, 0);
 				prof += isNaN(parseInt(v[attr + "_save_mod"])) ? 0 : parseInt(v[attr + "_save_mod"]);
 				total = prof + (isNaN(parseInt(v[attr + "_mod"])) ? 0 : parseInt(v[attr + "_mod"]));
 
@@ -10547,10 +10547,15 @@ function GetKiCapacityBonuses(pointObj, spellcasting_ability) {
 
 
 // Sheet Upgrades
-var upgrade_to_1_1_10 = function (doneupdating) {
+var upgrade_to_1_1_11 = function (doneupdating) {
 	let update = {};
 	update["speaking_language"] = "Minere";
 	setAttrs(update);
+	update_all_saves();
+	doneupdating();
+}
+
+var upgrade_to_1_1_10 = function (doneupdating) {
 	doneupdating();
 }
 
@@ -10719,11 +10724,17 @@ var versioning = function () {
 	getAttrs(["version"], function (v) {
 		console.log("Checking version " + v["version"]);
 
-		if (v["version"] === "1.1.10") {
+		if (v["version"] === "1.1.11") {
 			console.log("Wuxing Sheet modified from 5th Edition OGL by Roll20 v" + v["version"]);
+		} else if (v["version"] === "1.1.10") {
+			console.log("UPGRADING TO v1.1.11");
+			upgrade_to_1_1_11(function () {
+				setAttrs({version: "1.1.11"});
+				versioning();
+			});
 		} else if (v["version"] === "1.1.9") {
 			console.log("UPGRADING TO v1.1.10");
-			upgrade_to_1_1_9(function () {
+			upgrade_to_1_1_10(function () {
 				setAttrs({version: "1.1.10"});
 				versioning();
 			});
