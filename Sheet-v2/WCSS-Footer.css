@@ -1,0 +1,39 @@
+/*========================================
+    Hidden Field
+========================================*/
+
+.wuxSectionBlock .wuxHiddenField,
+.wuxLayoutItem .wuxHiddenField,
+.wuxSectionBlock .wuxHiddenInlineField,
+.wuxSectionBlock .wuxHiddenField-flag
+{
+    display: none;
+}
+
+input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenField,
+input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenField,
+.wuxSectionBlock .wuxHiddenAuxField
+{
+    display: inherit;
+}
+
+input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenInlineField,
+input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenInlineField,
+.wuxSectionBlock .wuxHiddenInlineAuxField
+{
+    display: inline-block;
+}
+
+input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenAuxField,
+input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenInlineAuxField,
+input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenAuxField,
+input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenInlineAuxField
+{
+    display: none;
+}
+
+.wuxInvisibleField
+{
+    opacity: 0;
+}
+

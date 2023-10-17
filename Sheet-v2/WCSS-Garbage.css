@@ -1,0 +1,602 @@
+
+
+
+/*========================================
+    Error Field
+========================================*/
+
+.wuxAspectContainer input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxAspectInput
+{
+    background: #e86363;
+}
+
+.wuxInfoSection input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoData,
+input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoSubdata,
+input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInput
+{
+    background: #ba1717;
+}
+
+/*========================================
+    Equip Field
+========================================*/
+
+.wuxSectionBlock input[type=checkbox].wuxEquipField-flag
+{
+    opacity: 0;    
+    position: absolute;
+    left: 0px;
+    width: 15px;
+    height: 18px;
+    z-index: 100;
+}
+
+.wuxSectionBlock .wuxEquipField-flag + span
+{
+    white-space: nowrap;
+    font-family: dicefontd6;
+    z-index: 99;
+}
+
+.wuxSectionBlock .wuxEquipField-flag + span::before
+{
+    content: "0" !important;
+}
+
+.wuxSectionBlock .wuxEquipField-flag:not([value="0"]) + span
+{
+    font-family: pictos;
+    color: #DE9B72;
+}
+
+.wuxSectionBlock .wuxEquipField-flag:not([value="0"]) + span::before
+{
+    content: "2" !important;
+}
+
+
+
+
+
+
+
+
+
+/*========================================
+    Class Levels
+========================================*/
+
+.wuxAbilityScoreTitleContainer {
+    margin-left: 10px;
+}
+
+
+.wuxSectionBlock input[type=checkbox].wuxRevealField-flag
+{
+    display: block;
+    opacity: 0;    
+    position: absolute;
+    left: 0px;
+    width: 100px;
+    height: 18px;
+    z-index: 100;
+}
+
+.wuxSectionBlock input[type=checkbox].wuxRevealField-flag:checked
+{
+    display: none;
+}
+
+.wuxSectionBlock .wuxRevealField-flag + span
+{
+    display: block;
+    height: 14px;
+    width: 100px;
+
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10px;
+
+    background-color: #cacbcf;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.wuxSectionBlock input[type=checkbox].wuxRevealField-flag:checked + span
+{
+    display: none;
+}
+
+/*========================================
+    Caster Points
+========================================*/
+
+.wuxSectionBlock .wuxCasterGrowthSubSection
+{
+    position: relative;
+    left: 15px;
+}
+
+/*========================================
+    Feat List
+========================================*/
+
+.wuxSectionBlock .wuxNewEntry
+{
+    color: #f4ff58;
+}
+
+.wuxFeatListClassDisplay-Arcanist,
+.wuxFeatListClassDisplay-Brawler,
+.wuxFeatListClassDisplay-Commoner,
+.wuxFeatListClassDisplay-Defender,
+.wuxFeatListClassDisplay-Exemplar,
+.wuxFeatListClassDisplay-Fighter,
+.wuxFeatListClassDisplay-Investigator,
+.wuxFeatListClassDisplay-Mage,
+.wuxFeatListClassDisplay-Pugilist,
+.wuxFeatListClassDisplay-Rogue,
+.wuxFeatListClassDisplay-Soldier,
+.wuxFeatListClassDisplay-Spellblade,
+.wuxFeatListClassDisplay-Thaumaturge,
+.wuxFeatListClassDisplay-Warrior,
+.wuxFeatListClassDisplay-Wizard,
+.wuxFeatListClassDisplay-Eidolon,
+.wuxFeatListClassDisplay-Esper,
+.wuxFeatListClassDisplay-Watcher,
+.wuxFeatListClassDisplay-Automaton,
+.wuxFeatListClassDisplay-Brute,
+.wuxFeatListClassDisplay-Bulwark,
+.wuxFeatListClassDisplay-Prowler,
+.wuxFeatListClassDisplay-flag
+{
+    display: none;
+}
+
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Arcanist"] + .wuxFeatListClassDisplay-Arcanist,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Brawler"] + .wuxFeatListClassDisplay-Brawler,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Commoner"] + .wuxFeatListClassDisplay-Commoner,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Defender"] + .wuxFeatListClassDisplay-Defender,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Exemplar"] + .wuxFeatListClassDisplay-Exemplar,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Fighter"] + .wuxFeatListClassDisplay-Fighter,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Investigator"] + .wuxFeatListClassDisplay-Investigator,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Mage"] + .wuxFeatListClassDisplay-Mage,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Pugilist"] + .wuxFeatListClassDisplay-Pugilist,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Rogue"] + .wuxFeatListClassDisplay-Rogue,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Soldier"] + .wuxFeatListClassDisplay-Soldier,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Spellblade"] + .wuxFeatListClassDisplay-Spellblade,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Thaumaturge"] + .wuxFeatListClassDisplay-Thaumaturge,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Warrior"] + .wuxFeatListClassDisplay-Warrior,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Wizard"] + .wuxFeatListClassDisplay-Wizard,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Eidolon"] + .wuxFeatListClassDisplay-Eidolon,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Esper"] + .wuxFeatListClassDisplay-Esper,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Watcher"] + .wuxFeatListClassDisplay-Watcher,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Automaton"] + .wuxFeatListClassDisplay-Automaton,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Brute"] + .wuxFeatListClassDisplay-Brute,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Bulwark"] + .wuxFeatListClassDisplay-Bulwark,
+input[type=hidden].wuxFeatListClassDisplay-flag[value="Prowler"] + .wuxFeatListClassDisplay-Prowler
+{
+    display: block;
+}
+
+.wuxSectionBlock .wuxFeatEntry
+{
+    width: 210px;
+}
+
+.wuxSectionBlock .wuxFeatLevel
+{
+    position: absolute;
+    right: 0px; 
+    
+    font-size: 7px;
+}
+
+.wuxSectionBlock .wuxFeatTypeName
+{
+    display: inline;
+    grid-template-columns: 8px;
+    width: 80px;
+
+    color: #a6a6a6;
+    font-size: 8px;
+    font-weight: normal;
+}
+
+
+.wuxSectionBlock input[type=checkbox].wuxFeatEquipField-flag
+{
+    opacity: 0;    
+    position: absolute;
+    left: 18px;
+    width: 15px;
+    height: 18px;
+    z-index: 100;
+}
+
+.wuxSectionBlock .wuxFeatEquipField-flag + span
+{
+    white-space: nowrap;
+    font-family: dicefontd6;
+    z-index: 99;
+}
+
+.wuxSectionBlock .wuxFeatEquipField-flag + span::before
+{
+    content: "0" !important;
+}
+
+.wuxSectionBlock .wuxFeatEquipField-flag:not([value="0"]) + span
+{
+    font-family: pictos;
+    color: #DE9B72;
+}
+
+.wuxSectionBlock .wuxFeatEquipField-flag:not([value="0"]) + span::before
+{
+    content: "2" !important;
+}
+
+/*========================================
+    Gear Section
+========================================*/
+
+.wuxSectionBlock .wuxGearMaterialOptions-all,
+.wuxSectionBlock .wuxGearMaterialOptions-sturdy,
+.wuxSectionBlock .wuxGearMaterialOptions-sturdy3,
+.wuxSectionBlock .wuxGearMaterialOptions-piercing,
+.wuxSectionBlock .wuxGearMaterialOptions-sharp,
+.wuxSectionBlock .wuxGearMaterialOptions-flexible,
+.wuxSectionBlock .wuxGearMaterialOptions-transparent
+{
+    display: none;
+}
+
+.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value=""] ~ .wuxGearMaterialOptions-all,
+.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="0"] ~ .wuxGearMaterialOptions-all,
+.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="sturdy"] ~ .wuxGearMaterialOptions-sturdy,
+.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="sturdy3"] ~ .wuxGearMaterialOptions-sturdy3,
+.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="piercing"] ~ .wuxGearMaterialOptions-piercing,
+.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="sharp"] ~ .wuxGearMaterialOptions-sharp,
+.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="flexible"] ~ .wuxGearMaterialOptions-flexible,
+.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="transparent"] ~ .wuxGearMaterialOptions-transparent
+{
+    display: inline-block;
+} 
+
+.wuxSectionBlock .wuxGearEquipGroup input[type=checkbox].wuxEquipField-flag
+{
+    left: 18px;
+}
+
+.wuxSectionBlock input[type=checkbox].wuxGearEquipField-flag
+{
+    opacity: 0;    
+    position: absolute;
+    left: 18px;
+    top: 0px;
+    width: 15px;
+    height: 18px;
+    z-index: 100;
+}
+
+.wuxSectionBlock .wuxGearEquipField-flag + span
+{
+    white-space: nowrap;
+    font-family: dicefontd6;
+    z-index: 99;
+}
+
+.wuxSectionBlock .wuxGearEquipField-flag + span::before
+{
+    content: "0" !important;
+}
+
+.wuxSectionBlock .wuxGearEquipField-flag:not([value="0"]) + span
+{
+    font-family: pictos;
+    color: #DE9B72;
+}
+
+.wuxSectionBlock .wuxGearEquipField-flag:not([value="0"]) + span::before
+{
+    content: "2" !important;
+}
+
+.wuxSectionBlock .wuxGearInStorage,
+.wuxSectionBlock .wuxGearInStorage .wuxSubheader
+{
+    color: #666;
+}
+
+.wuxSectionBlock .wuxCraftingTypeFieldWeapon,
+.wuxSectionBlock .wuxCraftingTypeFieldArmor,
+.wuxSectionBlock .wuxCraftingTypeFieldCount,
+.wuxSectionBlock .wuxCraftingTypeFieldBlueprint,
+.wuxSectionBlock .wuxCraftingTypeFieldRecipe,
+.wuxSectionBlock .wuxCraftingTypeFieldMaterial,
+.wuxSectionBlock .wuxCraftingTypeFieldGoods,
+.wuxSectionBlock .wuxCraftingTypeFieldEngineering
+{
+    display: none;
+}
+
+input[type=hidden].wuxCraftingTypeField-flag[value="weapon"] + .wuxCraftingTypeFieldWeapon,
+input[type=hidden].wuxCraftingTypeField-flag[value="armor"] + .wuxCraftingTypeFieldArmor,
+input[type=hidden].wuxCraftingTypeField-flag[value="gear"] + .wuxCraftingTypeFieldCount,
+input[type=hidden].wuxCraftingTypeField-flag[value="ammo"] + .wuxCraftingTypeFieldCount,
+input[type=hidden].wuxCraftingTypeField-flag[value="consumable"] + .wuxCraftingTypeFieldCount,
+input[type=hidden].wuxCraftingTypeField-flag[value="blueprint"] + .wuxCraftingTypeFieldBlueprint,
+input[type=hidden].wuxCraftingTypeField-flag[value="recipe"] + .wuxCraftingTypeFieldRecipe,
+input[type=hidden].wuxCraftingTypeField-flag[value="M"] + .wuxCraftingTypeFieldMaterial,
+input[type=hidden].wuxCraftingTypeField-flag[value="I"] + .wuxCraftingTypeFieldGoods,
+input[type=hidden].wuxCraftingTypeField-flag[value="E"] + .wuxCraftingTypeFieldEngineering
+{
+    display: inherit;
+}
+
+.wuxSectionBlock .wuxRightButton
+{
+    float: right;
+}
+
+/*========================================
+    Skills
+========================================*/
+
+.wuxSectionBlock .wuxFormHeaderSkillSpacing
+{
+    display: inline-block;
+    height: 15px;
+    padding: 0px;
+    margin: 0px;
+    width: 7px;
+
+    line-height: 14px;
+}
+
+/*========================================
+    Actions Section
+========================================*/
+
+.wuxActionResourcesGroup .repcontrol 
+{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+}
+
+.wuxActionResourcesGroup .repcontrol .repcontrol_edit,
+.wuxActionResourcesGroup .repcontrol .repcontrol_add
+{
+    position: absolute;
+    float: none;
+    top: -5px;
+    right: 0px;
+    margin: 0px;
+}
+
+.wuxActionResourcesGroup .repcontainer,
+.wuxActionResourcesGroup .repcontainer > .repitem 
+{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.wuxSectionBlock .wuxFieldSet .wuxSpellDamageButton
+{
+    opacity: 0;
+    position: absolute;
+    top: -5px;
+    right: 20px;
+    display: none;
+    width: 18px;
+    height: 18px;
+    z-index: 100;
+    margin: 0px;
+    
+    white-space: nowrap;
+    font-size: 16px;
+    font-family: pictos;
+    color: #A0A0A0;
+
+    cursor: pointer;
+    background-color: transparent;
+    border: 0px;
+}
+
+.wuxSectionBlock .wuxFieldSet:hover > .wuxSpellDamageButton
+{
+    opacity: 1;
+    display: block;
+}
+
+.wuxSectionBlock .wuxFieldSet .wuxSpellDamageButton:hover
+{
+    color: red;
+}
+
+.wuxSectionBlock input[type=checkbox].wuxSpellEquipField-flag
+{
+    opacity: 0;    
+    position: absolute;
+    left: 18px;
+    width: 15px;
+    height: 18px;
+    z-index: 100;
+}
+
+.wuxSectionBlock .wuxSpellEquipField-flag + span
+{
+    white-space: nowrap;
+    font-family: dicefontd6;
+    z-index: 99;
+}
+
+.wuxSectionBlock .wuxSpellEquipField-flag + span::before
+{
+    content: "0" !important;
+}
+
+.wuxSectionBlock .wuxSpellEquipField-flag:not([value="0"]) + span
+{
+    font-family: pictos;
+    color: #DE9B72;
+}
+
+.wuxSectionBlock .wuxSpellEquipField-flag:not([value="0"]) + span::before
+{
+    content: "2" !important;
+}
+
+input[type=checkbox].wuxActionTabButton 
+{
+    position: absolute;
+    height: 16px;
+    z-index: 2;
+
+    opacity: 0;
+}
+
+input[type=checkbox].wuxActionTabButton + img 
+{
+    position: absolute;
+    top: 4px;
+
+    filter: invert(50%);
+}
+
+input[type=hidden].wuxActionTabButton[value="0"] ~ img.wuxActionTabFree,
+input[type=hidden].wuxActionTabButton[value="1"] ~ img.wuxActionTab1,
+input[type=hidden].wuxActionTabButton[value="2"] ~ img.wuxActionTab1,
+input[type=hidden].wuxActionTabButton[value="3"] ~ img.wuxActionTab1,
+input[type=hidden].wuxActionTabButton[value="2"] ~ img.wuxActionTab2,
+input[type=hidden].wuxActionTabButton[value="3"] ~ img.wuxActionTab2,
+input[type=hidden].wuxActionTabButton[value="3"] ~ img.wuxActionTab3,
+input[type=hidden].wuxActionTabButton[value="R"] ~ img.wuxActionTabR
+{
+    filter: invert(100%);
+}
+
+input[type=checkbox].wuxActionTabButton.wuxActionTabFree,
+input[type=checkbox].wuxActionTabButton.wuxActionTabFree + img 
+{
+    left: 0px;
+    width: 14px;
+}
+
+input[type=checkbox].wuxActionTabButton.wuxActionTab1,
+input[type=checkbox].wuxActionTabButton.wuxActionTab1 + img 
+{
+    left: 20px;
+    width: 14px;
+}
+
+input[type=checkbox].wuxActionTabButton.wuxActionTab2,
+input[type=checkbox].wuxActionTabButton.wuxActionTab2 + img 
+{
+    left: 40px;
+    width: 14px;
+}
+
+input[type=checkbox].wuxActionTabButton.wuxActionTab3,
+input[type=checkbox].wuxActionTabButton.wuxActionTab3 + img 
+{
+    left: 60px;
+    width: 14px;
+}
+
+input[type=checkbox].wuxActionTabButton.wuxActionTabR,
+input[type=checkbox].wuxActionTabButton.wuxActionTabR + img 
+{
+    left: 80px;
+    width: 14px;
+}
+
+
+
+/*========================================
+    Vitals
+========================================*/
+
+.wuxSectionBlock .wuxFieldSet .wuxModifierData 
+{
+    position: relative;
+    padding-bottom: 3px;
+}
+
+.wuxSectionBlock .wuxFieldSet .wuxModifierData span
+{
+    display: block;
+
+    font-style: italic;
+    font-size: 10px;
+    line-height: 11px;
+    color: #A0A0A0;
+}
+
+/*========================================
+    Character Type Field
+========================================*/
+
+.wuxSectionBlock .wuxCharacterTypeField-Human,
+.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Human,
+.wuxSectionBlock .wuxCharacterTypeField-Spirit,
+.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Spirit,
+.wuxSectionBlock .wuxCharacterTypeField-Beast,
+.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Beast,
+.wuxSectionBlock .wuxCharacterTypeField-Archetype,
+.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Archetype,
+.wuxSectionBlock .wuxCharacterTypeField-Phasma,
+.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Phasma,
+.wuxSectionBlock .wuxCharacterTypeField-Temperament,
+.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Temperament,
+.wuxSectionBlock .wuxCharacterTypeField-flag,
+.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-flag,
+
+.wuxSectionBlock .wuxRollTypeField-Common,
+.wuxAspectContainer .wuxAspectInput .wuxRollTypeField-Common,
+.wuxSectionBlock .wuxRollTypeField-Heroic,
+.wuxAspectContainer .wuxAspectInput .wuxRollTypeField-Heroic,
+.wuxSectionBlock .wuxRollTypeField-flag,
+.wuxAspectContainer .wuxAspectInput .wuxRollTypeField-flag,
+.wuxSectionBlock .wuxElementTypeField-Wood,
+.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Wood,
+.wuxSectionBlock .wuxElementTypeField-Fire,
+.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Fire,
+.wuxSectionBlock .wuxElementTypeField-Earth,
+.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Earth,
+.wuxSectionBlock .wuxElementTypeField-Metal,
+.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Metal,
+.wuxSectionBlock .wuxElementTypeField-Water,
+.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Water,
+.wuxSectionBlock .wuxElementTypeField-flag,
+.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-flag
+{
+    display: none;
+}
+
+input[type=hidden].wuxCharacterTypeField-flag[value="0"] + .wuxCharacterTypeField-Human,
+input[type=hidden].wuxCharacterTypeField-flag[value="Spirit"] + .wuxCharacterTypeField-Spirit,
+input[type=hidden].wuxCharacterTypeField-flag[value="Beast"] + .wuxCharacterTypeField-Beast,
+input[type=hidden].wuxCharacterTypeField-flag[value="Archetype"] + .wuxCharacterTypeField-Archetype,
+input[type=hidden].wuxCharacterTypeField-flag[value="Phasma"] + .wuxCharacterTypeField-Phasma,
+input[type=hidden].wuxCharacterTypeField-flag[value="BeastStyle"] + .wuxCharacterTypeField-BeastStyle
+{
+    display: block;
+}
+
+input[type=hidden].wuxRollTypeField-flag[value="Common"] + .wuxRollTypeField-Common,
+input[type=hidden].wuxRollTypeField-flag[value="Heroic"] + .wuxRollTypeField-Heroic,
+input[type=hidden].wuxElementTypeField-flag[value="Wood"] + .wuxElementTypeField-Wood,
+input[type=hidden].wuxElementTypeField-flag[value="Fire"] + .wuxElementTypeField-Fire,
+input[type=hidden].wuxElementTypeField-flag[value="Earth"] + .wuxElementTypeField-Earth,
+input[type=hidden].wuxElementTypeField-flag[value="Metal"] + .wuxElementTypeField-Metal,
+input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeField-Water
+{
+    display: inherit;
+}

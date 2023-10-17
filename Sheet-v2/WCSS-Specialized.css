@@ -1,0 +1,280 @@
+/*========================================
+  Core Stats
+========================================*/
+
+.wuxNamePlate 
+{
+    height: 26px;
+    padding: 0px 5px 5px 5px;
+
+	background: #1d1e1f;
+    border-color: transparent transparent #DE9B72 transparent;
+}
+
+.wuxNamePlate input[type=text],
+.wuxNamePlate div
+{
+    position: absolute;
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+}
+
+.wuxNamePlate input[type=text]::placeholder
+{
+    color: #686868;
+}
+
+.wuxNamePlate span.wuxNamePlateTitle
+{
+    top: -3px;
+    left: 40px;
+
+    font-family: "Candal";
+    font-size: 10px;
+    text-overflow: clip;
+    color: #f4f6f8;
+
+    background: none;
+    border: none;
+}
+
+.wuxNamePlate div.wuxNamePlateLevel
+{
+    top: -3px;
+    left: 0px;
+
+    background: none;
+    border: none;
+}
+
+.wuxNamePlate div.wuxNamePlateLevel span
+{
+    font-family: "Candal";
+    font-size: 10px;
+    text-overflow: clip;
+    color: #f4f6f8;
+}
+
+.wuxNamePlate input[type=text].wuxNamePlateName
+{
+    top: 10px;
+    left: 5px;
+
+    color: #f4f6f8;
+    font-family: "Candal";
+    font-size: 14px;
+    text-transform: capitalize;
+    text-overflow: clip;
+
+    background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border: none;
+}
+
+.wuxCoreStats
+{
+    position: relative;
+    top: -9px;
+    left: 0px;
+    width: calc(100% - 18px);
+    padding: 0px 5px 3px 5px;
+
+	background: #3A3D3E;
+    background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 100%);
+
+    border: 3px #DE9B72 solid;
+    border-left: transparent;
+    border-radius: 0px 10px 10px 0px;
+}
+
+.wuxCoreStats .wuxFormHeader
+{
+    position: absolute;
+    left: 0px;
+}
+
+.wuxSectionBlock .wuxFieldSet .wuxInjuryField 
+{
+    position: relative;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.wuxSectionBlock .wuxFieldSet .wuxInjuryField span
+{
+    display: inline-block;
+
+    color: red;
+    font-style: italic;
+    font-size: 9px;
+    line-height: 11px;
+}
+
+.wuxSectionBlock .wuxSimpleLeveling,
+.wuxSectionBlock .wuxComplexLeveling
+{
+    display: none;
+}
+
+.wuxSectionContent button.wuxSpellAddButton
+{
+    position: relative;
+    display: inline-block; 
+    height: 10px; 
+    margin: 0px; 
+    margin-right: 5px;
+    padding: 0px;
+    width: 14px;
+
+    text-shadow: none;
+
+    background: #3A3D3E;
+    border-width: 0px;
+    border-radius: 5px;
+}
+
+.wuxSectionContent button.wuxSpellAddButton:active 
+{
+    background: #8a8b8e;
+}
+
+.wuxSectionContent .wuxBattleTabs button.wuxSpellAddButton[type=roll]
+{
+    background-image: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%); 
+}
+
+.wuxSectionContent button.wuxSpellAddButton span
+{
+    font-size: 6px;
+    vertical-align: top;
+}
+
+/*========================================
+    Emote Post
+========================================*/
+
+.wuxSectionBlock.wuxChatNotes textarea
+{
+    width: calc(100% - 10px);
+    height: 40px;
+    margin-bottom: 0px;
+
+    color: #1d1e1f;
+    font-size: 11px;
+    line-height: 15px;
+}
+
+.wuxEmotePostGroup .display
+{
+    position: relative;
+    padding: 5px;
+    margin-bottom: 5px;
+
+	background: #5A5D5E;
+    border-color: #a6a6a6;
+    border-image: linear-gradient(170deg, #a6a6a600 60%, #a6a6a6FF 100%) 1;
+    border-style: solid;
+    border-width: 0px 1px 1px 0px;
+}
+
+.wuxEmotePostGroup textarea.wuxFormInput
+{
+    width: 215px;
+    height: 80px;
+
+    font-size: 10px;
+}
+
+.wuxEmotePostGroup .repcontrol 
+{
+    display: none;
+}
+
+.wuxEmotePostGroup .repcontainer > .repitem 
+{
+    display: inline-block;
+}
+
+.wuxEmotePostGroup div.wuxEmoteButton,
+.wuxEmotePostGroup button.wuxEmoteButton[type=roll]
+{
+    position: relative;
+    display: block; 
+    height: 14px; 
+    margin: 0px; 
+    margin-right: 5px; 
+    width: calc(100% - 10px);
+
+    text-shadow: none;
+}
+
+.wuxEmotePostGroup button.wuxEmoteButton[type=roll]
+{
+    background: none;
+    background-image: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
+    border-width: 0px;
+    border-radius: 5px;
+}
+
+.wuxEmotePostGroup div.wuxEmoteButton span,
+.wuxEmotePostGroup button.wuxEmoteButton[type=roll] span
+{
+    position: relative;
+    bottom: 5px;
+    left: -6px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    padding: 0px 6px;
+
+    border: 0px;
+}
+
+.wuxEmotePostGroup button.wuxEmoteButton[type=roll] span
+{
+    color: #f4f6f8;
+    font-weight: normal;
+    font-size: 10px;
+}
+
+.wuxEmotePostGroup button.wuxEmoteButton[type=roll]::before
+{
+    content: "" !important;
+}
+
+.wuxEmoteDisplayStyleList,
+.wuxEmoteDisplayStyleRecast,
+.wuxEmoteDisplayStyleField-flag
+{
+    display: none;
+}
+
+input[type=hidden].wuxEmoteDisplayStyleField-flag[value="List"] + .wuxEmoteDisplayStyleList,
+input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDisplayStyleRecast
+{
+    display: inherit;
+}
+
+/*========================================
+    Options
+========================================*/
+
+.wuxSectionBlock .wuxDisplayStyleCharacter,
+.wuxSectionBlock .wuxDisplayStyleClone,
+.wuxSectionBlock .wuxDisplayStyleParty,
+.wuxSectionBlock .wuxDisplayStyleBattleLog,
+.wuxSectionBlock .wuxDisplayStyleField-flag
+{
+    display: none;
+}
+
+input[type=hidden].wuxDisplayStyleField-flag[value="Character"] + .wuxDisplayStyleCharacter,
+input[type=hidden].wuxDisplayStyleField-flag[value="Clone"] + .wuxDisplayStyleClone,
+input[type=hidden].wuxDisplayStyleField-flag[value="PartyManager"] + .wuxDisplayStyleParty,
+input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplayStyleBattleLog
+{
+    display: inherit;
+}

@@ -93,6 +93,130 @@ select
     color: white;
 }
 
+
+/*========================================
+  Master Layout
+========================================*/
+
+.wuxCharacterSheet
+{
+    position: absolute;
+    top: 20px;
+    left: 0px;
+    width: 98%;
+    min-width: 250px;
+    max-width: 1065px;
+    padding-bottom: 30px;
+    margin: 0px;
+
+	background: #3A3D3E;
+    border: 0px black solid;
+    border-radius: 10px;
+}
+
+.wuxHiddenFields
+{
+    display: none;
+}
+
+.wuxInnerHeader
+{
+    pointer-events: none;
+}
+
+.wuxCharacterInformation 
+{
+    display: flex;
+    flex-flow: row;
+    align-content: flex-start;
+}
+
+.wuxMainContent
+{
+    display: inline-block;
+    flex: 5;
+}
+
+.wuxHorizontalFlex,
+.wuxSheetHeader
+{
+    position: relative;
+    width: 100%;
+    flex-basis: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.wuxLayoutItem,
+.wuxLargeLayoutItem,
+.wuxSmallLayoutItem
+{
+    position: relative;
+    display: inline-block;
+    height: auto;
+    vertical-align: top;
+}
+
+.wuxLayoutItem
+{
+    min-width: 220px;
+    max-width: 500px;
+    flex: 2;
+}
+
+.wuxLargeLayoutItem
+{
+    min-width: 610px;
+    max-width: 810px;
+    flex: 4;
+}
+
+.wuxSmallLayoutItem
+{
+    min-width: 120px;
+    max-width: 175px;
+    flex: 1;
+}
+
+.wuxFlexLayoutItem
+{
+    flex: 1 1 250px;
+}
+
+.wuxFloatHeader,
+.wuxFloatSidebar
+{
+    position: sticky;
+    left: 0px;
+    padding-bottom: 5px;
+
+    background: linear-gradient(to bottom, #3A3D3EFF 85%, #3A3D3E00 100%);
+}
+
+.wuxFloatHeader
+{
+    width: 100%;
+    flex-basis: 100%;
+    top: 0px;
+    z-index: 9999;
+}
+
+.wuxFloatSidebar
+{
+    display: inline-block;
+    top: 50px;
+    flex: 1;
+
+    min-width: 80px;
+    max-width: 80px;
+    height: 100px;
+    height: calc(100vh - 50px);
+    margin-right: 10px;
+
+    background: #FFF;
+    z-index: 9998;
+}
+
 /*========================================
   Tabs
 ========================================*/
@@ -107,314 +231,52 @@ select
     align-content: flex-start;
 }
 
-.wuxTab.wuxTabCore,
-.wuxTab.wuxTabGear,
-.wuxTab.wuxTabSkill,
-.wuxTab.wuxTabActions,
-.wuxTab.wuxTabVitals,
-.wuxTab.wuxTabLife,
-.wuxTab.wuxTabChat,
-.wuxTab.wuxTabBio,
-.wuxTab.wuxTabNPC,
-.wuxTab.wuxTabQuest,
-.wuxTab.wuxTabTools,
-.wuxTab.wuxTabNotes,
-.wuxTab.wuxTabMusic,
-.wuxTab.wuxTabBattle,
-.wuxTab.wuxTabField,
-.wuxTab.wuxTabOptions
-{
-    display: none;
-}
-
-input[type=hidden].wuxTabButton.wuxTabGroup[value="core"] ~ .wuxTab.wuxTabCore,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="gear"] ~ .wuxTab.wuxTabGear,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="skill"] ~ .wuxTab.wuxTabSkill,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="actions"] ~ .wuxTab.wuxTabActions,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="vitals"] ~ .wuxTab.wuxTabVitals,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="life"] ~ .wuxTab.wuxTabLife,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="chat"] ~ .wuxTab.wuxTabChat,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="bio"] ~ .wuxTab.wuxTabBio,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="npc"] ~ .wuxTab.wuxTabNPC,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="quest"] ~ .wuxTab.wuxTabQuest,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="tools"] ~ .wuxTab.wuxTabTools,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="notes"] ~ .wuxTab.wuxTabNotes,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="music"] ~ .wuxTab.wuxTabMusic,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="battle"] ~ .wuxTab.wuxTabBattle,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxTab.wuxTabField,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="options"] ~ .wuxTab.wuxTabOptions
-{
-    display: inline-block;
-}
-
-input[type=radio].wuxTabButton 
-{
-    position: absolute;
-    height: 16px;
-    z-index: 2;
-
-    opacity: 0;
-}
-
-input[type=radio].wuxTabButton + span 
-{
-    position: absolute;
-    height: 14px;
-
-    color: #000;
-    text-align: center;
-    font-weight: bold;
-    font-size: 10px;
-
-    background-color: #cacbcf;
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
-input[type=radio].wuxTabButton:checked + span 
-{
-    color: #FFFFFF;
-    background-color: #DE9B72;
-}
-
-input[type=radio].wuxTabButton.wuxTabCore,
-input[type=radio].wuxTabButton.wuxTabCore + span 
-{
-    right: 198px;
-    width: 35px;
-}
-
-input[type=radio].wuxTabButton.wuxTabGear,
-input[type=radio].wuxTabButton.wuxTabGear + span 
-{
-    right: 160px;
-    width: 35px;
-}
-
-input[type=radio].wuxTabButton.wuxTabSkill,
-input[type=radio].wuxTabButton.wuxTabSkill + span 
-{
-    right: 122px;
-    width: 35px;
-}
-
-input[type=radio].wuxTabButton.wuxTabActions,
-input[type=radio].wuxTabButton.wuxTabActions + span 
-{
-    right: 76px;
-    width: 44px;
-}
-
-input[type=radio].wuxTabButton.wuxTabVitals,
-input[type=radio].wuxTabButton.wuxTabVitals + span 
-{
-    right: 38px;
-    width: 35px;
-}
-
-input[type=radio].wuxTabButton.wuxTabBio,
-input[type=radio].wuxTabButton.wuxTabBio + span
-{
-    right: 0px;
-    width: 35px;
-}
-
-input[type=radio].wuxTabButton.wuxTabNPC,
-input[type=radio].wuxTabButton.wuxTabNPC + span 
-{
-    right: 175px;
-    width: 35px;
-}
-
-input[type=radio].wuxTabButton.wuxTabQuest,
-input[type=radio].wuxTabButton.wuxTabQuest + span 
-{
-    right: 137px;
-    width: 35px;
-}
-
-input[type=radio].wuxTabButton.wuxTabTools,
-input[type=radio].wuxTabButton.wuxTabTools + span 
-{
-    right: 99px;
-    width: 35px;
-}
-
-input[type=radio].wuxTabButton.wuxTabNotes,
-input[type=radio].wuxTabButton.wuxTabNotes + span, 
-input[type=radio].wuxTabButton.wuxTabField,
-input[type=radio].wuxTabButton.wuxTabField + span 
-{
-    right: 61px;
-    width: 35px;
-}
-
-input[type=radio].wuxTabButton.wuxTabChat,
-input[type=radio].wuxTabButton.wuxTabChat + span,
-input[type=radio].wuxTabButton.wuxTabMusic,
-input[type=radio].wuxTabButton.wuxTabMusic + span,
-input[type=radio].wuxTabButton.wuxTabBattle,
-input[type=radio].wuxTabButton.wuxTabBattle + span
-{
-    right: 23px;
-    width: 35px;
-}
-
-input[type=radio].wuxTabButton.wuxTabOptions,
-input[type=radio].wuxTabButton.wuxTabOptions + span 
-{
-    right: 0px;
-    width: 20px;
-}
-
-input[type=radio].wuxTabButton.wuxTabWhisperPublic + span ,
-input[type=radio].wuxTabButton.wuxTabWhisperToGM + span 
-{
-    height: 10px;
-
-    color: #FFF;
-    text-align: left;
-    font-weight: bold;
-    font-size: 10px;
-
-    background: none;
-    border: none;
-}
-
-input[type=radio].wuxTabButton.wuxTabWhisperPublic:checked + span,
-input[type=radio].wuxTabButton.wuxTabWhisperToGM:checked + span 
-{
-    color: #DE9B72;
-}
-
-input[type=radio].wuxTabButton.wuxTabWhisperPublic,
-input[type=radio].wuxTabButton.wuxTabWhisperPublic + span 
-{
-    left: 0px;
-    width: 50px;
-}
-
-input[type=radio].wuxTabButton.wuxTabWhisperToGM,
-input[type=radio].wuxTabButton.wuxTabWhisperToGM + span 
-{
-    left: 53px;
-    width: 40px;
-}
-
-/*========================================
-  Shared Layout
-========================================*/
-
-.wuxHiddenFields
-{
-    display: none;
-}
-
-.wuxCharacterInformation 
-{
-    position: absolute;
-    top: 15px;
-    left: 0px;
-    min-width: 250px;
-    max-width: 765px;
-    padding-bottom: 30px;
-    margin: 0px;
-
-	background: #3A3D3E;
-    border: 0px black solid;
-    border-radius: 10px;
-}
-
-.wuxHorizontalFlex,
-.wuxSheetHeader
-{
-    position: relative;
-    width: 100%;
-    margin: 0px;
-    padding: 0px;
-
-
-    display: flex;
-    flex-flow: wrap row;
-    align-content: flex-start;
-}
-
-.wuxLayoutItem,
-.wuxLargeLayoutItem,
-.wuxInnerLayoutItem
+.wuxTabHeader
 {
     position: relative;
     display: inline-block;
-    height: auto;
-    vertical-align: top;
-    flex: 1;
+    margin-bottom: 15px;
+    width: calc(100% - 15px);
+    height: 22px;
+    padding: 3px;
+    padding-left: 6px;
+    z-index: 1;
+
+    color: #f4f6f8;
+    font-family: "Candal";
+    font-size: 18px;
+    line-height: 22px;
+    vertical-align: bottom;
+    text-transform: capitalize;
+
+	background: #512800;
+    background: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
+    border-bottom: 3px solid;
+    border-color: #000 #000 #a6a6a6 #000;
 }
 
-.wuxLayoutItem
+.wuxTab-flag
 {
-    min-width: 250px;
-    max-width: 250px;
+    opacity: 0;    
+    position: absolute;
+    top: 0px;
+    right: -3px;
+    left: 0px;
+    width: 18px;
+    min-height: 25px;
+    z-index: 100;
 }
 
-.wuxLargeLayoutItem
+
+.wuxTab-flag:hover + .wuxTabHeader
 {
-    width: 510px;
-    min-width: 510px;
-    max-width: 510px;
+    background: #86530f;
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
 }
 
-.wuxInnerLayoutItem
-{
-    width: 244px;
-    min-width: 244px;
-    max-width: 244px;
-}
-
-.wuxFlexLayoutItem
-{
-    flex: 1 1 250px;
-}
-
-.wuxLayoutItem.wuxTabCore,
-.wuxLayoutItem.wuxTabLife,
-.wuxLayoutItem.wuxTabGear,
-.wuxLayoutItem.wuxTabSkill,
-.wuxLayoutItem.wuxTabActions,
-.wuxLayoutItem.wuxTabBio,
-.wuxLayoutItem.wuxTabOptions,
-.wuxLayoutItem.wuxTabTools,
-.wuxLayoutItem.wuxTabQuest,
-.wuxLayoutItem.wuxTabMusic,
-.wuxLayoutItem.wuxTabBattle,
-.wuxLayoutItem.wuxTabField,
-.wuxFlexLayoutItem.wuxTabChat,
-.wuxFlexLayoutItem.wuxTabSkill,
-.wuxFlexLayoutItem.wuxTabActions,
-.wuxFlexLayoutItem.wuxTabVitals,
-.wuxFlexLayoutItem.wuxTabLife
+.wuxTab-flag:not(:checked) ~ .wuxTab
 {
     display: none;
-}
-
-input[type=hidden].wuxTabButton.wuxTabGroup[value="core"] ~ .wuxLayoutItem.wuxTabCore,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="gear"] ~ .wuxLayoutItem.wuxTabGear,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="skill"] ~ .wuxLayoutItem.wuxTabSkill,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="actions"] ~ .wuxLayoutItem.wuxTabActions,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="life"] ~ .wuxLayoutItem.wuxTabLife,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="bio"] ~ .wuxLayoutItem.wuxTabBio,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="skill"] ~ .wuxFlexLayoutItem.wuxTabSkill,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="actions"] ~ .wuxFlexLayoutItem.wuxTabActions,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="vitals"] ~ .wuxFlexLayoutItem.wuxTabVitals,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="life"] ~ .wuxFlexLayoutItem.wuxTabLife,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="chat"] ~ .wuxFlexLayoutItem.wuxTabChat,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="options"] ~ .wuxLayoutItem.wuxTabOptions,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="tools"] ~ .wuxLayoutItem.wuxTabTools,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="quest"] ~ .wuxLayoutItem.wuxTabQuest,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="music"] ~ .wuxLayoutItem.wuxTabMusic,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="battle"] ~ .wuxLayoutItem.wuxTabBattle,
-input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxTabField
-{
-    display: inline-block;
 }
 
 /*========================================
@@ -515,17 +377,6 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 {
     position: relative;
     width: 100%;
-}
-
-.wuxFloatHeader
-{
-    position: sticky;
-    top: 0px;
-    left: 0px;
-    padding-bottom: 20px;
-    z-index: 9999;
-
-    background: linear-gradient(to bottom, #3A3D3EFF 85%, #3A3D3E00 100%);
 }
 
 /*========================================
@@ -825,42 +676,6 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
     margin-left: 5px;
 
     filter: invert(100%);
-}
-
-.wuxSectionBlock .wuxActionCostFree,
-.wuxAspectContainer .wuxActionCostFree,
-.wuxSectionBlock .wuxActionCost1,
-.wuxAspectContainer .wuxActionCost1,
-.wuxSectionBlock .wuxActionCost2,
-.wuxAspectContainer .wuxActionCost2,
-.wuxSectionBlock .wuxActionCost3,
-.wuxAspectContainer .wuxActionCost3,
-.wuxSectionBlock .wuxActionCost4,
-.wuxAspectContainer .wuxActionCost4,
-.wuxSectionBlock .wuxActionCost5,
-.wuxAspectContainer .wuxActionCost5,
-.wuxSectionBlock .wuxActionCostReaction,
-.wuxAspectContainer .wuxActionCostReaction
-{
-    display: none;
-}
-
-.wuxSectionBlock .wuxActionCost-flag[value="0"] ~ .wuxActionCostFree,
-.wuxAspectContainer .wuxActionCost-flag[value="0"] ~ .wuxActionCostFree,
-.wuxSectionBlock .wuxActionCost-flag[value="1"] ~ .wuxActionCost1,
-.wuxAspectContainer .wuxActionCost-flag[value="1"] ~ .wuxActionCost1,
-.wuxSectionBlock .wuxActionCost-flag[value="2"] ~ .wuxActionCost2,
-.wuxAspectContainer .wuxActionCost-flag[value="2"] ~ .wuxActionCost2,
-.wuxSectionBlock .wuxActionCost-flag[value="3"] ~ .wuxActionCost3,
-.wuxAspectContainer .wuxActionCost-flag[value="3"] ~ .wuxActionCost3,
-.wuxSectionBlock .wuxActionCost-flag[value="4"] ~ .wuxActionCost4,
-.wuxAspectContainer .wuxActionCost-flag[value="4"] ~ .wuxActionCost4,
-.wuxSectionBlock .wuxActionCost-flag[value="5"] ~ .wuxActionCost5,
-.wuxAspectContainer .wuxActionCost-flag[value="5"] ~ .wuxActionCost5,
-.wuxSectionBlock .wuxActionCost-flag[value="R"] ~ .wuxActionCostReaction,
-.wuxAspectContainer .wuxActionCost-flag[value="R"] ~ .wuxActionCostReaction
-{
-    display: inline-block;
 }
 
 
@@ -1379,6 +1194,224 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 {
     content: "" !important;
 }
+
+/*========================================
+    Options Settings
+========================================*/
+
+.wuxSectionBlock .options-flag,
+.wuxAspectContainer .options-flag,
+.wuxSectionBlock .display-flag,
+.wuxSectionBlock .wuxSectionContent-flag
+{
+    opacity: 0;    
+    position: absolute;
+    top: 0px;
+    right: -3px;
+    width: 18px;
+    height: 18px;
+    z-index: 100;
+}
+
+.wuxSectionBlock .display-flag,
+.wuxSectionBlock .wuxSectionContent-flag
+{
+    left: 0px;
+    width: 225px;
+    height: 22px;
+}
+
+.wuxSectionBlock .options-flag + span,
+.wuxAspectContainer .options-flag + span
+{
+    position: absolute;
+    top: -5px;
+    right: -3px;
+    white-space: nowrap;
+    width: 18px;
+    height: 18px;
+    font-size: 20px;
+    font-family: pictos;
+    color: #d0d0d0;
+    cursor: pointer;
+    margin-top: 0px;
+    display: none;
+    opacity: 0;
+    border-bottom: 0px;
+    background-color: transparent;
+    z-index: 99;
+}
+
+.wuxSectionBlock .wuxSubCategory .options-flag,
+.wuxSectionBlock .wuxSubCategory .options-flag + span
+{
+    top: 0px;
+}
+
+.wuxSectionBlock .wuxInfoSection .options-flag,
+.wuxSectionBlock .wuxInfoSection .options-flag + span
+{
+    top: 0px;
+    left: 0px;
+}
+
+.wuxSectionBlock .wuxFieldSet .options-flag:checked + span,
+.wuxAspectContainer .options-flag:checked + span,
+.wuxSectionBlock .wuxSubCategory .options-flag:checked + span
+{
+    color: white;
+    display: block;
+    background-color: transparent;
+}
+
+.wuxSectionBlock .wuxFieldSet:hover > .options-flag + span,
+.wuxSectionBlock .wuxSubCategory:hover > .options-flag + span,
+.wuxSectionBlock .wuxInfoSection:hover > .options-flag + span,
+.wuxAspectContainer:hover > .options-flag + span,
+.wuxSectionBlock .wuxFormInputArea:hover > .options-flag + span
+{
+    opacity: 1;
+    display: block;
+}
+
+.wuxSectionBlock .wuxSectionContent-flag:hover + .wuxSectionHeader
+{
+    background: #86530f;
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+}
+
+.wuxSectionBlock .options,
+.wuxAspectContainer .options
+{
+    position: relative;
+    padding: 5px;
+    margin-bottom: 5px;
+
+	background: #5A5D5E;
+    border-color: #a6a6a6;
+    border-image: linear-gradient(170deg, #a6a6a600 60%, #a6a6a6FF 100%) 1;
+    border-style: solid;
+    border-width: 0px 1px 1px 0px;
+}
+
+.wuxSectionBlock .options,
+.wuxSectionBlock .wuxDisplay,
+.wuxAspectContainer .options,
+.wuxAspectContainer .wuxDisplay,
+.wuxSectionBlock .wuxSectionContent-flag:not(:checked) ~ .wuxSectionContent
+{
+    display: none;
+}
+
+.wuxSectionBlock .options-flag:checked + span,
+.wuxAspectContainer .options-flag:checked + span
+{
+    color: black;
+    display: block;
+    background-color: transparent;
+}
+
+.wuxSectionBlock:hover > .options-flag + span,
+.wuxAspectContainer:hover > .options-flag + span
+{
+    opacity: 1;
+    display: block;
+}
+
+.wuxSectionBlock .options-flag:checked ~ .options,
+.wuxAspectContainer .options-flag:checked ~ .options,
+.wuxSectionBlock .display-flag:checked ~ .wuxDisplay,
+.wuxSectionBlock .wuxSectionContent-flag:checked ~ .wuxSectionContent
+{
+    display: inherit;
+}
+
+.wuxSectionBlock .options-flag:checked ~ .display,
+.wuxAspectContainer .options-flag:checked ~ .display,
+.wuxSectionBlock .options-flag:checked ~ .wuxDisplay,
+.wuxSectionBlock .options-flag:checked ~ .wuxSectionContent,
+.wuxSectionBlock .wuxSectionContent-flag:checked ~ .wuxSectionContentCollapsed
+{
+    display: none;
+}
+
+/*========================================
+    Collapse Field
+========================================*/
+
+.wuxSectionBlock .wuxCollapseField-flag
+{
+    opacity: 0;    
+    position: absolute;
+    left: 0px;
+    width: 15px;
+    height: 18px;
+    z-index: 100;
+}
+
+.wuxSectionBlock .wuxCollapseField
+{
+    display: none;
+}
+
+.wuxSectionBlock .wuxCollapseField-flag:checked ~ .wuxCollapseField
+{
+    display: inherit;
+}
+
+/*========================================
+   Traits
+========================================*/
+
+.wuxSectionBlock .wuxTraitsSection
+{
+    position: relative;
+    display: inline-block;
+}
+
+.wuxSectionBlock .wuxTrait
+{
+    display: inline-block;
+    padding: 0px 3px;
+
+    color: #fff;
+    font-size: 11px;
+}
+
+.wuxSectionBlock .wuxTrait
+{ 
+    display: none;
+}
+
+.wuxSectionBlock input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
+.wuxSectionBlock .wuxShownTraits .wuxTrait
+{
+    display: inline-block;
+}
+
+.wuxSectionBlock .wuxTrait .wuxTooltiptext
+{
+    position: absolute;
+    top: 18px;
+    left: 0px;
+    width: 240px;
+    padding: 5px;
+    z-index: 1000;
+
+    color: #3e3e3e;
+    font-size: 11px;
+    text-align: center;
+
+    visibility: hidden;
+    background: #fff;
+    border-radius: 6px;
+   
+  }
+  
+  .wuxSectionBlock .wuxTrait:hover .wuxTooltiptext
+  {
+    visibility: visible;
+  }
 
 /*========================================
     Information Elements
@@ -2090,284 +2123,6 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="field"] ~ .wuxLayoutItem.wuxT
 }
 
 /*========================================
-    Options Settings
-========================================*/
-
-.wuxSectionBlock .options-flag,
-.wuxAspectContainer .options-flag,
-.wuxSectionBlock .display-flag,
-.wuxSectionBlock .wuxSectionContent-flag
-{
-    opacity: 0;    
-    position: absolute;
-    top: 0px;
-    right: -3px;
-    width: 18px;
-    height: 18px;
-    z-index: 100;
-}
-
-.wuxSectionBlock .display-flag,
-.wuxSectionBlock .wuxSectionContent-flag
-{
-    left: 0px;
-    width: 225px;
-    height: 22px;
-}
-
-.wuxSectionBlock .options-flag + span,
-.wuxAspectContainer .options-flag + span
-{
-    position: absolute;
-    top: -5px;
-    right: -3px;
-    white-space: nowrap;
-    width: 18px;
-    height: 18px;
-    font-size: 20px;
-    font-family: pictos;
-    color: #d0d0d0;
-    cursor: pointer;
-    margin-top: 0px;
-    display: none;
-    opacity: 0;
-    border-bottom: 0px;
-    background-color: transparent;
-    z-index: 99;
-}
-
-.wuxSectionBlock .wuxSubCategory .options-flag,
-.wuxSectionBlock .wuxSubCategory .options-flag + span
-{
-    top: 0px;
-}
-
-.wuxSectionBlock .wuxInfoSection .options-flag,
-.wuxSectionBlock .wuxInfoSection .options-flag + span
-{
-    top: 0px;
-    left: 0px;
-}
-
-.wuxSectionBlock .wuxFieldSet .options-flag:checked + span,
-.wuxAspectContainer .options-flag:checked + span,
-.wuxSectionBlock .wuxSubCategory .options-flag:checked + span
-{
-    color: white;
-    display: block;
-    background-color: transparent;
-}
-
-.wuxSectionBlock .wuxFieldSet:hover > .options-flag + span,
-.wuxSectionBlock .wuxSubCategory:hover > .options-flag + span,
-.wuxSectionBlock .wuxInfoSection:hover > .options-flag + span,
-.wuxAspectContainer:hover > .options-flag + span,
-.wuxSectionBlock .wuxFormInputArea:hover > .options-flag + span
-{
-    opacity: 1;
-    display: block;
-}
-
-.wuxSectionBlock .wuxSectionContent-flag:hover + .wuxSectionHeader
-{
-    background: #86530f;
-    background: linear-gradient(to right, #86530f, #815822, #6e420a);
-}
-
-.wuxSectionBlock .options,
-.wuxAspectContainer .options
-{
-    position: relative;
-    padding: 5px;
-    margin-bottom: 5px;
-
-	background: #5A5D5E;
-    border-color: #a6a6a6;
-    border-image: linear-gradient(170deg, #a6a6a600 60%, #a6a6a6FF 100%) 1;
-    border-style: solid;
-    border-width: 0px 1px 1px 0px;
-}
-
-.wuxSectionBlock .options,
-.wuxSectionBlock .wuxDisplay,
-.wuxAspectContainer .options,
-.wuxAspectContainer .wuxDisplay,
-.wuxSectionBlock .wuxSectionContent-flag:not(:checked) ~ .wuxSectionContent
-{
-    display: none;
-}
-
-.wuxSectionBlock .options-flag:checked + span,
-.wuxAspectContainer .options-flag:checked + span
-{
-    color: black;
-    display: block;
-    background-color: transparent;
-}
-
-.wuxSectionBlock:hover > .options-flag + span,
-.wuxAspectContainer:hover > .options-flag + span
-{
-    opacity: 1;
-    display: block;
-}
-
-.wuxSectionBlock .options-flag:checked ~ .options,
-.wuxAspectContainer .options-flag:checked ~ .options,
-.wuxSectionBlock .display-flag:checked ~ .wuxDisplay,
-.wuxSectionBlock .wuxSectionContent-flag:checked ~ .wuxSectionContent
-{
-    display: inherit;
-}
-
-.wuxSectionBlock .options-flag:checked ~ .display,
-.wuxAspectContainer .options-flag:checked ~ .display,
-.wuxSectionBlock .options-flag:checked ~ .wuxDisplay,
-.wuxSectionBlock .options-flag:checked ~ .wuxSectionContent,
-.wuxSectionBlock .wuxSectionContent-flag:checked ~ .wuxSectionContentCollapsed
-{
-    display: none;
-}
-
-
-/*========================================
-    Error Field
-========================================*/
-
-.wuxAspectContainer input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxAspectInput
-{
-    background: #e86363;
-}
-
-.wuxInfoSection input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoData,
-input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInfoSubdata,
-input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInput
-{
-    background: #ba1717;
-}
-
-/*========================================
-    Collapse Field
-========================================*/
-
-.wuxSectionBlock .wuxCollapseField-flag
-{
-    opacity: 0;    
-    position: absolute;
-    left: 0px;
-    width: 15px;
-    height: 18px;
-    z-index: 100;
-}
-
-.wuxSectionBlock .wuxCollapseField
-{
-    display: none;
-}
-
-.wuxSectionBlock .wuxCollapseField-flag:checked ~ .wuxCollapseField
-{
-    display: inherit;
-}
-
-/*========================================
-    Equip Field
-========================================*/
-
-.wuxSectionBlock input[type=checkbox].wuxEquipField-flag
-{
-    opacity: 0;    
-    position: absolute;
-    left: 0px;
-    width: 15px;
-    height: 18px;
-    z-index: 100;
-}
-
-.wuxSectionBlock .wuxEquipField-flag + span
-{
-    white-space: nowrap;
-    font-family: dicefontd6;
-    z-index: 99;
-}
-
-.wuxSectionBlock .wuxEquipField-flag + span::before
-{
-    content: "0" !important;
-}
-
-.wuxSectionBlock .wuxEquipField-flag:not([value="0"]) + span
-{
-    font-family: pictos;
-    color: #DE9B72;
-}
-
-.wuxSectionBlock .wuxEquipField-flag:not([value="0"]) + span::before
-{
-    content: "2" !important;
-}
-
-/*========================================
-   Traits
-========================================*/
-
-.wuxSectionBlock .wuxTraitsSection
-{
-    position: relative;
-    display: inline-block;
-}
-
-.wuxSectionBlock .wuxTrait
-{
-    display: inline-block;
-    padding: 0px 3px;
-
-    color: #fff;
-    font-size: 11px;
-}
-
-.wuxSectionBlock .wuxTrait
-{ 
-    display: none;
-}
-
-.wuxSectionBlock input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
-.wuxSectionBlock .wuxShownTraits .wuxTrait
-{
-    display: inline-block;
-}
-
-.wuxSectionBlock .wuxTrait .wuxTooltiptext
-{
-    position: absolute;
-    top: 18px;
-    left: 0px;
-    width: 240px;
-    padding: 5px;
-    z-index: 1000;
-
-    color: #3e3e3e;
-    font-size: 11px;
-    text-align: center;
-
-    visibility: hidden;
-    background: #fff;
-    border-radius: 6px;
-   
-  }
-  
-  .wuxSectionBlock .wuxTrait:hover .wuxTooltiptext
-  {
-    visibility: visible;
-  }
-
-
-
-
-
-
-
-/*========================================
   Core Stats
 ========================================*/
 
@@ -2522,188 +2277,6 @@ input[type=hidden].wuxErrorField-flag:not([value="0"]) + .wuxInput
 }
 
 /*========================================
-    Class Levels
-========================================*/
-
-.wuxAbilityScoreTitleContainer {
-    margin-left: 10px;
-}
-
-
-.wuxSectionBlock input[type=checkbox].wuxRevealField-flag
-{
-    display: block;
-    opacity: 0;    
-    position: absolute;
-    left: 0px;
-    width: 100px;
-    height: 18px;
-    z-index: 100;
-}
-
-.wuxSectionBlock input[type=checkbox].wuxRevealField-flag:checked
-{
-    display: none;
-}
-
-.wuxSectionBlock .wuxRevealField-flag + span
-{
-    display: block;
-    height: 14px;
-    width: 100px;
-
-    color: black;
-    text-align: center;
-    font-weight: bold;
-    font-size: 10px;
-
-    background-color: #cacbcf;
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
-.wuxSectionBlock input[type=checkbox].wuxRevealField-flag:checked + span
-{
-    display: none;
-}
-
-/*========================================
-    Caster Points
-========================================*/
-
-.wuxSectionBlock .wuxCasterGrowthSubSection
-{
-    position: relative;
-    left: 15px;
-}
-
-/*========================================
-    Feat List
-========================================*/
-
-.wuxSectionBlock .wuxNewEntry
-{
-    color: #f4ff58;
-}
-
-.wuxFeatListClassDisplay-Arcanist,
-.wuxFeatListClassDisplay-Brawler,
-.wuxFeatListClassDisplay-Commoner,
-.wuxFeatListClassDisplay-Defender,
-.wuxFeatListClassDisplay-Exemplar,
-.wuxFeatListClassDisplay-Fighter,
-.wuxFeatListClassDisplay-Investigator,
-.wuxFeatListClassDisplay-Mage,
-.wuxFeatListClassDisplay-Pugilist,
-.wuxFeatListClassDisplay-Rogue,
-.wuxFeatListClassDisplay-Soldier,
-.wuxFeatListClassDisplay-Spellblade,
-.wuxFeatListClassDisplay-Thaumaturge,
-.wuxFeatListClassDisplay-Warrior,
-.wuxFeatListClassDisplay-Wizard,
-.wuxFeatListClassDisplay-Eidolon,
-.wuxFeatListClassDisplay-Esper,
-.wuxFeatListClassDisplay-Watcher,
-.wuxFeatListClassDisplay-Automaton,
-.wuxFeatListClassDisplay-Brute,
-.wuxFeatListClassDisplay-Bulwark,
-.wuxFeatListClassDisplay-Prowler,
-.wuxFeatListClassDisplay-flag
-{
-    display: none;
-}
-
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Arcanist"] + .wuxFeatListClassDisplay-Arcanist,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Brawler"] + .wuxFeatListClassDisplay-Brawler,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Commoner"] + .wuxFeatListClassDisplay-Commoner,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Defender"] + .wuxFeatListClassDisplay-Defender,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Exemplar"] + .wuxFeatListClassDisplay-Exemplar,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Fighter"] + .wuxFeatListClassDisplay-Fighter,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Investigator"] + .wuxFeatListClassDisplay-Investigator,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Mage"] + .wuxFeatListClassDisplay-Mage,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Pugilist"] + .wuxFeatListClassDisplay-Pugilist,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Rogue"] + .wuxFeatListClassDisplay-Rogue,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Soldier"] + .wuxFeatListClassDisplay-Soldier,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Spellblade"] + .wuxFeatListClassDisplay-Spellblade,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Thaumaturge"] + .wuxFeatListClassDisplay-Thaumaturge,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Warrior"] + .wuxFeatListClassDisplay-Warrior,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Wizard"] + .wuxFeatListClassDisplay-Wizard,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Eidolon"] + .wuxFeatListClassDisplay-Eidolon,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Esper"] + .wuxFeatListClassDisplay-Esper,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Watcher"] + .wuxFeatListClassDisplay-Watcher,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Automaton"] + .wuxFeatListClassDisplay-Automaton,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Brute"] + .wuxFeatListClassDisplay-Brute,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Bulwark"] + .wuxFeatListClassDisplay-Bulwark,
-input[type=hidden].wuxFeatListClassDisplay-flag[value="Prowler"] + .wuxFeatListClassDisplay-Prowler
-{
-    display: block;
-}
-
-.wuxSectionBlock .wuxFeatEntry
-{
-    width: 210px;
-}
-
-.wuxSectionBlock .wuxFeatLevel
-{
-    position: absolute;
-    right: 0px; 
-    
-    font-size: 7px;
-}
-
-.wuxSectionBlock .wuxFeatTypeName
-{
-    display: inline;
-    grid-template-columns: 8px;
-    width: 80px;
-
-    color: #a6a6a6;
-    font-size: 8px;
-    font-weight: normal;
-}
-
-/* .wuxSectionBlock .wuxFeatTypeName input[type=checkbox],
-.wuxSectionBlock .wuxFeatTypeName span
-{
-    display: inline;
-} */
-
-
-.wuxSectionBlock input[type=checkbox].wuxFeatEquipField-flag
-{
-    opacity: 0;    
-    position: absolute;
-    left: 18px;
-    width: 15px;
-    height: 18px;
-    z-index: 100;
-}
-
-.wuxSectionBlock .wuxFeatEquipField-flag + span
-{
-    white-space: nowrap;
-    font-family: dicefontd6;
-    z-index: 99;
-}
-
-.wuxSectionBlock .wuxFeatEquipField-flag + span::before
-{
-    content: "0" !important;
-}
-
-.wuxSectionBlock .wuxFeatEquipField-flag:not([value="0"]) + span
-{
-    font-family: pictos;
-    color: #DE9B72;
-}
-
-.wuxSectionBlock .wuxFeatEquipField-flag:not([value="0"]) + span::before
-{
-    content: "2" !important;
-}
-
-/*========================================
     Emote Post
 ========================================*/
 
@@ -2809,592 +2382,26 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     display: inherit;
 }
 
-
-
 /*========================================
-    Life
+    Options
 ========================================*/
 
-/* === Calendar */
-.wuxSectionBlock .wuxCalendarMonth.wuxFieldSet 
-{
-    position: relative;
-    display: inline-block;
-    width: 120px;
-}
-
-.wuxCalendar .repcontainer > .repitem 
-{
-    display: inline-block;
-}
-
-.wuxSectionBlock .wuxCalendarMonth .display 
-{
-    border: 1px solid black;
-    border-radius: 10px 10px 0px 0px;
-}
-
-.wuxSectionBlock .wuxCalendarMonth .wuxCalendarYearTitle,
-.wuxSectionBlock .wuxCalendarMonth .wuxCalendarMonthTitle
-{
-    position: relative;
-    display: inline-block;
-    padding: 2px 0px;
-    height: auto;
-    margin: 0px;
-
-    color: #FFF;
-    font-size: 10px;
-    line-height: 13px;
-}
-
-.wuxSectionBlock .wuxCalendarMonth .wuxCalendarYearTitle
-{
-    width: calc(55% - 7px);
-    padding-left: 5px;
-
-    text-align: left;
-
-    background: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
-    border-radius: 10px 0px 0px 0px;
-}
-
-.wuxSectionBlock .wuxCalendarMonth .wuxCalendarMonthTitle
-{
-    width: calc(45% - 7px);
-    padding-left: 5px;
-
-    text-align: left;
-
-    background: linear-gradient(to right, #86530f, #815822, #6e420a);
-    border-radius: 0px 10px 0px 0px;
-}
-
-/* === Activities */
-
-.wuxSectionBlock .wuxDowntimeActivityDetails
-{
-    margin-left: 10px;
-    width: calc(100% - 20px);
-    font-family: "Courier New", monospace;
-
-    background-color: #ddd;
-}
-
-.wuxSectionBlock span.wuxDowntimeActivityDetails
-{
-    color: #000;
-}
-
-
-
-.wuxSectionBlock input[type=checkbox].wuxDowntimelockField-flag
-{
-    opacity: 0;    
-    position: absolute;
-    left: 0px;
-    width: 15px;
-    height: 18px;
-    z-index: 100;
-}
-
-.wuxSectionBlock .wuxDowntimelockField-flag + span
-{
-    white-space: nowrap;
-    font-family: pictos;
-    color: #DE9B72;
-    z-index: 99;
-}
-
-.wuxSectionBlock .wuxDowntimeLockIcon
-{
-    display: inline-block;
-    width: 14px;
-    height: 13px;
-    padding: 0px;
-    margin: 0px;
-    margin-right: 3px;
-
-    line-height: 11px;
-    
-    font-family: pictos;
-    font-size: 12px;
-    vertical-align: bottom;
-}
-
-.wuxSectionBlock .wuxDowntimeOptionGroup input[type=checkbox].wuxEquipField-flag
-{
-    left: 18px;
-}
-
-.wuxSectionBlock .wuxDowntimeActivityList,
-.wuxSectionBlock .wuxDowntimeCommunitySection
-{
-    position: relative;
-    width: 100%;
-}
-
-.wuxSectionBlock .wuxDowntimeActivityField-flag,
-.wuxSectionBlock .wuxDowntimeMainActivity,
-.wuxSectionBlock .wuxDowntimeMinorActivitySection,
-.wuxSectionBlock .wuxDowntimeMinorActivity,
-.wuxSectionBlock .wuxDowntimeActivityList,
-.wuxSectionBlock .wuxDowntimeVocationSection,
-.wuxSectionBlock .wuxDowntimeCommunitySection,
-.wuxSectionBlock .wuxDowntimeCompetitionSection,
-.wuxSectionBlock .wuxDowntimeCrimeSection,
-.wuxSectionBlock .wuxDowntimeMonsterHuntSection,
-.wuxSectionBlock .wuxDowntimeNoneSection,
-.wuxSectionBlock .wuxDowntimeProficienceSection,
-.wuxSectionBlock .wuxDowntimeRelaxationSection,
-.wuxSectionBlock .wuxDowntimeResearchSection,
-.wuxSectionBlock .wuxDowntimeSocializingSection,
-.wuxSectionBlock .wuxDowntimeTrainingSection,
-.wuxSectionBlock .wuxDowntimeWorkSection,
-.wuxSectionBlock .wuxDowntimeMainMonsterHunt,
-.wuxSectionBlock .wuxDowntimeMinorMonsterHunt
-/* .wuxSectionBlock .wuxDowntimeActivityList .wuxDowntimeMainCrimeType,
-.wuxSectionBlock .wuxDowntimeActivityList .wuxDowntimeMinorCrimeType,
-.wuxSectionBlock .wuxDowntimeActivityList .wuxDowntimeMainRelaxationType,
-.wuxSectionBlock .wuxDowntimeActivityList .wuxDowntimeMinorRelaxationType,
-.wuxSectionBlock .wuxDowntimeActivityList .wuxDowntimeWorkTypeCrafting,
-.wuxSectionBlock .wuxDowntimeActivityList .wuxDowntimeWorkTypeEntertainment,
-.wuxSectionBlock .wuxDowntimeActivityList .wuxDowntimeWorkTypeMonsterHunt,
-.wuxSectionBlock .wuxDowntimeActivityList .wuxDowntimeWorkTypePiecework,
-.wuxSectionBlock .wuxDowntimeActivityList .wuxDowntimeWorkTypeService,
-.wuxSectionBlock .wuxDowntimeActivityList .wuxDowntimeWorkTypeCustom */
+.wuxSectionBlock .wuxDisplayStyleCharacter,
+.wuxSectionBlock .wuxDisplayStyleClone,
+.wuxSectionBlock .wuxDisplayStyleParty,
+.wuxSectionBlock .wuxDisplayStyleBattleLog,
+.wuxSectionBlock .wuxDisplayStyleField-flag
 {
     display: none;
 }
 
-.wuxSectionBlock input[type=checkbox].wuxDowntimeMainActivity:checked ~ div.wuxDowntimeMainActivity,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeMainActivity:checked ~ div.wuxDowntimeMinorActivitySection,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeMinorActivity:checked ~ div.wuxDowntimeMinorActivity,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeActivityList:not(:checked) ~ div.wuxDowntimeActivityList,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Community Service"] + .wuxDowntimeCommunitySection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Community Service"] + .wuxDowntimeVocationSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Crime"] + .wuxDowntimeCrimeSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="MonsterHunt"] + .wuxDowntimeMonsterHuntSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="None"] + .wuxDowntimeNoneSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Proficience"] + .wuxDowntimeProficienceSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Relaxation"] + .wuxDowntimeRelaxationSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Research"] + .wuxDowntimeResearchSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Socializing"] + .wuxDowntimeSocializingSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Training"] + .wuxDowntimeTrainingSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Training"] + .wuxDowntimeVocationSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Work"] + .wuxDowntimeWorkSection,
-input[type=hidden].wuxDowntimeActivityField-flag[value="Work"] + .wuxDowntimeVocationSection,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeMainActivity:not(:checked) ~ select.wuxDowntimeMainCrimeType,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeMainActivity:checked ~ select.wuxDowntimeMinorCrimeType,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeMainActivity:not(:checked) ~ div.wuxDowntimeMainRelaxationType,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeMainActivity:checked ~ div.wuxDowntimeMinorRelaxationType,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeMainActivity:not(:checked) ~ div.wuxDowntimeMainMonsterHunt,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeMainActivity:checked ~ div.wuxDowntimeMinorMonsterHunt
-/* .wuxSectionBlock input[type=checkbox].wuxDowntimeWorkTypeCrafting:checked ~ div.wuxDowntimeWorkTypeCrafting,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeWorkTypeEntertainment:checked ~ div.wuxDowntimeWorkTypeEntertainment,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeWorkTypeMonsterHunt:checked ~ div.wuxDowntimeWorkTypeMonsterHunt,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeWorkTypePiecework:checked ~ div.wuxDowntimeWorkTypePiecework,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeWorkTypeService:checked ~ div.wuxDowntimeWorkTypeService,
-.wuxSectionBlock input[type=checkbox].wuxDowntimeWorkTypeCustom:checked ~ div.wuxDowntimeWorkTypeCustom */
-{
-    display: block;
-}
-
-.wuxSectionBlock .wuxDowntimeInformation
-{
-    position: relative;
-    margin-left: 12px;
-    font-size: 9px;
-}
-
-/* .wuxSectionBlock .wuxDowntimeFormInput
-{
-    margin-left: 20px;
-} */
-
-.wuxSectionBlock .wuxDowntimeFormRow
-{
-    margin-left: 20px;
-    width: 90%;
-    display: block;
-}
-
-.wuxSectionBlock .wuxDowntimeRepeatingTitle
-{
-    display: inline-block;
-    width: calc(100% - 24px);
-}
-
-.wuxDowntimeAttr
-{
-    display: inline-block;
-    margin-right: 5px;
-}
-
-/*========================================
-    Gear Section
-========================================*/
-
-.wuxSectionBlock .wuxGearMaterialOptions-all,
-.wuxSectionBlock .wuxGearMaterialOptions-sturdy,
-.wuxSectionBlock .wuxGearMaterialOptions-sturdy3,
-.wuxSectionBlock .wuxGearMaterialOptions-piercing,
-.wuxSectionBlock .wuxGearMaterialOptions-sharp,
-.wuxSectionBlock .wuxGearMaterialOptions-flexible,
-.wuxSectionBlock .wuxGearMaterialOptions-transparent
-{
-    display: none;
-}
-
-.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value=""] ~ .wuxGearMaterialOptions-all,
-.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="0"] ~ .wuxGearMaterialOptions-all,
-.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="sturdy"] ~ .wuxGearMaterialOptions-sturdy,
-.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="sturdy3"] ~ .wuxGearMaterialOptions-sturdy3,
-.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="piercing"] ~ .wuxGearMaterialOptions-piercing,
-.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="sharp"] ~ .wuxGearMaterialOptions-sharp,
-.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="flexible"] ~ .wuxGearMaterialOptions-flexible,
-.wuxSectionBlock input[type=hidden].wuxGearMaterialOptions-flag[value="transparent"] ~ .wuxGearMaterialOptions-transparent
-{
-    display: inline-block;
-} 
-
-.wuxSectionBlock .wuxGearEquipGroup input[type=checkbox].wuxEquipField-flag
-{
-    left: 18px;
-}
-
-.wuxSectionBlock input[type=checkbox].wuxGearEquipField-flag
-{
-    opacity: 0;    
-    position: absolute;
-    left: 18px;
-    top: 0px;
-    width: 15px;
-    height: 18px;
-    z-index: 100;
-}
-
-.wuxSectionBlock .wuxGearEquipField-flag + span
-{
-    white-space: nowrap;
-    font-family: dicefontd6;
-    z-index: 99;
-}
-
-.wuxSectionBlock .wuxGearEquipField-flag + span::before
-{
-    content: "0" !important;
-}
-
-.wuxSectionBlock .wuxGearEquipField-flag:not([value="0"]) + span
-{
-    font-family: pictos;
-    color: #DE9B72;
-}
-
-.wuxSectionBlock .wuxGearEquipField-flag:not([value="0"]) + span::before
-{
-    content: "2" !important;
-}
-
-.wuxSectionBlock .wuxGearInStorage,
-.wuxSectionBlock .wuxGearInStorage .wuxSubheader
-{
-    color: #666;
-}
-
-.wuxSectionBlock .wuxCraftingTypeFieldWeapon,
-.wuxSectionBlock .wuxCraftingTypeFieldArmor,
-.wuxSectionBlock .wuxCraftingTypeFieldCount,
-.wuxSectionBlock .wuxCraftingTypeFieldBlueprint,
-.wuxSectionBlock .wuxCraftingTypeFieldRecipe,
-.wuxSectionBlock .wuxCraftingTypeFieldMaterial,
-.wuxSectionBlock .wuxCraftingTypeFieldGoods,
-.wuxSectionBlock .wuxCraftingTypeFieldEngineering
-{
-    display: none;
-}
-
-input[type=hidden].wuxCraftingTypeField-flag[value="weapon"] + .wuxCraftingTypeFieldWeapon,
-input[type=hidden].wuxCraftingTypeField-flag[value="armor"] + .wuxCraftingTypeFieldArmor,
-input[type=hidden].wuxCraftingTypeField-flag[value="gear"] + .wuxCraftingTypeFieldCount,
-input[type=hidden].wuxCraftingTypeField-flag[value="ammo"] + .wuxCraftingTypeFieldCount,
-input[type=hidden].wuxCraftingTypeField-flag[value="consumable"] + .wuxCraftingTypeFieldCount,
-input[type=hidden].wuxCraftingTypeField-flag[value="blueprint"] + .wuxCraftingTypeFieldBlueprint,
-input[type=hidden].wuxCraftingTypeField-flag[value="recipe"] + .wuxCraftingTypeFieldRecipe,
-input[type=hidden].wuxCraftingTypeField-flag[value="M"] + .wuxCraftingTypeFieldMaterial,
-input[type=hidden].wuxCraftingTypeField-flag[value="I"] + .wuxCraftingTypeFieldGoods,
-input[type=hidden].wuxCraftingTypeField-flag[value="E"] + .wuxCraftingTypeFieldEngineering
+input[type=hidden].wuxDisplayStyleField-flag[value="Character"] + .wuxDisplayStyleCharacter,
+input[type=hidden].wuxDisplayStyleField-flag[value="Clone"] + .wuxDisplayStyleClone,
+input[type=hidden].wuxDisplayStyleField-flag[value="PartyManager"] + .wuxDisplayStyleParty,
+input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplayStyleBattleLog
 {
     display: inherit;
-}
-
-.wuxSectionBlock .wuxRightButton
-{
-    float: right;
-}
-
-/*========================================
-    Skills
-========================================*/
-
-.wuxSectionBlock .wuxFormHeaderSkillSpacing
-{
-    display: inline-block;
-    height: 15px;
-    padding: 0px;
-    margin: 0px;
-    width: 7px;
-
-    line-height: 14px;
-}
-
-/*========================================
-    Actions Section
-========================================*/
-
-.wuxActionResourcesGroup .repcontrol 
-{
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    display: inline-block;
-    margin: 0px;
-    padding: 0px;
-}
-
-.wuxActionResourcesGroup .repcontrol .repcontrol_edit,
-.wuxActionResourcesGroup .repcontrol .repcontrol_add
-{
-    position: absolute;
-    float: none;
-    top: -5px;
-    right: 0px;
-    margin: 0px;
-}
-
-.wuxActionResourcesGroup .repcontainer,
-.wuxActionResourcesGroup .repcontainer > .repitem 
-{
-    display: inline-block;
-    vertical-align: top;
-}
-
-.wuxSectionBlock .wuxFieldSet .wuxSpellDamageButton
-{
-    opacity: 0;
-    position: absolute;
-    top: -5px;
-    right: 20px;
-    display: none;
-    width: 18px;
-    height: 18px;
-    z-index: 100;
-    margin: 0px;
-    
-    white-space: nowrap;
-    font-size: 16px;
-    font-family: pictos;
-    color: #A0A0A0;
-
-    cursor: pointer;
-    background-color: transparent;
-    border: 0px;
-}
-
-.wuxSectionBlock .wuxFieldSet:hover > .wuxSpellDamageButton
-{
-    opacity: 1;
-    display: block;
-}
-
-.wuxSectionBlock .wuxFieldSet .wuxSpellDamageButton:hover
-{
-    color: red;
-}
-
-.wuxSectionBlock input[type=checkbox].wuxSpellEquipField-flag
-{
-    opacity: 0;    
-    position: absolute;
-    left: 18px;
-    width: 15px;
-    height: 18px;
-    z-index: 100;
-}
-
-.wuxSectionBlock .wuxSpellEquipField-flag + span
-{
-    white-space: nowrap;
-    font-family: dicefontd6;
-    z-index: 99;
-}
-
-.wuxSectionBlock .wuxSpellEquipField-flag + span::before
-{
-    content: "0" !important;
-}
-
-.wuxSectionBlock .wuxSpellEquipField-flag:not([value="0"]) + span
-{
-    font-family: pictos;
-    color: #DE9B72;
-}
-
-.wuxSectionBlock .wuxSpellEquipField-flag:not([value="0"]) + span::before
-{
-    content: "2" !important;
-}
-
-input[type=checkbox].wuxActionTabButton 
-{
-    position: absolute;
-    height: 16px;
-    z-index: 2;
-
-    opacity: 0;
-}
-
-input[type=checkbox].wuxActionTabButton + img 
-{
-    position: absolute;
-    top: 4px;
-
-    filter: invert(50%);
-}
-
-input[type=hidden].wuxActionTabButton[value="0"] ~ img.wuxActionTabFree,
-input[type=hidden].wuxActionTabButton[value="1"] ~ img.wuxActionTab1,
-input[type=hidden].wuxActionTabButton[value="2"] ~ img.wuxActionTab1,
-input[type=hidden].wuxActionTabButton[value="3"] ~ img.wuxActionTab1,
-input[type=hidden].wuxActionTabButton[value="2"] ~ img.wuxActionTab2,
-input[type=hidden].wuxActionTabButton[value="3"] ~ img.wuxActionTab2,
-input[type=hidden].wuxActionTabButton[value="3"] ~ img.wuxActionTab3,
-input[type=hidden].wuxActionTabButton[value="R"] ~ img.wuxActionTabR
-{
-    filter: invert(100%);
-}
-
-input[type=checkbox].wuxActionTabButton.wuxActionTabFree,
-input[type=checkbox].wuxActionTabButton.wuxActionTabFree + img 
-{
-    left: 0px;
-    width: 14px;
-}
-
-input[type=checkbox].wuxActionTabButton.wuxActionTab1,
-input[type=checkbox].wuxActionTabButton.wuxActionTab1 + img 
-{
-    left: 20px;
-    width: 14px;
-}
-
-input[type=checkbox].wuxActionTabButton.wuxActionTab2,
-input[type=checkbox].wuxActionTabButton.wuxActionTab2 + img 
-{
-    left: 40px;
-    width: 14px;
-}
-
-input[type=checkbox].wuxActionTabButton.wuxActionTab3,
-input[type=checkbox].wuxActionTabButton.wuxActionTab3 + img 
-{
-    left: 60px;
-    width: 14px;
-}
-
-input[type=checkbox].wuxActionTabButton.wuxActionTabR,
-input[type=checkbox].wuxActionTabButton.wuxActionTabR + img 
-{
-    left: 80px;
-    width: 14px;
-}
-
-
-
-/*========================================
-    Vitals
-========================================*/
-
-.wuxSectionBlock .wuxFieldSet .wuxModifierData 
-{
-    position: relative;
-    padding-bottom: 3px;
-}
-
-.wuxSectionBlock .wuxFieldSet .wuxModifierData span
-{
-    display: block;
-
-    font-style: italic;
-    font-size: 10px;
-    line-height: 11px;
-    color: #A0A0A0;
-}
-
-/*========================================
-    Character Type Field
-========================================*/
-
-.wuxSectionBlock .wuxCharacterTypeField-Human,
-.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Human,
-.wuxSectionBlock .wuxCharacterTypeField-Spirit,
-.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Spirit,
-.wuxSectionBlock .wuxCharacterTypeField-Beast,
-.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Beast,
-.wuxSectionBlock .wuxCharacterTypeField-Archetype,
-.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Archetype,
-.wuxSectionBlock .wuxCharacterTypeField-Phasma,
-.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Phasma,
-.wuxSectionBlock .wuxCharacterTypeField-Temperament,
-.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-Temperament,
-.wuxSectionBlock .wuxCharacterTypeField-flag,
-.wuxAspectContainer .wuxAspectInput .wuxCharacterTypeField-flag,
-
-.wuxSectionBlock .wuxRollTypeField-Common,
-.wuxAspectContainer .wuxAspectInput .wuxRollTypeField-Common,
-.wuxSectionBlock .wuxRollTypeField-Heroic,
-.wuxAspectContainer .wuxAspectInput .wuxRollTypeField-Heroic,
-.wuxSectionBlock .wuxRollTypeField-flag,
-.wuxAspectContainer .wuxAspectInput .wuxRollTypeField-flag,
-.wuxSectionBlock .wuxElementTypeField-Wood,
-.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Wood,
-.wuxSectionBlock .wuxElementTypeField-Fire,
-.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Fire,
-.wuxSectionBlock .wuxElementTypeField-Earth,
-.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Earth,
-.wuxSectionBlock .wuxElementTypeField-Metal,
-.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Metal,
-.wuxSectionBlock .wuxElementTypeField-Water,
-.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-Water,
-.wuxSectionBlock .wuxElementTypeField-flag,
-.wuxAspectContainer .wuxAspectInput .wuxElementTypeField-flag
-{
-    display: none;
-}
-
-input[type=hidden].wuxCharacterTypeField-flag[value="0"] + .wuxCharacterTypeField-Human,
-input[type=hidden].wuxCharacterTypeField-flag[value="Spirit"] + .wuxCharacterTypeField-Spirit,
-input[type=hidden].wuxCharacterTypeField-flag[value="Beast"] + .wuxCharacterTypeField-Beast,
-input[type=hidden].wuxCharacterTypeField-flag[value="Archetype"] + .wuxCharacterTypeField-Archetype,
-input[type=hidden].wuxCharacterTypeField-flag[value="Phasma"] + .wuxCharacterTypeField-Phasma,
-input[type=hidden].wuxCharacterTypeField-flag[value="BeastStyle"] + .wuxCharacterTypeField-BeastStyle
-{
-    display: block;
-}
-
-input[type=hidden].wuxRollTypeField-flag[value="Common"] + .wuxRollTypeField-Common,
-input[type=hidden].wuxRollTypeField-flag[value="Heroic"] + .wuxRollTypeField-Heroic,
-input[type=hidden].wuxElementTypeField-flag[value="Wood"] + .wuxElementTypeField-Wood,
-input[type=hidden].wuxElementTypeField-flag[value="Fire"] + .wuxElementTypeField-Fire,
-input[type=hidden].wuxElementTypeField-flag[value="Earth"] + .wuxElementTypeField-Earth,
-input[type=hidden].wuxElementTypeField-flag[value="Metal"] + .wuxElementTypeField-Metal,
-input[type=hidden].wuxElementTypeField-flag[value="Water"] + .wuxElementTypeField-Water
-{
-    display: inherit;
-}
-
-/*========================================
+}/*========================================
     Party Manager Shared
 ========================================*/
 .wuxNpcTabs input[type=radio].wuxTabButton,
@@ -3801,75 +2808,6 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 {
     background: #ba7417;
 }
-
-
-
-/*========================================
-    Options
-========================================*/
-
-.wuxSectionBlock .wuxDisplayStyleCharacter,
-.wuxSectionBlock .wuxDisplayStyleClone,
-.wuxSectionBlock .wuxDisplayStyleParty,
-.wuxSectionBlock .wuxDisplayStyleBattleLog,
-.wuxSectionBlock .wuxDisplayStyleField-flag
-{
-    display: none;
-}
-
-input[type=hidden].wuxDisplayStyleField-flag[value="Character"] + .wuxDisplayStyleCharacter,
-input[type=hidden].wuxDisplayStyleField-flag[value="Clone"] + .wuxDisplayStyleClone,
-input[type=hidden].wuxDisplayStyleField-flag[value="PartyManager"] + .wuxDisplayStyleParty,
-input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplayStyleBattleLog
-{
-    display: inherit;
-}
-
-
-/*========================================
-    Hidden Field
-========================================*/
-
-.wuxSectionBlock .wuxHiddenField,
-.wuxLayoutItem .wuxHiddenField,
-.wuxSectionBlock .wuxHiddenInlineField,
-.wuxSectionBlock .wuxHiddenField-flag
-{
-    display: none;
-}
-
-input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenField,
-input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenField,
-.wuxSectionBlock .wuxHiddenAuxField
-{
-    display: inherit;
-}
-
-input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenInlineField,
-input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenInlineField,
-.wuxSectionBlock .wuxHiddenInlineAuxField
-{
-    display: inline-block;
-}
-
-input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenAuxField,
-input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenInlineAuxField,
-input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenAuxField,
-input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenInlineAuxField
-{
-    display: none;
-}
-
-.wuxInvisibleField
-{
-    opacity: 0;
-}
-
-
-
-
-
-
 
 /*========================================
   Roll Templates
@@ -6136,3 +5074,43 @@ Quest Box
     position: absolute; 
     width: 280px;
 }
+
+/*========================================
+    Hidden Field
+========================================*/
+
+.wuxSectionBlock .wuxHiddenField,
+.wuxLayoutItem .wuxHiddenField,
+.wuxSectionBlock .wuxHiddenInlineField,
+.wuxSectionBlock .wuxHiddenField-flag
+{
+    display: none;
+}
+
+input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenField,
+input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenField,
+.wuxSectionBlock .wuxHiddenAuxField
+{
+    display: inherit;
+}
+
+input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenInlineField,
+input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenInlineField,
+.wuxSectionBlock .wuxHiddenInlineAuxField
+{
+    display: inline-block;
+}
+
+input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenAuxField,
+input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenInlineAuxField,
+input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenAuxField,
+input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenInlineAuxField
+{
+    display: none;
+}
+
+.wuxInvisibleField
+{
+    opacity: 0;
+}
+

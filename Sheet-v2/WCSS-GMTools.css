@@ -1,0 +1,408 @@
+/*========================================
+    Party Manager Shared
+========================================*/
+.wuxNpcTabs input[type=radio].wuxTabButton,
+.wuxNpcTabs input[type=radio].wuxTabButton + span,
+.wuxJukeboxTabs input[type=radio].wuxTabButton,
+.wuxJukeboxTabs input[type=radio].wuxTabButton + span
+{
+    position: absolute;
+    top: 0px;
+    height: 12px;
+    padding: 1px;
+    margin: 0px;
+    width: 36px;
+    font-size: 8px;
+
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+    cursor: pointer;
+}
+
+.wuxSectionContent button.wuxToolButton
+{
+    position: relative;
+    display: inline-block; 
+    height: 14px; 
+    margin: 0px; 
+    margin-right: 5px; 
+    width: 37px;
+
+    text-shadow: none;
+
+    background: #cacbcf;
+    border-width: 0px;
+    border-radius: 5px;
+}
+
+.wuxSectionContent button.wuxToolButton:active 
+{
+    background: #8a8b8e;
+}
+
+.wuxSectionContent .wuxNotesTab button.wuxToolButton[type=roll],
+.wuxSectionContent .wuxBattleTabs button.wuxToolButton[type=roll]
+{
+    background-image: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%); 
+}
+
+.wuxSectionContent button.wuxToolButton.wuxSizeTiny
+{
+    width: 16px;
+}
+
+.wuxSectionContent button.wuxToolButton.wuxSizeSmall
+{
+    width: 20px;
+}
+
+.wuxSectionContent button.wuxToolButton.wuxSizeLarge
+{
+    width: 43px;
+}
+
+.wuxSectionContent button.wuxToolButton.wuxSizeHuge
+{
+    width: 60px;
+}
+
+.wuxSectionContent button.wuxToolButton.wuxToolLock
+{
+    background: none;
+    background-color: #000;
+    border-radius: 1px;
+}
+
+.wuxSectionContent button.wuxToolButton span
+{
+    position: relative;
+    bottom: 5px;
+    left: -6px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0px 6px;
+    width: 100%;
+
+    color: #000;
+    font-weight: normal;
+    font-size: 10px;
+
+    border: 0px;
+}
+
+.wuxSectionContent .wuxNotesTab button.wuxToolButton span,
+.wuxSectionContent .wuxBattleTabs button.wuxToolButton span,
+.wuxSectionContent button.wuxToolButton.wuxToolLock span
+{
+    color: #f4f6f8;
+}
+
+.wuxSectionContent button.wuxToolButton[type=roll]::before,
+.wuxSectionContent .wuxToolsTab button.wuxToolButton[type=roll]::before,
+.wuxSectionContent .wuxNotesTab button.wuxToolButton[type=roll]::before,
+.wuxSectionContent .wuxJukeboxTabs button.wuxToolButton[type=roll]::before,
+.wuxSectionContent button.wuxToolButton[type=roll]::before
+{
+    content: "" !important;
+}
+
+.wuxSectionContent .wuxPmSpacer,
+.wuxSectionContent .wuxToolsTab button.wuxToolButton[type=roll].wuxPmSpacer,
+.wuxSectionContent .wuxNotesTab button.wuxToolButton[type=roll].wuxPmSpacer,
+.wuxSectionContent .wuxJukeboxTabs button.wuxToolButton[type=roll].wuxPmSpacer,
+.wuxSectionContent button.wuxToolButton[type=roll].wuxPmSpacer
+{
+    margin-left: 5px;
+}
+
+
+.wuxSectionBlock .wuxPmToolsHoverButton
+{
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    border: none;
+    background: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    color: black; 
+    z-index: 100;
+}
+
+.wuxSectionBlock .wuxToolsTab:hover .wuxPmToolsHoverButton,
+.wuxSectionBlock .wuxNotesTab:hover .wuxPmToolsHoverButton,
+.wuxSectionBlock .wuxNotesTab:hover .wuxPmToolsHoverButton + span,
+.wuxSectionBlock .wuxBattleTabs:hover .wuxPmToolsHoverButton
+{
+    opacity: 1;
+    display: block;
+}
+
+.wuxSectionBlock .wuxToolsTab .wuxPmToolsHoverButton,
+.wuxSectionBlock .wuxNotesTab .wuxPmToolsHoverButton,
+.wuxSectionBlock .wuxBattleTabs .wuxPmToolsHoverButton
+{
+    position: absolute;
+    top: -4px;
+    right: 14px;
+    width: 18px;
+    height: 18px;
+    background: none;
+    border: none;
+    font-family: pictos;
+    font-size: 16px;
+    color: #A0A0A0;
+    display: none;
+    z-index: 100;
+}
+
+.wuxSectionBlock .wuxNotesTab .wuxPmToolsHoverButton + span
+{
+    position: absolute;
+    top: -5px;
+    right: 14px;
+    white-space: nowrap;
+    width: 18px;
+    height: 18px;
+    font-size: 20px;
+    font-family: pictos;
+    color: #d0d0d0;
+    cursor: pointer;
+    margin-top: 0px;
+    display: none;
+    opacity: 0;
+    border-bottom: 0px;
+    background-color: transparent;
+    z-index: 99;
+}
+
+.wuxSectionBlock .wuxToolsTab.wuxEmotePosts .wuxPmToolsHoverButton,
+.wuxSectionBlock .wuxBattleTabs.wuxEmotePosts .wuxPmToolsHoverButton
+{
+    top: 0px;
+    right: 0px;
+}
+
+.wuxSectionBlock .wuxToolsTab .wuxPmToolsHoverButton:hover,
+.wuxSectionBlock .wuxNotesTab .wuxPmToolsHoverButton:hover + span,
+.wuxSectionBlock .wuxBattleTabs .wuxPmToolsHoverButton:hover
+{
+    color: #DE9B72;
+}
+
+.wuxSectionBlock .wuxToolsTab button.wuxPmToolsHoverButton:before,
+.wuxSectionBlock .wuxNotesTab button.wuxPmToolsHoverButton:before,
+.wuxSectionBlock .wuxBattleTabs button.wuxPmToolsHoverButton:before 
+{
+    content: "";
+}
+
+
+/*========================================
+    NPC Generator
+========================================*/
+.wuxNpcTabs input[type=radio].wuxTabButton,
+.wuxNpcTabs input[type=radio].wuxTabButton + span
+{
+    width: 36px;
+}
+
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol1,
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol1 + span
+{
+    left: 0px;
+}
+
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol2,
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol2 + span
+{
+    left: 39px;
+}
+
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol3,
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol3 + span
+{
+    left: 78px;
+}
+
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol4,
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol4 + span
+{
+    left: 117px;
+}
+
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol5,
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol5 + span
+{
+    left: 156px;
+}
+
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol6,
+.wuxNpcTabs input[type=radio].wuxTabButton.wuxPmCol6 + span
+{
+    left: 195px;
+}
+
+.wuxJbxCategory
+{
+    display: none;
+}
+
+
+/*========================================
+    Jukebox
+========================================*/
+
+.wuxSectionBlock button.wuxJukeboxButton
+{
+    position: relative;
+    bottom: 3px;
+    height: 12px; 
+    width: 13px; 
+    padding: 0px 0px 2px 0px; 
+    margin: 0px;
+    margin-right: 3px;
+    vertical-align: top;
+
+    font-size: 9px;
+}
+
+.wuxJukeboxTabs input[type=radio].wuxTabButton,
+.wuxJukeboxTabs input[type=radio].wuxTabButton + span
+{
+    width: 55px;
+}
+
+.wuxJukeboxTabs input[type=radio].wuxTabButton.wuxPmCol1,
+.wuxJukeboxTabs input[type=radio].wuxTabButton.wuxPmCol1 + span
+{
+    left: 0px;
+}
+
+.wuxJukeboxTabs input[type=radio].wuxTabButton.wuxPmCol2,
+.wuxJukeboxTabs input[type=radio].wuxTabButton.wuxPmCol2 + span
+{
+    left: 58px;
+}
+
+.wuxJukeboxTabs input[type=radio].wuxTabButton.wuxPmCol3,
+.wuxJukeboxTabs input[type=radio].wuxTabButton.wuxPmCol3 + span
+{
+    left: 132px;
+}
+
+.wuxJukeboxTabs input[type=radio].wuxTabButton.wuxPmCol4,
+.wuxJukeboxTabs input[type=radio].wuxTabButton.wuxPmCol4 + span
+{
+    left: 190px;
+}
+
+.wuxJbxCategory
+{
+    display: none;
+}
+
+input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Casual"] ~ div.wuxJbxCategoryScene-Casual,
+input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Emotional"] ~ div.wuxJbxCategoryScene-Emotional,
+input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Scenario"] ~ div.wuxJbxCategoryScene-Scenario,
+input[type=hidden].wuxTabButton.wuxTabGroup[value="UniqueLocales"] ~ div.wuxJbxCategoryUniqueLocales,
+input[type=hidden].wuxTabButton.wuxTabGroup[value="Cities"] ~ div.wuxJbxCategoryCities,
+input[type=hidden].wuxTabButton.wuxTabGroup[value="Fields"] ~ div.wuxJbxCategoryFields,
+input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Battle"] ~ div.wuxJbxCategoryScene-Battle,
+input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJbxCategoryScene-Character
+{
+    display: block;
+}
+
+
+
+/*========================================
+    Battle
+========================================*/
+.wuxBattleTabs input[type=radio].wuxTabButton,
+.wuxBattleTabs input[type=radio].wuxTabButton + span
+{
+    width: 36px;
+}
+
+.wuxBattleTabs input[type=radio].wuxTabButton.wuxPmCol1,
+.wuxBattleTabs input[type=radio].wuxTabButton.wuxPmCol1 + span
+{
+    left: 0px;
+}
+
+.wuxBattleTabs input[type=radio].wuxTabButton.wuxPmCol2,
+.wuxBattleTabs input[type=radio].wuxTabButton.wuxPmCol2 + span
+{
+    left: 39px;
+}
+
+.wuxBattleTabs input[type=radio].wuxTabButton.wuxPmCol3,
+.wuxBattleTabs input[type=radio].wuxTabButton.wuxPmCol3 + span
+{
+    left: 78px;
+}
+
+.wuxBattleTabs input[type=radio].wuxTabButton.wuxPmCol4,
+.wuxBattleTabs input[type=radio].wuxTabButton.wuxPmCol4 + span
+{
+    left: 117px;
+}
+
+.wuxBattleTabs .wuxHighlightField
+{
+    display: inline-block;
+    background-color: #ba7417;
+    min-width: 24px;
+
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.wuxBattleTabs .wuxVersus
+{
+    display: inline-block;
+    width: 30px;
+
+    text-align: center;
+}
+
+.wuxBattleTabs .wuxDetails
+{
+    display: block;
+    height: auto;
+    width: auto;
+    margin: 0px 0px 3px 20px;
+    padding: 2px 5px;
+
+	background: #1d1e1f;
+}
+
+.wuxBattleTabs span.wuxDetails,
+.wuxBattleTabs div.wuxDetails,
+.wuxBattleTabs .wuxDetails p
+{
+    color: #f4f6f8;
+    font-size: 10px;
+    line-height: 13px;
+    word-break: break-word;
+    white-space: pre-line;
+    
+    font-family: "Courier New", monospace;
+}
+
+.wuxSectionContent .wuxBattleTabs .wuxBattleResultOption[value="critsuccess"] + button.wuxToolButton.wuxResultCritSuccess,
+.wuxSectionContent .wuxBattleTabs .wuxBattleResultOption[value="success"] + button.wuxToolButton.wuxResultSuccess,
+.wuxSectionContent .wuxBattleTabs .wuxBattleResultOption[value="critfailure"] + button.wuxToolButton.wuxResultCritFailure,
+.wuxSectionContent .wuxBattleTabs .wuxBattleResultOption[value="failure"] + button.wuxToolButton.wuxResultFailure
+{
+    background: #ba7417;
+}
+
