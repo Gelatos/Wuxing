@@ -1,0 +1,424 @@
+<div class="wuxCharacterSheetDisplayStyle-LevelUp">
+
+	<div class="main-TopRow wuxFloatHeader wuxHorizontalFlex">
+		<div class="segment-Basis wuxSegment">
+			<div class="wuxTabHeader"><span class="wuxInnerHeader">Class Advancement</span></div>
+			<div class="wuxTabBuilderHeader wuxTab">
+				<div class="builderHeader-base wuxLayoutItem">
+					<div class="chat-chatBox wuxSectionBlock wuxLayoutItem">
+						<div class="wuxSectionContent">
+							<div class="wuxFieldSet">
+								<div class="wuxMultiRow">
+									<span class="wuxDescription">This is Class Advancement. Here you can select which classes to level up. </span>
+									<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character.</span>
+									<span class="wuxDescription">Reset will undo all your changes. Back will take you back to the previous page without accepting any other changes.</span>
+								</div>
+
+								<div class="wuxMultiRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="Character">
+										<span>Submit</span>
+									</div>
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="Character">
+										<span>Reset</span>
+									</div>
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="Character">
+										<span>Back</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	<div class="wumMainSheet">
+		<div class="wuxMainContent">
+			<div class="segment-Origin wuxSegment">
+				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-Origin" checked="checked">
+				<div class="wuxTabHeader"><span class="wuxInnerHeader">Classes</span></div>
+
+				<div class="wuxTabOrigin wuxTab">
+					<div class="origin-name wuxLayoutItem">
+						<div class="chat-chatBox wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+
+								<div class="wuxFieldSet">
+									<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>w</span>
+									<span class='wuxHeader'>Post Area</span>
+									<div class="options" style="border: 0px;">
+										<div class="wuxMultiRow">
+											<textarea class="wuxFormInput" name="attr_emotePostContent" placeholder="Type your post here then select an emote to use from the options below"></textarea>
+										</div>
+									</div>
+									<div class="display">
+										<input type="text" class="wuxFormInput wuxSizeHuge" name="attr_emotePostContent" placeholder="Type your post here then select an emote to use from the options below">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="chat-languageAndLeitmotif wuxLayoutItem">
+						<div class="chat-Languages wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Languages" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">Languages</div>
+							<input type="hidden" name="attr_speaking_language" value="Minere">
+
+							<div class="wuxSectionContent">
+								<fieldset class="repeating_skilllanguages">
+									<div class="wuxFieldSet">
+										<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
+										<div class="options">
+											<div class="wuxRow">
+												<span class="wuxFormHeader">Statistics</span>
+				
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle wuxSizeSmall">Language</span>
+												<select class="wuxFormInput wuxSizeMed" name="attr_language">
+													<option>-</option>
+													<option value="Apollen">Apollen / Mons</option>
+													<option value="Cert">Cert</option>
+													<option value="Junal">Junal</option>
+													<option value="Lib">Lib</option>
+													<option value="Minere">Minere</option>
+													<option value="-">---</option>
+													<option value="Byric">Byric</option>
+													<option value="Ciel">Ciel</option>
+													<option value="Citeq">Citeq</option>
+													<option value="Dustell">Dustell</option>
+													<option value="Kleikan">Kleikan</option>
+													<option value="Manstan">Manstan</option>
+													<option value="Muralic">Muralic</option>
+													<option value="Palmic">Palmic</option>
+													<option value="Salkan">Salkan</option>
+													<option value="Sansic">Sansic</option>
+													<option value="Shorespeak">Shorespeak</option>
+													<option value="Silq">Silq</option>
+													<option value="Verdeni">Verdeni</option>
+													<option value="Wolfwarg">Wolfwarg</option>
+													<option value="Crinere">Crinere</option>
+													<option value="Shira">Shira</option>
+													<option value="Vulca">Vulca</option>
+													<option value="Beast">Beast</option>
+													<option value="Emotion">Emotion</option>
+													<option value="Empathy">Empathy</option>
+													<option value="Jovean">Novan / Jovean</option>
+													<option value="Mytikan">Mytikan</option>
+				
+												</select>
+				
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle wuxSizeSmall">Rank</span>
+												<select class="wuxFormHeaderSelect" name="attr_languageproficiency" value="3">
+													<option value="0">+0 - Untrained</option>
+													<option value="1">+1 - Trained</option>
+													<option value="2">+2 - Adept</option>
+													<option value="3" selected="selected">+3 - Expert</option>
+													<option value="4">+4 - Elite</option>
+													<option value="5">+5 - Master</option>
+													<option value="6">+6 - Legendary</option>
+				
+												</select>
+				
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle wuxSizeSmall">Base</span>
+												<select class="wuxFormInput wuxSizeSmall" name="attr_languagebase" value="intelligence">
+													<option value="intelligence" selected="selected">INT</option>
+													<option value="wisdom">WIS</option>
+													<option value="charisma">CHA</option>
+				
+												</select>
+				
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle wuxSizeSmall">Mods</span>
+												<input type="number" class="wuxFormInput wuxSizeSmall" name="attr_languagemod">
+				
+											</div>
+											<div class="wuxRow">
+												&nbsp;
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormHeader">Description</span>
+				
+											</div>
+											<div class="wuxMultiRow">
+												<textarea class="wuxFormInput" name="attr_languagedesc"></textarea>
+				
+											</div>
+										</div>
+										<div class="display">
+											<div class="wuxMultiRow">
+												<div class="wuxFormEntry">
+													<input class="wuxEquipField-flag" type="checkbox" name="attr_isSelected" style="display: block">
+													<input class="wuxEquipField-flag" type="hidden" name="attr_isSelected" value="0">
+													<span class="wuxFormHeaderLeadIcon"></span>
+													<select class="wuxFormHeaderSelect" name="attr_languageproficiency" value="3">
+														<option value="0">Untrained</option>
+														<option value="1">Trained</option>
+														<option value="2">Adept</option>
+														<option value="3" selected="selected">Expert</option>
+														<option value="4">Elite</option>
+														<option value="5">Master</option>
+														<option value="6">Legendary</option>
+													</select>
+													<span name="attr_language">Item</span>
+												</div>
+											</div>
+										</div>
+									</div>
+				
+								</fieldset>
+								<div class="wuxHiddenField">
+									<fieldset class="repeating_languages">
+										<div class="wuxFieldSet">
+											<div class="wuxMultiRow">
+												<div class="wuxFormEntry">
+													<input class="wuxEquipField-flag" type="checkbox" name="attr_isSelected" style="display: block">
+													<input class="wuxEquipField-flag" type="hidden" name="attr_isSelected" value="0">
+													<span class="wuxFormHeaderLeadIcon"></span>
+													<select name="attr_language" value="-">
+														<option>-</option>
+														<option value="Apollen">Apollen / Mons</option>
+														<option value="Cert">Cert</option>
+														<option value="Junal">Junal</option>
+														<option value="Lib">Lib</option>
+														<option value="Minere">Minere</option>
+														<option value="-">---</option>
+														<option value="Byric">Byric</option>
+														<option value="Ciel">Ciel</option>
+														<option value="Citeq">Citeq</option>
+														<option value="Dustell">Dustell</option>
+														<option value="Kleikan">Kleikan</option>
+														<option value="Manstan">Manstan</option>
+														<option value="Muralic">Muralic</option>
+														<option value="Palmic">Palmic</option>
+														<option value="Salkan">Salkan</option>
+														<option value="Sansic">Sansic</option>
+														<option value="Shorespeak">Shorespeak</option>
+														<option value="Silq">Silq</option>
+														<option value="Verdeni">Verdeni</option>
+														<option value="Wolfwarg">Wolfwarg</option>
+														<option value="Crinere">Crinere</option>
+														<option value="Shira">Shira</option>
+														<option value="Vulca">Vulca</option>
+														<option value="Beast">Beast</option>
+														<option value="Emotion">Emotion</option>
+														<option value="Empathy">Empathy</option>
+														<option value="Jovean">Novan / Jovean</option>
+														<option value="Mytikan">Mytikan</option>
+					
+													</select>
+												</div>
+											</div>
+										</div>
+					
+									</fieldset>
+								</div>
+							</div>
+							<div class="wuxSectionContentCollapsed"></div>
+						</div>
+
+						<input type="hidden" class="wuxEmoteDisplayStyleField-flag" name="attr_emoteDisplayStyle" value="0">
+						<div class="chat-chararecast wuxEmoteDisplayStyleRecast wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-chararecast" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">Recast</div>
+
+							<div class="wuxSectionContent">
+								<input type="hidden" name="attr_recastCharacterNames" value="">
+								<fieldset class="repeating_chararecast">
+									<div class="wuxFieldSet">
+										<!-- <input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
+										<div class="options">
+											<div class="wuxRow">
+												<span class="wuxFormTitle wuxSizeSmall">Name</span>
+												<input type="text" class="wuxFormInput" name="attr_recastName" value="">
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle wuxSizeSmall">id</span>
+												<input type="text" class="wuxFormInput" name="attr_recastId" value="">
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle wuxSizeSmall">Gender</span>
+												<select class='wuxFormInput wuxSizeMed' name='attr_recastGender' value="M">
+													<option value="M">Male</option>
+													<option value="F">Female</option>
+												</select>
+											</div>
+										</div>
+										<div class="display"> -->
+										<div class="wuxMultiRow">
+											<div class="wuxFormEntry">
+												<input type="text" class="wuxFormHeaderSelect" name="attr_recastName" value="">
+											</div>
+										</div>
+										<!-- </div> -->
+									</div>
+								</fieldset>
+							</div>
+							<div class="wuxSectionContentCollapsed"></div>
+						</div>
+
+						<div class="chat-Interaction wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Interaction" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">Interaction</div>
+
+							<div class="wuxSectionContent">
+								<div class="core-Introduction">
+									<input type="hidden" class="" name="attr_spell_prof-effect" value="0">
+									<span class="wuxHeader">Introduction</span>
+
+									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+										<div class="wuxInfoField">
+											<span class="wuxInfoTitle">Emote</span>
+											<input type="text" class='wuxInfoInput' name='attr_introduction_emote' value="Serious">
+										</div>
+									</div>
+
+									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+										<div class="wuxInfoField">
+											<span class="wuxInfoTitle">Nickname</span>
+											<input type="text" class='wuxInfoInput' name='attr_introduction_nickname' value="">
+										</div>
+									</div>
+
+									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+										<div class="wuxInfoField">
+											<span class="wuxInfoTitle">Title</span>
+											<input type="text" class='wuxInfoInput' name='attr_introduction_title' value="" placeholder="title">
+										</div>
+									</div>
+								</div>
+								<div class="wuxRow">&nbsp;</div>
+								<div class="core-Interactions">
+									<input type="hidden" class="" name="attr_spell_prof-effect" value="0">
+									<span class="wuxHeader">Check Message</span>
+
+									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+										<div class="wuxInfoField">
+											<span class="wuxInfoTitle">Emote</span>
+											<input type="text" class='wuxInfoInput' name='attr_interaction_keyemote' value="Serious">
+										</div>
+									</div>
+
+									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+										<div class="wuxInfoField">
+											<span class="wuxInfoTitle">Phrase</span>
+											<input type="text" class='wuxInfoInput' name='attr_interaction_keyphrase' value="Hello">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxSectionContentCollapsed"></div>
+						</div>
+					</div>
+
+					<div class="chat-Emotes wuxLayoutItem">
+						<div class="chat-Outfits wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Outfits" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">Outfits</div>
+							<input type="hidden" name="attr_emote_allEmoteOutfits">
+							<input type="hidden" name="attr_emote_activesetimageurl">
+							<input type="hidden" name="attr_emote_activesetfireimageurl">
+							<input type="hidden" name="attr_emote_activesethurtimageurl">
+							<input type="hidden" name="attr_emote_activesetcutinimageurl">
+							<input type="hidden" name="attr_emote_activesetemotes">
+							<input type="hidden" class="inventoryflag" name="attr_emotes" value="complex">
+
+							<div class="wuxSectionContent">
+								<fieldset class="repeating_emoteOutfits">
+									<div class="wuxFieldSet">
+										<input type="hidden" name="attr_name">
+										<input type="hidden" name="attr_emoteSet">
+										<input type="hidden" name="attr_emoteSetURL">
+
+										<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
+										<div class="options">
+											<div class="wuxRow">
+												<span class="wuxFormTitle">Name: </span>
+												<input type="text" class="wuxFormInput" name="attr_tempName">
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle">Main URL: </span>
+												<input type="text" class="wuxFormInput" name="attr_emoteMainImage" placeholder="http://image.png">
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle">Fire URL: </span>
+												<input type="text" class="wuxFormInput" name="attr_emoteFireImage" placeholder="http://image.png">
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle">Hurt URL: </span>
+												<input type="text" class="wuxFormInput" name="attr_emoteHurtImage" placeholder="http://image.png">
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle">Cut In URL: </span>
+												<input type="text" class="wuxFormInput" name="attr_emoteCutImage" placeholder="http://image.png">
+											</div>
+										</div>
+										<div class="display">
+											<div class="wuxMultiRow">
+												<div class="wuxFormEntry">
+													<input class="wuxEquipField-flag" type="checkbox" name="attr_isSelected" style="display: block">
+													<input class="wuxEquipField-flag" type="hidden" name="attr_isSelected" value="0">
+													<span class="wuxFormHeaderLeadIcon"></span>
+													<span name="attr_name">emote</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+							<div class="wuxSectionContentCollapsed"></div>
+						</div>
+
+						<div class="chat-EmoteImages wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-EmoteImages" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">Emote Images</div>
+
+							<div class="wuxSectionContent">
+								<fieldset class="repeating_emotes">
+									<div class="wuxFieldSet">
+										<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
+										<div class="options">
+											<div class="wuxRow">
+												<span class="wuxFormTitle">Name: </span>
+												<input class="wuxFormInput" type="text" name="attr_emote_name">
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle">URL: </span>
+												<input class="wuxFormInput" type="text" name="attr_url">
+											</div>
+											<div class="wuxRow">
+												<span class="wuxFormTitle">Outfit Set: </span>
+												<input class="wuxFormInput" type="text" name="attr_emote_set">
+											</div>
+										</div>
+										<div class="display">
+											<div class="wuxMultiRow">
+												<div class="wuxFormEntry">
+													<span>[</span><span class="wuxSubheader" name="attr_emote_set">outfit</span><span>] </span>
+													<span name="attr_emote_name">Emote</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+							<div class="wuxSectionContentCollapsed"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

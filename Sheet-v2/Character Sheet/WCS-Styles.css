@@ -93,6 +93,32 @@ select
     color: white;
 }
 
+.wuxNoRepControl .repcontrol 
+{
+    display: none;
+}
+
+
+/*========================================
+  Character Sheet Display Style
+========================================*/
+
+.wuxCharacterSheetDisplayStyle-Builder,
+.wuxCharacterSheetDisplayStyle-LevelUp,
+.wuxCharacterSheetDisplayStyle-Character,
+.wuxCharacterSheetDisplayStyle-PartyManager
+{
+	display: none;
+}
+
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="0"] ~ .wuxCharacterSheetDisplayStyle-Builder,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="LevelUp"] ~ .wuxCharacterSheetDisplayStyle-LevelUp,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Character"] ~ .wuxCharacterSheetDisplayStyle-Character,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .wuxCharacterSheetDisplayStyle-PartyManager
+{
+	display: block;
+}
+
 
 /*========================================
   Master Layout
@@ -124,18 +150,31 @@ select
     pointer-events: none;
 }
 
-.wuxCharacterInformation 
+.wumMainSheet 
 {
     display: flex;
     flex-flow: row;
     align-content: flex-start;
 }
 
+/*========================================
+  Segments
+========================================*/
+
 .wuxMainContent
 {
     display: inline-block;
     flex: 5;
 }
+
+.wuxSegment
+{
+	position: relative;
+}
+
+/*========================================
+  Layouts
+========================================*/
 
 .wuxHorizontalFlex,
 .wuxSheetHeader
@@ -160,7 +199,7 @@ select
 .wuxLayoutItem
 {
     min-width: 220px;
-    max-width: 500px;
+    max-width: 600px;
     flex: 2;
 }
 
@@ -183,6 +222,10 @@ select
     flex: 1 1 250px;
 }
 
+/*========================================
+  Sticky Panels
+========================================*/
+
 .wuxFloatHeader,
 .wuxFloatSidebar
 {
@@ -204,7 +247,6 @@ select
 .wuxFloatSidebar
 {
     display: inline-block;
-    top: 50px;
     flex: 1;
 
     min-width: 80px;
@@ -212,8 +254,9 @@ select
     height: 100px;
     height: calc(100vh - 50px);
     margin-right: 10px;
+	padding: 0px;
 
-    background: #FFF;
+    /* background: #FFF; */
     z-index: 9998;
 }
 
@@ -249,10 +292,10 @@ select
     vertical-align: bottom;
     text-transform: capitalize;
 
-	background: #512800;
-    background: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
+	background: #1d1e1f;
     border-bottom: 3px solid;
-    border-color: #000 #000 #a6a6a6 #000;
+    border-color: transparent transparent #DE9B72 transparent;
+    border-radius: 10px 10px 0px 0px;
 }
 
 .wuxTab-flag
@@ -270,8 +313,7 @@ select
 
 .wuxTab-flag:hover + .wuxTabHeader
 {
-    background: #86530f;
-    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+    background: #deaf72;
 }
 
 .wuxTab-flag:not(:checked) ~ .wuxTab
@@ -305,10 +347,6 @@ select
     border-image: linear-gradient(to right, #ffffffff 0%, #ffffff00 70%) 1;
 }
 
-/*========================================
-  Sections
-========================================*/
-
 .wuxSectionBlock
 {
     position: relative;
@@ -337,7 +375,18 @@ select
     border-style: solid;
     border-width: 3px;
     border-radius: 10px 10px 0px 0px;
-    border-color: #000 #000 #a6a6a6 #000;
+    border-color: #000 #000 transparent #000;
+}
+
+.wuxSectionHeaderFooter
+{
+    position: relative;
+    display: block;
+    width: calc(100% - 5px);
+	height: 0px;
+	margin-bottom: 3px;
+
+	border-bottom: 3px solid #a6a6a6;
 }
 
 .wuxSectionContent,
@@ -346,17 +395,20 @@ select
     position: relative;
     top: -3px;
     left: 0px;
-    display: block;
+    display: flex;
+    flex-flow: row;
+    align-content: flex-start;
+
     width: calc(100% - 18px);
     padding: 5px;
 
 	background: #1d1e1f;
     background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 30%, #3A3D3E 100%);
     border-style: solid;
-    border-width: 3px;
+    border-width: 0px 3px 3px 0px;
     border-color: #a6a6a6 #a6a6a6 #a6a6a6 transparent;
-    border-image: linear-gradient(to right, #a6a6a600 0%, #a6a6a600 55%, #a6a6a6FF 60%) 1;
-    border-radius: 0px 5px 5px 0px;
+    border-image: linear-gradient(to right, #a6a6a600 0%, #a6a6a600 35%, #a6a6a6FF 40%) 1;
+    border-radius: 0px 0px 5px 0px;
 }
 
 .wuxSectionContentCollapsed
@@ -364,7 +416,7 @@ select
     height: 0px;
     line-height: 0px;
 
-    border-width: 3px 3px 0px 0px;
+    border-width: 0px 3px 0px 0px;
 }
 
 .wuxLargeLayoutItem .wuxSectionContent,
@@ -411,14 +463,14 @@ select
     width: 100%;
     height: auto;
 
-    font-size: 9px;
+    font-size: 11px;
     line-height: 14px;
 }
 
 .wuxSectionBlock .wuxRow,
 .wuxSectionBlock .wuxActionRow
 {
-    height: 16px;
+    height: auto;
 }
 
 .wuxSectionBlock .wuxTabRow
@@ -454,7 +506,7 @@ select
     -webkit-appearance: checkbox;
     -moz-appearance: checkbox;
 
-    font-size: 10px;
+    font-size: 12px;
 
     border: 1px solid #666;
     border-radius: 3px;
@@ -464,7 +516,7 @@ select
 .wuxSectionBlock .wuxMultiActionRow button
 {
     border: none;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .wuxSectionBlock .wuxSubCategory
@@ -484,31 +536,196 @@ select
 }
 
 /*========================================
-    Section General Entry
+    Text Inputs and Labels
 ========================================*/
 
-.wuxSectionBlock .wuxHeader
+.wuxHeader
 {
     display: inline-block;
     width: 100%;
+	padding-top: 5px;
+    
+    color: #DE9B72;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 2px solid #DE9B72;
+    border-image: linear-gradient(to right, #DE9B72ff 0%, #DE9B72ff 50%, #DE9B7200 100%) 1;
+}
+
+.wuxHeader2
+{
+    display: inline-block;
+    width: 100%;
+	padding-top: 5px;
     
     color: #d0d0d0;
     font-size: 12px;
     font-weight: bold;
-    border-bottom: 2px solid #FFF;
-    border-image: linear-gradient(to right, #ffffffff 0%, #ffffffff 50%, #ffffff00 100%) 1;
+    border-bottom: 1px solid #d0d0d0;
+    border-image: linear-gradient(to right, #A0A0A0 0%, #A0A0A0 50%, #A0A0A0 100%) 1;
 }
 
-.wuxSectionBlock .wuxSubheader
+.wuxSubheader
 {
     display: inline;
     margin-top: -3px;
     vertical-align: bottom;
 
     font-style: italic;
-    font-size: 9px;
+    font-size: 10px;
     color: #A0A0A0;
 }
+
+.wuxDescription
+{
+    color: #f4f6f8;
+    font-size: 12px;
+    line-height: 13px;
+    word-break: break-word;
+}
+
+span.wuxDescription,
+.wuxDescription p
+{
+    white-space: pre-line;
+}
+
+div.wuxDescription .wuxTitle
+{
+    display: inline-block;
+    width: 40px;
+
+    font-weight: bold;
+}
+
+
+.wuxInput
+{
+    display: inline-block;
+    width: 95%;
+    height: auto;
+    margin: 0px -4px 0px 0px;
+    padding: 3px 4px 3px 5px;
+    vertical-align: bottom;
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+	background: #cacbcf;
+}
+
+/*========================================
+    Button
+========================================*/
+
+.wuxButton
+{
+    position: relative;
+    display: inline-block;
+    width: 90%;
+
+    background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
+    text-shadow: none;
+    box-shadow: none;
+    border: 1px solid black;
+}
+
+.wuxButton input[type=checkbox]
+{
+    position: absolute;
+    display: block;
+    opacity: 0;    
+    left: 0px;
+    width: 90%;
+    height: 24px;
+    z-index: 100;
+}
+
+button[type=roll].wuxButton,
+.wuxButton span
+{
+    height: 24px;
+    margin: 0px;
+    padding: 0px;
+}
+
+button[type=roll].wuxButton::before
+{
+    content: "" !important;
+}
+
+button[type=roll].wuxButton span,
+.wuxButton span
+{
+    position: relative;
+    top: 3px;
+    display: block;
+    width: 100%;
+    height: 24px;
+
+    text-align: center;
+
+    color: #1d1e1f;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.wuxButton,
+.wuxButton span
+{
+    max-width: 120px;
+}
+
+/*========================================
+    Flex Table
+========================================*/
+
+.wuxFlexTable
+{
+	position: relative;
+	display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
+}
+
+.wuxFlexTableItemGroup
+{
+	position: relative;
+	display: inline-block;
+	padding: 5px;
+
+	flex: 1;
+}
+
+.wuxFlexTableItemHeader,
+.wuxFlexTableItemData
+{
+	position: relative;
+	display: block;
+}
+
+.wuxFlexTableItemHeader
+{
+    color: #d0d0d0;
+    font-size: 13px;
+    font-weight: bold;
+	text-align: center;
+
+    border-bottom: 1px solid #FFF;
+}
+
+.wuxFlexTableItemData
+{
+    color: #f4f6f8;
+    font-size: 12px;
+	text-align: center;
+}
+
+
+
+
+/*========================================
+    Form Base
+========================================*/
 
 .wuxSectionBlock .wuxFormEntry,
 .wuxSectionBlock .wuxFormHeader,
@@ -763,42 +980,6 @@ select
     width: 30px;
 }
 
-.wuxSectionBlock .wuxDescription
-{
-    display: block;
-    height: auto;
-    width: auto;
-    margin: 3px 0px;
-    padding: 2px 5px;
-
-	background: #1d1e1f;
-}
-
-.wuxSectionBlock span.wuxDescription,
-.wuxSectionBlock div.wuxDescription,
-.wuxSectionBlock .wuxDescription p
-{
-    color: #f4f6f8;
-    font-size: 10px;
-    line-height: 13px;
-    word-break: break-word;
-}
-
-.wuxSectionBlock span.wuxDescription,
-.wuxSectionBlock .wuxDescription p
-{
-    white-space: pre-line;
-}
-
-.wuxSectionBlock div.wuxDescription .wuxTitle
-{
-    display: inline-block;
-    width: 40px;
-
-    font-weight: bold;
-}
-
-
 .wuxSectionBlock .wuxFormSubsection 
 {
     position: relative;
@@ -817,6 +998,17 @@ select
     font-size: 10px;
     line-height: 11px;
     color: #A0A0A0;
+}
+
+.wuxSectionBlock .wuxDescription
+{
+    display: block;
+    height: auto;
+    width: auto;
+    margin: 3px 0px;
+    padding: 2px 5px;
+
+	background: #1d1e1f;
 }
 
 /*========================================
@@ -1196,146 +1388,6 @@ select
 }
 
 /*========================================
-    Options Settings
-========================================*/
-
-.wuxSectionBlock .options-flag,
-.wuxAspectContainer .options-flag,
-.wuxSectionBlock .display-flag,
-.wuxSectionBlock .wuxSectionContent-flag
-{
-    opacity: 0;    
-    position: absolute;
-    top: 0px;
-    right: -3px;
-    width: 18px;
-    height: 18px;
-    z-index: 100;
-}
-
-.wuxSectionBlock .display-flag,
-.wuxSectionBlock .wuxSectionContent-flag
-{
-    left: 0px;
-    width: 225px;
-    height: 22px;
-}
-
-.wuxSectionBlock .options-flag + span,
-.wuxAspectContainer .options-flag + span
-{
-    position: absolute;
-    top: -5px;
-    right: -3px;
-    white-space: nowrap;
-    width: 18px;
-    height: 18px;
-    font-size: 20px;
-    font-family: pictos;
-    color: #d0d0d0;
-    cursor: pointer;
-    margin-top: 0px;
-    display: none;
-    opacity: 0;
-    border-bottom: 0px;
-    background-color: transparent;
-    z-index: 99;
-}
-
-.wuxSectionBlock .wuxSubCategory .options-flag,
-.wuxSectionBlock .wuxSubCategory .options-flag + span
-{
-    top: 0px;
-}
-
-.wuxSectionBlock .wuxInfoSection .options-flag,
-.wuxSectionBlock .wuxInfoSection .options-flag + span
-{
-    top: 0px;
-    left: 0px;
-}
-
-.wuxSectionBlock .wuxFieldSet .options-flag:checked + span,
-.wuxAspectContainer .options-flag:checked + span,
-.wuxSectionBlock .wuxSubCategory .options-flag:checked + span
-{
-    color: white;
-    display: block;
-    background-color: transparent;
-}
-
-.wuxSectionBlock .wuxFieldSet:hover > .options-flag + span,
-.wuxSectionBlock .wuxSubCategory:hover > .options-flag + span,
-.wuxSectionBlock .wuxInfoSection:hover > .options-flag + span,
-.wuxAspectContainer:hover > .options-flag + span,
-.wuxSectionBlock .wuxFormInputArea:hover > .options-flag + span
-{
-    opacity: 1;
-    display: block;
-}
-
-.wuxSectionBlock .wuxSectionContent-flag:hover + .wuxSectionHeader
-{
-    background: #86530f;
-    background: linear-gradient(to right, #86530f, #815822, #6e420a);
-}
-
-.wuxSectionBlock .options,
-.wuxAspectContainer .options
-{
-    position: relative;
-    padding: 5px;
-    margin-bottom: 5px;
-
-	background: #5A5D5E;
-    border-color: #a6a6a6;
-    border-image: linear-gradient(170deg, #a6a6a600 60%, #a6a6a6FF 100%) 1;
-    border-style: solid;
-    border-width: 0px 1px 1px 0px;
-}
-
-.wuxSectionBlock .options,
-.wuxSectionBlock .wuxDisplay,
-.wuxAspectContainer .options,
-.wuxAspectContainer .wuxDisplay,
-.wuxSectionBlock .wuxSectionContent-flag:not(:checked) ~ .wuxSectionContent
-{
-    display: none;
-}
-
-.wuxSectionBlock .options-flag:checked + span,
-.wuxAspectContainer .options-flag:checked + span
-{
-    color: black;
-    display: block;
-    background-color: transparent;
-}
-
-.wuxSectionBlock:hover > .options-flag + span,
-.wuxAspectContainer:hover > .options-flag + span
-{
-    opacity: 1;
-    display: block;
-}
-
-.wuxSectionBlock .options-flag:checked ~ .options,
-.wuxAspectContainer .options-flag:checked ~ .options,
-.wuxSectionBlock .display-flag:checked ~ .wuxDisplay,
-.wuxSectionBlock .wuxSectionContent-flag:checked ~ .wuxSectionContent
-{
-    display: inherit;
-}
-
-.wuxSectionBlock .options-flag:checked ~ .display,
-.wuxAspectContainer .options-flag:checked ~ .display,
-.wuxSectionBlock .options-flag:checked ~ .wuxDisplay,
-.wuxSectionBlock .options-flag:checked ~ .wuxSectionContent,
-.wuxSectionBlock .wuxSectionContent-flag:checked ~ .wuxSectionContentCollapsed
-{
-    display: none;
-}
-
-/*========================================
     Collapse Field
 ========================================*/
 
@@ -1413,7 +1465,7 @@ select
     visibility: visible;
   }
 
-/*========================================
+  /*========================================
     Information Elements
 ========================================*/
 
@@ -2312,11 +2364,6 @@ select
     font-size: 10px;
 }
 
-.wuxEmotePostGroup .repcontrol 
-{
-    display: none;
-}
-
 .wuxEmotePostGroup .repcontainer > .repitem 
 {
     display: inline-block;
@@ -2383,11 +2430,152 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 }
 
 /*========================================
+    Techniques
+========================================*/
+
+.wuxTechnique
+{
+    position: relative;
+    display: inline-block;
+    width: 360px; 
+    margin: 0px 15px 10px 0px; 
+
+    font-size: 12px;
+
+    border: 1px solid black; 
+}
+
+.wuxTechniqueHeader
+{
+    position: relative;
+    display: block; 
+    width: 358px; 
+    padding: 0px 0px 5px 10px; 
+    
+    background: #c0e7d5;
+    border-bottom: 1px solid #efefef; 
+}
+
+input.wuxTechniqueHeader-flag[value="Quick"] + .wuxTechniqueHeader
+{
+    background-color: #fbe5e5;
+}
+
+input.wuxTechniqueHeader-flag[value="Full"] + .wuxTechniqueHeader
+{
+    background-color: #d7a0a0;
+}
+
+input.wuxTechniqueHeader-flag[value="Reaction"] + .wuxTechniqueHeader
+{
+    background-color: #e5eafb;
+}
+
+input.wuxTechniqueHeader-flag[value="Free"] + .wuxTechniqueHeader
+{
+    background-color: #e5fbf1;
+}
+
+.wuxTechniqueType
+{
+    position: absolute;
+    display: inline-block;
+    right: 0px;
+    width: 70px; 
+    padding: 5px; 
+
+    vertical-align: top; 
+    text-align: center; 
+    
+    color: #FFF; 
+    
+    background: #000000;
+}
+
+input.wuxTechniqueType-flag[value="Active"] + .wuxTechniqueType
+{
+    background-color: #b60003;
+}
+
+input.wuxTechniqueType-flag[value="Passive"] + .wuxTechniqueType
+{
+    background-color: #4db600;
+}
+
+input.wuxTechniqueType-flag[value="Support"] + .wuxTechniqueType
+{
+    background-color: #00b0b6;
+}
+
+input.wuxTechniqueType-flag[value="Job"] + .wuxTechniqueType
+{
+    background-color: #7800b6;
+}
+
+input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
+{
+    background-color: #b66f00;
+}
+
+.wuxTechniqueType .wuxTechniqueTypeHeader
+{
+    display: block;
+
+    font-size: 10px; 
+    font-weight: bold;
+}
+
+.wuxTechniqueType .wuxTechniqueTypeFooter
+{
+    display: block;
+    font-size: 8px;
+}
+
+.wuxTechniqueHeaderName
+{
+    display:inline-block; 
+    width: 253px; 
+    margin-top: 5px; 
+    
+    font-size: 18px; 
+    font-weight: bold;
+}
+
+.wuxTechniqueHeaderInfo
+{
+    display: block; 
+    width: 253px; 
+
+    font-size: 13px;
+}
+
+.wuxTechniqueHeaderInfoType
+{
+    font-weight: bold;
+}
+
+.wuxTechniqueFunctionBlock
+{
+    width: 358px; 
+    line-height: 15px; 
+    padding: 5px 10px; 
+    
+    font-size: 13px; 
+    
+    border-bottom: 1px solid #c6c6c6; 
+    background: #fbf9e5;
+}
+
+.wuxTechniqueAttackBlock
+{
+    font-weight: bold;
+}
+
+/*========================================
     Options
 ========================================*/
 
 .wuxSectionBlock .wuxDisplayStyleCharacter,
-.wuxSectionBlock .wuxDisplayStyleClone,
 .wuxSectionBlock .wuxDisplayStyleParty,
 .wuxSectionBlock .wuxDisplayStyleBattleLog,
 .wuxSectionBlock .wuxDisplayStyleField-flag
@@ -2396,11 +2584,146 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 }
 
 input[type=hidden].wuxDisplayStyleField-flag[value="Character"] + .wuxDisplayStyleCharacter,
-input[type=hidden].wuxDisplayStyleField-flag[value="Clone"] + .wuxDisplayStyleClone,
 input[type=hidden].wuxDisplayStyleField-flag[value="PartyManager"] + .wuxDisplayStyleParty,
 input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplayStyleBattleLog
 {
     display: inherit;
+}
+
+.wuxSectionBlock .options-flag,
+.wuxAspectContainer .options-flag,
+.wuxSectionBlock .display-flag,
+.wuxSectionBlock .wuxSectionContent-flag
+{
+    opacity: 0;    
+    position: absolute;
+    top: 0px;
+    right: -3px;
+    width: 18px;
+    min-height: 18px;
+    z-index: 100;
+}
+
+.wuxSectionBlock .display-flag,
+.wuxSectionBlock .wuxSectionContent-flag
+{
+    left: 0px;
+    width: 225px; 
+    min-height: 25px;
+}
+
+.wuxSectionBlock .options-flag + span,
+.wuxAspectContainer .options-flag + span
+{
+    position: absolute;
+    top: -5px;
+    right: -3px;
+    white-space: nowrap;
+    width: 18px;
+    height: 18px;
+    font-size: 20px;
+    font-family: pictos;
+    color: #d0d0d0;
+    cursor: pointer;
+    margin-top: 0px;
+    display: none;
+    opacity: 0;
+    border-bottom: 0px;
+    background-color: transparent;
+    z-index: 99;
+}
+
+.wuxSectionBlock .wuxSubCategory .options-flag,
+.wuxSectionBlock .wuxSubCategory .options-flag + span
+{
+    top: 0px;
+}
+
+.wuxSectionBlock .wuxInfoSection .options-flag,
+.wuxSectionBlock .wuxInfoSection .options-flag + span
+{
+    top: 0px;
+    left: 0px;
+}
+
+.wuxSectionBlock .wuxFieldSet .options-flag:checked + span,
+.wuxAspectContainer .options-flag:checked + span,
+.wuxSectionBlock .wuxSubCategory .options-flag:checked + span
+{
+    color: white;
+    display: block;
+    background-color: transparent;
+}
+
+.wuxSectionBlock .wuxFieldSet:hover > .options-flag + span,
+.wuxSectionBlock .wuxSubCategory:hover > .options-flag + span,
+.wuxSectionBlock .wuxInfoSection:hover > .options-flag + span,
+.wuxAspectContainer:hover > .options-flag + span,
+.wuxSectionBlock .wuxFormInputArea:hover > .options-flag + span
+{
+    opacity: 1;
+    display: block;
+}
+
+.wuxSectionBlock .wuxSectionContent-flag:hover + .wuxSectionHeader
+{
+    background: #86530f;
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+}
+
+.wuxSectionBlock .options,
+.wuxAspectContainer .options
+{
+    position: relative;
+    padding: 5px;
+    margin-bottom: 5px;
+
+	background: #5A5D5E;
+    border-color: #a6a6a6;
+    border-image: linear-gradient(170deg, #a6a6a600 60%, #a6a6a6FF 100%) 1;
+    border-style: solid;
+    border-width: 0px 1px 1px 0px;
+}
+
+.wuxSectionBlock .options,
+.wuxSectionBlock .wuxDisplay,
+.wuxAspectContainer .options,
+.wuxAspectContainer .wuxDisplay,
+.wuxSectionBlock .wuxSectionContent-flag:not(:checked) ~ .wuxSectionContent
+{
+    display: none;
+}
+
+.wuxSectionBlock .options-flag:checked + span,
+.wuxAspectContainer .options-flag:checked + span
+{
+    color: black;
+    display: block;
+    background-color: transparent;
+}
+
+.wuxSectionBlock:hover > .options-flag + span,
+.wuxAspectContainer:hover > .options-flag + span
+{
+    opacity: 1;
+    display: block;
+}
+
+.wuxSectionBlock .options-flag:checked ~ .options,
+.wuxAspectContainer .options-flag:checked ~ .options,
+.wuxSectionBlock .display-flag:checked ~ .wuxDisplay,
+.wuxSectionBlock .wuxSectionContent-flag:checked ~ .wuxSectionContent
+{
+    display: inherit;
+}
+
+.wuxSectionBlock .options-flag:checked ~ .display,
+.wuxAspectContainer .options-flag:checked ~ .display,
+.wuxSectionBlock .options-flag:checked ~ .wuxDisplay,
+.wuxSectionBlock .options-flag:checked ~ .wuxSectionContent,
+.wuxSectionBlock .wuxSectionContent-flag:checked ~ .wuxSectionContentCollapsed
+{
+    display: none;
 }/*========================================
     Party Manager Shared
 ========================================*/

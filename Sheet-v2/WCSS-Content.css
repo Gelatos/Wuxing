@@ -1,0 +1,1451 @@
+/*========================================
+    Form Base
+========================================*/
+
+.wuxSectionBlock .wuxFormEntry,
+.wuxSectionBlock .wuxFormHeader,
+.wuxSectionBlock .wuxFormSubheader
+{
+    display: block;
+    width: 100%;
+    
+    color: #d0d0d0;
+    font-size: 11px;
+    font-weight: normal;
+    border-bottom: 1px solid #FFF;
+    border-image: linear-gradient(to right, #ffffffff 0%, #ffffff00 70%) 1;
+}
+
+.wuxSectionBlock .wuxFormEntry select 
+{
+    display: inline-block;
+    width: auto;
+
+    color: #d0d0d0;
+    font-size: 11px;
+    font-weight: normal;
+    border: none;
+    background: none;
+}
+
+.wuxSectionBlock .wuxFormEntry button[type=roll]
+{
+    position: relative;
+    display: inline-block;
+    width: auto;
+    height: 14px;
+    vertical-align: top;
+
+    color: #d0d0d0;
+    font-size: 11px;
+    font-weight: normal;
+
+    background: none;
+    text-shadow: none;
+    box-shadow: none;
+    border: none;
+}
+
+.wuxSectionBlock .wuxFormEntry button[type=roll]::before
+{
+    content: "" !important;
+}
+
+.wuxSectionBlock .wuxFormEntry button[type=roll] span
+{
+    position: relative;
+    top: -2px;
+    display: inline-block;
+}
+
+.wuxSectionBlock .wuxFormEntry input.wuxFormHeaderSelect
+{
+    position: relative;
+    display: inline-block;
+    width: auto;
+    height: 14px;
+    vertical-align: top;
+
+    color: #d0d0d0;
+    font-size: 11px;
+    font-weight: normal;
+
+    background: none;
+    text-shadow: none;
+    box-shadow: none;
+    border: none;
+}
+
+.wuxSectionBlock .wuxFormEntry .wuxSubheader
+{
+    font-size: 9px;
+    vertical-align: bottom;
+}
+
+.wuxSectionBlock .wuxSubCategory .wuxFormEntry
+{
+    border: none;
+}
+
+.wuxSectionBlock .wuxFormHeader
+{
+    padding-left: 3px;
+
+    font-weight: bold;
+
+    border-image: linear-gradient(to right, #ffffffff 0%, #ffffff00 70%) 1;
+}
+
+.wuxSectionBlock .wuxFormSubheader
+{
+    margin-top: 8px;
+    padding-left: 3px;
+
+    font-size: 10px;
+
+    border-image: linear-gradient(to right, #ffffffff 0%, #ffffff00 40%) 1;
+}
+
+.wuxSectionBlock .wuxFormHeaderLeadIcon,
+.wuxSectionBlock .wuxFormHeaderResource,
+.wuxSectionBlock .wuxFormHeaderMod,
+.wuxSectionBlock .wuxFormHeaderActionSymbol,
+.wuxAspectContainer .wuxFormHeaderActionSymbol,
+.wuxSectionBlock .wuxFormHeaderSelect
+{
+    display: inline-block;
+    height: 13px;
+    padding: 0px;
+    margin: 0px;
+
+    line-height: 11px;
+}
+
+.wuxSectionBlock .wuxFormHeaderLeadIcon
+{
+    width: 14px;
+    margin-right: 3px;
+    
+    font-family: pictos;
+    font-size: 12px;
+    vertical-align: bottom;
+
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+    cursor: pointer;
+}
+
+.wuxSectionBlock .wuxFormHeaderResource
+{
+    width: 28px;
+}
+
+.wuxSectionBlock .wuxFormHeaderResource.wuxSizeTiny
+{
+    width: 17px;
+}
+
+.wuxSectionBlock .wuxFormHeaderMod
+{
+    position: relative;
+    height: 11px;
+    width: 22px;
+    margin-right: 3px;
+
+    text-align: center;
+
+    border: 1px solid #3A3D3E;
+    border-radius: 2px;
+}
+
+.wuxSectionBlock .wuxFormHeaderActionSymbol
+{
+    position: relative;
+    top: -2px;
+    height: 12px;
+    margin-left: 5px;
+
+    filter: invert(100%);
+}
+
+
+.wuxSectionBlock .wuxFormHeaderResource input,
+.wuxSectionBlock .wuxFormHeaderResource span
+{
+    width: 100%;
+    height: 13px;
+
+    font-size: 11px;
+    line-height: 13px;
+    text-align: center;
+
+    border: none;
+}
+
+.wuxSectionBlock .wuxFormHeaderResource input
+{
+    margin-bottom: -2px;
+    vertical-align: top;
+
+    text-align: left;
+
+    color: #1d1e1f;
+    background: #efefef;
+}
+
+.wuxSectionBlock .wuxFormHeaderResource input::-webkit-outer-spin-button,
+.wuxSectionBlock .wuxFormHeaderResource input::-webkit-inner-spin-button 
+{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.wuxSectionBlock .wuxFormHeaderResource input[type=number]
+{
+    width: 28px;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.wuxSectionBlock .wuxFormHeaderResource span
+{
+    position: relative;
+    bottom: -2px;
+    display: inline-block;
+    line-height: 11px;
+    
+    border: 1px solid #3A3D3E;
+    border-radius: 2px;
+}
+
+.wuxSectionBlock select.wuxFormHeaderSelect
+{
+    width: 60px;
+
+    color: #d0d0d0;
+    font-size: 11px;
+
+    background: none;
+    background-color: #3A3D3E;
+    border: none;
+	appearance: none;
+}
+
+.wuxSectionBlock select.wuxFormHeaderSelect.wuxSizeSmall,
+.wuxSectionBlock select.wuxFormHeaderSelect.wuxSizeTiny
+{
+    font-size: 10px;
+    line-height: 10px;
+}
+
+.wuxSectionBlock select.wuxFormHeaderSelect.wuxSizeLarge
+{
+    width: 200px;
+}
+
+.wuxSectionBlock select.wuxFormHeaderSelect.wuxSizeSmall
+{
+    width: 45px;
+}
+
+.wuxSectionBlock select.wuxFormHeaderSelect.wuxSizeTiny
+{
+    width: 30px;
+}
+
+.wuxSectionBlock .wuxFormSubsection 
+{
+    position: relative;
+    padding-bottom: 3px;
+}
+
+.wuxSectionBlock .wuxFormSubsection div
+{
+    font-size: 10px;
+    line-height: 11px;
+}
+
+.wuxSectionBlock .wuxFormSubsection span
+{
+    font-style: italic;
+    font-size: 10px;
+    line-height: 11px;
+    color: #A0A0A0;
+}
+
+.wuxSectionBlock .wuxDescription
+{
+    display: block;
+    height: auto;
+    width: auto;
+    margin: 3px 0px;
+    padding: 2px 5px;
+
+	background: #1d1e1f;
+}
+
+/*========================================
+    Form Data
+========================================*/
+
+.wuxSectionBlock .wuxFormInputArea
+{
+    position: relative;
+    display: inline-block;
+    padding: 5px;
+    padding-bottom: 0px;
+    margin-bottom: 5px;
+    width: calc(100% - 20px);
+
+	background: #1d1e1f;
+    border-color: #a6a6a6;
+    border-image: linear-gradient(170deg, #a6a6a600 60%, #a6a6a6FF 100%) 1;
+    border-style: solid;
+    border-width: 0px 1px 1px 0px;
+}
+
+.wuxSectionBlock .wuxInnerLayoutItem .wuxFormInputArea textarea
+{
+    width: calc(100% - 10px);
+}
+
+.wuxSectionBlock .wuxFieldSet .wuxFormInputArea textarea
+{
+    width: calc(100% - 20px);
+
+    font-size: 10px;
+    line-height: 12px;
+}
+
+.wuxSectionBlock .wuxFormInputArea.wuxSizeSmall
+{
+    width: 220px;
+    margin-right: 10px;
+}
+
+.wuxSectionBlock .wuxFormTitle,
+.wuxSectionBlock .wuxFormSubitle,
+.wuxSectionBlock .wuxFormInput,
+.wuxSectionBlock .wuxFormData
+{
+    display: inline-block;
+    height: auto;
+    margin: 0px -4px 0px 0px;
+    padding: 0px 4px 0px 0px;
+    padding-left: 5px;
+    vertical-align: bottom;
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.wuxSectionBlock .wuxFormTitle
+{
+    width: 60px;
+
+    text-transform: capitalize;
+    color: #fff;
+
+    border-width: 0px;
+    border-bottom: 2px solid #000;
+    border-radius: 0px;
+}
+
+.wuxSectionBlock .wuxFormTitle
+{
+    font-size: 9px;
+    line-height: 11px;
+
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+}
+
+.wuxSectionBlock .wuxFormTitle.wuxSizeTiny
+{
+    font-size: 8px;
+    width: 30px;
+}
+
+.wuxSectionBlock .wuxFormTitle.wuxSizeSmall
+{
+    font-size: 8px;
+    width: 35px;
+}
+
+.wuxSectionBlock .wuxFormTitle.wuxSizeMed
+{
+    font-size: 8px;
+    width: 75px;
+}
+
+.wuxSectionBlock .wuxFormTitle.wuxSizeLarge
+{
+    font-size: 8px;
+    width: 90px;
+}
+
+.wuxSectionBlock .wuxFormTitle.wuxSizeHuge
+{
+    font-size: 8px;
+    width: 120px;
+}
+
+.wuxSectionBlock .wuxFormInput,
+.wuxSectionBlock .wuxDowntimeFormInput,
+.wuxSectionBlock .wuxDowntimeFormRow
+{
+    width: 150px;
+
+    color: #1d1e1f;
+    font-size: 12px;
+    line-height: 16px;
+
+    background: #efefef;
+    border-width: 0px;
+    border-bottom: 2px solid #000;
+    border-radius: 0px;
+}
+
+.wuxSectionBlock input.wuxFormInput
+{
+    padding: 0px 2px;
+}
+
+.wuxSectionBlock span.wuxFormInput
+{
+    padding-right: 0px;
+
+    color: #d0d0d0;
+
+	background: #1d1e1f;
+}
+
+.wuxSectionBlock input.wuxFormInput::-webkit-outer-spin-button,
+.wuxSectionBlock input.wuxFormInput::-webkit-inner-spin-button
+{
+    -webkit-appearance: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.wuxSectionBlock input[type=number].wuxFormInput 
+{
+    appearance: textfield; 
+    -moz-appearance: textfield;
+}
+
+.wuxSectionBlock .wuxFormInput.wuxSizeMini,
+.wuxSectionBlock input[type=number].wuxFormInput.wuxSizeMini
+{
+    width: 24px;
+}
+
+.wuxSectionBlock .wuxFormInput.wuxSizeTiny,
+.wuxSectionBlock input[type=number].wuxFormInput.wuxSizeTiny
+{
+    width: 35px;
+}
+
+.wuxSectionBlock .wuxFormInput.wuxSizeSmall,
+.wuxSectionBlock input[type=number].wuxFormInput.wuxSizeSmall
+{
+    width: 60px;
+}
+
+.wuxSectionBlock .wuxFormInput.wuxSizeMedSmall,
+.wuxSectionBlock input[type=number].wuxFormInput.wuxSizeMed
+{
+    width: 90px;
+}
+
+.wuxSectionBlock .wuxFormInput.wuxSizeMed,
+.wuxSectionBlock input[type=number].wuxFormInput.wuxSizeMed
+{
+    width: 100px;
+}
+
+.wuxSectionBlock .wuxFormInput.wuxSizeLarge,
+.wuxSectionBlock input[type=number].wuxFormInput.wuxSizeLarge
+{
+    width: 180px;
+}
+
+.wuxSectionBlock .wuxFormInput.wuxSizeHuge,
+.wuxSectionBlock input[type=number].wuxFormInput.wuxSizeHuge
+{
+    width: 220px;
+}
+
+.wuxSectionBlock textarea.wuxFormInput
+{
+    width: calc(100% - 10px);
+    height: 160px;
+
+    font-size: 11px;
+}
+
+.wuxSectionBlock textarea.wuxFormInput.wuxSizeSmall
+{
+    width: calc(100% - 10px);
+    height: 40px;
+}
+
+.wuxSectionBlock textarea.wuxFormInput.wuxSizeLarge
+{
+    width: calc(100% - 10px);
+    height: 250px;
+}
+
+.wuxSectionBlock .wuxFormInput.wuxSizeFlex,
+.wuxSectionBlock textarea.wuxFormInput.wuxSizeFlex
+{
+    width: calc(100% - 10px);
+}
+
+.wuxSectionBlock .wuxFormData
+{
+    padding-left: 5px;
+    padding-right: 5px;
+
+    color: #d0d0d0;
+    text-align: center;
+    font-size: 10px;
+    line-height: 13px;
+
+    background: #3A3D3E;
+    border-width: 0px;
+    border-bottom: 2px solid #000;
+    border-radius: 0px;
+}
+
+.wuxSectionBlock .wuxFormData.wuxSizeTiny
+{
+    width: 20px;
+}
+
+.wuxSectionBlock .wuxFormData.wuxSizeSmall
+{
+    width: 60px;
+}
+
+.wuxSectionBlock .wuxFormData.wuxSizeLarge
+{
+    width: 120px;
+}
+
+.wuxSectionBlock .wuxFormSpacer
+{
+    display: inline-block;
+    width: 11px;
+}
+
+.wuxSectionBlock .wuxFormButton,
+.wuxSectionBlock .wuxFormSearchButton
+{
+    position: relative;
+    display: inline-block;
+}
+
+.wuxSectionBlock .wuxFormButton input,
+.wuxSectionBlock .wuxFormSearchButton input
+{
+    opacity: 0;    
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 15px;
+    z-index: 100;
+}
+
+.wuxSectionBlock .wuxFormButton,
+.wuxSectionBlock .wuxFormButton input
+{
+    width: 80px;
+}
+
+.wuxSectionBlock .wuxFormButton.wuxSizeTiny,
+.wuxSectionBlock .wuxFormButton.wuxSizeTiny input
+{
+    width: 40px;
+}
+
+.wuxSectionBlock .wuxFormButton.wuxSizeSmall,
+.wuxSectionBlock .wuxFormButton.wuxSizeSmall input
+{
+    width: 60px;
+}
+
+.wuxSectionBlock .wuxFormButton.wuxSizeLarge,
+.wuxSectionBlock .wuxFormButton.wuxSizeLarge input
+{
+    width: 120px;
+}
+
+.wuxSectionBlock .wuxFormButton.wuxSizeHuge,
+.wuxSectionBlock .wuxFormButton.wuxSizeHuge input
+{
+    width: 160px;
+}
+
+.wuxSectionBlock .wuxFormButton span
+{
+    position: relative;
+    display: inline-block;
+    height: 14px;
+    width: 100%;
+
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10px;
+
+    background-color: #cacbcf;
+    border: 1px solid black;
+    border-radius: 5px;
+    
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+    cursor: pointer;
+}
+
+.wuxSectionBlock .wuxFormButton.wuxDelButton span
+{
+    color: white;
+    background-color: red;
+}
+
+.wuxSectionBlock .wuxFormSearchButton
+{
+    width: fit-content;
+}
+
+.wuxSectionBlock .wuxFormSearchButton input
+{
+    width: 100%;
+}
+
+.wuxSectionBlock .wuxFormSearchButton span
+{
+    position: relative;
+    display: inline-block;
+    height: 14px;
+    padding: 0px 4px;
+    
+    font-size: 10px;
+    color: #a6a6a6;
+
+	background-color: #1d1e1f;
+}
+
+.wuxSectionBlock .wuxFormSearchButton span.wuxFormSearchLeadIcon
+{
+    font-family: pictos;
+    font-size: 10px;
+    vertical-align: bottom;
+}
+
+.wuxSectionBlock .wuxFormButton input:active + span
+{
+    background-color: #9fa0a3;
+}
+
+.wuxSectionContent button.wuxFormButton[type=roll]
+{
+    text-shadow: none;
+    border-radius: 0px;
+}
+
+.wuxSectionContent button.wuxFormButton[type=roll]::before
+{
+    content: "" !important;
+}
+
+/*========================================
+    Collapse Field
+========================================*/
+
+.wuxSectionBlock .wuxCollapseField-flag
+{
+    opacity: 0;    
+    position: absolute;
+    left: 0px;
+    width: 15px;
+    height: 18px;
+    z-index: 100;
+}
+
+.wuxSectionBlock .wuxCollapseField
+{
+    display: none;
+}
+
+.wuxSectionBlock .wuxCollapseField-flag:checked ~ .wuxCollapseField
+{
+    display: inherit;
+}
+
+/*========================================
+   Traits
+========================================*/
+
+.wuxSectionBlock .wuxTraitsSection
+{
+    position: relative;
+    display: inline-block;
+}
+
+.wuxSectionBlock .wuxTrait
+{
+    display: inline-block;
+    padding: 0px 3px;
+
+    color: #fff;
+    font-size: 11px;
+}
+
+.wuxSectionBlock .wuxTrait
+{ 
+    display: none;
+}
+
+.wuxSectionBlock input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
+.wuxSectionBlock .wuxShownTraits .wuxTrait
+{
+    display: inline-block;
+}
+
+.wuxSectionBlock .wuxTrait .wuxTooltiptext
+{
+    position: absolute;
+    top: 18px;
+    left: 0px;
+    width: 240px;
+    padding: 5px;
+    z-index: 1000;
+
+    color: #3e3e3e;
+    font-size: 11px;
+    text-align: center;
+
+    visibility: hidden;
+    background: #fff;
+    border-radius: 6px;
+   
+  }
+  
+  .wuxSectionBlock .wuxTrait:hover .wuxTooltiptext
+  {
+    visibility: visible;
+  }
+
+  /*========================================
+    Information Elements
+========================================*/
+
+.wuxInfoSectionColumn,
+.wuxInfoSection
+{
+    position: relative;
+    display: inline-block;
+    height: auto;
+    vertical-align: top;
+}
+
+.wuxInfoSectionColumn
+{
+    width: 120px;
+}
+
+.wuxInfoSection
+{
+    width: auto;
+    margin-right: 10px;
+}
+
+.wuxInfoSection .wuxInfoField,
+.wuxInfoSection .wuxInfoSubField,
+.wuxInfoSection .wuxInfoSubFieldInLine
+{
+    position: relative;
+    display: block;
+    width: auto;
+    height: auto;
+}
+
+.wuxInfoSection .wuxInfoSubFieldInLine
+{
+    display: inline-block;
+}
+
+.wuxInfoSection .wuxInfoSubField,
+.wuxInfoSection .wuxInfoSubFieldInLine
+{
+    top: -3px;
+}
+
+
+.wuxInfoSection .wuxInfoTitle,
+.wuxInfoSection .wuxInfoSubtitle,
+.wuxInfoSection .wuxInfoData,
+.wuxInfoSection .wuxInfoSubdata,
+.wuxInfoSection .wuxInfoSubHolder
+{
+    display: inline-block;
+    height: auto;
+    margin: 0px -4px 0px 0px;
+    padding: 0px 4px 0px 0px;
+    padding-left: 5px;
+    vertical-align: bottom;
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.wuxInfoSection .wuxInfoTitle,
+.wuxInfoSection .wuxInfoSubtitle
+{
+    text-transform: capitalize;
+    color: #ffffdf;
+
+    border-width: 0px;
+    border-bottom: 2px solid #000;
+    border-radius: 5px 0px 0px 5px;
+}
+
+.wuxInfoSection .wuxInfoTitle
+{
+    position: relative;
+    width: 60px;
+
+    font-size: 10px;
+    line-height: 13px;
+    text-align: right;
+
+    background: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
+    border-radius: 5px 0px 0px 5px;
+}
+
+.wuxInfoSection .wuxInfoSubtitle
+{
+    position: relative;
+    left: 20px;
+    width: 38px;
+
+    font-size: 8px;
+    line-height: 10px;
+    text-align: right;
+
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+    border: 0px solid #000;
+    border-width: 1px 0px 1px 1px;
+}
+
+.wuxInfoSection .wuxInfoData,
+.wuxInfoSection .wuxInfoData select,
+.wuxInfoSection .wuxInfoInput,
+.wuxInfoSection .wuxInfoSubdata,
+.wuxInfoSection .wuxInfoSubHolder
+{
+    margin: 0px;
+    padding: 0px;
+    width: 30px;
+
+    color: #fff;
+    font-weight: bold;
+
+    background-color: #ba7417;
+
+    border-width: 0px;
+}
+
+.wuxInfoSection .wuxInfoData,
+.wuxInfoSection .wuxInfoInput,
+.wuxInfoSection .wuxInfoSubdata,
+.wuxInfoSection .wuxInfoSubHolder
+{
+    border-bottom: 2px solid #000;
+    border-radius: 0px 5px 5px 0px;
+}
+
+.wuxInfoSection .wuxInfoData,
+.wuxInfoSection .wuxInfoData select,
+.wuxInfoSection .wuxInfoInput,
+.wuxInfoSection .wuxInfoInput input
+{
+    position: relative;
+    display: inline-block;
+
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+}
+
+.wuxInfoSection.wuxSizeLarge .wuxInfoData,
+.wuxInfoSection.wuxSizeLarge .wuxInfoData select,
+.wuxInfoSection.wuxSizeLarge .wuxInfoInput
+{
+    padding-left: 5px;
+    text-align: left;
+}
+
+.wuxInfoSection .wuxInfoInput,
+.wuxInfoSection span.wuxInfoInput input.wuxInnerInfoInput
+{
+    width: 30px;
+
+    color: #1d1e1f;
+    font-size: 11px;
+    font-style: normal;
+
+    -webkit-appearance: none;
+    appearance: none;
+    background: #efefef;
+}
+
+.wuxInfoSection span.wuxInfoInput input.wuxInnerInfoInput
+{
+    padding: 0px;
+    line-height: 14px;
+    border: 0px;
+}
+
+.wuxInfoSection.wuxSizeLarge span.wuxInfoInput input.wuxInnerInfoInput
+{
+    width: 80px;
+}
+
+.wuxInfoSection .wuxInfoInput::-webkit-outer-spin-button,
+.wuxInfoSection .wuxInfoInput::-webkit-inner-spin-button,
+.wuxInfoSection span.wuxInfoInput input.wuxInnerInfoInput::-webkit-outer-spin-button,
+.wuxInfoSection span.wuxInfoInput input.wuxInnerInfoInput::-webkit-inner-spin-button
+{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.wuxInfoSection input[type=number].wuxInfoInput,
+.wuxInfoSection span.wuxInfoInput input[type=number].wuxInnerInfoInput
+{
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.wuxInfoSection .wuxInfoSubdata
+{
+    position: relative;
+    left: 20px;
+    width: 30px;
+
+    font-size: 10px;
+    line-height: 10px;
+    text-align: center;
+    font-weight: normal;
+
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+    border: 0px solid #000;
+    border-width: 1px 1px 1px 0px;
+}
+
+.wuxInfoSection .wuxInfoSubHolder
+{
+    position: relative;
+    left: 6px;
+    width: 90px;
+
+    color: #1d1e1f;
+    font-size: 8px;
+    line-height: 10px;
+    text-align: center;
+    font-weight: normal;
+
+    background: #efefef;
+    border: 0px solid #000;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.wuxInfoSection.wuxSizeLarge .wuxInfoData,
+.wuxInfoSection.wuxSizeLarge .wuxInfoData select,
+.wuxInfoSection.wuxSizeLarge .wuxInfoInput,
+.wuxInfoSection.wuxSizeLarge span.wuxInfoInput,
+.wuxInfoSection.wuxSizeLarge input.wuxInfoInput
+{
+    width: 155px;
+}
+
+.wuxInfoSection.wuxSizeLarge .wuxInfoSubdata
+{
+    width: 100px;
+}
+
+.wuxInfoSection.wuxSizeLarge .wuxInfoTitle,
+.wuxInfoSection.wuxSizeMed .wuxInfoTitle,
+.wuxInfoSection.wuxSizeMed .wuxInfoData,
+.wuxInfoSection.wuxSizeMed .wuxInfoInput,
+.wuxInfoSection.wuxSizeMed input.wuxInfoInput,
+.wuxInfoSection input.wuxInfoInput.wuxSizeMed,
+.wuxInfoSection.wuxSizeMed .wuxInfoSubdata
+{
+    width: 45px;
+}
+
+.wuxInfoSection.wuxSizeLarge .wuxInfoSubtitle,
+.wuxInfoSection.wuxSizeMed .wuxInfoSubtitle
+{
+    width: 20px;
+    left: 22px;
+}
+
+.wuxInfoSection.wuxSizeLarge .wuxInfoSubdata,
+.wuxInfoSection.wuxSizeMed .wuxInfoSubdata,
+.wuxInfoSubField input.wuxInfoInput
+{
+    left: 24px;
+}
+
+.wuxInfoSection .wuxInfoTitle.wuxSizeLarge,
+.wuxInfoSection .wuxInfoSubtitle.wuxSizeLarge,
+.wuxInfoSection .wuxInfoData.wuxSizeLarge,
+.wuxInfoSection .wuxInfoInput.wuxSizeLarge
+{
+    width: 60px;
+}
+
+/*========================================
+    Aspect Containers
+========================================*/
+
+.wuxAspectContainer
+{
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% - 15px);
+    margin: 5px;
+    margin-bottom: 2px;
+    margin-right: 15px;
+}
+
+.wuxAspectContainer.wuxSizeSmall
+{
+    width: calc(50% - 12px);
+    margin-right: 2px;
+}
+
+.wuxAspectContainer .wuxContainer
+{
+    position: relative;
+    top: 0px;
+    left: 15px;
+    width: calc(100% - 15px);
+    min-height: 30px;
+    display: inline-block;
+    vertical-align: top;
+
+    color: #f4f6f8;
+
+	background: #1d1e1f;
+    background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 100%);
+    border-style: solid;
+    border-width: 2px;
+    border-color: #a6a6a6;
+    border-radius: 5px 5px;
+}
+
+.wuxAspectContainer .wuxContainer .wuxHeader,
+.wuxAspectContainer .wuxContainer .wuxSubheader,
+.wuxAspectContainer .wuxContainer button.wuxHeader,
+.wuxAspectContainer .wuxContainer button.wuxSubheader
+{
+    display: block;
+    margin: 5px 0px;
+    padding-left: 20px;
+    
+    font-family: "Candal";
+    font-size: 12px;
+    line-height: 16px;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+.wuxAspectContainer .wuxContainer input.wuxHeader,
+.wuxAspectContainer .wuxContainer select.wuxHeader
+{
+    width: calc(100% - 22px);
+    margin-left: 22px;
+
+    text-transform: none;
+    font-weight: normal;
+
+    background: none;
+    border: 0px;
+}
+
+.wuxAspectContainer .wuxContainer.wuxAspectInput,
+.wuxAspectContainer .wuxContainer.wuxAspectInput select.wuxHeader
+{
+    color: #1d1e1f;
+    background: #efefef;
+}
+
+.wuxAspectContainer .wuxContainer button[type=roll].wuxHeader 
+{
+    position: relative;
+    width: calc(100% - 10px);
+
+    color: #f4f6f8;
+
+    background: none;
+    text-shadow: none;
+    box-shadow: none;
+    border: none;
+}
+
+.wuxAspectContainer .wuxContainer button[type=roll]::before
+{
+    content: "" !important;
+}
+
+/* === subheader */
+
+.wuxAspectContainer .wuxContainer .wuxSubheader
+{
+    position: absolute;
+    top: -5px;
+    left: 20px;
+    width: auto;
+    height: 9px;
+    vertical-align: bottom;
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9px;
+    line-height: 9px;
+    font-weight: normal;
+    text-align: left;
+    font-style: italic;
+}
+
+/* === circle containers */
+
+.wuxAspectContainer .wuxCircleContainer
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 35px;
+    height: 35px;
+    z-index: 1;
+
+    color: #f4f6f8;
+	background: #1d1e1f;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 18px;
+    border-color: #a6a6a6;
+}
+
+.wuxAspectContainer .wuxCircleContainer.wuxAspectInput
+{
+    color: #1d1e1f;
+    background: #efefef;
+}
+
+
+.wuxAspectContainer .wuxCircleContainer input[type=checkbox],
+.wuxAspectContainer .wuxCircleContainer input[type=number],
+.wuxAspectContainer .wuxCircleContainer input[type=text]
+{
+    position: relative;
+    height: 20px;
+    width: 100%;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.wuxAspectContainer .wuxCircleContainer input[type=checkbox] 
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+
+    opacity: 0;
+}
+
+.wuxAspectContainer .wuxCircleContainer input[type=checkbox] ~ span 
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: none;
+    height: 100%;
+    width: 100%;
+
+    text-align: center;
+
+    border-radius: 50%;
+    background:url("https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/5th%20Edition%20OGL%20by%20Roll20/images/insperation.gif") left top no-repeat;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.wuxAspectContainer .wuxCircleContainer input[type=checkbox]:checked ~ span 
+{
+    display: block;
+}
+
+.wuxAspectContainer .wuxCircleContainer input[type=number],
+.wuxAspectContainer .wuxCircleContainer input[type=text],
+.wuxAspectContainer .wuxCircleContainer span,
+.wuxAspectContainer .wuxCircleContainer span.spell-wuxAspectSpan
+{
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    text-align: center;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 34px;
+
+    border: none;
+    background: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+
+.wuxAspectContainer .wuxCircleContainer span.wuxSubheader
+{
+    position: absolute;
+    right: 0px;
+    bottom: 2px;
+    width: 100%;
+    height: 9px;
+    padding-left: 15px;
+    padding-top: 3px;
+    vertical-align: bottom;
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 6px;
+    line-height: 9px;
+    font-weight: normal;
+    text-align: center;
+}
+
+.wuxAspectContainer .wuxCircleContainer input::-webkit-outer-spin-button,
+.wuxAspectContainer .wuxCircleContainer input::-webkit-inner-spin-button
+{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.wuxAspectContainer .wuxCircleContainer input[type=number] 
+{
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.wuxAspectContainer .wuxCircleContainer img
+{
+    width: 35px;
+    height: 35px;
+}
+
+/* === sub containers */
+
+.wuxAspectContainer .wuxSubContainers
+{
+    position: relative;
+    width: calc(100% - 20px);
+    margin-left: 20px;
+    margin-top: -5px;
+}
+
+.wuxAspectContainer .wuxSubContainer 
+{
+    position: relative;
+    display: inline-block;
+    width: auto;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxHeader,
+.wuxAspectContainer .wuxSubContainer .wuxInput
+{
+    position: relative;
+    display: inline-block;
+    height: 14px;
+    padding: 0px 5px;
+
+    font-size: 10px;
+    color: #f4f6f8;
+
+	background: #1d1e1f;
+    background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 100%);
+    border-style: solid;
+    border-color: #a6a6a6;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxHeader
+{
+    width: 40px;
+    margin-left: 0px;
+
+    font-weight: bold;
+    text-align: right;
+
+    border-width: 1px 0px 1px 1px;
+    border-radius: 5px 0px 0px 5px;
+}
+
+.wuxAspectContainer .wuxSubContainer button[type=roll].wuxHeader 
+{
+    position: relative;
+    display: inline-block;
+    top : -2px;
+    width: 40px;
+    margin: 0px;
+    height: 10px;
+    padding: 0px 0px 5px 0px;
+
+    font-size: 10px;
+    color: #f4f6f8;
+
+    text-shadow: none;
+    box-shadow: none;
+    border: none;
+
+	background: #1d1e1f;
+    background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 100%);
+    border-style: solid;
+    border-color: #a6a6a6;
+    border-width: 1px 0px 1px 1px;
+    border-radius: 5px 0px 0px 5px;
+}
+
+.wuxAspectContainer .wuxSubContainer button[type=roll]::before
+{
+    content: "" !important;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxHeader.wuxSizeSmall
+{
+    width: 20px;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxHeader.wuxSizeLarge
+{
+    width: 55px;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput
+{
+    width: 145px;
+    margin-left: -5px;
+
+    border-width: 1px 1px 1px 0px;
+    border-radius: 0px 5px 5px 0px;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput.wuxAspectInput
+{
+    color: #1d1e1f;
+    background: #efefef;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput.wuxSizeMed
+{
+    width: 130px;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput.wuxSizeSmall
+{
+    width: 45px;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput.wuxSizeTiny
+{
+    width: 25px;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput input,
+.wuxAspectContainer .wuxSubContainer .wuxInput select
+{
+    position: relative;
+    height: 14px;
+    width: 100%;
+    margin-bottom: 0px;
+
+    font-size: 10px;
+    color: #1d1e1f;
+    text-align: center;
+
+    appearance: none;
+    background: none;
+    border: none;
+    border-radius: 0px;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput.wuxAspectDoubleInput input,
+.wuxAspectContainer .wuxSubContainer .wuxInput.wuxAspectDoubleInput select,
+.wuxAspectContainer .wuxSubContainer .wuxInput.wuxAspectDoubleInput span
+{
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput input
+{
+    top: -1px;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput select
+{
+    top: -2px;
+    vertical-align: top;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput input::-webkit-outer-spin-button,
+.wuxAspectContainer .wuxSubContainer .wuxInput input::-webkit-inner-spin-button
+{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput input[type=number] 
+{
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput input.wuxSizeSmall
+{
+    width: 60px;
+}
+
+.wuxAspectContainer .wuxSubContainer .wuxInput input.wuxSizeTiny,
+.wuxAspectContainer .wuxSubContainer .wuxInput span.wuxSizeTiny
+{
+    width: 18px;
+}
+
+.wuxAspectContainer.wuxSizeSmall .wuxSubContainer .wuxInput,
+.wuxAspectContainer.wuxSizeSmall .wuxSubContainer .wuxInput input
+{
+    width: 30px;
+}
+
+.wuxAspectContainer.wuxSizeSmall .wuxSubContainer .wuxInput.wuxSizeLarge,
+.wuxAspectContainer.wuxSizeSmall .wuxSubContainer .wuxInput.wuxSizeLarge input
+{
+    width: 50px;
+}
+

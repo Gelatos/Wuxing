@@ -1,0 +1,257 @@
+<div class="wuxCharacterSheetDisplayStyle-Builder">
+
+	<div class="main-TopRow wuxFloatHeader wuxHorizontalFlex">
+		<div class="segment-Basis wuxSegment">
+			<div class="wuxTabHeader"><span class="wuxInnerHeader">Character Creation</span></div>
+			<div class="wuxTabBuilderHeader wuxTab">
+				<div class="builderHeader-base wuxLayoutItem">
+					<div class="chat-chatBox wuxSectionBlock wuxLayoutItem">
+						<div class="wuxSectionContent">
+							<div class="wuxFieldSet">
+								<div class="wuxMultiRow">
+									<span class="wuxDescription">This is the Character Creator. Here you can set starting aspects of your character like their origins, starting ability scores, and starting skills. You can always return to this page from Options.</span>
+									<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character. You will then be sent to Class Advancement to select class(es) to level up.</span>
+									<span class="wuxDescription">Leave will ignore any changes made here and return you to the Character Sheet.</span>
+								</div>
+
+								<div class="wuxRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="LevelUp">
+										<span>Submit</span>
+									</div>
+
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="Character">
+										<span>Leave</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	<div class="wumMainSheet">
+		<div class="wuxMainContent">
+			<div class="segment-Origin wuxSegment">
+				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-Origin" checked="checked">
+				<div class="wuxTabHeader"><span class="wuxInnerHeader">Origin</span></div>
+
+				<div class="wuxTabOrigin wuxTab">
+					<div class="origin-Background wuxSectionBlock wuxLayoutItem">
+						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-origin-Background" checked="checked" style="display: block">
+						
+						<div class="wuxSectionHeader"><span class="wuxInnerHeader">Background</span></div>
+						<div class="wuxSectionHeaderFooter"></div>
+
+						<div class="wuxSectionContent">
+							<span class='wuxHeader'>Full Name</span>
+							<div class="wuxRow"><span class="wuxDescription">A character's full name. This is for self referential use.</span></div> 
+							<div class="wuxRow">
+								<input type="text" class='wuxInput' name='attr_full_name' value="">
+							</div>
+							<span class='wuxHeader2'>Display Name</span>
+							<div class="wuxRow"><span class="wuxDescription">This is the name that is displayed when your character speaks.</span></div>
+							<div class="wuxRow">
+								<input type="text" class='wuxInput' name='attr_nickname' value="???">
+							</div>
+
+							<div class="wuxRow">&nbsp;</div>
+							<span class='wuxHeader'>Path</span>
+							<div class="wuxRow"><span class="wuxDescription">Path broadly describes a character's role in the game.</span></div>
+							<div class="wuxRow">
+								<select class='wuxInput' name='attr_builder-path' value="Common">
+									<option value="Common">Common</option>
+									<option value="Hero">Hero</option>
+									<option value="Paragon">Paragon</option>
+								</select>
+							</div>
+							<div class="wuxRow"><span class="wuxDescription" name="attr_builder-pathDesc"></span></div>
+		
+						</div>
+						<div class="wuxSectionContentCollapsed"></div>
+					</div>
+					<div class="origin-Ancestry wuxSectionBlock wuxLayoutItem">
+						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-origin-Ancestry" checked="checked" style="display: block">
+						
+						<div class="wuxSectionHeader"><span class="wuxInnerHeader">Ancestry</span></div>
+						<div class="wuxSectionHeaderFooter"></div>
+
+						<div class="wuxSectionContent">
+							<span class='wuxHeader'>Ancestry</span>
+							<div class="wuxRow"><span class="wuxDescription">Every character belongs to an ancestry, one of the many creatures that exist in Wuxing. The ancestry you choose contributes to your character’s identity in an important way, by establishing a general appearance and the natural talents available to you.</span></div>
+							<div class="wuxRow">
+								<select class='wuxInput' name='attr_builder-ancestry' value="Human">
+									<option value="Human">Human</option>
+									<option value="Spirit">Spirit</option>
+								</select>
+							</div>
+							<div class="wuxRow"><span class="wuxDescription" name="attr_builder-ancestryDesc"></span></div>
+
+							<div class="wuxRow">&nbsp;</div>
+							<span class='wuxHeader'>Starting Statistics</span>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">HP</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-HP">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">Barrier</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-Barrier">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">Speed</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-Speed">-</span>
+								</div>
+							</div>
+
+							<div class="wuxRow">&nbsp;</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">CON</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-CON">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">DEX</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-DEX">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">QCK</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-QCK">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">STR</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-STR">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">CHA</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-CHA">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">INT</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-INT">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">PER</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-PER">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">WIL</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-starting-WIL">-</span>
+								</div>
+							</div>
+
+							<div class="wuxRow">&nbsp;</div>
+							<span class='wuxHeader'>Ancestry Growths</span>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">CON</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-CON">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">DEX</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-DEX">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">QCK</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-QCK">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">STR</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-STR">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">CHA</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-CHA">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">INT</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-INT">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">PER</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-PER">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">WIL</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-WIL">-</span>
+								</div>
+							</div>
+
+							<div class="wuxRow">&nbsp;</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">HP</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-HP">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">Vitality</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-Vitality">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">Ki Charge</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-KiCharge">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">Spellforce</span>
+									<span class="wuxFlexTableItemData" name="attr_builder-growth-Spellforce">-</span>
+								</div>
+							</div>
+
+							<div class="wuxRow">&nbsp;</div>
+							<span class='wuxHeader'>Techniques</span>
+
+
+							<fieldset class="repeating_ancestrytechniques">
+								<div class="wuxNoRepControl">
+									<div class="wuxTechnique">
+										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-action" value="">
+										<div class="wuxTechniqueHeader">
+											<input type="hidden" class="wuxHiddenBlankField-flag wuxTechniqueType-flag" name="attr_technique-type" value="">
+											<div class="wuxHiddenField wuxTechniqueType" name="attr_technique-type" value="">
+												<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
+												<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
+											</div>
+											<span class="wuxTechniqueHeaderName" name="attr_technique-name">Technique</span>
+											<div class="wuxTechniqueHeaderInfo">
+												<span class="wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Base</span>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-action" value="">
+												<span class="wuxHiddenField wuxTechniqueHeaderInfoType">: </span>  
+												<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+												<span class="wuxHiddenField">, </span>
+												<span name="attr_technique-limits"></span>
+											</div>
+										</div>
+										<!-- <div style="width: 330px; line-height: 15px; padding: 5px 5px; margin: 5px 10px; font-size: 13px; border: 1px solid black; background: #e8c5c5;">
+											<div style="width: 318px;">
+												<div style="width: 90px; display: inline-block;">
+													<strong>Range:</strong> 0
+												</div>
+												<div style="width: 180px; display: inline-block;">
+													<strong>Target:</strong> See Details
+												</div>
+											</div>
+											<div style="width: 318px;">Skill vs. Defense</div>
+											<div style="width: 318px;"> Damage</div>
+										</div>
+										<div style="width: 340px; padding: 5px 10px; font-size: 13px;">
+											<p>This section describes the effects or benefits of the technique.</p>
+											<p><strong>On Hit:</strong> This describes what occurs when the skill check ends in the attacker's favor. Attacks that glance instead of hit will still deal half their damage to all targets' HP.</p>
+										</div> -->
+									</div>
+								</div>
+							</fieldset>
+
+						</div>
+						<div class="wuxSectionContentCollapsed"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

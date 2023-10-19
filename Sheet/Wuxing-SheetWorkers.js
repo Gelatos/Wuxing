@@ -4576,9 +4576,7 @@ var update_save = function (attributeArray) {
 				update[attr + "_save_bonus"] = prof;
 			}
 
-			setAttrs(update, {
-				silent: true
-			});
+			setAttrs(update, {silent: true});
 		});
 	});
 };
