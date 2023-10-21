@@ -9,6 +9,19 @@ select
     margin: 0px;
 }
 
+input[type=number]
+{
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button
+{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .ui-dialog-content.ui-widget-content > p > strong + input {
     width: 100% !important; width: -moz-available !important; width: -webkit-fill-available !important; width: fill-available !important;
 }
@@ -93,9 +106,24 @@ select
     color: white;
 }
 
+.wuxRepeatingFlexSection .repcontrol,
 .wuxNoRepControl .repcontrol 
 {
     display: none;
+}
+
+.wuxRepeatingFlexSection .repcontainer
+{
+    display: flex;
+    flex-flow: wrap row;
+    align-content: flex-start;
+}
+
+.wuxRepeatingFlexSection .repcontainer > .repitem,
+.wuxRepeatingItemsInline .repcontainer > .repitem 
+{
+    display: inline-block;
+	flex: 1;
 }
 
 
@@ -199,7 +227,7 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 .wuxLayoutItem
 {
     min-width: 220px;
-    max-width: 600px;
+    /* max-width: 600px; */
     flex: 2;
 }
 
@@ -451,7 +479,6 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 
 .wuxSectionBlock .wuxRow,
 .wuxSectionBlock .wuxTabRow,
-.wuxSectionBlock .wuxInfoRow,
 .wuxSectionBlock .wuxFormRow,
 .wuxSectionBlock .wuxMultiRow,
 .wuxSectionBlock .wuxActionRow,
@@ -476,11 +503,6 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 .wuxSectionBlock .wuxTabRow
 {
     height: 14px;
-}
-
-.wuxSectionBlock .wuxInfoRow
-{
-    padding-top: 4px;
 }
 
 .wuxSectionBlock .wuxFormRow
@@ -621,12 +643,21 @@ div.wuxDescription .wuxTitle
 {
     position: relative;
     display: inline-block;
-    width: 90%;
+	width: auto;
+    min-width: 100px;
+	padding: 0px 10px;
 
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
     text-shadow: none;
     box-shadow: none;
     border: 1px solid black;
+}
+
+.wuxButton.wuxSizePercent
+{
+	padding: 0px;
+	width: 90%;
+    min-width: 0px;
 }
 
 .wuxButton input[type=checkbox]
@@ -635,8 +666,9 @@ div.wuxDescription .wuxTitle
     display: block;
     opacity: 0;    
     left: 0px;
-    width: 90%;
-    height: 24px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
     z-index: 100;
 }
 
@@ -656,6 +688,7 @@ button[type=roll].wuxButton::before
 button[type=roll].wuxButton span,
 .wuxButton span
 {
+    pointer-events: none;
     position: relative;
     top: 3px;
     display: block;
@@ -667,12 +700,6 @@ button[type=roll].wuxButton span,
     color: #1d1e1f;
     font-size: 12px;
     font-weight: normal;
-}
-
-.wuxButton,
-.wuxButton span
-{
-    max-width: 120px;
 }
 
 /*========================================
@@ -689,8 +716,8 @@ button[type=roll].wuxButton span,
 
 .wuxFlexTableItemGroup
 {
-	position: relative;
-	display: inline-block;
+    position: relative;
+    display: block;
 	padding: 5px;
 
 	flex: 1;
@@ -701,6 +728,9 @@ button[type=roll].wuxButton span,
 {
 	position: relative;
 	display: block;
+	min-width: 100%;
+	margin: 0px;
+	padding: 0px;
 }
 
 .wuxFlexTableItemHeader
@@ -720,6 +750,171 @@ button[type=roll].wuxButton span,
 	text-align: center;
 }
 
+input[type=number].wuxFlexTableItemData
+{
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+input.wuxFlexTableItemData
+{
+	color: #1d1e1f;
+    background: #efefef;
+	
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
+{
+    background: red;
+}
+
+/*========================================
+    Distinct Elements
+========================================*/
+
+.wuxDistinctSection
+{
+    position: relative;
+    display: block;
+	width: 95%;
+	max-width: 250px;
+    height: auto;
+}
+
+.wuxDistinctSection .wuxDistinctField
+{
+    position: relative;
+    display: block;
+	width: 100%;
+    height: auto;
+}
 
 
+.wuxDistinctSection .wuxDistinctTitle,
+.wuxDistinctSection .wuxDistinctSubtitle,
+.wuxDistinctSection .wuxDistinctData,
+.wuxDistinctSection .wuxDistinctSubdata
+{
+    display: inline-block;
+    margin: 0px -4px 0px 0px;
+    padding: 0px 4px 0px 0px;
+    padding-left: 5px;
+    vertical-align: bottom;
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.wuxDistinctSection .wuxDistinctTitle,
+.wuxDistinctSection .wuxDistinctSubtitle
+{
+    text-transform: capitalize;
+    color: #ffffdf;
+
+    border-width: 0px;
+    border-bottom: 2px solid #000;
+    border-radius: 5px 0px 0px 5px;
+}
+
+.wuxDistinctSection .wuxDistinctTitle
+{
+    position: relative;
+    width: 25%;
+
+    font-size: 10px;
+    line-height: 15px;
+    text-align: right;
+
+    background: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
+    border-radius: 5px 0px 0px 5px;
+}
+
+.wuxDistinctSection .wuxDistinctSubtitle
+{
+    position: relative;
+    left: 20px;
+    width: calc(25% - 20px);
+
+    font-size: 8px;
+    line-height: 15px;
+    text-align: right;
+
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+    border: 0px solid #000;
+    border-width: 1px 0px 1px 1px;
+}
+
+.wuxDistinctSection .wuxDistinctData,
+.wuxDistinctSection .wuxDistinctData select,
+.wuxDistinctSection .wuxDistinctSubdata
+{
+    margin: 0px;
+	padding: 0px 0px 0px 5px;
+    width: calc(75% - 15px);
+
+    color: #fff;
+    font-weight: bold;
+
+    background-color: #ba7417;
+    border-width: 0px;
+	
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.wuxDistinctSection .wuxDistinctData,
+.wuxDistinctSection .wuxDistinctSubdata
+{
+    border-bottom: 2px solid #000;
+    border-radius: 0px 5px 5px 0px;
+}
+
+.wuxDistinctSection .wuxDistinctData,
+.wuxDistinctSection .wuxDistinctData select
+{
+    position: relative;
+    display: inline-block;
+
+    font-size: 12px;
+    line-height: 15px;
+	text-align: left;
+}
+
+.wuxDistinctSection input.wuxDistinctData
+{
+    width: calc(75% - 10px);
+
+    color: #1d1e1f;
+    font-style: normal;
+
+    background: #efefef;
+}
+
+.wuxDistinctSection input[type=number].wuxDistinctData
+{
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.wuxDistinctSection .wuxDistinctSubdata
+{
+    position: relative;
+    left: 20px;
+    width: 30px;
+
+    font-size: 10px;
+    line-height: 10px;
+    text-align: center;
+    font-weight: normal;
+
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+    border: 0px solid #000;
+    border-width: 1px 1px 1px 0px;
+}
+
+input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
+{
+    background: red;
+}
 

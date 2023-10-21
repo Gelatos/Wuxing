@@ -40,218 +40,475 @@
 
 	<div class="wumMainSheet">
 		<div class="wuxMainContent">
-			<div class="segment-Origin wuxSegment">
-				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-Origin" checked="checked">
-				<div class="wuxTabHeader"><span class="wuxInnerHeader">Origin</span></div>
+			<div class="wuxTab">
+				<div class="origin-Background wuxSectionBlock wuxLayoutItem">
+					<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-origin-Background" checked="checked" style="display: block">
+					
+					<div class="wuxSectionHeader"><span class="wuxInnerHeader">Background</span></div>
+					<div class="wuxSectionHeaderFooter"></div>
 
-				<div class="wuxTabOrigin wuxTab">
-					<div class="origin-Background wuxSectionBlock wuxLayoutItem">
-						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-origin-Background" checked="checked" style="display: block">
-						
-						<div class="wuxSectionHeader"><span class="wuxInnerHeader">Background</span></div>
-						<div class="wuxSectionHeaderFooter"></div>
-
-						<div class="wuxSectionContent">
-							<span class='wuxHeader'>Full Name</span>
-							<div class="wuxRow"><span class="wuxDescription">A character's full name. This is for self referential use.</span></div> 
-							<div class="wuxRow">
-								<input type="text" class='wuxInput' name='attr_full_name' value="">
-							</div>
-							<span class='wuxHeader2'>Display Name</span>
-							<div class="wuxRow"><span class="wuxDescription">This is the name that is displayed when your character speaks.</span></div>
-							<div class="wuxRow">
-								<input type="text" class='wuxInput' name='attr_nickname' value="???">
-							</div>
-
-							<div class="wuxRow">&nbsp;</div>
-							<span class='wuxHeader'>Path</span>
-							<div class="wuxRow"><span class="wuxDescription">Path broadly describes a character's role in the game.</span></div>
-							<div class="wuxRow">
-								<select class='wuxInput' name='attr_builder-path' value="Common">
-									<option value="Common">Common</option>
-									<option value="Hero">Hero</option>
-									<option value="Paragon">Paragon</option>
-								</select>
-							</div>
-							<div class="wuxRow"><span class="wuxDescription" name="attr_builder-pathDesc"></span></div>
-		
+					<div class="wuxSectionContent">
+						<span class='wuxHeader'>Full Name</span>
+						<div class="wuxRow"><span class="wuxDescription">A character's full name. This is for self referential use.</span></div> 
+						<div class="wuxRow">
+							<input type="text" class='wuxInput' name='attr_full_name' value="">
 						</div>
-						<div class="wuxSectionContentCollapsed"></div>
+						<span class='wuxHeader2'>Display Name</span>
+						<div class="wuxRow"><span class="wuxDescription">This is the name that is displayed when your character speaks.</span></div>
+						<div class="wuxRow">
+							<input type="text" class='wuxInput' name='attr_nickname' value="???">
+						</div>
+
+						<div class="wuxRow">&nbsp;</div>
+						<span class='wuxHeader'>Path</span>
+						<div class="wuxRow"><span class="wuxDescription">Path broadly describes a character's role in the game.</span></div>
+						<div class="wuxRow">
+							<select class='wuxInput' name='attr_builder-path' value="Common">
+								<option value="Common">Common</option>
+								<option value="Hero">Hero</option>
+								<option value="Paragon">Paragon</option>
+							</select>
+						</div>
+						<div class="wuxRow"><span class="wuxDescription" name="attr_builder-pathDesc"></span></div>
+	
 					</div>
-					<div class="origin-Ancestry wuxSectionBlock wuxLayoutItem">
-						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-origin-Ancestry" checked="checked" style="display: block">
-						
-						<div class="wuxSectionHeader"><span class="wuxInnerHeader">Ancestry</span></div>
-						<div class="wuxSectionHeaderFooter"></div>
+					<div class="wuxSectionContentCollapsed"></div>
+				</div>
+				<div class="origin-Ancestry wuxSectionBlock wuxLayoutItem">
+					<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-origin-Ancestry" checked="checked" style="display: block">
+					
+					<div class="wuxSectionHeader"><span class="wuxInnerHeader">Ancestry</span></div>
+					<div class="wuxSectionHeaderFooter"></div>
 
-						<div class="wuxSectionContent">
-							<span class='wuxHeader'>Ancestry</span>
-							<div class="wuxRow"><span class="wuxDescription">Every character belongs to an ancestry, one of the many creatures that exist in Wuxing. The ancestry you choose contributes to your character’s identity in an important way, by establishing a general appearance and the natural talents available to you.</span></div>
-							<div class="wuxRow">
-								<select class='wuxInput' name='attr_builder-ancestry' value="Human">
-									<option value="Human">Human</option>
-									<option value="Spirit">Spirit</option>
-								</select>
+					<div class="wuxSectionContent">
+						<span class='wuxHeader'>Ancestry</span>
+						<div class="wuxRow"><span class="wuxDescription">Every character belongs to an ancestry, one of the many creatures that exist in Wuxing. The ancestry you choose contributes to your character’s identity in an important way, by establishing a general appearance and the natural talents available to you.</span></div>
+						<div class="wuxRow">
+							<select class='wuxInput' name='attr_builder-ancestry' value="Human">
+								<option value="Human">Human</option>
+								<option value="Spirit">Spirit</option>
+							</select>
+						</div>
+						<div class="wuxRow"><span class="wuxDescription" name="attr_builder-ancestryDesc"></span></div>
+
+						<div class="wuxRow">&nbsp;</div>
+						<span class='wuxHeader'>Starting Statistics</span>
+						<div class="wuxFlexTable">
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">HP</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-HP">-</span>
 							</div>
-							<div class="wuxRow"><span class="wuxDescription" name="attr_builder-ancestryDesc"></span></div>
-
-							<div class="wuxRow">&nbsp;</div>
-							<span class='wuxHeader'>Starting Statistics</span>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">HP</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-HP">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">Barrier</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-Barrier">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">Speed</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-Speed">-</span>
-								</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">Barrier</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-Barrier">-</span>
 							</div>
-
-							<div class="wuxRow">&nbsp;</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-CON">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-DEX">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-QCK">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-STR">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-CHA">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-INT">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-PER">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-starting-WIL">-</span>
-								</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">Speed</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-Speed">-</span>
 							</div>
+						</div>
 
-							<div class="wuxRow">&nbsp;</div>
-							<span class='wuxHeader'>Ancestry Growths</span>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-CON">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-DEX">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-QCK">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-STR">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-CHA">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-INT">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-PER">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-WIL">-</span>
-								</div>
+						<div class="wuxRow">&nbsp;</div>
+						<div class="wuxFlexTable">
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">CON</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-CON">-</span>
 							</div>
-
-							<div class="wuxRow">&nbsp;</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">HP</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-HP">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">Vitality</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-Vitality">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">Ki Charge</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-KiCharge">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">Spellforce</span>
-									<span class="wuxFlexTableItemData" name="attr_builder-growth-Spellforce">-</span>
-								</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">DEX</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-DEX">-</span>
 							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">QCK</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-QCK">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">STR</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-STR">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">CHA</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-CHA">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">INT</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-INT">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">PER</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-PER">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">WIL</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-starting-WIL">-</span>
+							</div>
+						</div>
 
-							<div class="wuxRow">&nbsp;</div>
-							<span class='wuxHeader'>Techniques</span>
+						<div class="wuxRow">&nbsp;</div>
+						<span class='wuxHeader'>Ancestry Growths</span>
+						<div class="wuxFlexTable">
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">CON</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-CON">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">DEX</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-DEX">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">QCK</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-QCK">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">STR</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-STR">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">CHA</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-CHA">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">INT</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-INT">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">PER</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-PER">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">WIL</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-WIL">-</span>
+							</div>
+						</div>
+
+						<div class="wuxRow">&nbsp;</div>
+						<div class="wuxFlexTable">
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">HP</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-HP">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">Vitality</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-Vitality">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">Ki Charge</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-KiCharge">-</span>
+							</div>
+							<div class="wuxFlexTableItemGroup">
+								<span class="wuxFlexTableItemHeader">Spellforce</span>
+								<span class="wuxFlexTableItemData" name="attr_builder-growth-Spellforce">-</span>
+							</div>
+						</div>
+
+						<div class="wuxRow">&nbsp;</div>
+						<span class='wuxHeader'>Techniques</span>
 
 
+						<div class="wuxRepeatingFlexSection">
 							<fieldset class="repeating_ancestrytechniques">
-								<div class="wuxNoRepControl">
-									<div class="wuxTechnique">
-										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-action" value="">
-										<div class="wuxTechniqueHeader">
-											<input type="hidden" class="wuxHiddenBlankField-flag wuxTechniqueType-flag" name="attr_technique-type" value="">
-											<div class="wuxHiddenField wuxTechniqueType" name="attr_technique-type" value="">
-												<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
-												<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
+								<div class="wuxTechnique">
+									<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-action" value="">
+									<div class="wuxTechniqueHeader">
+										<input type="hidden" class="wuxHiddenBlankField-flag wuxTechniqueType-flag" name="attr_technique-type" value="">
+										<div class="wuxHiddenField wuxTechniqueType" name="attr_technique-type" value="">
+											<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
+											<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
+										</div>
+										<span class="wuxTechniqueHeaderName" name="attr_technique-name">Technique</span>
+										<div class="wuxTechniqueHeaderInfo">
+											<span class="wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Base</span>
+											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-action" value="">
+											<span class="wuxHiddenField wuxTechniqueHeaderInfoType">: </span>  
+											<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
+											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+											<span class="wuxHiddenField">, </span>
+											<span name="attr_technique-limits"></span>
+										</div>
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+									<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+										<div class="wuxHiddenField wuxTechniqueFunctionBlockRow">
+											<span><strong>Prerequisites: </strong></span>
+											<span name="attr_technique-prerequisite"></span>
+										</div>
+										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+										<div class="wuxHiddenField wuxTechniqueFunctionBlockRow">
+											<span><strong>Traits: </strong></span>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+											<div class="wuxTrait">
+												<span name="attr_technique-traits0"></span>
+												<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
 											</div>
-											<span class="wuxTechniqueHeaderName" name="attr_technique-name">Technique</span>
-											<div class="wuxTechniqueHeaderInfo">
-												<span class="wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Base</span>
-												<span class="wuxTechniqueHeaderInfoType">: </span>  
-												<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
-												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
-												<span class="wuxHiddenField">, </span>
-												<span name="attr_technique-limits"></span>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+											<div class="wuxTrait">
+												<span name="attr_technique-traits1"></span>
+												<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+											<div class="wuxTrait">
+												<span name="attr_technique-traits2"></span>
+												<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+											<div class="wuxTrait">
+												<span name="attr_technique-traits3"></span>
+												<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+											<div class="wuxTrait">
+												<span name="attr_technique-traits4"></span>
+												<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+											<div class="wuxTrait">
+												<span name="attr_technique-traits5"></span>
+												<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
 											</div>
 										</div>
-										<!-- <div style="width: 330px; line-height: 15px; padding: 5px 5px; margin: 5px 10px; font-size: 13px; border: 1px solid black; background: #e8c5c5;">
-											<div style="width: 318px;">
-												<div style="width: 90px; display: inline-block;">
-													<strong>Range:</strong> 0
-												</div>
-												<div style="width: 180px; display: inline-block;">
-													<strong>Target:</strong> See Details
-												</div>
-											</div>
-											<div style="width: 318px;">Skill vs. Defense</div>
-											<div style="width: 318px;"> Damage</div>
+										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+										<div class="wuxHiddenField wuxTechniqueFunctionBlockRow">
+											<span><strong>Requirement: </strong></span>
+											<span name="attr_technique-requirement"></span>
 										</div>
-										<div style="width: 340px; padding: 5px 10px; font-size: 13px;">
-											<p>This section describes the effects or benefits of the technique.</p>
-											<p><strong>On Hit:</strong> This describes what occurs when the skill check ends in the attacker's favor. Attacks that glance instead of hit will still deal half their damage to all targets' HP.</p>
-										</div> -->
+										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+										<div class="wuxHiddenField wuxTechniqueFunctionBlockRow">
+											<span><strong>Trigger: </strong></span>
+											<span name="attr_technique-trigger"></span>
+										</div>
+										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+										<div class="wuxHiddenField wuxTechniqueFunctionBlockRow">
+											<span><strong>Resources: </strong></span>
+											<span name="attr_technique-resourceCost"></span>
+										</div>
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+									<div class="wuxHiddenField wuxTechniqueAttackBlock">
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+										<div class="wuxHiddenField wuxTechniqueAttackBlockRow">
+											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+											<div class="wuxHiddenField wuxTechniqueAttackBlockRange">
+												<span><strong>Range: </strong></span>
+												<span name="attr_technique-range"></span>
+											</div>
+											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+											<div class="wuxHiddenField wuxTechniqueAttackBlockTarget">
+												<span><strong>Target: </strong></span>
+												<span name="attr_technique-target"></span>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+										<div class="wuxHiddenField wuxTechniqueAttackBlockRow">
+											<strong><span name="attr_technique-skill"></span></strong>
+
+											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+											<div class="wuxHiddenField wuxTechniqueAttackBlockDefense">
+												<span> vs. </span>
+												<span name="attr_technique-defense"></span>
+											</div>
+											<div class="wuxHiddenAuxField wuxTechniqueAttackBlockDefense">
+												<span> Check</span>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+										<div class="wuxHiddenField wuxTechniqueAttackBlockRow">
+											<span name="attr_technique-damageString"></span>
+										</div>
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+									<div class="wuxHiddenField wuxTechniqueDescriptionBlock">
+										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+										<div class="wuxHiddenField wuxTechniqueDescriptionBlockDesc">
+											<span name="attr_technique-description"></span>
+										</div>
+										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+										<div class="wuxHiddenField wuxTechniqueDescriptionBlockDesc">
+											<strong>On Hit: </strong>
+											<span name="attr_technique-onSuccess"></span>
+										</div>
 									</div>
 								</div>
 							</fieldset>
+						</div>
+
+					</div>
+					<div class="wuxSectionContentCollapsed"></div>
+				</div>
+			</div>
+			<div class="wuxTab">
+				<div class="origin-AbilityScores wuxSectionBlock wuxLayoutItem">
+					<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-origin-AbilityScores" checked="checked" style="display: block">
+					
+					<div class="wuxSectionHeader"><span class="wuxInnerHeader">Ability Scores</span></div>
+					<div class="wuxSectionHeaderFooter"></div>
+
+					<div class="wuxSectionContent">
+						<div class="abilityScores-starting">
+							<span class='wuxHeader'>Starting Scores</span>
+							<div class="wuxRow">
+								<span class="wuxDescription">You may spend a number of points to increase your ability scores, from a minimum of 0 to a maximum of 10. These are added to your ancestry ability scores to determine your final starting scores.</span>
+							</div>
+							<div class="wuxDistinctSection">
+								<div class="wuxDistinctField">
+									<span class="wuxDistinctTitle">Points</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error" value="0">
+									<span class='wuxDistinctData'>
+										<span name='attr_builder-baseAbilityScorePoints' value="40">40</span>
+										<span>/ </span>
+										<span name='attr_builder-baseAbilityScorePoints_max' value="40">40</span>
+									</span>
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">CON</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-CON" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-CON">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">DEX</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-DEX" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-DEX">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">QCK</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-QCK" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-QCK">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">STR</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-STR" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-STR">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">CHA</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-CHA" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-CHA">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">INT</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-INT" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-INT">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">PER</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-PER" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-PER">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">WIL</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-WIL" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-WIL">-</span>
+								</div>
+							</div>
+							<div class="wuxRow">
+								<div class="wuxButton">
+									<input type="checkbox" name="attr_builder-baseAbilityScore-randomize">
+									<span>Randomize Remaining Points</span>
+								</div>
+								<div class="wuxButton">
+									<input type="checkbox" name="attr_builder-baseAbilityScore-reset">
+									<span>Reset</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="wuxRow">&nbsp;</div>
+						<div class="abilityScores-growths">
+							<span class='wuxHeader'>Growths</span>
+							<div class="wuxRow">
+								<span class="wuxDescription">As your character advances in level they will increase their ability scores based on the growth rates of their class and starting growths. Each time you level you will gain progress in each ability score (and some statistics) equal to your growths total.</span>
+								<span class="wuxDescription">All characters begin with a pool of 16 points. These points can be assigned to each of the eight ability scores, to a maximum of 3 points in any stat. Each point will grant the ability score +0.2 growth. </span>
+							</div>
+							<div class="wuxDistinctSection">
+								<div class="wuxDistinctField">
+									<span class="wuxDistinctTitle">Points</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error" value="0">
+									<span class='wuxDistinctData'>
+										<span name='attr_builder-growthAbilityScorePoints' value="16">16</span>
+										<span>/ </span>
+										<span name='attr_builder-growthAbilityScorePoints_max' value="16">16</span>
+									</span>
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">CON</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-CON" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-CON">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">DEX</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-DEX" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-DEX">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">QCK</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-QCK" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-QCK">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">STR</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-STR" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-STR">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">CHA</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-CHA" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-CHA">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">INT</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-INT" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-INT">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">PER</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-PER" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-PER">-</span>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">WIL</span>
+									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-WIL" value="0">
+									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-WIL">-</span>
+								</div>
+							</div>
+
+							<div class="wuxRow">
+								<div class="wuxButton">
+									<input type="checkbox" name="attr_builder-growthAbilityScore-randomize">
+									<span>Randomize Remaining Points</span>
+								</div>
+								<div class="wuxButton">
+									<input type="checkbox" name="attr_builder-growthAbilityScore-reset">
+									<span>Reset</span>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="wuxSectionContentCollapsed"></div>
+				</div>
+				<div class="origin-Skills wuxSectionBlock wuxLayoutItem">
+					<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-origin-Skills" checked="checked" style="display: block">
+					
+					<div class="wuxSectionHeader"><span class="wuxInnerHeader">Skills</span></div>
+					<div class="wuxSectionHeaderFooter"></div>
+
+					<div class="wuxSectionContent">
+						<div class="skills-defensive">
+							<span class='wuxHeader'>Defensive Skills</span>
+							
+							<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_builder-skills-desc-defensivePhys" value="">
+							<div class="wuxHiddenField wuxRow">
+								<span class="wuxDescription" name="attr_builder-skills-desc-defensivePhys"></span>
+							</div>
 
 						</div>
-						<div class="wuxSectionContentCollapsed"></div>
+
 					</div>
+					<div class="wuxSectionContentCollapsed"></div>
 				</div>
 			</div>
 		</div>
@@ -692,9 +949,9 @@
 						<span>Lv.</span>
 						<span name="attr_base_level">1</span>
 						<span style="width: 5px;">&nbsp;</span>
-						<span name="attr_class">-</span>
+						<input type="text" class="wuxFullName" name="attr_full_name" placeholder="Full Name"></span>
 					</div>
-					<input type="text" class="wuxNamePlateName" name="attr_full_name" placeholder="Character Name" />
+					<input type="text" class="wuxNamePlateName" name="attr_nickname" placeholder="Display Name" />
 				</div>
 			</div>
 		</div>
@@ -702,8 +959,8 @@
 
 	<div class="wumMainSheet">
 		<div class="main-Sidebar wuxFloatSidebar wuxSheetSidebar">
-			<button class="wuxButton" type="roll" value="Acrobatics C"><span>Acrobatics</span></button>
-			<button class="wuxButton" type="roll" value="Athletics C"><span>Athletics</span></button>
+			<button class="wuxButton wuxSizePercent" type="roll" value="Acrobatics C"><span>Acrobatics</span></button>
+			<button class="wuxButton wuxSizePercent" type="roll" value="Athletics C"><span>Athletics</span></button>
 			<button class="wuxButton" type="roll" value="Physique C"><span>Physique</span></button>
 			<button class="wuxButton" type="roll" value="Palming C"><span>Palming</span></button>
 			<button class="wuxButton" type="roll" value="Stealth C"><span>Stealth</span></button>
@@ -735,17 +992,6 @@
 
 				<div class="wuxTab">
 					<div class="chat-rpTools wuxLayoutItem">
-						<div class="chat-Name wuxAspectContainer">
-							<div class="wuxAspectContainer">
-								<div class="wuxContainer wuxAspectInput">
-									<input type="text" class="wuxHeader" name="attr_nickname" placeholder="-" value="-">
-									<span class="wuxSubheader">Nickname</span>
-								</div>
-								<div class="wuxCircleContainer">
-									<img src="https://i.imgur.com/AkW8XLC.png">
-								</div>
-							</div>
-						</div>
 						<div class="chat-chatBox wuxSectionBlock wuxLayoutItem">
 							<div class="wuxSectionContent wuxEmotePostGroup">
 								<input type="hidden" name="attr_emotePostType">
@@ -764,28 +1010,12 @@
 										<input type="text" class="wuxFormInput wuxSizeHuge" name="attr_emotePostContent" placeholder="Type your post here then select an emote to use from the options below">
 									</div>
 
-									<fieldset class="repeating_emotesSet2">
-										<div class="wuxNoRepControl">
+									<div class="wuxNoRepControl">
+										<fieldset class="repeating_emotesSet2">
 											<button class="wuxEmoteButton" type="roll" value="@{whispertoggle}&{template:@{emotePostType}} {{url=@{url}}} {{title=@{emotePostTarget}}} {{language=@{speaking_language}}} {{message=@{emotePostMessage}}} @{speaking_language_tag}">
 												<span name="attr_emote_name">emote</span>
 											</button>
 											<input type="hidden" name="attr_url">
-										</div>
-									</fieldset>
-								</div>
-								<input type="hidden" class="wuxHiddenField-flag" name="attr_showStoryTellerPosts" value="0">
-								<div class="wuxHiddenField">
-									<div class="wuxRow">&nbsp;</div>
-									<div class="wuxFieldSet">
-										<span class='wuxHeader'>Party Manager Post Emotes</span>
-
-										<fieldset class="repeating_emotesSet2">
-											<div>
-												<button class="wuxEmoteButton" type="roll" value="!sendPmNote @{emotePostType}@@@{url}@@@{emotePostTarget}@@@{speaking_language}@@@{emotePostMessage}">
-													<span name="attr_emote_name">emote</span>
-												</button>
-												<input type="hidden" name="attr_url">
-											</div>
 										</fieldset>
 									</div>
 								</div>
@@ -797,6 +1027,7 @@
 						<div class="chat-Languages wuxSectionBlock wuxLayoutItem">
 							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Languages" checked="checked" style="display: block">
 							<div class="wuxSectionHeader">Languages</div>
+							<div class="wuxSectionHeaderFooter"></div>
 							<input type="hidden" name="attr_speaking_language" value="Minere">
 
 							<div class="wuxSectionContent">
@@ -956,105 +1187,13 @@
 							</div>
 							<div class="wuxSectionContentCollapsed"></div>
 						</div>
-
-						<input type="hidden" class="wuxEmoteDisplayStyleField-flag" name="attr_emoteDisplayStyle" value="0">
-						<div class="chat-chararecast wuxEmoteDisplayStyleRecast wuxSectionBlock wuxLayoutItem">
-							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-chararecast" checked="checked" style="display: block">
-							<div class="wuxSectionHeader">Recast</div>
-
-							<div class="wuxSectionContent">
-								<input type="hidden" name="attr_recastCharacterNames" value="">
-								<fieldset class="repeating_chararecast">
-									<div class="wuxFieldSet">
-										<!-- <input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
-										<div class="options">
-											<div class="wuxRow">
-												<span class="wuxFormTitle wuxSizeSmall">Name</span>
-												<input type="text" class="wuxFormInput" name="attr_recastName" value="">
-											</div>
-											<div class="wuxRow">
-												<span class="wuxFormTitle wuxSizeSmall">id</span>
-												<input type="text" class="wuxFormInput" name="attr_recastId" value="">
-											</div>
-											<div class="wuxRow">
-												<span class="wuxFormTitle wuxSizeSmall">Gender</span>
-												<select class='wuxFormInput wuxSizeMed' name='attr_recastGender' value="M">
-													<option value="M">Male</option>
-													<option value="F">Female</option>
-												</select>
-											</div>
-										</div>
-										<div class="display"> -->
-										<div class="wuxMultiRow">
-											<div class="wuxFormEntry">
-												<input type="text" class="wuxFormHeaderSelect" name="attr_recastName" value="">
-											</div>
-										</div>
-										<!-- </div> -->
-									</div>
-								</fieldset>
-							</div>
-							<div class="wuxSectionContentCollapsed"></div>
-						</div>
-
-						<div class="chat-Interaction wuxSectionBlock wuxLayoutItem">
-							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Interaction" checked="checked" style="display: block">
-							<div class="wuxSectionHeader">Interaction</div>
-
-							<div class="wuxSectionContent">
-								<div class="core-Introduction">
-									<input type="hidden" class="" name="attr_spell_prof-effect" value="0">
-									<span class="wuxHeader">Introduction</span>
-
-									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
-										<div class="wuxInfoField">
-											<span class="wuxInfoTitle">Emote</span>
-											<input type="text" class='wuxInfoInput' name='attr_introduction_emote' value="Serious">
-										</div>
-									</div>
-
-									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
-										<div class="wuxInfoField">
-											<span class="wuxInfoTitle">Nickname</span>
-											<input type="text" class='wuxInfoInput' name='attr_introduction_nickname' value="">
-										</div>
-									</div>
-
-									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
-										<div class="wuxInfoField">
-											<span class="wuxInfoTitle">Title</span>
-											<input type="text" class='wuxInfoInput' name='attr_introduction_title' value="" placeholder="title">
-										</div>
-									</div>
-								</div>
-								<div class="wuxRow">&nbsp;</div>
-								<div class="core-Interactions">
-									<input type="hidden" class="" name="attr_spell_prof-effect" value="0">
-									<span class="wuxHeader">Check Message</span>
-
-									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
-										<div class="wuxInfoField">
-											<span class="wuxInfoTitle">Emote</span>
-											<input type="text" class='wuxInfoInput' name='attr_interaction_keyemote' value="Serious">
-										</div>
-									</div>
-
-									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
-										<div class="wuxInfoField">
-											<span class="wuxInfoTitle">Phrase</span>
-											<input type="text" class='wuxInfoInput' name='attr_interaction_keyphrase' value="Hello">
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="wuxSectionContentCollapsed"></div>
-						</div>
 					</div>
 
 					<div class="chat-Emotes wuxLayoutItem">
 						<div class="chat-Outfits wuxSectionBlock wuxLayoutItem">
 							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Outfits" checked="checked" style="display: block">
 							<div class="wuxSectionHeader">Outfits</div>
+							<div class="wuxSectionHeaderFooter"></div>
 							<input type="hidden" name="attr_emote_allEmoteOutfits">
 							<input type="hidden" name="attr_emote_activesetimageurl">
 							<input type="hidden" name="attr_emote_activesetfireimageurl">
@@ -1112,6 +1251,7 @@
 						<div class="chat-EmoteImages wuxSectionBlock wuxLayoutItem">
 							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-EmoteImages" checked="checked" style="display: block">
 							<div class="wuxSectionHeader">Emote Images</div>
+							<div class="wuxSectionHeaderFooter"></div>
 
 							<div class="wuxSectionContent">
 								<fieldset class="repeating_emotes">
@@ -1156,6 +1296,7 @@
 					<div class="options-Advancement wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-Advancement" checked="checked" style="display: block">
 						<div class="wuxSectionHeader">Advancement</div>
+						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
 							<span class='wuxHeader'>Experience</span>
@@ -1186,22 +1327,26 @@
 					<div class="options-Storyteller wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-Storyteller" checked="checked" style="display: block">
 						<div class="wuxSectionHeader">Storyteller</div>
+						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
 							<div class="options-StorytellerPostBox chat-chatBox">
-								<div class="wuxSectionContent wuxEmotePostGroup">
+								<div class='wuxHeader'>Cutscene Post Area</div>
+								<div class="wuxEmotePostGroup">
 									<div class="wuxFieldSet">
 										<input type="text" class="wuxFormInput wuxSizeHuge" name="attr_emotePostContent" placeholder="Type your post here then select an emote to use from the options below">
 
 										<div class="wuxRow">&nbsp;</div>
-										<fieldset class="repeating_emotesSet2">
-											<div>
-												<button class="wuxEmoteButton" type="roll" value="!sendPmNote @{emotePostType}@@@{url}@@@{emotePostTarget}@@@{speaking_language}@@@{emotePostMessage}">
-													<span name="attr_emote_name">emote</span>
-												</button>
-												<input type="hidden" name="attr_url">
-											</div>
-										</fieldset>
+										<div class="wuxNoRepControl">
+											<fieldset class="repeating_emotesSet2">
+												<div>
+													<button class="wuxEmoteButton" type="roll" value="!sendPmNote @{emotePostType}@@@{url}@@@{emotePostTarget}@@@{speaking_language}@@@{emotePostMessage}">
+														<span name="attr_emote_name">emote</span>
+													</button>
+													<input type="hidden" name="attr_url">
+												</div>
+											</fieldset>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1227,12 +1372,71 @@
 									</div>
 								</div>
 							</div>
+
+							<input type="hidden" class="wuxEmoteDisplayStyleField-flag" name="attr_emoteDisplayStyle" value="0">
+							<div class="options-StorytellerRecasting wuxEmoteDisplayStyleRecast">
+								<div class="wuxRow">&nbsp;</div>
+								<span class='wuxHeader'>Recast</span>
+								<input type="hidden" name="attr_recastCharacterNames" value="">
+								<fieldset class="repeating_chararecast">
+									<div class="wuxFieldSet">
+										<div class="wuxMultiRow">
+											<div class="wuxFormEntry">
+												<input type="text" class="wuxFormHeaderSelect" name="attr_recastName" value="">
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+
+							<div class="wuxRow">&nbsp;</div>
+							<div class="options-Introduction">
+								<span class="wuxHeader">Introduction</span>
+
+								<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+									<div class="wuxInfoField">
+										<span class="wuxInfoTitle">Emote</span>
+										<input type="text" class='wuxInfoInput' name='attr_introduction_emote' value="Serious">
+									</div>
+								</div>
+
+								<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+									<div class="wuxInfoField">
+										<span class="wuxInfoTitle">Nickname</span>
+										<input type="text" class='wuxInfoInput' name='attr_introduction_nickname' value="">
+									</div>
+								</div>
+
+								<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+									<div class="wuxInfoField">
+										<span class="wuxInfoTitle">Title</span>
+										<input type="text" class='wuxInfoInput' name='attr_introduction_title' value="" placeholder="title">
+									</div>
+								</div>
+							</div>
+							
+							<div class="wuxRow">&nbsp;</div>
+							<div class="options-Interactions">
+								<input type="hidden" class="" name="attr_spell_prof-effect" value="0">
+								<span class="wuxHeader">Check Message</span>
+
+								<span class='wuxHeader2'>Emote</span>
+								<div class="wuxRow">
+									<input type="text" class='wuxInput' name='attr_interaction_keyemote' value="???">
+								</div>
+								<span class='wuxHeader2'>Phrase</span>
+								<div class="wuxRow">
+									<input type="text" class='wuxInput' name='attr_interaction_keyphrase' value="???">
+								</div>
+							</div>
+
 						</div>
 						<div class="wuxSectionContentCollapsed"></div>
 					</div>
 					<div class="options-SheetDisplay wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-SheetDisplay" checked="checked" style="display: block">
 						<div class="wuxSectionHeader">Sheet Options</div>
+						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
 							<div class="options-OptionalDisplays">
@@ -1355,25 +1559,57 @@ function SetAbilityScoreUpdate(update, updateAttr, abilityScoreArray) {
 	return update;
 }
 
+function GetAbilityScoreFieldNames(updateAttr) {
+	return [`${updateAttr}CON`, `${updateAttr}DEX`, `${updateAttr}QCK`, `${updateAttr}STR`, `${updateAttr}CHA`, `${updateAttr}INT`, `${updateAttr}PER`, `${updateAttr}WIL`];
+}
+
+function GetAbilityScoreFieldIntegerArray(updateAttr, abilityScoreArray) {
+
+	let output = [];
+	output["CON"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}CON`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}CON`]);
+	output["DEX"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}DEX`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}DEX`]);
+	output["QCK"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}QCK`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}QCK`]);
+	output["STR"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}STR`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}STR`]);
+	output["CHA"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}CHA`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}CHA`]);
+	output["INT"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}INT`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}INT`]);
+	output["PER"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}PER`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}PER`]);
+	output["WIL"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}WIL`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}WIL`]);
+	
+	return output;
+}
+
 // Techniques
 
-function GetTraitsDictionary (traits) {
+function GetTraitsDictionary (traits, traitType) {
 
-	var output = [];
+	let output = [];
 	if (traits != undefined) {
-		var splits = traits.split(",");
+		let keywordsSplit = traits.split(";");
 
-		var count = 6;
-		for (var i = 0; i < splits.length; i++) {
+		let name = "";
+		let lookup = "";
+		let traitInfo;
 
-			var traitInfo = GetTraitInfo(splits[i].trim());
-			if (traitInfo.name != "") {
-				output.push(traitInfo);
-				count--;
-				if (count <= 0) {
-					break;
-				}
+		for(let i = 0; i < keywordsSplit.length; i++) {
+			name = "" + keywordsSplit[i].trim();
+
+			if (name.includes ("Impact") || name.includes ("Explosive")) {
+			name = ReplaceDamageDice(name);
 			}
+
+			lookup = name;
+			if (lookup.indexOf ("(") >= 0) {
+				lookup = lookup.replace(/\([^)]*\)/g, "(X)");
+			}
+			
+			switch(traitType.toLowerCase()) {
+				case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
+				case "weapon": traitInfo = GetWeaponTraitsInfo(lookup); break;
+				case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
+				case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
+			}
+			traitInfo.name = name;
+			output.push (traitInfo);
 		}
 	}
 
@@ -1434,12 +1670,14 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-limits")] = technique.limits;
 
 	// set the function block
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-functionBlock")] = 
+		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "" || technique.resourceCost != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-traits")] = technique.traits;
-	var traitsDb = GetTraitsDictionary(technique.traits);
+	var traitsDb = GetTraitsDictionary(technique.traits, "technique");
 	for (var i = 0; i < 6; i++) {
 		if (i < traitsDb.length) {
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = traitsDb[i].name;
-			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = traitsDb[i].desc;
+			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = traitsDb[i].description;
 		} else {
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = "";
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = "";
@@ -1451,26 +1689,36 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-resourceCost")] = technique.resourceCost;
 
 	// set the description
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-descriptionBlock")] = (technique.description != "" || technique.onSuccess != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-description")] = technique.description;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-onSuccess")] = technique.onSuccess;
 
 	// set the attack block
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-skill")] = technique.skill;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-defense")] = technique.defense;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlock")] = 
+	(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") ? "1" : "0";
+
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockTarget")] = (technique.range != "" || technique.target != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-range")] = technique.range;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-target")] = technique.target;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-targetCode")] = technique.targetCode;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-onHit")] = technique.onHit;
+
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockSkill")] = (technique.skill != "" || technique.defense != "") ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-skill")] = technique.skill;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-defense")] = technique.defense;
 
 	// set the damage
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockDamage")] = (technique.damage != "" || technique.damageType != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-damage")] = technique.damage;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-damageType")] = technique.damageType;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-element")] = technique.element;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-specBonus")] = technique.specBonus;
 	if (technique.damageType != "") {
 		let damageString = `${FormatDamageString(technique.damage)}${technique.damageType}${technique.element == "" ? "" : ` [${technique.element}]`}`;
 		update[GetSectionIdName(repeatingSection, newrowid, "technique-damageString")] = damageString;
 	}
+	
+	// set special data
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-onHit")] = technique.onHit;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-specBonus")] = technique.specBonus;
 
 	return update;
 }
@@ -1516,16 +1764,47 @@ on("change:builder-ancestry", function (eventinfo) {
 	update_builder_ancestry_info(eventinfo.newValue);
 });
 
+on("change:builder-base-CON change:builder-base-DEX change:builder-base-QCK change:builder-base-STR change:builder-base-CHA change:builder-base-INT change:builder-base-PER change:builder-base-WIL", function () {
+
+	update_builder_base_ability_scores();
+});
+
+on("change:builder-baseGrowth-CON change:builder-baseGrowth-DEX change:builder-baseGrowth-QCK change:builder-baseGrowth-STR change:builder-baseGrowth-CHA change:builder-baseGrowth-INT change:builder-baseGrowth-PER change:builder-baseGrowth-WIL", function () {
+
+	update_builder_growth_ability_scores();
+});
+
+on("change:builder-baseAbilityScore-randomize", function () {
+
+	update_builder_base_ability_scores_randomize();
+});
+
+on("change:builder-growthAbilityScore-randomize", function () {
+
+	update_builder_growth_ability_scores_randomize();
+});
+
+on("change:builder-baseAbilityScore-reset", function () {
+
+	update_builder_base_ability_scores_reset();
+});
+
+on("change:builder-growthAbilityScore-reset", function () {
+
+	update_builder_growth_ability_scores_reset();
+});
+
 // Sheet Functions
 var update_builder_path_info = function(newValue) {
 
 	let update = {};
 	let pathData = GetPathInfo(newValue);
 	update["builder-pathDesc"] = pathData.description;
+	update["builder-baseAbilityScorePoints"] = pathData.abilityScorePts;
+	update["builder-baseAbilityScorePoints_max"] = pathData.abilityScorePts;
 	setAttrs(update, {silent: true});
 }
 
-// Sheet Functions
 var update_builder_ancestry_info = function(newValue) {
 
 	// get database info
@@ -1549,6 +1828,106 @@ var update_builder_ancestry_info = function(newValue) {
 	update = SetTechniqueDataList(update, "repeating_ancestrytechniques", ancestryTechniques);
 	
 	setAttrs(update, {silent: true});
+}
+
+var update_builder_base_ability_scores = function() {
+	update_builder_ability_scores ("builder-baseAbilityScorePoints", "builder-base-", 10, 40);
+}
+
+var update_builder_growth_ability_scores = function() {
+	update_builder_ability_scores ("builder-growthAbilityScorePoints", "builder-baseGrowth-", 3, 16);
+}
+
+var update_builder_ability_scores = function(pointsAttr, absAttr, indivPointMax, pointsMax) {
+
+	let mod_attrs = [`${pointsAttr}_max`];
+	mod_attrs = mod_attrs.concat(GetAbilityScoreFieldNames(absAttr));
+	
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+		let pointCount = 0;
+		let pointMax = isNaN(parseInt(v[`${pointsAttr}_max`])) ? pointsMax : parseInt(v[`${pointsAttr}_max`]);
+
+		let abilityScoreNames = GetAbilityScoreFieldNames("");
+		let abilityScores = GetAbilityScoreFieldIntegerArray(absAttr, v);
+		for (let i = 0; i < abilityScoreNames.length; i++) {
+			pointCount += abilityScores[abilityScoreNames[i]];
+			update[`${pointsAttr}-error-${abilityScoreNames[i]}`] = 
+				(abilityScores[abilityScoreNames[i]] > indivPointMax || abilityScores[abilityScoreNames[i]] < 0) ? "1" : "0";
+		}
+		pointCount = pointMax - pointCount;
+		update[`${pointsAttr}`] = pointCount;
+		update[`${pointsAttr}-error`] = pointCount < 0 ? "1" : "0";
+
+		setAttrs(update, {silent: true});
+	});
+}
+
+var update_builder_base_ability_scores_randomize = function() {
+	update_builder_ability_scores_randomize ("builder-baseAbilityScorePoints", "builder-base-", 10);
+}
+
+var update_builder_growth_ability_scores_randomize = function() {
+	update_builder_ability_scores_randomize ("builder-growthAbilityScorePoints", "builder-baseGrowth-", 3);
+}
+
+var update_builder_ability_scores_randomize = function(pointsAttr, absAttr, indivPointMax) {
+
+	let mod_attrs = [pointsAttr];
+	mod_attrs = mod_attrs.concat(GetAbilityScoreFieldNames(absAttr));
+	
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+		let pointCount = isNaN(parseInt(v[`${pointsAttr}`])) ? pointMax : parseInt(v[`${pointsAttr}`]);
+
+		let abilityScoreNames = GetAbilityScoreFieldNames("");
+		let abilityScores = GetAbilityScoreFieldIntegerArray(absAttr, v);
+		let rng = 0;
+
+		while (pointCount > 0) {
+			rng = Math.floor(Math.random() * 8);
+			if (abilityScores[abilityScoreNames[rng]] < indivPointMax) {
+				abilityScores[abilityScoreNames[rng]]++;
+				pointCount--;
+			}
+		}
+
+		for (let i = 0; i < abilityScoreNames.length; i++) {
+			update[`${absAttr}${abilityScoreNames[i]}`] = abilityScores[abilityScoreNames[i]];
+		}
+		update[`${pointsAttr}`] = pointCount;
+
+		setAttrs(update, {silent: true});
+	});
+}
+
+var update_builder_base_ability_scores_reset = function() {
+	update_builder_ability_scores_reset ("builder-baseAbilityScorePoints", "builder-base-", 40);
+}
+
+var update_builder_growth_ability_scores_reset = function() {
+	update_builder_ability_scores_reset ("builder-growthAbilityScorePoints", "builder-baseGrowth-", 16);
+}
+
+var update_builder_ability_scores_reset = function(pointsAttr, absAttr, pointsMax) {
+
+	let mod_attrs = [`${pointsAttr}_max`];
+	
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let abilityScoreNames = GetAbilityScoreFieldNames("");
+		for (let i = 0; i < abilityScoreNames.length; i++) {
+			update[`${absAttr}${abilityScoreNames[i]}`] = 0;
+			update[`${pointsAttr}-error-${abilityScoreNames[i]}`] = 0;
+		}
+
+		let pointMax = isNaN(parseInt(v[`${pointsAttr}_max`])) ? pointsMax : parseInt(v[`${pointsAttr}_max`]);
+		update[`${pointsAttr}`] = pointMax;
+		update[`${pointsAttr}-error`] = "0";
+
+		setAttrs(update, {silent: true});
+	});
 }
 
 var upgrade_to_1_0_0 = function (doneupdating) {
@@ -2058,24 +2437,24 @@ function GetTraitInfo(trait) {
 }function GetPathInfo(name) {
 	switch (name.toLowerCase()) {
 	case "common":
-	return {"name":"Common","description":"Common characters represent the majority of creatures found throughout Wuxing. They receive no special bonuses throughout character creation and as they advance."}
+	return {"name":"Common","description":"Common characters represent the majority of creatures found throughout Wuxing. They receive no special bonuses throughout character creation and as they advance.","abilityScorePts":"40"}
 	case "hero":
-	return {"name":"Hero","description":"Player characters typically fall into the Hero path. This path is represented by those who have the resolve to push boundaries and survive the impossible. This path grants characters bonuses at character creation, increased growths throughout their advancement, and some unique actions."}
+	return {"name":"Hero","description":"Player characters typically fall into the Hero path. This path is represented by those who have the resolve to push boundaries and survive the impossible. This path grants characters bonuses at character creation, increased growths throughout their advancement, and some unique actions.","abilityScorePts":"60"}
 	case "paragon":
-	return {"name":"Paragon","description":"Paragon characters are those who excel beyond that of a hero into something very unique. They gain the bonuses of the Hero path characters plus additional benefits determined by the GM."}
+	return {"name":"Paragon","description":"Paragon characters are those who excel beyond that of a hero into something very unique. They gain the bonuses of the Hero path characters plus additional benefits determined by the GM.","abilityScorePts":"60"}
 	default:
-	return {"name":"","description":""}
+	return {"name":"","description":"","abilityScorePts":""}
 	
 	}
 	}
 	function GetAncestryInfo(name) {
 	switch (name.toLowerCase()) {
 	case "human":
-	return {"name":"Human","description":"Humans are the most common intelligent ancestry in the world of Wuxing. There are multiple ethnicities of human, none granting any special bonuses but instead alter how they appear and are perceived in the world.","moreDetails":"Ethnicities","growths":{"CON":"0.20","DEX":"0.20","QCK":"0.20","STR":"0.20","CHA":"0.20","INT":"0.20","PER":"0.20","WIL":"0.20","hp":"0.00","vitality":"0.00","kiCharge":"0.00","spellForce":"0.06"},"startingScores":{"CON":7,"DEX":7,"QCK":7,"STR":7,"CHA":7,"INT":7,"PER":7,"WIL":7},"hp":15,"barrier":0,"speed":5,"skillPointsDefense":1,"skillPointsCoAcTc":4,"skillPointsMgKnSo":4,"skillPointsAny":4,"gearSlots":"1 Head; 1 Body, 1 Arms, 1 Legs, 2 Hands","techniques":"Unarmed Attack"}
+	return {"name":"Human","description":"Humans are the most common intelligent ancestry in the world of Wuxing. There are multiple ethnicities of human, none granting any special bonuses but instead alter how they appear and are perceived in the world.","moreDetails":"Ethnicities","growths":{"CON":"0.20","DEX":"0.20","QCK":"0.20","STR":"0.20","CHA":"0.20","INT":"0.20","PER":"0.20","WIL":"0.20","hp":"0.00","vitality":"0.00","kiCharge":"0.00","spellForce":"0.06"},"startingScores":{"CON":7,"DEX":7,"QCK":7,"STR":7,"CHA":7,"INT":7,"PER":7,"WIL":7},"hp":15,"barrier":0,"speed":5,"skillPointsPhysDefense":1,"skillPointsSensDefense":1,"skillPointsCoAcTc":4,"skillPointsMgKnSo":4,"skillPointsAny":4,"gearSlots":"1 Head; 1 Body, 1 Arms, 1 Legs, 2 Hands","techniques":"Unarmed Attack"}
 	case "spirit":
-	return {"name":"Spirit","description":"Spirits are the principle definition of a magical creature. Their composition is made entirely from ether and an element aspected to it. Surviving off of ether alone, spirits’ lives can be eternal or short, depending on their will for survival, power, and entertainment.\n\nSpirits roam their boundless void of ether surviving and purveying the land of the material. Whenever they wish to, a spirit can manifest into the material world, possessing or living within anything they wish to experience life. However their reasoning to do so are as varied as humans.","moreDetails":"","growths":{"CON":"0.00","DEX":"0.00","QCK":"0.00","STR":"0.00","CHA":"0.20","INT":"0.20","PER":"0.20","WIL":"0.20","hp":"0.00","vitality":"0.00","kiCharge":"0.05","spellForce":"0.06"},"startingScores":{"CON":0,"DEX":0,"QCK":0,"STR":0,"CHA":5,"INT":5,"PER":5,"WIL":5},"hp":15,"barrier":5,"speed":5,"skillPointsDefense":1,"skillPointsCoAcTc":null,"skillPointsMgKnSo":4,"skillPointsAny":4,"gearSlots":"None","techniques":""}
+	return {"name":"Spirit","description":"Spirits are the principle definition of a magical creature. Their composition is made entirely from ether and an element aspected to it. Surviving off of ether alone, spirits’ lives can be eternal or short, depending on their will for survival, power, and entertainment.\n\nSpirits roam their boundless void of ether surviving and purveying the land of the material. Whenever they wish to, a spirit can manifest into the material world, possessing or living within anything they wish to experience life. However their reasoning to do so are as varied as humans.","moreDetails":"","growths":{"CON":"0.00","DEX":"0.00","QCK":"0.00","STR":"0.00","CHA":"0.20","INT":"0.20","PER":"0.20","WIL":"0.20","hp":"0.00","vitality":"0.00","kiCharge":"0.05","spellForce":"0.06"},"startingScores":{"CON":0,"DEX":0,"QCK":0,"STR":0,"CHA":5,"INT":5,"PER":5,"WIL":5},"hp":15,"barrier":5,"speed":5,"skillPointsPhysDefense":1,"skillPointsSensDefense":1,"skillPointsCoAcTc":null,"skillPointsMgKnSo":4,"skillPointsAny":4,"gearSlots":"None","techniques":""}
 	default:
-	return {"name":"","description":"","moreDetails":"","growths":[],"startingScores":[],"hp":0,"barrier":0,"speed":0,"skillPointsDefense":0,"skillPointsCoAcTc":0,"skillPointsMgKnSo":0,"skillPointsAny":0,"gearSlots":"","techniques":""}
+	return {"name":"","description":"","moreDetails":"","growths":[],"startingScores":[],"hp":0,"barrier":0,"speed":0,"skillPointsPhysDefense":0,"skillPointsSensDefense":0,"skillPointsCoAcTc":0,"skillPointsMgKnSo":0,"skillPointsAny":0,"gearSlots":"","techniques":""}
 	
 	}
 	}
@@ -2088,4 +2467,102 @@ function GetTraitInfo(trait) {
 	
 	}
 	}
+	function GetTechniqueTraitsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "affinity":
+	return {"name":"Affinity","group":"Technique","description":"This technique's element changes to one of your elemental affinities."}
+	case "affinity [m]":
+	return {"name":"Affinity [M]","group":"Technique","description":"This technique forms ether into a material and stabilizes it. The material is determined by your elemental affinity. If you have access to multiple choose one. Wood creates pine, fire creates glass, earth creates granite, metal creates iron, and water creates ice."}
+	case "ap (x)":
+	return {"name":"AP (X)","group":"Technique","description":"This technique adds armor piercing. Ignore up to X Armor on the target."}
+	case "armament":
+	return {"name":"Armament","group":"Technique","description":"This technique uses the skill, range/threat, and damage statistics of an equipped weapon."}
+	case "armament [f]":
+	return {"name":"Armament [F]","group":"Technique","description":"This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon."}
+	case "brutal":
+	return {"name":"Brutal","group":"Technique","description":"When this technique deals damage, roll all damage dice twice and take only the highest results."}
+	case "focus":
+	return {"name":"Focus","group":"Technique","description":"Until an end trigger is reached or you stop channeling ki this technique will continue its effects. It takes effort to maintain focus. Each time a character uses a technique with the Focus trait, they take stress equal to the number of Focus effects they currently have active. Focus [F] effects do not count towards this total. When you take Trauma, all on going Focus effects immediately end. The caster can end a Focus effect at any time."}
+	case "focus [f]":
+	return {"name":"Focus [F]","group":"Technique","description":"Until an end trigger is reached or you stop channeling ki this technique will continue its effects. Unlike Focus effects, a character can only ever maintain one Focus [F] effect at a time. When you take Trauma, all on going Focus [F] effects immediately end. The caster can end a Focus [F] technique at any time."}
+	case "material":
+	return {"name":"Material","group":"Technique","description":"This technique affects material elemental properties. In order to affect a material with this technique, you must have an affinity to all elements of the material. If you do not, a caster that casts the same spell in the same round on the same material who has access to any missing elements may supplement for the use of this technique."}
+	case "multiple":
+	return {"name":"Multiple","group":"Technique","description":"This technique can be learned multiple times."}
+	case "volatile":
+	return {"name":"Volatile","group":"Technique","description":"This technique uses volatile ether. When this technique hits a character that projects a barrier, the damage is done twice, first only to temporary HP, the second is treated normally."}
+	case "vortex":
+	return {"name":"Vortex","group":"Technique","description":"This feature is always a part of an area effect. The effect will always attempt to grapple those within its area, using the caster's Conjure skill instead of physique. If it is successful, at the start of the round the vortex will act on the character as determined by the effect. A grappled creature may use the Break Free action against the caster's Conjure DC to escape the vortex. Many vortexes have additional effects that may trigger on a character's escape."}
+	case "wall":
+	return {"name":"Wall","group":"Technique","description":"This technique causes a wall to manifest at a point within range. Each segment fills a 1x1x1 space. When making the wall, each segment must be contiguous with at least one other segment. The wall can have any shape you desire. The wall doesn’t need to be vertical or rest on any firm foundation. However, it must be supported by existing solid material."}
+	default:
+	return {"name":"","group":"","description":""}
+	
+	}
+	}
+	
+	function GetWeaponTraitsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "arcing":
+	return {"name":"Arcing","group":"Weapon","description":"This weapon can be fired over obstacles, usually by lobbing a projectile in an arc. Attacks made with this weapon don’t require line of sight, as long as it’s possible to trace a path to the target; however, they are still affected by cover."}
+	case "shield":
+	return {"name":"Shield","group":"Weapon","description":"This weapon provides additional defenses. While it is equipped, you gain +1 Armor, and -1 Flexibility."}
+	case "thrown":
+	return {"name":"Thrown","group":"Weapon","description":"This weapon is made to be thrown with its range value. When throwing in this way, the weapon uses the Thrown skill."}
+	case "two-handed":
+	return {"name":"Two-Handed","group":"Weapon","description":"This weapon is required to be wielded in two hands."}
+	case "loud":
+	return {"name":"Loud","group":"Weapon","description":"This weapon creates a loud booming noise, audible to those within 300 feet of the source."}
+	default:
+	return {"name":"","group":"","description":""}
+	
+	}
+	}
+	
+	function GetAbilityTraitsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "ap (x)":
+	return {"name":"AP (X)","group":"Ability","description":"This weapon is armor piercing. Ignore up to X Armor on the target."}
+	case "blast (x)":
+	return {"name":"Blast (X)","group":"Ability","description":"Attacks made with this weapon affect characters within a radius of X spaces, drawn from a point within range and line of sight. Cover and line of sight are calculated based on the center of the blast, rather than the attacker’s position."}
+	case "cone (x)":
+	return {"name":"Cone (X)","group":"Ability","description":"Attacks made with this weapon affect characters within a cone, X spaces long and X spaces wide at its furthest point. The cone begins 1 space wide."}
+	case "crushing":
+	return {"name":"Crushing","group":"Ability","description":"This weapon can crush through defenses. Actions that target BR DC instead targets Reflex DC."}
+	case "explosive (x/y)":
+	return {"name":"Explosive (X/Y)","group":"Ability","description":"This weapon can explode on impact. Attacks made with this weapon affect characters within a radius of X spaces, drawn from the impact point, and deals X extra damage to all characters in the area."}
+	case "finesse":
+	return {"name":"Finesse","group":"Ability","description":"This weapon is easy to maneuver allowing you to easily strike at enemies trying to evade you. Actions that target BR DC instead targets Brace DC."}
+	case "impact (x)":
+	return {"name":"Impact (X)","group":"Ability","description":"This weapon deals X extra damage."}
+	case "knockback (x)":
+	return {"name":"Knockback (X)","group":"Ability","description":"On a hit, the user may choose to knock their target X spaces in a straight line directly away from the point of origin."}
+	case "line (x)":
+	return {"name":"Line (X)","group":"Ability","description":"Attacks made with this weapon affect characters in a straight line, X spaces long."}
+	default:
+	return {"name":"","group":"","description":""}
+	
+	}
+	}
+	
+	function GetMaterialTraitsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "flammable":
+	return {"name":"Flammable","group":"Material","description":"This material will gain the aflame condition when exposed to fire."}
+	case "flexible":
+	return {"name":"Flexible","group":"Material","description":"Flexible materials are malleable and often are able to fold to the shape of whatever it is on top of or inside of. Flexible material is resistant to force damage."}
+	case "frozen":
+	return {"name":"Frozen","group":"Material","description":"Frozen items in temperatures between 32°F (0°C) and 70°F (21°C) melt, losing 10 lb. of material within 4 hours - becoming worthless. In temperatures above 70°F they melt within 1 hour."}
+	case "sharp":
+	return {"name":"Sharp","group":"Material","description":"Sharp materials can maintain durability even when reduced to a thin edge. Sharp materials are appropriate for slashing weapons and anything that needs to retain form when made especially thin."}
+	case "sturdy":
+	return {"name":"Sturdy","group":"Material","description":"Sturdy materials are especially durable and resilient. Sturdy material is resistant to all damage types except force."}
+	case "transparent":
+	return {"name":"Transparent","group":"Material","description":"A transparent material can be seen through due to its translucency. "}
+	default:
+	return {"name":"","group":"","description":""}
+	
+	}
+	}
+	
 	</script>

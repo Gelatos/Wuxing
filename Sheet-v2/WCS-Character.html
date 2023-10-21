@@ -10,9 +10,9 @@
 						<span>Lv.</span>
 						<span name="attr_base_level">1</span>
 						<span style="width: 5px;">&nbsp;</span>
-						<span name="attr_class">-</span>
+						<input type="text" class="wuxFullName" name="attr_full_name" placeholder="Full Name"></span>
 					</div>
-					<input type="text" class="wuxNamePlateName" name="attr_full_name" placeholder="Character Name" />
+					<input type="text" class="wuxNamePlateName" name="attr_nickname" placeholder="Display Name" />
 				</div>
 			</div>
 		</div>
@@ -20,8 +20,8 @@
 
 	<div class="wumMainSheet">
 		<div class="main-Sidebar wuxFloatSidebar wuxSheetSidebar">
-			<button class="wuxButton" type="roll" value="Acrobatics C"><span>Acrobatics</span></button>
-			<button class="wuxButton" type="roll" value="Athletics C"><span>Athletics</span></button>
+			<button class="wuxButton wuxSizePercent" type="roll" value="Acrobatics C"><span>Acrobatics</span></button>
+			<button class="wuxButton wuxSizePercent" type="roll" value="Athletics C"><span>Athletics</span></button>
 			<button class="wuxButton" type="roll" value="Physique C"><span>Physique</span></button>
 			<button class="wuxButton" type="roll" value="Palming C"><span>Palming</span></button>
 			<button class="wuxButton" type="roll" value="Stealth C"><span>Stealth</span></button>
@@ -53,17 +53,6 @@
 
 				<div class="wuxTab">
 					<div class="chat-rpTools wuxLayoutItem">
-						<div class="chat-Name wuxAspectContainer">
-							<div class="wuxAspectContainer">
-								<div class="wuxContainer wuxAspectInput">
-									<input type="text" class="wuxHeader" name="attr_nickname" placeholder="-" value="-">
-									<span class="wuxSubheader">Nickname</span>
-								</div>
-								<div class="wuxCircleContainer">
-									<img src="https://i.imgur.com/AkW8XLC.png">
-								</div>
-							</div>
-						</div>
 						<div class="chat-chatBox wuxSectionBlock wuxLayoutItem">
 							<div class="wuxSectionContent wuxEmotePostGroup">
 								<input type="hidden" name="attr_emotePostType">
@@ -82,28 +71,12 @@
 										<input type="text" class="wuxFormInput wuxSizeHuge" name="attr_emotePostContent" placeholder="Type your post here then select an emote to use from the options below">
 									</div>
 
-									<fieldset class="repeating_emotesSet2">
-										<div class="wuxNoRepControl">
+									<div class="wuxNoRepControl">
+										<fieldset class="repeating_emotesSet2">
 											<button class="wuxEmoteButton" type="roll" value="@{whispertoggle}&{template:@{emotePostType}} {{url=@{url}}} {{title=@{emotePostTarget}}} {{language=@{speaking_language}}} {{message=@{emotePostMessage}}} @{speaking_language_tag}">
 												<span name="attr_emote_name">emote</span>
 											</button>
 											<input type="hidden" name="attr_url">
-										</div>
-									</fieldset>
-								</div>
-								<input type="hidden" class="wuxHiddenField-flag" name="attr_showStoryTellerPosts" value="0">
-								<div class="wuxHiddenField">
-									<div class="wuxRow">&nbsp;</div>
-									<div class="wuxFieldSet">
-										<span class='wuxHeader'>Party Manager Post Emotes</span>
-
-										<fieldset class="repeating_emotesSet2">
-											<div>
-												<button class="wuxEmoteButton" type="roll" value="!sendPmNote @{emotePostType}@@@{url}@@@{emotePostTarget}@@@{speaking_language}@@@{emotePostMessage}">
-													<span name="attr_emote_name">emote</span>
-												</button>
-												<input type="hidden" name="attr_url">
-											</div>
 										</fieldset>
 									</div>
 								</div>
@@ -115,6 +88,7 @@
 						<div class="chat-Languages wuxSectionBlock wuxLayoutItem">
 							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Languages" checked="checked" style="display: block">
 							<div class="wuxSectionHeader">Languages</div>
+							<div class="wuxSectionHeaderFooter"></div>
 							<input type="hidden" name="attr_speaking_language" value="Minere">
 
 							<div class="wuxSectionContent">
@@ -274,105 +248,13 @@
 							</div>
 							<div class="wuxSectionContentCollapsed"></div>
 						</div>
-
-						<input type="hidden" class="wuxEmoteDisplayStyleField-flag" name="attr_emoteDisplayStyle" value="0">
-						<div class="chat-chararecast wuxEmoteDisplayStyleRecast wuxSectionBlock wuxLayoutItem">
-							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-chararecast" checked="checked" style="display: block">
-							<div class="wuxSectionHeader">Recast</div>
-
-							<div class="wuxSectionContent">
-								<input type="hidden" name="attr_recastCharacterNames" value="">
-								<fieldset class="repeating_chararecast">
-									<div class="wuxFieldSet">
-										<!-- <input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>y</span>
-										<div class="options">
-											<div class="wuxRow">
-												<span class="wuxFormTitle wuxSizeSmall">Name</span>
-												<input type="text" class="wuxFormInput" name="attr_recastName" value="">
-											</div>
-											<div class="wuxRow">
-												<span class="wuxFormTitle wuxSizeSmall">id</span>
-												<input type="text" class="wuxFormInput" name="attr_recastId" value="">
-											</div>
-											<div class="wuxRow">
-												<span class="wuxFormTitle wuxSizeSmall">Gender</span>
-												<select class='wuxFormInput wuxSizeMed' name='attr_recastGender' value="M">
-													<option value="M">Male</option>
-													<option value="F">Female</option>
-												</select>
-											</div>
-										</div>
-										<div class="display"> -->
-										<div class="wuxMultiRow">
-											<div class="wuxFormEntry">
-												<input type="text" class="wuxFormHeaderSelect" name="attr_recastName" value="">
-											</div>
-										</div>
-										<!-- </div> -->
-									</div>
-								</fieldset>
-							</div>
-							<div class="wuxSectionContentCollapsed"></div>
-						</div>
-
-						<div class="chat-Interaction wuxSectionBlock wuxLayoutItem">
-							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Interaction" checked="checked" style="display: block">
-							<div class="wuxSectionHeader">Interaction</div>
-
-							<div class="wuxSectionContent">
-								<div class="core-Introduction">
-									<input type="hidden" class="" name="attr_spell_prof-effect" value="0">
-									<span class="wuxHeader">Introduction</span>
-
-									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
-										<div class="wuxInfoField">
-											<span class="wuxInfoTitle">Emote</span>
-											<input type="text" class='wuxInfoInput' name='attr_introduction_emote' value="Serious">
-										</div>
-									</div>
-
-									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
-										<div class="wuxInfoField">
-											<span class="wuxInfoTitle">Nickname</span>
-											<input type="text" class='wuxInfoInput' name='attr_introduction_nickname' value="">
-										</div>
-									</div>
-
-									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
-										<div class="wuxInfoField">
-											<span class="wuxInfoTitle">Title</span>
-											<input type="text" class='wuxInfoInput' name='attr_introduction_title' value="" placeholder="title">
-										</div>
-									</div>
-								</div>
-								<div class="wuxRow">&nbsp;</div>
-								<div class="core-Interactions">
-									<input type="hidden" class="" name="attr_spell_prof-effect" value="0">
-									<span class="wuxHeader">Check Message</span>
-
-									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
-										<div class="wuxInfoField">
-											<span class="wuxInfoTitle">Emote</span>
-											<input type="text" class='wuxInfoInput' name='attr_interaction_keyemote' value="Serious">
-										</div>
-									</div>
-
-									<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
-										<div class="wuxInfoField">
-											<span class="wuxInfoTitle">Phrase</span>
-											<input type="text" class='wuxInfoInput' name='attr_interaction_keyphrase' value="Hello">
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="wuxSectionContentCollapsed"></div>
-						</div>
 					</div>
 
 					<div class="chat-Emotes wuxLayoutItem">
 						<div class="chat-Outfits wuxSectionBlock wuxLayoutItem">
 							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-Outfits" checked="checked" style="display: block">
 							<div class="wuxSectionHeader">Outfits</div>
+							<div class="wuxSectionHeaderFooter"></div>
 							<input type="hidden" name="attr_emote_allEmoteOutfits">
 							<input type="hidden" name="attr_emote_activesetimageurl">
 							<input type="hidden" name="attr_emote_activesetfireimageurl">
@@ -430,6 +312,7 @@
 						<div class="chat-EmoteImages wuxSectionBlock wuxLayoutItem">
 							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-core-EmoteImages" checked="checked" style="display: block">
 							<div class="wuxSectionHeader">Emote Images</div>
+							<div class="wuxSectionHeaderFooter"></div>
 
 							<div class="wuxSectionContent">
 								<fieldset class="repeating_emotes">
@@ -474,6 +357,7 @@
 					<div class="options-Advancement wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-Advancement" checked="checked" style="display: block">
 						<div class="wuxSectionHeader">Advancement</div>
+						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
 							<span class='wuxHeader'>Experience</span>
@@ -504,22 +388,26 @@
 					<div class="options-Storyteller wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-Storyteller" checked="checked" style="display: block">
 						<div class="wuxSectionHeader">Storyteller</div>
+						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
 							<div class="options-StorytellerPostBox chat-chatBox">
-								<div class="wuxSectionContent wuxEmotePostGroup">
+								<div class='wuxHeader'>Cutscene Post Area</div>
+								<div class="wuxEmotePostGroup">
 									<div class="wuxFieldSet">
 										<input type="text" class="wuxFormInput wuxSizeHuge" name="attr_emotePostContent" placeholder="Type your post here then select an emote to use from the options below">
 
 										<div class="wuxRow">&nbsp;</div>
-										<fieldset class="repeating_emotesSet2">
-											<div>
-												<button class="wuxEmoteButton" type="roll" value="!sendPmNote @{emotePostType}@@@{url}@@@{emotePostTarget}@@@{speaking_language}@@@{emotePostMessage}">
-													<span name="attr_emote_name">emote</span>
-												</button>
-												<input type="hidden" name="attr_url">
-											</div>
-										</fieldset>
+										<div class="wuxNoRepControl">
+											<fieldset class="repeating_emotesSet2">
+												<div>
+													<button class="wuxEmoteButton" type="roll" value="!sendPmNote @{emotePostType}@@@{url}@@@{emotePostTarget}@@@{speaking_language}@@@{emotePostMessage}">
+														<span name="attr_emote_name">emote</span>
+													</button>
+													<input type="hidden" name="attr_url">
+												</div>
+											</fieldset>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -545,12 +433,71 @@
 									</div>
 								</div>
 							</div>
+
+							<input type="hidden" class="wuxEmoteDisplayStyleField-flag" name="attr_emoteDisplayStyle" value="0">
+							<div class="options-StorytellerRecasting wuxEmoteDisplayStyleRecast">
+								<div class="wuxRow">&nbsp;</div>
+								<span class='wuxHeader'>Recast</span>
+								<input type="hidden" name="attr_recastCharacterNames" value="">
+								<fieldset class="repeating_chararecast">
+									<div class="wuxFieldSet">
+										<div class="wuxMultiRow">
+											<div class="wuxFormEntry">
+												<input type="text" class="wuxFormHeaderSelect" name="attr_recastName" value="">
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+
+							<div class="wuxRow">&nbsp;</div>
+							<div class="options-Introduction">
+								<span class="wuxHeader">Introduction</span>
+
+								<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+									<div class="wuxInfoField">
+										<span class="wuxInfoTitle">Emote</span>
+										<input type="text" class='wuxInfoInput' name='attr_introduction_emote' value="Serious">
+									</div>
+								</div>
+
+								<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+									<div class="wuxInfoField">
+										<span class="wuxInfoTitle">Nickname</span>
+										<input type="text" class='wuxInfoInput' name='attr_introduction_nickname' value="">
+									</div>
+								</div>
+
+								<div class="core-keyEmote wuxInfoSection wuxSizeLarge">
+									<div class="wuxInfoField">
+										<span class="wuxInfoTitle">Title</span>
+										<input type="text" class='wuxInfoInput' name='attr_introduction_title' value="" placeholder="title">
+									</div>
+								</div>
+							</div>
+							
+							<div class="wuxRow">&nbsp;</div>
+							<div class="options-Interactions">
+								<input type="hidden" class="" name="attr_spell_prof-effect" value="0">
+								<span class="wuxHeader">Check Message</span>
+
+								<span class='wuxHeader2'>Emote</span>
+								<div class="wuxRow">
+									<input type="text" class='wuxInput' name='attr_interaction_keyemote' value="???">
+								</div>
+								<span class='wuxHeader2'>Phrase</span>
+								<div class="wuxRow">
+									<input type="text" class='wuxInput' name='attr_interaction_keyphrase' value="???">
+								</div>
+							</div>
+
 						</div>
 						<div class="wuxSectionContentCollapsed"></div>
 					</div>
 					<div class="options-SheetDisplay wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-SheetDisplay" checked="checked" style="display: block">
 						<div class="wuxSectionHeader">Sheet Options</div>
+						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
 							<div class="options-OptionalDisplays">

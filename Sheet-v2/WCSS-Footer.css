@@ -1,4 +1,28 @@
 /*========================================
+    Collapse Field
+========================================*/
+
+.wuxCollapseField-flag
+{
+    opacity: 0;    
+    position: absolute;
+    left: 0px;
+    width: 15px;
+    height: 18px;
+    z-index: 100;
+}
+
+.wuxCollapseField
+{
+    display: none;
+}
+
+.wuxCollapseField-flag:checked ~ .wuxCollapseField
+{
+    display: inherit;
+}
+
+/*========================================
     Hidden Field
 ========================================*/
 

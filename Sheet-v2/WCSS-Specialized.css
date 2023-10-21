@@ -56,22 +56,33 @@
     color: #f4f6f8;
 }
 
+.wuxNamePlate input[type=text].wuxFullName,
+.wuxNamePlate input[type=text].wuxNamePlateName
+{
+    color: #f4f6f8;
+    font-family: "Candal";
+    text-overflow: clip;
+    border: none;
+}
+
+.wuxNamePlate input[type=text].wuxFullName
+{
+    font-size: 10px;
+    background: none;
+}
+
 .wuxNamePlate input[type=text].wuxNamePlateName
 {
     top: 10px;
     left: 5px;
 
-    color: #f4f6f8;
-    font-family: "Candal";
-    font-size: 14px;
+    font-size: 16px;
     text-transform: capitalize;
-    text-overflow: clip;
 
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    border: none;
 }
 
 .wuxCoreStats
@@ -261,19 +272,22 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 {
     position: relative;
     display: inline-block;
-    width: 360px; 
-    margin: 0px 15px 10px 0px; 
+    min-width: 200px; 
+    width: calc(100% - 10px);
 
     font-size: 12px;
 
-    border: 1px solid black; 
+    border: 3px solid black; 
+    background: #cacbcf;
+
+    flex: 1;
 }
 
 .wuxTechniqueHeader
 {
     position: relative;
     display: block; 
-    width: 358px; 
+    width: calc(100% - 10px);
     padding: 0px 0px 5px 10px; 
     
     background: #c0e7d5;
@@ -305,7 +319,7 @@ input.wuxTechniqueHeader-flag[value="Free"] + .wuxTechniqueHeader
     position: absolute;
     display: inline-block;
     right: 0px;
-    width: 70px; 
+    width: 55px; 
     padding: 5px; 
 
     vertical-align: top; 
@@ -345,32 +359,32 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
 {
     display: block;
 
-    font-size: 10px; 
+    font-size: 9px; 
     font-weight: bold;
 }
 
 .wuxTechniqueType .wuxTechniqueTypeFooter
 {
     display: block;
-    font-size: 8px;
+    font-size: 7px;
 }
 
 .wuxTechniqueHeaderName
 {
     display:inline-block; 
-    width: 253px; 
+    width: calc(100% - 65px);
     margin-top: 5px; 
     
-    font-size: 18px; 
+    font-size: 13px; 
     font-weight: bold;
 }
 
 .wuxTechniqueHeaderInfo
 {
     display: block; 
-    width: 253px; 
+    width: calc(100% - 65px);
 
-    font-size: 13px;
+    font-size: 11px;
 }
 
 .wuxTechniqueHeaderInfoType
@@ -380,20 +394,121 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
 
 .wuxTechniqueFunctionBlock
 {
-    width: 358px; 
-    line-height: 15px; 
+    width: calc(100% - 2px);
     padding: 5px 10px; 
     
-    font-size: 13px; 
+    line-height: 14px; 
+    font-size: 11px; 
     
     border-bottom: 1px solid #c6c6c6; 
     background: #fbf9e5;
 }
 
+.wuxTechniqueFunctionBlock .wuxTechniqueFunctionBlockRow
+{
+    position: relative;
+    display: block;
+}
+
 .wuxTechniqueAttackBlock
 {
-    font-weight: bold;
+    width: calc(100% - 10px);
+    padding: 5px 5px; 
+    margin: 5px 10px; 
+    
+    line-height: 14px; 
+    font-size: 11px; 
+    border: 1px solid black; 
+    background: #e8c5c5;
 }
+
+.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow,
+.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockRange,
+.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockDefense,
+.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockTarget
+{
+    position: relative;
+    display: inline-block;
+}
+
+.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow
+{
+    width: calc(100% - 22px);
+}
+
+.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockRange,
+.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockDefense
+{
+    width: calc(35% - 5px);
+}
+
+.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockTarget
+{
+    width: calc(65% - 5px);
+}
+
+.wuxTechniqueDescriptionBlock
+{
+    width: calc(100% - 20px);
+    padding: 5px 10px; 
+
+    font-size: 11px;
+}
+
+.wuxTechniqueDescriptionBlock .wuxTechniqueDescriptionBlockDesc
+{
+    display: block;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+/*========================================
+   Traits
+========================================*/
+
+.wuxTrait
+{
+    display: inline-block;
+    padding: 0px 3px;
+
+    color: #fff;
+    font-size: 11px;
+}
+
+.wuxTrait
+{ 
+    display: none;
+}
+
+input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
+.wuxShownTraits .wuxTrait
+{
+    display: inline-block;
+}
+
+.wuxTrait .wuxTooltiptext
+{
+    position: absolute;
+    top: 18px;
+    left: 0px;
+    width: 240px;
+    padding: 5px;
+    z-index: 1000;
+
+    color: #3e3e3e;
+    font-size: 11px;
+    text-align: center;
+
+    visibility: hidden;
+    background: #fff;
+    border-radius: 6px;
+   
+  }
+  
+  .wuxTrait:hover .wuxTooltiptext
+  {
+    visibility: visible;
+  }
 
 /*========================================
     Options

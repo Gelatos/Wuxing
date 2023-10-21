@@ -45,25 +45,57 @@ function SetAbilityScoreUpdate(update, updateAttr, abilityScoreArray) {
 	return update;
 }
 
+function GetAbilityScoreFieldNames(updateAttr) {
+	return [`${updateAttr}CON`, `${updateAttr}DEX`, `${updateAttr}QCK`, `${updateAttr}STR`, `${updateAttr}CHA`, `${updateAttr}INT`, `${updateAttr}PER`, `${updateAttr}WIL`];
+}
+
+function GetAbilityScoreFieldIntegerArray(updateAttr, abilityScoreArray) {
+
+	let output = [];
+	output["CON"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}CON`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}CON`]);
+	output["DEX"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}DEX`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}DEX`]);
+	output["QCK"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}QCK`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}QCK`]);
+	output["STR"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}STR`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}STR`]);
+	output["CHA"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}CHA`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}CHA`]);
+	output["INT"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}INT`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}INT`]);
+	output["PER"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}PER`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}PER`]);
+	output["WIL"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}WIL`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}WIL`]);
+	
+	return output;
+}
+
 // Techniques
 
-function GetTraitsDictionary (traits) {
+function GetTraitsDictionary (traits, traitType) {
 
-	var output = [];
+	let output = [];
 	if (traits != undefined) {
-		var splits = traits.split(",");
+		let keywordsSplit = traits.split(";");
 
-		var count = 6;
-		for (var i = 0; i < splits.length; i++) {
+		let name = "";
+		let lookup = "";
+		let traitInfo;
 
-			var traitInfo = GetTraitInfo(splits[i].trim());
-			if (traitInfo.name != "") {
-				output.push(traitInfo);
-				count--;
-				if (count <= 0) {
-					break;
-				}
+		for(let i = 0; i < keywordsSplit.length; i++) {
+			name = "" + keywordsSplit[i].trim();
+
+			if (name.includes ("Impact") || name.includes ("Explosive")) {
+			name = ReplaceDamageDice(name);
 			}
+
+			lookup = name;
+			if (lookup.indexOf ("(") >= 0) {
+				lookup = lookup.replace(/\([^)]*\)/g, "(X)");
+			}
+			
+			switch(traitType.toLowerCase()) {
+				case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
+				case "weapon": traitInfo = GetWeaponTraitsInfo(lookup); break;
+				case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
+				case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
+			}
+			traitInfo.name = name;
+			output.push (traitInfo);
 		}
 	}
 
@@ -127,11 +159,11 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-functionBlock")] = 
 		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "" || technique.resourceCost != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-traits")] = technique.traits;
-	var traitsDb = GetTraitsDictionary(technique.traits);
+	var traitsDb = GetTraitsDictionary(technique.traits, "technique");
 	for (var i = 0; i < 6; i++) {
 		if (i < traitsDb.length) {
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = traitsDb[i].name;
-			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = traitsDb[i].desc;
+			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = traitsDb[i].description;
 		} else {
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = "";
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = "";
@@ -143,6 +175,7 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-resourceCost")] = technique.resourceCost;
 
 	// set the description
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-descriptionBlock")] = (technique.description != "" || technique.onSuccess != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-description")] = technique.description;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-onSuccess")] = technique.onSuccess;
 
@@ -150,22 +183,28 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlock")] = 
 	(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") ? "1" : "0";
 
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-skill")] = technique.skill;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-defense")] = technique.defense;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockTarget")] = (technique.range != "" || technique.target != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-range")] = technique.range;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-target")] = technique.target;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-targetCode")] = technique.targetCode;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-onHit")] = technique.onHit;
+
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockSkill")] = (technique.skill != "" || technique.defense != "") ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-skill")] = technique.skill;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-defense")] = technique.defense;
 
 	// set the damage
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockDamage")] = (technique.damage != "" || technique.damageType != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-damage")] = technique.damage;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-damageType")] = technique.damageType;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-element")] = technique.element;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-specBonus")] = technique.specBonus;
 	if (technique.damageType != "") {
 		let damageString = `${FormatDamageString(technique.damage)}${technique.damageType}${technique.element == "" ? "" : ` [${technique.element}]`}`;
 		update[GetSectionIdName(repeatingSection, newrowid, "technique-damageString")] = damageString;
 	}
+	
+	// set special data
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-onHit")] = technique.onHit;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-specBonus")] = technique.specBonus;
 
 	return update;
 }
