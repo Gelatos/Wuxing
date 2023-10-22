@@ -110,11 +110,9 @@ function GetTechniqueDataArray (type, techniques) {
 
 	for (let i = 0; i < techniqueList.length; i++) {
 		tech = techniqueList[i].trim();
-		console.log ("searching tech: " + tech);
 		switch(type.toLowerCase()) {
 			case "ancestry": 
 				technique = GetAncestryTechniqueInfo(tech);
-				console.log ("Found tech: " + technique.name);
 				if (technique.name != "") {
 					output.push(technique); 
 				}

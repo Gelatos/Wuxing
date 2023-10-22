@@ -96,4 +96,233 @@ function GetTechniqueTraitsInfo(name) {
 	}
 	}
 	
+	function GetDefensiveSkillsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "brace":
+	return {"name":"Brace","description":"Brace represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects.","group":"Defensive","subGroup":"Physical Defense","abilityScore":"STR"}
+	case "fortitude":
+	return {"name":"Fortitude","description":"Fortitude is a character's ability to resist internal damage such as from poisons or sickness.","group":"Defensive","subGroup":"Physical Defense","abilityScore":"CON"}
+	case "insight":
+	return {"name":"Insight","description":"Insight represents a character's ability to parse conversation and judge mental states. This defense is typically used when information is being hidden in text or speech or to detect when someone is concealing their true thoughts.","group":"Defensive","subGroup":"Sensory Defense","abilityScore":"INT"}
+	case "notice":
+	return {"name":"Notice","description":"Notice is the ability to see or hear sudden changes in your environment. It is typically used to counter a character's stealth attempts or to hear a distant or quiet noise.","group":"Defensive","subGroup":"Sensory Defense","abilityScore":"PER"}
+	case "presence":
+	return {"name":"Presence","description":"Presence is a character's ability to force their will over their environment. It is used to disrupt ether as it means to affect a character.","group":"Defensive","subGroup":"Physical Defense","abilityScore":"CHA"}
+	case "reflex":
+	return {"name":"Reflex","description":"Reflex is used when a character could quickly react to a situation with movement. It is usually used to avoid powerful attacks or to get out of the way of harmful effects that only need to touch the character like a fireball.","group":"Defensive","subGroup":"Physical Defense","abilityScore":"QCK"}
+	case "resolve":
+	return {"name":"Resolve","description":"Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in.","group":"Defensive","subGroup":"Sensory Defense","abilityScore":"WIL"}
+	default:
+	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
+	
+	}
+	}
+	
+	function GetDefensiveSkillsList(isFields) {
+	if (isFields) {
+	return ["Brace", "Fortitude", "Insight", "Notice", "Presence", "Reflex", "Resolve"];
+	}
+	else {
+	return ["brace", "fortitude", "insight", "notice", "presence", "reflex", "resolve"];
+	}
+	}
+	
+	function GetCombatSkillsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "archery":
+	return {"name":"Archery","description":"The skill of using borws. Bows have decent range and allow one to add their strength to their damage. They also tend to have more flexible ammunitions.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "brawling":
+	return {"name":"Brawling","description":"This is the skill to use one's own body to fight. The combat style has a focus on quick actions, allowing more maneuverability in their attacks in exchange for less damage.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "light blade":
+	return {"name":"Light Blade","description":"These weapons require a dextrous hand as they use precision to strike at a foe. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are exceptionally well balanced for striking with speed.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "hammer":
+	return {"name":"Hammer","description":"Blunt weapons that are swung with force to bludgeon their targets. These weapons tend to have qualities to allow them to deal increased damage to objects and can crush through defenses.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "handgun":
+	return {"name":"Handgun","description":"Small firearms made to be easily wielded in one hand. These weapons typically have the least range of all dedicated range weapons but feature threat ranges to be used in melee.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "heavy blade":
+	return {"name":"Heavy Blade","description":"These weapons are large and bladed, allowing the wielder to swing them with all their might. These weapons are made to be able to allow the user to strike with a powerful blow.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "longarm":
+	return {"name":"Longarm","description":"Powerful ranged weapons that fire bullets from two-handed implements. These weapons tend to have the highest range of all range weapons and large damage values in exchange for less action flexibility.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "polearm":
+	return {"name":"Polearm","description":"Weapons on a pole of some sort. These weapons will often feature increased threat range, allowing one to strike at more distant foes.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "thrown":
+	return {"name":"Thrown","description":"Weapons that are able to be thrown, or improvising a thrown weapon. ","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	default:
+	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
+	
+	}
+	}
+	
+	function GetCombatSkillsList(isFields) {
+	if (isFields) {
+	return ["Archery", "Brawling", "LightBlade", "Hammer", "Handgun", "HeavyBlade", "Longarm", "Polearm", "Thrown"];
+	}
+	else {
+	return ["archery", "brawling", "light blade", "hammer", "handgun", "heavy blade", "longarm", "polearm", "thrown"];
+	}
+	}
+	
+	function GetMagicSkillsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "assault":
+	return {"name":"Assault","description":"These spells quickly form ether into a physical substance. Because the ether is formed quickly, these spells are well suited for launching at targets in a combat situation at the cost of keeping the ether stable for more than a few seconds.","group":"Magic","subGroup":"","abilityScore":"PER"}
+	case "conjure":
+	return {"name":"Conjure","description":"These spells form ether into a form of energy and stabilzes it so that it can linger in this form. Conjured magic is often unable to last for long and must be consumed quickly else disperse into ether.","group":"Magic","subGroup":"","abilityScore":"PER"}
+	case "enchant":
+	return {"name":"Enchant","description":"Spells that imbue a target with temporary or permanent change. These spells can typically cause effects in creatures such as emboldening their strength or heal their wounds.","group":"Magic","subGroup":"","abilityScore":"CHA"}
+	case "ethereal":
+	return {"name":"Ethereal","description":"Ethereal spells are unique in that they don't create any obvious physical manifestation but rather affect ether and the ethereal plane directly.","group":"Magic","subGroup":"","abilityScore":"CHA"}
+	case "field":
+	return {"name":"Field","description":"These spells affect existing terrain and environments by either modifying it or adding to it. ","group":"Magic","subGroup":"","abilityScore":"INT"}
+	case "structure":
+	return {"name":"Structure","description":"Spells that transform ether into physical objects and materials and reform it. Some spells in this class can affect physical aspected-materials and reform it as well.","group":"Magic","subGroup":"","abilityScore":"INT"}
+	default:
+	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
+	
+	}
+	}
+	
+	function GetMagicSkillsList(isFields) {
+	if (isFields) {
+	return ["Assault", "Conjure", "Enchant", "Ethereal", "Field", "Structure"];
+	}
+	else {
+	return ["assault", "conjure", "enchant", "ethereal", "field", "structure"];
+	}
+	}
+	
+	function GetBodySkillsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "acrobatics":
+	return {"name":"Acrobatics","description":"Your Acrobatics check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. ","group":"Body","subGroup":"","abilityScore":"DEX"}
+	case "athletics":
+	return {"name":"Athletics","description":"Your Athletics check covers movement through an environment such as when climbing, jumping, or swimming.","group":"Body","subGroup":"","abilityScore":"STR"}
+	case "physique":
+	return {"name":"Physique","description":"The Physique skill represents a character’s raw strength and endurance. It is the base skill for actions that allow one to shove or grapple and can be used to allow one to lift or carry objects that may fall outside normal rules.","group":"Body","subGroup":"","abilityScore":"STR"}
+	case "palming":
+	return {"name":"Palming","description":"Palming is sleight-of-hand skill that gives a character the ability to snag, hide, and pass off small objects.","group":"Body","subGroup":"","abilityScore":"QCK"}
+	case "stealth":
+	return {"name":"Stealth","description":"Make a Stealth check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. ","group":"Body","subGroup":"","abilityScore":"DEX"}
+	case "survival":
+	return {"name":"Survival","description":"Make a Survival check to follow tracks, hunt wild game, or guide your group through wastelands. ","group":"Body","subGroup":"","abilityScore":"PER"}
+	default:
+	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
+	
+	}
+	}
+	
+	function GetBodySkillsList(isFields) {
+	if (isFields) {
+	return ["Acrobatics", "Athletics", "Physique", "Palming", "Stealth", "Survival"];
+	}
+	else {
+	return ["acrobatics", "athletics", "physique", "palming", "stealth", "survival"];
+	}
+	}
+	
+	function GetKnowledgeSkillsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "arcana":
+	return {"name":"Arcana","description":"Arcana represents knowledge of the ethereal and manipulation of ether. It can help identify spell effects, well known spirits, and qualities of ether.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
+	case "culture":
+	return {"name":"Culture","description":"Your culture check measures your ability to recall lore about a civilization's practices, personalities, laws, and religions. ","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
+	case "engineering":
+	return {"name":"Engineering","description":"This skill represents knowledge of technological subjects. It can be used to recall lore about construction, buildings, fortifications, technology, and tools.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
+	case "history":
+	return {"name":"History","description":"Your history check measures your ability to recall lore about historical events, legendary people, ancient kingdoms, past disputes, recent wars, and lost civilizations.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
+	case "investigation":
+	return {"name":"Investigation","description":"This is used to actively search for for clues or anything out of sorts. You might deduce the location of a hidden object, discern from the appearance of a wound what kind of weapon dealt it, or determine the weakest point in a tunnel that could cause it to collapse. ","group":"Knowledge","subGroup":"","abilityScore":"PER"}
+	case "nature":
+	return {"name":"Nature","description":"Your nature check measures your ability to recall lore about geography, plants, animals, the weather, and natural cycles.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
+	default:
+	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
+	
+	}
+	}
+	
+	function GetKnowledgeSkillsList(isFields) {
+	if (isFields) {
+	return ["Arcana", "Culture", "Engineering", "History", "Investigation", "Nature"];
+	}
+	else {
+	return ["arcana", "culture", "engineering", "history", "investigation", "nature"];
+	}
+	}
+	
+	function GetSocialSkillsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "deception":
+	return {"name":"Deception","description":"Your Deception check determines whether you can convincingly hide the truth, either verbally or through your actions. This deception can encompass everything from misleading others through ambiguity to telling outright lies.","group":"Social","subGroup":"Social Influence","abilityScore":"CHA"}
+	case "etiquette":
+	return {"name":"Etiquette","description":"Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that peo- ple might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.","group":"Social","subGroup":"","abilityScore":"PER"}
+	case "intimidation":
+	return {"name":"Intimidation","description":"When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision.","group":"Social","subGroup":"Social Influence","abilityScore":"CHA"}
+	case "leadership":
+	return {"name":"Leadership","description":"Leadership is the ability to direct and motivate others. This skill is especially helpful in situations where the will of a teammate is shaken or someone is being asked to do something uncomfortable.","group":"Social","subGroup":"","abilityScore":"CHA"}
+	case "negotiation":
+	return {"name":"Negotiation","description":"Negotiation governs a character’s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals.","group":"Social","subGroup":"Social Influence","abilityScore":"CHA"}
+	case "performance":
+	return {"name":"Performance","description":"Your Performance check determines how well you can delight an audience with music, dance, acting, storytelling, or some other form of entertainment. ","group":"Social","subGroup":"","abilityScore":"CHA"}
+	default:
+	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
+	
+	}
+	}
+	
+	function GetSocialSkillsList(isFields) {
+	if (isFields) {
+	return ["Deception", "Etiquette", "Intimidation", "Leadership", "Negotiation", "Performance"];
+	}
+	else {
+	return ["deception", "etiquette", "intimidation", "leadership", "negotiation", "performance"];
+	}
+	}
+	
+	function GetTechnicalSkillsInfo(name) {
+	switch (name.toLowerCase()) {
+	case "artisan":
+	return {"name":"Artisan","description":"This skill includes several different forms of artistic impression such as through drawing, sculpting, handcrafting of fine objects, and conveying art and information through images and technique. ","group":"Technical","subGroup":"Crafting","abilityScore":"DEX"}
+	case "cook":
+	return {"name":"Cook","description":"Food is important for survival, so making it enjoyable is a craft of great appreciation. This skill requires cook's utensils in order to cook most food at a minimum, while different dishes may require access to a stove, oven, or other large appliances.","group":"Technical","subGroup":"Crafting","abilityScore":"PER"}
+	case "herbalism":
+	return {"name":"Herbalism","description":"The skill to create medicinal and chemical compounds such as drugs, perfumes, and poisons.","group":"Technical","subGroup":"Crafting","abilityScore":"INT"}
+	case "mechanical":
+	return {"name":"Mechanical","description":"This skill covers building, repairing, and disabling mechanical devices such as locks, tools, and machinery.","group":"Technical","subGroup":"Crafting","abilityScore":"DEX"}
+	case "medicine":
+	return {"name":"Medicine","description":"Medicine is used to perform medical procedures such as administering drugs, performing first aid, and surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character’s medical condition.","group":"Technical","subGroup":"","abilityScore":"PER"}
+	case "pilot":
+	return {"name":"Pilot","description":"When attempting to drive a vehicle of any kind, the pilot skill often governs most checks. ","group":"Technical","subGroup":"","abilityScore":"QCK"}
+	default:
+	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
+	
+	}
+	}
+	
+	function GetTechnicalSkillsList(isFields) {
+	if (isFields) {
+	return ["Artisan", "Cook", "Herbalism", "Mechanical", "Medicine", "Pilot"];
+	}
+	else {
+	return ["artisan", "cook", "herbalism", "mechanical", "medicine", "pilot"];
+	}
+	}
+	
+	function GetDefensivePhysSkillsList(isFields) {
+	if (isFields) {
+	return ["Brace", "Fortitude", "Presence", "Reflex"];
+	}
+	else {
+	return ["brace", "fortitude", "presence", "reflex"];
+	}
+	}
+	
+	function GetDefensiveSensSkillsList(isFields) {
+	if (isFields) {
+	return ["Insight", "Notice", "Resolve"];
+	}
+	else {
+	return ["insight", "notice", "resolve"];
+	}
+	}
+	
 	

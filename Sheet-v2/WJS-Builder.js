@@ -69,10 +69,41 @@ var update_builder_ancestry_info = function(newValue) {
 	update["builder-growth-KiCharge"] = ancestryData.growths.kiCharge;
 	update["builder-growth-Spellforce"] = ancestryData.growths.spellForce;
 
-	// create the techniques
+	// create the techniques and update the skills
 	update = SetTechniqueDataList(update, "repeating_ancestrytechniques", ancestryTechniques);
-	
+	update = update_builder_ancestrySkills(update, ancestryData);
+
 	setAttrs(update, {silent: true});
+}
+
+var update_builder_ancestrySkills = function(update, ancestryData) {
+
+	// defensive skills
+	update = update_builder_skill_fields(update, "Physical Defensive", ancestryData.skillPointsPhysDefense, "DefensivePhys");
+	console.log("ancestryData.skillPointsPhysDefense: " + ancestryData.skillPointsPhysDefense);
+	if (ancestryData.skillPointsPhysDefense > 0) {
+		update["builder-skills-defensive"] = "1";
+	}
+	else {
+		update["builder-skills-defensive"] = "0";
+		update_builder_skills_defensive_reset();
+	}
+
+	return update;
+}
+
+var update_builder_skill_fields = function(update, skillName, count, fieldName) {
+
+	if (count > 0) {
+		update[`builder-skills-desc${fieldName}`] = `Become trained in ${count} ${skillName} skill${count > 1 ? "s" : ""}.`;
+		update[`builder-skills-points${fieldName}_max`] = count;
+	}
+	else {
+		update[`builder-skills-desc${fieldName}`] = "";
+		update[`builder-skills-points${fieldName}_max`] = 0;
+	}
+
+	return update;
 }
 
 var update_builder_base_ability_scores = function() {
@@ -170,6 +201,66 @@ var update_builder_ability_scores_reset = function(pointsAttr, absAttr, pointsMa
 		let pointMax = isNaN(parseInt(v[`${pointsAttr}_max`])) ? pointsMax : parseInt(v[`${pointsAttr}_max`]);
 		update[`${pointsAttr}`] = pointMax;
 		update[`${pointsAttr}-error`] = "0";
+
+		setAttrs(update, {silent: true});
+	});
+}
+
+var update_builder_skills_defensivePhys = function() {
+	update_builder_skills("DefensivePhys", GetDefensivePhysSkillsList(true));
+}
+
+var update_builder_skills_defensiveSens = function() {
+	update_builder_skills("DefensiveSens", GetDefensiveSensSkillsList(true));
+}
+
+var update_builder_skills = function(fieldName, skillsArray) {
+
+	let mod_attrs = [`builder-skills-points${fieldName}_max`];
+	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-training${fieldName}-`, "", skillsArray));
+	
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+		let pointMax = isNaN(parseInt(v[`builder-skills-points${fieldName}_max`])) ? 0 : parseInt(v[`builder-skills-points${fieldName}_max`]);
+		let pointCount = pointMax;
+		
+		for (let i = 0; i < skillsArray.length; i++) {
+			if (v[`builder-skills-training${fieldName}-${skillsArray[i]}`] == "on") {
+				pointCount--;
+			}
+
+			update[`builder-skills-trainingChoice-${skillsArray[i]}`] = v[`builder-skills-training${fieldName}-${skillsArray[i]}`];
+		}
+		
+		update[`builder-skills-points${fieldName}`] = pointCount;
+		update[`builder-skills-points${fieldName}-error`] = pointCount < 0 ? "1" : "0";
+
+		setAttrs(update, {silent: true});
+	});
+}
+
+var update_builder_skills_defensive_reset = function() {
+	update_builder_skills_reset("DefensivePhys", GetDefensivePhysSkillsList(true));
+	update_builder_skills_reset("DefensiveSens", GetDefensiveSensSkillsList(true));
+}
+
+var update_builder_skills_reset = function(fieldName, skillsArray) {
+	let mod_attrs = [`builder-skills-points${fieldName}_max`];
+	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-training${fieldName}-`, "", skillsArray));
+	
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		for (let i = 0; i < skillsArray.length; i++) {
+			if (v[`builder-skills-training${fieldName}-${skillsArray[i]}`] != 0) {
+				update[`builder-skills-training${fieldName}-${skillsArray[i]}`] = 0;
+				update[`builder-skills-trainingChoice-${skillsArray[i]}`] = 0;
+			}
+		}
+
+		let pointMax = parseInt(v[`builder-skills-points${fieldName}_max`]);
+		update[`builder-skills-points${fieldName}`] = pointMax;
+		update[`builder-skills-points${fieldName}-error`] = "0";
 
 		setAttrs(update, {silent: true});
 	});
