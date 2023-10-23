@@ -235,6 +235,12 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
     border-image: linear-gradient(to right, #A0A0A0FF 0%, #A0A0A000 80%, #A0A0A000 100%) 1;
 }
 
+.wuxInteractiveBlock.wuxSizeSmall
+{
+    min-width: 80px;
+    padding: 0px;
+}
+
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
 .wuxInteractiveBlock .wuxInteractiveInnerExpandBlock,

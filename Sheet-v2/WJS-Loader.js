@@ -1,7 +1,7 @@
 var upgrade_to_1_0_0 = function (doneupdating) {
 	update_builder_path_info("Common");
 	update_builder_ancestry_info("Human");
-	// doneupdating();
+	doneupdating();
 };
 
 var versioning = function () {

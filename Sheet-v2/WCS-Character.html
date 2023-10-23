@@ -1,4 +1,3 @@
-
 <div class="wuxCharacterSheetDisplayStyle-Character">
 
 	<div class="main-TopRow wuxFloatHeader wuxHorizontalFlex">
@@ -19,32 +18,118 @@
 	</div>
 
 	<div class="wumMainSheet">
-		<div class="main-Sidebar wuxFloatSidebar wuxSheetSidebar">
-			<button class="wuxButton wuxSizePercent" type="roll" value="Acrobatics C"><span>Acrobatics</span></button>
-			<button class="wuxButton wuxSizePercent" type="roll" value="Athletics C"><span>Athletics</span></button>
-			<button class="wuxButton" type="roll" value="Physique C"><span>Physique</span></button>
-			<button class="wuxButton" type="roll" value="Palming C"><span>Palming</span></button>
-			<button class="wuxButton" type="roll" value="Stealth C"><span>Stealth</span></button>
-			<button class="wuxButton" type="roll" value="Survival C"><span>Survival</span></button>
-			<button class="wuxButton" type="roll" value="Arcana C"><span>Arcana</span></button>
-			<button class="wuxButton" type="roll" value="Culture C"><span>Culture</span></button>
-			<button class="wuxButton" type="roll" value="Engineering C"><span>Engineering</span></button>
-			<button class="wuxButton" type="roll" value="History C"><span>History</span></button>
-			<button class="wuxButton" type="roll" value="Investigation C"><span>Investigation</span></button>
-			<button class="wuxButton" type="roll" value="Nature C"><span>Nature</span></button>
-			<button class="wuxButton" type="roll" value="Deception C"><span>Deception</span></button>
-			<button class="wuxButton" type="roll" value="Etiquette C"><span>Etiquette</span></button>
-			<button class="wuxButton" type="roll" value="Intimidation C"><span>Intimidation</span></button>
-			<button class="wuxButton" type="roll" value="Leadership C"><span>Leadership</span></button>
-			<button class="wuxButton" type="roll" value="Negotiation C"><span>Negotiation</span></button>
-			<button class="wuxButton" type="roll" value="Performance C"><span>Performance</span></button>
-			<button class="wuxButton" type="roll" value="Artisan C"><span>Artisan</span></button>
-			<button class="wuxButton" type="roll" value="Cook C"><span>Cook</span></button>
-			<button class="wuxButton" type="roll" value="Herbalism C"><span>Herbalism</span></button>
-			<button class="wuxButton" type="roll" value="Mechanical C"><span>Mechanical</span></button>
-			<button class="wuxButton" type="roll" value="Medicine C"><span>Medicine</span></button>
-			<button class="wuxButton" type="roll" value="Pilot C"><span>Pilot</span></button>
+
+		<!-- Skill Sidebar Buttons -->
+		<div class="main-Sidebar wuxFloatSidebar">
+			<!-- <div class="segment-skills wuxSegment">
+				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-skills" checked="checked">
+				<div class="wuxTabHeader"><span class="wuxInnerHeader">Quick</span></div>
+
+				<div class="wuxTab"> -->
+					<div class="wuxSheetSidebar">
+						<div class="wuxHeader">Skills</div>
+						<div class="wuxInteractiveBlock wuxSizeSmall">
+
+							<div class="wuxInteractiveInnerBlock">
+								<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-Body">
+								<div class="wuxInteractiveContent">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Body">
+									<span class="wuxInteractiveIcon">&#9663;</span>
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Body">
+									<span class="wuxInteractiveAuxIcon">&#9657;</span>
+
+									<span class="wuxSubheader">Body</span>
+								</div>
+							</div>
+
+							<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-Body">
+							<div class="wuxInteractiveExpandingContent">
+								<button class="wuxButton wuxSizePercent" type="roll" value="Acrobatics Check"><span>Acrobatics</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Athletics Check"><span>Athletics</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Physique Check"><span>Physique</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Palming Check"><span>Palming</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Stealth Check"><span>Stealth</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Survival Check"><span>Survival</span></button>
+							</div>
+						</div>
+						<div class="wuxInteractiveBlock wuxSizeSmall">
+
+							<div class="wuxInteractiveInnerBlock">
+								<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-Technical">
+								<div class="wuxInteractiveContent">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Technical">
+									<span class="wuxInteractiveIcon">&#9663;</span>
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Technical">
+									<span class="wuxInteractiveAuxIcon">&#9657;</span>
+
+									<span class="wuxSubheader">Technical</span>
+								</div>
+							</div>
+
+							<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-Technical">
+							<div class="wuxInteractiveExpandingContent">
+								<button class="wuxButton wuxSizePercent" type="roll" value="Artisan Check"><span>Artisan</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Cook Check"><span>Cook</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Herbalism Check"><span>Herbalism</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Mechanical Check"><span>Mechanical</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Medicine Check"><span>Medicine</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Pilot Check"><span>Pilot</span></button>
+							</div>
+						</div>
+						<div class="wuxInteractiveBlock wuxSizeSmall">
+
+							<div class="wuxInteractiveInnerBlock">
+								<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-Knowledge">
+								<div class="wuxInteractiveContent">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Knowledge">
+									<span class="wuxInteractiveIcon">&#9663;</span>
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Knowledge">
+									<span class="wuxInteractiveAuxIcon">&#9657;</span>
+
+									<span class="wuxSubheader">Knowledge</span>
+								</div>
+							</div>
+
+							<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-Knowledge">
+							<div class="wuxInteractiveExpandingContent">
+								<button class="wuxButton wuxSizePercent" type="roll" value="Arcana Check"><span>Arcana</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Culture Check"><span>Culture</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Engineering Check"><span>Engineering</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="History Check"><span>History</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Investigation Check"><span>Investigation</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Nature Check"><span>Nature</span></button>
+							</div>
+						</div>
+						<div class="wuxInteractiveBlock wuxSizeSmall">
+
+							<div class="wuxInteractiveInnerBlock">
+								<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-Social">
+								<div class="wuxInteractiveContent">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Social">
+									<span class="wuxInteractiveIcon">&#9663;</span>
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Social">
+									<span class="wuxInteractiveAuxIcon">&#9657;</span>
+
+									<span class="wuxSubheader">Social</span>
+								</div>
+							</div>
+
+							<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-Social">
+							<div class="wuxInteractiveExpandingContent">
+								<button class="wuxButton wuxSizePercent" type="roll" value="Deception Check"><span>Deception</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Etiquette Check"><span>Etiquette</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Intimidation Check"><span>Intimidation</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Leadership Check"><span>Leadership</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Negotiation Check"><span>Negotiation</span></button>
+								<button class="wuxButton wuxSizePercent" type="roll" value="Performance Check"><span>Performance</span></button>
+							</div>
+						</div>
+					</div>
+				<!-- </div>
+			</div> -->
 		</div>
+
+
 		<div class="wuxMainContent">
 
 			<div class="segment-chat wuxSegment">
@@ -98,7 +183,7 @@
 										<div class="options">
 											<div class="wuxRow">
 												<span class="wuxFormHeader">Statistics</span>
-				
+
 											</div>
 											<div class="wuxRow">
 												<span class="wuxFormTitle wuxSizeSmall">Language</span>
@@ -132,9 +217,9 @@
 													<option value="Empathy">Empathy</option>
 													<option value="Jovean">Novan / Jovean</option>
 													<option value="Mytikan">Mytikan</option>
-				
+
 												</select>
-				
+
 											</div>
 											<div class="wuxRow">
 												<span class="wuxFormTitle wuxSizeSmall">Rank</span>
@@ -146,9 +231,9 @@
 													<option value="4">+4 - Elite</option>
 													<option value="5">+5 - Master</option>
 													<option value="6">+6 - Legendary</option>
-				
+
 												</select>
-				
+
 											</div>
 											<div class="wuxRow">
 												<span class="wuxFormTitle wuxSizeSmall">Base</span>
@@ -156,25 +241,25 @@
 													<option value="intelligence" selected="selected">INT</option>
 													<option value="wisdom">WIS</option>
 													<option value="charisma">CHA</option>
-				
+
 												</select>
-				
+
 											</div>
 											<div class="wuxRow">
 												<span class="wuxFormTitle wuxSizeSmall">Mods</span>
 												<input type="number" class="wuxFormInput wuxSizeSmall" name="attr_languagemod">
-				
+
 											</div>
 											<div class="wuxRow">
 												&nbsp;
 											</div>
 											<div class="wuxRow">
 												<span class="wuxFormHeader">Description</span>
-				
+
 											</div>
 											<div class="wuxMultiRow">
 												<textarea class="wuxFormInput" name="attr_languagedesc"></textarea>
-				
+
 											</div>
 										</div>
 										<div class="display">
@@ -197,7 +282,7 @@
 											</div>
 										</div>
 									</div>
-				
+
 								</fieldset>
 								<div class="wuxHiddenField">
 									<fieldset class="repeating_languages">
@@ -237,12 +322,12 @@
 														<option value="Empathy">Empathy</option>
 														<option value="Jovean">Novan / Jovean</option>
 														<option value="Mytikan">Mytikan</option>
-					
+
 													</select>
 												</div>
 											</div>
 										</div>
-					
+
 									</fieldset>
 								</div>
 							</div>
@@ -414,7 +499,7 @@
 							<div class="wuxRow">&nbsp;</div>
 							<div class="options-StorytellerExport">
 								<span class='wuxHeader'>Storyteller Exporter</span>
-								
+
 								<span class="wuxFormHeader">Export Data</span>
 								<div class="wuxMultiRow">
 									<textarea class="wuxFormInput" name="attr_storytellerExportField"></textarea>
@@ -475,7 +560,7 @@
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="wuxRow">&nbsp;</div>
 							<div class="options-Interactions">
 								<input type="hidden" class="" name="attr_spell_prof-effect" value="0">

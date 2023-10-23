@@ -3,13 +3,7 @@ on("change:advancement-button-back", function () {
 	update_advancement_back();
 });
 
-on("change:advancement-button-submit", function () {
-
-	update_advancement_submit();
-});
-
 var update_advancement_back = function() {
-	console.log ("Going back");
 	
 	let mod_attrs = [`advancement-previousPage`];
 
@@ -24,8 +18,12 @@ var update_advancement_back = function() {
 
 }
 
+on("change:advancement-button-submit", function () {
+
+	update_advancement_submit();
+});
+
 var update_advancement_submit = function() {
-	console.log ("Submitting");
 
 	let update = {};
 

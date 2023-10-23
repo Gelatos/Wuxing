@@ -274,13 +274,10 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 
 .wuxFloatSidebar
 {
-    display: inline-block;
     flex: 1;
 
     min-width: 80px;
     max-width: 80px;
-    height: 100px;
-    height: calc(100vh - 50px);
     margin-right: 10px;
 	padding: 0px;
 
@@ -315,7 +312,7 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 
     color: #f4f6f8;
     font-family: "Candal";
-    font-size: 18px;
+    font-size: 16px;
     line-height: 22px;
     vertical-align: bottom;
     text-transform: capitalize;
