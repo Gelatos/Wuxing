@@ -1021,12 +1021,18 @@ input[type=hidden].wuxInteractiveExpandIcon-flag[value="on"] + .wuxInteractiveEx
 .wuxInteractiveExpandAuxIcon
 {
     display: inline-block;
+    color: #DE9B72;
 }
 
 input[type=hidden].wuxInteractiveIcon-flag[value="on"] + .wuxInteractiveAuxIcon,
 input[type=hidden].wuxInteractiveExpandIcon-flag[value="on"] + .wuxInteractiveExpandAuxIcon
 {
     display: none;
+}
+
+input[type=hidden].wuxInteractiveIcon-flag[value="on"] + .wuxHeader
+{
+    color: #DE9B72;
 }
 
 .wuxInteractiveBlock .wuxInteractiveExpandingIcon
@@ -1058,7 +1064,7 @@ input[type="checkbox"].wuxInteractiveExpandingContent-flag
     background: #1d1e1f;
 }
 
-input[type=hidden].wuxInteractiveExpandingContent-flag:not([value="0"]) + .wuxInteractiveExpandingContent
+input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInteractiveExpandingContent
 {
     display: block;
 }
