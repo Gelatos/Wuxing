@@ -20,7 +20,7 @@
 
 								<div class="wuxRow">
 									<div class="wuxButton">
-										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="LevelUp">
+										<input type="checkbox" name="attr_builder-button-submit">
 										<span>Submit</span>
 									</div>
 
@@ -2932,7 +2932,6 @@
 					<div class="wuxSectionContentCollapsed"></div>
 				</div>
 
-
 			</div>
 		</div>
 	</div>
@@ -2950,20 +2949,16 @@
 								<div class="wuxMultiRow">
 									<span class="wuxDescription">This is Class Advancement. Here you can select which classes to level up. </span>
 									<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character.</span>
-									<span class="wuxDescription">Reset will undo all your changes. Back will take you back to the previous page without accepting any other changes.</span>
+									<span class="wuxDescription">Back will take you back to the previous page without accepting any other changes.</span>
 								</div>
 
 								<div class="wuxMultiRow">
 									<div class="wuxButton">
-										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="Character">
+										<input type="checkbox" name="attr_advancement-button-submit">
 										<span>Submit</span>
 									</div>
 									<div class="wuxButton">
-										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="Character">
-										<span>Reset</span>
-									</div>
-									<div class="wuxButton">
-										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="Character">
+										<input type="checkbox" name="attr_advancement-button-back">
 										<span>Back</span>
 									</div>
 								</div>
@@ -3736,7 +3731,7 @@
 							<span class='wuxHeader'>Advancement</span>
 							<div class="wuxMultiRow">
 								<div class="wuxButton">
-									<input type="checkbox" name="attr_characterSheetDisplayStyle" value="LevelUp">
+									<input type="checkbox" name="attr_character-button-advancement">
 									<span>Level Up</span>
 								</div>
 								<div class="wuxButton">
@@ -3931,6 +3926,11 @@
 			</div>
 		</div>
 	</div></div>
+</div>
+
+
+<div class="wuxHiddenFields">
+	<input type="hidden" name="attr_advancement-previousPage" value="">
 </div><!-- WORKERS -->
 <script type="text/worker">
     on("sheet:opened", function(eventinfo) {
@@ -4282,6 +4282,11 @@ on("change:builder-skills-Choice-reset", function () {
 	update_builder_choice_skills_reset();
 });
 
+on("change:builder-button-submit", function () {
+
+	update_builder_submit();
+});
+
 
 
 // Sheet Functions
@@ -4512,7 +4517,7 @@ var update_builder_mental_skills = function () {
 
 var update_builder_skills = function (fieldName, skillsArray) {
 
-	let mod_attrs = [`builder-skills-points${fieldName}_max`, `builder-skills-pointsChoice`];
+	let mod_attrs = [`builder-skills-points${fieldName}_max`];
 	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-training${fieldName}-`, "", skillsArray));
 	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-trainingChoice-`, "", skillsArray));
 
@@ -4520,23 +4525,16 @@ var update_builder_skills = function (fieldName, skillsArray) {
 		let update = {};
 		let pointMax = isNaN(parseInt(v[`builder-skills-points${fieldName}_max`])) ? 0 : parseInt(v[`builder-skills-points${fieldName}_max`]);
 		let pointCount = pointMax;
-		let choicePointCount = parseInt(v[`builder-skills-pointsChoice`]);
 
 		for (let i = 0; i < skillsArray.length; i++) {
 			if (v[`builder-skills-training${fieldName}-${skillsArray[i]}`] == "on") {
 				pointCount--;
-				if (!isNaN(choicePointCount) && v[`builder-skills-trainingChoice-${skillsArray[i]}`] == "on") {
-					choicePointCount++;
-				}
 			}
 			update[`builder-skills-trainingChoice-${skillsArray[i]}`] = v[`builder-skills-training${fieldName}-${skillsArray[i]}`];
 		}
 
 		update[`builder-skills-points${fieldName}`] = pointCount;
 		update[`builder-skills-points${fieldName}-error`] = pointCount < 0 ? "1" : "0";
-		if (!isNaN(choicePointCount)) {
-			update[`builder-skills-pointsChoice`] = choicePointCount;
-		}
 
 		setAttrs(update, { silent: true });
 	});
@@ -4622,7 +4620,7 @@ var update_builder_skills_reset = function (fieldName, skillsArray) {
 	});
 }
 
-var update_builder_choice_skills_reset = function (fieldName, skillsArray) {
+var update_builder_choice_skills_reset = function () {
 	let mod_attrs = [`builder-skills-pointsChoice_max`];
 	let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
 	let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
@@ -4653,6 +4651,70 @@ var update_builder_choice_skills_reset = function (fieldName, skillsArray) {
 
 		setAttrs(update, { silent: true });
 	});
+}
+
+var update_builder_submit = function () {
+	let update = {};
+
+	// update the sheet's statistics here
+
+	update["advancement-previousPage"] = "0";
+	update["characterSheetDisplayStyle"] = "LevelUp";
+
+	setAttrs(update, { silent: true });
+}
+
+on("change:advancement-button-back", function () {
+
+	update_advancement_back();
+});
+
+on("change:advancement-button-submit", function () {
+
+	update_advancement_submit();
+});
+
+var update_advancement_back = function() {
+	console.log ("Going back");
+	
+	let mod_attrs = [`advancement-previousPage`];
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		update["characterSheetDisplayStyle"] = v["advancement-previousPage"];
+		update["advancement-previousPage"] = "";
+
+		setAttrs(update, { silent: true });
+	});
+
+}
+
+var update_advancement_submit = function() {
+	console.log ("Submitting");
+
+	let update = {};
+
+	// update the sheet's statistics here
+
+	update["characterSheetDisplayStyle"] = "Character";
+
+	setAttrs(update, { silent: true });
+
+}
+
+on("change:character-button-advancement", function () {
+
+	update_character_toAdvancement();
+});
+
+var update_character_toAdvancement = function () {
+	let update = {};
+
+	update["advancement-previousPage"] = "Character";
+	update["characterSheetDisplayStyle"] = "LevelUp";
+
+	setAttrs(update, { silent: true });
 }
 
 var upgrade_to_1_0_0 = function (doneupdating) {

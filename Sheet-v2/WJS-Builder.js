@@ -108,7 +108,7 @@ on("change:builder-skills-Choice-reset", function () {
 
 on("change:builder-button-submit", function () {
 
-	update_builder_set_choices();
+	update_builder_submit();
 });
 
 
@@ -444,7 +444,7 @@ var update_builder_skills_reset = function (fieldName, skillsArray) {
 	});
 }
 
-var update_builder_choice_skills_reset = function (fieldName, skillsArray) {
+var update_builder_choice_skills_reset = function () {
 	let mod_attrs = [`builder-skills-pointsChoice_max`];
 	let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
 	let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
@@ -477,12 +477,12 @@ var update_builder_choice_skills_reset = function (fieldName, skillsArray) {
 	});
 }
 
-var update_builder_set_choices = function () {
+var update_builder_submit = function () {
 	let update = {};
 
 	// update the sheet's statistics here
 
-	update["advancement-previousPage"] = "Builder";
+	update["advancement-previousPage"] = "0";
 	update["characterSheetDisplayStyle"] = "LevelUp";
 
 	setAttrs(update, { silent: true });
