@@ -35,3 +35,10 @@ var update_advancement_submit = function() {
 
 }
 
+
+
+var update_advancement_class_level = function(classFieldName) {
+	
+} 
+
+
