@@ -35,7 +35,14 @@ var update_advancement_submit = function() {
 
 }
 
+on("change:advancement-button-submit", function () {
+	
+	var className = inputString.match(/[^-]*$/)[0];
+	if (className.indexOf("_max") >= 0) {
+		className = className.substring(0, className.indexOf("_max"));
+	} 
 
+});
 
 var update_advancement_class_level = function(classFieldName, newValue) {
 	let mod_attrs =`advancement-level-${classFieldName}`];
