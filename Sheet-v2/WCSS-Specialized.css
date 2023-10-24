@@ -324,6 +324,11 @@ input.wuxTechniqueHeader-flag[value="Free"] + .wuxTechniqueHeader
     background-color: #e5fbf1;
 }
 
+input.wuxTechniqueHeader-flag[value="Augment"] + .wuxTechniqueHeader
+{
+    background-color: #dcdcdc;
+}
+
 .wuxTechniqueType
 {
     position: absolute;
@@ -404,7 +409,10 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
 
 .wuxTechniqueFunctionBlock
 {
-    width: calc(100% - 2px);
+    position: relative;
+    display: block;
+
+    width: 100%;
     padding: 5px 10px; 
     
     line-height: 14px; 

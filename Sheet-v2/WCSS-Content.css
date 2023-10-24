@@ -2,25 +2,44 @@
     Flex Table
 ========================================*/
 
-.wuxFlexTable
+.wuxFlexTable,
+.wuxFlexTableNoWrap
 {
 	position: relative;
 	display: flex;
-    flex-flow: row wrap;
     align-content: flex-start;
 }
 
-.wuxFlexTableItemGroup
+.wuxFlexTable
+{
+    flex-flow: row wrap;
+}
+
+.wuxFlexTableNoWrap
+{
+    flex-flow: row;
+}
+
+.wuxFlexTableItemGroup,
+.wuxFlexTableItemGroup8
 {
     position: relative;
     display: block;
 	padding: 5px;
+}
 
+.wuxFlexTableItemGroup
+{
 	flex: 1;
 }
 
-.wuxFlexTableItemVerticalHeader,
-.wuxFlexTableItemVerticalData
+.wuxFlexTableItemGroup8
+{
+	flex: 8;
+}
+
+.wuxFlexTableItemHeader,
+.wuxFlexTableItemData
 {
 	position: relative;
 	display: block;
@@ -29,7 +48,7 @@
 	padding: 0px;
 }
 
-.wuxFlexTableItemVerticalHeader
+.wuxFlexTableItemHeader
 {
     color: #d0d0d0;
     font-size: 13px;
@@ -39,22 +58,22 @@
     border-bottom: 1px solid #FFF;
 }
 
-span.wuxFlexTableItemVerticalData,
-.wuxFlexTableItemVerticalData span,
-.wuxFlexTableItemVerticalData input
+span.wuxFlexTableItemData,
+.wuxFlexTableItemData span,
+.wuxFlexTableItemData input
 {
     color: #f4f6f8;
     font-size: 12px;
 	text-align: center;
 }
 
-input[type=number].wuxFlexTableItemVerticalData
+input[type=number].wuxFlexTableItemData
 {
     -moz-appearance: textfield;
     appearance: textfield;
 }
 
-input.wuxFlexTableItemVerticalData
+input.wuxFlexTableItemData
 {
 	color: #1d1e1f;
     background: #efefef;
@@ -63,7 +82,7 @@ input.wuxFlexTableItemVerticalData
     appearance: none;
 }
 
-input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemVerticalData
+input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 {
     background: red;
 }
