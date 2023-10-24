@@ -37,8 +37,21 @@ var update_advancement_submit = function() {
 
 
 
-var update_advancement_class_level = function(classFieldName) {
-	
+var update_advancement_class_level = function(classFieldName, newValue) {
+	let mod_attrs =`advancement-level-${classFieldName}`];
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let currentLevel = iaNaN(parseInt(v[`advancement-level-${classFieldName}`])) ? 0 : parseInt(v[`advancement-level-${classFieldName}`]);
+
+		if(currentLevel > newValue) {
+
+			update[`advancement-level-${classFieldName}_max`] = currentLevel;
+
+			setAttrs(update, { silent: true });
+		}
+	});
 } 
 
 
