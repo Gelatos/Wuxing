@@ -14,8 +14,6 @@
 							<div class="wuxFieldSet">
 								<div class="wuxMultiRow">
 									<span class="wuxDescription">This is the Character Creator. Here you can set starting aspects of your character like their origins, starting ability scores, and starting skills. You can always return to this page from Options.</span>
-									<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character. You will then be sent to Class Advancement to select class(es) to level up.</span>
-									<span class="wuxDescription">Leave will ignore any changes made here and return you to the Character Sheet.</span>
 								</div>
 
 								<div class="wuxRow">
@@ -40,6 +38,21 @@
 
 	<div class="wumMainSheet">
 		<div class="wuxMainContent">
+			<div class="advancement-Top wuxSegment">
+				<div class="wuxTabBuilderHeader wuxTab">
+					<div class="builderHeader-base wuxLayoutItem">
+						<div class="chat-chatBox wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxMultiRow">
+									<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character. You will then be sent to Class Advancement to select class(es) to level up.</span>
+									<span class="wuxDescription">Leave will ignore any changes made here and return you to the Character Sheet.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<div class="wuxTab">
 				<div class="origin-Background wuxSectionBlock wuxLayoutItem">
 					<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-origin-Background" checked="checked" style="display: block">
@@ -2946,9 +2959,7 @@
 						<div class="wuxSectionContent">
 							<div class="wuxFieldSet">
 								<div class="wuxMultiRow">
-									<span class="wuxDescription">This is Class Advancement. Here you can select which classes to level up. </span>
-									<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character. You will then be moved to Technique Selection.</span>
-									<span class="wuxDescription">Back will take you back to the previous page without accepting any other changes.</span>
+									<span class="wuxDescription">This is Class Advancement. Here you can select which classes to level up. Open a class section and set the level to your desired level.</span>
 								</div>
 
 								<div class="wuxMultiRow">
@@ -2972,144 +2983,18 @@
 
 	<div class="wumMainSheet">
 		<div class="wuxMainContent">
-			<div class="wuxTab">
-				<div class="origin-Background wuxSectionBlock wuxLayoutItem">
-					<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-classSelect" style="display: block">
-
-					<input type="hidden" name='attr_advancement-levelCurrent-Fighter' value="Fighter">
-					<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Fighter_max" value="Fighter">Fighter</span></div>
-					<div class="wuxSectionHeaderFooter"></div>
-
-					<div class="wuxSectionContent">
-						<div class="wuxDistinctSection">
-							<div class="wuxDistinctField">
-								<span class="wuxDistinctTitle">Current Level</span>
-								<span class='wuxDistinctData'>
-									<input type="hidden" name='attr_advancement-levelCurrent-Fighter' value="0">
-									<input type="text" name='attr_advancement-level-Fighter_max' value="0">
-								</span>
-							</div>
-						</div>
-
-						<div class="wuxRow">&nbsp;</div>
-						<span class="wuxHeader">Prerequisites</span>
-						<span class='wuxDescription'>Fighter Prereq</span>
-
-						<div class="wuxRow">&nbsp;</div>
-						<span class='wuxDescription'>Fighter Description</span>
-
-						<div class="wuxRow">&nbsp;</div>
-						<span class="wuxHeader">Fighter Growths</span>
-						<div class="wuxFlexTableNoWrap">
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">CON</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">DEX</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">QCK</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">STR</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">CHA</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">INT</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">PER</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">WIL</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-						</div>
-
-						<div class="wuxRow">&nbsp;</div>
-						<div class="wuxFlexTableNoWrap">
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">HP</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">Vitality</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">Ki Charge</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">Spellforce</span>
-								<span class="wuxFlexTableItemData">-</span>
-							</div>
-						</div>
-
-						<div class="wuxRow">&nbsp;</div>
-						<span class="wuxHeader">Fighter Advancement</span>
-						<div class="wuxFlexTableNoWrap">
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">Lv.</span>
-								<span class="wuxFlexTableItemData">1</span>
-								<span class="wuxFlexTableItemData">2</span>
-								<span class="wuxFlexTableItemData">4</span>
-								<span class="wuxFlexTableItemData">6</span>
-								<span class="wuxFlexTableItemData">8</span>
-								<span class="wuxFlexTableItemData">10</span>
-								<span class="wuxFlexTableItemData">12</span>
-								<span class="wuxFlexTableItemData">14</span>
-								<span class="wuxFlexTableItemData">16</span>
-								<span class="wuxFlexTableItemData">18</span>
-								<span class="wuxFlexTableItemData">20</span>
-							</div>
-							<div class="wuxFlexTableItemGroup8">
-								<span class="wuxFlexTableItemHeader">Feature</span>
-								<span class="wuxFlexTableItemData">Fighter Fight</span>
-								<span class="wuxFlexTableItemData">Gain a Defensive Skill Technique.</span>
-								<span class="wuxFlexTableItemData">Gain a Defensive Skill Technique.</span>
-								<span class="wuxFlexTableItemData">Gain a Defensive Skill Technique.</span>
-								<span class="wuxFlexTableItemData">Gain a Defensive Skill Technique.</span>
-								<span class="wuxFlexTableItemData">Gain a Defensive Skill Technique.</span>
-								<span class="wuxFlexTableItemData">Gain a Defensive Skill Technique.</span>
-								<span class="wuxFlexTableItemData">Gain a Defensive Skill Technique.</span>
-								<span class="wuxFlexTableItemData">Gain a Defensive Skill Technique.</span>
-								<span class="wuxFlexTableItemData">Gain a Defensive Skill Technique.</span>
-								<span class="wuxFlexTableItemData">Gain a Defensive Skill Technique.</span>
-							</div>
-						</div>
-
-						<div class="wuxRow">&nbsp;</div>
-						<span class="wuxHeader">Fighter Techniques</span>
-						<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Free"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Second Wind</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span class="wuxTechniqueHeaderInfoType">Free</span><span>, </span><span>1/Round</span></span></span>
-							<div class="wuxTechniqueFunctionBlock">
-								<div class="wuxTechniqueFunctionBlockRow"><strong>Resources:</strong> 1 Vitality</div>
-							</div>
-							<div class="wuxTechniqueDescriptionBlock">
-								<div class="wuxTechniqueDescriptionBlockDesc">
-									<p>You take a breath and refocus your senses. You restore your HP to full.</p>
+			<div class="advancement-Top wuxSegment">
+				<div class="wuxTabBuilderHeader wuxTab">
+					<div class="builderHeader-base wuxLayoutItem">
+						<div class="chat-chatBox wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxMultiRow">
+									<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character. You will then be moved to Technique Selection.</span>
+									<span class="wuxDescription">Back will take you back to the previous page without accepting any other changes.</span>
 								</div>
 							</div>
 						</div>
-						<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Augment"><span class="wuxTechniqueHeader"><span class="wuxTechniqueHeaderName">Shrug It Off</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Augment: </span><span>Second Wind</span></span></span>
-							<div class="wuxTechniqueDescriptionBlock">
-								<div class="wuxTechniqueDescriptionBlockDesc">
-									<p>You may remove one condition that is affecting you.</p>
-								</div>
-							</div>
-						</div>
-
 					</div>
-					<div class="wuxSectionContentCollapsed"></div>
 				</div>
 			</div>
 
@@ -3122,7 +3007,7 @@
 					<div class="advancement-Fighter wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Fighter" style="display: block">
 
-						<input type="hidden" name='attr_advancement-levelCurrent-Fighter' value="Fighter">
+						<input type="hidden" name='attr_advancement-name-Fighter' value="Fighter">
 						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Fighter_max" value="Fighter">Fighter</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
@@ -3132,8 +3017,8 @@
 							<div class="wuxRow">&nbsp;</div>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
-									<span class="wuxDistinctTitle">Current Level</span>
-									<input type="hidden" name='attr_advancement-levelCurrent-Fighter' value="0">
+									<span class="wuxDistinctTitle">Level</span>
+									<input type="hidden" name='attr_advancement-level-Fighter' value="0">
 									<input type="text" class='wuxDistinctData' name='attr_advancement-level-Fighter_max' value="0">
 								</div>
 							</div>
@@ -3235,7 +3120,7 @@
 
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Fighter Techniques</span>
-							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Free"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Second Wind</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span class="wuxTechniqueHeaderInfoType">Free</span><span>, </span><span>1/Round</span></span></span>
+							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Free"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Second Wind</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span>Free</span><span>, </span><span>1/Round</span></span></span>
 								<div class="wuxTechniqueFunctionBlock">
 									<div class="wuxTechniqueFunctionBlockRow"><strong>Resources:</strong> 1 Vitality</div>
 								</div>
@@ -3284,7 +3169,7 @@
 					<div class="advancement-Interceptor wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Interceptor" style="display: block">
 
-						<input type="hidden" name='attr_advancement-levelCurrent-Interceptor' value="Interceptor">
+						<input type="hidden" name='attr_advancement-name-Interceptor' value="Interceptor">
 						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Interceptor_max" value="Interceptor">Interceptor</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
@@ -3294,11 +3179,9 @@
 							<div class="wuxRow">&nbsp;</div>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
-									<span class="wuxDistinctTitle">Current Level</span>
-									<span class='wuxDistinctData'>
-										<input type="hidden" name='attr_advancement-levelCurrent-Interceptor' value="0">
-										<input type="text" name='attr_advancement-level-Interceptor_max' value="0">
-									</span>
+									<span class="wuxDistinctTitle">Level</span>
+									<input type="hidden" name='attr_advancement-level-Interceptor' value="0">
+									<input type="text" class='wuxDistinctData' name='attr_advancement-level-Interceptor_max' value="0">
 								</div>
 							</div>
 
@@ -3399,7 +3282,7 @@
 
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Interceptor Techniques</span>
-							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Reaction"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Preemptive Strike</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span class="wuxTechniqueHeaderInfoType">Reaction</span><span>, </span><span>1/Round</span></span></span>
+							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Reaction"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Preemptive Strike</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span>Reaction</span><span>, </span><span>1/Round</span></span></span>
 								<div class="wuxTechniqueFunctionBlock">
 									<div class="wuxTechniqueFunctionBlockRow"><strong>Traits:</strong>
 										<div class="wuxTrait">
@@ -3413,7 +3296,7 @@
 									<div class="wuxTechniqueAttackBlockRow">
 										<div class="wuxTechniqueAttackBlockTarget"><strong>Target:</strong> One target</div>
 									</div>
-									<div class="wuxTechniqueAttackBlockRow">Weapon<div class="wuxTechniqueFunctionBlockRow"> vs. BR DC</div>
+									<div class="wuxTechniqueAttackBlockRow">Weapon<div class="wuxTechniqueAttackBlockDefense">&nbsp;vs. BR DC</div>
 									</div>
 								</div>
 								<div class="wuxTechniqueDescriptionBlock">
@@ -3460,7 +3343,7 @@
 					<div class="advancement-Marksman wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Marksman" style="display: block">
 
-						<input type="hidden" name='attr_advancement-levelCurrent-Marksman' value="Marksman">
+						<input type="hidden" name='attr_advancement-name-Marksman' value="Marksman">
 						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Marksman_max" value="Marksman">Marksman</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
@@ -3470,11 +3353,9 @@
 							<div class="wuxRow">&nbsp;</div>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
-									<span class="wuxDistinctTitle">Current Level</span>
-									<span class='wuxDistinctData'>
-										<input type="hidden" name='attr_advancement-levelCurrent-Marksman' value="0">
-										<input type="text" name='attr_advancement-level-Marksman_max' value="0">
-									</span>
+									<span class="wuxDistinctTitle">Level</span>
+									<input type="hidden" name='attr_advancement-level-Marksman' value="0">
+									<input type="text" class='wuxDistinctData' name='attr_advancement-level-Marksman_max' value="0">
 								</div>
 							</div>
 
@@ -3575,7 +3456,7 @@
 
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Marksman Techniques</span>
-							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Free"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Spellshot</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span class="wuxTechniqueHeaderInfoType">Free</span><span></span></span></span>
+							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Free"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Spellshot</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span>Free</span><span></span></span></span>
 								<div class="wuxTechniqueDescriptionBlock">
 									<div class="wuxTechniqueDescriptionBlockDesc">
 										<p>You use projectiles as a conduit for magic. Until the end of your turn, spells you cast with the volatile trait have their range increased by 2.</p>
@@ -3607,7 +3488,7 @@
 					<div class="advancement-Rogue wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Rogue" style="display: block">
 
-						<input type="hidden" name='attr_advancement-levelCurrent-Rogue' value="Rogue">
+						<input type="hidden" name='attr_advancement-name-Rogue' value="Rogue">
 						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Rogue_max" value="Rogue">Rogue</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
@@ -3617,11 +3498,9 @@
 							<div class="wuxRow">&nbsp;</div>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
-									<span class="wuxDistinctTitle">Current Level</span>
-									<span class='wuxDistinctData'>
-										<input type="hidden" name='attr_advancement-levelCurrent-Rogue' value="0">
-										<input type="text" name='attr_advancement-level-Rogue_max' value="0">
-									</span>
+									<span class="wuxDistinctTitle">Level</span>
+									<input type="hidden" name='attr_advancement-level-Rogue' value="0">
+									<input type="text" class='wuxDistinctData' name='attr_advancement-level-Rogue_max' value="0">
 								</div>
 							</div>
 
@@ -3722,7 +3601,7 @@
 
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Rogue Techniques</span>
-							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Free"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Sneak Attack</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span class="wuxTechniqueHeaderInfoType">Free</span><span>, </span><span>1/Round</span></span></span>
+							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Free"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Sneak Attack</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span>Free</span><span>, </span><span>1/Round</span></span></span>
 								<div class="wuxTechniqueFunctionBlock">
 									<div class="wuxTechniqueFunctionBlockRow"><strong>Traits:</strong>
 										<div class="wuxTrait">
@@ -3778,7 +3657,7 @@
 					<div class="advancement-Physician wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Physician" style="display: block">
 
-						<input type="hidden" name='attr_advancement-levelCurrent-Physician' value="Physician">
+						<input type="hidden" name='attr_advancement-name-Physician' value="Physician">
 						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Physician_max" value="Physician">Physician</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
@@ -3788,11 +3667,9 @@
 							<div class="wuxRow">&nbsp;</div>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
-									<span class="wuxDistinctTitle">Current Level</span>
-									<span class='wuxDistinctData'>
-										<input type="hidden" name='attr_advancement-levelCurrent-Physician' value="0">
-										<input type="text" name='attr_advancement-level-Physician_max' value="0">
-									</span>
+									<span class="wuxDistinctTitle">Level</span>
+									<input type="hidden" name='attr_advancement-level-Physician' value="0">
+									<input type="text" class='wuxDistinctData' name='attr_advancement-level-Physician_max' value="0">
 								</div>
 							</div>
 
@@ -3893,7 +3770,7 @@
 
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Physician Techniques</span>
-							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Full"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Support"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Support</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Emergency Care</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span class="wuxTechniqueHeaderInfoType">Full</span><span></span></span></span>
+							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Full"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Support"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Support</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Emergency Care</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span>Full</span><span></span></span></span>
 								<div class="wuxTechniqueFunctionBlock">
 									<div class="wuxTechniqueFunctionBlockRow"><strong>Requirements:</strong> You must have access to a Medkit.</div>
 									<div class="wuxTechniqueFunctionBlockRow"><strong>Resources:</strong> 1 Mana</div>
@@ -3930,7 +3807,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Quick"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">First Aid</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span class="wuxTechniqueHeaderInfoType">Quick</span><span>, </span><span>1/Round</span></span></span>
+							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Quick"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">First Aid</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span>Quick</span><span>, </span><span>1/Round</span></span></span>
 								<div class="wuxTechniqueFunctionBlock">
 									<div class="wuxTechniqueFunctionBlockRow"><strong>Requirements:</strong> You must have access to a Medkit.</div>
 								</div>
@@ -3963,7 +3840,7 @@
 					<div class="advancement-Pugilist wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Pugilist" style="display: block">
 
-						<input type="hidden" name='attr_advancement-levelCurrent-Pugilist' value="Pugilist">
+						<input type="hidden" name='attr_advancement-name-Pugilist' value="Pugilist">
 						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Pugilist_max" value="Pugilist">Pugilist</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
@@ -3973,11 +3850,9 @@
 							<div class="wuxRow">&nbsp;</div>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
-									<span class="wuxDistinctTitle">Current Level</span>
-									<span class='wuxDistinctData'>
-										<input type="hidden" name='attr_advancement-levelCurrent-Pugilist' value="0">
-										<input type="text" name='attr_advancement-level-Pugilist_max' value="0">
-									</span>
+									<span class="wuxDistinctTitle">Level</span>
+									<input type="hidden" name='attr_advancement-level-Pugilist' value="0">
+									<input type="text" class='wuxDistinctData' name='attr_advancement-level-Pugilist_max' value="0">
 								</div>
 							</div>
 
@@ -4078,12 +3953,12 @@
 
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Pugilist Techniques</span>
-							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Quick"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Flurry of Blows</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span class="wuxTechniqueHeaderInfoType">Quick</span><span>, </span><span>1/Round</span></span></span>
+							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Quick"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Flurry of Blows</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span>Quick</span><span>, </span><span>1/Round</span></span></span>
 								<div class="wuxTechniqueAttackBlock">
 									<div class="wuxTechniqueAttackBlockRow">
 										<div class="wuxTechniqueAttackBlockTarget"><strong>Target:</strong> One target</div>
 									</div>
-									<div class="wuxTechniqueAttackBlockRow">Weapon<div class="wuxTechniqueFunctionBlockRow"> vs. BR DC</div>
+									<div class="wuxTechniqueAttackBlockRow">Weapon<div class="wuxTechniqueAttackBlockDefense">&nbsp;vs. BR DC</div>
 									</div>
 								</div>
 								<div class="wuxTechniqueDescriptionBlock">
@@ -4139,7 +4014,7 @@
 					<div class="advancement-Scholar wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Scholar" style="display: block">
 
-						<input type="hidden" name='attr_advancement-levelCurrent-Scholar' value="Scholar">
+						<input type="hidden" name='attr_advancement-name-Scholar' value="Scholar">
 						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Scholar_max" value="Scholar">Scholar</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
@@ -4149,11 +4024,9 @@
 							<div class="wuxRow">&nbsp;</div>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
-									<span class="wuxDistinctTitle">Current Level</span>
-									<span class='wuxDistinctData'>
-										<input type="hidden" name='attr_advancement-levelCurrent-Scholar' value="0">
-										<input type="text" name='attr_advancement-level-Scholar_max' value="0">
-									</span>
+									<span class="wuxDistinctTitle">Level</span>
+									<input type="hidden" name='attr_advancement-level-Scholar' value="0">
+									<input type="text" class='wuxDistinctData' name='attr_advancement-level-Scholar_max' value="0">
 								</div>
 							</div>
 
@@ -4254,7 +4127,7 @@
 
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Scholar Techniques</span>
-							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Reaction"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Foresight</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span class="wuxTechniqueHeaderInfoType">Reaction</span><span>, </span><span>1/Round</span></span></span>
+							<div class="wuxTechnique"><input type="hidden" class="wuxTechniqueHeader-flag" value="Reaction"><span class="wuxTechniqueHeader"><input type="hidden" class="wuxTechniqueType-flag" value="Job"><span class="wuxTechniqueType"><span class="wuxTechniqueTypeHeader">Job</span><span class="wuxTechniqueTypeFooter">Class</span></span><span class="wuxTechniqueHeaderName">Foresight</span><span class="wuxTechniqueHeaderInfo"><span class="wuxTechniqueHeaderInfoType">Base:</span> <span>Reaction</span><span>, </span><span>1/Round</span></span></span>
 								<div class="wuxTechniqueFunctionBlock">
 									<div class="wuxTechniqueFunctionBlockRow"><strong>Trigger:</strong> Trigger conditions vary.</div>
 								</div>
@@ -5707,8 +5580,8 @@ on("change:advancement-button-back", function () {
 	update_advancement_back();
 });
 
-var update_advancement_back = function() {
-	
+var update_advancement_back = function () {
+
 	let mod_attrs = [`advancement-previousPage`];
 
 	getAttrs(mod_attrs, function (v) {
@@ -5727,7 +5600,7 @@ on("change:advancement-button-submit", function () {
 	update_advancement_submit();
 });
 
-var update_advancement_submit = function() {
+var update_advancement_submit = function () {
 
 	let update = {};
 
@@ -5738,6 +5611,37 @@ var update_advancement_submit = function() {
 	setAttrs(update, { silent: true });
 
 }
+
+// Advancement Listeners
+on("change:advancement-level-Fighter_max change:advancement-level-Interceptor_max change:advancement-level-Marksman_max change:advancement-level-Rogue_max change:advancement-level-Physician_max change:advancement-level-Pugilist_max change:advancement-level-Scholar_max ", function (eventinfo) {
+
+	var className = eventinfo.sourceAttribute.match(/[^-]*$/)[0];
+	if (className.indexOf("_max") >= 0) {
+		className = className.substring(0, className.indexOf("_max"));
+	}
+	update_advancement_class_level(className);
+});
+
+
+
+var update_advancement_class_level = function (classFieldName) {
+	let mod_attrs = [`advancement-level-${classFieldName}`, `advancement-level-${classFieldName}_max`, `advancement-name-${classFieldName}`];
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+		let currentLevel = isNaN(parseInt(v[`advancement-level-${classFieldName}`])) ? 0 : parseInt(v[`advancement-level-${classFieldName}`]);
+		let newLevel = isNaN(parseInt(v[`advancement-level-${classFieldName}_max`])) ? currentLevel : parseInt(v[`advancement-level-${classFieldName}_max`]);
+
+		if (currentLevel > newLevel) {
+			update[`advancement-level-${classFieldName}_max`] = currentLevel;
+		}
+		console.log (`currentLevel: ${currentLevel} newLevel: ${newLevel}`);
+		let levelDifference = newLevel - currentLevel;
+		update[`advancement-name-${classFieldName}_max`] = `${v[`advancement-name-${classFieldName}`]}${levelDifference > 0 ? `+${levelDifference}` : ""}`;
+		setAttrs(update, { silent: true });
+	});
+}
+
 
 on("change:character-button-advancement", function () {
 
@@ -5974,7 +5878,7 @@ function GetAncestryInfo(name) {
 function GetAncestryTechniqueInfo(name) {
 	switch (name.toLowerCase()) {
 		case "unarmed attack":
-			return { "name": "Unarmed Attack", "augmentBase": "", "techniqueGroup": "Ancestry", "techniqueSubGroup": "Human", "techniqueType": "Permanent", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "You gain the Unarmed weapon. It has the following stats:\n\nSkill: Brawling\nAbility: Finesse\nRange: 1T\nDamage: 1d3 + P\nType: Force", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Unarmed Attack", "augmentBase": "", "techniqueGroup": "Ancestry", "techniqueSubGroup": "Human", "techniqueType": "Permanent", "action": "", "traits": "", "limits": "", "resourceCost": "20 Mana", "description": "You gain the Unarmed weapon. It has the following stats:\n\nSkill: Brawling\nAbility: Finesse\nRange: 1T\nDamage: 1d3 + P\nType: Force", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "pooping", "defense": "not poo", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		default:
 			return { "name": "", "augmentBase": "", "techniqueGroup": "", "techniqueSubGroup": "", "techniqueType": "", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 

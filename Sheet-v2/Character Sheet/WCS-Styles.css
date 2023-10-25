@@ -1419,7 +1419,7 @@ input.wuxTechniqueHeader-flag[value="Free"] + .wuxTechniqueHeader
 
 input.wuxTechniqueHeader-flag[value="Augment"] + .wuxTechniqueHeader
 {
-    background-color: #dcdcdc;
+    background-color: #acacac;
 }
 
 .wuxTechniqueType
@@ -1505,7 +1505,7 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
     position: relative;
     display: block;
 
-    width: 100%;
+    width: calc(100% - 22px);
     padding: 5px 10px; 
     
     line-height: 14px; 
@@ -1523,7 +1523,7 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
 
 .wuxTechniqueAttackBlock
 {
-    width: calc(100% - 10px);
+    width: calc(100% - 30px);
     padding: 5px 5px; 
     margin: 5px 10px; 
     

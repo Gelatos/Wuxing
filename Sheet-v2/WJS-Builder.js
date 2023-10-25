@@ -114,6 +114,18 @@ on("change:builder-button-submit", function () {
 
 
 // Sheet Functions
+
+var update_builder_submit = function () {
+	let update = {};
+
+	// update the sheet's statistics here
+
+	update["advancement-previousPage"] = "0";
+	update["characterSheetDisplayStyle"] = "Advancement";
+
+	setAttrs(update, { silent: true });
+}
+
 var update_builder_path_info = function (newValue) {
 
 	let update = {};
@@ -475,16 +487,5 @@ var update_builder_choice_skills_reset = function () {
 
 		setAttrs(update, { silent: true });
 	});
-}
-
-var update_builder_submit = function () {
-	let update = {};
-
-	// update the sheet's statistics here
-
-	update["advancement-previousPage"] = "0";
-	update["characterSheetDisplayStyle"] = "LevelUp";
-
-	setAttrs(update, { silent: true });
 }
 
