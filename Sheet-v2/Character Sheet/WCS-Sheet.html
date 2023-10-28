@@ -3,6 +3,14 @@
 	<input class="wuxCharacterSheetDisplayStyle-Flag" name="attr_characterSheetDisplayStyle" type="hidden" value="0">
 
 <div class="wuxCharacterSheetDisplayStyle-Builder">
+	<input type="hidden" name="attr_builder-basePath" value="">
+	<input type="hidden" name="attr_builder-baseAncestry" value="">
+	<input type="hidden" name="attr_builder-baseGrowths" value="">
+	<input type="hidden" name="attr_builder-baseAbilityScores" value="">
+	<input type="hidden" name="attr_builder-baseSkills" value="">
+	<input type="hidden" name="attr_builder-baseChoiceSkills" value="">
+
+	<input type="hidden" name="attr_builder-baseGrowthsTotal" value="">
 
 	<div class="main-TopRow wuxFloatHeader wuxHorizontalFlex">
 		<div class="segment-Basis wuxSegment">
@@ -23,7 +31,7 @@
 									</div>
 
 									<div class="wuxButton">
-										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="Character">
+										<input type="checkbox" name="attr_builder-button-leave">
 										<span>Leave</span>
 									</div>
 								</div>
@@ -123,74 +131,122 @@
 
 						<div class="wuxRow">&nbsp;</div>
 						<div class="wuxFlexTable">
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">CON</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-CON">-</span>
+							<div class="wuxFlexTableItemGroup wuxNoPadding">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">CON</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-CON">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">DEX</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-DEX">-</span>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">QCK</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-QCK">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">STR</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-STR">-</span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">DEX</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-DEX">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">QCK</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-QCK">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">STR</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-STR">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">CHA</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-CHA">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">INT</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-INT">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">PER</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-PER">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">WIL</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-WIL">-</span>
+							<div class="wuxFlexTableItemGroup wuxNoPadding">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">CHA</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-CHA">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">INT</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-INT">-</span>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">PER</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-PER">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">WIL</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-WIL">-</span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 
 						<div class="wuxRow">&nbsp;</div>
 						<span class='wuxHeader'>Ancestry Growths</span>
 						<div class="wuxFlexTable">
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">CON</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-CON">-</span>
+							<div class="wuxFlexTableItemGroup wuxNoPadding">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">CON</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-CON">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">DEX</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-DEX">-</span>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">QCK</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-QCK">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">STR</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-STR">-</span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">DEX</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-DEX">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">QCK</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-QCK">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">STR</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-STR">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">CHA</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-CHA">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">INT</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-INT">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">PER</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-PER">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">WIL</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-WIL">-</span>
+							<div class="wuxFlexTableItemGroup wuxNoPadding">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">CHA</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-CHA">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">INT</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-INT">-</span>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">PER</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-PER">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">WIL</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-WIL">-</span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -384,45 +440,69 @@
 								</div>
 							</div>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-CON" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-CON">-</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-CON" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-CON">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-DEX" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-DEX">-</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-QCK" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-QCK">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-STR" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-STR">-</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-DEX" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-DEX">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-QCK" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-QCK">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-STR" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-STR">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-CHA" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-CHA">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-INT" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-INT">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-PER" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-PER">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-WIL" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-WIL">-</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-CHA" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-CHA">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-INT" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-INT">-</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-PER" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-PER">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-WIL" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-WIL">-</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -456,45 +536,69 @@
 								</div>
 							</div>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-CON" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-CON">-</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-CON" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-CON">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-DEX" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-DEX">-</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-QCK" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-QCK">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-STR" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-STR">-</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-DEX" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-DEX">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-QCK" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-QCK">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-STR" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-STR">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-CHA" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-CHA">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-INT" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-INT">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-PER" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-PER">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-WIL" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-WIL">-</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-CHA" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-CHA">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-INT" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-INT">-</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-PER" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-PER">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-WIL" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-WIL">-</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -2948,7 +3052,9 @@
 		</div>
 	</div>
 
-</div><div class="wuxCharacterSheetDisplayStyle-LevelUp">
+</div><div class="wuxCharacterSheetDisplayStyle-Advancement">
+	<input type="hidden" name="attr_advancement-advancementGrowthsTotal" value="">
+	<input type="hidden" name="attr_advancement-level-total" value="">
 
 	<div class="main-TopRow wuxFloatHeader wuxHorizontalFlex">
 		<div class="segment-Basis wuxSegment">
@@ -2988,9 +3094,39 @@
 					<div class="builderHeader-base wuxLayoutItem">
 						<div class="chat-chatBox wuxSectionBlock wuxLayoutItem">
 							<div class="wuxSectionContent">
-								<div class="wuxMultiRow">
-									<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character. You will then be moved to Technique Selection.</span>
-									<span class="wuxDescription">Back will take you back to the previous page without accepting any other changes.</span>
+								<div class="wuxFieldSet">
+									<div class="wuxMultiRow">
+										<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character. You will then be moved to Technique Selection.</span>
+										<span class="wuxDescription">Back will take you back to the previous page without accepting any other changes.</span>
+										<span class="wuxDescription">Reset will erase all of your changes made on this page in this session.</span>
+										<span class="wuxDescription">Restart will reset all of your levels and techniques, taking you back to level 0.</span>
+									</div>
+
+									<div class="wuxMultiRow">
+										<div class="wuxButton">
+											<input type="checkbox" name="attr_advancement-button-reset">
+											<span>Reset</span>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_advancement-button-reset-everything">
+										<div class="wuxButton wuxHiddenInlineField">
+											<input type="checkbox" name="attr_advancement-button-reset-everything">
+											<span>Restart</span>
+										</div>
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_advancement-button-reset-everything">
+									<div class="wuxHiddenBlockAuxField">
+										<div class="wuxMultiRow">
+											<span class="wuxDescription">Restart will undo every level up you've set and reset all of your learned techniques. Are you sure?</span>
+											<div class="wuxButton">
+												<input type="checkbox" name="attr_advancement-button-restart-confirm">
+												<span>Erase It All</span>
+											</div>
+											<div class="wuxButton">
+												<input type="checkbox" name="attr_advancement-button-reset-everything">
+												<span>Nevermind</span>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -3007,8 +3143,7 @@
 					<div class="advancement-Fighter wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Fighter" style="display: block">
 
-						<input type="hidden" name='attr_advancement-name-Fighter' value="Fighter">
-						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Fighter_max" value="Fighter">Fighter</span></div>
+						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Fighter" value="Fighter">Fighter Lv.0</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
@@ -3030,37 +3165,61 @@
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Fighter Growths</span>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<span class="wuxFlexTableItemData">0.80</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<span class="wuxFlexTableItemData">80%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<span class="wuxFlexTableItemData">80%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<span class="wuxFlexTableItemData">40%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<span class="wuxFlexTableItemData">0.80</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<span class="wuxFlexTableItemData">0.40</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<span class="wuxFlexTableItemData">0.60</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<span class="wuxFlexTableItemData">0.20</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<span class="wuxFlexTableItemData">20%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -3068,19 +3227,19 @@
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">HP</span>
-									<span class="wuxFlexTableItemData">1.50</span>
+									<span class="wuxFlexTableItemData">150%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Vitality</span>
-									<span class="wuxFlexTableItemData">0.25</span>
+									<span class="wuxFlexTableItemData">25%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Ki.Charge</span>
-									<span class="wuxFlexTableItemData">0.05</span>
+									<span class="wuxFlexTableItemData">5%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Spellforce</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 							</div>
 
@@ -3169,8 +3328,7 @@
 					<div class="advancement-Interceptor wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Interceptor" style="display: block">
 
-						<input type="hidden" name='attr_advancement-name-Interceptor' value="Interceptor">
-						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Interceptor_max" value="Interceptor">Interceptor</span></div>
+						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Interceptor" value="Interceptor">Interceptor Lv.0</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
@@ -3192,37 +3350,61 @@
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Interceptor Growths</span>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<span class="wuxFlexTableItemData">0.40</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<span class="wuxFlexTableItemData">40%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<span class="wuxFlexTableItemData">80%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<span class="wuxFlexTableItemData">100%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<span class="wuxFlexTableItemData">40%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<span class="wuxFlexTableItemData">0.80</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<span class="wuxFlexTableItemData">1.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<span class="wuxFlexTableItemData">0.40</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<span class="wuxFlexTableItemData">0.60</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<span class="wuxFlexTableItemData">0.60</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -3230,19 +3412,19 @@
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">HP</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Vitality</span>
-									<span class="wuxFlexTableItemData">0.10</span>
+									<span class="wuxFlexTableItemData">10%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Ki.Charge</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Spellforce</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 							</div>
 
@@ -3343,8 +3525,7 @@
 					<div class="advancement-Marksman wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Marksman" style="display: block">
 
-						<input type="hidden" name='attr_advancement-name-Marksman' value="Marksman">
-						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Marksman_max" value="Marksman">Marksman</span></div>
+						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Marksman" value="Marksman">Marksman Lv.0</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
@@ -3366,37 +3547,61 @@
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Marksman Growths</span>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<span class="wuxFlexTableItemData">0.60</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<span class="wuxFlexTableItemData">80%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<span class="wuxFlexTableItemData">0.80</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<span class="wuxFlexTableItemData">0.60</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<span class="wuxFlexTableItemData">0.40</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<span class="wuxFlexTableItemData">1.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<span class="wuxFlexTableItemData">0.20</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<span class="wuxFlexTableItemData">40%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<span class="wuxFlexTableItemData">100%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<span class="wuxFlexTableItemData">20%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -3404,19 +3609,19 @@
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">HP</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Vitality</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Ki.Charge</span>
-									<span class="wuxFlexTableItemData">0.10</span>
+									<span class="wuxFlexTableItemData">10%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Spellforce</span>
-									<span class="wuxFlexTableItemData">0.12</span>
+									<span class="wuxFlexTableItemData">12%</span>
 								</div>
 							</div>
 
@@ -3488,8 +3693,7 @@
 					<div class="advancement-Rogue wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Rogue" style="display: block">
 
-						<input type="hidden" name='attr_advancement-name-Rogue' value="Rogue">
-						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Rogue_max" value="Rogue">Rogue</span></div>
+						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Rogue" value="Rogue">Rogue Lv.0</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
@@ -3511,37 +3715,61 @@
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Rogue Growths</span>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<span class="wuxFlexTableItemData">100%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<span class="wuxFlexTableItemData">80%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<span class="wuxFlexTableItemData">1.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<span class="wuxFlexTableItemData">0.80</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<span class="wuxFlexTableItemData">0.40</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<span class="wuxFlexTableItemData">0.40</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<span class="wuxFlexTableItemData">0.60</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<span class="wuxFlexTableItemData">0.60</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<span class="wuxFlexTableItemData">40%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<span class="wuxFlexTableItemData">40%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -3549,19 +3777,19 @@
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">HP</span>
-									<span class="wuxFlexTableItemData">0.50</span>
+									<span class="wuxFlexTableItemData">50%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Vitality</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Ki.Charge</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Spellforce</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 							</div>
 
@@ -3657,8 +3885,7 @@
 					<div class="advancement-Physician wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Physician" style="display: block">
 
-						<input type="hidden" name='attr_advancement-name-Physician' value="Physician">
-						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Physician_max" value="Physician">Physician</span></div>
+						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Physician" value="Physician">Physician Lv.0</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
@@ -3680,37 +3907,61 @@
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Physician Growths</span>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<span class="wuxFlexTableItemData">0.60</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<span class="wuxFlexTableItemData">0.60</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<span class="wuxFlexTableItemData">0.80</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<span class="wuxFlexTableItemData">1.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<span class="wuxFlexTableItemData">0.60</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<span class="wuxFlexTableItemData">80%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<span class="wuxFlexTableItemData">100%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -3718,19 +3969,19 @@
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">HP</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Vitality</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Ki.Charge</span>
-									<span class="wuxFlexTableItemData">0.10</span>
+									<span class="wuxFlexTableItemData">10%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Spellforce</span>
-									<span class="wuxFlexTableItemData">0.12</span>
+									<span class="wuxFlexTableItemData">12%</span>
 								</div>
 							</div>
 
@@ -3840,8 +4091,7 @@
 					<div class="advancement-Pugilist wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Pugilist" style="display: block">
 
-						<input type="hidden" name='attr_advancement-name-Pugilist' value="Pugilist">
-						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Pugilist_max" value="Pugilist">Pugilist</span></div>
+						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Pugilist" value="Pugilist">Pugilist Lv.0</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
@@ -3863,37 +4113,61 @@
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Pugilist Growths</span>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<span class="wuxFlexTableItemData">0.80</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<span class="wuxFlexTableItemData">80%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<span class="wuxFlexTableItemData">80%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<span class="wuxFlexTableItemData">0.80</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<span class="wuxFlexTableItemData">0.60</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<span class="wuxFlexTableItemData">0.60</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<span class="wuxFlexTableItemData">0.20</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<span class="wuxFlexTableItemData">20%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -3901,19 +4175,19 @@
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">HP</span>
-									<span class="wuxFlexTableItemData">2.00</span>
+									<span class="wuxFlexTableItemData">200%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Vitality</span>
-									<span class="wuxFlexTableItemData">0.10</span>
+									<span class="wuxFlexTableItemData">10%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Ki.Charge</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Spellforce</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 							</div>
 
@@ -4014,8 +4288,7 @@
 					<div class="advancement-Scholar wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-Scholar" style="display: block">
 
-						<input type="hidden" name='attr_advancement-name-Scholar' value="Scholar">
-						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Scholar_max" value="Scholar">Scholar</span></div>
+						<div class="wuxSectionHeader"><span class="wuxInnerHeader" name="attr_advancement-name-Scholar" value="Scholar">Scholar Lv.0</span></div>
 						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
@@ -4037,37 +4310,61 @@
 							<div class="wuxRow">&nbsp;</div>
 							<span class="wuxHeader">Scholar Growths</span>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<span class="wuxFlexTableItemData">0.20</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<span class="wuxFlexTableItemData">20%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<span class="wuxFlexTableItemData">60%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<span class="wuxFlexTableItemData">0.60</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<span class="wuxFlexTableItemData">0.60</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<span class="wuxFlexTableItemData">0.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<span class="wuxFlexTableItemData">1.00</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<span class="wuxFlexTableItemData">0.80</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<span class="wuxFlexTableItemData">0.40</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<span class="wuxFlexTableItemData">0%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<span class="wuxFlexTableItemData">100%</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<span class="wuxFlexTableItemData">80%</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<span class="wuxFlexTableItemData">40%</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -4075,19 +4372,19 @@
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">HP</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Vitality</span>
-									<span class="wuxFlexTableItemData">0.05</span>
+									<span class="wuxFlexTableItemData">5%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Ki.Charge</span>
-									<span class="wuxFlexTableItemData">0.15</span>
+									<span class="wuxFlexTableItemData">15%</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<span class="wuxFlexTableItemHeader">Spellforce</span>
-									<span class="wuxFlexTableItemData">0.00</span>
+									<span class="wuxFlexTableItemData">0%</span>
 								</div>
 							</div>
 
@@ -4195,6 +4492,8 @@
 
 		</div>
 	</div>
+
+</div><div class="wuxCharacterSheetDisplayStyle-LevelUp">
 
 </div><div class="wuxCharacterSheetDisplayStyle-Character">
 
@@ -4322,6 +4621,153 @@
 
 
 		<div class="wuxMainContent">
+
+			<div class="segment-statistics wuxSegment">
+				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-statistics" checked="checked">
+				<div class="wuxTabHeader"><span class="wuxInnerHeader">Statistics</span></div>
+
+				<div class="wuxTab">
+					<div class="statistics-AbilityScores wuxSectionBlock wuxLayoutItem">
+						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-AbilityScores" checked="checked" style="display: block">
+						<div class="wuxSectionHeader">Ability Scores</div>
+						<div class="wuxSectionHeaderFooter"></div>
+
+						<div class="wuxSectionContent">
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Mod</span>
+															<span class="wuxFlexTableItemData" name="attr_CON">0</span>
+														</div>
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Score</span>
+															<span class="wuxFlexTableItemData" name="attr_CON_score">0</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Mod</span>
+															<span class="wuxFlexTableItemData" name="attr_DEX">0</span>
+														</div>
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Score</span>
+															<span class="wuxFlexTableItemData" name="attr_DEX_score">0</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Mod</span>
+															<span class="wuxFlexTableItemData" name="attr_QCK">0</span>
+														</div>
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Score</span>
+															<span class="wuxFlexTableItemData" name="attr_QCK_score">0</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Mod</span>
+															<span class="wuxFlexTableItemData" name="attr_STR">0</span>
+														</div>
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Score</span>
+															<span class="wuxFlexTableItemData" name="attr_STR_score">0</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Mod</span>
+															<span class="wuxFlexTableItemData" name="attr_CHA">0</span>
+														</div>
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Score</span>
+															<span class="wuxFlexTableItemData" name="attr_CHA_score">0</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Mod</span>
+															<span class="wuxFlexTableItemData" name="attr_INT">0</span>
+														</div>
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Score</span>
+															<span class="wuxFlexTableItemData" name="attr_INT_score">0</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Mod</span>
+															<span class="wuxFlexTableItemData" name="attr_PER">0</span>
+														</div>
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Score</span>
+															<span class="wuxFlexTableItemData" name="attr_PER_score">0</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Mod</span>
+															<span class="wuxFlexTableItemData" name="attr_WIL">0</span>
+														</div>
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Score</span>
+															<span class="wuxFlexTableItemData" name="attr_WIL_score">0</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="wuxSectionContentCollapsed"></div>
+					</div>
+				</div>
+			</div>
 
 			<div class="segment-chat wuxSegment">
 				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-chat" checked="checked">
@@ -4636,14 +5082,16 @@
 						<div class="wuxSectionHeaderFooter"></div>
 
 						<div class="wuxSectionContent">
-							<span class='wuxHeader'>Experience</span>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeLarge">Exp. Multiplier</span>
-								<input type="text" class='wuxFormInput wuxSizeTiny' name='attr_expMultiplier' value="1">
-							</div>
-							<div class="wuxRow">
-								<span class="wuxFormTitle wuxSizeLarge">Exp. Share Targets</span>
-								<input type="text" class='wuxFormInput wuxSizeMed' name='attr_shareExp'>
+							<div class="options-Experiemnce">
+								<span class="wuxHeader">Experience</span>
+								<span class='wuxHeader2'>Exp. Multiplier</span>
+								<div class="wuxRow">
+									<input type="text" class='wuxInput' name='attr_expMultiplier' value="1">
+								</div>
+								<span class='wuxHeader2'>Exp. Share Target</span>
+								<div class="wuxRow">
+									<input type="text" class='wuxInput' name='attr_shareExp' value="">
+								</div>
 							</div>
 
 							<div class="wuxRow">&nbsp;</div>
@@ -4845,8 +5293,38 @@
 <script type="text/worker">
     on("sheet:opened", function(eventinfo) {
         on_sheet_opened();
-    });// Section Ids
-function GetSectionIdValues (idarray, sectionName, variableArray) {
+    });// ======== Attribute Values
+function AttrParseString(attrArray, fieldName, defaultValue) {
+	if (defaultValue == undefined) {
+		defaultValue = "";
+	}
+	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName];
+}
+
+function AttrParseInt(attrArray, fieldName, defaultValue) {
+	if (defaultValue == undefined) {
+		defaultValue = 0;
+	}
+	return isNaN(parseInt(attrArray[fieldName])) ? defaultValue : parseInt(attrArray[fieldName]);
+}
+
+function AttrParseFloat(attrArray, fieldName, defaultValue) {
+	if (defaultValue == undefined) {
+		defaultValue = 0;
+	}
+	return isNaN(parseFloat(attrArray[fieldName])) ? defaultValue : parseFloat(attrArray[fieldName]);
+}
+
+function AttrParseJSON(attrArray, fieldName, defaultValue) {
+	if (defaultValue == undefined) {
+		defaultValue = "";
+	}
+	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName] == "" ? defaultValue : JSON.parse(attrArray[fieldName]);
+}
+
+
+// ======== Section Ids
+function GetSectionIdValues(idarray, sectionName, variableArray) {
 	var output = [];
 
 	_.each(idarray, function (currentID) {
@@ -4858,7 +5336,7 @@ function GetSectionIdValues (idarray, sectionName, variableArray) {
 	return output;
 }
 
-function GetRepeatingSectionIdFromId (id, repeatingSection) {
+function GetRepeatingSectionIdFromId(id, repeatingSection) {
 	var len = repeatingSection.length + 1;
 	return id.substr(len, 20);
 }
@@ -4872,48 +5350,197 @@ function ClearAllSectionIds(repeatingSection) {
 	});
 }
 
-function RemoveSectionId (repeatingSection, repeatingSectionId) {
+function RemoveSectionId(repeatingSection, repeatingSectionId) {
 
 	removeRepeatingRow(`${repeatingSection}_${repeatingSectionId}`);
 }
 
-// Ability Scores
 
-function SetAbilityScoreUpdate(update, updateAttr, abilityScoreArray) {
 
-	update[`${updateAttr}CON`] = abilityScoreArray.CON;
-	update[`${updateAttr}DEX`] = abilityScoreArray.DEX;
-	update[`${updateAttr}QCK`] = abilityScoreArray.QCK;
-	update[`${updateAttr}STR`] = abilityScoreArray.STR;
-	update[`${updateAttr}CHA`] = abilityScoreArray.CHA;
-	update[`${updateAttr}INT`] = abilityScoreArray.INT;
-	update[`${updateAttr}PER`] = abilityScoreArray.PER;
-	update[`${updateAttr}WIL`] = abilityScoreArray.WIL;
+
+  //// ======== Ability Scores
+  
+  function CreateAbilityScoreArrayData() {
+	var output = {
+	  CON: 0, DEX: 0,
+	  QCK: 0, STR: 0,
+	  CHA: 0, INT: 0,
+	  PER: 0, WIL: 0
+	}
+	
+	return output;
+  }
+
+function SetAbilityScoreUpdate(update, updateAttr, abilityScoreArray, suffix) {
+
+	if (suffix == undefined) {
+		suffix = "";
+	}
+
+	update[`${updateAttr}CON`] = abilityScoreArray.CON + suffix;
+	update[`${updateAttr}DEX`] = abilityScoreArray.DEX + suffix;
+	update[`${updateAttr}QCK`] = abilityScoreArray.QCK + suffix;
+	update[`${updateAttr}STR`] = abilityScoreArray.STR + suffix;
+	update[`${updateAttr}CHA`] = abilityScoreArray.CHA + suffix;
+	update[`${updateAttr}INT`] = abilityScoreArray.INT + suffix;
+	update[`${updateAttr}PER`] = abilityScoreArray.PER + suffix;
+	update[`${updateAttr}WIL`] = abilityScoreArray.WIL + suffix;
 	return update;
 }
 
-function GetAbilityScoreFieldNames(updateAttr) {
-	return [`${updateAttr}CON`, `${updateAttr}DEX`, `${updateAttr}QCK`, `${updateAttr}STR`, `${updateAttr}CHA`, `${updateAttr}INT`, `${updateAttr}PER`, `${updateAttr}WIL`];
+function GetAbilityScoreList(isFields) {
+	if (isFields) {
+	return ["CON", "DEX", "QCK", "STR", "CHA", "INT", "PER", "WIL"];
+	}
+	else {
+	return ["Constitution", "Dexterity", "Quickness", "Strength", "Charisma", "Intelligence", "Perception", "Willpower"];
+	}
 }
 
-function GetAbilityScoreFieldIntegerArray(updateAttr, abilityScoreArray) {
+function SetAbilityScoreFieldArray(attrArray, fieldName) {
 
-	let output = [];
-	output["CON"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}CON`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}CON`]);
-	output["DEX"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}DEX`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}DEX`]);
-	output["QCK"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}QCK`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}QCK`]);
-	output["STR"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}STR`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}STR`]);
-	output["CHA"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}CHA`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}CHA`]);
-	output["INT"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}INT`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}INT`]);
-	output["PER"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}PER`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}PER`]);
-	output["WIL"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}WIL`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}WIL`]);
-	
+	let output = {};
+	let abList = GetAbilityScoreList(true);
+	for (let i = 0; i < abList.length; i++) {
+		output[abList[i]] = AttrParseInt(attrArray, `${fieldName}${abList[i]}`);
+	}
+
 	return output;
 }
 
-// Techniques
+function AddAbilityScores(array1, array2) {
 
-function GetTraitsDictionary (traits, traitType) {
+	return {
+		CON: (array1.CON + array2.CON),
+		DEX: (array1.DEX + array2.DEX),
+		QCK: (array1.QCK + array2.QCK),
+		STR: (array1.STR + array2.STR),
+		CHA: (array1.CHA + array2.CHA),
+		INT: (array1.INT + array2.INT),
+		PER: (array1.PER + array2.PER),
+		WIL: (array1.WIL + array2.WIL)
+	}
+}
+
+function MultiplyAbilityScores(array1, val) {
+
+	return {
+		CON: Math.floor(array1.CON * val),
+		DEX: Math.floor(array1.DEX * val),
+		QCK: Math.floor(array1.QCK * val),
+		STR: Math.floor(array1.STR * val),
+		CHA: Math.floor(array1.CHA * val),
+		INT: Math.floor(array1.INT * val),
+		PER: Math.floor(array1.PER * val),
+		WIL: Math.floor(array1.WIL * val)
+	}
+}
+
+function ModulusAbilityScores(array1, val) {
+
+	return {
+		CON: (array1.CON % val),
+		DEX: (array1.DEX % val),
+		QCK: (array1.QCK % val),
+		STR: (array1.STR % val),
+		CHA: (array1.CHA % val),
+		INT: (array1.INT % val),
+		PER: (array1.PER % val),
+		WIL: (array1.WIL % val)
+	}
+}
+
+
+
+// ======== Growths
+
+function CreateGrowthsArrayData() {
+
+	var output = CreateAbilityScoreArrayData();
+	output.hp = 0;
+	output.vitality = 0;
+	output.kiCharge = 0;
+	output.spellForce = 0;
+
+	return output;
+}
+
+function ConvertAbilityScorePointsToGrowths(growthData) {
+
+	let abilityScoreGrowthRate = 20;
+	let hpGrowthRate = 50;
+	let vitalityGrowthRate = 5;
+	let kiChargeGrowthRate = 5;
+	let spellForceGrowthRate = 6;
+	return {
+		CON: (growthData.CON * abilityScoreGrowthRate),
+		DEX: (growthData.DEX * abilityScoreGrowthRate),
+		QCK: (growthData.QCK * abilityScoreGrowthRate),
+		STR: (growthData.STR * abilityScoreGrowthRate),
+		CHA: (growthData.CHA * abilityScoreGrowthRate),
+		INT: (growthData.INT * abilityScoreGrowthRate),
+		PER: (growthData.PER * abilityScoreGrowthRate),
+		WIL: (growthData.WIL * abilityScoreGrowthRate),
+		hp: (growthData.hp * hpGrowthRate),
+		vitality: (growthData.vitality * vitalityGrowthRate),
+		kiCharge: (growthData.kiCharge * kiChargeGrowthRate),
+		spellForce: (growthData.spellForce * spellForceGrowthRate)
+	}
+}
+
+function SetGrowthFieldArray(attrArray, fieldName) {
+
+	let output = SetAbilityScoreFieldArray(attrArray, fieldName);
+	output.hp = AttrParseInt(attrArray, `${fieldName}hp`);
+	output.vitality = AttrParseInt(attrArray, `${fieldName}vitality`);
+	output.kiCharge = AttrParseInt(attrArray, `${fieldName}kiCharge`);
+	output.spellForce = AttrParseInt(attrArray, `${fieldName}spellForce`);
+
+	return output;
+}
+
+function AddGrowths(array1, array2) {
+
+	let output = AddAbilityScores(array1, array2);
+
+	output.hp = (array1.hp + array2.hp);
+	output.vitality = (array1.vitality + array2.vitality);
+	output.kiCharge = (array1.kiCharge + array2.kiCharge);
+	output.spellForce = (array1.spellForce + array2.spellForce);
+
+	return output;
+}
+
+function MultiplyGrowths(array1, val) {
+
+	let output = MultiplyAbilityScores(array1, val);
+
+	output.hp = Math.floor(array1.hp * val);
+	output.vitality = Math.floor(array1.vitality * val);
+	output.kiCharge = Math.floor(array1.kiCharge * val);
+	output.spellForce = Math.floor(array1.spellForce * val);
+
+	return output;
+}
+
+function ModulusGrowths(array1, val) {
+
+	let output = ModulusAbilityScores(array1, val);
+
+	output.hp = (array1.hp % val);
+	output.vitality = (array1.vitality % val);
+	output.kiCharge = (array1.kiCharge % val);
+	output.spellForce = (array1.spellForce % val);
+
+	return output;
+}
+
+
+
+
+// ======== Techniques
+
+function GetTraitsDictionary(traits, traitType) {
 
 	let output = [];
 	if (traits != undefined) {
@@ -4923,33 +5550,33 @@ function GetTraitsDictionary (traits, traitType) {
 		let lookup = "";
 		let traitInfo;
 
-		for(let i = 0; i < keywordsSplit.length; i++) {
+		for (let i = 0; i < keywordsSplit.length; i++) {
 			name = "" + keywordsSplit[i].trim();
 
-			if (name.includes ("Impact") || name.includes ("Explosive")) {
-			name = ReplaceDamageDice(name);
+			if (name.includes("Impact") || name.includes("Explosive")) {
+				name = ReplaceDamageDice(name);
 			}
 
 			lookup = name;
-			if (lookup.indexOf ("(") >= 0) {
+			if (lookup.indexOf("(") >= 0) {
 				lookup = lookup.replace(/\([^)]*\)/g, "(X)");
 			}
-			
-			switch(traitType.toLowerCase()) {
+
+			switch (traitType.toLowerCase()) {
 				case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
 				case "weapon": traitInfo = GetWeaponTraitsInfo(lookup); break;
 				case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
 				case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
 			}
 			traitInfo.name = name;
-			output.push (traitInfo);
+			output.push(traitInfo);
 		}
 	}
 
 	return output;
 }
 
-function GetTechniqueDataArray (type, techniques) {
+function GetTechniqueDataArray(type, techniques) {
 	let output = [];
 	let techniqueList = techniques.split(";");
 	let tech = "";
@@ -4957,13 +5584,13 @@ function GetTechniqueDataArray (type, techniques) {
 
 	for (let i = 0; i < techniqueList.length; i++) {
 		tech = techniqueList[i].trim();
-		switch(type.toLowerCase()) {
-			case "ancestry": 
+		switch (type.toLowerCase()) {
+			case "ancestry":
 				technique = GetAncestryTechniqueInfo(tech);
 				if (technique.name != "") {
-					output.push(technique); 
+					output.push(technique);
 				}
-			break;
+				break;
 		}
 	}
 	return output;
@@ -4988,11 +5615,11 @@ function SetTechniqueDataList(update, repeatingSection, techniqueList) {
 	}
 
 	return update;
-	
+
 }
 
 function SetTechniqueData(update, newrowid, repeatingSection, technique) {
- 
+
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-header")] = technique.augmentBase == "" ? technique.action : "Augment";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-name")] = technique.name;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-augmentBase")] = technique.augmentBase == "" ? "Base" : technique.augmentBase;
@@ -5002,7 +5629,7 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-limits")] = technique.limits;
 
 	// set the function block
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-functionBlock")] = 
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-functionBlock")] =
 		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "" || technique.resourceCost != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-traits")] = technique.traits;
 	var traitsDb = GetTraitsDictionary(technique.traits, "technique");
@@ -5026,8 +5653,8 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-onSuccess")] = technique.onSuccess;
 
 	// set the attack block
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlock")] = 
-	(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlock")] =
+		(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") ? "1" : "0";
 
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockTarget")] = (technique.range != "" || technique.target != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-range")] = technique.range;
@@ -5047,7 +5674,7 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 		let damageString = `${FormatDamageString(technique.damage)}${technique.damageType}${technique.element == "" ? "" : ` [${technique.element}]`}`;
 		update[GetSectionIdName(repeatingSection, newrowid, "technique-damageString")] = damageString;
 	}
-	
+
 	// set special data
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-onHit")] = technique.onHit;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-specBonus")] = technique.specBonus;
@@ -5055,143 +5682,126 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	return update;
 }
 
+
+
+
+// ======== Damage Values
+
 function FormatDamageString(element, condensed) {
 	var output = "";
 	var damage = "";
 	var elements = element.split(";");
 	for (var i = 0; i < elements.length; i++) {
-	  damage = ReplaceDamageDice(elements[i]).trim();
-	  if (condensed && damage == "Power") {
-		damage = "P";
-	  }
-  
-	  // form output string
-	  if (output != "") {
-		output += "+ ";
-	  }
-	  output += `${damage} `;
+		damage = ReplaceDamageDice(elements[i]).trim();
+		if (condensed && damage == "Power") {
+			damage = "P";
+		}
+
+		// form output string
+		if (output != "") {
+			output += "+ ";
+		}
+		output += `${damage} `;
 	}
 	return output;
-  }
-  
-  function ReplaceDamageDice(element) {
+}
+
+function ReplaceDamageDice(element) {
 	// Define a regular expression and the replacement string
 	var regexH = /(\d+)h/g;
 	var replacementH = '$1d3';
 	var regexD = /(\d+)d/g;
 	var replacementD = '$1d6';
-  
+
 	// Use String.replace() with the regular expression
 	return element.replace(regexD, replacementD).replace(regexH, replacementH);
-  }
+}
 
-// Sheet Lisenters
-on("change:builder-path", function (eventinfo) {
+// ======= Helper Functions
 
-	update_builder_path_info(eventinfo.newValue);
+function SetAdvancementBaseGrowths (update, baseGrowths, ancestryGrowths) {
+    
+    let growthArray = AddGrowths(baseGrowths, ancestryGrowths);
+	
+    update["advancement-baseGrowths"] = JSON.stringify(growthArray);
+    return update;
+}
+
+
+
+// ======== Leave Button
+
+on("change:builder-button-leave", function () {
+
+	update_builder_leave();
 });
 
-on("change:builder-ancestry", function (eventinfo) {
+var update_builder_leave = function () {
 
-	update_builder_ancestry_info(eventinfo.newValue);
-});
+	let mod_attrs = ["builder-basePath", "builder-baseAncestry", "builder-baseGrowths", "builder-baseAbilityScores", "builder-baseSkills", "builder-baseChoiceSkills"];
 
-on("change:builder-base-CON change:builder-base-DEX change:builder-base-QCK change:builder-base-STR change:builder-base-CHA change:builder-base-INT change:builder-base-PER change:builder-base-WIL", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
 
-	update_builder_base_ability_scores();
-});
+		let basePath = AttrParseString(v, "builder-basePath");
+		let baseAncestry = AttrParseString(v, "builder-baseAncestry");
+		let baseGrowths = AttrParseJSON(v, "builder-baseGrowths");
+		let baseAbilityScores = AttrParseJSON(v, "builder-baseAbilityScores");
+		let baseSkills = AttrParseJSON(v, "builder-baseSkills");
+		let baseChoiceSkills = AttrParseJSON(v, "builder-baseChoiceSkills");
 
-on("change:builder-baseGrowth-CON change:builder-baseGrowth-DEX change:builder-baseGrowth-QCK change:builder-baseGrowth-STR change:builder-baseGrowth-CHA change:builder-baseGrowth-INT change:builder-baseGrowth-PER change:builder-baseGrowth-WIL", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
+		if (basePath != "") {
+			update["builder-path"] = basePath;
+		}
+		if (baseAncestry != "") {
+			update["builder-ancestry"] = baseAncestry;
+		}
+		if (baseGrowths != "") {
+			update = SetAbilityScoreUpdate(update, "builder-base-", baseGrowths);
+		}
+		if (baseAbilityScores != "") {
+			update = SetAbilityScoreUpdate(update, "builder-baseGrowth-", baseAbilityScores);
+		}
+		if (baseSkills != "" || baseChoiceSkills != "") {
+			let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
+			let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
 
-	update_builder_growth_ability_scores();
-});
+			if (baseSkills != "") {
+				let defPhysSkillsArray = GetDefensivePhysSkillsList(true);
+				let defSensSkillsArray = GetDefensiveSensSkillsList(true);
+				for (let i = 0; i < defPhysSkillsArray.length; i++) {
+					update[`builder-skills-trainingDefensivePhys-${defPhysSkillsArray[i]}`] = (baseSkills.includes(defPhysSkillsArray[i])) ? "on" : "0";
+				}
+				for (let i = 0; i < defSensSkillsArray.length; i++) {
+					update[`builder-skills-trainingDefensiveSens-${defSensSkillsArray[i]}`] = (baseSkills.includes(defSensSkillsArray[i])) ? "on" : "0";
+				}
+				for (let i = 0; i < physSkillsArray.length; i++) {
+					update[`builder-skills-trainingPhysical-${physSkillsArray[i]}`] = (baseSkills.includes(physSkillsArray[i])) ? "on" : "0";
+				}
+				for (let i = 0; i < mentSkillsArray.length; i++) {
+					update[`builder-skills-trainingMental-${mentSkillsArray[i]}`] = (baseSkills.includes(mentSkillsArray[i])) ? "on" : "0";
+				}
+			}
+			if (baseChoiceSkills != "") {
+				let choiceSkillsArray = physSkillsArray.concat(mentSkillsArray);
+				
+				for (let i = 0; i < choiceSkillsArray.length; i++) {
+					update[`builder-skills-trainingChoice-${choiceSkillsArray[i]}`] = (baseChoiceSkills.includes(choiceSkillsArray[i])) ? "on" : "0";
+				}
+			}
+		}
 
-on("change:builder-baseAbilityScore-randomize", function () {
+		update["characterSheetDisplayStyle"] = "Character";
 
-	update_builder_base_ability_scores_randomize();
-});
+		setAttrs(update, { silent: true });
+	});
 
-on("change:builder-growthAbilityScore-randomize", function () {
+}
 
-	update_builder_growth_ability_scores_randomize();
-});
 
-on("change:builder-baseAbilityScore-reset", function () {
 
-	update_builder_base_ability_scores_reset();
-});
 
-on("change:builder-growthAbilityScore-reset", function () {
-
-	update_builder_growth_ability_scores_reset();
-});
-
-// Builder Skills Listeners
-on("change:builder-skills-trainingDefensivephys-Brace change:builder-skills-trainingDefensivephys-Fortitude change:builder-skills-trainingDefensivephys-Presence change:builder-skills-trainingDefensivephys-Reflex", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_builder_defensivePhys_skills();
-});
-
-on("change:builder-skills-trainingDefensivesens-Insight change:builder-skills-trainingDefensivesens-Notice change:builder-skills-trainingDefensivesens-Resolve", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_builder_defensiveSens_skills();
-});
-
-on("change:builder-skills-Defensive-reset", function () {
-
-	update_builder_defensive_skills_reset();
-});
-
-on("change:builder-skills-trainingPhysical-Archery change:builder-skills-trainingPhysical-Brawling change:builder-skills-trainingPhysical-LightBlade change:builder-skills-trainingPhysical-Hammer change:builder-skills-trainingPhysical-Handgun change:builder-skills-trainingPhysical-HeavyBlade change:builder-skills-trainingPhysical-Longarm change:builder-skills-trainingPhysical-Polearm change:builder-skills-trainingPhysical-Thrown change:builder-skills-trainingPhysical-Acrobatics change:builder-skills-trainingPhysical-Athletics change:builder-skills-trainingPhysical-Physique change:builder-skills-trainingPhysical-Palming change:builder-skills-trainingPhysical-Stealth change:builder-skills-trainingPhysical-Survival change:builder-skills-trainingPhysical-Artisan change:builder-skills-trainingPhysical-Cook change:builder-skills-trainingPhysical-Herbalism change:builder-skills-trainingPhysical-Mechanical change:builder-skills-trainingPhysical-Medicine change:builder-skills-trainingPhysical-Pilot", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_builder_physical_skills();
-});
-
-on("change:builder-skills-Physical-reset", function () {
-
-	update_builder_physical_skills_reset();
-});
-
-on("change:builder-skills-trainingMental-Assault change:builder-skills-trainingMental-Conjure change:builder-skills-trainingMental-Enchant change:builder-skills-trainingMental-Ethereal change:builder-skills-trainingMental-Field change:builder-skills-trainingMental-Structure change:builder-skills-trainingMental-Arcana change:builder-skills-trainingMental-Culture change:builder-skills-trainingMental-Engineering change:builder-skills-trainingMental-History change:builder-skills-trainingMental-Investigation change:builder-skills-trainingMental-Nature change:builder-skills-trainingMental-Deception change:builder-skills-trainingMental-Etiquette change:builder-skills-trainingMental-Intimidation change:builder-skills-trainingMental-Leadership change:builder-skills-trainingMental-Negotiation change:builder-skills-trainingMental-Performance", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_builder_mental_skills();
-});
-
-on("change:builder-skills-Mental-reset", function () {
-
-	update_builder_mental_skills_reset();
-});
-
-on("change:builder-skills-trainingChoice-Archery change:builder-skills-trainingChoice-Brawling change:builder-skills-trainingChoice-LightBlade change:builder-skills-trainingChoice-Hammer change:builder-skills-trainingChoice-Handgun change:builder-skills-trainingChoice-HeavyBlade change:builder-skills-trainingChoice-Longarm change:builder-skills-trainingChoice-Polearm change:builder-skills-trainingChoice-Thrown change:builder-skills-trainingChoice-Acrobatics change:builder-skills-trainingChoice-Athletics change:builder-skills-trainingChoice-Physique change:builder-skills-trainingChoice-Palming change:builder-skills-trainingChoice-Stealth change:builder-skills-trainingChoice-Survival change:builder-skills-trainingChoice-Artisan change:builder-skills-trainingChoice-Cook change:builder-skills-trainingChoice-Herbalism change:builder-skills-trainingChoice-Mechanical change:builder-skills-trainingChoice-Medicine change:builder-skills-trainingChoice-Pilot change:builder-skills-trainingChoice-Assault change:builder-skills-trainingChoice-Conjure change:builder-skills-trainingChoice-Enchant change:builder-skills-trainingChoice-Ethereal change:builder-skills-trainingChoice-Field change:builder-skills-trainingChoice-Structure change:builder-skills-trainingChoice-Arcana change:builder-skills-trainingChoice-Culture change:builder-skills-trainingChoice-Engineering change:builder-skills-trainingChoice-History change:builder-skills-trainingChoice-Investigation change:builder-skills-trainingChoice-Nature change:builder-skills-trainingChoice-Deception change:builder-skills-trainingChoice-Etiquette change:builder-skills-trainingChoice-Intimidation change:builder-skills-trainingChoice-Leadership change:builder-skills-trainingChoice-Negotiation change:builder-skills-trainingChoice-Performance", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_builder_choice_skills();
-});
-
-on("change:builder-skills-Choice-reset", function () {
-
-	update_builder_choice_skills_reset();
-});
+// ======= Submission
 
 on("change:builder-button-submit", function () {
 
@@ -5199,8 +5809,98 @@ on("change:builder-button-submit", function () {
 });
 
 
+var update_builder_submit = function () {
 
-// Sheet Functions
+	let defPhysSkillsArray = GetDefensivePhysSkillsList(true);
+	let defSensSkillsArray = GetDefensiveSensSkillsList(true);
+	let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
+	let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
+	let choiceSkillsArray = physSkillsArray.concat(mentSkillsArray);
+
+	let abilityScoreFieldArray = GetSectionIdNameFromArray("builder-base-", "", GetAbilityScoreList(true));
+	let growthsFieldArray = GetSectionIdNameFromArray("builder-baseGrowth-", "", GetAbilityScoreList(true));
+	let defPhysFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingDefensivePhys-`, "", defPhysSkillsArray);
+	let defSensFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingDefensiveSens-`, "", defSensSkillsArray);
+	let physicalFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingPhysical-`, "", physSkillsArray);
+	let mentalFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingMental-`, "", mentSkillsArray);
+	let choiceFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingChoice-`, "", choiceSkillsArray);
+
+	let mod_attrs = ["base_level", "builder-path", "builder-ancestry", "advancement-advancementGrowthsTotal"];
+	mod_attrs = mod_attrs.concat(abilityScoreFieldArray).concat(growthsFieldArray).concat(defPhysFieldArray).concat(defSensFieldArray).concat(physicalFieldArray);
+	mod_attrs = mod_attrs.concat(mentalFieldArray).concat(choiceFieldArray);
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+	    let baseLevel = AttrParseInt(v, "base_level");
+		let pathName = AttrParseString(v, "builder-path", "Common");
+		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
+		let ancestryData = GetAncestryInfo(ancestryName);
+		let baseAbilityScores = SetAbilityScoreFieldArray(v, "builder-base-");
+		let baseGrowths = SetGrowthFieldArray(v, "builder-baseGrowth-");
+		let baseGrowthsTotal = MultiplyGrowths(baseGrowths, baseLevel);
+		let baseSkills = [];
+		let choiceSkills = [];
+	    let advancementGrowthsTotal = AttrParseJSON(v, "advancement-advancementGrowthsTotal");
+	    if (advancementGrowthsTotal == "") {
+	    	advancementGrowthsTotal = CreateGrowthsArrayData();
+		}
+
+		// set skill arrays
+		for (let i = 0; i < defPhysFieldArray.length; i++) {
+			if (v[defPhysFieldArray[i]] == "on") {
+				baseSkills.push(defPhysSkillsArray[i]);
+			}
+		}
+		for (let i = 0; i < defSensFieldArray.length; i++) {
+			if (v[defSensFieldArray[i]] == "on") {
+				baseSkills.push(physSkillsArray[i]);
+			}
+		}
+		for (let i = 0; i < physicalFieldArray.length; i++) {
+			if (v[physicalFieldArray[i]] == "on") {
+				baseSkills.push(defSensSkillsArray[i]);
+			}
+		}
+		for (let i = 0; i < mentalFieldArray.length; i++) {
+			if (v[mentalFieldArray[i]] == "on") {
+				baseSkills.push(mentSkillsArray[i]);
+			}
+		}
+		for (let i = 0; i < choiceFieldArray.length; i++) {
+			if (v[choiceFieldArray[i]] == "on") {
+				choiceSkills.push(choiceSkillsArray[i]);
+			}
+		}
+		
+		// set variables
+		update["builder-basePath"] = pathName;
+		update["builder-baseAncestry"] = ancestryName;
+		update["builder-baseAbilityScores"] = JSON.stringify(baseAbilityScores);
+		update["builder-baseGrowths"] = JSON.stringify(baseGrowths);
+		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
+		update["builder-baseSkills"] = JSON.stringify(baseSkills);
+		update["builder-baseChoiceSkills"] = JSON.stringify(choiceSkills);
+		update = SetCharacterStatGrowths(update, ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+
+		// update page position
+		update["advancement-previousPage"] = "0";
+		update["characterSheetDisplayStyle"] = "Advancement";
+
+		setAttrs(update, { silent: true });
+	});
+
+}
+
+
+
+// ======= Path Update
+
+on("change:builder-path", function (eventinfo) {
+
+	update_builder_path_info(eventinfo.newValue);
+});
+
 var update_builder_path_info = function (newValue) {
 
 	let update = {};
@@ -5210,6 +5910,15 @@ var update_builder_path_info = function (newValue) {
 	update["builder-baseAbilityScorePoints_max"] = pathData.abilityScorePts;
 	setAttrs(update, { silent: true });
 }
+
+
+
+// ======= Ancestry Update
+
+on("change:builder-ancestry", function (eventinfo) {
+
+	update_builder_ancestry_info(eventinfo.newValue);
+});
 
 var update_builder_ancestry_info = function (newValue) {
 
@@ -5224,7 +5933,7 @@ var update_builder_ancestry_info = function (newValue) {
 	update["builder-starting-Barrier"] = ancestryData.barrier;
 	update["builder-starting-Speed"] = ancestryData.speed;
 	update = SetAbilityScoreUpdate(update, "builder-starting-", ancestryData.startingScores);
-	update = SetAbilityScoreUpdate(update, "builder-growth-", ancestryData.growths);
+	update = SetAbilityScoreUpdate(update, "builder-growth-", ConvertAbilityScorePointsToGrowths(ancestryData.growths), "%");
 	update["builder-growth-HP"] = ancestryData.growths.hp;
 	update["builder-growth-Vitality"] = ancestryData.growths.vitality;
 	update["builder-growth-KiCharge"] = ancestryData.growths.kiCharge;
@@ -5310,9 +6019,33 @@ var update_builder_skill_fields = function (update, skillName, count, fieldName,
 	return update;
 }
 
+
+
+// ======== Update base ability scores
+
+on("change:builder-base-CON change:builder-base-DEX change:builder-base-QCK change:builder-base-STR change:builder-base-CHA change:builder-base-INT change:builder-base-PER change:builder-base-WIL", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	update_builder_base_ability_scores();
+});
+
 var update_builder_base_ability_scores = function () {
 	update_builder_ability_scores("builder-baseAbilityScorePoints", "builder-base-", 10, 40);
 }
+
+
+
+// ======== Update ability score growths
+
+on("change:builder-baseGrowth-CON change:builder-baseGrowth-DEX change:builder-baseGrowth-QCK change:builder-baseGrowth-STR change:builder-baseGrowth-CHA change:builder-baseGrowth-INT change:builder-baseGrowth-PER change:builder-baseGrowth-WIL", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	update_builder_growth_ability_scores();
+});
 
 var update_builder_growth_ability_scores = function () {
 	update_builder_ability_scores("builder-growthAbilityScorePoints", "builder-baseGrowth-", 3, 16);
@@ -5321,15 +6054,15 @@ var update_builder_growth_ability_scores = function () {
 var update_builder_ability_scores = function (pointsAttr, absAttr, indivPointMax, pointsMax) {
 
 	let mod_attrs = [`${pointsAttr}_max`];
-	mod_attrs = mod_attrs.concat(GetAbilityScoreFieldNames(absAttr));
+	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(absAttr, "", GetAbilityScoreList(true)));
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
 		let pointCount = 0;
 		let pointMax = isNaN(parseInt(v[`${pointsAttr}_max`])) ? pointsMax : parseInt(v[`${pointsAttr}_max`]);
 
-		let abilityScoreNames = GetAbilityScoreFieldNames("");
-		let abilityScores = GetAbilityScoreFieldIntegerArray(absAttr, v);
+		let abilityScoreNames = GetAbilityScoreList(true);
+		let abilityScores = SetAbilityScoreFieldArray(v, absAttr);
 		for (let i = 0; i < abilityScoreNames.length; i++) {
 			pointCount += abilityScores[abilityScoreNames[i]];
 			update[`${pointsAttr}-error-${abilityScoreNames[i]}`] =
@@ -5343,6 +6076,20 @@ var update_builder_ability_scores = function (pointsAttr, absAttr, indivPointMax
 	});
 }
 
+
+
+// ======== Ability Score Randomizers
+
+on("change:builder-baseAbilityScore-randomize", function () {
+
+	update_builder_base_ability_scores_randomize();
+});
+
+on("change:builder-growthAbilityScore-randomize", function () {
+
+	update_builder_growth_ability_scores_randomize();
+});
+
 var update_builder_base_ability_scores_randomize = function () {
 	update_builder_ability_scores_randomize("builder-baseAbilityScorePoints", "builder-base-", 10);
 }
@@ -5354,14 +6101,14 @@ var update_builder_growth_ability_scores_randomize = function () {
 var update_builder_ability_scores_randomize = function (pointsAttr, absAttr, indivPointMax) {
 
 	let mod_attrs = [pointsAttr];
-	mod_attrs = mod_attrs.concat(GetAbilityScoreFieldNames(absAttr));
+	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(absAttr, "", GetAbilityScoreList(true)));
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
-		let pointCount = isNaN(parseInt(v[`${pointsAttr}`])) ? pointMax : parseInt(v[`${pointsAttr}`]);
+		let pointCount = isNaN(parseInt(v[`${pointsAttr}`])) ? indivPointMax : parseInt(v[`${pointsAttr}`]);
 
-		let abilityScoreNames = GetAbilityScoreFieldNames("");
-		let abilityScores = GetAbilityScoreFieldIntegerArray(absAttr, v);
+		let abilityScoreNames = GetAbilityScoreList(true);
+		let abilityScores = SetAbilityScoreFieldArray(v, absAttr);
 		let rng = 0;
 
 		while (pointCount > 0) {
@@ -5381,6 +6128,20 @@ var update_builder_ability_scores_randomize = function (pointsAttr, absAttr, ind
 	});
 }
 
+
+
+// ======== Ability Score Resetters
+
+on("change:builder-baseAbilityScore-reset", function () {
+
+	update_builder_base_ability_scores_reset();
+});
+
+on("change:builder-growthAbilityScore-reset", function () {
+
+	update_builder_growth_ability_scores_reset();
+});
+
 var update_builder_base_ability_scores_reset = function () {
 	update_builder_ability_scores_reset("builder-baseAbilityScorePoints", "builder-base-", 40);
 }
@@ -5396,7 +6157,7 @@ var update_builder_ability_scores_reset = function (pointsAttr, absAttr, pointsM
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
 
-		let abilityScoreNames = GetAbilityScoreFieldNames("");
+		let abilityScoreNames = GetAbilityScoreList(true);
 		for (let i = 0; i < abilityScoreNames.length; i++) {
 			update[`${absAttr}${abilityScoreNames[i]}`] = 0;
 			update[`${pointsAttr}-error-${abilityScoreNames[i]}`] = 0;
@@ -5409,6 +6170,71 @@ var update_builder_ability_scores_reset = function (pointsAttr, absAttr, pointsM
 		setAttrs(update, { silent: true });
 	});
 }
+
+
+
+
+// ======== Builder Skills Listeners
+
+on("change:builder-skills-trainingDefensivephys-Brace change:builder-skills-trainingDefensivephys-Fortitude change:builder-skills-trainingDefensivephys-Presence change:builder-skills-trainingDefensivephys-Reflex", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	update_builder_defensivePhys_skills();
+});
+
+on("change:builder-skills-trainingDefensivesens-Insight change:builder-skills-trainingDefensivesens-Notice change:builder-skills-trainingDefensivesens-Resolve", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	update_builder_defensiveSens_skills();
+});
+
+on("change:builder-skills-Defensive-reset", function () {
+
+	update_builder_defensive_skills_reset();
+});
+
+on("change:builder-skills-trainingPhysical-Archery change:builder-skills-trainingPhysical-Brawling change:builder-skills-trainingPhysical-LightBlade change:builder-skills-trainingPhysical-Hammer change:builder-skills-trainingPhysical-Handgun change:builder-skills-trainingPhysical-HeavyBlade change:builder-skills-trainingPhysical-Longarm change:builder-skills-trainingPhysical-Polearm change:builder-skills-trainingPhysical-Thrown change:builder-skills-trainingPhysical-Acrobatics change:builder-skills-trainingPhysical-Athletics change:builder-skills-trainingPhysical-Physique change:builder-skills-trainingPhysical-Palming change:builder-skills-trainingPhysical-Stealth change:builder-skills-trainingPhysical-Survival change:builder-skills-trainingPhysical-Artisan change:builder-skills-trainingPhysical-Cook change:builder-skills-trainingPhysical-Herbalism change:builder-skills-trainingPhysical-Mechanical change:builder-skills-trainingPhysical-Medicine change:builder-skills-trainingPhysical-Pilot", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	update_builder_physical_skills();
+});
+
+on("change:builder-skills-Physical-reset", function () {
+
+	update_builder_physical_skills_reset();
+});
+
+on("change:builder-skills-trainingMental-Assault change:builder-skills-trainingMental-Conjure change:builder-skills-trainingMental-Enchant change:builder-skills-trainingMental-Ethereal change:builder-skills-trainingMental-Field change:builder-skills-trainingMental-Structure change:builder-skills-trainingMental-Arcana change:builder-skills-trainingMental-Culture change:builder-skills-trainingMental-Engineering change:builder-skills-trainingMental-History change:builder-skills-trainingMental-Investigation change:builder-skills-trainingMental-Nature change:builder-skills-trainingMental-Deception change:builder-skills-trainingMental-Etiquette change:builder-skills-trainingMental-Intimidation change:builder-skills-trainingMental-Leadership change:builder-skills-trainingMental-Negotiation change:builder-skills-trainingMental-Performance", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	update_builder_mental_skills();
+});
+
+on("change:builder-skills-Mental-reset", function () {
+
+	update_builder_mental_skills_reset();
+});
+
+on("change:builder-skills-trainingChoice-Archery change:builder-skills-trainingChoice-Brawling change:builder-skills-trainingChoice-LightBlade change:builder-skills-trainingChoice-Hammer change:builder-skills-trainingChoice-Handgun change:builder-skills-trainingChoice-HeavyBlade change:builder-skills-trainingChoice-Longarm change:builder-skills-trainingChoice-Polearm change:builder-skills-trainingChoice-Thrown change:builder-skills-trainingChoice-Acrobatics change:builder-skills-trainingChoice-Athletics change:builder-skills-trainingChoice-Physique change:builder-skills-trainingChoice-Palming change:builder-skills-trainingChoice-Stealth change:builder-skills-trainingChoice-Survival change:builder-skills-trainingChoice-Artisan change:builder-skills-trainingChoice-Cook change:builder-skills-trainingChoice-Herbalism change:builder-skills-trainingChoice-Mechanical change:builder-skills-trainingChoice-Medicine change:builder-skills-trainingChoice-Pilot change:builder-skills-trainingChoice-Assault change:builder-skills-trainingChoice-Conjure change:builder-skills-trainingChoice-Enchant change:builder-skills-trainingChoice-Ethereal change:builder-skills-trainingChoice-Field change:builder-skills-trainingChoice-Structure change:builder-skills-trainingChoice-Arcana change:builder-skills-trainingChoice-Culture change:builder-skills-trainingChoice-Engineering change:builder-skills-trainingChoice-History change:builder-skills-trainingChoice-Investigation change:builder-skills-trainingChoice-Nature change:builder-skills-trainingChoice-Deception change:builder-skills-trainingChoice-Etiquette change:builder-skills-trainingChoice-Intimidation change:builder-skills-trainingChoice-Leadership change:builder-skills-trainingChoice-Negotiation change:builder-skills-trainingChoice-Performance", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	update_builder_choice_skills();
+});
+
+on("change:builder-skills-Choice-reset", function () {
+
+	update_builder_choice_skills_reset();
+});
 
 var update_builder_defensivePhys_skills = function () {
 	update_builder_skills("DefensivePhys", GetDefensivePhysSkillsList(true));
@@ -5564,16 +6390,52 @@ var update_builder_choice_skills_reset = function () {
 	});
 }
 
-var update_builder_submit = function () {
-	let update = {};
-
-	// update the sheet's statistics here
-
-	update["advancement-previousPage"] = "0";
-	update["characterSheetDisplayStyle"] = "LevelUp";
-
-	setAttrs(update, { silent: true });
+function GetAdvancementLevelData (totalLevel) {
+    
+    if (totalLevel == "" || totalLevel == undefined) {
+        return {
+            keys: [],
+            values: {}
+        };
+    }
+    else {
+        return JSON.parse(totalLevel);
+    }
 }
+
+function SetAdvancementLevelData (levelData, className, currentLevel, level) {
+    
+    if (!levelData.keys.includes(className)) {
+        levelData.keys.push(className);
+    }
+    levelData.values[className] = {current: currentLevel, increase: level};
+    
+}
+
+function ResetAdvancementLevel (levelData, updateCurrent) {
+
+	let i = 0;
+	while (i < levelData.keys.length) {
+		if (updateCurrent) {
+			levelData.values[levelData.keys[i]].currentLevel += levelData.values[levelData.keys[i]].increase;
+		}
+		levelData.values[levelData.keys[i]].increase = 0;
+
+		if (levelData.values[levelData.keys[i]].currentLevel == 0) {
+			delete levelData.values[levelData.keys[i]];
+			levelData.keys = levelData.keys.splice(i, 1);
+		}
+		else {
+			i++;
+		}
+	}
+	
+	return levelData;
+}
+
+
+
+// ======== Back Button
 
 on("change:advancement-button-back", function () {
 
@@ -5589,11 +6451,17 @@ var update_advancement_back = function () {
 
 		update["characterSheetDisplayStyle"] = v["advancement-previousPage"];
 		update["advancement-previousPage"] = "";
+		update["advancement-button-reset-everything"] = "0";
 
 		setAttrs(update, { silent: true });
 	});
 
 }
+
+
+
+
+// ======== Submission
 
 on("change:advancement-button-submit", function () {
 
@@ -5601,16 +6469,320 @@ on("change:advancement-button-submit", function () {
 });
 
 var update_advancement_submit = function () {
+    
+    let mod_attrs = ["base_level", "builder-ancestry", "builder-baseAbilityScores", "advancement-level-total", "builder-baseGrowths", "builder-baseGrowthsTotal", "advancement-advancementGrowthsTotal"];
+	getAttrs(mod_attrs, function (v) {
+	    
+	    let update = {};
+	    
+	    let baseLevel = AttrParseInt(v, "base_level");
+	    let totalLevel = baseLevel;
+	    let classLevelTotal = 0;
+	    let levelData = GetAdvancementLevelData(v["advancement-level-total"]);
 
-	let update = {};
+		let baseAbilityScores = AttrParseJSON(v, "builder-baseAbilityScores");
+		if (baseAbilityScores == "") {
+			baseAbilityScores = CreateAbilityScoreArrayData();
+		}
+		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
+		let ancestryData = GetAncestryInfo(ancestryName);
 
-	// update the sheet's statistics here
+	    let baseGrowths = AttrParseJSON(v, "builder-baseGrowths");
+		if (baseGrowths == "") {
+			baseGrowths = CreateGrowthsArrayData();
+		}
+		let baseGrowthsTotal = AttrParseJSON(v, "builder-baseGrowthsTotal");
+		if (baseGrowthsTotal == "") {
+			baseGrowthsTotal = CreateGrowthsArrayData();
+		}
+	    let advancementGrowthsTotal = AttrParseJSON(v, "advancement-advancementGrowthsTotal");
+	    if (advancementGrowthsTotal == "") {
+	    	advancementGrowthsTotal = CreateGrowthsArrayData();
+		}
 
-	update["characterSheetDisplayStyle"] = "Character";
-
-	setAttrs(update, { silent: true });
+	    let classUpdates = [];
+	    let classUpdate;
+	    let pathUpdate = "";
+	    
+	    let classData;
+	    let classLevel;
+	    let techLevel;
+	    let techModLevel;
+	    let advancement = {
+	        keys: [],
+	        values: {}
+	    };
+	    let tech = {};
+	    let levelCheck = 0;
+	    
+	    // iterate through the classes and record any advancement changes. Also reset UI from the advancement page
+	    for (let i = 0; i < levelData.keys.length; i++) {
+	        
+	        classLevel = levelData.values[levelData.keys[i]];
+	        if (classLevel.increase > 0) {
+	            
+	            // get class and level data
+    	        classData = GetClassesInfo(levelData.keys[i]);
+    	        totalLevel += classLevel.increase;
+    	        advancementGrowthsTotal = AddGrowths(advancementGrowthsTotal, MultiplyGrowths(classData.growths, classLevel.increase));
+    	        classLevelTotal = classLevel.current + classLevel.increase;
+    	        
+    	        // update the level up update
+    	        classUpdate = {
+    	            header: `${classData.name} Level Up!`,
+    	            desc: `${classData.name} ${classLevel.current} -> ${classLevelTotal}`
+    	        };
+    	        
+    	        // iterate through the advancement gains
+    	        techLevel = classLevel.current + 1;
+    	        if (techLevel == 1) {
+    	            tech = {name: classData.jobTechnique, type: "T"};
+    	            advancement = AddAdvancementTech(advancement, tech);
+    	            classUpdate.desc += `\n[Level ${techLevel}]`;
+    	            classUpdate.desc += `\nGained the ${tech.name} technique.`;
+    	        }
+    	        while (techLevel <= 20 && techLevel <= classLevelTotal) {
+    	            
+    	            // only check advancement on even class levels
+    	            if (techLevel % 2 == 0) {
+    	                techModLevel = Math.floor(techLevel / 2) - 1;
+    	                if (techModLevel >= 0) {
+        	                tech = classData.advancement[techModLevel];
+        	                
+        	                if (tech != undefined) {
+        	                    
+        	                    advancement = AddAdvancementTech (advancement, tech);
+        	                    classUpdate.desc += `\n[Level ${techLevel}]`;
+        	                    classUpdate.desc += `\n${tech.type == "T" ? `Gained the ${tech.name} technique.` : tech.name}`;
+        	                }
+    	                }
+    	            }
+    	            techLevel++;
+    	        }
+    	        
+    	        // add the updates
+    	        classUpdates.push[classUpdates];
+    	        
+    	        // update UI
+    	        update[`advancement-level-${levelData.keys[i]}`] = classLevelTotal;
+    	        update[`advancement-level-${levelData.keys[i]}_max`] = classLevelTotal;
+    	        update[`advancement-name-${levelData.keys[i]}`] = `${classData.name} Lv.${classLevelTotal}`;
+	        }
+	    }
+	    
+	    // iterate through the levels for new path growths
+	    classUpdate = {
+            header: `Character Level Increased!`,
+            desc: `Character Level ${baseLevel} -> ${totalLevel}`
+        };
+	    for (let i = baseLevel; i < totalLevel; i++) {
+	        levelCheck = i + 1;
+	        pathUpdate = "";
+	        
+	        // set level bonuses
+	        switch(levelCheck) {
+	           case 1:
+	                tech = {name: "Gain a Path Technique.", type: "PS"};
+	                pathUpdate += `\n${tech.name}`;
+	                advancement = AddAdvancementTech(advancement, tech);
+                    tech = {name: "Gain 2 Spell Techniques.", type: "SPS"};
+                    pathUpdate += `\n${tech.name}`;
+                    advancement = AddAdvancementTech(advancement, tech);
+                    advancement = AddAdvancementTech(advancement, tech);
+	                break;
+	            
+	           case 6:
+               case 31: 
+	                tech = {name: "Gain an Active Tech Slot.", type: "ATS"};
+	                pathUpdate += `\n${tech.name}`;
+	                advancement = AddAdvancementTech(advancement, tech);
+	                break;
+	                
+               case 21:
+	                tech = {name: "Gain an Active Tech Slot.", type: "ATS"};
+	                pathUpdate += `\n${tech.name}`;
+	                advancement = AddAdvancementTech(advancement, tech);
+	                tech = {name: "Gain a Job Tech Slot", type: "JTS"};
+	                pathUpdate += `\n${tech.name}`;
+	                advancement = AddAdvancementTech(advancement, tech);
+	                break;
+	            
+	           case 11:
+               case 26:
+               case 36: 
+	                tech = {name: "Gain a Passive and Support Tech Slot.", type: "PTS"};
+	                pathUpdate += `\n${tech.name}`;
+	                advancement = AddAdvancementTech(advancement, tech);
+	                break;
+	        }
+	        
+	        if ((levelCheck % 5) - 2 == 0) {
+                tech = {name: "Gain a Skill Technique.", type: "AS"};
+                pathUpdate += `\n${tech.name}`;
+                advancement = AddAdvancementTech(advancement, tech);
+	        }
+	        else if ((levelCheck % 5) - 3 == 0) {
+                tech = {name: "Gain a Training Path Technique.", type: "TPS"};
+                pathUpdate += `\n${tech.name}`;
+                advancement = AddAdvancementTech(advancement, tech);
+	        }
+	        else if ((levelCheck % 5) - 4 == 0) {
+                tech = {name: "Gain a Path Technique.", type: "APS"};
+                pathUpdate += `\n${tech.name}`;
+                advancement = AddAdvancementTech(advancement, tech);
+	        }
+	        else if ((levelCheck % 5) == 0) {
+                tech = {name: "Gain a Spell Technique.", type: "SPS"};
+                pathUpdate += `\n${tech.name}`;
+                advancement = AddAdvancementTech(advancement, tech);
+	        }
+	        
+	        if (pathUpdate != "") {
+	            pathUpdate = `[Level ${levelCheck}]${pathUpdate}`;
+	            classUpdate.desc += pathUpdate;
+	        }
+	        
+	    }
+	    
+	    // calculate final growths
+		baseGrowthsTotal = AddGrowths(baseGrowthsTotal, MultiplyGrowths(baseGrowths, totalLevel - baseLevel));
+		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
+		update["advancement-advancementGrowthsTotal"] = JSON.stringify(advancementGrowthsTotal);
+		update = SetCharacterStatGrowths(update, ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+    	
+		// set updates
+		update["base_level"] = totalLevel;
+		update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, true));
+    	update["characterSheetDisplayStyle"] = "Character";
+		update["advancement-button-reset-everything"] = "0";
+    
+    	setAttrs(update, { silent: true });
+       	
+	});
 
 }
+
+function AddAdvancementTech (advancement, tech) {
+    
+    if (!advancement.keys.includes(tech.type)) {
+        advancement.keys.push(tech.type);
+        advancement.values[tech.type] = (tech.type == "T") ? "" : 0;
+    }
+    
+    switch (tech.type) {
+        case 'T':
+            if (advancement.values[tech.type] != "") {
+                advancement.values[tech.type] += ";";
+            }
+            advancement.values[tech.type] += tech.name;
+            break;
+        default: 
+            advancement.values[tech.type]++;
+            break;
+    }
+    
+    return advancement;
+}
+
+
+
+
+// ======== Reset
+
+on("change:advancement-button-reset", function () {
+
+	update_advancement_reset();
+});
+
+var update_advancement_reset = function () {
+    
+    let mod_attrs = ["advancement-level-total"];
+	getAttrs(mod_attrs, function (v) {
+	    
+	    let update = {};
+	    let levelData = GetAdvancementLevelData(v["advancement-level-total"]);
+
+	    let classData;
+	    let classLevel;
+	    
+	    // iterate through the classes and record any advancement changes. Also reset UI from the advancement page
+	    for (let i = 0; i < levelData.keys.length; i++) {
+	        
+	        classLevel = levelData.values[levelData.keys[i]];
+	        if (classLevel.increase > 0) {
+				
+    	        // update UI
+    	        classData = GetClassesInfo(levelData.keys[i]);
+    	        update[`advancement-level-${levelData.keys[i]}_max`] = classLevel.current;
+    	        update[`advancement-name-${levelData.keys[i]}`] = `${classData.name} Lv.${classLevel.current}`
+	        }
+	    }
+
+		// set updates
+		update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, false));
+		update["advancement-button-reset-everything"] = "0";
+    
+    	setAttrs(update, { silent: true });
+       	
+	});
+
+}
+
+
+
+
+// ======== Restart
+
+on("change:advancement-button-restart-confirm", function () {
+
+	update_advancement_restart();
+});
+
+var update_advancement_restart = function () {
+
+    let mod_attrs = ["advancement-level-total", "builder-baseAbilityScores", "builder-ancestry"];
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let baseAbilityScores = AttrParseJSON(v, "builder-baseAbilityScores");
+		if (baseAbilityScores == "") {
+			baseAbilityScores = CreateAbilityScoreArrayData();
+		}
+		let emptyGrowths = CreateGrowthsArrayData();
+		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
+		let ancestryData = GetAncestryInfo(ancestryName);
+	
+	    let levelData = GetAdvancementLevelData(v["advancement-level-total"]);
+	    let classData;
+	    
+	    // iterate through the classes and reset any levels
+	    for (let i = 0; i < levelData.keys.length; i++) {
+
+	        if (levelData.values[levelData.keys[i]].increase > 0) {
+				
+    	        // update UI
+    	        classData = GetClassesInfo(levelData.keys[i]);
+    	        update[`advancement-level-${levelData.keys[i]}`] = "0";
+    	        update[`advancement-level-${levelData.keys[i]}_max`] = "0";
+    	        update[`advancement-name-${levelData.keys[i]}`] = `${classData.name} Lv.0`
+	        }
+	    }
+
+		// set updates
+		update["advancement-level-total"] = "";
+		update["advancement-button-reset-everything"] = "on";
+		update["base_level"] = 0;
+		update["builder-baseGrowthsTotal"] = JSON.stringify(emptyGrowths);
+		update["advancement-advancementGrowthsTotal"] = JSON.stringify(emptyGrowths);
+		update = SetCharacterStatGrowths(update, ancestryData, baseAbilityScores, emptyGrowths, emptyGrowths);
+    
+    	setAttrs(update, { silent: true });
+       	
+	});
+
+}
+
+
 
 // Advancement Listeners
 on("change:advancement-level-Fighter_max change:advancement-level-Interceptor_max change:advancement-level-Marksman_max change:advancement-level-Rogue_max change:advancement-level-Physician_max change:advancement-level-Pugilist_max change:advancement-level-Scholar_max ", function (eventinfo) {
@@ -5622,10 +6794,8 @@ on("change:advancement-level-Fighter_max change:advancement-level-Interceptor_ma
 	update_advancement_class_level(className);
 });
 
-
-
 var update_advancement_class_level = function (classFieldName) {
-	let mod_attrs = [`advancement-level-${classFieldName}`, `advancement-level-${classFieldName}_max`, `advancement-name-${classFieldName}`];
+	let mod_attrs = ["advancement-level-total", `advancement-level-${classFieldName}`, `advancement-level-${classFieldName}_max`];
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -5635,13 +6805,47 @@ var update_advancement_class_level = function (classFieldName) {
 		if (currentLevel > newLevel) {
 			update[`advancement-level-${classFieldName}_max`] = currentLevel;
 		}
-		console.log (`currentLevel: ${currentLevel} newLevel: ${newLevel}`);
 		let levelDifference = newLevel - currentLevel;
-		update[`advancement-name-${classFieldName}_max`] = `${v[`advancement-name-${classFieldName}`]}${levelDifference > 0 ? `+${levelDifference}` : ""}`;
+		
+		let classData = GetClassesInfo(classFieldName);
+		update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${currentLevel} ${levelDifference > 0 ? `+${levelDifference}` : ""}`;
+		
+		var levelData = GetAdvancementLevelData(v["advancement-level-total"]);
+		SetAdvancementLevelData(levelData, classFieldName, currentLevel, levelDifference);
+		update["advancement-level-total"] = JSON.stringify(levelData);
+		
 		setAttrs(update, { silent: true });
 	});
 }
 
+
+// ======== Ability Scores
+
+function SetCharacterStatGrowths (update, ancestryData, baseAbilityScores, baseGrowths, advancementGrowths) {
+
+	// convert growths to ability scores
+	let currentGrowths = ConvertAbilityScorePointsToGrowths(AddGrowths(baseGrowths, AddGrowths(ancestryData.growths, advancementGrowths)));
+	let abilityScores = AddAbilityScores(baseAbilityScores, AddAbilityScores(ancestryData.startingScores, MultiplyAbilityScores(currentGrowths, 0.01)));
+	let abilityScoreModulus = ModulusAbilityScores(currentGrowths, 100);
+
+	let abilityScoresList = GetAbilityScoreList(true);
+	let score = "";
+	for (let i = 0; i < abilityScoresList.length; i++) {
+		score = abilityScoresList[i];
+		update[`${score}_score`] = `${abilityScores[score]}.${(abilityScoreModulus[score] < 10) ? `0${abilityScoreModulus[score]}` : abilityScoreModulus[score]}`;
+		update[score] = GetAbilityScoreMod(abilityScores[score]);
+	}
+
+	return update;
+}
+
+
+
+
+
+
+
+// ======== Advancement Button
 
 on("change:character-button-advancement", function () {
 
@@ -5652,7 +6856,7 @@ var update_character_toAdvancement = function () {
 	let update = {};
 
 	update["advancement-previousPage"] = "Character";
-	update["characterSheetDisplayStyle"] = "LevelUp";
+	update["characterSheetDisplayStyle"] = "Advancement";
 
 	setAttrs(update, { silent: true });
 }
@@ -5709,6 +6913,19 @@ function GetSectionIdNameFromArray(sectionName, currentID, variableNames) {
 		output.push(GetSectionIdName(sectionName, currentID, variableNames[i]));
 	}
 	return output;
+}
+
+function CapitalizeAndRemoveSpaces(inputString) {
+
+	// Capitalize every word in the string
+	var capitalizedString = inputString.replace(/\w\S*/g, function (word) {
+		return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+	});
+
+	// Remove spaces using a regular expression
+	var stringWithoutSpaces = capitalizedString.replace(/\s/g, '');
+
+	return stringWithoutSpaces;
 }
 
 // ====== Language
@@ -5851,40 +7068,81 @@ function GetLanguageTag(language) {
             return "{{language-default=1}}";
     }
 }
-function GetPathInfo(name) {
-	switch (name.toLowerCase()) {
-		case "common":
-			return { "name": "Common", "description": "Common characters represent the majority of creatures found throughout Wuxing. They receive no special bonuses throughout character creation and as they advance.", "abilityScorePts": "40" }
-		case "hero":
-			return { "name": "Hero", "description": "Player characters typically fall into the Hero path. This path is represented by those who have the resolve to push boundaries and survive the impossible. This path grants characters bonuses at character creation, increased growths throughout their advancement, and some unique actions.", "abilityScorePts": "60" }
-		case "paragon":
-			return { "name": "Paragon", "description": "Paragon characters are those who excel beyond that of a hero into something very unique. They gain the bonuses of the Hero path characters plus additional benefits determined by the GM.", "abilityScorePts": "60" }
-		default:
-			return { "name": "", "description": "", "abilityScorePts": "" }
+function GetAbilityScoreMod(score) {
 
+	if (score <= 1) {
+	return -3;
 	}
-}
-function GetAncestryInfo(name) {
+	else if (score <= 6) {
+	return -2;
+	}
+	else if (score <= 9) {
+	return -1;
+	}
+	else if (score <= 12) {
+	return 0;
+	}
+	else if (score <= 17) {
+	return 1;
+	}
+	else if (score <= 24) {
+	return 2;
+	}
+	else if (score <= 33) {
+	return 3;
+	}
+	else if (score <= 44) {
+	return 4;
+	}
+	else if (score <= 57) {
+	return 5;
+	}
+	else if (score <= 72) {
+	return 6;
+	}
+	else if (score <= 89) {
+	return 7;
+	}
+	else if (score >= 90) {
+	return 8;
+	}
+	
+	return 0;
+	}
+	function GetPathInfo(name) {
 	switch (name.toLowerCase()) {
-		case "human":
-			return { "name": "Human", "description": "Humans are the most common intelligent ancestry in the world of Wuxing. There are multiple ethnicities of human, none granting any special bonuses but instead alter how they appear and are perceived in the world.", "moreDetails": "Ethnicities", "growths": { "CON": "0.20", "DEX": "0.20", "QCK": "0.20", "STR": "0.20", "CHA": "0.20", "INT": "0.20", "PER": "0.20", "WIL": "0.20", "hp": "0.00", "vitality": "0.00", "kiCharge": "0.00", "spellForce": "0.06" }, "startingScores": { "CON": 7, "DEX": 7, "QCK": 7, "STR": 7, "CHA": 7, "INT": 7, "PER": 7, "WIL": 7 }, "hp": 15, "barrier": 0, "speed": 5, "skillPointsPhysDefense": 1, "skillPointsSensDefense": 1, "skillPointsCoAcTc": 4, "skillPointsMgKnSo": 4, "skillPointsAny": 6, "gearSlots": "1 Head; 1 Body, 1 Arms, 1 Legs, 2 Hands", "techniques": "Unarmed Attack" }
-		case "spirit":
-			return { "name": "Spirit", "description": "Spirits are the principle definition of a magical creature. Their composition is made entirely from ether and an element aspected to it. Surviving off of ether alone, spirits’ lives can be eternal or short, depending on their will for survival, power, and entertainment.\n\nSpirits roam their boundless void of ether surviving and purveying the land of the material. Whenever they wish to, a spirit can manifest into the material world, possessing or living within anything they wish to experience life. However their reasoning to do so are as varied as humans.", "moreDetails": "", "growths": { "CON": "0.00", "DEX": "0.00", "QCK": "0.00", "STR": "0.00", "CHA": "0.20", "INT": "0.20", "PER": "0.20", "WIL": "0.20", "hp": "0.00", "vitality": "0.00", "kiCharge": "0.05", "spellForce": "0.06" }, "startingScores": { "CON": 0, "DEX": 0, "QCK": 0, "STR": 0, "CHA": 5, "INT": 5, "PER": 5, "WIL": 5 }, "hp": 15, "barrier": 5, "speed": 5, "skillPointsPhysDefense": 1, "skillPointsSensDefense": 1, "skillPointsCoAcTc": null, "skillPointsMgKnSo": 4, "skillPointsAny": 6, "gearSlots": "None", "techniques": "" }
-		default:
-			return { "name": "", "description": "", "moreDetails": "", "growths": [], "startingScores": [], "hp": 0, "barrier": 0, "speed": 0, "skillPointsPhysDefense": 0, "skillPointsSensDefense": 0, "skillPointsCoAcTc": 0, "skillPointsMgKnSo": 0, "skillPointsAny": 0, "gearSlots": "", "techniques": "" }
-
+	case "common":
+	return {"name":"Common","description":"Common characters represent the majority of creatures found throughout Wuxing. They receive no special bonuses throughout character creation and as they advance.","abilityScorePts":"40"}
+	case "hero":
+	return {"name":"Hero","description":"Player characters typically fall into the Hero path. This path is represented by those who have the resolve to push boundaries and survive the impossible. This path grants characters bonuses at character creation, increased growths throughout their advancement, and some unique actions.","abilityScorePts":"60"}
+	case "paragon":
+	return {"name":"Paragon","description":"Paragon characters are those who excel beyond that of a hero into something very unique. They gain the bonuses of the Hero path characters plus additional benefits determined by the GM.","abilityScorePts":"60"}
+	default:
+	return {"name":"","description":"","abilityScorePts":""}
+	
 	}
-}
-function GetAncestryTechniqueInfo(name) {
+	}
+	function GetAncestryInfo(name) {
 	switch (name.toLowerCase()) {
-		case "unarmed attack":
-			return { "name": "Unarmed Attack", "augmentBase": "", "techniqueGroup": "Ancestry", "techniqueSubGroup": "Human", "techniqueType": "Permanent", "action": "", "traits": "", "limits": "", "resourceCost": "20 Mana", "description": "You gain the Unarmed weapon. It has the following stats:\n\nSkill: Brawling\nAbility: Finesse\nRange: 1T\nDamage: 1d3 + P\nType: Force", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "pooping", "defense": "not poo", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
-		default:
-			return { "name": "", "augmentBase": "", "techniqueGroup": "", "techniqueSubGroup": "", "techniqueType": "", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
-
+	case "human":
+	return {"name":"Human","description":"Humans are the most common intelligent ancestry in the world of Wuxing. There are multiple ethnicities of human, none granting any special bonuses but instead alter how they appear and are perceived in the world.","moreDetails":"Ethnicities","growths":{"CON":1,"DEX":1,"QCK":1,"STR":1,"CHA":1,"INT":1,"PER":1,"WIL":1,"hp":0,"vitality":0,"kiCharge":0,"spellForce":1},"startingScores":{"CON":7,"DEX":7,"QCK":7,"STR":7,"CHA":7,"INT":7,"PER":7,"WIL":7},"hp":15,"barrier":0,"speed":5,"skillPointsPhysDefense":1,"skillPointsSensDefense":1,"skillPointsCoAcTc":4,"skillPointsMgKnSo":4,"skillPointsAny":6,"gearSlots":"1 Head; 1 Body, 1 Arms, 1 Legs, 2 Hands","techniques":"Unarmed Attack"}
+	case "spirit":
+	return {"name":"Spirit","description":"Spirits are the principle definition of a magical creature. Their composition is made entirely from ether and an element aspected to it. Surviving off of ether alone, spirits’ lives can be eternal or short, depending on their will for survival, power, and entertainment.\n\nSpirits roam their boundless void of ether surviving and purveying the land of the material. Whenever they wish to, a spirit can manifest into the material world, possessing or living within anything they wish to experience life. However their reasoning to do so are as varied as humans.","moreDetails":"","growths":{"CON":0,"DEX":0,"QCK":0,"STR":0,"CHA":1,"INT":1,"PER":1,"WIL":1,"hp":0,"vitality":0,"kiCharge":1,"spellForce":1},"startingScores":{"CON":0,"DEX":0,"QCK":0,"STR":0,"CHA":5,"INT":5,"PER":5,"WIL":5},"hp":15,"barrier":5,"speed":5,"skillPointsPhysDefense":1,"skillPointsSensDefense":1,"skillPointsCoAcTc":null,"skillPointsMgKnSo":4,"skillPointsAny":6,"gearSlots":"None","techniques":""}
+	default:
+	return {"name":"","description":"","moreDetails":"","growths":[],"startingScores":[],"hp":0,"barrier":0,"speed":0,"skillPointsPhysDefense":0,"skillPointsSensDefense":0,"skillPointsCoAcTc":0,"skillPointsMgKnSo":0,"skillPointsAny":0,"gearSlots":"","techniques":""}
+	
 	}
-}
-function GetTechniqueTraitsInfo(name) {
+	}
+	function GetAncestryTechniqueInfo(name) {
+	switch (name.toLowerCase()) {
+	case "unarmed attack":
+	return {"name":"Unarmed Attack","augmentBase":"","techniqueGroup":"Ancestry","techniqueSubGroup":"Human","techniqueType":"Permanent","action":"","traits":"","limits":"","resourceCost":"","description":"You gain the Unarmed weapon. It has the following stats:\n\nSkill: Brawling\nAbility: Finesse\nRange: 1T\nDamage: 1d3 + P\nType: Force","onSuccess":"","trigger":"","requirement":"","prerequisite":"","skill":"","defense":"","range":"","target":"","targetCode":"","onHit":"","damage":"","damageType":"","element":"","specBonus":"","augments":[]}
+	default:
+	return {"name":"","augmentBase":"","techniqueGroup":"","techniqueSubGroup":"","techniqueType":"","action":"","traits":"","limits":"","resourceCost":"","description":"","onSuccess":"","trigger":"","requirement":"","prerequisite":"","skill":"","defense":"","range":"","target":"","targetCode":"","onHit":"","damage":"","damageType":"","element":"","specBonus":"","augments":[]}
+	
+	}
+	}
+	function GetTechniqueTraitsInfo(name) {
 	switch (name.toLowerCase()) {
 	case "affinity":
 	return {"name":"Affinity","group":"Technique","description":"This technique's element changes to one of your elemental affinities."}
@@ -6208,6 +7466,37 @@ function GetTechniqueTraitsInfo(name) {
 	}
 	else {
 	return ["insight", "notice", "resolve"];
+	}
+	}
+	
+	function GetClassesInfo(name) {
+	switch (name.toLowerCase()) {
+	case "fighter":
+	return {"name":"Fighter","category":"Warfare","description":"The fighter is about survival. This battle hardened warrior will keep himself from falling through many means to self-heal, aid, and even shrug off wounds. ","growths":{"CON":4,"DEX":4,"QCK":2,"STR":3,"CHA":0,"INT":0,"PER":0,"WIL":1,"hp":3,"vitality":5,"kiCharge":1,"spellForce":0},"prerequisite":"","jobTechnique":"Second Wind","advancement":[{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Shrug It Off","type":"T"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Always Armored","type":"T"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Always Armored +","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Undaunted","type":"T"}]}
+	case "interceptor":
+	return {"name":"Interceptor","category":"Warfare","description":"The interceptor is an expert in disrupting others. Prefering weapons with increased threat, interceptors protect their allies by stopping the movement of advancing enemies.","growths":{"CON":2,"DEX":4,"QCK":5,"STR":2,"CHA":0,"INT":0,"PER":3,"WIL":3,"hp":0,"vitality":2,"kiCharge":0,"spellForce":0},"prerequisite":"Trained in Notice and Polearm","jobTechnique":"Preemptive Strike","advancement":[{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Preemptive Stagger","type":"T"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Lunge","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Step Forward","type":"T"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Critical Maim","type":"T"}]}
+	case "marksman":
+	return {"name":"Marksman","category":"Warfare","description":"","growths":{"CON":3,"DEX":4,"QCK":3,"STR":0,"CHA":2,"INT":0,"PER":5,"WIL":1,"hp":0,"vitality":0,"kiCharge":2,"spellForce":2},"prerequisite":"Trained in Assault and Longarm","jobTechnique":"Spellshot","advancement":[{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Distant Spell","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"","type":"T"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"","type":"T"}]}
+	case "rogue":
+	return {"name":"Rogue","category":"Talent","description":"The rogue is an expert at exploiting distractions. They can exploit enemy weaknesses with their sneak attack, both on their turn and during follow-up attacks. ","growths":{"CON":0,"DEX":5,"QCK":4,"STR":0,"CHA":2,"INT":2,"PER":3,"WIL":3,"hp":1,"vitality":0,"kiCharge":0,"spellForce":0},"prerequisite":"","jobTechnique":"Sneak Attack","advancement":[{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Sneaky Follow-Up","type":"T"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Skulk Away","type":"T"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Then Hide","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Assassinate","type":"T"}]}
+	case "physician":
+	return {"name":"Physician","category":"Talent","description":"The physician is a medical practitioner and expert healer. Their Emergency Care allows them to heal allies and provide them with barrier, eventually allowing them to heal wounds. And if faster healing is necessary, their First aid allows them to perform healing as a Quick action.","growths":{"CON":3,"DEX":0,"QCK":3,"STR":0,"CHA":4,"INT":0,"PER":5,"WIL":3,"hp":0,"vitality":0,"kiCharge":2,"spellForce":2},"prerequisite":"Trained in Herbalism and Medicine","jobTechnique":"Emergency Care","advancement":[{"name":"Gain a Technical Skill Technique.","type":"TS"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"First Aid","type":"T"},{"name":"Gain a Technical Skill Technique.","type":"TS"},{"name":"Nightingale","type":"T"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"Cleansing Aid","type":"T"},{"name":"Gain a Technical Skill Technique.","type":"TS"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"Rhapsody","type":"T"}]}
+	case "pugilist":
+	return {"name":"Pugilist","category":"Talent","description":"The pugilist is a martial artist and athlete whose own body is a weapon. They feature an incredible method of getting in and out of combat with their Sprint. When they are in combat, their Flurry of Blows allows them to attack more often and combo off their foes' conditions.","growths":{"CON":4,"DEX":4,"QCK":3,"STR":3,"CHA":0,"INT":0,"PER":1,"WIL":0,"hp":4,"vitality":2,"kiCharge":0,"spellForce":0},"prerequisite":"Trained in Athletics and Brawling","jobTechnique":"Flurry of Blows","advancement":[{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Sprint","type":"T"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Throw Down","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Burst Sprint","type":"T"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Stunning Strike","type":"T"}]}
+	case "scholar":
+	return {"name":"Scholar","category":"Acumen","description":"The scholar is an expert in history and uses it to always be prepared. In addition to history, scholars are typically knowledgable in a broad array of subjects and will sometimes use it to educate others. In combat, a scholar will use their preparedness to avoid bad situations and help their allies avoid them too.","growths":{"CON":1,"DEX":3,"QCK":3,"STR":0,"CHA":0,"INT":5,"PER":4,"WIL":2,"hp":0,"vitality":1,"kiCharge":3,"spellForce":0},"prerequisite":"Trained in History","jobTechnique":"Foresight","advancement":[{"name":"Gain a Knowledge Skill Technique.","type":"KS"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Eclectic Knowledge","type":"T"},{"name":"Gain a Knowledge Skill Technique.","type":"KS"},{"name":"Saw That Coming","type":"T"},{"name":"Gain a Knowledge Skill Technique.","type":"KS"},{"name":"Point of Clarity","type":"T"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Gain a Knowledge Skill Technique.","type":"KS"},{"name":"As You May Recall","type":"T"}]}
+	default:
+	return {"name":"","category":"","description":"","growths":[],"prerequisite":"","jobTechnique":"","advancement":[]}
+	
+	}
+	}
+	
+	function GetClassesList(isFields) {
+	if (isFields) {
+	return ["Fighter", "Interceptor", "Marksman", "Rogue", "Physician", "Pugilist", "Scholar"];
+	}
+	else {
+	return ["fighter", "interceptor", "marksman", "rogue", "physician", "pugilist", "scholar"];
 	}
 	}
 	

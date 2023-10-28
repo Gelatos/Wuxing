@@ -1,5 +1,35 @@
-// Section Ids
-function GetSectionIdValues (idarray, sectionName, variableArray) {
+// ======== Attribute Values
+function AttrParseString(attrArray, fieldName, defaultValue) {
+	if (defaultValue == undefined) {
+		defaultValue = "";
+	}
+	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName];
+}
+
+function AttrParseInt(attrArray, fieldName, defaultValue) {
+	if (defaultValue == undefined) {
+		defaultValue = 0;
+	}
+	return isNaN(parseInt(attrArray[fieldName])) ? defaultValue : parseInt(attrArray[fieldName]);
+}
+
+function AttrParseFloat(attrArray, fieldName, defaultValue) {
+	if (defaultValue == undefined) {
+		defaultValue = 0;
+	}
+	return isNaN(parseFloat(attrArray[fieldName])) ? defaultValue : parseFloat(attrArray[fieldName]);
+}
+
+function AttrParseJSON(attrArray, fieldName, defaultValue) {
+	if (defaultValue == undefined) {
+		defaultValue = "";
+	}
+	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName] == "" ? defaultValue : JSON.parse(attrArray[fieldName]);
+}
+
+
+// ======== Section Ids
+function GetSectionIdValues(idarray, sectionName, variableArray) {
 	var output = [];
 
 	_.each(idarray, function (currentID) {
@@ -11,7 +41,7 @@ function GetSectionIdValues (idarray, sectionName, variableArray) {
 	return output;
 }
 
-function GetRepeatingSectionIdFromId (id, repeatingSection) {
+function GetRepeatingSectionIdFromId(id, repeatingSection) {
 	var len = repeatingSection.length + 1;
 	return id.substr(len, 20);
 }
@@ -25,48 +55,197 @@ function ClearAllSectionIds(repeatingSection) {
 	});
 }
 
-function RemoveSectionId (repeatingSection, repeatingSectionId) {
+function RemoveSectionId(repeatingSection, repeatingSectionId) {
 
 	removeRepeatingRow(`${repeatingSection}_${repeatingSectionId}`);
 }
 
-// Ability Scores
 
-function SetAbilityScoreUpdate(update, updateAttr, abilityScoreArray) {
 
-	update[`${updateAttr}CON`] = abilityScoreArray.CON;
-	update[`${updateAttr}DEX`] = abilityScoreArray.DEX;
-	update[`${updateAttr}QCK`] = abilityScoreArray.QCK;
-	update[`${updateAttr}STR`] = abilityScoreArray.STR;
-	update[`${updateAttr}CHA`] = abilityScoreArray.CHA;
-	update[`${updateAttr}INT`] = abilityScoreArray.INT;
-	update[`${updateAttr}PER`] = abilityScoreArray.PER;
-	update[`${updateAttr}WIL`] = abilityScoreArray.WIL;
+
+  //// ======== Ability Scores
+  
+  function CreateAbilityScoreArrayData() {
+	var output = {
+	  CON: 0, DEX: 0,
+	  QCK: 0, STR: 0,
+	  CHA: 0, INT: 0,
+	  PER: 0, WIL: 0
+	}
+	
+	return output;
+  }
+
+function SetAbilityScoreUpdate(update, updateAttr, abilityScoreArray, suffix) {
+
+	if (suffix == undefined) {
+		suffix = "";
+	}
+
+	update[`${updateAttr}CON`] = abilityScoreArray.CON + suffix;
+	update[`${updateAttr}DEX`] = abilityScoreArray.DEX + suffix;
+	update[`${updateAttr}QCK`] = abilityScoreArray.QCK + suffix;
+	update[`${updateAttr}STR`] = abilityScoreArray.STR + suffix;
+	update[`${updateAttr}CHA`] = abilityScoreArray.CHA + suffix;
+	update[`${updateAttr}INT`] = abilityScoreArray.INT + suffix;
+	update[`${updateAttr}PER`] = abilityScoreArray.PER + suffix;
+	update[`${updateAttr}WIL`] = abilityScoreArray.WIL + suffix;
 	return update;
 }
 
-function GetAbilityScoreFieldNames(updateAttr) {
-	return [`${updateAttr}CON`, `${updateAttr}DEX`, `${updateAttr}QCK`, `${updateAttr}STR`, `${updateAttr}CHA`, `${updateAttr}INT`, `${updateAttr}PER`, `${updateAttr}WIL`];
+function GetAbilityScoreList(isFields) {
+	if (isFields) {
+	return ["CON", "DEX", "QCK", "STR", "CHA", "INT", "PER", "WIL"];
+	}
+	else {
+	return ["Constitution", "Dexterity", "Quickness", "Strength", "Charisma", "Intelligence", "Perception", "Willpower"];
+	}
 }
 
-function GetAbilityScoreFieldIntegerArray(updateAttr, abilityScoreArray) {
+function SetAbilityScoreFieldArray(attrArray, fieldName) {
 
-	let output = [];
-	output["CON"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}CON`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}CON`]);
-	output["DEX"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}DEX`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}DEX`]);
-	output["QCK"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}QCK`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}QCK`]);
-	output["STR"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}STR`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}STR`]);
-	output["CHA"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}CHA`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}CHA`]);
-	output["INT"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}INT`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}INT`]);
-	output["PER"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}PER`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}PER`]);
-	output["WIL"] = isNaN(parseInt(abilityScoreArray[`${updateAttr}WIL`])) ? 0 : parseInt(abilityScoreArray[`${updateAttr}WIL`]);
-	
+	let output = {};
+	let abList = GetAbilityScoreList(true);
+	for (let i = 0; i < abList.length; i++) {
+		output[abList[i]] = AttrParseInt(attrArray, `${fieldName}${abList[i]}`);
+	}
+
 	return output;
 }
 
-// Techniques
+function AddAbilityScores(array1, array2) {
 
-function GetTraitsDictionary (traits, traitType) {
+	return {
+		CON: (array1.CON + array2.CON),
+		DEX: (array1.DEX + array2.DEX),
+		QCK: (array1.QCK + array2.QCK),
+		STR: (array1.STR + array2.STR),
+		CHA: (array1.CHA + array2.CHA),
+		INT: (array1.INT + array2.INT),
+		PER: (array1.PER + array2.PER),
+		WIL: (array1.WIL + array2.WIL)
+	}
+}
+
+function MultiplyAbilityScores(array1, val) {
+
+	return {
+		CON: Math.floor(array1.CON * val),
+		DEX: Math.floor(array1.DEX * val),
+		QCK: Math.floor(array1.QCK * val),
+		STR: Math.floor(array1.STR * val),
+		CHA: Math.floor(array1.CHA * val),
+		INT: Math.floor(array1.INT * val),
+		PER: Math.floor(array1.PER * val),
+		WIL: Math.floor(array1.WIL * val)
+	}
+}
+
+function ModulusAbilityScores(array1, val) {
+
+	return {
+		CON: (array1.CON % val),
+		DEX: (array1.DEX % val),
+		QCK: (array1.QCK % val),
+		STR: (array1.STR % val),
+		CHA: (array1.CHA % val),
+		INT: (array1.INT % val),
+		PER: (array1.PER % val),
+		WIL: (array1.WIL % val)
+	}
+}
+
+
+
+// ======== Growths
+
+function CreateGrowthsArrayData() {
+
+	var output = CreateAbilityScoreArrayData();
+	output.hp = 0;
+	output.vitality = 0;
+	output.kiCharge = 0;
+	output.spellForce = 0;
+
+	return output;
+}
+
+function ConvertAbilityScorePointsToGrowths(growthData) {
+
+	let abilityScoreGrowthRate = 20;
+	let hpGrowthRate = 50;
+	let vitalityGrowthRate = 5;
+	let kiChargeGrowthRate = 5;
+	let spellForceGrowthRate = 6;
+	return {
+		CON: (growthData.CON * abilityScoreGrowthRate),
+		DEX: (growthData.DEX * abilityScoreGrowthRate),
+		QCK: (growthData.QCK * abilityScoreGrowthRate),
+		STR: (growthData.STR * abilityScoreGrowthRate),
+		CHA: (growthData.CHA * abilityScoreGrowthRate),
+		INT: (growthData.INT * abilityScoreGrowthRate),
+		PER: (growthData.PER * abilityScoreGrowthRate),
+		WIL: (growthData.WIL * abilityScoreGrowthRate),
+		hp: (growthData.hp * hpGrowthRate),
+		vitality: (growthData.vitality * vitalityGrowthRate),
+		kiCharge: (growthData.kiCharge * kiChargeGrowthRate),
+		spellForce: (growthData.spellForce * spellForceGrowthRate)
+	}
+}
+
+function SetGrowthFieldArray(attrArray, fieldName) {
+
+	let output = SetAbilityScoreFieldArray(attrArray, fieldName);
+	output.hp = AttrParseInt(attrArray, `${fieldName}hp`);
+	output.vitality = AttrParseInt(attrArray, `${fieldName}vitality`);
+	output.kiCharge = AttrParseInt(attrArray, `${fieldName}kiCharge`);
+	output.spellForce = AttrParseInt(attrArray, `${fieldName}spellForce`);
+
+	return output;
+}
+
+function AddGrowths(array1, array2) {
+
+	let output = AddAbilityScores(array1, array2);
+
+	output.hp = (array1.hp + array2.hp);
+	output.vitality = (array1.vitality + array2.vitality);
+	output.kiCharge = (array1.kiCharge + array2.kiCharge);
+	output.spellForce = (array1.spellForce + array2.spellForce);
+
+	return output;
+}
+
+function MultiplyGrowths(array1, val) {
+
+	let output = MultiplyAbilityScores(array1, val);
+
+	output.hp = Math.floor(array1.hp * val);
+	output.vitality = Math.floor(array1.vitality * val);
+	output.kiCharge = Math.floor(array1.kiCharge * val);
+	output.spellForce = Math.floor(array1.spellForce * val);
+
+	return output;
+}
+
+function ModulusGrowths(array1, val) {
+
+	let output = ModulusAbilityScores(array1, val);
+
+	output.hp = (array1.hp % val);
+	output.vitality = (array1.vitality % val);
+	output.kiCharge = (array1.kiCharge % val);
+	output.spellForce = (array1.spellForce % val);
+
+	return output;
+}
+
+
+
+
+// ======== Techniques
+
+function GetTraitsDictionary(traits, traitType) {
 
 	let output = [];
 	if (traits != undefined) {
@@ -76,33 +255,33 @@ function GetTraitsDictionary (traits, traitType) {
 		let lookup = "";
 		let traitInfo;
 
-		for(let i = 0; i < keywordsSplit.length; i++) {
+		for (let i = 0; i < keywordsSplit.length; i++) {
 			name = "" + keywordsSplit[i].trim();
 
-			if (name.includes ("Impact") || name.includes ("Explosive")) {
-			name = ReplaceDamageDice(name);
+			if (name.includes("Impact") || name.includes("Explosive")) {
+				name = ReplaceDamageDice(name);
 			}
 
 			lookup = name;
-			if (lookup.indexOf ("(") >= 0) {
+			if (lookup.indexOf("(") >= 0) {
 				lookup = lookup.replace(/\([^)]*\)/g, "(X)");
 			}
-			
-			switch(traitType.toLowerCase()) {
+
+			switch (traitType.toLowerCase()) {
 				case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
 				case "weapon": traitInfo = GetWeaponTraitsInfo(lookup); break;
 				case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
 				case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
 			}
 			traitInfo.name = name;
-			output.push (traitInfo);
+			output.push(traitInfo);
 		}
 	}
 
 	return output;
 }
 
-function GetTechniqueDataArray (type, techniques) {
+function GetTechniqueDataArray(type, techniques) {
 	let output = [];
 	let techniqueList = techniques.split(";");
 	let tech = "";
@@ -110,13 +289,13 @@ function GetTechniqueDataArray (type, techniques) {
 
 	for (let i = 0; i < techniqueList.length; i++) {
 		tech = techniqueList[i].trim();
-		switch(type.toLowerCase()) {
-			case "ancestry": 
+		switch (type.toLowerCase()) {
+			case "ancestry":
 				technique = GetAncestryTechniqueInfo(tech);
 				if (technique.name != "") {
-					output.push(technique); 
+					output.push(technique);
 				}
-			break;
+				break;
 		}
 	}
 	return output;
@@ -141,11 +320,11 @@ function SetTechniqueDataList(update, repeatingSection, techniqueList) {
 	}
 
 	return update;
-	
+
 }
 
 function SetTechniqueData(update, newrowid, repeatingSection, technique) {
- 
+
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-header")] = technique.augmentBase == "" ? technique.action : "Augment";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-name")] = technique.name;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-augmentBase")] = technique.augmentBase == "" ? "Base" : technique.augmentBase;
@@ -155,7 +334,7 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-limits")] = technique.limits;
 
 	// set the function block
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-functionBlock")] = 
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-functionBlock")] =
 		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "" || technique.resourceCost != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-traits")] = technique.traits;
 	var traitsDb = GetTraitsDictionary(technique.traits, "technique");
@@ -179,8 +358,8 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-onSuccess")] = technique.onSuccess;
 
 	// set the attack block
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlock")] = 
-	(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlock")] =
+		(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") ? "1" : "0";
 
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockTarget")] = (technique.range != "" || technique.target != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-range")] = technique.range;
@@ -200,7 +379,7 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 		let damageString = `${FormatDamageString(technique.damage)}${technique.damageType}${technique.element == "" ? "" : ` [${technique.element}]`}`;
 		update[GetSectionIdName(repeatingSection, newrowid, "technique-damageString")] = damageString;
 	}
-	
+
 	// set special data
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-onHit")] = technique.onHit;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-specBonus")] = technique.specBonus;
@@ -208,33 +387,38 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	return update;
 }
 
+
+
+
+// ======== Damage Values
+
 function FormatDamageString(element, condensed) {
 	var output = "";
 	var damage = "";
 	var elements = element.split(";");
 	for (var i = 0; i < elements.length; i++) {
-	  damage = ReplaceDamageDice(elements[i]).trim();
-	  if (condensed && damage == "Power") {
-		damage = "P";
-	  }
-  
-	  // form output string
-	  if (output != "") {
-		output += "+ ";
-	  }
-	  output += `${damage} `;
+		damage = ReplaceDamageDice(elements[i]).trim();
+		if (condensed && damage == "Power") {
+			damage = "P";
+		}
+
+		// form output string
+		if (output != "") {
+			output += "+ ";
+		}
+		output += `${damage} `;
 	}
 	return output;
-  }
-  
-  function ReplaceDamageDice(element) {
+}
+
+function ReplaceDamageDice(element) {
 	// Define a regular expression and the replacement string
 	var regexH = /(\d+)h/g;
 	var replacementH = '$1d3';
 	var regexD = /(\d+)d/g;
 	var replacementD = '$1d6';
-  
+
 	// Use String.replace() with the regular expression
 	return element.replace(regexD, replacementD).replace(regexH, replacementH);
-  }
+}
 

@@ -7,6 +7,11 @@
     text-align: left;
 }
 
+.wuxNoPadding
+{
+    padding: 0px;
+}
+
 /*========================================
     Collapse Field
 ========================================*/
@@ -38,8 +43,7 @@
 .wuxHiddenField,
 .wuxHiddenInlineField,
 .wuxHiddenBlockField,
-.wuxHiddenFlexField,
-.wuxHiddenField-flag
+.wuxHiddenFlexField
 {
     display: none;
 }

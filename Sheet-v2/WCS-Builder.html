@@ -1,4 +1,12 @@
 <div class="wuxCharacterSheetDisplayStyle-Builder">
+	<input type="hidden" name="attr_builder-basePath" value="">
+	<input type="hidden" name="attr_builder-baseAncestry" value="">
+	<input type="hidden" name="attr_builder-baseGrowths" value="">
+	<input type="hidden" name="attr_builder-baseAbilityScores" value="">
+	<input type="hidden" name="attr_builder-baseSkills" value="">
+	<input type="hidden" name="attr_builder-baseChoiceSkills" value="">
+
+	<input type="hidden" name="attr_builder-baseGrowthsTotal" value="">
 
 	<div class="main-TopRow wuxFloatHeader wuxHorizontalFlex">
 		<div class="segment-Basis wuxSegment">
@@ -19,7 +27,7 @@
 									</div>
 
 									<div class="wuxButton">
-										<input type="checkbox" name="attr_characterSheetDisplayStyle" value="Character">
+										<input type="checkbox" name="attr_builder-button-leave">
 										<span>Leave</span>
 									</div>
 								</div>
@@ -119,74 +127,122 @@
 
 						<div class="wuxRow">&nbsp;</div>
 						<div class="wuxFlexTable">
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">CON</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-CON">-</span>
+							<div class="wuxFlexTableItemGroup wuxNoPadding">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">CON</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-CON">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">DEX</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-DEX">-</span>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">QCK</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-QCK">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">STR</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-STR">-</span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">DEX</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-DEX">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">QCK</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-QCK">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">STR</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-STR">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">CHA</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-CHA">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">INT</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-INT">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">PER</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-PER">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">WIL</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-starting-WIL">-</span>
+							<div class="wuxFlexTableItemGroup wuxNoPadding">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">CHA</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-CHA">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">INT</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-INT">-</span>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">PER</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-PER">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">WIL</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-starting-WIL">-</span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 
 						<div class="wuxRow">&nbsp;</div>
 						<span class='wuxHeader'>Ancestry Growths</span>
 						<div class="wuxFlexTable">
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">CON</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-CON">-</span>
+							<div class="wuxFlexTableItemGroup wuxNoPadding">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">CON</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-CON">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">DEX</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-DEX">-</span>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">QCK</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-QCK">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">STR</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-STR">-</span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">DEX</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-DEX">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">QCK</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-QCK">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">STR</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-STR">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">CHA</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-CHA">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">INT</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-INT">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">PER</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-PER">-</span>
-							</div>
-							<div class="wuxFlexTableItemGroup">
-								<span class="wuxFlexTableItemHeader">WIL</span>
-								<span class="wuxFlexTableItemData" name="attr_builder-growth-WIL">-</span>
+							<div class="wuxFlexTableItemGroup wuxNoPadding">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">CHA</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-CHA">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">INT</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-INT">-</span>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">PER</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-PER">-</span>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">WIL</span>
+												<span class="wuxFlexTableItemData" name="attr_builder-growth-WIL">-</span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -380,45 +436,69 @@
 								</div>
 							</div>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-CON" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-CON">-</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-CON" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-CON">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-DEX" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-DEX">-</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-QCK" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-QCK">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-STR" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-STR">-</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-DEX" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-DEX">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-QCK" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-QCK">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-STR" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-STR">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-CHA" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-CHA">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-INT" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-INT">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-PER" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-PER">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-WIL" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-WIL">-</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-CHA" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-CHA">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-INT" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-INT">-</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-PER" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-PER">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-baseAbilityScorePoints-error-WIL" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-base-WIL">-</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -452,45 +532,69 @@
 								</div>
 							</div>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CON</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-CON" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-CON">-</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CON</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-CON" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-CON">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">DEX</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-DEX" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-DEX">-</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">QCK</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-QCK" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-QCK">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">STR</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-STR" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-STR">-</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">DEX</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-DEX" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-DEX">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">QCK</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-QCK" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-QCK">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">STR</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-STR" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-STR">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">CHA</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-CHA" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-CHA">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">INT</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-INT" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-INT">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">PER</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-PER" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-PER">-</span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<span class="wuxFlexTableItemHeader">WIL</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-WIL" value="0">
-									<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-WIL">-</span>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">CHA</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-CHA" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-CHA">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">INT</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-INT" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-INT">-</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">PER</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-PER" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-PER">-</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemHeader">WIL</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_builder-growthAbilityScorePoints-error-WIL" value="0">
+													<input type="number" class="wuxFlexTableItemData" min="0" max="10" name="attr_builder-baseGrowth-WIL">-</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

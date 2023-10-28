@@ -20,108 +20,30 @@ function SetAdvancementLevelData (levelData, className, currentLevel, level) {
     
 }
 
-function SetAdvancementBaseGrowths (update, baseGrowths, ancestryGrowths) {
-    
-    let growthArray = CreateGrowthsArrayData();
-    growthArray.CON = baseGrowths.CON + ancestryGrowths.CON;
-    
-    update["advancement-baseGrowths"] = JSON.stringify(growthArray);
-    return update;
+function ResetAdvancementLevel (levelData, updateCurrent) {
+
+	let i = 0;
+	while (i < levelData.keys.length) {
+		if (updateCurrent) {
+			levelData.values[levelData.keys[i]].currentLevel += levelData.values[levelData.keys[i]].increase;
+		}
+		levelData.values[levelData.keys[i]].increase = 0;
+
+		if (levelData.values[levelData.keys[i]].currentLevel == 0) {
+			delete levelData.values[levelData.keys[i]];
+			levelData.keys = levelData.keys.splice(i, 1);
+		}
+		else {
+			i++;
+		}
+	}
+	
+	return levelData;
 }
 
-function CapitalizeAndRemoveSpaces(inputString) {
 
-  // Capitalize every word in the string
-  var capitalizedString = inputString.replace(/\w\S*/g, function (word) {
-    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-  });
 
-  // Remove spaces using a regular expression
-  var stringWithoutSpaces = capitalizedString.replace(/\s/g, '');
-
-  return stringWithoutSpaces;
-}
-
-function CreateAbilityScoreArrayData() {
-  var output = {
-    CON: 0, DEX: 0,
-    QCK: 0, STR: 0,
-    CHA: 0, INT: 0,
-    PER: 0, WIL: 0
-  }
-  
-  return output;
-}
-
-function CreateGrowthsArrayData() {
-
-  var output = CreateAbilityScoreArrayData();
-  output.hp = 0;
-  output.vitality = 0;
-  output.kiCharge = 0;
-  output.spellForce = 0;
-  
-  return output;
-}
-
-function ConvertAbilityScoresToGrowths(growthData) {
-
-  abilityScoreGrowthRate = 0.2;
-  hpGrowthRate = 0.5;
-  vitalityGrowthRate = 0.05;
-  kiChargeGrowthRate = 0.05;
-  spellForceGrowthRate = 0.06;
-  return {
-    CON: (growthData.CON * abilityScoreGrowthRate),
-    DEX: (growthData.DEX * abilityScoreGrowthRate),
-    QCK: (growthData.QCK * abilityScoreGrowthRate),
-    STR: (growthData.STR * abilityScoreGrowthRate),
-    CHA: (growthData.CHA * abilityScoreGrowthRate),
-    INT: (growthData.INT * abilityScoreGrowthRate),
-    PER: (growthData.PER * abilityScoreGrowthRate),
-    WIL: (growthData.WIL * abilityScoreGrowthRate),
-    hp: (growthData.hp * hpGrowthRate),
-    vitality: (growthData.vitality * vitalityGrowthRate),
-    kiCharge: (growthData.kiCharge * kiChargeGrowthRate),
-    spellForce: (growthData.spellForce * spellForceGrowthRate)
-  }
-}
-
-function AddGrowths (array1, array2) {
-    
-    return {
-    CON: (array1.CON + array2.CON),
-    DEX: (array1.DEX + array2.DEX),
-    QCK: (array1.QCK + array2.QCK),
-    STR: (array1.STR + array2.STR),
-    CHA: (array1.CHA + array2.CHA),
-    INT: (array1.INT + array2.INT),
-    PER: (array1.PER + array2.PER),
-    WIL: (array1.WIL + array2.WIL),
-    hp: (array1.hp + array2.hp),
-    vitality: (array1.vitality + array2.vitality),
-    kiCharge: (array1.kiCharge + array2.kiCharge),
-    spellForce: (array1.spellForce + array2.spellForce)
-  }
-}
-
-function MultiplyGrowths (array1, val) {
-    
-    return {
-    CON: (array1.CON * val),
-    DEX: (array1.DEX * val),
-    QCK: (array1.QCK * val),
-    STR: (array1.STR * val),
-    CHA: (array1.CHA * val),
-    INT: (array1.INT * val),
-    PER: (array1.PER * val),
-    WIL: (array1.WIL * val),
-    hp: (array1.hp * val),
-    vitality: (array1.vitality * val),
-    kiCharge: (array1.kiCharge * val),
-    spellForce: (array1.spellForce * val)
-  }
-}
+// ======== Back Button
 
 on("change:advancement-button-back", function () {
 
@@ -137,11 +59,17 @@ var update_advancement_back = function () {
 
 		update["characterSheetDisplayStyle"] = v["advancement-previousPage"];
 		update["advancement-previousPage"] = "";
+		update["advancement-button-reset-everything"] = "0";
 
 		setAttrs(update, { silent: true });
 	});
 
 }
+
+
+
+
+// ======== Submission
 
 on("change:advancement-button-submit", function () {
 
@@ -150,20 +78,36 @@ on("change:advancement-button-submit", function () {
 
 var update_advancement_submit = function () {
     
-    let mod_attrs = ["base_level", "advancement-level-total", "advancement-baseGrowths", "advancement-currentGrowths"];
+    let mod_attrs = ["base_level", "builder-ancestry", "builder-baseAbilityScores", "advancement-level-total", "builder-baseGrowths", "builder-baseGrowthsTotal", "advancement-advancementGrowthsTotal"];
 	getAttrs(mod_attrs, function (v) {
 	    
 	    let update = {};
 	    
-	    let baseLevel = isNaN(parseInt(v["base_level"])) ? 0 : parseInt(v["base_level"]);
+	    let baseLevel = AttrParseInt(v, "base_level");
+	    let totalLevel = baseLevel;
+	    let classLevelTotal = 0;
 	    let levelData = GetAdvancementLevelData(v["advancement-level-total"]);
-	    let baseGrowths = JSON.parse(v["advancement-baseGrowths"]);
-	    let currentGrowths = JSON.parse(v["advancement-currentGrowths"]);
-	    
-	    let totalGrowths = CreateGrowthsArrayData();
-	    totalGrowths = AddGrowths(totalGrowths, baseGrowths);
-	    let totalLevel = 0;
-	    Let classLevelTotal = 0;
+
+		let baseAbilityScores = AttrParseJSON(v, "builder-baseAbilityScores");
+		if (baseAbilityScores == "") {
+			baseAbilityScores = CreateAbilityScoreArrayData();
+		}
+		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
+		let ancestryData = GetAncestryInfo(ancestryName);
+
+	    let baseGrowths = AttrParseJSON(v, "builder-baseGrowths");
+		if (baseGrowths == "") {
+			baseGrowths = CreateGrowthsArrayData();
+		}
+		let baseGrowthsTotal = AttrParseJSON(v, "builder-baseGrowthsTotal");
+		if (baseGrowthsTotal == "") {
+			baseGrowthsTotal = CreateGrowthsArrayData();
+		}
+	    let advancementGrowthsTotal = AttrParseJSON(v, "advancement-advancementGrowthsTotal");
+	    if (advancementGrowthsTotal == "") {
+	    	advancementGrowthsTotal = CreateGrowthsArrayData();
+		}
+
 	    let classUpdates = [];
 	    let classUpdate;
 	    let pathUpdate = "";
@@ -188,7 +132,7 @@ var update_advancement_submit = function () {
 	            // get class and level data
     	        classData = GetClassesInfo(levelData.keys[i]);
     	        totalLevel += classLevel.increase;
-    	        totalGrowths = AddGrowths(totalGrowths, MultiplyGrowths(classData.growths, classLevel.increase));
+    	        advancementGrowthsTotal = AddGrowths(advancementGrowthsTotal, MultiplyGrowths(classData.growths, classLevel.increase));
     	        classLevelTotal = classLevel.current + classLevel.increase;
     	        
     	        // update the level up update
@@ -200,7 +144,7 @@ var update_advancement_submit = function () {
     	        // iterate through the advancement gains
     	        techLevel = classLevel.current + 1;
     	        if (techLevel == 1) {
-    	            tech = {name: clasData.jobTechnique, type: "T"};
+    	            tech = {name: classData.jobTechnique, type: "T"};
     	            advancement = AddAdvancementTech(advancement, tech);
     	            classUpdate.desc += `\n[Level ${techLevel}]`;
     	            classUpdate.desc += `\nGained the ${tech.name} technique.`;
@@ -211,7 +155,7 @@ var update_advancement_submit = function () {
     	            if (techLevel % 2 == 0) {
     	                techModLevel = Math.floor(techLevel / 2) - 1;
     	                if (techModLevel >= 0) {
-        	                tech = clasData.advancement[techModLevel];
+        	                tech = classData.advancement[techModLevel];
         	                
         	                if (tech != undefined) {
         	                    
@@ -228,19 +172,19 @@ var update_advancement_submit = function () {
     	        classUpdates.push[classUpdates];
     	        
     	        // update UI
-    	        update[`advancement-level-${classFieldName}`] = classLevelTotal;
-    	        update[`advancement-name-${classFieldName}`] = classData.name};
+    	        update[`advancement-level-${levelData.keys[i]}`] = classLevelTotal;
+    	        update[`advancement-level-${levelData.keys[i]}_max`] = classLevelTotal;
+    	        update[`advancement-name-${levelData.keys[i]}`] = `${classData.name} Lv.${classLevelTotal}`;
 	        }
 	    }
 	    
+	    // iterate through the levels for new path growths
 	    classUpdate = {
             header: `Character Level Increased!`,
-            desc: `Character Level ${baseLevel} -> ${baseLevel + totalLevel}`
+            desc: `Character Level ${baseLevel} -> ${totalLevel}`
         };
-	    
-	    // iterate through the levels for new path growths
-	    for (let i = 1; i <= totalLevel; i++) {
-	        levelCheck = baseLevel + i;
+	    for (let i = baseLevel; i < totalLevel; i++) {
+	        levelCheck = i + 1;
 	        pathUpdate = "";
 	        
 	        // set level bonuses
@@ -309,10 +253,16 @@ var update_advancement_submit = function () {
 	    }
 	    
 	    // calculate final growths
-        totalGrowths = AddGrowths(totalGrowths, MultiplyGrowths(baseGrowths, totalLevel));
-        
+		baseGrowthsTotal = AddGrowths(baseGrowthsTotal, MultiplyGrowths(baseGrowths, totalLevel - baseLevel));
+		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
+		update["advancement-advancementGrowthsTotal"] = JSON.stringify(advancementGrowthsTotal);
+		update = SetCharacterStatGrowths(update, ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
     	
+		// set updates
+		update["base_level"] = totalLevel;
+		update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, true));
     	update["characterSheetDisplayStyle"] = "Character";
+		update["advancement-button-reset-everything"] = "0";
     
     	setAttrs(update, { silent: true });
        	
@@ -344,6 +294,104 @@ function AddAdvancementTech (advancement, tech) {
 
 
 
+
+// ======== Reset
+
+on("change:advancement-button-reset", function () {
+
+	update_advancement_reset();
+});
+
+var update_advancement_reset = function () {
+    
+    let mod_attrs = ["advancement-level-total"];
+	getAttrs(mod_attrs, function (v) {
+	    
+	    let update = {};
+	    let levelData = GetAdvancementLevelData(v["advancement-level-total"]);
+
+	    let classData;
+	    let classLevel;
+	    
+	    // iterate through the classes and record any advancement changes. Also reset UI from the advancement page
+	    for (let i = 0; i < levelData.keys.length; i++) {
+	        
+	        classLevel = levelData.values[levelData.keys[i]];
+	        if (classLevel.increase > 0) {
+				
+    	        // update UI
+    	        classData = GetClassesInfo(levelData.keys[i]);
+    	        update[`advancement-level-${levelData.keys[i]}_max`] = classLevel.current;
+    	        update[`advancement-name-${levelData.keys[i]}`] = `${classData.name} Lv.${classLevel.current}`
+	        }
+	    }
+
+		// set updates
+		update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, false));
+		update["advancement-button-reset-everything"] = "0";
+    
+    	setAttrs(update, { silent: true });
+       	
+	});
+
+}
+
+
+
+
+// ======== Restart
+
+on("change:advancement-button-restart-confirm", function () {
+
+	update_advancement_restart();
+});
+
+var update_advancement_restart = function () {
+
+    let mod_attrs = ["advancement-level-total", "builder-baseAbilityScores", "builder-ancestry"];
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let baseAbilityScores = AttrParseJSON(v, "builder-baseAbilityScores");
+		if (baseAbilityScores == "") {
+			baseAbilityScores = CreateAbilityScoreArrayData();
+		}
+		let emptyGrowths = CreateGrowthsArrayData();
+		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
+		let ancestryData = GetAncestryInfo(ancestryName);
+	
+	    let levelData = GetAdvancementLevelData(v["advancement-level-total"]);
+	    let classData;
+	    
+	    // iterate through the classes and reset any levels
+	    for (let i = 0; i < levelData.keys.length; i++) {
+
+	        if (levelData.values[levelData.keys[i]].increase > 0) {
+				
+    	        // update UI
+    	        classData = GetClassesInfo(levelData.keys[i]);
+    	        update[`advancement-level-${levelData.keys[i]}`] = "0";
+    	        update[`advancement-level-${levelData.keys[i]}_max`] = "0";
+    	        update[`advancement-name-${levelData.keys[i]}`] = `${classData.name} Lv.0`
+	        }
+	    }
+
+		// set updates
+		update["advancement-level-total"] = "";
+		update["advancement-button-reset-everything"] = "on";
+		update["base_level"] = 0;
+		update["builder-baseGrowthsTotal"] = JSON.stringify(emptyGrowths);
+		update["advancement-advancementGrowthsTotal"] = JSON.stringify(emptyGrowths);
+		update = SetCharacterStatGrowths(update, ancestryData, baseAbilityScores, emptyGrowths, emptyGrowths);
+    
+    	setAttrs(update, { silent: true });
+       	
+	});
+
+}
+
+
+
 // Advancement Listeners
 on("change:advancement-level-Fighter_max change:advancement-level-Interceptor_max change:advancement-level-Marksman_max change:advancement-level-Rogue_max change:advancement-level-Physician_max change:advancement-level-Pugilist_max change:advancement-level-Scholar_max ", function (eventinfo) {
 
@@ -368,7 +416,7 @@ var update_advancement_class_level = function (classFieldName) {
 		let levelDifference = newLevel - currentLevel;
 		
 		let classData = GetClassesInfo(classFieldName);
-		update[`advancement-name-${classFieldName}`] = `${classData.name} ${levelDifference > 0 ? `+${levelDifference}` : ""}`;
+		update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${currentLevel} ${levelDifference > 0 ? `+${levelDifference}` : ""}`;
 		
 		var levelData = GetAdvancementLevelData(v["advancement-level-total"]);
 		SetAdvancementLevelData(levelData, classFieldName, currentLevel, levelDifference);

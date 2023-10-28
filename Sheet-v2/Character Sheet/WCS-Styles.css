@@ -132,7 +132,9 @@ input[type=number]::-webkit-inner-spin-button
 ========================================*/
 
 .wuxCharacterSheetDisplayStyle-Builder,
+.wuxCharacterSheetDisplayStyle-Advancement,
 .wuxCharacterSheetDisplayStyle-LevelUp,
+.wuxCharacterSheetDisplayStyle-Techniques,
 .wuxCharacterSheetDisplayStyle-Character,
 .wuxCharacterSheetDisplayStyle-PartyManager
 {
@@ -141,6 +143,7 @@ input[type=number]::-webkit-inner-spin-button
 
 input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="0"] ~ .wuxCharacterSheetDisplayStyle-Builder,
 input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="LevelUp"] ~ .wuxCharacterSheetDisplayStyle-LevelUp,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Advancement"] ~ .wuxCharacterSheetDisplayStyle-Advancement,
 input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Character"] ~ .wuxCharacterSheetDisplayStyle-Character,
 input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .wuxCharacterSheetDisplayStyle-PartyManager
 {
@@ -748,6 +751,7 @@ button[type=roll].wuxButton span,
 }
 
 .wuxFlexTableItemHeader,
+.wuxFlexTableItemSubheader,
 .wuxFlexTableItemData
 {
 	position: relative;
@@ -794,6 +798,13 @@ input.wuxFlexTableItemData
 input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 {
     background: red;
+}
+
+.wuxFlexTableItemSubheader
+{
+    color: #d0d0d0;
+    font-size: 8px;
+	text-align: center;
 }
 
 /*========================================
@@ -873,7 +884,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 
 .wuxDistinctSection .wuxDistinctData,
 .wuxDistinctSection .wuxDistinctData select,
-.wuxDistinctSection .wuxDistinctSubdata
+.wuxDistinctSection .wuxDistinctSubdata,
+.wuxDistinctSection .wuxDistinctSubdata select
 {
     margin: 0px;
 	padding: 0px 0px 0px 5px;
@@ -897,7 +909,9 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 }
 
 .wuxDistinctSection .wuxDistinctData,
-.wuxDistinctSection .wuxDistinctData select
+.wuxDistinctSection .wuxDistinctData select,
+.wuxDistinctSection .wuxDistinctSubdata,
+.wuxDistinctSection .wuxDistinctSubdata select
 {
     position: relative;
     display: inline-block;
@@ -907,7 +921,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 	text-align: left;
 }
 
-.wuxDistinctSection input.wuxDistinctData
+.wuxDistinctSection input.wuxDistinctData,
+.wuxDistinctSection input.wuxDistinctSubdata
 {
     width: calc(75% - 10px);
 
@@ -917,13 +932,14 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
     background: #efefef;
 }
 
-.wuxDistinctSection input[type=number].wuxDistinctData
+.wuxDistinctSection input[type=number].wuxDistinctData,
+.wuxDistinctSection input[type=number].wuxDistinctSubdata
 {
     -moz-appearance: textfield;
     appearance: textfield;
 }
 
-.wuxDistinctSection .wuxDistinctSubdata
+/* .wuxDistinctSection .wuxDistinctSubdata
 {
     position: relative;
     left: 20px;
@@ -937,7 +953,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
     border: 0px solid #000;
     border-width: 1px 1px 1px 0px;
-}
+} */
 
 input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 {
@@ -6429,6 +6445,11 @@ Quest Box
     text-align: left;
 }
 
+.wuxNoPadding
+{
+    padding: 0px;
+}
+
 /*========================================
     Collapse Field
 ========================================*/
@@ -6460,8 +6481,7 @@ Quest Box
 .wuxHiddenField,
 .wuxHiddenInlineField,
 .wuxHiddenBlockField,
-.wuxHiddenFlexField,
-.wuxHiddenField-flag
+.wuxHiddenFlexField
 {
     display: none;
 }

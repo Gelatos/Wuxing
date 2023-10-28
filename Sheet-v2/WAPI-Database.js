@@ -25,6 +25,19 @@ function GetSectionIdNameFromArray(sectionName, currentID, variableNames) {
 	return output;
 }
 
+function CapitalizeAndRemoveSpaces(inputString) {
+
+	// Capitalize every word in the string
+	var capitalizedString = inputString.replace(/\w\S*/g, function (word) {
+		return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+	});
+
+	// Remove spaces using a regular expression
+	var stringWithoutSpaces = capitalizedString.replace(/\s/g, '');
+
+	return stringWithoutSpaces;
+}
+
 // ====== Language
 
 function GetLanguageName(language) {
