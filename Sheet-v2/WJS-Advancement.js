@@ -11,13 +11,14 @@ function GetAdvancementLevelData(totalLevel) {
 	}
 }
 
-function SetAdvancementLevelData(levelData, className, currentLevel, level) {
+function SetAdvancementLevelData(levelData, className, currentLevel, increaseValue) {
 
 	if (!levelData.keys.includes(className)) {
 		levelData.keys.push(className);
 	}
-	levelData.values[className] = { current: currentLevel, increase: level };
+	levelData.values[className] = {current: currentLevel, increase: increaseValue};
 
+	return levelData;
 }
 
 function ResetAdvancementLevel(levelData, updateCurrent) {
@@ -25,11 +26,12 @@ function ResetAdvancementLevel(levelData, updateCurrent) {
 	let i = 0;
 	while (i < levelData.keys.length) {
 		if (updateCurrent) {
-			levelData.values[levelData.keys[i]].currentLevel += levelData.values[levelData.keys[i]].increase;
+			levelData.values[levelData.keys[i]].current = ParseIntValue(levelData.values[levelData.keys[i]].current) 
+				+ ParseIntValue(levelData.values[levelData.keys[i]].increase);
 		}
 		levelData.values[levelData.keys[i]].increase = 0;
 
-		if (levelData.values[levelData.keys[i]].currentLevel == 0) {
+		if (levelData.values[levelData.keys[i]].current == 0) {
 			delete levelData.values[levelData.keys[i]];
 			levelData.keys = levelData.keys.splice(i, 1);
 		}
@@ -108,7 +110,9 @@ var update_advancement_submit = function () {
 			advancementGrowthsTotal = CreateGrowthsArrayData();
 		}
 
-		let classUpdates = [];
+		let startingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+
+		var classUpdates = [];
 		let classUpdate;
 		let pathUpdate = "";
 
@@ -170,7 +174,7 @@ var update_advancement_submit = function () {
 				}
 
 				// add the updates
-				classUpdates.push[classUpdates];
+				classUpdates.push(classUpdate);
 
 				// update UI
 				classFieldName = ToCamelCase(levelData.keys[i]);
@@ -181,7 +185,7 @@ var update_advancement_submit = function () {
 		}
 
 		// iterate through the levels for new path growths
-		classUpdate = {
+		let mainUpdate = {
 			header: `Character Level Increased!`,
 			desc: `Character Level ${baseLevel} -> ${totalLevel}`
 		};
@@ -248,8 +252,8 @@ var update_advancement_submit = function () {
 			}
 
 			if (pathUpdate != "") {
-				pathUpdate = `[Level ${levelCheck}]${pathUpdate}`;
-				classUpdate.desc += pathUpdate;
+				pathUpdate = `\n[Level ${levelCheck}]${pathUpdate}`;
+				mainUpdate.desc += pathUpdate;
 			}
 
 		}
@@ -258,12 +262,14 @@ var update_advancement_submit = function () {
 		baseGrowthsTotal = AddGrowths(baseGrowthsTotal, MultiplyGrowths(baseGrowths, totalLevel - baseLevel));
 		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
 		update["advancement-advancementGrowthsTotal"] = JSON.stringify(advancementGrowthsTotal);
-		update = SetCharacterStatGrowths(update, ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+		update = SetCharacterStatGrowths(update, endingStatistics);
+		update = SetLevelUpData(update, startingStatistics, endingStatistics, classUpdates, mainUpdate);
 
 		// set updates
 		update["base_level"] = totalLevel;
 		update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, true));
-		update["characterSheetDisplayStyle"] = "Character";
+		update["characterSheetDisplayStyle"] = "LevelUp";
 		update["advancement-button-reset-everything"] = "on";
 
 		setAttrs(update, { silent: true });
@@ -366,13 +372,15 @@ var update_advancement_restart = function () {
 		let ancestryData = GetAncestryInfo(ancestryName);
 
 		let levelData = GetAdvancementLevelData(v["advancement-level-total"]);
+		let levelObj;
 		let classData;
 		let classFieldName;
 
 		// iterate through the classes and reset any levels
 		for (let i = 0; i < levelData.keys.length; i++) {
 
-			if (levelData.values[levelData.keys[i]].current > 0) {
+			levelObj = levelData.values[levelData.keys[i]];
+			if (levelObj != undefined && levelObj.current > 0) {
 
 				// update UI
 				classData = GetClassesInfo(levelData.keys[i]);
@@ -389,7 +397,8 @@ var update_advancement_restart = function () {
 		update["base_level"] = 0;
 		update["builder-baseGrowthsTotal"] = JSON.stringify(emptyGrowths);
 		update["advancement-advancementGrowthsTotal"] = JSON.stringify(emptyGrowths);
-		update = SetCharacterStatGrowths(update, ancestryData, baseAbilityScores, emptyGrowths, emptyGrowths);
+		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, emptyGrowths, emptyGrowths);
+		update = SetCharacterStatGrowths(update, endingStatistics);
 
 		setAttrs(update, { silent: true });
 
@@ -425,7 +434,7 @@ var update_advancement_class_level = function (classFieldName) {
 		let levelDifference = newLevel - currentLevel;
 
 		var levelData = GetAdvancementLevelData(v["advancement-level-total"]);
-		SetAdvancementLevelData(levelData, classFieldName, currentLevel, levelDifference);
+		levelData = SetAdvancementLevelData(levelData, classFieldName, currentLevel, levelDifference);
 
 		let classData = GetClassesInfo(classFieldName);
 		update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${currentLevel} ${levelDifference > 0 ? `+${levelDifference}` : ""}`;

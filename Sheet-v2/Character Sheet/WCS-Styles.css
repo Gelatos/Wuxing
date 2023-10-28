@@ -142,8 +142,9 @@ input[type=number]::-webkit-inner-spin-button
 }
 
 input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="0"] ~ .wuxCharacterSheetDisplayStyle-Builder,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="LevelUp"] ~ .wuxCharacterSheetDisplayStyle-LevelUp,
 input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Advancement"] ~ .wuxCharacterSheetDisplayStyle-Advancement,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="LevelUp"] ~ .wuxCharacterSheetDisplayStyle-LevelUp,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Techniques"] ~ .wuxCharacterSheetDisplayStyle-Techniques,
 input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Character"] ~ .wuxCharacterSheetDisplayStyle-Character,
 input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .wuxCharacterSheetDisplayStyle-PartyManager
 {
@@ -469,6 +470,7 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
     position: relative;
     display: block;
     height: auto;
+    width: 100%;
     margin: 0px;
 }
 

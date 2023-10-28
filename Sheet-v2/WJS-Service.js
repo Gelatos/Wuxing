@@ -7,17 +7,27 @@ function AttrParseString(attrArray, fieldName, defaultValue) {
 }
 
 function AttrParseInt(attrArray, fieldName, defaultValue) {
+
+	return ParseIntValue(attrArray[fieldName], defaultValue);
+}
+
+function ParseIntValue(value, defaultValue) {
 	if (defaultValue == undefined) {
 		defaultValue = 0;
 	}
-	return isNaN(parseInt(attrArray[fieldName])) ? defaultValue : parseInt(attrArray[fieldName]);
+	return isNaN(parseInt(value)) ? defaultValue : parseInt(value);
 }
 
 function AttrParseFloat(attrArray, fieldName, defaultValue) {
+
+	return ParseFloatValue(attrArray[fieldName], defaultValue);
+}
+
+function ParseFloatValue(value, defaultValue) {
 	if (defaultValue == undefined) {
 		defaultValue = 0;
 	}
-	return isNaN(parseFloat(attrArray[fieldName])) ? defaultValue : parseFloat(attrArray[fieldName]);
+	return isNaN(parseFloat(value)) ? defaultValue : parseFloat(value);
 }
 
 function AttrParseJSON(attrArray, fieldName, defaultValue) {
@@ -204,14 +214,25 @@ function SetGrowthFieldArray(attrArray, fieldName) {
 	return output;
 }
 
+function GetCharacterStatGrowths (ancestryData, baseAbilityScores, baseGrowths, advancementGrowths) {
+
+	// convert growths to ability scores
+	let currentGrowths = ConvertAbilityScorePointsToGrowths(AddGrowths(baseGrowths, AddGrowths(ancestryData.growths, advancementGrowths)));
+
+	return {
+		stats: AddGrowths(baseAbilityScores, AddGrowths(ancestryData.startingScores, MultiplyGrowths(currentGrowths, 0.01))),
+		modulus: ModulusGrowths(currentGrowths, 100)
+	}
+}
+
 function AddGrowths(array1, array2) {
 
 	let output = AddAbilityScores(array1, array2);
 
-	output.hp = (array1.hp + array2.hp);
-	output.vitality = (array1.vitality + array2.vitality);
-	output.kiCharge = (array1.kiCharge + array2.kiCharge);
-	output.spellForce = (array1.spellForce + array2.spellForce);
+	output.hp = (ParseIntValue(array1.hp) + ParseIntValue(array2.hp));
+	output.vitality = (ParseIntValue(array1.vitality) + ParseIntValue(array2.vitality));
+	output.kiCharge = (ParseIntValue(array1.kiCharge) + ParseIntValue(array2.kiCharge));
+	output.spellForce = (ParseIntValue(array1.spellForce) + ParseIntValue(array2.spellForce));
 
 	return output;
 }

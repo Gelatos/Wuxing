@@ -162,7 +162,8 @@ var update_builder_submit = function () {
 		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
 		update["builder-baseSkills"] = JSON.stringify(baseSkills);
 		update["builder-baseChoiceSkills"] = JSON.stringify(choiceSkills);
-		update = SetCharacterStatGrowths(update, ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+		update = SetCharacterStatGrowths(update, endingStatistics);
 
 		// update page position
 		update["advancement-previousPage"] = "0";
