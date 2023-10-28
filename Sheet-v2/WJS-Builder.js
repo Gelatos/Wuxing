@@ -1,11 +1,11 @@
 // ======= Helper Functions
 
-function SetAdvancementBaseGrowths (update, baseGrowths, ancestryGrowths) {
-    
-    let growthArray = AddGrowths(baseGrowths, ancestryGrowths);
-	
-    update["advancement-baseGrowths"] = JSON.stringify(growthArray);
-    return update;
+function SetAdvancementBaseGrowths(update, baseGrowths, ancestryGrowths) {
+
+	let growthArray = AddGrowths(baseGrowths, ancestryGrowths);
+
+	update["advancement-baseGrowths"] = JSON.stringify(growthArray);
+	return update;
 }
 
 
@@ -65,7 +65,7 @@ var update_builder_leave = function () {
 			}
 			if (baseChoiceSkills != "") {
 				let choiceSkillsArray = physSkillsArray.concat(mentSkillsArray);
-				
+
 				for (let i = 0; i < choiceSkillsArray.length; i++) {
 					update[`builder-skills-trainingChoice-${choiceSkillsArray[i]}`] = (baseChoiceSkills.includes(choiceSkillsArray[i])) ? "on" : "0";
 				}
@@ -113,7 +113,7 @@ var update_builder_submit = function () {
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
 
-	    let baseLevel = AttrParseInt(v, "base_level");
+		let baseLevel = AttrParseInt(v, "base_level");
 		let pathName = AttrParseString(v, "builder-path", "Common");
 		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
 		let ancestryData = GetAncestryInfo(ancestryName);
@@ -122,9 +122,9 @@ var update_builder_submit = function () {
 		let baseGrowthsTotal = MultiplyGrowths(baseGrowths, baseLevel);
 		let baseSkills = [];
 		let choiceSkills = [];
-	    let advancementGrowthsTotal = AttrParseJSON(v, "advancement-advancementGrowthsTotal");
-	    if (advancementGrowthsTotal == "") {
-	    	advancementGrowthsTotal = CreateGrowthsArrayData();
+		let advancementGrowthsTotal = AttrParseJSON(v, "advancement-advancementGrowthsTotal");
+		if (advancementGrowthsTotal == "") {
+			advancementGrowthsTotal = CreateGrowthsArrayData();
 		}
 
 		// set skill arrays
@@ -153,7 +153,7 @@ var update_builder_submit = function () {
 				choiceSkills.push(choiceSkillsArray[i]);
 			}
 		}
-		
+
 		// set variables
 		update["builder-basePath"] = pathName;
 		update["builder-baseAncestry"] = ancestryName;
@@ -237,7 +237,7 @@ var update_builder_ancestrySkills = function (update, ancestryData) {
 	// defensive skills
 	update = update_builder_skill_fields(update, "Physical Defensive", ancestryData.skillPointsPhysDefense, "DefensivePhys");
 	update = update_builder_skill_fields(update, "Sensory Defensive", ancestryData.skillPointsSensDefense, "DefensiveSens");
-	
+
 	if (ancestryData.skillPointsPhysDefense > 0 || ancestryData.skillPointsSensDefense > 0) {
 		update["builder-skills-Defensive"] = "1";
 	}
@@ -248,7 +248,7 @@ var update_builder_ancestrySkills = function (update, ancestryData) {
 
 	// physical skills
 	update = update_builder_skill_fields(update, "Combat, Body, and/or Technical", ancestryData.skillPointsCoAcTc, "Physical");
-	
+
 	if (ancestryData.skillPointsCoAcTc > 0) {
 		update["builder-skills-Physical"] = "1";
 	}
@@ -259,7 +259,7 @@ var update_builder_ancestrySkills = function (update, ancestryData) {
 
 	// mental skills
 	update = update_builder_skill_fields(update, "Magic, Knowledge, and/or Social", ancestryData.skillPointsMgKnSo, "Mental");
-	
+
 	if (ancestryData.skillPointsMgKnSo > 0) {
 		update["builder-skills-Mental"] = "1";
 	}
@@ -270,7 +270,7 @@ var update_builder_ancestrySkills = function (update, ancestryData) {
 
 	// choice skills
 	update = update_builder_skill_fields(update, "additional", ancestryData.skillPointsAny, "Choice", " of choice, none can be from the defensive skill group.");
-	
+
 	if (ancestryData.skillPointsAny > 0) {
 		update["builder-skills-Choice"] = "1";
 	}
@@ -456,8 +456,7 @@ var update_builder_ability_scores_reset = function (pointsAttr, absAttr, pointsM
 
 
 // ======== Builder Skills Listeners
-
-on("change:builder-skills-trainingDefensivephys-Brace change:builder-skills-trainingDefensivephys-Fortitude change:builder-skills-trainingDefensivephys-Presence change:builder-skills-trainingDefensivephys-Reflex", function (eventinfo) {
+on("change:builder-skills-trainingdefensivePhys-brace change:builder-skills-trainingdefensivePhys-fortitude change:builder-skills-trainingdefensivePhys-presence change:builder-skills-trainingdefensivePhys-reflex", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -465,7 +464,7 @@ on("change:builder-skills-trainingDefensivephys-Brace change:builder-skills-trai
 	update_builder_defensivePhys_skills();
 });
 
-on("change:builder-skills-trainingDefensivesens-Insight change:builder-skills-trainingDefensivesens-Notice change:builder-skills-trainingDefensivesens-Resolve", function (eventinfo) {
+on("change:builder-skills-trainingdefensiveSens-insight change:builder-skills-trainingdefensiveSens-notice change:builder-skills-trainingdefensiveSens-resolve", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -473,12 +472,12 @@ on("change:builder-skills-trainingDefensivesens-Insight change:builder-skills-tr
 	update_builder_defensiveSens_skills();
 });
 
-on("change:builder-skills-Defensive-reset", function () {
+on("change:builder-skills-defensive-reset", function () {
 
-	update_builder_defensive_skills_reset();
+	update_builder_Defensive_skills_reset();
 });
 
-on("change:builder-skills-trainingPhysical-Archery change:builder-skills-trainingPhysical-Brawling change:builder-skills-trainingPhysical-LightBlade change:builder-skills-trainingPhysical-Hammer change:builder-skills-trainingPhysical-Handgun change:builder-skills-trainingPhysical-HeavyBlade change:builder-skills-trainingPhysical-Longarm change:builder-skills-trainingPhysical-Polearm change:builder-skills-trainingPhysical-Thrown change:builder-skills-trainingPhysical-Acrobatics change:builder-skills-trainingPhysical-Athletics change:builder-skills-trainingPhysical-Physique change:builder-skills-trainingPhysical-Palming change:builder-skills-trainingPhysical-Stealth change:builder-skills-trainingPhysical-Survival change:builder-skills-trainingPhysical-Artisan change:builder-skills-trainingPhysical-Cook change:builder-skills-trainingPhysical-Herbalism change:builder-skills-trainingPhysical-Mechanical change:builder-skills-trainingPhysical-Medicine change:builder-skills-trainingPhysical-Pilot", function (eventinfo) {
+on("change:builder-skills-trainingphysical-archery change:builder-skills-trainingphysical-brawling change:builder-skills-trainingphysical-lightBlade change:builder-skills-trainingphysical-hammer change:builder-skills-trainingphysical-handgun change:builder-skills-trainingphysical-heavyBlade change:builder-skills-trainingphysical-longarm change:builder-skills-trainingphysical-polearm change:builder-skills-trainingphysical-thrown change:builder-skills-trainingphysical-acrobatics change:builder-skills-trainingphysical-athletics change:builder-skills-trainingphysical-physique change:builder-skills-trainingphysical-palming change:builder-skills-trainingphysical-stealth change:builder-skills-trainingphysical-survival change:builder-skills-trainingphysical-artisan change:builder-skills-trainingphysical-cook change:builder-skills-trainingphysical-herbalism change:builder-skills-trainingphysical-mechanical change:builder-skills-trainingphysical-medicine change:builder-skills-trainingphysical-pilot", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -486,12 +485,12 @@ on("change:builder-skills-trainingPhysical-Archery change:builder-skills-trainin
 	update_builder_physical_skills();
 });
 
-on("change:builder-skills-Physical-reset", function () {
+on("change:builder-skills-physical-reset", function () {
 
 	update_builder_physical_skills_reset();
 });
 
-on("change:builder-skills-trainingMental-Assault change:builder-skills-trainingMental-Conjure change:builder-skills-trainingMental-Enchant change:builder-skills-trainingMental-Ethereal change:builder-skills-trainingMental-Field change:builder-skills-trainingMental-Structure change:builder-skills-trainingMental-Arcana change:builder-skills-trainingMental-Culture change:builder-skills-trainingMental-Engineering change:builder-skills-trainingMental-History change:builder-skills-trainingMental-Investigation change:builder-skills-trainingMental-Nature change:builder-skills-trainingMental-Deception change:builder-skills-trainingMental-Etiquette change:builder-skills-trainingMental-Intimidation change:builder-skills-trainingMental-Leadership change:builder-skills-trainingMental-Negotiation change:builder-skills-trainingMental-Performance", function (eventinfo) {
+on("change:builder-skills-trainingmental-assault change:builder-skills-trainingmental-conjure change:builder-skills-trainingmental-enchant change:builder-skills-trainingmental-ethereal change:builder-skills-trainingmental-field change:builder-skills-trainingmental-structure change:builder-skills-trainingmental-arcana change:builder-skills-trainingmental-culture change:builder-skills-trainingmental-engineering change:builder-skills-trainingmental-history change:builder-skills-trainingmental-investigation change:builder-skills-trainingmental-nature change:builder-skills-trainingmental-deception change:builder-skills-trainingmental-etiquette change:builder-skills-trainingmental-intimidation change:builder-skills-trainingmental-leadership change:builder-skills-trainingmental-negotiation change:builder-skills-trainingmental-performance", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -499,12 +498,12 @@ on("change:builder-skills-trainingMental-Assault change:builder-skills-trainingM
 	update_builder_mental_skills();
 });
 
-on("change:builder-skills-Mental-reset", function () {
+on("change:builder-skills-mental-reset", function () {
 
 	update_builder_mental_skills_reset();
 });
 
-on("change:builder-skills-trainingChoice-Archery change:builder-skills-trainingChoice-Brawling change:builder-skills-trainingChoice-LightBlade change:builder-skills-trainingChoice-Hammer change:builder-skills-trainingChoice-Handgun change:builder-skills-trainingChoice-HeavyBlade change:builder-skills-trainingChoice-Longarm change:builder-skills-trainingChoice-Polearm change:builder-skills-trainingChoice-Thrown change:builder-skills-trainingChoice-Acrobatics change:builder-skills-trainingChoice-Athletics change:builder-skills-trainingChoice-Physique change:builder-skills-trainingChoice-Palming change:builder-skills-trainingChoice-Stealth change:builder-skills-trainingChoice-Survival change:builder-skills-trainingChoice-Artisan change:builder-skills-trainingChoice-Cook change:builder-skills-trainingChoice-Herbalism change:builder-skills-trainingChoice-Mechanical change:builder-skills-trainingChoice-Medicine change:builder-skills-trainingChoice-Pilot change:builder-skills-trainingChoice-Assault change:builder-skills-trainingChoice-Conjure change:builder-skills-trainingChoice-Enchant change:builder-skills-trainingChoice-Ethereal change:builder-skills-trainingChoice-Field change:builder-skills-trainingChoice-Structure change:builder-skills-trainingChoice-Arcana change:builder-skills-trainingChoice-Culture change:builder-skills-trainingChoice-Engineering change:builder-skills-trainingChoice-History change:builder-skills-trainingChoice-Investigation change:builder-skills-trainingChoice-Nature change:builder-skills-trainingChoice-Deception change:builder-skills-trainingChoice-Etiquette change:builder-skills-trainingChoice-Intimidation change:builder-skills-trainingChoice-Leadership change:builder-skills-trainingChoice-Negotiation change:builder-skills-trainingChoice-Performance", function (eventinfo) {
+on("change:builder-skills-trainingchoice-archery change:builder-skills-trainingchoice-brawling change:builder-skills-trainingchoice-lightBlade change:builder-skills-trainingchoice-hammer change:builder-skills-trainingchoice-handgun change:builder-skills-trainingchoice-heavyBlade change:builder-skills-trainingchoice-longarm change:builder-skills-trainingchoice-polearm change:builder-skills-trainingchoice-thrown change:builder-skills-trainingchoice-acrobatics change:builder-skills-trainingchoice-athletics change:builder-skills-trainingchoice-physique change:builder-skills-trainingchoice-palming change:builder-skills-trainingchoice-stealth change:builder-skills-trainingchoice-survival change:builder-skills-trainingchoice-artisan change:builder-skills-trainingchoice-cook change:builder-skills-trainingchoice-herbalism change:builder-skills-trainingchoice-mechanical change:builder-skills-trainingchoice-medicine change:builder-skills-trainingchoice-pilot change:builder-skills-trainingchoice-assault change:builder-skills-trainingchoice-conjure change:builder-skills-trainingchoice-enchant change:builder-skills-trainingchoice-ethereal change:builder-skills-trainingchoice-field change:builder-skills-trainingchoice-structure change:builder-skills-trainingchoice-arcana change:builder-skills-trainingchoice-culture change:builder-skills-trainingchoice-engineering change:builder-skills-trainingchoice-history change:builder-skills-trainingchoice-investigation change:builder-skills-trainingchoice-nature change:builder-skills-trainingchoice-deception change:builder-skills-trainingchoice-etiquette change:builder-skills-trainingchoice-intimidation change:builder-skills-trainingchoice-leadership change:builder-skills-trainingchoice-negotiation change:builder-skills-trainingchoice-performance", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -512,10 +511,11 @@ on("change:builder-skills-trainingChoice-Archery change:builder-skills-trainingC
 	update_builder_choice_skills();
 });
 
-on("change:builder-skills-Choice-reset", function () {
+on("change:builder-skills-choice-reset", function () {
 
 	update_builder_choice_skills_reset();
 });
+
 
 var update_builder_defensivePhys_skills = function () {
 	update_builder_skills("DefensivePhys", GetDefensivePhysSkillsList(true));

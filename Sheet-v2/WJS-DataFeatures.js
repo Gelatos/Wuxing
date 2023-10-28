@@ -120,10 +120,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetDefensiveSkillsList(isFields) {
 	if (isFields) {
-	return ["Brace", "Fortitude", "Insight", "Notice", "Presence", "Reflex", "Resolve"];
+	return ["brace", "fortitude", "insight", "notice", "presence", "reflex", "resolve"];
 	}
 	else {
-	return ["brace", "fortitude", "insight", "notice", "presence", "reflex", "resolve"];
+	return ["Brace", "Fortitude", "Insight", "Notice", "Presence", "Reflex", "Resolve"];
 	}
 	}
 	
@@ -155,10 +155,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetCombatSkillsList(isFields) {
 	if (isFields) {
-	return ["Archery", "Brawling", "LightBlade", "Hammer", "Handgun", "HeavyBlade", "Longarm", "Polearm", "Thrown"];
+	return ["archery", "brawling", "lightBlade", "hammer", "handgun", "heavyBlade", "longarm", "polearm", "thrown"];
 	}
 	else {
-	return ["archery", "brawling", "light blade", "hammer", "handgun", "heavy blade", "longarm", "polearm", "thrown"];
+	return ["Archery", "Brawling", "Light Blade", "Hammer", "Handgun", "Heavy Blade", "Longarm", "Polearm", "Thrown"];
 	}
 	}
 	
@@ -184,10 +184,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetMagicSkillsList(isFields) {
 	if (isFields) {
-	return ["Assault", "Conjure", "Enchant", "Ethereal", "Field", "Structure"];
+	return ["assault", "conjure", "enchant", "ethereal", "field", "structure"];
 	}
 	else {
-	return ["assault", "conjure", "enchant", "ethereal", "field", "structure"];
+	return ["Assault", "Conjure", "Enchant", "Ethereal", "Field", "Structure"];
 	}
 	}
 	
@@ -213,10 +213,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetBodySkillsList(isFields) {
 	if (isFields) {
-	return ["Acrobatics", "Athletics", "Physique", "Palming", "Stealth", "Survival"];
+	return ["acrobatics", "athletics", "physique", "palming", "stealth", "survival"];
 	}
 	else {
-	return ["acrobatics", "athletics", "physique", "palming", "stealth", "survival"];
+	return ["Acrobatics", "Athletics", "Physique", "Palming", "Stealth", "Survival"];
 	}
 	}
 	
@@ -242,10 +242,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetKnowledgeSkillsList(isFields) {
 	if (isFields) {
-	return ["Arcana", "Culture", "Engineering", "History", "Investigation", "Nature"];
+	return ["arcana", "culture", "engineering", "history", "investigation", "nature"];
 	}
 	else {
-	return ["arcana", "culture", "engineering", "history", "investigation", "nature"];
+	return ["Arcana", "Culture", "Engineering", "History", "Investigation", "Nature"];
 	}
 	}
 	
@@ -271,10 +271,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetSocialSkillsList(isFields) {
 	if (isFields) {
-	return ["Deception", "Etiquette", "Intimidation", "Leadership", "Negotiation", "Performance"];
+	return ["deception", "etiquette", "intimidation", "leadership", "negotiation", "performance"];
 	}
 	else {
-	return ["deception", "etiquette", "intimidation", "leadership", "negotiation", "performance"];
+	return ["Deception", "Etiquette", "Intimidation", "Leadership", "Negotiation", "Performance"];
 	}
 	}
 	
@@ -300,28 +300,28 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetTechnicalSkillsList(isFields) {
 	if (isFields) {
-	return ["Artisan", "Cook", "Herbalism", "Mechanical", "Medicine", "Pilot"];
+	return ["artisan", "cook", "herbalism", "mechanical", "medicine", "pilot"];
 	}
 	else {
-	return ["artisan", "cook", "herbalism", "mechanical", "medicine", "pilot"];
+	return ["Artisan", "Cook", "Herbalism", "Mechanical", "Medicine", "Pilot"];
 	}
 	}
 	
 	function GetDefensivePhysSkillsList(isFields) {
 	if (isFields) {
-	return ["Brace", "Fortitude", "Presence", "Reflex"];
+	return ["brace", "fortitude", "presence", "reflex"];
 	}
 	else {
-	return ["brace", "fortitude", "presence", "reflex"];
+	return ["Brace", "Fortitude", "Presence", "Reflex"];
 	}
 	}
 	
 	function GetDefensiveSensSkillsList(isFields) {
 	if (isFields) {
-	return ["Insight", "Notice", "Resolve"];
+	return ["insight", "notice", "resolve"];
 	}
 	else {
-	return ["insight", "notice", "resolve"];
+	return ["Insight", "Notice", "Resolve"];
 	}
 	}
 	
@@ -349,10 +349,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetClassesList(isFields) {
 	if (isFields) {
-	return ["Fighter", "Interceptor", "Marksman", "Rogue", "Physician", "Pugilist", "Scholar"];
+	return ["fighter", "interceptor", "marksman", "rogue", "physician", "pugilist", "scholar"];
 	}
 	else {
-	return ["fighter", "interceptor", "marksman", "rogue", "physician", "pugilist", "scholar"];
+	return ["Fighter", "Interceptor", "Marksman", "Rogue", "Physician", "Pugilist", "Scholar"];
 	}
 	}
 	
