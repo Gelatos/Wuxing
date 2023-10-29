@@ -1,0 +1,2324 @@
+<div class="wuxCharacterSheetDisplayStyle-Skills">
+	<input type="hidden" name="attr_skills-previousPage" value="">
+	<input type="hidden" name="attr_skills-nextPage" value="">
+	<input type="hidden" name="attr_skills-baseSkills" value="">
+	<input type="hidden" name="attr_skills-baseChoiceSkills" value="">
+	<input type="hidden" name="attr_skills-baseBonusSkills" value="">
+
+	<input type="hidden" name="attr_skills-baseGrowthsTotal" value="">
+
+	<div class="main-TopRow wuxFloatHeader wuxHorizontalFlex">
+		<div class="segment-Basis wuxSegment">
+			<div class="wuxTabHeader"><span class="wuxInnerHeader">Skill Training</span></div>
+			<div class="wuxTabBuilderHeader wuxTab">
+				<div class="wuxLayoutItem">
+					<div class="wuxSectionBlock wuxLayoutItem">
+						<div class="wuxSectionContent">
+							<div class="wuxFieldSet">
+								<div class="wuxMultiRow">
+									<span class="wuxDescription">In Skill Training you can select what skills you have trained.</span>
+								</div>
+
+								<div class="wuxRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_skills-button-submit">
+										<span>Submit</span>
+									</div>
+
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_skills-button-back">
+										<span>Back</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="wumMainSheet">
+		<div class="wuxMainContent">
+			<div class="advancement-Top wuxSegment">
+				<div class="wuxTabBuilderHeader wuxTab">
+					<div class="wuxLayoutItem">
+						<div class="wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxMultiRow">
+									<span class="wuxDescription">This page is divided into two main sections, character creation skills and bonus skills. The character creation section holds tallies for the skills you are selecting. Bonus skills is intended for any additional skills you may take through advancement.</span>
+									<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character.</span>
+									<span class="wuxDescription">Leave will ignore any changes made here and return you to the Character Sheet.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Builder Skills section -->
+			<div class="wuxTab">
+				<div class="origin-Skills wuxSectionBlock wuxLayoutItem">
+					<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-origin-Skills" checked="checked" style="display: block">
+
+					<div class="wuxSectionHeader"><span class="wuxInnerHeader">Skills</span></div>
+					<div class="wuxSectionHeaderFooter"></div>
+
+					<div class="wuxSectionContent">
+						<div class="skills-defensive">
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_skills-Defensive" value="0">
+							<div class="wuxHiddenField">
+								<span class='wuxHeader'>Defensive Skills</span>
+								<div class="wuxRow">
+									<span class="wuxDescription" name="attr_skills-descDefensivePhys"></span>
+								</div>
+								<div class="wuxRow">
+									<span class="wuxDescription" name="attr_skills-descDefensiveSens"></span>
+								</div>
+								<div class="wuxRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_skills-Defensive-reset">
+										<span>Reset</span>
+									</div>
+								</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Physical Defensive</div>
+										<div class="wuxFlexTableItemData">
+											<div class="wuxDistinctSection">
+												<div class="wuxDistinctField">
+													<span class="wuxDistinctTitle">Points</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_skills-pointsDefensivePhys-error" value="0">
+													<span class='wuxDistinctData'>
+														<span name='attr_skills-pointsDefensivePhys' value="1">1</span>
+														<span>/ </span>
+														<span name='attr_skills-pointsDefensivePhys_max' value="1">1</span>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsDefensivePhys-brace">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensivePhys-brace">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensivePhys-brace">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingDefensivePhys-brace">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensivePhys-brace">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensivePhys-brace">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensivePhys-brace">
+														<span class="wuxHeader">Brace</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsDefensivePhys-brace">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Brace represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsDefensivePhys-presence">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensivePhys-presence">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensivePhys-presence">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingDefensivePhys-presence">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensivePhys-presence">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensivePhys-presence">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensivePhys-presence">
+														<span class="wuxHeader">Presence</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsDefensivePhys-presence">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Presence is a character's ability to force their will over their environment. It is used to disrupt ether as it means to affect a character.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsDefensivePhys-reflex">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensivePhys-reflex">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensivePhys-reflex">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingDefensivePhys-reflex">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensivePhys-reflex">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensivePhys-reflex">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensivePhys-reflex">
+														<span class="wuxHeader">Reflex</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsDefensivePhys-reflex">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Reflex is used when a character could quickly react to a situation with movement. It is usually used to avoid powerful attacks or to get out of the way of harmful effects that only need to touch the character like a fireball.</span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Sensory Defensive</div>
+										<div class="wuxFlexTableItemData">
+											<div class="wuxDistinctSection">
+												<div class="wuxDistinctField">
+													<span class="wuxDistinctTitle">Points</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_skills-pointsDefensiveSens-error" value="0">
+													<span class='wuxDistinctData'>
+														<span name='attr_skills-pointsDefensiveSens' value="1">1</span>
+														<span>/ </span>
+														<span name='attr_skills-pointsDefensiveSens_max' value="1">1</span>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsDefensiveSens-insight">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensiveSens-insight">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensiveSens-insight">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingDefensiveSens-insight">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensiveSens-insight">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensiveSens-insight">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensiveSens-insight">
+														<span class="wuxHeader">Insight</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsDefensiveSens-insight">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Insight represents a character's ability to parse conversation and judge mental states. This defense is typically used when information is being hidden in text or speech or to detect when someone is concealing their true thoughts.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsDefensiveSens-notice">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensiveSens-notice">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensiveSens-notice">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingDefensiveSens-notice">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensiveSens-notice">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensiveSens-notice">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensiveSens-notice">
+														<span class="wuxHeader">Notice</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsDefensiveSens-notice">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Notice is the ability to see or hear sudden changes in your environment. It is typically used to counter a character's stealth attempts or to hear a distant or quiet noise.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsDefensiveSens-resolve">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensiveSens-resolve">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsDefensiveSens-resolve">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingDefensiveSens-resolve">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensiveSens-resolve">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensiveSens-resolve">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingDefensiveSens-resolve">
+														<span class="wuxHeader">Resolve</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsDefensiveSens-resolve">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in.</span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<div class="skills-physical">
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_skills-physical" value="0">
+							<div class="wuxHiddenField">
+								<span class='wuxHeader'>Physical Skills</span>
+								<div class="wuxRow">
+									<span class="wuxDescription" name="attr_skills-descphysical"></span>
+								</div>
+								<div class="wuxDistinctSection">
+									<div class="wuxDistinctField">
+										<span class="wuxDistinctTitle">Points</span>
+										<input type="hidden" class="wuxErrorField-flag" name="attr_skills-pointsphysical-error" value="0">
+										<span class='wuxDistinctData'>
+											<span name='attr_skills-pointsphysical' value="1">1</span>
+											<span>/ </span>
+											<span name='attr_skills-pointsphysical_max' value="1">1</span>
+										</span>
+									</div>
+								</div>
+								<div class="wuxRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_skills-physical-reset">
+										<span>Reset</span>
+									</div>
+								</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Combat</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-brawling">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-brawling">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-brawling">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-brawling">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-brawling">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-brawling">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-brawling">
+														<span class="wuxHeader">Brawling</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-brawling">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This is the skill to use one's own body to fight. The combat style has a focus on quick actions, allowing more maneuverability in their attacks in exchange for less damage.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-finesse">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-finesse">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-finesse">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-finesse">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-finesse">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-finesse">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-finesse">
+														<span class="wuxHeader">Finesse</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-finesse">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This is the skill to strike at a foe dextrously, using precision to target weaknesses. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are well balanced for striking fast.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-marksmanship">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-marksmanship">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-marksmanship">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-marksmanship">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-marksmanship">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-marksmanship">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-marksmanship">
+														<span class="wuxHeader">Marksmanship</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-marksmanship">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">The skill of using a bow or firearm. These weapons have the most variety in weapon ranges, but typically are ineffective in melee.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-might">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-might">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-might">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-might">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-might">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-might">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-might">
+														<span class="wuxHeader">Might</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-might">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">These weapons are large, allowing the wielder to swing them with all their strength. They often come with ways to either smash through defenses or simply to break a defense more easily.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-polearm">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-polearm">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-polearm">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-polearm">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-polearm">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-polearm">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-polearm">
+														<span class="wuxHeader">Polearm</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-polearm">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This is the skill for striking in melee with a weapon that is long and has substantial reach. These weapons will often feature increased threat range, allowing one to strike at more distant foes.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-throw">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-throw">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-throw">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-throw">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-throw">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-throw">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-throw">
+														<span class="wuxHeader">Throw</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-throw">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">When one strikes at a foe or aims for a location by throwing an object, it is typical to use the throw skill. </span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Body</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-acrobatics">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-acrobatics">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-acrobatics">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-acrobatics">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-acrobatics">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-acrobatics">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-acrobatics">
+														<span class="wuxHeader">Acrobatics</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-acrobatics">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your Acrobatics check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. </span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-athletics">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-athletics">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-athletics">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-athletics">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-athletics">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-athletics">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-athletics">
+														<span class="wuxHeader">Athletics</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-athletics">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your Athletics check covers movement through an environment such as when climbing, jumping, or swimming.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-fortitude">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-fortitude">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-fortitude">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-fortitude">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-fortitude">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-fortitude">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-fortitude">
+														<span class="wuxHeader">Fortitude</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-fortitude">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Fortitude is a character's ability to resist environmental or internal harm such as from severe heat or cold, poisons or sickness.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-physique">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-physique">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-physique">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-physique">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-physique">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-physique">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-physique">
+														<span class="wuxHeader">Physique</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-physique">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">The Physique skill represents a character’s raw strength and endurance. It is the base skill for actions that allow one to shove or grapple and can be used to allow one to lift or carry objects that may fall outside normal rules.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-palming">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-palming">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-palming">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-palming">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-palming">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-palming">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-palming">
+														<span class="wuxHeader">Palming</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-palming">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Palming is sleight-of-hand skill that gives a character the ability to snag, hide, and pass off small objects.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-stealth">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-stealth">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-stealth">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-stealth">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-stealth">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-stealth">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-stealth">
+														<span class="wuxHeader">Stealth</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-stealth">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Make a Stealth check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. </span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Technical</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-artisan">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-artisan">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-artisan">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-artisan">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-artisan">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-artisan">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-artisan">
+														<span class="wuxHeader">Artisan</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-artisan">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This skill includes several different forms of artistic impression such as through drawing, sculpting, handcrafting of fine objects, and conveying art and information through images and technique. </span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-cook">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-cook">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-cook">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-cook">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-cook">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-cook">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-cook">
+														<span class="wuxHeader">Cook</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-cook">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Food is important for survival, so making it enjoyable is a craft of great appreciation. This skill requires cook's utensils in order to cook most food at a minimum, while different dishes may require access to a stove, oven, or other large appliances.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-herbalism">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-herbalism">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-herbalism">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-herbalism">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-herbalism">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-herbalism">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-herbalism">
+														<span class="wuxHeader">Herbalism</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-herbalism">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">The skill to create medicinal and chemical compounds such as drugs, perfumes, and poisons.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-mechanical">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-mechanical">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-mechanical">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-mechanical">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-mechanical">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-mechanical">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-mechanical">
+														<span class="wuxHeader">Mechanical</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-mechanical">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This skill covers building, repairing, and disabling mechanical devices such as locks, tools, and machinery.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-medicine">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-medicine">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-medicine">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-medicine">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-medicine">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-medicine">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-medicine">
+														<span class="wuxHeader">Medicine</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-medicine">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Medicine is used to perform medical procedures such as administering drugs, performing first aid, and surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character’s medical condition.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsPhysical-pilot">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-pilot">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsPhysical-pilot">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingPhysical-pilot">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-pilot">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-pilot">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingPhysical-pilot">
+														<span class="wuxHeader">Pilot</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsPhysical-pilot">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">When attempting to drive a vehicle of any kind, the pilot skill often governs most checks. </span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<div class="skills-mental">
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_skills-mental" value="0">
+							<div class="wuxHiddenField">
+								<span class='wuxHeader'>Mental Skills</span>
+								<div class="wuxRow">
+									<span class="wuxDescription" name="attr_skills-descmental"></span>
+								</div>
+								<div class="wuxDistinctSection">
+									<div class="wuxDistinctField">
+										<span class="wuxDistinctTitle">Points</span>
+										<input type="hidden" class="wuxErrorField-flag" name="attr_skills-pointsmental-error" value="0">
+										<span class='wuxDistinctData'>
+											<span name='attr_skills-pointsmental' value="1">1</span>
+											<span>/ </span>
+											<span name='attr_skills-pointsmental_max' value="1">1</span>
+										</span>
+									</div>
+								</div>
+								<div class="wuxRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_skills-mental-reset">
+										<span>Reset</span>
+									</div>
+								</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Magic</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-assault">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-assault">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-assault">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-assault">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-assault">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-assault">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-assault">
+														<span class="wuxHeader">Assault</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-assault">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">These spells quickly form ether into a physical substance. Because the ether is formed quickly, these spells are well suited for launching at targets in a combat situation at the cost of keeping the ether stable for more than a few seconds.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-conjure">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-conjure">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-conjure">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-conjure">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-conjure">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-conjure">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-conjure">
+														<span class="wuxHeader">Conjure</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-conjure">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">These spells form ether into a form of energy and stabilzes it so that it can linger in this form. Conjured magic is often unable to last for long and must be consumed quickly else disperse into ether.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-enchant">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-enchant">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-enchant">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-enchant">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-enchant">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-enchant">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-enchant">
+														<span class="wuxHeader">Enchant</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-enchant">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Spells that imbue a target with temporary or permanent change. These spells can typically cause effects in creatures such as emboldening their strength or heal their wounds.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-ethereal">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-ethereal">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-ethereal">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-ethereal">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-ethereal">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-ethereal">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-ethereal">
+														<span class="wuxHeader">Ethereal</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-ethereal">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Ethereal spells are unique in that they don't create any obvious physical manifestation but rather affect ether and the ethereal plane directly.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-field">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-field">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-field">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-field">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-field">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-field">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-field">
+														<span class="wuxHeader">Field</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-field">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">These spells affect existing terrain and environments by either modifying it or adding to it. </span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-structure">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-structure">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-structure">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-structure">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-structure">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-structure">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-structure">
+														<span class="wuxHeader">Structure</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-structure">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Spells that transform ether into physical objects and materials and reform it. Some spells in this class can affect physical aspected-materials and reform it as well.</span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Social</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-deception">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-deception">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-deception">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-deception">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-deception">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-deception">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-deception">
+														<span class="wuxHeader">Deception</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-deception">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your Deception check determines whether you can convincingly hide the truth, either verbally or through your actions. This deception can encompass everything from misleading others through ambiguity to telling outright lies.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-etiquette">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-etiquette">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-etiquette">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-etiquette">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-etiquette">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-etiquette">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-etiquette">
+														<span class="wuxHeader">Etiquette</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-etiquette">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that people might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-intimidation">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-intimidation">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-intimidation">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-intimidation">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-intimidation">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-intimidation">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-intimidation">
+														<span class="wuxHeader">Intimidation</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-intimidation">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-leadership">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-leadership">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-leadership">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-leadership">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-leadership">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-leadership">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-leadership">
+														<span class="wuxHeader">Leadership</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-leadership">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Leadership is the ability to direct and motivate others. This skill is especially helpful in situations where the will of a teammate is shaken or someone is being asked to do something uncomfortable.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-negotiation">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-negotiation">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-negotiation">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-negotiation">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-negotiation">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-negotiation">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-negotiation">
+														<span class="wuxHeader">Negotiation</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-negotiation">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Negotiation governs a character’s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-performance">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-performance">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-performance">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-performance">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-performance">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-performance">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-performance">
+														<span class="wuxHeader">Performance</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-performance">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your Performance check determines how well you can delight an audience with music, dance, acting, storytelling, or some other form of entertainment. </span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Knowledge</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-arcana">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-arcana">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-arcana">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-arcana">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-arcana">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-arcana">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-arcana">
+														<span class="wuxHeader">Arcana</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-arcana">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Arcana represents knowledge of the ethereal and manipulation of ether. It can help identify spell effects, well known spirits, and qualities of ether.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-culture">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-culture">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-culture">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-culture">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-culture">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-culture">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-culture">
+														<span class="wuxHeader">Culture</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-culture">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your culture check measures your ability to recall lore about a civilization's practices, personalities, laws, and religions. </span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-history">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-history">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-history">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-history">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-history">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-history">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-history">
+														<span class="wuxHeader">History</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-history">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your history check measures your ability to recall lore about historical events, legendary people, ancient kingdoms, past disputes, recent wars, and lost civilizations.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-investigation">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-investigation">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-investigation">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-investigation">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-investigation">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-investigation">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-investigation">
+														<span class="wuxHeader">Investigation</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-investigation">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This is used to actively search for for clues or anything out of sorts. You might deduce the location of a hidden object, discern from the appearance of a wound what kind of weapon dealt it, or determine the weakest point in a tunnel that could cause it to collapse. </span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-nature">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-nature">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-nature">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-nature">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-nature">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-nature">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-nature">
+														<span class="wuxHeader">Nature</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-nature">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your nature check measures your ability to recall lore about geography, plants, animals, the weather, and natural cycles.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsMental-tracking">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-tracking">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsMental-tracking">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingMental-tracking">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-tracking">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-tracking">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingMental-tracking">
+														<span class="wuxHeader">Tracking</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsMental-tracking">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Make a Tracking check to follow tracks, hunt wild game, or guide your group through wastelands. </span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<div class="skills-choice">
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_skills-choice" value="0">
+							<div class="wuxHiddenField">
+								<span class='wuxHeader'>Choice Skills</span>
+								<div class="wuxRow">
+									<span class="wuxDescription" name="attr_skills-descchoice"></span>
+								</div>
+								<div class="wuxDistinctSection">
+									<div class="wuxDistinctField">
+										<span class="wuxDistinctTitle">Points</span>
+										<input type="hidden" class="wuxErrorField-flag" name="attr_skills-pointschoice-error" value="0">
+										<span class='wuxDistinctData'>
+											<span name='attr_skills-pointschoice' value="1">1</span>
+											<span>/ </span>
+											<span name='attr_skills-pointschoice_max' value="1">1</span>
+										</span>
+									</div>
+								</div>
+								<div class="wuxRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_skills-choice-reset">
+										<span>Reset</span>
+									</div>
+								</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Combat</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-brawling">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-brawling">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-brawling">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-brawling">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-brawling">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-brawling">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-brawling">
+														<span class="wuxHeader">Brawling</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-brawling">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This is the skill to use one's own body to fight. The combat style has a focus on quick actions, allowing more maneuverability in their attacks in exchange for less damage.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-finesse">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-finesse">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-finesse">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-finesse">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-finesse">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-finesse">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-finesse">
+														<span class="wuxHeader">Finesse</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-finesse">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This is the skill to strike at a foe dextrously, using precision to target weaknesses. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are well balanced for striking fast.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-marksmanship">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-marksmanship">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-marksmanship">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-marksmanship">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-marksmanship">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-marksmanship">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-marksmanship">
+														<span class="wuxHeader">Marksmanship</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-marksmanship">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">The skill of using a bow or firearm. These weapons have the most variety in weapon ranges, but typically are ineffective in melee.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-might">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-might">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-might">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-might">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-might">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-might">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-might">
+														<span class="wuxHeader">Might</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-might">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">These weapons are large, allowing the wielder to swing them with all their strength. They often come with ways to either smash through defenses or simply to break a defense more easily.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-polearm">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-polearm">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-polearm">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-polearm">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-polearm">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-polearm">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-polearm">
+														<span class="wuxHeader">Polearm</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-polearm">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This is the skill for striking in melee with a weapon that is long and has substantial reach. These weapons will often feature increased threat range, allowing one to strike at more distant foes.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-throw">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-throw">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-throw">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-throw">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-throw">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-throw">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-throw">
+														<span class="wuxHeader">Throw</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-throw">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">When one strikes at a foe or aims for a location by throwing an object, it is typical to use the throw skill. </span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Magic</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-assault">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-assault">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-assault">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-assault">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-assault">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-assault">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-assault">
+														<span class="wuxHeader">Assault</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-assault">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">These spells quickly form ether into a physical substance. Because the ether is formed quickly, these spells are well suited for launching at targets in a combat situation at the cost of keeping the ether stable for more than a few seconds.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-conjure">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-conjure">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-conjure">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-conjure">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-conjure">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-conjure">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-conjure">
+														<span class="wuxHeader">Conjure</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-conjure">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">These spells form ether into a form of energy and stabilzes it so that it can linger in this form. Conjured magic is often unable to last for long and must be consumed quickly else disperse into ether.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-enchant">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-enchant">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-enchant">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-enchant">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-enchant">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-enchant">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-enchant">
+														<span class="wuxHeader">Enchant</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-enchant">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Spells that imbue a target with temporary or permanent change. These spells can typically cause effects in creatures such as emboldening their strength or heal their wounds.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-ethereal">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-ethereal">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-ethereal">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-ethereal">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-ethereal">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-ethereal">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-ethereal">
+														<span class="wuxHeader">Ethereal</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-ethereal">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Ethereal spells are unique in that they don't create any obvious physical manifestation but rather affect ether and the ethereal plane directly.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-field">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-field">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-field">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-field">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-field">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-field">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-field">
+														<span class="wuxHeader">Field</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-field">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">These spells affect existing terrain and environments by either modifying it or adding to it. </span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-structure">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-structure">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-structure">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-structure">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-structure">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-structure">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-structure">
+														<span class="wuxHeader">Structure</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-structure">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Spells that transform ether into physical objects and materials and reform it. Some spells in this class can affect physical aspected-materials and reform it as well.</span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Body</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-acrobatics">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-acrobatics">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-acrobatics">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-acrobatics">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-acrobatics">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-acrobatics">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-acrobatics">
+														<span class="wuxHeader">Acrobatics</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-acrobatics">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your Acrobatics check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. </span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-athletics">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-athletics">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-athletics">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-athletics">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-athletics">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-athletics">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-athletics">
+														<span class="wuxHeader">Athletics</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-athletics">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your Athletics check covers movement through an environment such as when climbing, jumping, or swimming.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-fortitude">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-fortitude">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-fortitude">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-fortitude">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-fortitude">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-fortitude">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-fortitude">
+														<span class="wuxHeader">Fortitude</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-fortitude">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Fortitude is a character's ability to resist environmental or internal harm such as from severe heat or cold, poisons or sickness.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-physique">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-physique">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-physique">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-physique">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-physique">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-physique">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-physique">
+														<span class="wuxHeader">Physique</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-physique">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">The Physique skill represents a character’s raw strength and endurance. It is the base skill for actions that allow one to shove or grapple and can be used to allow one to lift or carry objects that may fall outside normal rules.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-palming">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-palming">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-palming">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-palming">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-palming">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-palming">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-palming">
+														<span class="wuxHeader">Palming</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-palming">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Palming is sleight-of-hand skill that gives a character the ability to snag, hide, and pass off small objects.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-stealth">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-stealth">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-stealth">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-stealth">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-stealth">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-stealth">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-stealth">
+														<span class="wuxHeader">Stealth</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-stealth">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Make a Stealth check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. </span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Social</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-deception">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-deception">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-deception">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-deception">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-deception">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-deception">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-deception">
+														<span class="wuxHeader">Deception</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-deception">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your Deception check determines whether you can convincingly hide the truth, either verbally or through your actions. This deception can encompass everything from misleading others through ambiguity to telling outright lies.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-etiquette">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-etiquette">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-etiquette">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-etiquette">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-etiquette">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-etiquette">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-etiquette">
+														<span class="wuxHeader">Etiquette</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-etiquette">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that people might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-intimidation">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-intimidation">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-intimidation">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-intimidation">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-intimidation">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-intimidation">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-intimidation">
+														<span class="wuxHeader">Intimidation</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-intimidation">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-leadership">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-leadership">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-leadership">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-leadership">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-leadership">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-leadership">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-leadership">
+														<span class="wuxHeader">Leadership</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-leadership">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Leadership is the ability to direct and motivate others. This skill is especially helpful in situations where the will of a teammate is shaken or someone is being asked to do something uncomfortable.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-negotiation">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-negotiation">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-negotiation">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-negotiation">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-negotiation">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-negotiation">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-negotiation">
+														<span class="wuxHeader">Negotiation</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-negotiation">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Negotiation governs a character’s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-performance">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-performance">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-performance">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-performance">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-performance">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-performance">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-performance">
+														<span class="wuxHeader">Performance</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-performance">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your Performance check determines how well you can delight an audience with music, dance, acting, storytelling, or some other form of entertainment. </span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Technical</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-artisan">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-artisan">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-artisan">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-artisan">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-artisan">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-artisan">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-artisan">
+														<span class="wuxHeader">Artisan</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-artisan">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This skill includes several different forms of artistic impression such as through drawing, sculpting, handcrafting of fine objects, and conveying art and information through images and technique. </span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-cook">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-cook">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-cook">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-cook">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-cook">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-cook">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-cook">
+														<span class="wuxHeader">Cook</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-cook">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Food is important for survival, so making it enjoyable is a craft of great appreciation. This skill requires cook's utensils in order to cook most food at a minimum, while different dishes may require access to a stove, oven, or other large appliances.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-herbalism">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-herbalism">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-herbalism">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-herbalism">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-herbalism">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-herbalism">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-herbalism">
+														<span class="wuxHeader">Herbalism</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-herbalism">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">The skill to create medicinal and chemical compounds such as drugs, perfumes, and poisons.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-mechanical">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-mechanical">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-mechanical">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-mechanical">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-mechanical">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-mechanical">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-mechanical">
+														<span class="wuxHeader">Mechanical</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-mechanical">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This skill covers building, repairing, and disabling mechanical devices such as locks, tools, and machinery.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-medicine">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-medicine">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-medicine">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-medicine">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-medicine">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-medicine">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-medicine">
+														<span class="wuxHeader">Medicine</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-medicine">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Medicine is used to perform medical procedures such as administering drugs, performing first aid, and surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character’s medical condition.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-pilot">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-pilot">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-pilot">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-pilot">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-pilot">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-pilot">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-pilot">
+														<span class="wuxHeader">Pilot</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-pilot">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">When attempting to drive a vehicle of any kind, the pilot skill often governs most checks. </span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTableItemHeader wuxTextLeft">Knowledge</div>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-arcana">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-arcana">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-arcana">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-arcana">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-arcana">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-arcana">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-arcana">
+														<span class="wuxHeader">Arcana</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-arcana">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Arcana represents knowledge of the ethereal and manipulation of ether. It can help identify spell effects, well known spirits, and qualities of ether.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-culture">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-culture">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-culture">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-culture">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-culture">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-culture">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-culture">
+														<span class="wuxHeader">Culture</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-culture">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your culture check measures your ability to recall lore about a civilization's practices, personalities, laws, and religions. </span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-history">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-history">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-history">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-history">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-history">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-history">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-history">
+														<span class="wuxHeader">History</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-history">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your history check measures your ability to recall lore about historical events, legendary people, ancient kingdoms, past disputes, recent wars, and lost civilizations.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-investigation">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-investigation">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-investigation">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-investigation">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-investigation">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-investigation">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-investigation">
+														<span class="wuxHeader">Investigation</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-investigation">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">This is used to actively search for for clues or anything out of sorts. You might deduce the location of a hidden object, discern from the appearance of a wound what kind of weapon dealt it, or determine the weakest point in a tunnel that could cause it to collapse. </span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-nature">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-nature">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-nature">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-nature">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-nature">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-nature">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-nature">
+														<span class="wuxHeader">Nature</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-nature">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Your nature check measures your ability to recall lore about geography, plants, animals, the weather, and natural cycles.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_skills-detailsChoice-tracking">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-tracking">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_skills-detailsChoice-tracking">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_skills-trainingChoice-tracking">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-tracking">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-tracking">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skills-trainingChoice-tracking">
+														<span class="wuxHeader">Tracking</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_skills-detailsChoice-tracking">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Make a Tracking check to follow tracks, hunt wild game, or guide your group through wastelands. </span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="wuxSectionContentCollapsed"></div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</div>

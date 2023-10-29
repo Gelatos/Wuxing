@@ -26,6 +26,10 @@ function GetSectionIdNameFromArray(sectionName, currentID, variableNames) {
 }
 
 function ToCamelCase(inputString) {
+
+    if (inputString == "") {
+        return inputString;
+    }
     
     // Split the input string by spaces and iterate through the words
     let words = inputString.split(' ');

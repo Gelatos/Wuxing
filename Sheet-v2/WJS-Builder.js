@@ -92,23 +92,12 @@ on("change:builder-button-submit", function () {
 
 var update_builder_submit = function () {
 
-	let defPhysSkillsArray = GetDefensivePhysSkillsList(true);
-	let defSensSkillsArray = GetDefensiveSensSkillsList(true);
-	let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
-	let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
-	let choiceSkillsArray = physSkillsArray.concat(mentSkillsArray);
 
 	let abilityScoreFieldArray = GetSectionIdNameFromArray("builder-base-", "", GetAbilityScoreList(true));
 	let growthsFieldArray = GetSectionIdNameFromArray("builder-baseGrowth-", "", GetAbilityScoreList(true));
-	let defPhysFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingDefensivePhys-`, "", defPhysSkillsArray);
-	let defSensFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingDefensiveSens-`, "", defSensSkillsArray);
-	let physicalFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingPhysical-`, "", physSkillsArray);
-	let mentalFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingMental-`, "", mentSkillsArray);
-	let choiceFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingChoice-`, "", choiceSkillsArray);
 
-	let mod_attrs = ["base_level", "builder-path", "builder-ancestry", "builder-prime_element", "advancement-advancementGrowthsTotal"];
-	mod_attrs = mod_attrs.concat(abilityScoreFieldArray).concat(growthsFieldArray).concat(defPhysFieldArray).concat(defSensFieldArray).concat(physicalFieldArray);
-	mod_attrs = mod_attrs.concat(mentalFieldArray).concat(choiceFieldArray);
+	let mod_attrs = ["builder-nextPage", "base_level", "builder-path", "builder-ancestry", "builder-prime_element", "advancement-advancementGrowthsTotal"];
+	mod_attrs = mod_attrs.concat(abilityScoreFieldArray).concat(growthsFieldArray);
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -120,38 +109,9 @@ var update_builder_submit = function () {
 		let baseAbilityScores = SetAbilityScoreFieldArray(v, "builder-base-");
 		let baseGrowths = SetGrowthFieldArray(v, "builder-baseGrowth-");
 		let baseGrowthsTotal = MultiplyGrowths(baseGrowths, baseLevel);
-		let baseSkills = [];
-		let choiceSkills = [];
 		let advancementGrowthsTotal = AttrParseJSON(v, "advancement-advancementGrowthsTotal");
 		if (advancementGrowthsTotal == "") {
 			advancementGrowthsTotal = CreateGrowthsArrayData();
-		}
-
-		// set skill arrays
-		for (let i = 0; i < defPhysFieldArray.length; i++) {
-			if (v[defPhysFieldArray[i]] == "on") {
-				baseSkills.push(defPhysSkillsArray[i]);
-			}
-		}
-		for (let i = 0; i < defSensFieldArray.length; i++) {
-			if (v[defSensFieldArray[i]] == "on") {
-				baseSkills.push(physSkillsArray[i]);
-			}
-		}
-		for (let i = 0; i < physicalFieldArray.length; i++) {
-			if (v[physicalFieldArray[i]] == "on") {
-				baseSkills.push(defSensSkillsArray[i]);
-			}
-		}
-		for (let i = 0; i < mentalFieldArray.length; i++) {
-			if (v[mentalFieldArray[i]] == "on") {
-				baseSkills.push(mentSkillsArray[i]);
-			}
-		}
-		for (let i = 0; i < choiceFieldArray.length; i++) {
-			if (v[choiceFieldArray[i]] == "on") {
-				choiceSkills.push(choiceSkillsArray[i]);
-			}
 		}
 
 		// set variables
@@ -161,14 +121,11 @@ var update_builder_submit = function () {
 		update["builder-baseAbilityScores"] = JSON.stringify(baseAbilityScores);
 		update["builder-baseGrowths"] = JSON.stringify(baseGrowths);
 		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
-		update["builder-baseSkills"] = JSON.stringify(baseSkills);
-		update["builder-baseChoiceSkills"] = JSON.stringify(choiceSkills);
 		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
 		update = SetCharacterStatGrowths(update, endingStatistics);
 
 		// update page position
-		update["advancement-previousPage"] = "0";
-		update["characterSheetDisplayStyle"] = "Advancement";
+		update = GoToNextPage(update, AttrParseString(v, "builder-nextPage", "Skills"), "0");
 
 		setAttrs(update, { silent: true });
 	});
@@ -225,11 +182,11 @@ var update_builder_ancestry_info = function (newValue) {
 	// create the techniques and update the skills
 	update = SetTechniqueDataList(update, "repeating_ancestrytechniques", ancestryTechniques);
 	update = update_builder_ancestrySkills(update, ancestryData);
-	update_builder_defensivePhys_skills();
-	update_builder_defensiveSens_skills();
-	update_builder_physical_skills();
-	update_builder_mental_skills();
-	update_builder_choice_skills();
+	update_skills_defensivePhys_skills();
+	update_skills_defensiveSens_skills();
+	update_skills_physical_skills();
+	update_skills_mental_skills();
+	update_skills_choice_skills();
 
 	setAttrs(update, { silent: true });
 }
@@ -237,66 +194,66 @@ var update_builder_ancestry_info = function (newValue) {
 var update_builder_ancestrySkills = function (update, ancestryData) {
 
 	// defensive skills
-	update = update_builder_skill_fields(update, "Physical Defensive", ancestryData.skillPointsPhysDefense, "DefensivePhys");
-	update = update_builder_skill_fields(update, "Sensory Defensive", ancestryData.skillPointsSensDefense, "DefensiveSens");
+	update = update_skills_fields(update, "Physical Defensive", ancestryData.skillPointsPhysDefense, "DefensivePhys");
+	update = update_skills_fields(update, "Sensory Defensive", ancestryData.skillPointsSensDefense, "DefensiveSens");
 
 	if (ancestryData.skillPointsPhysDefense > 0 || ancestryData.skillPointsSensDefense > 0) {
-		update["builder-skills-Defensive"] = "1";
+		update["skills-Defensive"] = "1";
 	}
 	else {
-		update["builder-skills-Defensive"] = "0";
-		update_builder_defensive_skills_reset();
+		update["skills-Defensive"] = "0";
+		update_skills_defensive_skills_reset();
 	}
 
 	// physical skills
-	update = update_builder_skill_fields(update, "Combat, Body, and/or Technical", ancestryData.skillPointsCoAcTc, "Physical");
+	update = update_skills_fields(update, "Combat, Body, and/or Technical", ancestryData.skillPointsCoAcTc, "Physical");
 
 	if (ancestryData.skillPointsCoAcTc > 0) {
-		update["builder-skills-Physical"] = "1";
+		update["skills-Physical"] = "1";
 	}
 	else {
-		update["builder-skills-Physical"] = "0";
-		update_builder_physical_skills_reset();
+		update["skills-Physical"] = "0";
+		update_skills_physical_skills_reset();
 	}
 
 	// mental skills
-	update = update_builder_skill_fields(update, "Magic, Knowledge, and/or Social", ancestryData.skillPointsMgKnSo, "Mental");
+	update = update_skills_fields(update, "Magic, Knowledge, and/or Social", ancestryData.skillPointsMgKnSo, "Mental");
 
 	if (ancestryData.skillPointsMgKnSo > 0) {
-		update["builder-skills-Mental"] = "1";
+		update["skills-Mental"] = "1";
 	}
 	else {
-		update["builder-skills-Mental"] = "0";
-		update_builder_mental_skills_reset();
+		update["skills-Mental"] = "0";
+		update_skills_mental_skills_reset();
 	}
 
 	// choice skills
-	update = update_builder_skill_fields(update, "additional", ancestryData.skillPointsAny, "Choice", " of choice, none can be from the defensive skill group.");
+	update = update_skills_fields(update, "additional", ancestryData.skillPointsAny, "Choice", " of choice, none can be from the defensive skill group.");
 
 	if (ancestryData.skillPointsAny > 0) {
-		update["builder-skills-Choice"] = "1";
+		update["skills-Choice"] = "1";
 	}
 	else {
-		update["builder-skills-Choice"] = "0";
-		update_builder_mental_skills_reset();
+		update["skills-Choice"] = "0";
+		update_skills_mental_skills_reset();
 	}
 
 	return update;
 }
 
-var update_builder_skill_fields = function (update, skillName, count, fieldName, suffix) {
+var update_skills_fields = function (update, skillName, count, fieldName, suffix) {
 
 	if (suffix == undefined) {
 		suffix = ".";
 	}
 
 	if (count > 0) {
-		update[`builder-skills-desc${fieldName}`] = `Become trained in ${count} ${skillName} skill${count > 1 ? "s" : ""}${suffix}`;
-		update[`builder-skills-points${fieldName}_max`] = count;
+		update[`skills-desc${fieldName}`] = `Become trained in ${count} ${skillName} skill${count > 1 ? "s" : ""}${suffix}`;
+		update[`skills-points${fieldName}_max`] = count;
 	}
 	else {
-		update[`builder-skills-desc${fieldName}`] = "";
-		update[`builder-skills-points${fieldName}_max`] = 0;
+		update[`skills-desc${fieldName}`] = "";
+		update[`skills-points${fieldName}_max`] = 0;
 	}
 
 	return update;
@@ -449,224 +406,6 @@ var update_builder_ability_scores_reset = function (pointsAttr, absAttr, pointsM
 		let pointMax = isNaN(parseInt(v[`${pointsAttr}_max`])) ? pointsMax : parseInt(v[`${pointsAttr}_max`]);
 		update[`${pointsAttr}`] = pointMax;
 		update[`${pointsAttr}-error`] = "0";
-
-		setAttrs(update, { silent: true });
-	});
-}
-
-
-
-
-// ======== Builder Skills Listeners
-on("change:builder-skills-trainingdefensivePhys-brace change:builder-skills-trainingdefensivePhys-presence change:builder-skills-trainingdefensivePhys-reflex", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_builder_defensivePhys_skills();
-});
-
-on("change:builder-skills-trainingdefensiveSens-insight change:builder-skills-trainingdefensiveSens-notice change:builder-skills-trainingdefensiveSens-resolve", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_builder_defensiveSens_skills();
-});
-
-on("change:builder-skills-defensive-reset", function () {
-
-	update_builder_Defensive_skills_reset();
-});
-
-on("change:builder-skills-trainingphysical-brawling change:builder-skills-trainingphysical-finesse change:builder-skills-trainingphysical-marksmanship change:builder-skills-trainingphysical-might change:builder-skills-trainingphysical-polearm change:builder-skills-trainingphysical-throw change:builder-skills-trainingphysical-acrobatics change:builder-skills-trainingphysical-athletics change:builder-skills-trainingphysical-fortitude change:builder-skills-trainingphysical-physique change:builder-skills-trainingphysical-palming change:builder-skills-trainingphysical-stealth change:builder-skills-trainingphysical-artisan change:builder-skills-trainingphysical-cook change:builder-skills-trainingphysical-herbalism change:builder-skills-trainingphysical-mechanical change:builder-skills-trainingphysical-medicine change:builder-skills-trainingphysical-pilot", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_builder_physical_skills();
-});
-
-on("change:builder-skills-physical-reset", function () {
-
-	update_builder_physical_skills_reset();
-});
-
-on("change:builder-skills-trainingmental-assault change:builder-skills-trainingmental-conjure change:builder-skills-trainingmental-enchant change:builder-skills-trainingmental-ethereal change:builder-skills-trainingmental-field change:builder-skills-trainingmental-structure change:builder-skills-trainingmental-arcana change:builder-skills-trainingmental-culture change:builder-skills-trainingmental-history change:builder-skills-trainingmental-investigation change:builder-skills-trainingmental-nature change:builder-skills-trainingmental-tracking change:builder-skills-trainingmental-deception change:builder-skills-trainingmental-etiquette change:builder-skills-trainingmental-intimidation change:builder-skills-trainingmental-leadership change:builder-skills-trainingmental-negotiation change:builder-skills-trainingmental-performance", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_builder_mental_skills();
-});
-
-on("change:builder-skills-mental-reset", function () {
-
-	update_builder_mental_skills_reset();
-});
-
-on("change:builder-skills-trainingchoice-brawling change:builder-skills-trainingchoice-finesse change:builder-skills-trainingchoice-marksmanship change:builder-skills-trainingchoice-might change:builder-skills-trainingchoice-polearm change:builder-skills-trainingchoice-throw change:builder-skills-trainingchoice-acrobatics change:builder-skills-trainingchoice-athletics change:builder-skills-trainingchoice-fortitude change:builder-skills-trainingchoice-physique change:builder-skills-trainingchoice-palming change:builder-skills-trainingchoice-stealth change:builder-skills-trainingchoice-artisan change:builder-skills-trainingchoice-cook change:builder-skills-trainingchoice-herbalism change:builder-skills-trainingchoice-mechanical change:builder-skills-trainingchoice-medicine change:builder-skills-trainingchoice-pilot change:builder-skills-trainingchoice-assault change:builder-skills-trainingchoice-conjure change:builder-skills-trainingchoice-enchant change:builder-skills-trainingchoice-ethereal change:builder-skills-trainingchoice-field change:builder-skills-trainingchoice-structure change:builder-skills-trainingchoice-arcana change:builder-skills-trainingchoice-culture change:builder-skills-trainingchoice-history change:builder-skills-trainingchoice-investigation change:builder-skills-trainingchoice-nature change:builder-skills-trainingchoice-tracking change:builder-skills-trainingchoice-deception change:builder-skills-trainingchoice-etiquette change:builder-skills-trainingchoice-intimidation change:builder-skills-trainingchoice-leadership change:builder-skills-trainingchoice-negotiation change:builder-skills-trainingchoice-performance", function (eventinfo) {
-	if (eventinfo.sourceType === "sheetworker") {
-		return;
-	};
-
-	update_builder_choice_skills();
-});
-
-on("change:builder-skills-choice-reset", function () {
-
-	update_builder_choice_skills_reset();
-});
-
-var update_builder_defensivePhys_skills = function () {
-	update_builder_skills("DefensivePhys", GetDefensivePhysSkillsList(true));
-}
-
-var update_builder_defensiveSens_skills = function () {
-	update_builder_skills("DefensiveSens", GetDefensiveSensSkillsList(true));
-}
-
-var update_builder_physical_skills = function () {
-	update_builder_skills("Physical", GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true)));
-}
-
-var update_builder_mental_skills = function () {
-	update_builder_skills("Mental", GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true)));
-}
-
-var update_builder_skills = function (fieldName, skillsArray) {
-
-	let mod_attrs = [`builder-skills-points${fieldName}_max`];
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-training${fieldName}-`, "", skillsArray));
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-trainingChoice-`, "", skillsArray));
-
-	getAttrs(mod_attrs, function (v) {
-		let update = {};
-		let pointMax = isNaN(parseInt(v[`builder-skills-points${fieldName}_max`])) ? 0 : parseInt(v[`builder-skills-points${fieldName}_max`]);
-		let pointCount = pointMax;
-
-		for (let i = 0; i < skillsArray.length; i++) {
-			if (v[`builder-skills-training${fieldName}-${skillsArray[i]}`] == "on") {
-				pointCount--;
-			}
-			update[`builder-skills-trainingChoice-${skillsArray[i]}`] = v[`builder-skills-training${fieldName}-${skillsArray[i]}`];
-		}
-
-		update[`builder-skills-points${fieldName}`] = pointCount;
-		update[`builder-skills-points${fieldName}-error`] = pointCount < 0 ? "1" : "0";
-
-		setAttrs(update, { silent: true });
-	});
-}
-
-var update_builder_choice_skills = function () {
-
-	let mod_attrs = [`builder-skills-pointsChoice_max`];
-	let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
-	let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
-
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-trainingPhysical-`, "", physSkillsArray));
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-trainingMental-`, "", mentSkillsArray));
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-trainingChoice-`, "", physSkillsArray));
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-trainingChoice-`, "", mentSkillsArray));
-
-	getAttrs(mod_attrs, function (v) {
-		let update = {};
-		let pointMax = isNaN(parseInt(v[`builder-skills-pointsChoice_max`])) ? 0 : parseInt(v[`builder-skills-pointsChoice_max`]);
-		let pointCount = pointMax;
-
-		for (let i = 0; i < physSkillsArray.length; i++) {
-
-			if (v[`builder-skills-trainingPhysical-${physSkillsArray[i]}`] == "on" && v[`builder-skills-trainingChoice-${physSkillsArray[i]}`] != "on") {
-				update[`builder-skills-trainingChoice-${physSkillsArray[i]}`] = "on";
-			}
-			else if (v[`builder-skills-trainingChoice-${physSkillsArray[i]}`] == "on" && v[`builder-skills-trainingPhysical-${physSkillsArray[i]}`] != "on") {
-				pointCount--;
-			}
-		}
-		for (let i = 0; i < mentSkillsArray.length; i++) {
-			if (v[`builder-skills-trainingMental-${mentSkillsArray[i]}`] == "on" && v[`builder-skills-trainingChoice-${mentSkillsArray[i]}`] != "on") {
-				update[`builder-skills-trainingChoice-${mentSkillsArray[i]}`] = "on";
-			}
-			else if (v[`builder-skills-trainingChoice-${mentSkillsArray[i]}`] == "on" && v[`builder-skills-trainingMental-${mentSkillsArray[i]}`] != "on") {
-				pointCount--;
-			}
-		}
-
-		update[`builder-skills-pointsChoice`] = pointCount;
-		update[`builder-skills-pointsChoice-error`] = pointCount < 0 ? "1" : "0";
-
-		setAttrs(update, { silent: true });
-	});
-}
-
-var update_builder_defensive_skills_reset = function () {
-	update_builder_skills_reset("DefensivePhys", GetDefensivePhysSkillsList(true));
-	update_builder_skills_reset("DefensiveSens", GetDefensiveSensSkillsList(true));
-}
-
-var update_builder_physical_skills_reset = function () {
-	update_builder_skills_reset("Physical", GetCombatSkillsList(true));
-	update_builder_skills_reset("Physical", GetBodySkillsList(true));
-	update_builder_skills_reset("Physical", GetTechnicalSkillsList(true));
-}
-
-var update_builder_mental_skills_reset = function () {
-	update_builder_skills_reset("Mental", GetMagicSkillsList(true));
-	update_builder_skills_reset("Mental", GetKnowledgeSkillsList(true));
-	update_builder_skills_reset("Mental", GetSocialSkillsList(true));
-}
-
-var update_builder_skills_reset = function (fieldName, skillsArray) {
-	let mod_attrs = [`builder-skills-points${fieldName}_max`];
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-training${fieldName}-`, "", skillsArray));
-
-	getAttrs(mod_attrs, function (v) {
-		let update = {};
-
-		for (let i = 0; i < skillsArray.length; i++) {
-			if (v[`builder-skills-training${fieldName}-${skillsArray[i]}`] != 0) {
-				update[`builder-skills-training${fieldName}-${skillsArray[i]}`] = 0;
-				update[`builder-skills-trainingChoice-${skillsArray[i]}`] = 0;
-			}
-		}
-
-		let pointMax = parseInt(v[`builder-skills-points${fieldName}_max`]);
-		update[`builder-skills-points${fieldName}`] = pointMax;
-		update[`builder-skills-points${fieldName}-error`] = "0";
-
-		setAttrs(update, { silent: true });
-	});
-}
-
-var update_builder_choice_skills_reset = function () {
-	let mod_attrs = [`builder-skills-pointsChoice_max`];
-	let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
-	let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
-
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-trainingPhysical-`, "", physSkillsArray));
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-trainingMental-`, "", mentSkillsArray));
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-trainingChoice-`, "", physSkillsArray));
-	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`builder-skills-trainingChoice-`, "", mentSkillsArray));
-
-	getAttrs(mod_attrs, function (v) {
-		let update = {};
-
-		for (let i = 0; i < physSkillsArray.length; i++) {
-
-			if (v[`builder-skills-trainingChoice-${physSkillsArray[i]}`] == "on" && v[`builder-skills-trainingPhysical-${physSkillsArray[i]}`] != "on") {
-				update[`builder-skills-trainingChoice-${physSkillsArray[i]}`] = 0;
-			}
-		}
-		for (let i = 0; i < mentSkillsArray.length; i++) {
-			if (v[`builder-skills-trainingChoice-${mentSkillsArray[i]}`] == "on" && v[`builder-skills-trainingMental-${mentSkillsArray[i]}`] != "on") {
-				update[`builder-skills-trainingChoice-${mentSkillsArray[i]}`] = 0;
-			}
-		}
-
-		let pointMax = parseInt(v[`builder-skills-pointsChoice_max`]);
-		update[`builder-skills-pointsChoice`] = pointMax;
-		update[`builder-skills-pointsChoice-error`] = "0";
 
 		setAttrs(update, { silent: true });
 	});

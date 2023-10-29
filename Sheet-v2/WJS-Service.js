@@ -3,7 +3,7 @@ function AttrParseString(attrArray, fieldName, defaultValue) {
 	if (defaultValue == undefined) {
 		defaultValue = "";
 	}
-	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName];
+	return attrArray[fieldName] == undefined || attrArray[fieldName] == "" ? defaultValue : attrArray[fieldName];
 }
 
 function AttrParseInt(attrArray, fieldName, defaultValue) {
@@ -219,10 +219,18 @@ function GetCharacterStatGrowths (ancestryData, baseAbilityScores, baseGrowths, 
 	// convert growths to ability scores
 	let currentGrowths = ConvertAbilityScorePointsToGrowths(AddGrowths(baseGrowths, AddGrowths(ancestryData.growths, advancementGrowths)));
 
-	return {
+	let output = {
 		stats: AddGrowths(baseAbilityScores, AddGrowths(ancestryData.startingScores, MultiplyGrowths(currentGrowths, 0.01))),
-		modulus: ModulusGrowths(currentGrowths, 100)
+		modulus: ModulusGrowths(currentGrowths, 100),
+		mods: CreateAbilityScoreArrayData()
 	}
+
+	let abilityScoresList = GetAbilityScoreList(true);
+	for (let i = 0; i < abilityScoresList.length; i++) {
+		output.mods[abilityScoresList[i]] = GetAbilityScoreMod(output.stats[abilityScoresList[i]]);
+	}
+
+	return output;
 }
 
 function AddGrowths(array1, array2) {
@@ -441,5 +449,16 @@ function ReplaceDamageDice(element) {
 
 	// Use String.replace() with the regular expression
 	return element.replace(regexD, replacementD).replace(regexH, replacementH);
+}
+
+
+
+
+// ======== Page Progression
+
+function GoToNextPage(update, nextPage, currentPage) {
+	update[`${ToCamelCase(nextPage)}-previousPage`] = currentPage;
+	update["characterSheetDisplayStyle"] = nextPage;
+	return update;
 }
 

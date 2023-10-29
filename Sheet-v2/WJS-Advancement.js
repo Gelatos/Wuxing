@@ -269,7 +269,8 @@ var update_advancement_submit = function () {
 		// set updates
 		update["base_level"] = totalLevel;
 		update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, true));
-		update["characterSheetDisplayStyle"] = "LevelUp";
+
+		update = GoToNextPage(update, AttrParseString(v, "skills-nextPage", "LevelUp"), "Advancement");
 		update["advancement-button-reset-everything"] = "on";
 
 		setAttrs(update, { silent: true });
