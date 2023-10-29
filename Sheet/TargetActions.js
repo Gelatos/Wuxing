@@ -193,6 +193,9 @@ function TargetOptions(msg, action, modifiers, sendTargets, targets) {
 
     if (playerIsGM(msg.playerid)) {
         switch (action.toLowerCase()) {
+            // TURN
+            case "startturn":
+
             // EXPERIENCE
             case "xp":
                 TargetAddExp(sendTargets, targets, modifiers); 
@@ -265,6 +268,9 @@ function TargetOptions(msg, action, modifiers, sendTargets, targets) {
         break;
 
         // SKILLS
+        case "rollinit":
+            TargetGetCompareChart(sendTargets, targets, "Initiative", "initiative_bonus");
+        break;
         case "sensepresence":
             TargetGetCompareChart(sendTargets, targets, "Sense Presence", "sensepresence_mod");
         break;

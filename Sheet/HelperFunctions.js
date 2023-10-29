@@ -321,6 +321,38 @@ function GetRandomDrop(character) {
 // ======= Token Functions
 // =================================================
 
+function TokenStartRound(msg) {
+
+    if (Array.isArray(msg.selected) && msg.selected.length > 0) {
+        let token = {};
+
+        _.each(msg.selected, function (obj) {
+
+            token = getObj('graphic', obj._id);
+            if (token != undefined) {
+                token.set("status_yellow", true);
+            }
+        });
+
+    }
+}
+
+function TokenEndRound(msg) {
+
+    if (Array.isArray(msg.selected) && msg.selected.length > 0) {
+        let token = {};
+
+        _.each(msg.selected, function (obj) {
+
+            token = getObj('graphic', obj._id);
+            if (token != undefined) {
+                token.set("status_yellow", false);
+            }
+        });
+
+    }
+}
+
 function SetToken(tokens, options, tokenType) {
     
     // iterate through the selected tokens

@@ -140,6 +140,10 @@ on("chat:message", function(msg) {
                 OnTriggerCallTemplate(msg, content);
                 
             return;
+            case "!endturn":
+                TokenEndRound(msg);
+
+            return;
 
             // Token Triggered Events
             case "!tatk":
@@ -160,6 +164,9 @@ on("chat:message", function(msg) {
         // GM Events
         if (playerIsGM(msg.playerid)) {
             switch(tag) {
+                case "!startround":
+                    TokenStartRound(msg);
+                return;
                 case "!cp":
                 case "!cps":
                     CommandTargetPartyFunction(msg);
