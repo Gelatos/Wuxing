@@ -208,7 +208,7 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
   Layouts
 ========================================*/
 
-.wuxHorizontalFlex,
+.wuxStickyHeader,
 .wuxSheetHeader
 {
     position: relative;
@@ -231,27 +231,19 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 .wuxLayoutItem
 {
     min-width: 220px;
-    /* max-width: 600px; */
     flex: 2;
 }
 
 .wuxLargeLayoutItem
 {
-    min-width: 610px;
-    max-width: 810px;
+    min-width: 220px;
     flex: 4;
 }
 
 .wuxSmallLayoutItem
 {
     min-width: 120px;
-    max-width: 175px;
     flex: 1;
-}
-
-.wuxFlexLayoutItem
-{
-    flex: 1 1 250px;
 }
 
 /*========================================
@@ -387,7 +379,9 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 {
     position: relative;
     display: inline-block;
-    width: 210px;
+    min-width: 100px;
+    width: 100%;
+    max-width: 210px;
     height: 14px;
     padding: 3px;
     padding-left: 6px;
@@ -424,9 +418,7 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
     position: relative;
     top: -3px;
     left: 0px;
-    display: flex;
-    flex-flow: row;
-    align-content: flex-start;
+    display: inherit;
 
     width: calc(100% - 18px);
     padding: 5px;

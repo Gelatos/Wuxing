@@ -62,14 +62,14 @@ function GetTechniqueTraitsInfo(name) {
 	return {"name":"Crushing","group":"Ability","description":"This weapon can crush through defenses. Actions that target BR DC instead targets Reflex DC."}
 	case "explosive (x/y)":
 	return {"name":"Explosive (X/Y)","group":"Ability","description":"This weapon can explode on impact. Attacks made with this weapon affect characters within a radius of X spaces, drawn from the impact point, and deals X extra damage to all characters in the area."}
-	case "finesse":
-	return {"name":"Finesse","group":"Ability","description":"This weapon is easy to maneuver allowing you to easily strike at enemies trying to evade you. Actions that target BR DC instead targets Brace DC."}
 	case "impact (x)":
 	return {"name":"Impact (X)","group":"Ability","description":"This weapon deals X extra damage."}
 	case "knockback (x)":
 	return {"name":"Knockback (X)","group":"Ability","description":"On a hit, the user may choose to knock their target X spaces in a straight line directly away from the point of origin."}
 	case "line (x)":
 	return {"name":"Line (X)","group":"Ability","description":"Attacks made with this weapon affect characters in a straight line, X spaces long."}
+	case "quick":
+	return {"name":"Quick","group":"Ability","description":"This weapon is easy to maneuver allowing you to easily strike at enemies trying to evade you. Actions that target BR DC instead targets Brace DC."}
 	default:
 	return {"name":"","group":"","description":""}
 	
@@ -100,8 +100,6 @@ function GetTechniqueTraitsInfo(name) {
 	switch (name.toLowerCase()) {
 	case "brace":
 	return {"name":"Brace","description":"Brace represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects.","group":"Defensive","subGroup":"Physical Defense","abilityScore":"STR"}
-	case "fortitude":
-	return {"name":"Fortitude","description":"Fortitude is a character's ability to resist internal damage such as from poisons or sickness.","group":"Defensive","subGroup":"Physical Defense","abilityScore":"CON"}
 	case "insight":
 	return {"name":"Insight","description":"Insight represents a character's ability to parse conversation and judge mental states. This defense is typically used when information is being hidden in text or speech or to detect when someone is concealing their true thoughts.","group":"Defensive","subGroup":"Sensory Defense","abilityScore":"INT"}
 	case "notice":
@@ -120,33 +118,27 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetDefensiveSkillsList(isFields) {
 	if (isFields) {
-	return ["brace", "fortitude", "insight", "notice", "presence", "reflex", "resolve"];
+	return ["brace", "insight", "notice", "presence", "reflex", "resolve"];
 	}
 	else {
-	return ["Brace", "Fortitude", "Insight", "Notice", "Presence", "Reflex", "Resolve"];
+	return ["Brace", "Insight", "Notice", "Presence", "Reflex", "Resolve"];
 	}
 	}
 	
 	function GetCombatSkillsInfo(name) {
 	switch (name.toLowerCase()) {
-	case "archery":
-	return {"name":"Archery","description":"The skill of using borws. Bows have decent range and allow one to add their strength to their damage. They also tend to have more flexible ammunitions.","group":"Combat","subGroup":"","abilityScore":"DEX"}
 	case "brawling":
 	return {"name":"Brawling","description":"This is the skill to use one's own body to fight. The combat style has a focus on quick actions, allowing more maneuverability in their attacks in exchange for less damage.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "light blade":
-	return {"name":"Light Blade","description":"These weapons require a dextrous hand as they use precision to strike at a foe. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are exceptionally well balanced for striking with speed.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "hammer":
-	return {"name":"Hammer","description":"Blunt weapons that are swung with force to bludgeon their targets. These weapons tend to have qualities to allow them to deal increased damage to objects and can crush through defenses.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "handgun":
-	return {"name":"Handgun","description":"Small firearms made to be easily wielded in one hand. These weapons typically have the least range of all dedicated range weapons but feature threat ranges to be used in melee.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "heavy blade":
-	return {"name":"Heavy Blade","description":"These weapons are large and bladed, allowing the wielder to swing them with all their might. These weapons are made to be able to allow the user to strike with a powerful blow.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "longarm":
-	return {"name":"Longarm","description":"Powerful ranged weapons that fire bullets from two-handed implements. These weapons tend to have the highest range of all range weapons and large damage values in exchange for less action flexibility.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "finesse":
+	return {"name":"Finesse","description":"This is the skill to strike at a foe dextrously, using precision to target weaknesses. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are well balanced for striking fast.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "marksmanship":
+	return {"name":"Marksmanship","description":"The skill of using a bow or firearm. These weapons have the most variety in weapon ranges, but typically are ineffective in melee.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "might":
+	return {"name":"Might","description":"These weapons are large, allowing the wielder to swing them with all their strength. They often come with ways to either smash through defenses or simply to break a defense more easily.","group":"Combat","subGroup":"","abilityScore":"DEX"}
 	case "polearm":
-	return {"name":"Polearm","description":"Weapons on a pole of some sort. These weapons will often feature increased threat range, allowing one to strike at more distant foes.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "thrown":
-	return {"name":"Thrown","description":"Weapons that are able to be thrown, or improvising a thrown weapon. ","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	return {"name":"Polearm","description":"This is the skill for striking in melee with a weapon that is long and has substantial reach. These weapons will often feature increased threat range, allowing one to strike at more distant foes.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "throw":
+	return {"name":"Throw","description":"When one strikes at a foe or aims for a location by throwing an object, it is typical to use the throw skill. ","group":"Combat","subGroup":"","abilityScore":"DEX"}
 	default:
 	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
 	
@@ -155,10 +147,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetCombatSkillsList(isFields) {
 	if (isFields) {
-	return ["archery", "brawling", "lightBlade", "hammer", "handgun", "heavyBlade", "longarm", "polearm", "thrown"];
+	return ["brawling", "finesse", "marksmanship", "might", "polearm", "throw"];
 	}
 	else {
-	return ["Archery", "Brawling", "Light Blade", "Hammer", "Handgun", "Heavy Blade", "Longarm", "Polearm", "Thrown"];
+	return ["Brawling", "Finesse", "Marksmanship", "Might", "Polearm", "Throw"];
 	}
 	}
 	
@@ -194,17 +186,17 @@ function GetTechniqueTraitsInfo(name) {
 	function GetBodySkillsInfo(name) {
 	switch (name.toLowerCase()) {
 	case "acrobatics":
-	return {"name":"Acrobatics","description":"Your Acrobatics check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. ","group":"Body","subGroup":"","abilityScore":"DEX"}
+	return {"name":"Acrobatics","description":"Your Acrobatics check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. ","group":"Body","subGroup":"","abilityScore":"QCK"}
 	case "athletics":
 	return {"name":"Athletics","description":"Your Athletics check covers movement through an environment such as when climbing, jumping, or swimming.","group":"Body","subGroup":"","abilityScore":"STR"}
+	case "fortitude":
+	return {"name":"Fortitude","description":"Fortitude is a character's ability to resist environmental or internal harm such as from severe heat or cold, poisons or sickness.","group":"Body","subGroup":"","abilityScore":"CON"}
 	case "physique":
 	return {"name":"Physique","description":"The Physique skill represents a character’s raw strength and endurance. It is the base skill for actions that allow one to shove or grapple and can be used to allow one to lift or carry objects that may fall outside normal rules.","group":"Body","subGroup":"","abilityScore":"STR"}
 	case "palming":
 	return {"name":"Palming","description":"Palming is sleight-of-hand skill that gives a character the ability to snag, hide, and pass off small objects.","group":"Body","subGroup":"","abilityScore":"QCK"}
 	case "stealth":
-	return {"name":"Stealth","description":"Make a Stealth check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. ","group":"Body","subGroup":"","abilityScore":"DEX"}
-	case "survival":
-	return {"name":"Survival","description":"Make a Survival check to follow tracks, hunt wild game, or guide your group through wastelands. ","group":"Body","subGroup":"","abilityScore":"PER"}
+	return {"name":"Stealth","description":"Make a Stealth check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. ","group":"Body","subGroup":"","abilityScore":"QCK"}
 	default:
 	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
 	
@@ -213,10 +205,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetBodySkillsList(isFields) {
 	if (isFields) {
-	return ["acrobatics", "athletics", "physique", "palming", "stealth", "survival"];
+	return ["acrobatics", "athletics", "fortitude", "physique", "palming", "stealth"];
 	}
 	else {
-	return ["Acrobatics", "Athletics", "Physique", "Palming", "Stealth", "Survival"];
+	return ["Acrobatics", "Athletics", "Fortitude", "Physique", "Palming", "Stealth"];
 	}
 	}
 	
@@ -226,14 +218,14 @@ function GetTechniqueTraitsInfo(name) {
 	return {"name":"Arcana","description":"Arcana represents knowledge of the ethereal and manipulation of ether. It can help identify spell effects, well known spirits, and qualities of ether.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
 	case "culture":
 	return {"name":"Culture","description":"Your culture check measures your ability to recall lore about a civilization's practices, personalities, laws, and religions. ","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
-	case "engineering":
-	return {"name":"Engineering","description":"This skill represents knowledge of technological subjects. It can be used to recall lore about construction, buildings, fortifications, technology, and tools.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
 	case "history":
 	return {"name":"History","description":"Your history check measures your ability to recall lore about historical events, legendary people, ancient kingdoms, past disputes, recent wars, and lost civilizations.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
 	case "investigation":
 	return {"name":"Investigation","description":"This is used to actively search for for clues or anything out of sorts. You might deduce the location of a hidden object, discern from the appearance of a wound what kind of weapon dealt it, or determine the weakest point in a tunnel that could cause it to collapse. ","group":"Knowledge","subGroup":"","abilityScore":"PER"}
 	case "nature":
 	return {"name":"Nature","description":"Your nature check measures your ability to recall lore about geography, plants, animals, the weather, and natural cycles.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
+	case "tracking":
+	return {"name":"Tracking","description":"Make a Tracking check to follow tracks, hunt wild game, or guide your group through wastelands. ","group":"Knowledge","subGroup":"","abilityScore":"PER"}
 	default:
 	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
 	
@@ -242,10 +234,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetKnowledgeSkillsList(isFields) {
 	if (isFields) {
-	return ["arcana", "culture", "engineering", "history", "investigation", "nature"];
+	return ["arcana", "culture", "history", "investigation", "nature", "tracking"];
 	}
 	else {
-	return ["Arcana", "Culture", "Engineering", "History", "Investigation", "Nature"];
+	return ["Arcana", "Culture", "History", "Investigation", "Nature", "Tracking"];
 	}
 	}
 	
@@ -254,7 +246,7 @@ function GetTechniqueTraitsInfo(name) {
 	case "deception":
 	return {"name":"Deception","description":"Your Deception check determines whether you can convincingly hide the truth, either verbally or through your actions. This deception can encompass everything from misleading others through ambiguity to telling outright lies.","group":"Social","subGroup":"Social Influence","abilityScore":"CHA"}
 	case "etiquette":
-	return {"name":"Etiquette","description":"Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that peo- ple might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.","group":"Social","subGroup":"","abilityScore":"PER"}
+	return {"name":"Etiquette","description":"Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that people might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.","group":"Social","subGroup":"","abilityScore":"PER"}
 	case "intimidation":
 	return {"name":"Intimidation","description":"When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision.","group":"Social","subGroup":"Social Influence","abilityScore":"CHA"}
 	case "leadership":
@@ -309,10 +301,10 @@ function GetTechniqueTraitsInfo(name) {
 	
 	function GetDefensivePhysSkillsList(isFields) {
 	if (isFields) {
-	return ["brace", "fortitude", "presence", "reflex"];
+	return ["brace", "presence", "reflex"];
 	}
 	else {
-	return ["Brace", "Fortitude", "Presence", "Reflex"];
+	return ["Brace", "Presence", "Reflex"];
 	}
 	}
 	
@@ -332,7 +324,7 @@ function GetTechniqueTraitsInfo(name) {
 	case "interceptor":
 	return {"name":"Interceptor","category":"Warfare","description":"The interceptor is an expert in disrupting others. Prefering weapons with increased threat, interceptors protect their allies by stopping the movement of advancing enemies.","growths":{"CON":2,"DEX":4,"QCK":5,"STR":2,"CHA":0,"INT":0,"PER":3,"WIL":3,"hp":0,"vitality":2,"kiCharge":0,"spellForce":0},"prerequisite":"Trained in Notice and Polearm","jobTechnique":"Preemptive Strike","advancement":[{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Preemptive Stagger","type":"T"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Lunge","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Step Forward","type":"T"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Critical Maim","type":"T"}]}
 	case "marksman":
-	return {"name":"Marksman","category":"Warfare","description":"","growths":{"CON":3,"DEX":4,"QCK":3,"STR":0,"CHA":2,"INT":0,"PER":5,"WIL":1,"hp":0,"vitality":0,"kiCharge":2,"spellForce":2},"prerequisite":"Trained in Assault and Longarm","jobTechnique":"Spellshot","advancement":[{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Distant Spell","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"","type":"T"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"","type":"T"}]}
+	return {"name":"Marksman","category":"Warfare","description":"","growths":{"CON":3,"DEX":4,"QCK":3,"STR":0,"CHA":2,"INT":0,"PER":5,"WIL":1,"hp":0,"vitality":0,"kiCharge":2,"spellForce":2},"prerequisite":"Trained in Assault and Marksmanship","jobTechnique":"Spellshot","advancement":[{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Distant Spell","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"","type":"T"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"","type":"T"}]}
 	case "rogue":
 	return {"name":"Rogue","category":"Talent","description":"The rogue is an expert at exploiting distractions. They can exploit enemy weaknesses with their sneak attack, both on their turn and during follow-up attacks. ","growths":{"CON":0,"DEX":5,"QCK":4,"STR":0,"CHA":2,"INT":2,"PER":3,"WIL":3,"hp":1,"vitality":0,"kiCharge":0,"spellForce":0},"prerequisite":"","jobTechnique":"Sneak Attack","advancement":[{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Sneaky Follow-Up","type":"T"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Skulk Away","type":"T"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Then Hide","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Assassinate","type":"T"}]}
 	case "physician":

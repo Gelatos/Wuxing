@@ -9,56 +9,43 @@
 }
 
 /*========================================
-  Core Stats
+  Sticky Header
 ========================================*/
 
-.wuxNamePlate 
+.wuxStickyHeader 
 {
-    height: 26px;
+    width: calc(100% - 15px);
+    min-height: 30px;
     padding: 0px 5px 5px 5px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-flow: wrap row;
+    align-content: flex-start;
 
 	background: #1d1e1f;
-    border-color: transparent transparent #DE9B72 transparent;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 10px 10px 0px 0px;
+    border-color: #000 #000 #DE9B72 #000;
 }
 
-.wuxNamePlate input[type=text],
-.wuxNamePlate div
+.wuxStickyHeader .wuxHeader,
+.wuxStickyHeader .wuxHeader2
 {
-    position: absolute;
-    display: inline-block;
+    position: relative;
+    display: block;
     margin: 0px;
     padding: 0px;
-}
-
-.wuxNamePlate input[type=text]::placeholder
-{
-    color: #686868;
-}
-
-.wuxNamePlate span.wuxNamePlateTitle
-{
-    top: -3px;
-    left: 40px;
-
-    font-family: "Candal";
-    font-size: 10px;
-    text-overflow: clip;
-    color: #f4f6f8;
-
     background: none;
     border: none;
 }
 
-.wuxNamePlate div.wuxNamePlateLevel
+.wuxStickyHeader .wuxHeader2
 {
-    top: -3px;
-    left: 0px;
-
-    background: none;
-    border: none;
+    height: 10px;
 }
 
-.wuxNamePlate div.wuxNamePlateLevel span
+.wuxStickyHeader .wuxStickyHeaderMain .wuxHeader2 span
 {
     font-family: "Candal";
     font-size: 10px;
@@ -66,111 +53,42 @@
     color: #f4f6f8;
 }
 
-.wuxNamePlate input[type=text].wuxFullName,
-.wuxNamePlate input[type=text].wuxNamePlateName
+.wuxStickyHeader .wuxHeader
 {
+    height: 18px;
+}
+
+.wuxStickyHeader .wuxHeader input
+{
+    margin-bottom: 5px;
+
     color: #f4f6f8;
-    font-family: "Candal";
-    text-overflow: clip;
-    border: none;
-}
-
-.wuxNamePlate input[type=text].wuxFullName
-{
-    font-size: 10px;
-    background: none;
-}
-
-.wuxNamePlate input[type=text].wuxNamePlateName
-{
-    top: 10px;
-    left: 5px;
-
-    font-size: 16px;
+    font-size: 14px;
     text-transform: capitalize;
+    font-family: "Candal";
+    text-overflow: clip;
 
+    background: none;
+    border: none;
+}
+
+.wuxStickyHeader .wuxStickyHeaderMain .wuxHeader input
+{
+    font-size: 16px;
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.wuxCoreStats
+.wuxStickyHeader .wuxStickyHeaderMain .wuxHeader input[type=text]::placeholder
 {
-    position: relative;
-    top: -9px;
-    left: 0px;
-    width: calc(100% - 18px);
-    padding: 0px 5px 3px 5px;
-
-	background: #3A3D3E;
-    background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 100%);
-
-    border: 3px #DE9B72 solid;
-    border-left: transparent;
-    border-radius: 0px 10px 10px 0px;
+    color: #686868;
 }
 
-.wuxCoreStats .wuxFormHeader
+.wuxStickyHeader .wuxHeader input.wuxSizeSmall
 {
-    position: absolute;
-    left: 0px;
-}
-
-.wuxSectionBlock .wuxFieldSet .wuxInjuryField 
-{
-    position: relative;
-    display: inline-block;
-    margin-left: 5px;
-}
-
-.wuxSectionBlock .wuxFieldSet .wuxInjuryField span
-{
-    display: inline-block;
-
-    color: red;
-    font-style: italic;
-    font-size: 9px;
-    line-height: 11px;
-}
-
-.wuxSectionBlock .wuxSimpleLeveling,
-.wuxSectionBlock .wuxComplexLeveling
-{
-    display: none;
-}
-
-.wuxSectionContent button.wuxSpellAddButton
-{
-    position: relative;
-    display: inline-block; 
-    height: 10px; 
-    margin: 0px; 
-    margin-right: 5px;
-    padding: 0px;
-    width: 14px;
-
-    text-shadow: none;
-
-    background: #3A3D3E;
-    border-width: 0px;
-    border-radius: 5px;
-}
-
-.wuxSectionContent button.wuxSpellAddButton:active 
-{
-    background: #8a8b8e;
-}
-
-.wuxSectionContent .wuxBattleTabs button.wuxSpellAddButton[type=roll]
-{
-    background-image: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%); 
-}
-
-.wuxSectionContent button.wuxSpellAddButton span
-{
-    font-size: 6px;
-    vertical-align: top;
+    width: 25px;
 }
 
 /*========================================
@@ -532,7 +450,6 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     Options
 ========================================*/
 
-.wuxSectionBlock .wuxDisplayStyleCharacter,
 .wuxSectionBlock .wuxDisplayStyleParty,
 .wuxSectionBlock .wuxDisplayStyleBattleLog,
 .wuxSectionBlock .wuxDisplayStyleField-flag
@@ -540,7 +457,6 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     display: none;
 }
 
-input[type=hidden].wuxDisplayStyleField-flag[value="Character"] + .wuxDisplayStyleCharacter,
 input[type=hidden].wuxDisplayStyleField-flag[value="PartyManager"] + .wuxDisplayStyleParty,
 input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplayStyleBattleLog
 {

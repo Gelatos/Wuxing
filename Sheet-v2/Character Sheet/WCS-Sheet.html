@@ -92,6 +92,20 @@
 						</div>
 						<div class="wuxRow"><span class="wuxDescription" name="attr_builder-pathDesc"></span></div>
 
+						<div class="wuxRow">&nbsp;</div>
+						<span class='wuxHeader'>Primary Affinity</span>
+						<div class="wuxRow"><span class="wuxDescription">Characters that are able to cast spells will have an elemental affinity that ties them to one of the five primary elements.</span></div>
+						<div class="wuxRow">
+							<select class='wuxInput' name='attr_builder-prime_element' value="0">
+								<option value="0">-</option>
+								<option value="Wood">Wood</option>
+								<option value="Fire">Fire</option>
+								<option value="Earth">Earth</option>
+								<option value="Metal">Metal</option>
+								<option value="Water">Water</option>
+							</select>
+						</div>
+
 					</div>
 					<div class="wuxSectionContentCollapsed"></div>
 				</div>
@@ -674,32 +688,6 @@
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsDefensivePhys-fortitude">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsDefensivePhys-fortitude">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsDefensivePhys-fortitude">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingDefensivePhys-fortitude">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingDefensivePhys-fortitude">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingDefensivePhys-fortitude">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingDefensivePhys-fortitude">
-														<span class="wuxHeader">Fortitude</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsDefensivePhys-fortitude">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Fortitude is a character's ability to resist internal damage such as from poisons or sickness.</span>
-												</div>
-											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
 													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsDefensivePhys-presence">
 													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsDefensivePhys-presence">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
@@ -884,32 +872,6 @@
 										<div class="wuxFlexTableItemData wuxTextLeft">
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-archery">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-archery">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-archery">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-archery">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-archery">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-archery">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-archery">
-														<span class="wuxHeader">Archery</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-archery">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">The skill of using borws. Bows have decent range and allow one to add their strength to their damage. They also tend to have more flexible ammunitions.</span>
-												</div>
-											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
 													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-brawling">
 													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-brawling">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
@@ -936,132 +898,80 @@
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-lightBlade">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-lightBlade">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-finesse">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-finesse">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-lightBlade">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-finesse">
 													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
 												</div>
 
 												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-lightBlade">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-finesse">
 													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-lightBlade">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-finesse">
 														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-lightBlade">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-finesse">
 														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-lightBlade">
-														<span class="wuxHeader">Light Blade</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-finesse">
+														<span class="wuxHeader">Finesse</span>
 													</div>
 												</div>
 
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-lightBlade">
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-finesse">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">These weapons require a dextrous hand as they use precision to strike at a foe. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are exceptionally well balanced for striking with speed.</span>
+													<span class="wuxDescription">This is the skill to strike at a foe dextrously, using precision to target weaknesses. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are well balanced for striking fast.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-hammer">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-hammer">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-marksmanship">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-marksmanship">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-hammer">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-marksmanship">
 													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
 												</div>
 
 												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-hammer">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-marksmanship">
 													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-hammer">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-marksmanship">
 														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-hammer">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-marksmanship">
 														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-hammer">
-														<span class="wuxHeader">Hammer</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-marksmanship">
+														<span class="wuxHeader">Marksmanship</span>
 													</div>
 												</div>
 
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-hammer">
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-marksmanship">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Blunt weapons that are swung with force to bludgeon their targets. These weapons tend to have qualities to allow them to deal increased damage to objects and can crush through defenses.</span>
+													<span class="wuxDescription">The skill of using a bow or firearm. These weapons have the most variety in weapon ranges, but typically are ineffective in melee.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-handgun">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-handgun">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-might">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-might">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-handgun">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-might">
 													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
 												</div>
 
 												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-handgun">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-might">
 													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-handgun">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-might">
 														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-handgun">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-might">
 														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-handgun">
-														<span class="wuxHeader">Handgun</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-might">
+														<span class="wuxHeader">Might</span>
 													</div>
 												</div>
 
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-handgun">
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-might">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Small firearms made to be easily wielded in one hand. These weapons typically have the least range of all dedicated range weapons but feature threat ranges to be used in melee.</span>
-												</div>
-											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-heavyBlade">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-heavyBlade">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-heavyBlade">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-heavyBlade">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-heavyBlade">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-heavyBlade">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-heavyBlade">
-														<span class="wuxHeader">Heavy Blade</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-heavyBlade">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">These weapons are large and bladed, allowing the wielder to swing them with all their might. These weapons are made to be able to allow the user to strike with a powerful blow.</span>
-												</div>
-											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-longarm">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-longarm">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-longarm">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-longarm">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-longarm">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-longarm">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-longarm">
-														<span class="wuxHeader">Longarm</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-longarm">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Powerful ranged weapons that fire bullets from two-handed implements. These weapons tend to have the highest range of all range weapons and large damage values in exchange for less action flexibility.</span>
+													<span class="wuxDescription">These weapons are large, allowing the wielder to swing them with all their strength. They often come with ways to either smash through defenses or simply to break a defense more easily.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
@@ -1087,33 +997,33 @@
 
 												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-polearm">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Weapons on a pole of some sort. These weapons will often feature increased threat range, allowing one to strike at more distant foes.</span>
+													<span class="wuxDescription">This is the skill for striking in melee with a weapon that is long and has substantial reach. These weapons will often feature increased threat range, allowing one to strike at more distant foes.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-thrown">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-thrown">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-throw">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-throw">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-thrown">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-throw">
 													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
 												</div>
 
 												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-thrown">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-throw">
 													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-thrown">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-throw">
 														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-thrown">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-throw">
 														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-thrown">
-														<span class="wuxHeader">Thrown</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-throw">
+														<span class="wuxHeader">Throw</span>
 													</div>
 												</div>
 
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-thrown">
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-throw">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Weapons that are able to be thrown, or improvising a thrown weapon. </span>
+													<span class="wuxDescription">When one strikes at a foe or aims for a location by throwing an object, it is typical to use the throw skill. </span>
 												</div>
 											</div>
 
@@ -1172,6 +1082,32 @@
 												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-athletics">
 												<div class="wuxInteractiveExpandingContent">
 													<span class="wuxDescription">Your Athletics check covers movement through an environment such as when climbing, jumping, or swimming.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-fortitude">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-fortitude">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-fortitude">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-fortitude">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-fortitude">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-fortitude">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-fortitude">
+														<span class="wuxHeader">Fortitude</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-fortitude">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Fortitude is a character's ability to resist environmental or internal harm such as from severe heat or cold, poisons or sickness.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
@@ -1250,32 +1186,6 @@
 												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-stealth">
 												<div class="wuxInteractiveExpandingContent">
 													<span class="wuxDescription">Make a Stealth check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. </span>
-												</div>
-											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsPhysical-survival">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-survival">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsPhysical-survival">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingPhysical-survival">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-survival">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-survival">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingPhysical-survival">
-														<span class="wuxHeader">Survival</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsPhysical-survival">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Make a Survival check to follow tracks, hunt wild game, or guide your group through wastelands. </span>
 												</div>
 											</div>
 
@@ -1686,7 +1596,7 @@
 
 												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsMental-etiquette">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that peo- ple might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.</span>
+													<span class="wuxDescription">Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that people might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
@@ -1853,32 +1763,6 @@
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsMental-engineering">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsMental-engineering">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsMental-engineering">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingMental-engineering">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingMental-engineering">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingMental-engineering">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingMental-engineering">
-														<span class="wuxHeader">Engineering</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsMental-engineering">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">This skill represents knowledge of technological subjects. It can be used to recall lore about construction, buildings, fortifications, technology, and tools.</span>
-												</div>
-											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
 													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsMental-history">
 													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsMental-history">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
@@ -1955,6 +1839,32 @@
 													<span class="wuxDescription">Your nature check measures your ability to recall lore about geography, plants, animals, the weather, and natural cycles.</span>
 												</div>
 											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsMental-tracking">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsMental-tracking">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsMental-tracking">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingMental-tracking">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingMental-tracking">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingMental-tracking">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingMental-tracking">
+														<span class="wuxHeader">Tracking</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsMental-tracking">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Make a Tracking check to follow tracks, hunt wild game, or guide your group through wastelands. </span>
+												</div>
+											</div>
 
 										</div>
 									</div>
@@ -1992,32 +1902,6 @@
 										<div class="wuxFlexTableItemData wuxTextLeft">
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-archery">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-archery">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-archery">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-archery">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-archery">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-archery">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-archery">
-														<span class="wuxHeader">Archery</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-archery">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">The skill of using borws. Bows have decent range and allow one to add their strength to their damage. They also tend to have more flexible ammunitions.</span>
-												</div>
-											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
 													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-brawling">
 													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-brawling">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
@@ -2044,132 +1928,80 @@
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-lightBlade">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-lightBlade">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-finesse">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-finesse">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-lightBlade">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-finesse">
 													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
 												</div>
 
 												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-lightBlade">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-finesse">
 													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-lightBlade">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-finesse">
 														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-lightBlade">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-finesse">
 														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-lightBlade">
-														<span class="wuxHeader">Light Blade</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-finesse">
+														<span class="wuxHeader">Finesse</span>
 													</div>
 												</div>
 
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-lightBlade">
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-finesse">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">These weapons require a dextrous hand as they use precision to strike at a foe. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are exceptionally well balanced for striking with speed.</span>
+													<span class="wuxDescription">This is the skill to strike at a foe dextrously, using precision to target weaknesses. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are well balanced for striking fast.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-hammer">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-hammer">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-marksmanship">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-marksmanship">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-hammer">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-marksmanship">
 													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
 												</div>
 
 												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-hammer">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-marksmanship">
 													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-hammer">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-marksmanship">
 														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-hammer">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-marksmanship">
 														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-hammer">
-														<span class="wuxHeader">Hammer</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-marksmanship">
+														<span class="wuxHeader">Marksmanship</span>
 													</div>
 												</div>
 
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-hammer">
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-marksmanship">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Blunt weapons that are swung with force to bludgeon their targets. These weapons tend to have qualities to allow them to deal increased damage to objects and can crush through defenses.</span>
+													<span class="wuxDescription">The skill of using a bow or firearm. These weapons have the most variety in weapon ranges, but typically are ineffective in melee.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-handgun">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-handgun">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-might">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-might">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-handgun">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-might">
 													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
 												</div>
 
 												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-handgun">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-might">
 													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-handgun">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-might">
 														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-handgun">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-might">
 														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-handgun">
-														<span class="wuxHeader">Handgun</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-might">
+														<span class="wuxHeader">Might</span>
 													</div>
 												</div>
 
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-handgun">
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-might">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Small firearms made to be easily wielded in one hand. These weapons typically have the least range of all dedicated range weapons but feature threat ranges to be used in melee.</span>
-												</div>
-											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-heavyBlade">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-heavyBlade">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-heavyBlade">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-heavyBlade">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-heavyBlade">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-heavyBlade">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-heavyBlade">
-														<span class="wuxHeader">Heavy Blade</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-heavyBlade">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">These weapons are large and bladed, allowing the wielder to swing them with all their might. These weapons are made to be able to allow the user to strike with a powerful blow.</span>
-												</div>
-											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-longarm">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-longarm">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-longarm">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-longarm">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-longarm">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-longarm">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-longarm">
-														<span class="wuxHeader">Longarm</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-longarm">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Powerful ranged weapons that fire bullets from two-handed implements. These weapons tend to have the highest range of all range weapons and large damage values in exchange for less action flexibility.</span>
+													<span class="wuxDescription">These weapons are large, allowing the wielder to swing them with all their strength. They often come with ways to either smash through defenses or simply to break a defense more easily.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
@@ -2195,33 +2027,33 @@
 
 												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-polearm">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Weapons on a pole of some sort. These weapons will often feature increased threat range, allowing one to strike at more distant foes.</span>
+													<span class="wuxDescription">This is the skill for striking in melee with a weapon that is long and has substantial reach. These weapons will often feature increased threat range, allowing one to strike at more distant foes.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-thrown">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-thrown">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-throw">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-throw">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-thrown">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-throw">
 													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
 												</div>
 
 												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-thrown">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-throw">
 													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-thrown">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-throw">
 														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-thrown">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-throw">
 														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-thrown">
-														<span class="wuxHeader">Thrown</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-throw">
+														<span class="wuxHeader">Throw</span>
 													</div>
 												</div>
 
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-thrown">
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-throw">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Weapons that are able to be thrown, or improvising a thrown weapon. </span>
+													<span class="wuxDescription">When one strikes at a foe or aims for a location by throwing an object, it is typical to use the throw skill. </span>
 												</div>
 											</div>
 
@@ -2446,6 +2278,32 @@
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-fortitude">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-fortitude">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-fortitude">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-fortitude">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-fortitude">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-fortitude">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-fortitude">
+														<span class="wuxHeader">Fortitude</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-fortitude">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Fortitude is a character's ability to resist environmental or internal harm such as from severe heat or cold, poisons or sickness.</span>
+												</div>
+											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
 													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-physique">
 													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-physique">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
@@ -2522,32 +2380,6 @@
 													<span class="wuxDescription">Make a Stealth check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. </span>
 												</div>
 											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-survival">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-survival">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-survival">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-survival">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-survival">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-survival">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-survival">
-														<span class="wuxHeader">Survival</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-survival">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Make a Survival check to follow tracks, hunt wild game, or guide your group through wastelands. </span>
-												</div>
-											</div>
 
 										</div>
 									</div>
@@ -2603,7 +2435,7 @@
 
 												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-etiquette">
 												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that peo- ple might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.</span>
+													<span class="wuxDescription">Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that people might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.</span>
 												</div>
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
@@ -2932,32 +2764,6 @@
 											</div>
 											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 												<div class="wuxInteractiveInnerExpandBlock">
-													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-engineering">
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-engineering">
-													<span class="wuxInteractiveExpandIcon">&#9663;</span>
-													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-engineering">
-													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
-												</div>
-
-												<div class="wuxInteractiveInnerBlock">
-													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-engineering">
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-engineering">
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-engineering">
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-engineering">
-														<span class="wuxHeader">Engineering</span>
-													</div>
-												</div>
-
-												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-engineering">
-												<div class="wuxInteractiveExpandingContent">
-													<span class="wuxDescription">This skill represents knowledge of technological subjects. It can be used to recall lore about construction, buildings, fortifications, technology, and tools.</span>
-												</div>
-											</div>
-											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-												<div class="wuxInteractiveInnerExpandBlock">
 													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-history">
 													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-history">
 													<span class="wuxInteractiveExpandIcon">&#9663;</span>
@@ -3034,6 +2840,32 @@
 													<span class="wuxDescription">Your nature check measures your ability to recall lore about geography, plants, animals, the weather, and natural cycles.</span>
 												</div>
 											</div>
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_builder-skills-detailsChoice-tracking">
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-tracking">
+													<span class="wuxInteractiveExpandIcon">&#9663;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_builder-skills-detailsChoice-tracking">
+													<span class="wuxInteractiveExpandAuxIcon">&#9657;</span>
+												</div>
+
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_builder-skills-trainingChoice-tracking">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-tracking">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-tracking">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_builder-skills-trainingChoice-tracking">
+														<span class="wuxHeader">Tracking</span>
+													</div>
+												</div>
+
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_builder-skills-detailsChoice-tracking">
+												<div class="wuxInteractiveExpandingContent">
+													<span class="wuxDescription">Make a Tracking check to follow tracks, hunt wild game, or guide your group through wastelands. </span>
+												</div>
+											</div>
 
 										</div>
 									</div>
@@ -3097,7 +2929,7 @@
 										<span class="wuxDescription">Submit will have you accept any changes made on this page and add your selections to your character. You will then be moved to Technique Selection.</span>
 										<span class="wuxDescription">Back will take you back to the previous page without accepting any other changes.</span>
 										<span class="wuxDescription">Reset will erase all of your changes made on this page in this session.</span>
-										<span class="wuxDescription">Restart will reset all of your levels and techniques, taking you back to level 0.</span>
+										<span class="wuxDescription">Restart will reset all of your levels, taking you back to level 0.</span>
 									</div>
 
 									<div class="wuxMultiRow">
@@ -3114,7 +2946,7 @@
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_advancement-button-reset-everything">
 									<div class="wuxHiddenBlockAuxField">
 										<div class="wuxMultiRow">
-											<span class="wuxDescription">Restart will undo every level up you've set and reset all of your learned techniques. Are you sure?</span>
+											<span class="wuxDescription">Restart will undo every level up you've set. Are you sure?</span>
 											<div class="wuxButton">
 												<input type="checkbox" name="attr_advancement-button-restart-confirm">
 												<span>Erase It All</span>
@@ -4682,68 +4514,114 @@
 	</div>
 </div><div class="wuxCharacterSheetDisplayStyle-Character">
 
-	<div class="main-TopRow wuxFloatHeader wuxHorizontalFlex">
-		<div class="main-Header wuxSectionBlock wuxLayoutItem">
-			<input type="hidden" class="wuxDisplayStyleField-flag" name="attr_displayStyle" value="Character">
-			<div class="header-CharacterSheet wuxDisplayStyleCharacter">
-				<div class="wuxSectionHeader wuxNamePlate">
-					<div class="wuxNamePlateLevel">
-						<span>Lv.</span>
-						<span name="attr_base_level">1</span>
-						<span style="width: 5px;">&nbsp;</span>
-						<input type="text" class="wuxFullName" name="attr_full_name" placeholder="Full Name"></span>
-					</div>
-					<input type="text" class="wuxNamePlateName" name="attr_nickname" placeholder="Display Name" />
-				</div>
+	<div class="wuxFloatHeader wuxStickyHeader">
+		<div class="wuxSectionBlock wuxLargeLayoutItem wuxStickyHeaderMain">
+			<div class="wuxHeader2">
+				<span>Lv.</span>
+				<span name="attr_base_level">1</span>
+				<span style="width: 5px;">&nbsp;</span>
+				<span class="wuxFullName" name="attr_full_name" placeholder="Full Name"></span>
+			</div>
+			<div class="wuxHeader">
+				<input type="text" name="attr_nickname" placeholder="Display Name" />
+			</div>
+		</div>
+		<div class="wuxSectionBlock wuxSmallLayoutItem">
+			<div class="wuxHeader2">
+				<span>Ki</span>
+			</div>
+			<div class="wuxHeader">
+				<input type="text" class="wuxSizeSmall" name="attr_ki" value="0" />
+				<span>/ </span>
+				<span name='attr_ki_max' value="25">25</span>
+			</div>
+		</div>
+		<div class="wuxSectionBlock wuxLayoutItem">
+			<div class="wuxHeader2">
+				<span>Injuries</span>
+			</div>
+			<div class="wuxHeader">
+				<input type="text" class="wuxSizeSmall" name="attr_wounds" value="0" />
+				<span class="wuxSubheader">wounds </span>
+				<input type="text" class="wuxSizeSmall" name="attr_stress" value="0" />
+				<span class="wuxSubheader">stress </span>
+				<span class="wuxSizeSmall" name="attr_trauma" value="0">0</span>
+				<span>/ </span>
+				<span name='attr_trauma_max' value="1">1</span>
+				<span class="wuxSubheader">trauma </span>
 			</div>
 		</div>
 	</div>
 
 	<div class="wumMainSheet">
 
-		<!-- Skill Sidebar Buttons -->
+		<!-- Quick Access -->
 		<div class="main-Sidebar wuxFloatSidebar">
 			<div class="wuxSheetSidebar">
 				<div class="wuxHeader">Skills</div>
 				<div class="wuxInteractiveBlock wuxSizeSmall">
 
 					<div class="wuxInteractiveInnerBlock">
-						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-Body">
+						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-defensive">
 						<div class="wuxInteractiveContent">
-							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Body">
+							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-defensive">
 							<span class="wuxInteractiveIcon">&#9663;</span>
-							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Body">
+							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-defensive">
+							<span class="wuxInteractiveAuxIcon">&#9657;</span>
+
+							<span class="wuxSubheader">Defensive</span>
+						</div>
+					</div>
+
+					<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-defensive">
+					<div class="wuxInteractiveExpandingContent">
+						<button class="wuxButton wuxSizePercent" type="roll" value="Brace Check"><span>Brace</span></button>
+						<button class="wuxButton wuxSizePercent" type="roll" value="Insight Check"><span>Insight</span></button>
+						<button class="wuxButton wuxSizePercent" type="roll" value="Notice Check"><span>Notice</span></button>
+						<button class="wuxButton wuxSizePercent" type="roll" value="Presence Check"><span>Presence</span></button>
+						<button class="wuxButton wuxSizePercent" type="roll" value="Reflex Check"><span>Reflex</span></button>
+						<button class="wuxButton wuxSizePercent" type="roll" value="Resolve Check"><span>Resolve</span></button>
+					</div>
+				</div>
+				<div class="wuxInteractiveBlock wuxSizeSmall">
+
+					<div class="wuxInteractiveInnerBlock">
+						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-body">
+						<div class="wuxInteractiveContent">
+							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-body">
+							<span class="wuxInteractiveIcon">&#9663;</span>
+							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-body">
 							<span class="wuxInteractiveAuxIcon">&#9657;</span>
 
 							<span class="wuxSubheader">Body</span>
 						</div>
 					</div>
 
-					<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-Body">
+					<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-body">
 					<div class="wuxInteractiveExpandingContent">
 						<button class="wuxButton wuxSizePercent" type="roll" value="Acrobatics Check"><span>Acrobatics</span></button>
 						<button class="wuxButton wuxSizePercent" type="roll" value="Athletics Check"><span>Athletics</span></button>
+						<button class="wuxButton wuxSizePercent" type="roll" value="Fortitude Check"><span>Fortitude</span></button>
 						<button class="wuxButton wuxSizePercent" type="roll" value="Physique Check"><span>Physique</span></button>
 						<button class="wuxButton wuxSizePercent" type="roll" value="Palming Check"><span>Palming</span></button>
 						<button class="wuxButton wuxSizePercent" type="roll" value="Stealth Check"><span>Stealth</span></button>
-						<button class="wuxButton wuxSizePercent" type="roll" value="Survival Check"><span>Survival</span></button>
 					</div>
 				</div>
 				<div class="wuxInteractiveBlock wuxSizeSmall">
 
 					<div class="wuxInteractiveInnerBlock">
-						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-Technical">
+						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-technical">
 						<div class="wuxInteractiveContent">
-							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Technical">
+							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-technical">
 							<span class="wuxInteractiveIcon">&#9663;</span>
-							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Technical">
+							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-technical">
 							<span class="wuxInteractiveAuxIcon">&#9657;</span>
 
 							<span class="wuxSubheader">Technical</span>
 						</div>
 					</div>
 
-					<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-Technical">
+					<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-technical">
 					<div class="wuxInteractiveExpandingContent">
 						<button class="wuxButton wuxSizePercent" type="roll" value="Artisan Check"><span>Artisan</span></button>
 						<button class="wuxButton wuxSizePercent" type="roll" value="Cook Check"><span>Cook</span></button>
@@ -4756,42 +4634,42 @@
 				<div class="wuxInteractiveBlock wuxSizeSmall">
 
 					<div class="wuxInteractiveInnerBlock">
-						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-Knowledge">
+						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-knowledge">
 						<div class="wuxInteractiveContent">
-							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Knowledge">
+							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-knowledge">
 							<span class="wuxInteractiveIcon">&#9663;</span>
-							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Knowledge">
+							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-knowledge">
 							<span class="wuxInteractiveAuxIcon">&#9657;</span>
 
 							<span class="wuxSubheader">Knowledge</span>
 						</div>
 					</div>
 
-					<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-Knowledge">
+					<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-knowledge">
 					<div class="wuxInteractiveExpandingContent">
 						<button class="wuxButton wuxSizePercent" type="roll" value="Arcana Check"><span>Arcana</span></button>
 						<button class="wuxButton wuxSizePercent" type="roll" value="Culture Check"><span>Culture</span></button>
-						<button class="wuxButton wuxSizePercent" type="roll" value="Engineering Check"><span>Engineering</span></button>
 						<button class="wuxButton wuxSizePercent" type="roll" value="History Check"><span>History</span></button>
 						<button class="wuxButton wuxSizePercent" type="roll" value="Investigation Check"><span>Investigation</span></button>
 						<button class="wuxButton wuxSizePercent" type="roll" value="Nature Check"><span>Nature</span></button>
+						<button class="wuxButton wuxSizePercent" type="roll" value="Tracking Check"><span>Tracking</span></button>
 					</div>
 				</div>
 				<div class="wuxInteractiveBlock wuxSizeSmall">
 
 					<div class="wuxInteractiveInnerBlock">
-						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-Social">
+						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-social">
 						<div class="wuxInteractiveContent">
-							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Social">
+							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-social">
 							<span class="wuxInteractiveIcon">&#9663;</span>
-							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-Social">
+							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-social">
 							<span class="wuxInteractiveAuxIcon">&#9657;</span>
 
 							<span class="wuxSubheader">Social</span>
 						</div>
 					</div>
 
-					<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-Social">
+					<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-social">
 					<div class="wuxInteractiveExpandingContent">
 						<button class="wuxButton wuxSizePercent" type="roll" value="Deception Check"><span>Deception</span></button>
 						<button class="wuxButton wuxSizePercent" type="roll" value="Etiquette Check"><span>Etiquette</span></button>
@@ -4801,9 +4679,10 @@
 						<button class="wuxButton wuxSizePercent" type="roll" value="Performance Check"><span>Performance</span></button>
 					</div>
 				</div>
+
+
 			</div>
 		</div>
-
 
 		<div class="wuxMainContent">
 
@@ -4812,134 +4691,165 @@
 				<div class="wuxTabHeader"><span class="wuxInnerHeader">Statistics</span></div>
 
 				<div class="wuxTab">
-					<div class="statistics-AbilityScores wuxSectionBlock wuxLayoutItem">
-						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-AbilityScores" checked="checked" style="display: block">
-						<div class="wuxSectionHeader">Ability Scores</div>
-						<div class="wuxSectionHeaderFooter"></div>
-
-						<div class="wuxSectionContent">
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup wuxNoPadding">
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroup wuxNoPadding">
-											<div class="wuxFlexTable">
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemHeader">CON</span>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Mod</span>
-															<span class="wuxFlexTableItemData" name="attr_CON">0</span>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Score</span>
-															<span class="wuxFlexTableItemData" name="attr_CON_score">0</span>
+					<div class="tab-abilityScores wuxTab">
+						<div class="statistics-AbilityScores wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Ability Scores</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">CON</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_CON">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_CON_score">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_CON_bonus" placeholder="0"></span>
+															</div>
 														</div>
 													</div>
-												</div>
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemHeader">DEX</span>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Mod</span>
-															<span class="wuxFlexTableItemData" name="attr_DEX">0</span>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Score</span>
-															<span class="wuxFlexTableItemData" name="attr_DEX_score">0</span>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">DEX</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_DEX">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_DEX_score">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_DEX_bonus" placeholder="0"></span>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-										</div>
-										<div class="wuxFlexTableItemGroup wuxNoPadding">
-											<div class="wuxFlexTable">
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemHeader">QCK</span>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Mod</span>
-															<span class="wuxFlexTableItemData" name="attr_QCK">0</span>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Score</span>
-															<span class="wuxFlexTableItemData" name="attr_QCK_score">0</span>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">QCK</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_QCK">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_QCK_score">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_QCK_bonus" placeholder="0"></span>
+															</div>
 														</div>
 													</div>
-												</div>
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemHeader">STR</span>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Mod</span>
-															<span class="wuxFlexTableItemData" name="attr_STR">0</span>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Score</span>
-															<span class="wuxFlexTableItemData" name="attr_STR_score">0</span>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">STR</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_STR">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_STR_score">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_STR_bonus" placeholder="0"></span>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="wuxFlexTableItemGroup wuxNoPadding">
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroup wuxNoPadding">
-											<div class="wuxFlexTable">
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemHeader">CHA</span>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Mod</span>
-															<span class="wuxFlexTableItemData" name="attr_CHA">0</span>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Score</span>
-															<span class="wuxFlexTableItemData" name="attr_CHA_score">0</span>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">CHA</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_CHA">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_CHA_score">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_CHA_bonus" placeholder="0"></span>
+															</div>
 														</div>
 													</div>
-												</div>
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemHeader">INT</span>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Mod</span>
-															<span class="wuxFlexTableItemData" name="attr_INT">0</span>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Score</span>
-															<span class="wuxFlexTableItemData" name="attr_INT_score">0</span>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">INT</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_INT">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_INT_score">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_INT_bonus" placeholder="0"></span>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-										</div>
-										<div class="wuxFlexTableItemGroup wuxNoPadding">
-											<div class="wuxFlexTable">
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemHeader">PER</span>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Mod</span>
-															<span class="wuxFlexTableItemData" name="attr_PER">0</span>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Score</span>
-															<span class="wuxFlexTableItemData" name="attr_PER_score">0</span>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">PER</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_PER">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_PER_score">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_PER_bonus" placeholder="0"></span>
+															</div>
 														</div>
 													</div>
-												</div>
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemHeader">WIL</span>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Mod</span>
-															<span class="wuxFlexTableItemData" name="attr_WIL">0</span>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Score</span>
-															<span class="wuxFlexTableItemData" name="attr_WIL_score">0</span>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">WIL</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_WIL">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_WIL_score">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_WIL_bonus" placeholder="0"></span>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -4949,8 +4859,1462 @@
 								</div>
 							</div>
 						</div>
-						<div class="wuxSectionContentCollapsed"></div>
 					</div>
+					<div class="tab-Magic wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Magic Statistics</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Affinities</span>
+														<span class="wuxFlexTableItemData">Primary</span>
+														<select class='wuxFlexTableItemData wuxInput' name='attr_builder-prime_element' value="0">
+															<option value="0">-</option>
+															<option value="Wood">Wood</option>
+															<option value="Fire">Fire</option>
+															<option value="Earth">Earth</option>
+															<option value="Metal">Metal</option>
+															<option value="Water">Water</option>
+														</select>
+														<span class="wuxFlexTableItemData">Secondary</span>
+														<select class='wuxFlexTableItemData wuxInput' name='attr_builder-second_element' value="0">
+															<option value="0">-</option>
+															<option value="Wood">Wood</option>
+															<option value="Fire">Fire</option>
+															<option value="Earth">Earth</option>
+															<option value="Metal">Metal</option>
+															<option value="Water">Water</option>
+														</select>
+													</div>
+
+													<!-- Character Branches -->
+													<div class="wuxFlexTableItemGroup3">
+														<span class="wuxFlexTableItemHeader">Branches</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Total Selected</span>
+																<input type="hidden" class="wuxErrorField-flag" name="attr_branchpoints-error" value="0">
+																<span class='wuxFlexTableItemData'>
+																	<span name='attr_branchpoints' value="0">0</span>
+																	<span>/ </span>
+																	<span name='attr_branchpoints_max' value="0">0</span>
+																</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_branchpoints_bonus" placeholder="0"></span>
+															</div>
+														</div>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<div class="wuxFlexTableItemData wuxTextLeft"><span>Wood</span></div>
+																<div class="wuxFlexTableItemData wuxTextLeft">
+																	<div class="wuxInteractiveBlock wuxSizeSmall">
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-health">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-health">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-health">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-health">
+																				<span class="wuxHeader">Health</span>
+																			</div>
+																		</div>
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-wind">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-wind">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-wind">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-wind">
+																				<span class="wuxHeader">Wind</span>
+																			</div>
+																		</div>
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-poison">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-poison">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-poison">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-poison">
+																				<span class="wuxHeader">Poison</span>
+																			</div>
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<div class="wuxFlexTableItemData wuxTextLeft"><span>Fire</span></div>
+																<div class="wuxFlexTableItemData wuxTextLeft">
+																	<div class="wuxInteractiveBlock wuxSizeSmall">
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-light">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-light">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-light">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-light">
+																				<span class="wuxHeader">Light</span>
+																			</div>
+																		</div>
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-smoke">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-smoke">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-smoke">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-smoke">
+																				<span class="wuxHeader">Smoke</span>
+																			</div>
+																		</div>
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-soul">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-soul">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-soul">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-soul">
+																				<span class="wuxHeader">Soul</span>
+																			</div>
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<div class="wuxFlexTableItemData wuxTextLeft"><span>Earth</span></div>
+																<div class="wuxFlexTableItemData wuxTextLeft">
+																	<div class="wuxInteractiveBlock wuxSizeSmall">
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-power">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-power">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-power">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-power">
+																				<span class="wuxHeader">Power</span>
+																			</div>
+																		</div>
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-shadow">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-shadow">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-shadow">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-shadow">
+																				<span class="wuxHeader">Shadow</span>
+																			</div>
+																		</div>
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-gravity">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-gravity">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-gravity">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-gravity">
+																				<span class="wuxHeader">Gravity</span>
+																			</div>
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<div class="wuxFlexTableItemData wuxTextLeft"><span>Metal</span></div>
+																<div class="wuxFlexTableItemData wuxTextLeft">
+																	<div class="wuxInteractiveBlock wuxSizeSmall">
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-lightning">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-lightning">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-lightning">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-lightning">
+																				<span class="wuxHeader">Lightning</span>
+																			</div>
+																		</div>
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-force">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-force">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-force">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-force">
+																				<span class="wuxHeader">Force</span>
+																			</div>
+																		</div>
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-blood">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-blood">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-blood">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-blood">
+																				<span class="wuxHeader">Blood</span>
+																			</div>
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<div class="wuxFlexTableItemData wuxTextLeft"><span>Water</span></div>
+																<div class="wuxFlexTableItemData wuxTextLeft">
+																	<div class="wuxInteractiveBlock wuxSizeSmall">
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-restoration">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-restoration">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-restoration">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-restoration">
+																				<span class="wuxHeader">Restoration</span>
+																			</div>
+																		</div>
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-storm">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-storm">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-storm">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-storm">
+																				<span class="wuxHeader">Storm</span>
+																			</div>
+																		</div>
+																		<div class="wuxInteractiveInnerBlock">
+																			<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_branch-time">
+																			<div class="wuxInteractiveContent">
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-time">
+																				<span class="wuxInteractiveIcon">&#9635;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-time">
+																				<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																				<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_branch-time">
+																				<span class="wuxHeader">Time</span>
+																			</div>
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-general wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">General Statistics</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Prof.Bonus</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_pb">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_pb_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Initiative</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_initiative">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_initiative_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Speed</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_speed">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_speed_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Power</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_power">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_power_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Spellforce</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_spellForce">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_spellForce_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Ki.Charge</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_kiCharge">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_kiCharge_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-vitals wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Vital Statistics</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader" value="0">HP</span>
+														<input type="hidden" name="attr_hp" value="0">
+														<input type="hidden" name="attr_tempHp" value="0">
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_hp_max">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_hp_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Armor</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_armor">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_armor_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Vitality</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_vitality_max">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_vitality_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Temp HP</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Barrier</span>
+																<div class="wuxFlexTable">
+																	<div class="wuxFlexTableItemGroup">
+																		<span class="wuxFlexTableItemData" name="attr_barrier">0</span>
+																	</div>
+																	<div class="wuxFlexTableItemGroup">
+																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_barrier_bonus" placeholder="0"></span>
+																	</div>
+																</div>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Block</span>
+																<div class="wuxFlexTable">
+																	<div class="wuxFlexTableItemGroup">
+																		<span class="wuxFlexTableItemData" name="attr_block">0</span>
+																	</div>
+																	<div class="wuxFlexTableItemGroup">
+																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_block_bonus" placeholder="0"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">Injury.Limits</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Stress</span>
+																<div class="wuxFlexTable">
+																	<div class="wuxFlexTableItemGroup">
+																		<span class="wuxFlexTableItemData" name="attr_stress_max">0</span>
+																	</div>
+																	<div class="wuxFlexTableItemGroup">
+																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_stress_bonus" placeholder="0"></span>
+																	</div>
+																</div>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Trauma</span>
+																<div class="wuxFlexTable">
+																	<div class="wuxFlexTableItemGroup">
+																		<span class="wuxFlexTableItemData" name="attr_trauma_max">0</span>
+																	</div>
+																	<div class="wuxFlexTableItemGroup">
+																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_trauma_bonus" placeholder="0"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Character Skills -->
+			<div class="segment-skills wuxSegment">
+				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-Skills" checked="checked">
+				<div class="wuxTabHeader"><span class="wuxInnerHeader">Skills</span></div>
+
+				<div class="wuxTab">
+					<div class="tab-defensive wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Defensive Skills</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Brace</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">STR</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_brace">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_brace_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Insight</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">INT</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_insight">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_insight_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Notice</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">PER</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_notice">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_notice_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Presence</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">CHA</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_presence">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_presence_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Reflex</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">QCK</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_reflex">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_reflex_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Resolve</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">WIL</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_resolve">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_resolve_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-combat wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Combat Skills</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Brawling</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">DEX</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_brawling">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_brawling_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Finesse</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">DEX</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_finesse">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_finesse_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Marksmanship</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">DEX</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_marksmanship">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_marksmanship_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Might</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">DEX</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_might">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_might_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Polearm</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">DEX</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_polearm">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_polearm_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Throw</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">DEX</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_throw">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_throw_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-magic wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Magic Skills</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Assault</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">PER</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_assault">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_assault_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Conjure</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">PER</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_conjure">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_conjure_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Enchant</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">CHA</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_enchant">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_enchant_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Ethereal</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">CHA</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_ethereal">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_ethereal_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Field</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">INT</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_field">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_field_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Structure</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">INT</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_structure">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_structure_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-body wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Body Skills</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Acrobatics</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">QCK</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_acrobatics">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_acrobatics_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Athletics</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">STR</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_athletics">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_athletics_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Fortitude</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">CON</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_fortitude">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_fortitude_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Physique</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">STR</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_physique">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_physique_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Palming</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">QCK</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_palming">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_palming_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Stealth</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">QCK</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_stealth">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_stealth_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-knowledge wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Knowledge Skills</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Arcana</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">INT</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_arcana">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_arcana_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Culture</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">INT</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_culture">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_culture_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">History</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">INT</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_history">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_history_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Investigation</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">PER</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_investigation">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_investigation_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Nature</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">INT</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_nature">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_nature_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Tracking</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">PER</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_tracking">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_tracking_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-social wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Social Skills</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Deception</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">CHA</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_deception">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_deception_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Etiquette</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">PER</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_etiquette">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_etiquette_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Intimidation</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">CHA</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_intimidation">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_intimidation_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Leadership</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">CHA</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_leadership">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_leadership_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Negotiation</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">CHA</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_negotiation">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_negotiation_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Performance</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">CHA</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_performance">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_performance_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-technical wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Technical Skills</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Artisan</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">DEX</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_artisan">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_artisan_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Cook</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">PER</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_cook">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_cook_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Herbalism</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">INT</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_herbalism">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_herbalism_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Mechanical</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">DEX</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_mechanical">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_mechanical_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Medicine</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">PER</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_medicine">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_medicine_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Pilot</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">QCK</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_pilot">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skill_pilot_bonus" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
 
@@ -6031,7 +7395,7 @@ var update_builder_submit = function () {
 	let mentalFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingMental-`, "", mentSkillsArray);
 	let choiceFieldArray = GetSectionIdNameFromArray(`builder-skills-trainingChoice-`, "", choiceSkillsArray);
 
-	let mod_attrs = ["base_level", "builder-path", "builder-ancestry", "advancement-advancementGrowthsTotal"];
+	let mod_attrs = ["base_level", "builder-path", "builder-ancestry", "builder-prime_element", "advancement-advancementGrowthsTotal"];
 	mod_attrs = mod_attrs.concat(abilityScoreFieldArray).concat(growthsFieldArray).concat(defPhysFieldArray).concat(defSensFieldArray).concat(physicalFieldArray);
 	mod_attrs = mod_attrs.concat(mentalFieldArray).concat(choiceFieldArray);
 
@@ -6081,6 +7445,7 @@ var update_builder_submit = function () {
 
 		// set variables
 		update["builder-basePath"] = pathName;
+		update["prime_element"] = v["builder-prime_element"];
 		update["builder-baseAncestry"] = ancestryName;
 		update["builder-baseAbilityScores"] = JSON.stringify(baseAbilityScores);
 		update["builder-baseGrowths"] = JSON.stringify(baseGrowths);
@@ -6382,7 +7747,7 @@ var update_builder_ability_scores_reset = function (pointsAttr, absAttr, pointsM
 
 
 // ======== Builder Skills Listeners
-on("change:builder-skills-trainingdefensivePhys-brace change:builder-skills-trainingdefensivePhys-fortitude change:builder-skills-trainingdefensivePhys-presence change:builder-skills-trainingdefensivePhys-reflex", function (eventinfo) {
+on("change:builder-skills-trainingdefensivePhys-brace change:builder-skills-trainingdefensivePhys-presence change:builder-skills-trainingdefensivePhys-reflex", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -6403,7 +7768,7 @@ on("change:builder-skills-defensive-reset", function () {
 	update_builder_Defensive_skills_reset();
 });
 
-on("change:builder-skills-trainingphysical-archery change:builder-skills-trainingphysical-brawling change:builder-skills-trainingphysical-lightBlade change:builder-skills-trainingphysical-hammer change:builder-skills-trainingphysical-handgun change:builder-skills-trainingphysical-heavyBlade change:builder-skills-trainingphysical-longarm change:builder-skills-trainingphysical-polearm change:builder-skills-trainingphysical-thrown change:builder-skills-trainingphysical-acrobatics change:builder-skills-trainingphysical-athletics change:builder-skills-trainingphysical-physique change:builder-skills-trainingphysical-palming change:builder-skills-trainingphysical-stealth change:builder-skills-trainingphysical-survival change:builder-skills-trainingphysical-artisan change:builder-skills-trainingphysical-cook change:builder-skills-trainingphysical-herbalism change:builder-skills-trainingphysical-mechanical change:builder-skills-trainingphysical-medicine change:builder-skills-trainingphysical-pilot", function (eventinfo) {
+on("change:builder-skills-trainingphysical-brawling change:builder-skills-trainingphysical-finesse change:builder-skills-trainingphysical-marksmanship change:builder-skills-trainingphysical-might change:builder-skills-trainingphysical-polearm change:builder-skills-trainingphysical-throw change:builder-skills-trainingphysical-acrobatics change:builder-skills-trainingphysical-athletics change:builder-skills-trainingphysical-fortitude change:builder-skills-trainingphysical-physique change:builder-skills-trainingphysical-palming change:builder-skills-trainingphysical-stealth change:builder-skills-trainingphysical-artisan change:builder-skills-trainingphysical-cook change:builder-skills-trainingphysical-herbalism change:builder-skills-trainingphysical-mechanical change:builder-skills-trainingphysical-medicine change:builder-skills-trainingphysical-pilot", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -6416,7 +7781,7 @@ on("change:builder-skills-physical-reset", function () {
 	update_builder_physical_skills_reset();
 });
 
-on("change:builder-skills-trainingmental-assault change:builder-skills-trainingmental-conjure change:builder-skills-trainingmental-enchant change:builder-skills-trainingmental-ethereal change:builder-skills-trainingmental-field change:builder-skills-trainingmental-structure change:builder-skills-trainingmental-arcana change:builder-skills-trainingmental-culture change:builder-skills-trainingmental-engineering change:builder-skills-trainingmental-history change:builder-skills-trainingmental-investigation change:builder-skills-trainingmental-nature change:builder-skills-trainingmental-deception change:builder-skills-trainingmental-etiquette change:builder-skills-trainingmental-intimidation change:builder-skills-trainingmental-leadership change:builder-skills-trainingmental-negotiation change:builder-skills-trainingmental-performance", function (eventinfo) {
+on("change:builder-skills-trainingmental-assault change:builder-skills-trainingmental-conjure change:builder-skills-trainingmental-enchant change:builder-skills-trainingmental-ethereal change:builder-skills-trainingmental-field change:builder-skills-trainingmental-structure change:builder-skills-trainingmental-arcana change:builder-skills-trainingmental-culture change:builder-skills-trainingmental-history change:builder-skills-trainingmental-investigation change:builder-skills-trainingmental-nature change:builder-skills-trainingmental-tracking change:builder-skills-trainingmental-deception change:builder-skills-trainingmental-etiquette change:builder-skills-trainingmental-intimidation change:builder-skills-trainingmental-leadership change:builder-skills-trainingmental-negotiation change:builder-skills-trainingmental-performance", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -6429,7 +7794,7 @@ on("change:builder-skills-mental-reset", function () {
 	update_builder_mental_skills_reset();
 });
 
-on("change:builder-skills-trainingchoice-archery change:builder-skills-trainingchoice-brawling change:builder-skills-trainingchoice-lightBlade change:builder-skills-trainingchoice-hammer change:builder-skills-trainingchoice-handgun change:builder-skills-trainingchoice-heavyBlade change:builder-skills-trainingchoice-longarm change:builder-skills-trainingchoice-polearm change:builder-skills-trainingchoice-thrown change:builder-skills-trainingchoice-acrobatics change:builder-skills-trainingchoice-athletics change:builder-skills-trainingchoice-physique change:builder-skills-trainingchoice-palming change:builder-skills-trainingchoice-stealth change:builder-skills-trainingchoice-survival change:builder-skills-trainingchoice-artisan change:builder-skills-trainingchoice-cook change:builder-skills-trainingchoice-herbalism change:builder-skills-trainingchoice-mechanical change:builder-skills-trainingchoice-medicine change:builder-skills-trainingchoice-pilot change:builder-skills-trainingchoice-assault change:builder-skills-trainingchoice-conjure change:builder-skills-trainingchoice-enchant change:builder-skills-trainingchoice-ethereal change:builder-skills-trainingchoice-field change:builder-skills-trainingchoice-structure change:builder-skills-trainingchoice-arcana change:builder-skills-trainingchoice-culture change:builder-skills-trainingchoice-engineering change:builder-skills-trainingchoice-history change:builder-skills-trainingchoice-investigation change:builder-skills-trainingchoice-nature change:builder-skills-trainingchoice-deception change:builder-skills-trainingchoice-etiquette change:builder-skills-trainingchoice-intimidation change:builder-skills-trainingchoice-leadership change:builder-skills-trainingchoice-negotiation change:builder-skills-trainingchoice-performance", function (eventinfo) {
+on("change:builder-skills-trainingchoice-brawling change:builder-skills-trainingchoice-finesse change:builder-skills-trainingchoice-marksmanship change:builder-skills-trainingchoice-might change:builder-skills-trainingchoice-polearm change:builder-skills-trainingchoice-throw change:builder-skills-trainingchoice-acrobatics change:builder-skills-trainingchoice-athletics change:builder-skills-trainingchoice-fortitude change:builder-skills-trainingchoice-physique change:builder-skills-trainingchoice-palming change:builder-skills-trainingchoice-stealth change:builder-skills-trainingchoice-artisan change:builder-skills-trainingchoice-cook change:builder-skills-trainingchoice-herbalism change:builder-skills-trainingchoice-mechanical change:builder-skills-trainingchoice-medicine change:builder-skills-trainingchoice-pilot change:builder-skills-trainingchoice-assault change:builder-skills-trainingchoice-conjure change:builder-skills-trainingchoice-enchant change:builder-skills-trainingchoice-ethereal change:builder-skills-trainingchoice-field change:builder-skills-trainingchoice-structure change:builder-skills-trainingchoice-arcana change:builder-skills-trainingchoice-culture change:builder-skills-trainingchoice-history change:builder-skills-trainingchoice-investigation change:builder-skills-trainingchoice-nature change:builder-skills-trainingchoice-tracking change:builder-skills-trainingchoice-deception change:builder-skills-trainingchoice-etiquette change:builder-skills-trainingchoice-intimidation change:builder-skills-trainingchoice-leadership change:builder-skills-trainingchoice-negotiation change:builder-skills-trainingchoice-performance", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -6441,7 +7806,6 @@ on("change:builder-skills-choice-reset", function () {
 
 	update_builder_choice_skills_reset();
 });
-
 
 var update_builder_defensivePhys_skills = function () {
 	update_builder_skills("DefensivePhys", GetDefensivePhysSkillsList(true));
@@ -7537,14 +8901,14 @@ function GetAbilityScoreMod(score) {
 	return {"name":"Crushing","group":"Ability","description":"This weapon can crush through defenses. Actions that target BR DC instead targets Reflex DC."}
 	case "explosive (x/y)":
 	return {"name":"Explosive (X/Y)","group":"Ability","description":"This weapon can explode on impact. Attacks made with this weapon affect characters within a radius of X spaces, drawn from the impact point, and deals X extra damage to all characters in the area."}
-	case "finesse":
-	return {"name":"Finesse","group":"Ability","description":"This weapon is easy to maneuver allowing you to easily strike at enemies trying to evade you. Actions that target BR DC instead targets Brace DC."}
 	case "impact (x)":
 	return {"name":"Impact (X)","group":"Ability","description":"This weapon deals X extra damage."}
 	case "knockback (x)":
 	return {"name":"Knockback (X)","group":"Ability","description":"On a hit, the user may choose to knock their target X spaces in a straight line directly away from the point of origin."}
 	case "line (x)":
 	return {"name":"Line (X)","group":"Ability","description":"Attacks made with this weapon affect characters in a straight line, X spaces long."}
+	case "quick":
+	return {"name":"Quick","group":"Ability","description":"This weapon is easy to maneuver allowing you to easily strike at enemies trying to evade you. Actions that target BR DC instead targets Brace DC."}
 	default:
 	return {"name":"","group":"","description":""}
 	
@@ -7575,8 +8939,6 @@ function GetAbilityScoreMod(score) {
 	switch (name.toLowerCase()) {
 	case "brace":
 	return {"name":"Brace","description":"Brace represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects.","group":"Defensive","subGroup":"Physical Defense","abilityScore":"STR"}
-	case "fortitude":
-	return {"name":"Fortitude","description":"Fortitude is a character's ability to resist internal damage such as from poisons or sickness.","group":"Defensive","subGroup":"Physical Defense","abilityScore":"CON"}
 	case "insight":
 	return {"name":"Insight","description":"Insight represents a character's ability to parse conversation and judge mental states. This defense is typically used when information is being hidden in text or speech or to detect when someone is concealing their true thoughts.","group":"Defensive","subGroup":"Sensory Defense","abilityScore":"INT"}
 	case "notice":
@@ -7595,33 +8957,27 @@ function GetAbilityScoreMod(score) {
 	
 	function GetDefensiveSkillsList(isFields) {
 	if (isFields) {
-	return ["brace", "fortitude", "insight", "notice", "presence", "reflex", "resolve"];
+	return ["brace", "insight", "notice", "presence", "reflex", "resolve"];
 	}
 	else {
-	return ["Brace", "Fortitude", "Insight", "Notice", "Presence", "Reflex", "Resolve"];
+	return ["Brace", "Insight", "Notice", "Presence", "Reflex", "Resolve"];
 	}
 	}
 	
 	function GetCombatSkillsInfo(name) {
 	switch (name.toLowerCase()) {
-	case "archery":
-	return {"name":"Archery","description":"The skill of using borws. Bows have decent range and allow one to add their strength to their damage. They also tend to have more flexible ammunitions.","group":"Combat","subGroup":"","abilityScore":"DEX"}
 	case "brawling":
 	return {"name":"Brawling","description":"This is the skill to use one's own body to fight. The combat style has a focus on quick actions, allowing more maneuverability in their attacks in exchange for less damage.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "light blade":
-	return {"name":"Light Blade","description":"These weapons require a dextrous hand as they use precision to strike at a foe. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are exceptionally well balanced for striking with speed.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "hammer":
-	return {"name":"Hammer","description":"Blunt weapons that are swung with force to bludgeon their targets. These weapons tend to have qualities to allow them to deal increased damage to objects and can crush through defenses.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "handgun":
-	return {"name":"Handgun","description":"Small firearms made to be easily wielded in one hand. These weapons typically have the least range of all dedicated range weapons but feature threat ranges to be used in melee.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "heavy blade":
-	return {"name":"Heavy Blade","description":"These weapons are large and bladed, allowing the wielder to swing them with all their might. These weapons are made to be able to allow the user to strike with a powerful blow.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "longarm":
-	return {"name":"Longarm","description":"Powerful ranged weapons that fire bullets from two-handed implements. These weapons tend to have the highest range of all range weapons and large damage values in exchange for less action flexibility.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "finesse":
+	return {"name":"Finesse","description":"This is the skill to strike at a foe dextrously, using precision to target weaknesses. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are well balanced for striking fast.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "marksmanship":
+	return {"name":"Marksmanship","description":"The skill of using a bow or firearm. These weapons have the most variety in weapon ranges, but typically are ineffective in melee.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "might":
+	return {"name":"Might","description":"These weapons are large, allowing the wielder to swing them with all their strength. They often come with ways to either smash through defenses or simply to break a defense more easily.","group":"Combat","subGroup":"","abilityScore":"DEX"}
 	case "polearm":
-	return {"name":"Polearm","description":"Weapons on a pole of some sort. These weapons will often feature increased threat range, allowing one to strike at more distant foes.","group":"Combat","subGroup":"","abilityScore":"DEX"}
-	case "thrown":
-	return {"name":"Thrown","description":"Weapons that are able to be thrown, or improvising a thrown weapon. ","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	return {"name":"Polearm","description":"This is the skill for striking in melee with a weapon that is long and has substantial reach. These weapons will often feature increased threat range, allowing one to strike at more distant foes.","group":"Combat","subGroup":"","abilityScore":"DEX"}
+	case "throw":
+	return {"name":"Throw","description":"When one strikes at a foe or aims for a location by throwing an object, it is typical to use the throw skill. ","group":"Combat","subGroup":"","abilityScore":"DEX"}
 	default:
 	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
 	
@@ -7630,10 +8986,10 @@ function GetAbilityScoreMod(score) {
 	
 	function GetCombatSkillsList(isFields) {
 	if (isFields) {
-	return ["archery", "brawling", "lightBlade", "hammer", "handgun", "heavyBlade", "longarm", "polearm", "thrown"];
+	return ["brawling", "finesse", "marksmanship", "might", "polearm", "throw"];
 	}
 	else {
-	return ["Archery", "Brawling", "Light Blade", "Hammer", "Handgun", "Heavy Blade", "Longarm", "Polearm", "Thrown"];
+	return ["Brawling", "Finesse", "Marksmanship", "Might", "Polearm", "Throw"];
 	}
 	}
 	
@@ -7669,17 +9025,17 @@ function GetAbilityScoreMod(score) {
 	function GetBodySkillsInfo(name) {
 	switch (name.toLowerCase()) {
 	case "acrobatics":
-	return {"name":"Acrobatics","description":"Your Acrobatics check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. ","group":"Body","subGroup":"","abilityScore":"DEX"}
+	return {"name":"Acrobatics","description":"Your Acrobatics check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. ","group":"Body","subGroup":"","abilityScore":"QCK"}
 	case "athletics":
 	return {"name":"Athletics","description":"Your Athletics check covers movement through an environment such as when climbing, jumping, or swimming.","group":"Body","subGroup":"","abilityScore":"STR"}
+	case "fortitude":
+	return {"name":"Fortitude","description":"Fortitude is a character's ability to resist environmental or internal harm such as from severe heat or cold, poisons or sickness.","group":"Body","subGroup":"","abilityScore":"CON"}
 	case "physique":
 	return {"name":"Physique","description":"The Physique skill represents a character’s raw strength and endurance. It is the base skill for actions that allow one to shove or grapple and can be used to allow one to lift or carry objects that may fall outside normal rules.","group":"Body","subGroup":"","abilityScore":"STR"}
 	case "palming":
 	return {"name":"Palming","description":"Palming is sleight-of-hand skill that gives a character the ability to snag, hide, and pass off small objects.","group":"Body","subGroup":"","abilityScore":"QCK"}
 	case "stealth":
-	return {"name":"Stealth","description":"Make a Stealth check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. ","group":"Body","subGroup":"","abilityScore":"DEX"}
-	case "survival":
-	return {"name":"Survival","description":"Make a Survival check to follow tracks, hunt wild game, or guide your group through wastelands. ","group":"Body","subGroup":"","abilityScore":"PER"}
+	return {"name":"Stealth","description":"Make a Stealth check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. ","group":"Body","subGroup":"","abilityScore":"QCK"}
 	default:
 	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
 	
@@ -7688,10 +9044,10 @@ function GetAbilityScoreMod(score) {
 	
 	function GetBodySkillsList(isFields) {
 	if (isFields) {
-	return ["acrobatics", "athletics", "physique", "palming", "stealth", "survival"];
+	return ["acrobatics", "athletics", "fortitude", "physique", "palming", "stealth"];
 	}
 	else {
-	return ["Acrobatics", "Athletics", "Physique", "Palming", "Stealth", "Survival"];
+	return ["Acrobatics", "Athletics", "Fortitude", "Physique", "Palming", "Stealth"];
 	}
 	}
 	
@@ -7701,14 +9057,14 @@ function GetAbilityScoreMod(score) {
 	return {"name":"Arcana","description":"Arcana represents knowledge of the ethereal and manipulation of ether. It can help identify spell effects, well known spirits, and qualities of ether.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
 	case "culture":
 	return {"name":"Culture","description":"Your culture check measures your ability to recall lore about a civilization's practices, personalities, laws, and religions. ","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
-	case "engineering":
-	return {"name":"Engineering","description":"This skill represents knowledge of technological subjects. It can be used to recall lore about construction, buildings, fortifications, technology, and tools.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
 	case "history":
 	return {"name":"History","description":"Your history check measures your ability to recall lore about historical events, legendary people, ancient kingdoms, past disputes, recent wars, and lost civilizations.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
 	case "investigation":
 	return {"name":"Investigation","description":"This is used to actively search for for clues or anything out of sorts. You might deduce the location of a hidden object, discern from the appearance of a wound what kind of weapon dealt it, or determine the weakest point in a tunnel that could cause it to collapse. ","group":"Knowledge","subGroup":"","abilityScore":"PER"}
 	case "nature":
 	return {"name":"Nature","description":"Your nature check measures your ability to recall lore about geography, plants, animals, the weather, and natural cycles.","group":"Knowledge","subGroup":"Recall Knowledge","abilityScore":"INT"}
+	case "tracking":
+	return {"name":"Tracking","description":"Make a Tracking check to follow tracks, hunt wild game, or guide your group through wastelands. ","group":"Knowledge","subGroup":"","abilityScore":"PER"}
 	default:
 	return {"name":"","description":"","group":"","subGroup":"","abilityScore":""}
 	
@@ -7717,10 +9073,10 @@ function GetAbilityScoreMod(score) {
 	
 	function GetKnowledgeSkillsList(isFields) {
 	if (isFields) {
-	return ["arcana", "culture", "engineering", "history", "investigation", "nature"];
+	return ["arcana", "culture", "history", "investigation", "nature", "tracking"];
 	}
 	else {
-	return ["Arcana", "Culture", "Engineering", "History", "Investigation", "Nature"];
+	return ["Arcana", "Culture", "History", "Investigation", "Nature", "Tracking"];
 	}
 	}
 	
@@ -7729,7 +9085,7 @@ function GetAbilityScoreMod(score) {
 	case "deception":
 	return {"name":"Deception","description":"Your Deception check determines whether you can convincingly hide the truth, either verbally or through your actions. This deception can encompass everything from misleading others through ambiguity to telling outright lies.","group":"Social","subGroup":"Social Influence","abilityScore":"CHA"}
 	case "etiquette":
-	return {"name":"Etiquette","description":"Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that peo- ple might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.","group":"Social","subGroup":"","abilityScore":"PER"}
+	return {"name":"Etiquette","description":"Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that people might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.","group":"Social","subGroup":"","abilityScore":"PER"}
 	case "intimidation":
 	return {"name":"Intimidation","description":"When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision.","group":"Social","subGroup":"Social Influence","abilityScore":"CHA"}
 	case "leadership":
@@ -7784,10 +9140,10 @@ function GetAbilityScoreMod(score) {
 	
 	function GetDefensivePhysSkillsList(isFields) {
 	if (isFields) {
-	return ["brace", "fortitude", "presence", "reflex"];
+	return ["brace", "presence", "reflex"];
 	}
 	else {
-	return ["Brace", "Fortitude", "Presence", "Reflex"];
+	return ["Brace", "Presence", "Reflex"];
 	}
 	}
 	
@@ -7807,7 +9163,7 @@ function GetAbilityScoreMod(score) {
 	case "interceptor":
 	return {"name":"Interceptor","category":"Warfare","description":"The interceptor is an expert in disrupting others. Prefering weapons with increased threat, interceptors protect their allies by stopping the movement of advancing enemies.","growths":{"CON":2,"DEX":4,"QCK":5,"STR":2,"CHA":0,"INT":0,"PER":3,"WIL":3,"hp":0,"vitality":2,"kiCharge":0,"spellForce":0},"prerequisite":"Trained in Notice and Polearm","jobTechnique":"Preemptive Strike","advancement":[{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Preemptive Stagger","type":"T"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Lunge","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Step Forward","type":"T"},{"name":"Gain a Defensive Skill Technique.","type":"DS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Critical Maim","type":"T"}]}
 	case "marksman":
-	return {"name":"Marksman","category":"Warfare","description":"","growths":{"CON":3,"DEX":4,"QCK":3,"STR":0,"CHA":2,"INT":0,"PER":5,"WIL":1,"hp":0,"vitality":0,"kiCharge":2,"spellForce":2},"prerequisite":"Trained in Assault and Longarm","jobTechnique":"Spellshot","advancement":[{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Distant Spell","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"","type":"T"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"","type":"T"}]}
+	return {"name":"Marksman","category":"Warfare","description":"","growths":{"CON":3,"DEX":4,"QCK":3,"STR":0,"CHA":2,"INT":0,"PER":5,"WIL":1,"hp":0,"vitality":0,"kiCharge":2,"spellForce":2},"prerequisite":"Trained in Assault and Marksmanship","jobTechnique":"Spellshot","advancement":[{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Distant Spell","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"","type":"T"},{"name":"Gain a Magic Skill Technique.","type":"MS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"","type":"T"}]}
 	case "rogue":
 	return {"name":"Rogue","category":"Talent","description":"The rogue is an expert at exploiting distractions. They can exploit enemy weaknesses with their sneak attack, both on their turn and during follow-up attacks. ","growths":{"CON":0,"DEX":5,"QCK":4,"STR":0,"CHA":2,"INT":2,"PER":3,"WIL":3,"hp":1,"vitality":0,"kiCharge":0,"spellForce":0},"prerequisite":"","jobTechnique":"Sneak Attack","advancement":[{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Sneaky Follow-Up","type":"T"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Skulk Away","type":"T"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Then Hide","type":"T"},{"name":"Gain a Combat Skill Technique.","type":"CS"},{"name":"Gain a Body Skill Technique.","type":"BS"},{"name":"Assassinate","type":"T"}]}
 	case "physician":
