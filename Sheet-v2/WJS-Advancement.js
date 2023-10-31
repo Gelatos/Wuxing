@@ -80,7 +80,16 @@ on("change:advancement-button-submit", function () {
 
 var update_advancement_submit = function () {
 
-	let mod_attrs = ["base_level", "builder-ancestry", "builder-baseAbilityScores", "advancement-level-total", "builder-baseGrowths", "builder-baseGrowthsTotal", "advancement-advancementGrowthsTotal"];
+	let growthArray = GetGrowthList(true);
+	let skillsList = GetDefensiveSkillsList(true).concat(GetCombatSkillsList(true)).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
+	skillsList = skillsList.concat(GetMagicSkillsList(true)).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
+
+	let mod_attrs = ["base_level", "statbonus_pb", "skills-baseSkills", "skills-baseChoiceSkills", "skills-baseExtraSkills", "builder-ancestry", "builder-baseAbilityScores", "advancement-level-total", "builder-baseGrowths", "builder-baseGrowthsTotal", "advancement-advancementGrowthsTotal", "branchpoints_bonus"];
+	mod_attrs = mod_attrs.concat(growthArray);
+	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
+	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
+	mod_attrs = mod_attrs.concat(GetDerivedStatsList());
+
 	getAttrs(mod_attrs, function (v) {
 
 		let update = {};
@@ -111,6 +120,8 @@ var update_advancement_submit = function () {
 		}
 
 		let startingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+		let bonusGrowths = SetBonusGrowthFieldArray(v);
+		let coreData = SetCoreDataFieldArray(v, "");
 
 		var classUpdates = [];
 		let classUpdate;
@@ -263,12 +274,22 @@ var update_advancement_submit = function () {
 		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
 		update["advancement-advancementGrowthsTotal"] = JSON.stringify(advancementGrowthsTotal);
 		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
-		update = SetCharacterStatGrowths(update, endingStatistics);
-		update = SetLevelUpData(update, startingStatistics, endingStatistics, classUpdates, mainUpdate);
+		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray);
+		v = SetAbilityScoreUpdate(v, "statscore_", update);
+		v = SetAbilityScoreUpdate(v, "", update);
+		update = SetDerivedStats(update, v, ancestryData, growthArray);
+		update = SetLevelUpData(update, 
+			GetCharacterStatGrowths(startingStatistics, bonusGrowths, ancestryData),
+			GetCharacterStatGrowths(endingStatistics, bonusGrowths, ancestryData),
+			classUpdates, mainUpdate
+		);
 
 		// set updates
 		update["base_level"] = totalLevel;
+		coreData["pb"] = AttrParseInt(v, "statbonus_pb") + GetProfBonusMod(totalLevel);
+		update["pb"] = coreData["pb"];
 		update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, true));
+		update = SetCharacterSkillsUpdateData(update, v, skillsList, coreData);
 
 		update = GoToNextPage(update, AttrParseString(v, "skills-nextPage", "LevelUp"), "Advancement");
 		update["advancement-button-reset-everything"] = "on";
@@ -360,7 +381,11 @@ on("change:advancement-button-restart-confirm", function () {
 var update_advancement_restart = function () {
 	console.log(`Restarting Character Build `);
 
+	let growthArray = GetGrowthList(true);
 	let mod_attrs = ["advancement-level-total", "builder-baseAbilityScores", "builder-ancestry"];
+	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
+	mod_attrs = mod_attrs.concat(GetDerivedStatsList());
+
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
 
@@ -399,7 +424,11 @@ var update_advancement_restart = function () {
 		update["builder-baseGrowthsTotal"] = JSON.stringify(emptyGrowths);
 		update["advancement-advancementGrowthsTotal"] = JSON.stringify(emptyGrowths);
 		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, emptyGrowths, emptyGrowths);
-		update = SetCharacterStatGrowths(update, endingStatistics);
+		let bonusGrowths = SetBonusGrowthFieldArray(v);
+		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray);
+		v = SetAbilityScoreUpdate(v, "statscore_", update);
+		v = SetAbilityScoreUpdate(v, "", update);
+		update = SetDerivedStats(update, v, ancestryData, growthArray);
 
 		setAttrs(update, { silent: true });
 

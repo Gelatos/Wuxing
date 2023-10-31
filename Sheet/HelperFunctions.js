@@ -345,8 +345,14 @@ function TokenEndRound(msg) {
         _.each(msg.selected, function (obj) {
 
             token = getObj('graphic', obj._id);
-            if (token != undefined) {
+            if (token != undefined && token.get("status_yellow")) {
                 token.set("status_yellow", false);
+                if (token.get("name") != undefined) {
+                    SendSystemMessage([token.get("name") + " Ends Turn."], "");
+                }
+                else {
+                    SendSystemMessage(["End Turn."], "");
+                }
             }
         });
 

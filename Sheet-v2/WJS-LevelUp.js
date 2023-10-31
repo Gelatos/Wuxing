@@ -37,53 +37,53 @@ function SetLevelUpData (update, startingStatistics, endingStatistics, classUpda
 	update[`levelUp-desc-main`] = mainUpdate.desc;
 
 	// update the growths
-	update["levelUp-growth-CON"] = (startingStatistics.stats.CON == endingStatistics.stats.CON 
-		? startingStatistics.stats.CON 
-		: `${startingStatistics.stats.CON} => ${endingStatistics.stats.CON}`
+	update["levelUp-growth-CON"] = (startingStatistics.CON == endingStatistics.CON 
+		? startingStatistics.CON 
+		: `${startingStatistics.CON} => ${endingStatistics.CON}`
 	);
-	update["levelUp-growth-DEX"] = (startingStatistics.stats.DEX == endingStatistics.stats.DEX 
-		? startingStatistics.stats.DEX 
-		: `${startingStatistics.stats.DEX} => ${endingStatistics.stats.DEX}`
+	update["levelUp-growth-DEX"] = (startingStatistics.DEX == endingStatistics.DEX 
+		? startingStatistics.DEX 
+		: `${startingStatistics.DEX} => ${endingStatistics.DEX}`
 	);
-	update["levelUp-growth-QCK"] = (startingStatistics.stats.QCK == endingStatistics.stats.QCK 
-		? startingStatistics.stats.QCK 
-		: `${startingStatistics.stats.QCK} => ${endingStatistics.stats.QCK}`
+	update["levelUp-growth-QCK"] = (startingStatistics.QCK == endingStatistics.QCK 
+		? startingStatistics.QCK 
+		: `${startingStatistics.QCK} => ${endingStatistics.QCK}`
 	);
-	update["levelUp-growth-STR"] = (startingStatistics.stats.STR == endingStatistics.stats.STR 
-		? startingStatistics.stats.STR 
-		: `${startingStatistics.stats.STR} => ${endingStatistics.stats.STR}`
+	update["levelUp-growth-STR"] = (startingStatistics.STR == endingStatistics.STR 
+		? startingStatistics.STR 
+		: `${startingStatistics.STR} => ${endingStatistics.STR}`
 	);
-	update["levelUp-growth-CHA"] = (startingStatistics.stats.CHA == endingStatistics.stats.CHA 
-		? startingStatistics.stats.CHA 
-		: `${startingStatistics.stats.CHA} => ${endingStatistics.stats.CHA}`
+	update["levelUp-growth-CHA"] = (startingStatistics.CHA == endingStatistics.CHA 
+		? startingStatistics.CHA 
+		: `${startingStatistics.CHA} => ${endingStatistics.CHA}`
 	);
-	update["levelUp-growth-INT"] = (startingStatistics.stats.INT == endingStatistics.stats.INT 
-		? startingStatistics.stats.INT 
-		: `${startingStatistics.stats.INT} => ${endingStatistics.stats.INT}`
+	update["levelUp-growth-INT"] = (startingStatistics.INT == endingStatistics.INT 
+		? startingStatistics.INT 
+		: `${startingStatistics.INT} => ${endingStatistics.INT}`
 	);
-	update["levelUp-growth-PER"] = (startingStatistics.stats.PER == endingStatistics.stats.PER 
-		? startingStatistics.stats.PER 
-		: `${startingStatistics.stats.PER} => ${endingStatistics.stats.PER}`
+	update["levelUp-growth-PER"] = (startingStatistics.PER == endingStatistics.PER 
+		? startingStatistics.PER 
+		: `${startingStatistics.PER} => ${endingStatistics.PER}`
 	);
-	update["levelUp-growth-WIL"] = (startingStatistics.stats.WIL == endingStatistics.stats.WIL 
-		? startingStatistics.stats.WIL 
-		: `${startingStatistics.stats.WIL} => ${endingStatistics.stats.WIL}`
+	update["levelUp-growth-WIL"] = (startingStatistics.WIL == endingStatistics.WIL 
+		? startingStatistics.WIL 
+		: `${startingStatistics.WIL} => ${endingStatistics.WIL}`
 	);
-	update["levelUp-growth-HP"] = (startingStatistics.stats.hp == endingStatistics.stats.hp 
-		? startingStatistics.stats.hp 
-		: `${startingStatistics.stats.hp} => ${endingStatistics.stats.hp}`
+	update["levelUp-growth-HP"] = (startingStatistics.hp == endingStatistics.hp 
+		? startingStatistics.hp 
+		: `${startingStatistics.hp} => ${endingStatistics.hp}`
 	);
-	update["levelUp-growth-Vitality"] = (startingStatistics.stats.vitality == endingStatistics.stats.vitality 
-		? startingStatistics.stats.vitality 
-		: `${startingStatistics.stats.vitality} => ${endingStatistics.stats.vitality}`
+	update["levelUp-growth-Vitality"] = (startingStatistics.vitality == endingStatistics.vitality 
+		? startingStatistics.vitality 
+		: `${startingStatistics.vitality} => ${endingStatistics.vitality}`
 	);
-	update["levelUp-growth-KiCharge"] = (startingStatistics.stats.kiCharge == endingStatistics.stats.kiCharge 
-		? startingStatistics.stats.kiCharge 
-		: `${startingStatistics.stats.kiCharge} => ${endingStatistics.stats.kiCharge}`
+	update["levelUp-growth-KiCharge"] = (startingStatistics.kiCharge == endingStatistics.kiCharge 
+		? startingStatistics.kiCharge 
+		: `${startingStatistics.kiCharge} => ${endingStatistics.kiCharge}`
 	);
-	update["levelUp-growth-Spellforce"] = (startingStatistics.stats.spellForce == endingStatistics.stats.spellForce 
-		? startingStatistics.stats.spellForce 
-		: `${startingStatistics.stats.spellForce} => ${endingStatistics.stats.spellForce}`
+	update["levelUp-growth-Spellforce"] = (startingStatistics.spellForce == endingStatistics.spellForce 
+		? startingStatistics.spellForce 
+		: `${startingStatistics.spellForce} => ${endingStatistics.spellForce}`
 	);
 
 	return update;

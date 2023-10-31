@@ -92,12 +92,21 @@ on("change:builder-button-submit", function () {
 
 var update_builder_submit = function () {
 
+	let skillsList = GetDefensiveSkillsList(true).concat(GetCombatSkillsList(true)).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
+	skillsList = skillsList.concat(GetMagicSkillsList(true)).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
 
 	let abilityScoreFieldArray = GetSectionIdNameFromArray("builder-base-", "", GetAbilityScoreList(true));
 	let growthsFieldArray = GetSectionIdNameFromArray("builder-baseGrowth-", "", GetAbilityScoreList(true));
 
-	let mod_attrs = ["builder-nextPage", "base_level", "builder-path", "builder-ancestry", "builder-prime_element", "advancement-advancementGrowthsTotal"];
+	let growthArray = GetGrowthList(true);
+	let mod_attrs = ["pb", "builder-nextPage", "base_level", "builder-path", "builder-ancestry", "builder-prime_element", 
+		"advancement-advancementGrowthsTotal", "statbonus_speed", "statbonus_chakra"];
+
 	mod_attrs = mod_attrs.concat(abilityScoreFieldArray).concat(growthsFieldArray);
+	mod_attrs = mod_attrs.concat(growthArray);
+	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
+	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
+	mod_attrs = mod_attrs.concat(GetDerivedStatsList());
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -113,6 +122,9 @@ var update_builder_submit = function () {
 		if (advancementGrowthsTotal == "") {
 			advancementGrowthsTotal = CreateGrowthsArrayData();
 		}
+		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+		let bonusGrowths = SetBonusGrowthFieldArray(v);
+		let coreData = SetCoreDataFieldArray(v, "");
 
 		// set variables
 		update["builder-basePath"] = pathName;
@@ -121,8 +133,13 @@ var update_builder_submit = function () {
 		update["builder-baseAbilityScores"] = JSON.stringify(baseAbilityScores);
 		update["builder-baseGrowths"] = JSON.stringify(baseGrowths);
 		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
-		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
-		update = SetCharacterStatGrowths(update, endingStatistics);
+		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray);
+		v = SetAbilityScoreUpdate(v, "statscore_", update);
+		v = SetAbilityScoreUpdate(v, "", update);
+		update = SetDerivedStats(update, v, ancestryData, growthArray);
+		update = SetCharacterSkillsUpdateData(update, v, skillsList, coreData);
+		update = SetCharacterSpeed(update, v, ancestryData);
+		update = SetCharacterChakra(update, v);
 
 		// update page position
 		update = GoToNextPage(update, AttrParseString(v, "builder-nextPage", "Skills"), "0");
@@ -345,7 +362,7 @@ var update_builder_ability_scores_randomize = function (pointsAttr, absAttr, ind
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
-		let pointCount = isNaN(parseInt(v[`${pointsAttr}`])) ? indivPointMax : parseInt(v[`${pointsAttr}`]);
+		let pointCount = AttrParseInt(v, pointsAttr, indivPointMax);
 
 		let abilityScoreNames = GetAbilityScoreList(true);
 		let abilityScores = SetAbilityScoreFieldArray(v, absAttr);

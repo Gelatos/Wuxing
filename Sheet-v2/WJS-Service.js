@@ -74,6 +74,23 @@ function RemoveSectionId(repeatingSection, repeatingSectionId) {
 
 
   //// ======== Ability Scores
+
+  function GetStatisticsDefaults(path) {
+	return {
+		carryCapacity: 40,
+		vitality: 2,
+		woundLimit: path == "Common" ? 1 : 3,
+		kiCharge: 5,
+		kiLimit: 25,
+		chakra: 1,
+		spellForceLimit: 9,
+		kiChargeLimit: 4,
+		techSlotJob: 1,
+		techSlotActive: 1,
+		techSlotPassive: 1,
+		techSlotSupport: 1
+	}
+  }
   
   function CreateAbilityScoreArrayData() {
 	var output = {
@@ -91,15 +108,11 @@ function SetAbilityScoreUpdate(update, updateAttr, abilityScoreArray, suffix) {
 	if (suffix == undefined) {
 		suffix = "";
 	}
+	let list = GetAbilityScoreList(true);
+	for (let i = 0; i < list.length; i++) {
+		update[`${updateAttr}${list[i]}`] = abilityScoreArray[list[i]] + suffix;
 
-	update[`${updateAttr}CON`] = abilityScoreArray.CON + suffix;
-	update[`${updateAttr}DEX`] = abilityScoreArray.DEX + suffix;
-	update[`${updateAttr}QCK`] = abilityScoreArray.QCK + suffix;
-	update[`${updateAttr}STR`] = abilityScoreArray.STR + suffix;
-	update[`${updateAttr}CHA`] = abilityScoreArray.CHA + suffix;
-	update[`${updateAttr}INT`] = abilityScoreArray.INT + suffix;
-	update[`${updateAttr}PER`] = abilityScoreArray.PER + suffix;
-	update[`${updateAttr}WIL`] = abilityScoreArray.WIL + suffix;
+	}
 	return update;
 }
 
@@ -110,6 +123,14 @@ function GetAbilityScoreList(isFields) {
 	else {
 	return ["Constitution", "Dexterity", "Quickness", "Strength", "Charisma", "Intelligence", "Perception", "Willpower"];
 	}
+}
+
+function SetCoreDataFieldArray(attrArray, fieldName) {
+
+	let output = SetAbilityScoreFieldArray(attrArray, fieldName);
+	output["pb"] = AttrParseInt(attrArray, "pb");
+
+	return output;
 }
 
 function SetAbilityScoreFieldArray(attrArray, fieldName) {
@@ -169,6 +190,15 @@ function ModulusAbilityScores(array1, val) {
 
 // ======== Growths
 
+function GetGrowthList(isFields) {
+	if (isFields) {
+	return GetAbilityScoreList(isFields).concat(["hp", "vitality", "kiCharge", "spellForce"]);
+	}
+	else {
+	return GetAbilityScoreList(isFields).concat(["HP", "Vitality", "Ki Charge", "Spellforce"]);
+	}
+}
+
 function CreateGrowthsArrayData() {
 
 	var output = CreateAbilityScoreArrayData();
@@ -214,23 +244,30 @@ function SetGrowthFieldArray(attrArray, fieldName) {
 	return output;
 }
 
+function SetBonusGrowthFieldArray(attrArray) {
+
+	let fieldName = "statbonus_";
+	let output = SetAbilityScoreFieldArray(attrArray, fieldName);
+	output.hp = AttrParseInt(attrArray, `${fieldName}hp`);
+	output.vitality = AttrParseInt(attrArray, `${fieldName}vitality`);
+	output.kiCharge = AttrParseInt(attrArray, `${fieldName}kiCharge`);
+	output.spellForce = AttrParseInt(attrArray, `${fieldName}spellForce`);
+
+	output.branchPoints = AttrParseInt(attrArray, `${fieldName}branchpoints`);
+	output.kiLimit = AttrParseInt(attrArray, `${fieldName}ki`);
+	output.kiCharge = AttrParseInt(attrArray, `${fieldName}kiCharge`);
+
+	return output;
+}
+
 function GetCharacterStatGrowths (ancestryData, baseAbilityScores, baseGrowths, advancementGrowths) {
 
 	// convert growths to ability scores
 	let currentGrowths = ConvertAbilityScorePointsToGrowths(AddGrowths(baseGrowths, AddGrowths(ancestryData.growths, advancementGrowths)));
+	currentGrowths = AddGrowths(currentGrowths, MultiplyGrowths(baseAbilityScores, 100));
+	currentGrowths = AddGrowths(currentGrowths, MultiplyGrowths(ancestryData.startingScores, 100));
 
-	let output = {
-		stats: AddGrowths(baseAbilityScores, AddGrowths(ancestryData.startingScores, MultiplyGrowths(currentGrowths, 0.01))),
-		modulus: ModulusGrowths(currentGrowths, 100),
-		mods: CreateAbilityScoreArrayData()
-	}
-
-	let abilityScoresList = GetAbilityScoreList(true);
-	for (let i = 0; i < abilityScoresList.length; i++) {
-		output.mods[abilityScoresList[i]] = GetAbilityScoreMod(output.stats[abilityScoresList[i]]);
-	}
-
-	return output;
+	return currentGrowths;
 }
 
 function AddGrowths(array1, array2) {

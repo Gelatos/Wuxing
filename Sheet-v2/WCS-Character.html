@@ -1,4 +1,5 @@
 <div class="wuxCharacterSheetDisplayStyle-Character">
+	<input type="hidden" name="attr_character-baseGrowthStats" value="">
 
 	<div class="wuxFloatHeader wuxStickyHeader">
 		<div class="wuxSectionBlock wuxLargeLayoutItem wuxStickyHeaderMain">
@@ -177,6 +178,23 @@
 				<div class="wuxTabHeader"><span class="wuxInnerHeader">Statistics</span></div>
 
 				<div class="wuxTab">
+					<div class="tab-statsOptions wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Statistics Options</div>
+								<div class="wuxMultiRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_character-button-advancement">
+										<span>Level Up</span>
+									</div>
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_character-button-builder">
+										<span>Change Origin</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="tab-abilityScores wuxTab">
 						<div class="statistics-AbilityScores wuxSectionBlock wuxLayoutItem">
 							<div class="wuxSectionContent">
@@ -195,11 +213,11 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_CON_score">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_CON">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_CON_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_CON" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -212,11 +230,11 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_DEX_score">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_DEX">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_DEX_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_DEX" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -233,11 +251,11 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_QCK_score">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_QCK">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_QCK_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_QCK" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -250,11 +268,11 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_STR_score">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_STR">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_STR_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_STR" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -275,11 +293,11 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_CHA_score">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_CHA">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_CHA_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_CHA" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -292,11 +310,11 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_INT_score">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_INT">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_INT_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_INT" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -313,11 +331,11 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_PER_score">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_PER">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_PER_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_PER" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -330,11 +348,11 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_WIL_score">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_WIL">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_WIL_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_WIL" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -392,7 +410,7 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_branchpoints_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_branchpoints" placeholder="0"></span>
 															</div>
 														</div>
 														<div class="wuxFlexTable">
@@ -631,7 +649,7 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_pb_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_pb" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -644,7 +662,7 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_initiative_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_initiative" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -661,7 +679,7 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_speed_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_speed" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -674,7 +692,7 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_power_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_power" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -683,28 +701,62 @@
 											<div class="wuxFlexTableItemGroup wuxNoPadding">
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
+														<input type="hidden" name="attr_spellForce">
 														<span class="wuxFlexTableItemHeader">Spellforce</span>
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_spellForce">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_spellForce">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_spellForce_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_spellForce" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
 													<div class="wuxFlexTableItemGroup">
+														<input type="hidden" name="attr_chakra">
+														<span class="wuxFlexTableItemHeader">Chakra</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_chakra_max">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_chakra" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<input type="hidden" name="attr_kiCharge">
 														<span class="wuxFlexTableItemHeader">Ki.Charge</span>
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_kiCharge">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_kiCharge">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_kiCharge_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_kiCharge" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<input type="hidden" name="attr_ki">
+														<span class="wuxFlexTableItemHeader">Ki.Limit</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_ki_max">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_ki" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -728,15 +780,14 @@
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemHeader" value="0">HP</span>
 														<input type="hidden" name="attr_hp" value="0">
-														<input type="hidden" name="attr_tempHp" value="0">
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_hp_max">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_hp">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_hp_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_hp" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -749,20 +800,21 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_armor_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_armor" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemHeader">Vitality</span>
+														<input type="hidden" name="attr_vitality">
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_vitality_max">0</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_vitality">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_vitality_bonus" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_vitality" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -772,6 +824,7 @@
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemHeader">Temp HP</span>
+														<input type="hidden" name="attr_tempHp" value="0">
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Barrier</span>
@@ -780,7 +833,7 @@
 																		<span class="wuxFlexTableItemData" name="attr_barrier">0</span>
 																	</div>
 																	<div class="wuxFlexTableItemGroup">
-																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_barrier_bonus" placeholder="0"></span>
+																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_barrier" placeholder="0"></span>
 																	</div>
 																</div>
 															</div>
@@ -791,7 +844,7 @@
 																		<span class="wuxFlexTableItemData" name="attr_block">0</span>
 																	</div>
 																	<div class="wuxFlexTableItemGroup">
-																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_block_bonus" placeholder="0"></span>
+																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_block" placeholder="0"></span>
 																	</div>
 																</div>
 															</div>
@@ -807,7 +860,7 @@
 																		<span class="wuxFlexTableItemData" name="attr_stress_max">0</span>
 																	</div>
 																	<div class="wuxFlexTableItemGroup">
-																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_stress_bonus" placeholder="0"></span>
+																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_stress" placeholder="0"></span>
 																	</div>
 																</div>
 															</div>
@@ -818,7 +871,7 @@
 																		<span class="wuxFlexTableItemData" name="attr_trauma_max">0</span>
 																	</div>
 																	<div class="wuxFlexTableItemGroup">
-																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_trauma_bonus" placeholder="0"></span>
+																		<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_trauma" placeholder="0"></span>
 																	</div>
 																</div>
 															</div>
@@ -841,6 +894,19 @@
 				<div class="wuxTabHeader"><span class="wuxInnerHeader">Skills</span></div>
 
 				<div class="wuxTab">
+					<div class="tab-skillOptions wuxTab">
+						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Skill Options</div>
+								<div class="wuxMultiRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_character-button-skills">
+										<span>Skill Training</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="tab-defensive wuxTab">
 						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
 							<div class="wuxSectionContent">
@@ -2137,8 +2203,16 @@
 									<span>Level Up</span>
 								</div>
 								<div class="wuxButton">
-									<input type="checkbox" name="attr_characterSheetDisplayStyle" value="0">
+									<input type="checkbox" name="attr_character-button-builder">
 									<span>Character Builder</span>
+								</div>
+								<div class="wuxButton">
+									<input type="checkbox" name="attr_character-button-skills">
+									<span>Skill Training</span>
+								</div>
+								<div class="wuxButton">
+									<input type="checkbox" name="attr_character-button-techniques">
+									<span>Select Techniques</span>
 								</div>
 							</div>
 						</div>

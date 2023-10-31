@@ -64,6 +64,7 @@ on("change:skills-button-submit", function () {
 
 var update_skills_submit = function () {
 
+	let abilityScoreArray = GetAbilityScoreList(true);
 	let defPhysSkillsArray = GetDefensivePhysSkillsList(true);
 	let defSensSkillsArray = GetDefensiveSensSkillsList(true);
 	let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
@@ -76,54 +77,71 @@ var update_skills_submit = function () {
 	let physicalFieldArray = GetSectionIdNameFromArray(`skills-trainingPhysical-`, "", physSkillsArray);
 	let mentalFieldArray = GetSectionIdNameFromArray(`skills-trainingMental-`, "", mentSkillsArray);
 	let choiceFieldArray = GetSectionIdNameFromArray(`skills-trainingChoice-`, "", choiceSkillsArray);
+	let extraFieldArray = GetSectionIdNameFromArray(`skills-trainingExtra-`, "", allSkillsArray);
 	let bonusFieldArray = GetSectionIdNameFromArray(`skillbonus_`, "", allSkillsArray);
 
-	let mod_attrs = ["skills-nextPage"];
-	mod_attrs = mod_attrs.concat(defPhysFieldArray).concat(defSensFieldArray).concat(physicalFieldArray);
-	mod_attrs = mod_attrs.concat(mentalFieldArray).concat(choiceFieldArray).concat(bonusFieldArray);
+	let mod_attrs = ["skills-nextPage", "pb"];
+	mod_attrs = mod_attrs.concat(abilityScoreArray).concat(defPhysFieldArray).concat(defSensFieldArray).concat(physicalFieldArray);
+	mod_attrs = mod_attrs.concat(mentalFieldArray).concat(choiceFieldArray).concat(extraFieldArray).concat(bonusFieldArray);
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
 
-		let baseSkills = [];
-		let choiceSkills = [];
+		let coreData = SetCoreDataFieldArray(v, "");
 
-		// set skill arrays
-		for (let i = 0; i < defPhysFieldArray.length; i++) {
-			if (v[defPhysFieldArray[i]] == "on") {
-				baseSkills.push(defPhysSkillsArray[i]);
-			}
+		let skillsUpdate = {
+			baseSkillsTraining: [],
+			choiceSkillsTraining: [],
+			extraSkillsTraining: [],
+			skillData: []
 		}
-		for (let i = 0; i < defSensFieldArray.length; i++) {
-			if (v[defSensFieldArray[i]] == "on") {
-				baseSkills.push(physSkillsArray[i]);
-			}
-		}
-		for (let i = 0; i < physicalFieldArray.length; i++) {
-			if (v[physicalFieldArray[i]] == "on") {
-				baseSkills.push(defSensSkillsArray[i]);
-			}
-		}
-		for (let i = 0; i < mentalFieldArray.length; i++) {
-			if (v[mentalFieldArray[i]] == "on") {
-				baseSkills.push(mentSkillsArray[i]);
-			}
-		}
-		for (let i = 0; i < choiceFieldArray.length; i++) {
-			if (v[choiceFieldArray[i]] == "on") {
-				choiceSkills.push(choiceSkillsArray[i]);
-			}
-		}
+		skillsUpdate = SetSkillTrainingSkillsUpdate(v, skillsUpdate, defPhysSkillsArray, "trainingDefensivePhys", "");
+		skillsUpdate = SetSkillTrainingSkillsUpdate(v, skillsUpdate, defSensSkillsArray, "trainingDefensiveSens", "");
+		skillsUpdate = SetSkillTrainingSkillsUpdate(v, skillsUpdate, physSkillsArray, "trainingPhysical", "trainingChoice");
+		skillsUpdate = SetSkillTrainingSkillsUpdate(v, skillsUpdate, mentSkillsArray, "trainingMental", "trainingChoice");
 
 		// set variables
-		update["skills-baseSkills"] = JSON.stringify(baseSkills);
-		update["skills-baseChoiceSkills"] = JSON.stringify(choiceSkills);
+		update["skills-baseSkills"] = JSON.stringify(skillsUpdate.baseSkillsTraining);
+		update["skills-baseChoiceSkills"] = JSON.stringify(skillsUpdate.choiceSkillsTraining);
+		update["skills-baseExtraSkills"] = JSON.stringify(skillsUpdate.extraSkillsTraining);
+		update = SetCharacterSkills(update, skillsUpdate.skillData, coreData);
 
 		// update page position
 		update = GoToNextPage(update, AttrParseString(v, "skills-nextPage", "Advancement"), "Skills");
 
 		setAttrs(update, { silent: true });
 	});
+
+}
+
+function SetSkillTrainingSkillsUpdate(attrArray, skillsUpdate, skillArray, baseField, choiceField) {
+
+	let skillName = "";
+	let skill = {};
+
+	// set skill arrays
+	for (let i = 0; i < skillArray.length; i++) {
+		skillName = skillArray[i];
+		skill = GetSkillsInfo(skillName);
+		skill.bonus = AttrParseInt(attrArray, `skillbonus_${skillName}`);
+		skill.isTrained = false;
+
+		if (baseField != "" && attrArray[`skills-${baseField}-${skillName}`] == "on") {
+			skillsUpdate.baseSkillsTraining.push(skillName);
+			skill.isTrained = true;
+		}
+		if (choiceField != "" && attrArray[`skills-${choiceField}-${skillName}`] == "on") {
+			skillsUpdate.choiceSkillsTraining.push(skillName);
+			skill.isTrained = true;
+		}
+		if (attrArray[`skills-trainingExtra-${skillName}`] == "on") {
+			skillsUpdate.extraSkillsTraining.push(skillName);
+			skill.isTrained = true;
+		}
+		skillsUpdate.skillData.push(skill);
+	}
+
+	return skillsUpdate;
 
 }
 
@@ -187,6 +205,7 @@ on("change:skills-choice-reset", function () {
 
 	update_skills_choice_skills_reset();
 });
+// --end
 
 var update_skills_defensivePhys_skills = function () {
 	update_skills_training("DefensivePhys", GetDefensivePhysSkillsList(true));
