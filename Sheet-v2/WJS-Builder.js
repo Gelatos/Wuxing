@@ -24,7 +24,7 @@ var update_builder_leave = function () {
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
 
-		let basePath = AttrParseString(v, "builder-basePath");
+		let basePath = AttrParseString(v, "builder-basePath", "Common");
 		let baseAncestry = AttrParseString(v, "builder-baseAncestry");
 		let baseGrowths = AttrParseJSON(v, "builder-baseGrowths");
 		let baseAbilityScores = AttrParseJSON(v, "builder-baseAbilityScores");
@@ -140,6 +140,7 @@ var update_builder_submit = function () {
 		update = SetCharacterSkillsUpdateData(update, v, skillsList, coreData);
 		update = SetCharacterSpeed(update, v, ancestryData);
 		update = SetCharacterChakra(update, v);
+		update = SetCharacterTraumaLimit(update, v, pathName);
 
 		// update page position
 		update = GoToNextPage(update, AttrParseString(v, "builder-nextPage", "Skills"), "0");

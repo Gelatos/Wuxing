@@ -75,22 +75,25 @@ function GetCharacterStatGrowths(currentGrowths, bonusGrowths, ancestryData) {
 	finalGrowths["hp"] += (ancestryData["hp"] * 100) + finalGrowths["CON"];
 	finalGrowths["spellForce"] += ancestryData["spellForce"] * 100;
 
-	if (finalGrowths["spellForce"] > (defaultStats.spellForceLimit * 100)) {
-		finalGrowths["spellForce"] = defaultStats.spellForceLimit * 100;
-	}
-	if (finalGrowths["kiCharge"] > (defaultStats.kiChargeLimit * 100)) {
-		finalGrowths["kiCharge"] = defaultStats.kiChargeLimit * 100;
-	}
-
 	let output = {
 		scores: MultiplyGrowths(finalGrowths, 0.01),
 		modulus: ModulusGrowths(finalGrowths, 100)
 	};
 
+	// set caps
+	if (output.scores["spellForce"] > defaultStats.spellForceLimit) {
+		output.scores["spellForce"] = defaultStats.spellForceLimit;
+		output.modulus["spellForce"] = 0;
+	}
+	if (output.scores["kiCharge"] > defaultStats.kiChargeLimit) {
+		output.scores["kiCharge"] = defaultStats.kiChargeLimit;
+		output.modulus["kiCharge"] = 0;
+	}
+
 	// update more scores
 	output.scores["vitality"] += GetAbilityScoreMod(output.scores["CON"]);
-	output.scores["ki_max"] = defaultStats.kiLimit + (5 * output.scores["spellForce"]) + bonusGrowths["statbonus_ki"];
-	output.scores["branchpoints"] = Math.floor(output.scores["spellForce"] * 0.5) + bonusGrowths["statbonus_branchpoints"];
+	output.scores["ki_max"] = defaultStats.kiLimit + (5 * output.scores["spellForce"]) + bonusGrowths["kiLimit"];
+	output.scores["branchpoints"] = Math.floor(output.scores["spellForce"] * 0.5) + bonusGrowths["branchpoints"];
 	return output;
 }
 
@@ -241,6 +244,80 @@ function SetCharacterChakra(update, attrArray) {
 
 	let defaultStats = GetStatisticsDefaults();
 	update["chakra_max"] = defaultStats.chakra + AttrParseInt(attrArray, "statbonus_chakra");
+	return update;
+}
+
+on("change:statbonus_armor", function () {
+
+	UpdateCharacterArmor();
+});
+
+function UpdateCharacterArmor() {
+
+	let mod_attrs = ["statbonus_armor"];
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		update = SetCharacterArmor(update, v);
+
+		setAttrs(update, { silent: true });
+	});
+}
+
+function SetCharacterArmor(update, attrArray) {
+
+	update["armor"] = AttrParseInt(attrArray, "statbonus_armor");
+	return update;
+}
+
+on("change:statbonus_block", function () {
+
+	UpdateCharacterBlock();
+});
+
+function UpdateCharacterBlock() {
+
+	let mod_attrs = ["statbonus_block"];
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		update = SetCharacterBlock(update, v);
+
+		setAttrs(update, { silent: true });
+	});
+}
+
+function SetCharacterBlock(update, attrArray) {
+
+	update["block"] = AttrParseInt(attrArray, "statbonus_block");
+	return update;
+}
+
+on("change:statbonus_trauma", function () {
+
+	UpdateCharacterTraumaLimit();
+});
+
+function UpdateCharacterTraumaLimit() {
+
+	let mod_attrs = ["statbonus_trauma", "builder-basePath"];
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let basePath = AttrParseString(v, "builder-basePath", "Common");
+		update = SetCharacterTraumaLimit(update, v, basePath);
+
+		setAttrs(update, { silent: true });
+	});
+}
+
+function SetCharacterTraumaLimit(update, attrArray, path) {
+
+	let defaultStats = GetStatisticsDefaults(path);
+	update["trauma_max"] = defaultStats.traumaLimit + AttrParseInt(attrArray, "statbonus_trauma");
 	return update;
 }
 
