@@ -253,7 +253,7 @@ function SetBonusGrowthFieldArray(attrArray) {
 	output.kiCharge = AttrParseInt(attrArray, `${fieldName}kiCharge`);
 	output.spellForce = AttrParseInt(attrArray, `${fieldName}spellForce`);
 
-	output.branchPoints = AttrParseInt(attrArray, `${fieldName}branchpoints`);
+	output.branchpoints = AttrParseInt(attrArray, `${fieldName}branchpoints`);
 	output.kiLimit = AttrParseInt(attrArray, `${fieldName}ki`);
 
 	return output;

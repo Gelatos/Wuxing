@@ -9326,7 +9326,7 @@ function SetBonusGrowthFieldArray(attrArray) {
 	output.kiCharge = AttrParseInt(attrArray, `${fieldName}kiCharge`);
 	output.spellForce = AttrParseInt(attrArray, `${fieldName}spellForce`);
 
-	output.branchPoints = AttrParseInt(attrArray, `${fieldName}branchpoints`);
+	output.branchpoints = AttrParseInt(attrArray, `${fieldName}branchpoints`);
 	output.kiLimit = AttrParseInt(attrArray, `${fieldName}ki`);
 
 	return output;
@@ -11004,6 +11004,7 @@ function SetCharacterStatGrowths(update, currentGrowths, bonusGrowths, ancestryD
 	update["character-baseGrowthStats"] = JSON.stringify(currentGrowths);
 
 	let growths = GetCharacterStatGrowths(currentGrowths, bonusGrowths, ancestryData);
+	console.log("bonusGrowths: " + JSON.stringify(bonusGrowths));
 	update["ki_max"] = growths.scores["ki_max"];
 	update["branchpoints_max"] = growths.scores["branchpoints"];
 
