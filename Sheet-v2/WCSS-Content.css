@@ -95,6 +95,12 @@ input.wuxFlexTableItemData
     max-width: 25px;
 }
 
+input[type=hidden].wuxErrorField-flag[value="1"] + span.wuxFlexTableItemData,
+input[type=hidden].wuxErrorField-flag[value="1"] + span.wuxFlexTableItemData span
+{
+    color: red;
+}
+
 input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 {
     background: red;

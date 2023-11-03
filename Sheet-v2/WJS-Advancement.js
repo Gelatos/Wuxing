@@ -89,6 +89,7 @@ var update_advancement_submit = function () {
 	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
 	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
 	mod_attrs = mod_attrs.concat(GetDerivedBonusStatsList());
+	mod_attrs = mod_attrs.concat(GetBranchesTrainingList());
 
 	getAttrs(mod_attrs, function (v) {
 
@@ -274,7 +275,7 @@ var update_advancement_submit = function () {
 		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
 		update["advancement-advancementGrowthsTotal"] = JSON.stringify(advancementGrowthsTotal);
 		let endingStatistics = GetCharacterStatGrowthTotals(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
-		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray);
+		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray, v);
 		v = SetAbilityScoreUpdate(v, "statscore_", update);
 		v = SetAbilityScoreUpdate(v, "", update);
 		coreData = SetAbilityScoreUpdate(v, "", update);
@@ -386,6 +387,7 @@ var update_advancement_restart = function () {
 	let mod_attrs = ["advancement-level-total", "builder-baseAbilityScores", "builder-ancestry"];
 	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
 	mod_attrs = mod_attrs.concat(GetDerivedBonusStatsList());
+	mod_attrs = mod_attrs.concat(GetBranchesTrainingList());
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -426,7 +428,7 @@ var update_advancement_restart = function () {
 		update["advancement-advancementGrowthsTotal"] = JSON.stringify(emptyGrowths);
 		let endingStatistics = GetCharacterStatGrowthTotals(ancestryData, baseAbilityScores, emptyGrowths, emptyGrowths);
 		let bonusGrowths = SetBonusGrowthFieldArray(v);
-		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray);
+		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray, v);
 		v = SetAbilityScoreUpdate(v, "statscore_", update);
 		v = SetAbilityScoreUpdate(v, "", update);
 		update = SetDerivedStats(update, v, ancestryData, growthArray);

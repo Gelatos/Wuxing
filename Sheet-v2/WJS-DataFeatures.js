@@ -333,3 +333,50 @@ function GetClassesList(isFields) {
 	}
 }
 
+function GetBranchesInfo(name) {
+	switch (name.toLowerCase()) {
+		case "health":
+			return { "name": "Health", "group": "Wood", "isSpecial": "false", "description": "undefined" }
+		case "wind":
+			return { "name": "Wind", "group": "Wood", "isSpecial": "false", "description": "undefined" }
+		case "poison":
+			return { "name": "Poison", "group": "Wood", "isSpecial": "true", "description": "undefined" }
+		case "light":
+			return { "name": "Light", "group": "Fire", "isSpecial": "false", "description": "undefined" }
+		case "smoke":
+			return { "name": "Smoke", "group": "Fire", "isSpecial": "false", "description": "undefined" }
+		case "soul":
+			return { "name": "Soul", "group": "Fire", "isSpecial": "false", "description": "undefined" }
+		case "power":
+			return { "name": "Power", "group": "Earth", "isSpecial": "false", "description": "undefined" }
+		case "shadow":
+			return { "name": "Shadow", "group": "Earth", "isSpecial": "false", "description": "undefined" }
+		case "gravity":
+			return { "name": "Gravity", "group": "Earth", "isSpecial": "true", "description": "undefined" }
+		case "lightning":
+			return { "name": "Lightning", "group": "Metal", "isSpecial": "false", "description": "undefined" }
+		case "force":
+			return { "name": "Force", "group": "Metal", "isSpecial": "false", "description": "undefined" }
+		case "blood":
+			return { "name": "Blood", "group": "Metal", "isSpecial": "true", "description": "undefined" }
+		case "restoration":
+			return { "name": "Restoration", "group": "Water", "isSpecial": "false", "description": "undefined" }
+		case "storm":
+			return { "name": "Storm", "group": "Water", "isSpecial": "false", "description": "undefined" }
+		case "time":
+			return { "name": "Time", "group": "Water", "isSpecial": "true", "description": "undefined" }
+		default:
+			return { "name": "", "group": "", "isSpecial": "", "description": "" }
+
+	}
+}
+
+function GetBranchesList(isFields) {
+	if (isFields) {
+		return ["health", "wind", "poison", "light", "smoke", "soul", "power", "shadow", "gravity", "lightning", "force", "blood", "restoration", "storm", "time"];
+	}
+	else {
+		return ["Health", "Wind", "Poison", "Light", "Smoke", "Soul", "Power", "Shadow", "Gravity", "Lightning", "Force", "Blood", "Restoration", "Storm", "Time"];
+	}
+}
+

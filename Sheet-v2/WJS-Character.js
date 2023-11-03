@@ -19,17 +19,18 @@ function UpdateCharacterStatGrowths() {
 	mod_attrs = mod_attrs.concat(GetSkillTrainingFieldList());
 	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
 	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
+	mod_attrs = mod_attrs.concat(GetBranchesTrainingList());
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
 
 		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
 		let ancestryData = GetAncestryInfo(ancestryName);
-		
+
 		let startingStatistics = AttrParseJSON(v, "character-baseGrowthStats");
 		let bonusGrowths = SetBonusGrowthFieldArray(v);
 
-		update = SetCharacterStatGrowths(update, startingStatistics, bonusGrowths, ancestryData, GetGrowthList(true));
+		update = SetCharacterStatGrowths(update, startingStatistics, bonusGrowths, ancestryData, GetGrowthList(true), v);
 		v = SetAbilityScoreUpdate(v, "statscore_", update);
 		v = SetAbilityScoreUpdate(v, "", update);
 		coreData = SetAbilityScoreUpdate(v, "", update);
@@ -41,13 +42,14 @@ function UpdateCharacterStatGrowths() {
 
 }
 
-function SetCharacterStatGrowths(update, currentGrowths, bonusGrowths, ancestryData, growthList) {
+function SetCharacterStatGrowths(update, currentGrowths, bonusGrowths, ancestryData, growthList, attrArray) {
 
 	update["character-baseGrowthStats"] = JSON.stringify(currentGrowths);
 
 	let growths = GetCharacterStatGrowths(currentGrowths, bonusGrowths, ancestryData);
 	update["ki_max"] = growths.scores["ki_max"];
 	update["branchpoints_max"] = growths.scores["branchpoints"];
+	update["branchpoints"] = growths.scores["branchpoints"] - GetBranchPointsTotal(attrArray);
 
 	// iterate over the scores and update them
 	let abilityScoresList = GetAbilityScoreList(true);
@@ -121,7 +123,7 @@ function UpdateCharacterProficiencyBonus() {
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
-		
+
 		let coreData = SetCoreDataFieldArray(v, "");
 		coreData["pb"] = AttrParseInt(v, "statbonus_pb") + GetProfBonusMod(AttrParseInt(v, "base_level"));
 		update["pb"] = coreData["pb"];
@@ -149,7 +151,7 @@ function UpdateCharacterDerivedStat(fieldName) {
 	mod_attrs = mod_attrs.concat(GetAbilityScoreList(true));
 	let growthList = [];
 
-	switch(fieldName) {
+	switch (fieldName) {
 		case "initiative": mod_attrs = mod_attrs.concat(["statbonus_initiative", "QCK"]); growthList.push("QCK"); break;
 		case "power": mod_attrs = mod_attrs.concat(["statbonus_power", "STR"]); growthList.push("STR"); console.log("POWER"); break;
 		case "barrier": mod_attrs = mod_attrs.concat(["statbonus_barrier", "WIL"]); growthList.push("WIL"); break;
@@ -191,6 +193,51 @@ function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 	}
 
 	return update;
+}
+
+
+
+
+// ======== Branches 
+function GetBranchesTrainingList() {
+	return GetSectionIdNameFromArray(`branch-`, "", GetBranchesList(true));
+}
+
+
+
+// ======== Branch Listeners
+on("change:branch-health change:branch-wind change:branch-poison change:branch-light change:branch-smoke change:branch-soul change:branch-power change:branch-shadow change:branch-gravity change:branch-lightning change:branch-force change:branch-blood change:branch-restoration change:branch-storm change:branch-time ", function (eventinfo) {
+
+	UpdateCharacterBranch(eventinfo.newValue);
+});
+//-- end
+
+function UpdateCharacterBranch(branchValue) {
+
+	let mod_attrs = ["branchpoints"];
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let branchpoints = AttrParseInt(v, "branchpoints");
+		branchpoints += (branchValue == "0" || branchValue == "") ? 1 : -1;
+
+		update["branchpoints"] = branchpoints;
+		update[`branchpoints-error`] = branchpoints < 0 ? "1" : "0";
+
+		setAttrs(update, { silent: true });
+	});
+
+}
+
+function GetBranchPointsTotal(attrArray) {
+
+	let branches = GetBranchesList(true);
+	let total = 0;
+	for (let i = 0; i < branches.length; i++) {
+		total += attrArray[`branch-${branches[i]}`] == "on" ? 1 : 0;
+	}
+	return total;
 }
 
 
@@ -337,7 +384,7 @@ function GetBonusSkillsList() {
 
 
 function UpdateCharacterSingleSkill(fieldName) {
-	
+
 	UpdateCharacterSkills([GetFieldNameAttribute(fieldName)]);
 }
 
