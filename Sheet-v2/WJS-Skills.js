@@ -1,3 +1,7 @@
+function GetSkillTrainingFieldList() {
+	return ["skills-baseSkills", "skills-baseChoiceSkills", "skills-baseExtraSkills"];
+}
+
 // ======== Back Button
 
 on("change:skills-button-back", function () {
@@ -16,7 +20,7 @@ var update_skills_back = function () {
 		let baseChoiceSkills = AttrParseJSON(v, "skills-baseChoiceSkills");
 
 		if (baseSkills != "" || baseChoiceSkills != "") {
-			let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
+			let physSkillsArray = GetMartialSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
 			let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
 
 			if (baseSkills != "") {
@@ -67,10 +71,10 @@ var update_skills_submit = function () {
 	let abilityScoreArray = GetAbilityScoreList(true);
 	let defPhysSkillsArray = GetDefensivePhysSkillsList(true);
 	let defSensSkillsArray = GetDefensiveSensSkillsList(true);
-	let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
+	let physSkillsArray = GetMartialSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
 	let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
 	let choiceSkillsArray = physSkillsArray.concat(mentSkillsArray);
-	let allSkillsArray = defPhysSkillsArray.concat(defSensSkillsArray).concat(choiceSkillsArray);
+	let allSkillsArray = GetAllSkillsList(true)
 
 	let defPhysFieldArray = GetSectionIdNameFromArray(`skills-trainingDefensivePhys-`, "", defPhysSkillsArray);
 	let defSensFieldArray = GetSectionIdNameFromArray(`skills-trainingDefensiveSens-`, "", defSensSkillsArray);
@@ -167,7 +171,7 @@ on("change:skills-defensive-reset", function () {
 	update_skills_Defensive_skills_reset();
 });
 
-on("change:skills-trainingphysical-brawling change:skills-trainingphysical-finesse change:skills-trainingphysical-marksmanship change:skills-trainingphysical-might change:skills-trainingphysical-polearm change:skills-trainingphysical-throw change:skills-trainingphysical-acrobatics change:skills-trainingphysical-athletics change:skills-trainingphysical-fortitude change:skills-trainingphysical-physique change:skills-trainingphysical-palming change:skills-trainingphysical-stealth change:skills-trainingphysical-artisan change:skills-trainingphysical-cook change:skills-trainingphysical-herbalism change:skills-trainingphysical-mechanical change:skills-trainingphysical-medicine change:skills-trainingphysical-pilot", function (eventinfo) {
+on("change:skills-trainingphysical-brawling change:skills-trainingphysical-finesse change:skills-trainingphysical-marksmanship change:skills-trainingphysical-might change:skills-trainingphysical-polearm change:skills-trainingphysical-throw change:skills-trainingphysical-acrobatics change:skills-trainingphysical-athletics change:skills-trainingphysical-fortitude change:skills-trainingphysical-legerdemain change:skills-trainingphysical-physique change:skills-trainingphysical-stealth change:skills-trainingphysical-artisan change:skills-trainingphysical-cook change:skills-trainingphysical-heal change:skills-trainingphysical-herbalism change:skills-trainingphysical-mechanical change:skills-trainingphysical-pilot", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -180,7 +184,7 @@ on("change:skills-physical-reset", function () {
 	update_skills_physical_skills_reset();
 });
 
-on("change:skills-trainingmental-assault change:skills-trainingmental-conjure change:skills-trainingmental-enchant change:skills-trainingmental-ethereal change:skills-trainingmental-field change:skills-trainingmental-structure change:skills-trainingmental-arcana change:skills-trainingmental-culture change:skills-trainingmental-history change:skills-trainingmental-investigation change:skills-trainingmental-nature change:skills-trainingmental-tracking change:skills-trainingmental-deception change:skills-trainingmental-etiquette change:skills-trainingmental-intimidation change:skills-trainingmental-leadership change:skills-trainingmental-negotiation change:skills-trainingmental-performance", function (eventinfo) {
+on("change:skills-trainingmental-assault change:skills-trainingmental-conjure change:skills-trainingmental-enchant change:skills-trainingmental-ethereal change:skills-trainingmental-field change:skills-trainingmental-structure change:skills-trainingmental-academics change:skills-trainingmental-culture change:skills-trainingmental-investigation change:skills-trainingmental-nature change:skills-trainingmental-tracking change:skills-trainingmental-vocation change:skills-trainingmental-charm change:skills-trainingmental-deception change:skills-trainingmental-intimidation change:skills-trainingmental-leadership change:skills-trainingmental-negotiation change:skills-trainingmental-performance", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -193,7 +197,7 @@ on("change:skills-mental-reset", function () {
 	update_skills_mental_skills_reset();
 });
 
-on("change:skills-trainingchoice-brawling change:skills-trainingchoice-finesse change:skills-trainingchoice-marksmanship change:skills-trainingchoice-might change:skills-trainingchoice-polearm change:skills-trainingchoice-throw change:skills-trainingchoice-acrobatics change:skills-trainingchoice-athletics change:skills-trainingchoice-fortitude change:skills-trainingchoice-physique change:skills-trainingchoice-palming change:skills-trainingchoice-stealth change:skills-trainingchoice-artisan change:skills-trainingchoice-cook change:skills-trainingchoice-herbalism change:skills-trainingchoice-mechanical change:skills-trainingchoice-medicine change:skills-trainingchoice-pilot change:skills-trainingchoice-assault change:skills-trainingchoice-conjure change:skills-trainingchoice-enchant change:skills-trainingchoice-ethereal change:skills-trainingchoice-field change:skills-trainingchoice-structure change:skills-trainingchoice-arcana change:skills-trainingchoice-culture change:skills-trainingchoice-history change:skills-trainingchoice-investigation change:skills-trainingchoice-nature change:skills-trainingchoice-tracking change:skills-trainingchoice-deception change:skills-trainingchoice-etiquette change:skills-trainingchoice-intimidation change:skills-trainingchoice-leadership change:skills-trainingchoice-negotiation change:skills-trainingchoice-performance", function (eventinfo) {
+on("change:skills-trainingchoice-brawling change:skills-trainingchoice-finesse change:skills-trainingchoice-marksmanship change:skills-trainingchoice-might change:skills-trainingchoice-polearm change:skills-trainingchoice-throw change:skills-trainingchoice-acrobatics change:skills-trainingchoice-athletics change:skills-trainingchoice-fortitude change:skills-trainingchoice-legerdemain change:skills-trainingchoice-physique change:skills-trainingchoice-stealth change:skills-trainingchoice-artisan change:skills-trainingchoice-cook change:skills-trainingchoice-heal change:skills-trainingchoice-herbalism change:skills-trainingchoice-mechanical change:skills-trainingchoice-pilot change:skills-trainingchoice-assault change:skills-trainingchoice-conjure change:skills-trainingchoice-enchant change:skills-trainingchoice-ethereal change:skills-trainingchoice-field change:skills-trainingchoice-structure change:skills-trainingchoice-academics change:skills-trainingchoice-culture change:skills-trainingchoice-investigation change:skills-trainingchoice-nature change:skills-trainingchoice-tracking change:skills-trainingchoice-vocation change:skills-trainingchoice-charm change:skills-trainingchoice-deception change:skills-trainingchoice-intimidation change:skills-trainingchoice-leadership change:skills-trainingchoice-negotiation change:skills-trainingchoice-performance", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -205,7 +209,7 @@ on("change:skills-choice-reset", function () {
 
 	update_skills_choice_skills_reset();
 });
-// --end
+// -- End
 
 var update_skills_defensivePhys_skills = function () {
 	update_skills_training("DefensivePhys", GetDefensivePhysSkillsList(true));
@@ -216,7 +220,7 @@ var update_skills_defensiveSens_skills = function () {
 }
 
 var update_skills_physical_skills = function () {
-	update_skills_training("Physical", GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true)));
+	update_skills_training("Physical", GetMartialSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true)));
 }
 
 var update_skills_mental_skills = function () {
@@ -251,7 +255,7 @@ var update_skills_training = function (fieldName, skillsArray) {
 var update_skills_choice_skills = function () {
 
 	let mod_attrs = [`skills-pointsChoice_max`];
-	let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
+	let physSkillsArray = GetMartialSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
 	let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
 
 	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`skills-trainingPhysical-`, "", physSkillsArray));
@@ -295,7 +299,7 @@ var update_skills_defensive_skills_reset = function () {
 }
 
 var update_skills_physical_skills_reset = function () {
-	update_skills_reset("Physical", GetCombatSkillsList(true));
+	update_skills_reset("Physical", GetMartialSkillsList(true));
 	update_skills_reset("Physical", GetBodySkillsList(true));
 	update_skills_reset("Physical", GetTechnicalSkillsList(true));
 }
@@ -330,7 +334,7 @@ var update_skills_reset = function (fieldName, skillsArray) {
 
 var update_skills_choice_skills_reset = function () {
 	let mod_attrs = [`skills-pointsChoice_max`];
-	let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
+	let physSkillsArray = GetMartialSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
 	let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
 
 	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(`skills-trainingPhysical-`, "", physSkillsArray));

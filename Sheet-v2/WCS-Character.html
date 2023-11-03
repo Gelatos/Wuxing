@@ -172,8 +172,8 @@
 		</div>
 
 		<div class="wuxMainContent">
-		    
-		    <div class="segment-combat wuxSegment">
+
+			<div class="segment-combat wuxSegment">
 				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-combat" checked="checked">
 				<div class="wuxTabHeader"><span class="wuxInnerHeader">Combat</span></div>
 
@@ -187,7 +187,7 @@
 				</div>
 			</div>
 
-		    <div class="segment-gear wuxSegment">
+			<div class="segment-gear wuxSegment">
 				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-gear" checked="checked">
 				<div class="wuxTabHeader"><span class="wuxInnerHeader">Gear</span></div>
 
@@ -200,7 +200,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="segment-chat wuxSegment">
 				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-chat" checked="checked">
 				<div class="wuxTabHeader"><span class="wuxInnerHeader">Chat</span></div>
@@ -502,8 +502,8 @@
 					</div>
 				</div>
 			</div>
-			
-		    <div class="segment-learnedTech wuxSegment">
+
+			<div class="segment-learnedTech wuxSegment">
 				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-learnedTech" checked="checked">
 				<div class="wuxTabHeader"><span class="wuxInnerHeader">Learned Techniques</span></div>
 
@@ -511,12 +511,12 @@
 					<div class="tab-learnedTechOptions wuxTab">
 						<div class="learnedTech-GeneralStats wuxSectionBlock wuxLayoutItem">
 							<div class="wuxSectionContent">
-							    <div class="wuxMultiRow">
-    								<div class="wuxButton">
-    									<input type="checkbox" name="attr_character-button-techniques">
-    									<span>Select Techniques</span>
-    								</div>
-    							</div>
+								<div class="wuxMultiRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_character-button-techniques">
+										<span>Select Techniques</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -1394,10 +1394,10 @@
 							</div>
 						</div>
 					</div>
-					<div class="tab-combat wuxTab">
+					<div class="tab-martial wuxTab">
 						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
 							<div class="wuxSectionContent">
-								<div class="wuxHeader">Combat Skills</div>
+								<div class="wuxHeader">Martial Skills</div>
 								<div class="wuxFlexTable">
 									<div class="wuxFlexTableItemGroup wuxNoPadding">
 										<div class="wuxFlexTable">
@@ -1738,6 +1738,29 @@
 													</div>
 													<div class="wuxFlexTableItemGroup">
 
+														<span class="wuxFlexTableItemHeader">Legerdemain</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">QCK</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_legerdemain">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_legerdemain" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+
 														<span class="wuxFlexTableItemHeader">Physique</span>
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
@@ -1751,29 +1774,6 @@
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
 																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_physique" placeholder="0"></span>
-															</div>
-														</div>
-													</div>
-
-												</div>
-											</div>
-											<div class="wuxFlexTableItemGroup wuxNoPadding">
-												<div class="wuxFlexTable">
-													<div class="wuxFlexTableItemGroup">
-
-														<span class="wuxFlexTableItemHeader">Palming</span>
-														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Ability</span>
-																<span class="wuxFlexTableItemData">QCK</span>
-															</div>
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_skill_palming">0</span>
-															</div>
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_palming" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -1816,7 +1816,7 @@
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 
-														<span class="wuxFlexTableItemHeader">Arcana</span>
+														<span class="wuxFlexTableItemHeader">Academics</span>
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Ability</span>
@@ -1824,11 +1824,11 @@
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_skill_arcana">0</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_academics">0</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_arcana" placeholder="0"></span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_academics" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -1857,24 +1857,6 @@
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 
-														<span class="wuxFlexTableItemHeader">History</span>
-														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Ability</span>
-																<span class="wuxFlexTableItemData">INT</span>
-															</div>
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_skill_history">0</span>
-															</div>
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_history" placeholder="0"></span>
-															</div>
-														</div>
-													</div>
-													<div class="wuxFlexTableItemGroup">
-
 														<span class="wuxFlexTableItemHeader">Investigation</span>
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
@@ -1891,11 +1873,6 @@
 															</div>
 														</div>
 													</div>
-
-												</div>
-											</div>
-											<div class="wuxFlexTableItemGroup wuxNoPadding">
-												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 
 														<span class="wuxFlexTableItemHeader">Nature</span>
@@ -1914,6 +1891,11 @@
 															</div>
 														</div>
 													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 
 														<span class="wuxFlexTableItemHeader">Tracking</span>
@@ -1929,6 +1911,24 @@
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
 																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_tracking" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Vocation</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">INT</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_vocation">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_vocation" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -1953,11 +1953,29 @@
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 
-														<span class="wuxFlexTableItemHeader">Deception</span>
+														<span class="wuxFlexTableItemHeader">Charm</span>
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Ability</span>
 																<span class="wuxFlexTableItemData">CHA</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_charm">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_charm" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
+														<span class="wuxFlexTableItemHeader">Deception</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">PER</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
@@ -1966,24 +1984,6 @@
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
 																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_deception" placeholder="0"></span>
-															</div>
-														</div>
-													</div>
-													<div class="wuxFlexTableItemGroup">
-
-														<span class="wuxFlexTableItemHeader">Etiquette</span>
-														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Ability</span>
-																<span class="wuxFlexTableItemData">PER</span>
-															</div>
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_skill_etiquette">0</span>
-															</div>
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_etiquette" placeholder="0"></span>
 															</div>
 														</div>
 													</div>
@@ -2039,7 +2039,7 @@
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Ability</span>
-																<span class="wuxFlexTableItemData">CHA</span>
+																<span class="wuxFlexTableItemData">PER</span>
 															</div>
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Score</span>
@@ -2131,6 +2131,24 @@
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 
+														<span class="wuxFlexTableItemHeader">Heal</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Ability</span>
+																<span class="wuxFlexTableItemData">QCK</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_skill_heal">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_heal" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+
 														<span class="wuxFlexTableItemHeader">Herbalism</span>
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
@@ -2147,6 +2165,11 @@
 															</div>
 														</div>
 													</div>
+
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 
 														<span class="wuxFlexTableItemHeader">Mechanical</span>
@@ -2162,29 +2185,6 @@
 															<div class="wuxFlexTableItemGroup">
 																<span class="wuxFlexTableItemSubheader">Bonus</span>
 																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_mechanical" placeholder="0"></span>
-															</div>
-														</div>
-													</div>
-
-												</div>
-											</div>
-											<div class="wuxFlexTableItemGroup wuxNoPadding">
-												<div class="wuxFlexTable">
-													<div class="wuxFlexTableItemGroup">
-
-														<span class="wuxFlexTableItemHeader">Medicine</span>
-														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Ability</span>
-																<span class="wuxFlexTableItemData">PER</span>
-															</div>
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Score</span>
-																<span class="wuxFlexTableItemData" name="attr_skill_medicine">0</span>
-															</div>
-															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Bonus</span>
-																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_medicine" placeholder="0"></span>
 															</div>
 														</div>
 													</div>

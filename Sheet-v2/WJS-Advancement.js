@@ -81,14 +81,14 @@ on("change:advancement-button-submit", function () {
 var update_advancement_submit = function () {
 
 	let growthArray = GetGrowthList(true);
-	let skillsList = GetDefensiveSkillsList(true).concat(GetCombatSkillsList(true)).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
-	skillsList = skillsList.concat(GetMagicSkillsList(true)).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
+	let skillsList = GetAllSkillsList(true);
 
-	let mod_attrs = ["base_level", "statbonus_pb", "skills-baseSkills", "skills-baseChoiceSkills", "skills-baseExtraSkills", "builder-ancestry", "builder-baseAbilityScores", "advancement-level-total", "builder-baseGrowths", "builder-baseGrowthsTotal", "advancement-advancementGrowthsTotal", "branchpoints_bonus"];
+	let mod_attrs = ["base_level", "statbonus_pb", "builder-ancestry", "builder-baseAbilityScores", "advancement-level-total", "builder-baseGrowths", "builder-baseGrowthsTotal", "advancement-advancementGrowthsTotal", "branchpoints_bonus"];
 	mod_attrs = mod_attrs.concat(growthArray);
+	mod_attrs = mod_attrs.concat(GetSkillTrainingFieldList());
 	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
 	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
-	mod_attrs = mod_attrs.concat(GetDerivedStatsList());
+	mod_attrs = mod_attrs.concat(GetDerivedBonusStatsList());
 
 	getAttrs(mod_attrs, function (v) {
 
@@ -119,7 +119,7 @@ var update_advancement_submit = function () {
 			advancementGrowthsTotal = CreateGrowthsArrayData();
 		}
 
-		let startingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+		let startingStatistics = GetCharacterStatGrowthTotals(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
 		let bonusGrowths = SetBonusGrowthFieldArray(v);
 		let coreData = SetCoreDataFieldArray(v, "");
 
@@ -273,10 +273,11 @@ var update_advancement_submit = function () {
 		baseGrowthsTotal = AddGrowths(baseGrowthsTotal, MultiplyGrowths(baseGrowths, totalLevel - baseLevel));
 		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
 		update["advancement-advancementGrowthsTotal"] = JSON.stringify(advancementGrowthsTotal);
-		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+		let endingStatistics = GetCharacterStatGrowthTotals(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
 		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray);
 		v = SetAbilityScoreUpdate(v, "statscore_", update);
 		v = SetAbilityScoreUpdate(v, "", update);
+		coreData = SetAbilityScoreUpdate(v, "", update);
 		update = SetDerivedStats(update, v, ancestryData, growthArray);
 		update = SetLevelUpData(update, 
 			GetCharacterStatGrowths(startingStatistics, bonusGrowths, ancestryData),
@@ -384,7 +385,7 @@ var update_advancement_restart = function () {
 	let growthArray = GetGrowthList(true);
 	let mod_attrs = ["advancement-level-total", "builder-baseAbilityScores", "builder-ancestry"];
 	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
-	mod_attrs = mod_attrs.concat(GetDerivedStatsList());
+	mod_attrs = mod_attrs.concat(GetDerivedBonusStatsList());
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -423,7 +424,7 @@ var update_advancement_restart = function () {
 		update["base_level"] = 0;
 		update["builder-baseGrowthsTotal"] = JSON.stringify(emptyGrowths);
 		update["advancement-advancementGrowthsTotal"] = JSON.stringify(emptyGrowths);
-		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, emptyGrowths, emptyGrowths);
+		let endingStatistics = GetCharacterStatGrowthTotals(ancestryData, baseAbilityScores, emptyGrowths, emptyGrowths);
 		let bonusGrowths = SetBonusGrowthFieldArray(v);
 		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray);
 		v = SetAbilityScoreUpdate(v, "statscore_", update);

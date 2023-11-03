@@ -6,23 +6,23 @@ function GetSectionIdName(sectionName, currentID, variableName) {
         variableName = variableName.substr(4);
     }
 
-	if (currentID != "") {
-		if (!variableName.startsWith("_")) {
-			variableName = "_" + variableName;
-		}
-		if (!sectionName.endsWith("_")) {
-			sectionName += "_";
-		}
-	}
+    if (currentID != "") {
+        if (!variableName.startsWith("_")) {
+            variableName = "_" + variableName;
+        }
+        if (!sectionName.endsWith("_")) {
+            sectionName += "_";
+        }
+    }
     return sectionName + currentID + variableName;
 }
 
 function GetSectionIdNameFromArray(sectionName, currentID, variableNames) {
-	let output = [];
-	for (let i = 0; i < variableNames.length; i++) {
-		output.push(GetSectionIdName(sectionName, currentID, variableNames[i]));
-	}
-	return output;
+    let output = [];
+    for (let i = 0; i < variableNames.length; i++) {
+        output.push(GetSectionIdName(sectionName, currentID, variableNames[i]));
+    }
+    return output;
 }
 
 function ToCamelCase(inputString) {
@@ -30,17 +30,27 @@ function ToCamelCase(inputString) {
     if (inputString == "") {
         return inputString;
     }
-    
+
     // Split the input string by spaces and iterate through the words
     let words = inputString.split(' ');
     words[0] = words[0][0].toLowerCase() + words[0].slice(1);
     for (let i = 1; i < words.length; i++) {
-      // Capitalize the first letter of each word (except the first word)
-      words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+        // Capitalize the first letter of each word (except the first word)
+        words[i] = words[i][0].toUpperCase() + words[i].slice(1);
     }
-  
+
     return words.join('');
-  }
+}
+
+function GetFieldNameAttribute(fieldName) {
+    if (fieldName.indexOf("_") >= 0) {
+		fieldName = fieldName.match(/_([^_]*)$/)[1];
+	}
+    if (fieldName.indexOf("-") >= 0) {
+		fieldName = fieldName.match(/-(?!.*-)(.*)$/)[1];
+	}
+    return fieldName;
+}
 
 // ====== Language
 

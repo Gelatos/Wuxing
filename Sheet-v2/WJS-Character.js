@@ -2,8 +2,43 @@
 
 function GetStatGrowthBonusList() {
 	let growthArray = GetGrowthList(true);
-	let output = ["statbonus_branchpoints", "statbonus_ki", "statbonus_kiCharge"];
+	let output = ["statbonus_branchpoints", "statbonus_ki"];
 	return output.concat(GetSectionIdNameFromArray(`statbonus_`, "", growthArray));
+}
+
+on("change:statbonus_CON change:statbonus_DEX change:statbonus_QCK change:statbonus_STR change:statbonus_CHA change:statbonus_INT change:statbonus_PER change:statbonus_WIL change:statbonus_hp change:statbonus_vitality change:statbonus_kiCharge change:statbonus_spellForce change:statbonus_branchpoints change:statbonus_ki", function () {
+
+	UpdateCharacterStatGrowths();
+});
+
+function UpdateCharacterStatGrowths() {
+
+	let mod_attrs = ["pb", "builder-ancestry", "base_level", "character-baseGrowthStats"];
+	mod_attrs = mod_attrs.concat(GetGrowthList(true));
+	mod_attrs = mod_attrs.concat(GetDerivedBonusStatsList());
+	mod_attrs = mod_attrs.concat(GetSkillTrainingFieldList());
+	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
+	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
+		let ancestryData = GetAncestryInfo(ancestryName);
+		
+		let startingStatistics = AttrParseJSON(v, "character-baseGrowthStats");
+		let bonusGrowths = SetBonusGrowthFieldArray(v);
+
+		update = SetCharacterStatGrowths(update, startingStatistics, bonusGrowths, ancestryData, GetGrowthList(true));
+		v = SetAbilityScoreUpdate(v, "statscore_", update);
+		v = SetAbilityScoreUpdate(v, "", update);
+		coreData = SetAbilityScoreUpdate(v, "", update);
+		update = SetDerivedStats(update, v, ancestryData, GetGrowthList(true));
+		update = SetCharacterSkillsUpdateData(update, v, GetAllSkillsList(true), coreData);
+
+		setAttrs(update, { silent: true });
+	});
+
 }
 
 function SetCharacterStatGrowths(update, currentGrowths, bonusGrowths, ancestryData, growthList) {
@@ -20,12 +55,12 @@ function SetCharacterStatGrowths(update, currentGrowths, bonusGrowths, ancestryD
 	for (let i = 0; i < growthList.length; i++) {
 		name = growthList[i];
 
-		update[`statscore_${name}`] = `${scores[name]}.${(modulus[name] < 10) ? `0${modulus[name]}` : modulus[name]}`;
+		update[`statscore_${name}`] = `${growths.scores[name]}.${(growths.modulus[name] < 10) ? `0${growths.modulus[name]}` : growths.modulus[name]}`;
 		if (abilityScoresList.includes(name)) {
-			update[name] = GetAbilityScoreMod(scores[name]);
+			update[name] = GetAbilityScoreMod(growths.scores[name]);
 		}
 		else {
-			update[`${name}_max`] = scores[name];
+			update[`${name}_max`] = growths.scores[name];
 		}
 	}
 	return update;
@@ -53,9 +88,9 @@ function GetCharacterStatGrowths(currentGrowths, bonusGrowths, ancestryData) {
 	};
 
 	// update more scores
-	output.scores["vitality"] += GetAbilityScoreMod(scores["CON"]);
-	output.scores["ki_max"] = defaultStats.kiLimit + (5 * scores["spellForce"]) + bonusGrowths["statbonus_ki"];
-	output.scores["branchpoints"] = Math.floor(scores["spellForce"] * 0.5) + bonusGrowths["statbonus_branchpoints"];
+	output.scores["vitality"] += GetAbilityScoreMod(output.scores["CON"]);
+	output.scores["ki_max"] = defaultStats.kiLimit + (5 * output.scores["spellForce"]) + bonusGrowths["statbonus_ki"];
+	output.scores["branchpoints"] = Math.floor(output.scores["spellForce"] * 0.5) + bonusGrowths["statbonus_branchpoints"];
 	return output;
 }
 
@@ -64,8 +99,70 @@ function GetCharacterStatGrowths(currentGrowths, bonusGrowths, ancestryData) {
 
 // ======== Derived Stat Setters
 
-function GetDerivedStatsList() {
-	return ["statbonus_initiative", "statbonus_power", "statbonus_stress", "statbonus_barrier", "statbonus_vitality"];
+function GetDerivedBonusStatsList() {
+	return ["statbonus_initiative", "statbonus_power", "statbonus_stress", "statbonus_barrier"];
+}
+
+on("change:statbonus_pb", function () {
+
+	UpdateCharacterProficiencyBonus();
+});
+
+function UpdateCharacterProficiencyBonus() {
+
+	let mod_attrs = ["pb", "statbonus_pb", "builder-ancestry", "base_level"];
+	mod_attrs = mod_attrs.concat(GetGrowthList(true));
+	mod_attrs = mod_attrs.concat(GetDerivedBonusStatsList());
+	mod_attrs = mod_attrs.concat(GetSkillTrainingFieldList());
+	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+		
+		let coreData = SetCoreDataFieldArray(v, "");
+		coreData["pb"] = AttrParseInt(v, "statbonus_pb") + GetProfBonusMod(AttrParseInt(v, "base_level"));
+		update["pb"] = coreData["pb"];
+
+		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
+		let ancestryData = GetAncestryInfo(ancestryName);
+
+		update = SetDerivedStats(update, v, ancestryData, GetGrowthList(true));
+		update = SetCharacterSkillsUpdateData(update, v, GetAllSkillsList(true), coreData);
+
+		setAttrs(update, { silent: true });
+	});
+}
+
+on("change:statbonus_initiative change:statbonus_power change:statbonus_stress change:statbonus_barrier", function (eventinfo) {
+
+	console.log(`updating: ${GetFieldNameAttribute(eventinfo.sourceAttribute)}`);
+	UpdateCharacterDerivedStat(GetFieldNameAttribute(eventinfo.sourceAttribute));
+
+});
+
+function UpdateCharacterDerivedStat(fieldName) {
+
+	let mod_attrs = ["pb", "builder-ancestry"];
+	mod_attrs = mod_attrs.concat(GetAbilityScoreList(true));
+	let growthList = [];
+
+	switch(fieldName) {
+		case "initiative": mod_attrs = mod_attrs.concat(["statbonus_initiative", "QCK"]); growthList.push("QCK"); break;
+		case "power": mod_attrs = mod_attrs.concat(["statbonus_power", "STR"]); growthList.push("STR"); console.log("POWER"); break;
+		case "barrier": mod_attrs = mod_attrs.concat(["statbonus_barrier", "WIL"]); growthList.push("WIL"); break;
+		case "stress": mod_attrs = mod_attrs.concat(["statbonus_stress", "WIL"]); growthList.push("WIL"); break;
+	}
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
+		let ancestryData = GetAncestryInfo(ancestryName);
+
+		update = SetDerivedStats(update, v, ancestryData, growthList);
+
+		setAttrs(update, { silent: true });
+	});
 }
 
 function SetDerivedStats(update, attrArray, ancestryData, growthList) {
@@ -97,6 +194,7 @@ function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 
 
 // ======== Other Stat Setters
+
 on("change:statbonus_speed", function () {
 
 	UpdateCharacterSpeed();
@@ -150,26 +248,21 @@ function SetCharacterChakra(update, attrArray) {
 
 
 // ======== Character Skills Update
-on("change:skillbonus_brace change:skillbonus_insight change:skillbonus_notice change:skillbonus_presence change:skillbonus_reflex change:skillbonus_resolve change:skillbonus_brawling change:skillbonus_finesse change:skillbonus_marksmanship change:skillbonus_might change:skillbonus_polearm change:skillbonus_throw change:skillbonus_assault change:skillbonus_conjure change:skillbonus_enchant change:skillbonus_ethereal change:skillbonus_field change:skillbonus_structure change:skillbonus_acrobatics change:skillbonus_athletics change:skillbonus_fortitude change:skillbonus_physique change:skillbonus_palming change:skillbonus_stealth change:skillbonus_arcana change:skillbonus_culture change:skillbonus_history change:skillbonus_investigation change:skillbonus_nature change:skillbonus_tracking change:skillbonus_deception change:skillbonus_etiquette change:skillbonus_intimidation change:skillbonus_leadership change:skillbonus_negotiation change:skillbonus_performance change:skillbonus_artisan change:skillbonus_cook change:skillbonus_herbalism change:skillbonus_mechanical change:skillbonus_medicine change:skillbonus_pilot", function (eventinfo) {
+on("change:skillbonus_brace change:skillbonus_insight change:skillbonus_notice change:skillbonus_presence change:skillbonus_reflex change:skillbonus_resolve change:skillbonus_brawling change:skillbonus_finesse change:skillbonus_marksmanship change:skillbonus_might change:skillbonus_polearm change:skillbonus_throw change:skillbonus_assault change:skillbonus_conjure change:skillbonus_enchant change:skillbonus_ethereal change:skillbonus_field change:skillbonus_structure change:skillbonus_acrobatics change:skillbonus_athletics change:skillbonus_fortitude change:skillbonus_legerdemain change:skillbonus_physique change:skillbonus_stealth change:skillbonus_academics change:skillbonus_culture change:skillbonus_investigation change:skillbonus_nature change:skillbonus_tracking change:skillbonus_vocation change:skillbonus_charm change:skillbonus_deception change:skillbonus_intimidation change:skillbonus_leadership change:skillbonus_negotiation change:skillbonus_performance change:skillbonus_artisan change:skillbonus_cook change:skillbonus_heal change:skillbonus_herbalism change:skillbonus_mechanical change:skillbonus_pilot", function (eventinfo) {
 
 	UpdateCharacterSingleSkill(eventinfo.sourceAttribute);
 });
 
 function GetBonusSkillsList() {
-	return ["skillbonus_brace", "skillbonus_insight", "skillbonus_notice", "skillbonus_presence", "skillbonus_reflex", "skillbonus_resolve", "skillbonus_brawling", "skillbonus_finesse", "skillbonus_marksmanship", "skillbonus_might", "skillbonus_polearm", "skillbonus_throw", "skillbonus_assault", "skillbonus_conjure", "skillbonus_enchant", "skillbonus_ethereal", "skillbonus_field", "skillbonus_structure", "skillbonus_acrobatics", "skillbonus_athletics", "skillbonus_fortitude", "skillbonus_physique", "skillbonus_palming", "skillbonus_stealth", "skillbonus_arcana", "skillbonus_culture", "skillbonus_history", "skillbonus_investigation", "skillbonus_nature", "skillbonus_tracking", "skillbonus_deception", "skillbonus_etiquette", "skillbonus_intimidation", "skillbonus_leadership", "skillbonus_negotiation", "skillbonus_performance", "skillbonus_artisan", "skillbonus_cook", "skillbonus_herbalism", "skillbonus_mechanical", "skillbonus_medicine", "skillbonus_pilot"];
+	return ["skillbonus_brace", "skillbonus_insight", "skillbonus_notice", "skillbonus_presence", "skillbonus_reflex", "skillbonus_resolve", "skillbonus_brawling", "skillbonus_finesse", "skillbonus_marksmanship", "skillbonus_might", "skillbonus_polearm", "skillbonus_throw", "skillbonus_assault", "skillbonus_conjure", "skillbonus_enchant", "skillbonus_ethereal", "skillbonus_field", "skillbonus_structure", "skillbonus_acrobatics", "skillbonus_athletics", "skillbonus_fortitude", "skillbonus_legerdemain", "skillbonus_physique", "skillbonus_stealth", "skillbonus_academics", "skillbonus_culture", "skillbonus_investigation", "skillbonus_nature", "skillbonus_tracking", "skillbonus_vocation", "skillbonus_charm", "skillbonus_deception", "skillbonus_intimidation", "skillbonus_leadership", "skillbonus_negotiation", "skillbonus_performance", "skillbonus_artisan", "skillbonus_cook", "skillbonus_heal", "skillbonus_herbalism", "skillbonus_mechanical", "skillbonus_pilot"];
 }
 // -- end
 
 
 function UpdateCharacterSingleSkill(fieldName) {
-	if (fieldName.indexOf("_") >= 0) {
-		fieldName = fieldName.match(/_([^_]*)$/)[1];
-	}
-
-	UpdateCharacterSkills([fieldName]);
+	
+	UpdateCharacterSkills([GetFieldNameAttribute(fieldName)]);
 }
-
-
 
 function UpdateCharacterSkills(skillsList) {
 	let abilityScoreArray = GetAbilityScoreList(true);

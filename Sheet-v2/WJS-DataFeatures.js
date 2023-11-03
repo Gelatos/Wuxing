@@ -105,7 +105,7 @@ function GetDefensiveSkillsList(isFields) {
 	}
 }
 
-function GetCombatSkillsList(isFields) {
+function GetMartialSkillsList(isFields) {
 	if (isFields) {
 		return ["brawling", "finesse", "marksmanship", "might", "polearm", "throw"];
 	}
@@ -125,37 +125,46 @@ function GetMagicSkillsList(isFields) {
 
 function GetBodySkillsList(isFields) {
 	if (isFields) {
-		return ["acrobatics", "athletics", "fortitude", "physique", "palming", "stealth"];
+		return ["acrobatics", "athletics", "fortitude", "legerdemain", "physique", "stealth"];
 	}
 	else {
-		return ["Acrobatics", "Athletics", "Fortitude", "Physique", "Palming", "Stealth"];
+		return ["Acrobatics", "Athletics", "Fortitude", "Legerdemain", "Physique", "Stealth"];
 	}
 }
 
 function GetKnowledgeSkillsList(isFields) {
 	if (isFields) {
-		return ["arcana", "culture", "history", "investigation", "nature", "tracking"];
+		return ["academics", "culture", "investigation", "nature", "tracking", "vocation"];
 	}
 	else {
-		return ["Arcana", "Culture", "History", "Investigation", "Nature", "Tracking"];
+		return ["Academics", "Culture", "Investigation", "Nature", "Tracking", "Vocation"];
 	}
 }
 
 function GetSocialSkillsList(isFields) {
 	if (isFields) {
-		return ["deception", "etiquette", "intimidation", "leadership", "negotiation", "performance"];
+		return ["charm", "deception", "intimidation", "leadership", "negotiation", "performance"];
 	}
 	else {
-		return ["Deception", "Etiquette", "Intimidation", "Leadership", "Negotiation", "Performance"];
+		return ["Charm", "Deception", "Intimidation", "Leadership", "Negotiation", "Performance"];
 	}
 }
 
 function GetTechnicalSkillsList(isFields) {
 	if (isFields) {
-		return ["artisan", "cook", "herbalism", "mechanical", "medicine", "pilot"];
+		return ["artisan", "cook", "heal", "herbalism", "mechanical", "pilot"];
 	}
 	else {
-		return ["Artisan", "Cook", "Herbalism", "Mechanical", "Medicine", "Pilot"];
+		return ["Artisan", "Cook", "Heal", "Herbalism", "Mechanical", "Pilot"];
+	}
+}
+
+function GetAllSkillsList(isFields) {
+	if (isFields) {
+		return ["brace", "insight", "notice", "presence", "reflex", "resolve", "brawling", "finesse", "marksmanship", "might", "polearm", "throw", "assault", "conjure", "enchant", "ethereal", "field", "structure", "acrobatics", "athletics", "fortitude", "legerdemain", "physique", "stealth", "academics", "culture", "investigation", "nature", "tracking", "vocation", "charm", "deception", "intimidation", "leadership", "negotiation", "performance", "artisan", "cook", "heal", "herbalism", "mechanical", "pilot"];
+	}
+	else {
+		return ["Brace", "Insight", "Notice", "Presence", "Reflex", "Resolve", "Brawling", "Finesse", "Marksmanship", "Might", "Polearm", "Throw", "Assault", "Conjure", "Enchant", "Ethereal", "Field", "Structure", "Acrobatics", "Athletics", "Fortitude", "Legerdemain", "Physique", "Stealth", "Academics", "Culture", "Investigation", "Nature", "Tracking", "Vocation", "Charm", "Deception", "Intimidation", "Leadership", "Negotiation", "Performance", "Artisan", "Cook", "Heal", "Herbalism", "Mechanical", "Pilot"];
 	}
 }
 
@@ -182,13 +191,13 @@ function GetSkillsByAbilityScoreInfo(name) {
 		case "str":
 			return ["Brace", "Athletics", "Physique"]
 		case "int":
-			return ["Insight", "Field", "Structure", "Arcana", "Culture", "History", "Nature", "Herbalism"]
+			return ["Insight", "Field", "Structure", "Academics", "Culture", "Nature", "Vocation", "Herbalism"]
 		case "per":
-			return ["Notice", "Assault", "Conjure", "Investigation", "Tracking", "Etiquette", "Cook", "Medicine"]
+			return ["Notice", "Assault", "Conjure", "Investigation", "Tracking", "Deception", "Negotiation", "Cook"]
 		case "cha":
-			return ["Presence", "Enchant", "Ethereal", "Deception", "Intimidation", "Leadership", "Negotiation", "Performance"]
+			return ["Presence", "Enchant", "Ethereal", "Charm", "Intimidation", "Leadership", "Performance"]
 		case "qck":
-			return ["Reflex", "Acrobatics", "Palming", "Stealth", "Pilot"]
+			return ["Reflex", "Acrobatics", "Legerdemain", "Stealth", "Heal", "Pilot"]
 		case "wil":
 			return ["Resolve"]
 		case "dex":
@@ -216,17 +225,17 @@ function GetSkillsInfo(name) {
 		case "resolve":
 			return { "name": "Resolve", "description": "Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in.", "group": "Defensive", "subGroup": "Sensory Defense", "abilityScore": "WIL" }
 		case "brawling":
-			return { "name": "Brawling", "description": "This is the skill to use one's own body to fight. The combat style has a focus on quick actions, allowing more maneuverability in their attacks in exchange for less damage.", "group": "Combat", "subGroup": "", "abilityScore": "DEX" }
+			return { "name": "Brawling", "description": "This is the skill to use one's own body to fight. The combat style has a focus on quick actions, allowing more maneuverability in their attacks in exchange for less damage.", "group": "Martial", "subGroup": "", "abilityScore": "DEX" }
 		case "finesse":
-			return { "name": "Finesse", "description": "This is the skill to strike at a foe dextrously, using precision to target weaknesses. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are well balanced for striking fast.", "group": "Combat", "subGroup": "", "abilityScore": "DEX" }
+			return { "name": "Finesse", "description": "This is the skill to strike at a foe dextrously, using precision to target weaknesses. Weapons in this skill tend to have the flexibility of being used in melee or thrown and are well balanced for striking fast.", "group": "Martial", "subGroup": "", "abilityScore": "DEX" }
 		case "marksmanship":
-			return { "name": "Marksmanship", "description": "The skill of using a bow or firearm. These weapons have the most variety in weapon ranges, but typically are ineffective in melee.", "group": "Combat", "subGroup": "", "abilityScore": "DEX" }
+			return { "name": "Marksmanship", "description": "The skill of using a bow or firearm. These weapons have the most variety in weapon ranges, but typically are ineffective in melee.", "group": "Martial", "subGroup": "", "abilityScore": "DEX" }
 		case "might":
-			return { "name": "Might", "description": "These weapons are large, allowing the wielder to swing them with all their strength. They often come with ways to either smash through defenses or simply to break a defense more easily.", "group": "Combat", "subGroup": "", "abilityScore": "DEX" }
+			return { "name": "Might", "description": "These weapons are large, allowing the wielder to swing them with all their strength. They often come with ways to either smash through defenses or simply to break a defense more easily.", "group": "Martial", "subGroup": "", "abilityScore": "DEX" }
 		case "polearm":
-			return { "name": "Polearm", "description": "This is the skill for striking in melee with a weapon that is long and has substantial reach. These weapons will often feature increased threat range, allowing one to strike at more distant foes.", "group": "Combat", "subGroup": "", "abilityScore": "DEX" }
+			return { "name": "Polearm", "description": "This is the skill for striking in melee with a weapon that is long and has substantial reach. These weapons will often feature increased threat range, allowing one to strike at more distant foes.", "group": "Martial", "subGroup": "", "abilityScore": "DEX" }
 		case "throw":
-			return { "name": "Throw", "description": "When one strikes at a foe or aims for a location by throwing an object, it is typical to use the throw skill. ", "group": "Combat", "subGroup": "", "abilityScore": "DEX" }
+			return { "name": "Throw", "description": "When one strikes at a foe or aims for a location by throwing an object, it is typical to use the throw skill. ", "group": "Martial", "subGroup": "", "abilityScore": "DEX" }
 		case "assault":
 			return { "name": "Assault", "description": "These spells quickly form ether into a physical substance. Because the ether is formed quickly, these spells are well suited for launching at targets in a combat situation at the cost of keeping the ether stable for more than a few seconds.", "group": "Magic", "subGroup": "", "abilityScore": "PER" }
 		case "conjure":
@@ -245,46 +254,46 @@ function GetSkillsInfo(name) {
 			return { "name": "Athletics", "description": "Your Athletics check covers movement through an environment such as when climbing, jumping, or swimming.", "group": "Body", "subGroup": "", "abilityScore": "STR" }
 		case "fortitude":
 			return { "name": "Fortitude", "description": "Fortitude is a character's ability to resist environmental or internal harm such as from severe heat or cold, poisons or sickness.", "group": "Body", "subGroup": "", "abilityScore": "CON" }
+		case "legerdemain":
+			return { "name": "Legerdemain", "description": "Legerdemain is sleight-of-hand skill that gives a character the ability to snag, hide, and pass off small objects.", "group": "Body", "subGroup": "", "abilityScore": "QCK" }
 		case "physique":
 			return { "name": "Physique", "description": "The Physique skill represents a character’s raw strength and endurance. It is the base skill for actions that allow one to shove or grapple and can be used to allow one to lift or carry objects that may fall outside normal rules.", "group": "Body", "subGroup": "", "abilityScore": "STR" }
-		case "palming":
-			return { "name": "Palming", "description": "Palming is sleight-of-hand skill that gives a character the ability to snag, hide, and pass off small objects.", "group": "Body", "subGroup": "", "abilityScore": "QCK" }
 		case "stealth":
 			return { "name": "Stealth", "description": "Make a Stealth check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. ", "group": "Body", "subGroup": "", "abilityScore": "QCK" }
-		case "arcana":
-			return { "name": "Arcana", "description": "Arcana represents knowledge of the ethereal and manipulation of ether. It can help identify spell effects, well known spirits, and qualities of ether.", "group": "Knowledge", "subGroup": "Recall Knowledge", "abilityScore": "INT" }
+		case "academics":
+			return { "name": "Academics", "description": "This type of knowledge includes college subjects such as history, arithmetic, chemistry, technology, and magical theory.", "group": "Knowledge", "subGroup": "Recall Knowledge", "abilityScore": "INT" }
 		case "culture":
-			return { "name": "Culture", "description": "Your culture check measures your ability to recall lore about a civilization's practices, personalities, laws, and religions. ", "group": "Knowledge", "subGroup": "Recall Knowledge", "abilityScore": "INT" }
-		case "history":
-			return { "name": "History", "description": "Your history check measures your ability to recall lore about historical events, legendary people, ancient kingdoms, past disputes, recent wars, and lost civilizations.", "group": "Knowledge", "subGroup": "Recall Knowledge", "abilityScore": "INT" }
+			return { "name": "Culture", "description": "Your culture check measures your ability to recall lore about a civilization's practices, philosophies, laws, and religions. ", "group": "Knowledge", "subGroup": "Recall Knowledge", "abilityScore": "INT" }
 		case "investigation":
 			return { "name": "Investigation", "description": "This is used to actively search for for clues or anything out of sorts. You might deduce the location of a hidden object, discern from the appearance of a wound what kind of weapon dealt it, or determine the weakest point in a tunnel that could cause it to collapse. ", "group": "Knowledge", "subGroup": "", "abilityScore": "PER" }
 		case "nature":
-			return { "name": "Nature", "description": "Your nature check measures your ability to recall lore about geography, plants, animals, the weather, and natural cycles.", "group": "Knowledge", "subGroup": "Recall Knowledge", "abilityScore": "INT" }
+			return { "name": "Nature", "description": "Nature is the recall skill that governs the natural world. You would use a nature check to get information on geography, the planes, and creatures such as human and animal physiology and the nature of spirits.", "group": "Knowledge", "subGroup": "Recall Knowledge", "abilityScore": "INT" }
 		case "tracking":
 			return { "name": "Tracking", "description": "Make a Tracking check to follow tracks, hunt wild game, or guide your group through wastelands. ", "group": "Knowledge", "subGroup": "", "abilityScore": "PER" }
+		case "vocation":
+			return { "name": "Vocation", "description": "Vocational knowledge deals with subjects related to trades, professions, and occupations. Things like journalism, crafting, business, and so on.", "group": "Knowledge", "subGroup": "Recall Knowledge", "abilityScore": "INT" }
+		case "charm":
+			return { "name": "Charm", "description": "Enticing, fascinating, and endearing others to you on a personal basis. It can be used to win someone over emotionally through friendliness, joy, and an ability to read a situation. ", "group": "Social", "subGroup": "Social Influence", "abilityScore": "CHA" }
 		case "deception":
-			return { "name": "Deception", "description": "Your Deception check determines whether you can convincingly hide the truth, either verbally or through your actions. This deception can encompass everything from misleading others through ambiguity to telling outright lies.", "group": "Social", "subGroup": "Social Influence", "abilityScore": "CHA" }
-		case "etiquette":
-			return { "name": "Etiquette", "description": "Etiquette represents the level of understanding and awareness of proper social rituals. You can use Etiquette to ease suspicions, so that people might trust you more than they would an outsider. The skill is not meant to replace role-playing, but it can save you from a social blunder that you make when your character probably wouldn’t have.", "group": "Social", "subGroup": "", "abilityScore": "PER" }
+			return { "name": "Deception", "description": "Telling convincing lies, as well as feigning emotion, belief, or frame of mind. Deception can encompass everything from misleading others through ambiguity to telling outright lies. This skill is also used to convince others of a disguise. ", "group": "Social", "subGroup": "Social Influence", "abilityScore": "PER" }
 		case "intimidation":
-			return { "name": "Intimidation", "description": "When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision.", "group": "Social", "subGroup": "Social Influence", "abilityScore": "CHA" }
+			return { "name": "Intimidation", "description": "When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision. When intimidating others you target their resolve.", "group": "Social", "subGroup": "Social Influence", "abilityScore": "CHA" }
 		case "leadership":
 			return { "name": "Leadership", "description": "Leadership is the ability to direct and motivate others. This skill is especially helpful in situations where the will of a teammate is shaken or someone is being asked to do something uncomfortable.", "group": "Social", "subGroup": "", "abilityScore": "CHA" }
 		case "negotiation":
-			return { "name": "Negotiation", "description": "Negotiation governs a character’s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals.", "group": "Social", "subGroup": "Social Influence", "abilityScore": "CHA" }
+			return { "name": "Negotiation", "description": "Negotiation governs a character’s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals.", "group": "Social", "subGroup": "Social Influence", "abilityScore": "PER" }
 		case "performance":
 			return { "name": "Performance", "description": "Your Performance check determines how well you can delight an audience with music, dance, acting, storytelling, or some other form of entertainment. ", "group": "Social", "subGroup": "", "abilityScore": "CHA" }
 		case "artisan":
 			return { "name": "Artisan", "description": "This skill includes several different forms of artistic impression such as through drawing, sculpting, handcrafting of fine objects, and conveying art and information through images and technique. ", "group": "Technical", "subGroup": "Crafting", "abilityScore": "DEX" }
 		case "cook":
 			return { "name": "Cook", "description": "Food is important for survival, so making it enjoyable is a craft of great appreciation. This skill requires cook's utensils in order to cook most food at a minimum, while different dishes may require access to a stove, oven, or other large appliances.", "group": "Technical", "subGroup": "Crafting", "abilityScore": "PER" }
+		case "heal":
+			return { "name": "Heal", "description": "Heal is used to perform medical procedures such as administering drugs, performing first aid, and conducting surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character’s medical condition.", "group": "Technical", "subGroup": "", "abilityScore": "QCK" }
 		case "herbalism":
 			return { "name": "Herbalism", "description": "The skill to create medicinal and chemical compounds such as drugs, perfumes, and poisons.", "group": "Technical", "subGroup": "Crafting", "abilityScore": "INT" }
 		case "mechanical":
 			return { "name": "Mechanical", "description": "This skill covers building, repairing, and disabling mechanical devices such as locks, tools, and machinery.", "group": "Technical", "subGroup": "Crafting", "abilityScore": "DEX" }
-		case "medicine":
-			return { "name": "Medicine", "description": "Medicine is used to perform medical procedures such as administering drugs, performing first aid, and surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character’s medical condition.", "group": "Technical", "subGroup": "", "abilityScore": "PER" }
 		case "pilot":
 			return { "name": "Pilot", "description": "When attempting to drive a vehicle of any kind, the pilot skill often governs most checks. ", "group": "Technical", "subGroup": "", "abilityScore": "QCK" }
 		default:
@@ -296,19 +305,19 @@ function GetSkillsInfo(name) {
 function GetClassesInfo(name) {
 	switch (name.toLowerCase()) {
 		case "fighter":
-			return { "name": "Fighter", "category": "Warfare", "description": "The fighter is about survival. This battle hardened warrior will keep himself from falling through many means to self-heal, aid, and even shrug off wounds. ", "growths": { "CON": 4, "DEX": 4, "QCK": 2, "STR": 3, "CHA": 0, "INT": 0, "PER": 0, "WIL": 1, "hp": 3, "vitality": 5, "kiCharge": 1, "spellForce": 0 }, "prerequisite": "", "jobTechnique": "Second Wind", "advancement": [{ "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Shrug It Off", "type": "T" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Always Armored", "type": "T" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Always Armored +", "type": "T" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Undaunted", "type": "T" }] }
+			return { "name": "Fighter", "category": "Warfare", "description": "The fighter is about survival. This battle hardened warrior will keep himself from falling through many means to self-heal, aid, and even shrug off wounds. ", "growths": { "CON": 4, "DEX": 4, "QCK": 2, "STR": 3, "CHA": 0, "INT": 0, "PER": 0, "WIL": 1, "hp": 3, "vitality": 5, "kiCharge": 1, "spellForce": 0 }, "prerequisite": "", "jobTechnique": "Second Wind", "advancement": [{ "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Shrug It Off", "type": "T" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Always Armored", "type": "T" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Always Armored +", "type": "T" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Undaunted", "type": "T" }] }
 		case "interceptor":
-			return { "name": "Interceptor", "category": "Warfare", "description": "The interceptor is an expert in disrupting others. Prefering weapons with increased threat, interceptors protect their allies by stopping the movement of advancing enemies.", "growths": { "CON": 2, "DEX": 4, "QCK": 5, "STR": 2, "CHA": 0, "INT": 0, "PER": 3, "WIL": 3, "hp": 0, "vitality": 2, "kiCharge": 0, "spellForce": 0 }, "prerequisite": "Trained in Notice and Polearm", "jobTechnique": "Preemptive Strike", "advancement": [{ "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Preemptive Stagger", "type": "T" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Lunge", "type": "T" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Step Forward", "type": "T" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Critical Maim", "type": "T" }] }
+			return { "name": "Interceptor", "category": "Warfare", "description": "The interceptor is an expert in disrupting others. Prefering weapons with increased threat, interceptors protect their allies by stopping the movement of advancing enemies.", "growths": { "CON": 2, "DEX": 4, "QCK": 5, "STR": 2, "CHA": 0, "INT": 0, "PER": 3, "WIL": 3, "hp": 0, "vitality": 2, "kiCharge": 0, "spellForce": 0 }, "prerequisite": "Trained in Notice and Polearm", "jobTechnique": "Preemptive Strike", "advancement": [{ "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Preemptive Stagger", "type": "T" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Lunge", "type": "T" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Step Forward", "type": "T" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Critical Maim", "type": "T" }] }
 		case "marksman":
-			return { "name": "Marksman", "category": "Warfare", "description": "", "growths": { "CON": 3, "DEX": 4, "QCK": 3, "STR": 0, "CHA": 2, "INT": 0, "PER": 5, "WIL": 1, "hp": 0, "vitality": 0, "kiCharge": 2, "spellForce": 2 }, "prerequisite": "Trained in Assault and Marksmanship", "jobTechnique": "Spellshot", "advancement": [{ "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Gain a Magic Skill Technique.", "type": "MS" }, { "name": "", "type": "T" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Distant Spell", "type": "T" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "", "type": "T" }, { "name": "Gain a Magic Skill Technique.", "type": "MS" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "", "type": "T" }] }
+			return { "name": "Marksman", "category": "Warfare", "description": "", "growths": { "CON": 3, "DEX": 4, "QCK": 3, "STR": 0, "CHA": 2, "INT": 0, "PER": 5, "WIL": 1, "hp": 0, "vitality": 0, "kiCharge": 2, "spellForce": 2 }, "prerequisite": "Trained in Assault and Marksmanship", "jobTechnique": "Spellshot", "advancement": [{ "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Gain a Magic Skill Technique.", "type": "MS" }, { "name": "", "type": "T" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Distant Spell", "type": "T" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "", "type": "T" }, { "name": "Gain a Magic Skill Technique.", "type": "MS" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "", "type": "T" }] }
 		case "rogue":
-			return { "name": "Rogue", "category": "Talent", "description": "The rogue is an expert at exploiting distractions. They can exploit enemy weaknesses with their sneak attack, both on their turn and during follow-up attacks. ", "growths": { "CON": 0, "DEX": 5, "QCK": 4, "STR": 0, "CHA": 2, "INT": 2, "PER": 3, "WIL": 3, "hp": 1, "vitality": 0, "kiCharge": 0, "spellForce": 0 }, "prerequisite": "", "jobTechnique": "Sneak Attack", "advancement": [{ "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Sneaky Follow-Up", "type": "T" }, { "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Skulk Away", "type": "T" }, { "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Then Hide", "type": "T" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Assassinate", "type": "T" }] }
-		case "physician":
-			return { "name": "Physician", "category": "Talent", "description": "The physician is a medical practitioner and expert healer. Their Emergency Care allows them to heal allies and provide them with barrier, eventually allowing them to heal wounds. And if faster healing is necessary, their First aid allows them to perform healing as a Quick action.", "growths": { "CON": 3, "DEX": 0, "QCK": 3, "STR": 0, "CHA": 4, "INT": 0, "PER": 5, "WIL": 3, "hp": 0, "vitality": 0, "kiCharge": 2, "spellForce": 2 }, "prerequisite": "Trained in Herbalism and Medicine", "jobTechnique": "Emergency Care", "advancement": [{ "name": "Gain a Technical Skill Technique.", "type": "TS" }, { "name": "Gain a Magic Skill Technique.", "type": "MS" }, { "name": "First Aid", "type": "T" }, { "name": "Gain a Technical Skill Technique.", "type": "TS" }, { "name": "Nightingale", "type": "T" }, { "name": "Gain a Magic Skill Technique.", "type": "MS" }, { "name": "Cleansing Aid", "type": "T" }, { "name": "Gain a Technical Skill Technique.", "type": "TS" }, { "name": "Gain a Magic Skill Technique.", "type": "MS" }, { "name": "Rhapsody", "type": "T" }] }
+			return { "name": "Rogue", "category": "Talent", "description": "The rogue is an expert at exploiting distractions. They can exploit enemy weaknesses with their sneak attack, both on their turn and during follow-up attacks. ", "growths": { "CON": 0, "DEX": 5, "QCK": 4, "STR": 0, "CHA": 2, "INT": 2, "PER": 3, "WIL": 3, "hp": 1, "vitality": 0, "kiCharge": 0, "spellForce": 0 }, "prerequisite": "", "jobTechnique": "Sneak Attack", "advancement": [{ "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Sneaky Follow-Up", "type": "T" }, { "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Skulk Away", "type": "T" }, { "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Then Hide", "type": "T" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Assassinate", "type": "T" }] }
 		case "pugilist":
-			return { "name": "Pugilist", "category": "Talent", "description": "The pugilist is a martial artist and athlete whose own body is a weapon. They feature an incredible method of getting in and out of combat with their Sprint. When they are in combat, their Flurry of Blows allows them to attack more often and combo off their foes' conditions.", "growths": { "CON": 4, "DEX": 4, "QCK": 3, "STR": 3, "CHA": 0, "INT": 0, "PER": 1, "WIL": 0, "hp": 4, "vitality": 2, "kiCharge": 0, "spellForce": 0 }, "prerequisite": "Trained in Athletics and Brawling", "jobTechnique": "Flurry of Blows", "advancement": [{ "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Sprint", "type": "T" }, { "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Throw Down", "type": "T" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Burst Sprint", "type": "T" }, { "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Gain a Combat Skill Technique.", "type": "CS" }, { "name": "Stunning Strike", "type": "T" }] }
+			return { "name": "Pugilist", "category": "Talent", "description": "The pugilist is a martial artist and athlete whose own body is a weapon. They feature an incredible method of getting in and out of combat with their Sprint. When they are in combat, their Flurry of Blows allows them to attack more often and combo off their foes' conditions.", "growths": { "CON": 4, "DEX": 4, "QCK": 3, "STR": 3, "CHA": 0, "INT": 0, "PER": 1, "WIL": 0, "hp": 4, "vitality": 2, "kiCharge": 0, "spellForce": 0 }, "prerequisite": "Trained in Athletics and Brawling", "jobTechnique": "Flurry of Blows", "advancement": [{ "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Sprint", "type": "T" }, { "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Throw Down", "type": "T" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Burst Sprint", "type": "T" }, { "name": "Gain a Body Skill Technique.", "type": "BS" }, { "name": "Gain a Martial Skill Technique.", "type": "CS" }, { "name": "Stunning Strike", "type": "T" }] }
+		case "physician":
+			return { "name": "Physician", "category": "Acumen", "description": "The physician is a medical practitioner and expert healer. Their Emergency Care allows them to heal allies and provide them with barrier, eventually allowing them to heal wounds. And if faster healing is necessary, their First aid allows them to perform healing as a Quick action.", "growths": { "CON": 3, "DEX": 0, "QCK": 3, "STR": 0, "CHA": 4, "INT": 0, "PER": 5, "WIL": 3, "hp": 0, "vitality": 0, "kiCharge": 2, "spellForce": 2 }, "prerequisite": "Trained in Academics and Heal", "jobTechnique": "Emergency Care", "advancement": [{ "name": "Gain a Technical Skill Technique.", "type": "TS" }, { "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "First Aid", "type": "T" }, { "name": "Gain a Technical Skill Technique.", "type": "TS" }, { "name": "Nightingale", "type": "T" }, { "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "Cleansing Aid", "type": "T" }, { "name": "Gain a Technical Skill Technique.", "type": "TS" }, { "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "Rhapsody", "type": "T" }] }
 		case "scholar":
-			return { "name": "Scholar", "category": "Acumen", "description": "The scholar is an expert in history and uses it to always be prepared. In addition to history, scholars are typically knowledgable in a broad array of subjects and will sometimes use it to educate others. In combat, a scholar will use their preparedness to avoid bad situations and help their allies avoid them too.", "growths": { "CON": 1, "DEX": 3, "QCK": 3, "STR": 0, "CHA": 0, "INT": 5, "PER": 4, "WIL": 2, "hp": 0, "vitality": 1, "kiCharge": 3, "spellForce": 0 }, "prerequisite": "Trained in History", "jobTechnique": "Foresight", "advancement": [{ "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Eclectic Knowledge", "type": "T" }, { "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "Saw That Coming", "type": "T" }, { "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "Point of Clarity", "type": "T" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "As You May Recall", "type": "T" }] }
+			return { "name": "Scholar", "category": "Acumen", "description": "The scholar is an expert in history and uses it to always be prepared. In addition to history, scholars are typically knowledgable in a broad array of subjects and will sometimes use it to educate others. In combat, a scholar will use their preparedness to avoid bad situations and help their allies avoid them too.", "growths": { "CON": 1, "DEX": 3, "QCK": 3, "STR": 0, "CHA": 0, "INT": 5, "PER": 4, "WIL": 2, "hp": 0, "vitality": 1, "kiCharge": 3, "spellForce": 0 }, "prerequisite": "Trained in Academics", "jobTechnique": "Foresight", "advancement": [{ "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Eclectic Knowledge", "type": "T" }, { "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "Saw That Coming", "type": "T" }, { "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "Point of Clarity", "type": "T" }, { "name": "Gain a Defensive Skill Technique.", "type": "DS" }, { "name": "Gain a Knowledge Skill Technique.", "type": "KS" }, { "name": "As You May Recall", "type": "T" }] }
 		default:
 			return { "name": "", "category": "", "description": "", "growths": [], "prerequisite": "", "jobTechnique": "", "advancement": [] }
 
@@ -317,10 +326,10 @@ function GetClassesInfo(name) {
 
 function GetClassesList(isFields) {
 	if (isFields) {
-		return ["fighter", "interceptor", "marksman", "rogue", "physician", "pugilist", "scholar"];
+		return ["fighter", "interceptor", "marksman", "rogue", "pugilist", "physician", "scholar"];
 	}
 	else {
-		return ["Fighter", "Interceptor", "Marksman", "Rogue", "Physician", "Pugilist", "Scholar"];
+		return ["Fighter", "Interceptor", "Marksman", "Rogue", "Pugilist", "Physician", "Scholar"];
 	}
 }
 

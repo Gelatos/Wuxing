@@ -255,12 +255,11 @@ function SetBonusGrowthFieldArray(attrArray) {
 
 	output.branchPoints = AttrParseInt(attrArray, `${fieldName}branchpoints`);
 	output.kiLimit = AttrParseInt(attrArray, `${fieldName}ki`);
-	output.kiCharge = AttrParseInt(attrArray, `${fieldName}kiCharge`);
 
 	return output;
 }
 
-function GetCharacterStatGrowths (ancestryData, baseAbilityScores, baseGrowths, advancementGrowths) {
+function GetCharacterStatGrowthTotals (ancestryData, baseAbilityScores, baseGrowths, advancementGrowths) {
 
 	// convert growths to ability scores
 	let currentGrowths = ConvertAbilityScorePointsToGrowths(AddGrowths(baseGrowths, AddGrowths(ancestryData.growths, advancementGrowths)));

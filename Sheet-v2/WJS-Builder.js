@@ -44,7 +44,7 @@ var update_builder_leave = function () {
 			update = SetAbilityScoreUpdate(update, "builder-baseGrowth-", baseAbilityScores);
 		}
 		if (baseSkills != "" || baseChoiceSkills != "") {
-			let physSkillsArray = GetCombatSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
+			let physSkillsArray = GetMartialSkillsList(true).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
 			let mentSkillsArray = GetMagicSkillsList(true).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
 
 			if (baseSkills != "") {
@@ -92,8 +92,7 @@ on("change:builder-button-submit", function () {
 
 var update_builder_submit = function () {
 
-	let skillsList = GetDefensiveSkillsList(true).concat(GetCombatSkillsList(true)).concat(GetBodySkillsList(true)).concat(GetTechnicalSkillsList(true));
-	skillsList = skillsList.concat(GetMagicSkillsList(true)).concat(GetKnowledgeSkillsList(true)).concat(GetSocialSkillsList(true));
+	let skillsList = GetAllSkillsList();
 
 	let abilityScoreFieldArray = GetSectionIdNameFromArray("builder-base-", "", GetAbilityScoreList(true));
 	let growthsFieldArray = GetSectionIdNameFromArray("builder-baseGrowth-", "", GetAbilityScoreList(true));
@@ -106,7 +105,7 @@ var update_builder_submit = function () {
 	mod_attrs = mod_attrs.concat(growthArray);
 	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
 	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
-	mod_attrs = mod_attrs.concat(GetDerivedStatsList());
+	mod_attrs = mod_attrs.concat(GetDerivedBonusStatsList());
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -122,7 +121,7 @@ var update_builder_submit = function () {
 		if (advancementGrowthsTotal == "") {
 			advancementGrowthsTotal = CreateGrowthsArrayData();
 		}
-		let endingStatistics = GetCharacterStatGrowths(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
+		let endingStatistics = GetCharacterStatGrowthTotals(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
 		let bonusGrowths = SetBonusGrowthFieldArray(v);
 		let coreData = SetCoreDataFieldArray(v, "");
 
@@ -136,6 +135,7 @@ var update_builder_submit = function () {
 		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray);
 		v = SetAbilityScoreUpdate(v, "statscore_", update);
 		v = SetAbilityScoreUpdate(v, "", update);
+		coreData = SetAbilityScoreUpdate(v, "", update);
 		update = SetDerivedStats(update, v, ancestryData, growthArray);
 		update = SetCharacterSkillsUpdateData(update, v, skillsList, coreData);
 		update = SetCharacterSpeed(update, v, ancestryData);
