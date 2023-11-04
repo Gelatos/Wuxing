@@ -201,6 +201,7 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     position: relative;
     display: inline-block;
     min-width: 200px; 
+    max-width: 500px; 
     width: calc(100% - 10px);
 
     font-size: 12px;
@@ -536,12 +537,6 @@ input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplaySty
 {
     opacity: 1;
     display: block;
-}
-
-.wuxSectionBlock .wuxSectionContent-flag:hover + .wuxSectionHeader
-{
-    background: #86530f;
-    background: linear-gradient(to right, #86530f, #815822, #6e420a);
 }
 
 .wuxSectionBlock .options,

@@ -52,9 +52,9 @@
 						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-defensive">
 						<div class="wuxInteractiveContent">
 							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-defensive">
-							<span class="wuxInteractiveIcon">&#9663;</span>
+							<span class="wuxInteractiveIcon">&#9662;</span>
 							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-defensive">
-							<span class="wuxInteractiveAuxIcon">&#9657;</span>
+							<span class="wuxInteractiveAuxIcon">&#9656;</span>
 
 							<span class="wuxSubheader">Defensive</span>
 						</div>
@@ -76,9 +76,9 @@
 						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-body">
 						<div class="wuxInteractiveContent">
 							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-body">
-							<span class="wuxInteractiveIcon">&#9663;</span>
+							<span class="wuxInteractiveIcon">&#9662;</span>
 							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-body">
-							<span class="wuxInteractiveAuxIcon">&#9657;</span>
+							<span class="wuxInteractiveAuxIcon">&#9656;</span>
 
 							<span class="wuxSubheader">Body</span>
 						</div>
@@ -100,9 +100,9 @@
 						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-technical">
 						<div class="wuxInteractiveContent">
 							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-technical">
-							<span class="wuxInteractiveIcon">&#9663;</span>
+							<span class="wuxInteractiveIcon">&#9662;</span>
 							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-technical">
-							<span class="wuxInteractiveAuxIcon">&#9657;</span>
+							<span class="wuxInteractiveAuxIcon">&#9656;</span>
 
 							<span class="wuxSubheader">Technical</span>
 						</div>
@@ -124,9 +124,9 @@
 						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-knowledge">
 						<div class="wuxInteractiveContent">
 							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-knowledge">
-							<span class="wuxInteractiveIcon">&#9663;</span>
+							<span class="wuxInteractiveIcon">&#9662;</span>
 							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-knowledge">
-							<span class="wuxInteractiveAuxIcon">&#9657;</span>
+							<span class="wuxInteractiveAuxIcon">&#9656;</span>
 
 							<span class="wuxSubheader">Knowledge</span>
 						</div>
@@ -148,9 +148,9 @@
 						<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-social">
 						<div class="wuxInteractiveContent">
 							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-social">
-							<span class="wuxInteractiveIcon">&#9663;</span>
+							<span class="wuxInteractiveIcon">&#9662;</span>
 							<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-social">
-							<span class="wuxInteractiveAuxIcon">&#9657;</span>
+							<span class="wuxInteractiveAuxIcon">&#9656;</span>
 
 							<span class="wuxSubheader">Social</span>
 						</div>
@@ -505,16 +505,272 @@
 
 			<div class="segment-learnedTech wuxSegment">
 				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-learnedTech" checked="checked">
-				<div class="wuxTabHeader"><span class="wuxInnerHeader">Learned Techniques</span></div>
+				<div class="wuxTabHeader"><span class="wuxInnerHeader">Techniques</span></div>
 
 				<div class="wuxTab">
 					<div class="tab-learnedTechOptions wuxTab">
 						<div class="learnedTech-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-learnedTech-learnedTechOptions" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-learnedTech-learnedTechOptions">
+								<span class="wuxSectionExpandIcon">&#9662;</span>
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-learnedTech-learnedTechOptions">
+								<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+								<span>Technique Options</span>
+							</div>
+							<div class="wuxSectionHeaderFooter"></div>
+
 							<div class="wuxSectionContent">
-								<div class="wuxMultiRow">
-									<div class="wuxButton">
-										<input type="checkbox" name="attr_character-button-techniques">
-										<span>Select Techniques</span>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">Pages</span>
+												<div class="wuxFlexTableItemData">
+													<div class="wuxButton">
+														<input type="checkbox" name="attr_character-button-techniques">
+														<span>Select Techniques</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">Job Slots</span>
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemSubheader">Score</span>
+														<span class="wuxFlexTableItemData" name="attr_techslot-job">0</span>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemSubheader">Bonus</span>
+														<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-job" placeholder="0"></span>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">Active Slots</span>
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemSubheader">Score</span>
+														<span class="wuxFlexTableItemData" name="attr_techslot-active">0</span>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemSubheader">Bonus</span>
+														<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-active" placeholder="0"></span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">Passive Slots</span>
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemSubheader">Score</span>
+														<span class="wuxFlexTableItemData" name="attr_techslot-passive">0</span>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemSubheader">Bonus</span>
+														<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-passive" placeholder="0"></span>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<span class="wuxFlexTableItemHeader">Support Slots</span>
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemSubheader">Score</span>
+														<span class="wuxFlexTableItemData" name="attr_techslot-support">0</span>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemSubheader">Bonus</span>
+														<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-support" placeholder="0"></span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-techSlotsDesc wuxTab">
+						<div class="techSlots-desc wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<span class="wuxDescription">This is the Techniques Section. Techniques you have learned will appear here. You can learn additional techniques by entering the Technique Selection page above in Technique Options.</span>
+								<span class="wuxDescription">Each technique allows </span>
+							</div>
+						</div>
+					</div>
+					<div class="tab-techSlots1 wuxTab">
+						<div class="techSlots-job wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Job Techniques</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">CON</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_CON">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_CON">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_CON" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">DEX</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_DEX">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_DEX">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_DEX" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">QCK</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_QCK">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_QCK">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_QCK" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">STR</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_STR">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_STR">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_STR" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">CHA</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_CHA">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_CHA">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_CHA" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">INT</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_INT">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_INT">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_INT" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">PER</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_PER">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_PER">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_PER" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemGroup">
+														<span class="wuxFlexTableItemHeader">WIL</span>
+														<div class="wuxFlexTable">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Mod</span>
+																<span class="wuxFlexTableItemData" name="attr_WIL">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Score</span>
+																<span class="wuxFlexTableItemData" name="attr_statscore_WIL">0</span>
+															</div>
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxFlexTableItemSubheader">Bonus</span>
+																<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_WIL" placeholder="0"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -530,8 +786,17 @@
 				<div class="wuxTab">
 					<div class="tab-statsOptions wuxTab">
 						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-statistics-statsOptions" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-statistics-statsOptions">
+								<span class="wuxSectionExpandIcon">&#9662;</span>
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-statistics-statsOptions">
+								<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+								<span>Statistics Options</span>
+							</div>
+							<div class="wuxSectionHeaderFooter"></div>
+
 							<div class="wuxSectionContent">
-								<div class="wuxHeader">Statistics Options</div>
 								<div class="wuxMultiRow">
 									<div class="wuxButton">
 										<input type="checkbox" name="attr_character-button-advancement">
@@ -750,11 +1015,11 @@
 														<span class="wuxFlexTableItemHeader">Branches</span>
 														<div class="wuxFlexTable">
 															<div class="wuxFlexTableItemGroup">
-																<span class="wuxFlexTableItemSubheader">Total Selected</span>
+																<span class="wuxFlexTableItemSubheader">Branches Selected</span>
 																<span class='wuxFlexTableItemData'>
 																	<div class="wuxDistinctSection">
 																		<div class="wuxDistinctField">
-																			<span class="wuxDistinctTitle">Points</span>
+																			<span class="wuxDistinctTitle">Branches</span>
 																			<input type="hidden" class="wuxErrorField-flag" name="attr_branchpoints-error" value="0">
 																			<span class='wuxDistinctData'>
 																				<span name='attr_branchpoints' value="0">0</span>
@@ -1254,8 +1519,17 @@
 				<div class="wuxTab">
 					<div class="tab-skillOptions wuxTab">
 						<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-skills-skillOptions" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-skills-skillOptions">
+								<span class="wuxSectionExpandIcon">&#9662;</span>
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-skills-skillOptions">
+								<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+								<span>Skill Options</span>
+							</div>
+							<div class="wuxSectionHeaderFooter"></div>
+
 							<div class="wuxSectionContent">
-								<div class="wuxHeader">Skill Options</div>
 								<div class="wuxMultiRow">
 									<div class="wuxButton">
 										<input type="checkbox" name="attr_character-button-skills">

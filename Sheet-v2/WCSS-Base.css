@@ -403,6 +403,34 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
     border-color: #000 #000 transparent #000;
 }
 
+input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
+{
+    color: #1d1e1f;
+    background: #DE9B72;
+}
+
+.wuxSectionContent-flag:hover + .wuxSectionHeader
+{
+    background: #86530f;
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+}
+
+.wuxSectionExpandIcon
+{
+	display: none;
+}
+
+input[type=hidden].wuxSectionExpandIcon-flag[value="on"] + .wuxSectionExpandIcon,
+.wuxSectionExpandAuxIcon
+{
+    display: inline-block;
+}
+
+input[type=hidden].wuxSectionExpandIcon-flag[value="on"] + .wuxSectionExpandAuxIcon
+{
+    display: none;
+}
+
 .wuxSectionHeaderFooter
 {
     position: relative;
@@ -436,9 +464,7 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 
 .wuxSectionContentCollapsed
 {
-    height: 0px;
-    line-height: 0px;
-
+    line-height: 15px;
     border-width: 0px 3px 0px 0px;
 }
 
@@ -637,72 +663,5 @@ div.wuxDescription .wuxTitle
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 	background: #cacbcf;
-}
-
-/*========================================
-    Button
-========================================*/
-
-.wuxButton
-{
-    position: relative;
-    display: inline-block;
-	width: auto;
-    min-width: 100px;
-	padding: 0px 10px;
-
-    background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
-    text-shadow: none;
-    box-shadow: none;
-    border: 1px solid black;
-}
-
-.wuxButton.wuxSizePercent
-{
-	padding: 0px;
-	width: 90%;
-    min-width: 0px;
-}
-
-.wuxButton input[type=checkbox]
-{
-    position: absolute;
-    display: block;
-    opacity: 0;    
-    left: 0px;
-	right: 0px;
-	top: 0px;
-	bottom: 0px;
-    z-index: 100;
-}
-
-button[type=roll].wuxButton,
-.wuxButton span
-{
-    height: 24px;
-    margin: 0px;
-    padding: 0px;
-}
-
-button[type=roll].wuxButton::before
-{
-    content: "" !important;
-}
-
-button[type=roll].wuxButton span,
-.wuxButton span
-{
-    pointer-events: none;
-    position: relative;
-    top: 3px;
-    display: block;
-    width: 100%;
-    height: 24px;
-
-    text-align: center;
-
-    color: #1d1e1f;
-    font-size: 12px;
-    font-weight: normal;
 }
 
