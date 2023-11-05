@@ -408,7 +408,7 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = traitsDb[i].name;
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = traitsDb[i].description;
 		} else {
-			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = "";
+			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = "0";
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = "";
 		}
 	}

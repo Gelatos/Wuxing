@@ -406,7 +406,7 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 {
     color: #1d1e1f;
-    background: #DE9B72;
+    background: #f4f6f8;
 }
 
 .wuxSectionContent-flag:hover + .wuxSectionHeader

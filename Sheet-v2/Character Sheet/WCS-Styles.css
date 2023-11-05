@@ -406,7 +406,7 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 {
     color: #1d1e1f;
-    background: #DE9B72;
+    background: #f4f6f8;
 }
 
 .wuxSectionContent-flag:hover + .wuxSectionHeader
@@ -1316,7 +1316,7 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     position: relative;
     display: inline-block;
     min-width: 200px; 
-    max-width: 400px; 
+    max-width: 500px; 
     width: calc(100% - 10px);
 
     font-size: 12px;
@@ -1522,9 +1522,6 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
 {
     display: inline-block;
     padding: 0px 3px;
-
-    color: #fff;
-    font-size: 11px;
 }
 
 .wuxTrait
@@ -1536,6 +1533,14 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .wuxShownTraits .wuxTrait
 {
     display: inline-block;
+}
+
+.wuxTraitText
+{
+    font-size: 11px;
+    color: #0000FF;
+    
+    border-bottom: 1px dotted #0000FF;
 }
 
 .wuxTrait .wuxTooltiptext

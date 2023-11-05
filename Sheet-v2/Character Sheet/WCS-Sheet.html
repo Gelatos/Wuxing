@@ -284,13 +284,12 @@
 						<div class="wuxRow">&nbsp;</div>
 						<span class='wuxHeader'>Techniques</span>
 
-
 						<div class="wuxRepeatingFlexSection">
 							<fieldset class="repeating_ancestrytechniques">
 								<div class="wuxTechnique">
 									<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="">
 									<div class="wuxTechniqueHeader">
-										<input type="hidden" class="wuxHiddenBlankField-flag wuxTechniqueType-flag" name="attr_technique-type" value="">
+										<input type="hidden" class="wuxHiddenField-flag wuxTechniqueType-flag" name="attr_technique-type">
 										<div class="wuxHiddenField wuxTechniqueType" name="attr_technique-type" value="">
 											<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
 											<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
@@ -299,113 +298,133 @@
 										<div class="wuxTechniqueHeaderInfo">
 											<span class="wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Base</span>
 											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-action" value="">
-											<span class="wuxHiddenField wuxTechniqueHeaderInfoType">: </span>
+											<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">: </span>
 											<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
 											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
-											<span class="wuxHiddenField">, </span>
+											<span class="wuxHiddenInlineField">, </span>
 											<span name="attr_technique-limits"></span>
 										</div>
 									</div>
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
 									<div class="wuxHiddenField wuxTechniqueFunctionBlock">
 										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
-										<div class="wuxHiddenField wuxTechniqueFunctionBlockRow">
-											<span><strong>Prerequisites: </strong></span>
-											<span name="attr_technique-prerequisite"></span>
+										<div class="wuxHiddenBlockField">
+											<div class="wuxTechniqueFunctionBlockRow">
+												<span><strong>Prerequisites: </strong></span>
+												<span name="attr_technique-prerequisite"></span>
+											</div>
 										</div>
 										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
-										<div class="wuxHiddenField wuxTechniqueFunctionBlockRow">
-											<span><strong>Traits: </strong></span>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
-											<div class="wuxTrait">
-												<span name="attr_technique-traits0"></span>
-												<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
-											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
-											<div class="wuxTrait">
-												<span name="attr_technique-traits1"></span>
-												<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
-											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
-											<div class="wuxTrait">
-												<span name="attr_technique-traits2"></span>
-												<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
-											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
-											<div class="wuxTrait">
-												<span name="attr_technique-traits3"></span>
-												<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
-											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
-											<div class="wuxTrait">
-												<span name="attr_technique-traits4"></span>
-												<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
-											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
-											<div class="wuxTrait">
-												<span name="attr_technique-traits5"></span>
-												<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+										<div class="wuxHiddenBlockField">
+											<div class="wuxTechniqueFunctionBlockRow">
+												<span><strong>Traits: </strong></span>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+												<div class="wuxTrait">
+													<span class="wuxTraitText" name="attr_technique-traits0"></span>
+													<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+												<div class="wuxTrait">
+													<span class="wuxTraitText" name="attr_technique-traits1"></span>
+													<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+												<div class="wuxTrait">
+													<span class="wuxTraitText" name="attr_technique-traits2"></span>
+													<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+												<div class="wuxTrait">
+													<span class="wuxTraitText" name="attr_technique-traits3"></span>
+													<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+												<div class="wuxTrait">
+													<span class="wuxTraitText" name="attr_technique-traits4"></span>
+													<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+												<div class="wuxTrait">
+													<span class="wuxTraitText" name="attr_technique-traits5"></span>
+													<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+												</div>
 											</div>
 										</div>
 										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
-										<div class="wuxHiddenField wuxTechniqueFunctionBlockRow">
-											<span><strong>Requirement: </strong></span>
-											<span name="attr_technique-requirement"></span>
+										<div class="wuxHiddenBlockField">
+											<div class="wuxTechniqueFunctionBlockRow">
+												<span><strong>Requirement: </strong></span>
+												<span name="attr_technique-requirement"></span>
+											</div>
 										</div>
 										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
-										<div class="wuxHiddenField wuxTechniqueFunctionBlockRow">
-											<span><strong>Trigger: </strong></span>
-											<span name="attr_technique-trigger"></span>
+										<div class="wuxHiddenBlockField">
+											<div class="wuxTechniqueFunctionBlockRow">
+												<span><strong>Trigger: </strong></span>
+												<span name="attr_technique-trigger"></span>
+											</div>
 										</div>
 										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
-										<div class="wuxHiddenField wuxTechniqueFunctionBlockRow">
-											<span><strong>Resources: </strong></span>
-											<span name="attr_technique-resourceCost"></span>
+										<div class="wuxHiddenBlockField">
+											<div class="wuxTechniqueFunctionBlockRow">
+												<span><strong>Resources: </strong></span>
+												<span name="attr_technique-resourceCost"></span>
+											</div>
 										</div>
 									</div>
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
-									<div class="wuxHiddenField wuxTechniqueAttackBlock">
+									<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
-										<div class="wuxHiddenField wuxTechniqueAttackBlockRow">
-											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
-											<div class="wuxHiddenField wuxTechniqueAttackBlockRange">
-												<span><strong>Range: </strong></span>
-												<span name="attr_technique-range"></span>
-											</div>
-											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
-											<div class="wuxHiddenField wuxTechniqueAttackBlockTarget">
-												<span><strong>Target: </strong></span>
-												<span name="attr_technique-target"></span>
+										<div class="wuxHiddenBlockField">
+											<div class="wuxTechniqueAttackBlockRow">
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+												<div class="wuxHiddenField wuxTechniqueAttackBlockRange">
+													<span><strong>Range: </strong></span>
+													<span name="attr_technique-range"></span>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+												<div class="wuxHiddenField wuxTechniqueAttackBlockTarget">
+													<span><strong>Target: </strong></span>
+													<span name="attr_technique-target"></span>
+												</div>
 											</div>
 										</div>
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
-										<div class="wuxHiddenField wuxTechniqueAttackBlockRow">
-											<strong><span name="attr_technique-skill"></span></strong>
+										<div class="wuxHiddenBlockField">
+											<div class="wuxTechniqueAttackBlockRow">
+												<strong><span name="attr_technique-skill"></span></strong>
 
-											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
-											<div class="wuxHiddenField wuxTechniqueAttackBlockDefense">
-												<span> vs. </span>
-												<span name="attr_technique-defense"></span>
-											</div>
-											<div class="wuxHiddenAuxField wuxTechniqueAttackBlockDefense">
-												<span> Check</span>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+												<div class="wuxHiddenField wuxTechniqueAttackBlockDefense">
+													<span> vs. </span>
+													<span name="attr_technique-defense"></span>
+												</div>
+												<div class="wuxHiddenAuxField wuxTechniqueAttackBlockDefense">
+													<span> Check</span>
+												</div>
 											</div>
 										</div>
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
-										<div class="wuxHiddenField wuxTechniqueAttackBlockRow">
-											<span name="attr_technique-damageString"></span>
+										<div class="wuxHiddenBlockField">
+											<div class="wuxTechniqueAttackBlockRow">
+												<span name="attr_technique-damageString"></span>
+											</div>
 										</div>
 									</div>
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
-									<div class="wuxHiddenField wuxTechniqueDescriptionBlock">
-										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
-										<div class="wuxHiddenField wuxTechniqueDescriptionBlockDesc">
-											<span name="attr_technique-description"></span>
-										</div>
-										<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
-										<div class="wuxHiddenField wuxTechniqueDescriptionBlockDesc">
-											<strong>On Hit: </strong>
-											<span name="attr_technique-onSuccess"></span>
+									<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+										<div>
+											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+											<div class="wuxHiddenBlockField">
+												<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+											</div>
+											<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+											<div class="wuxHiddenBlockField">
+												<div class="wuxTechniqueDescriptionBlockDesc">
+													<strong>On Hit: </strong>
+													<span name="attr_technique-onSuccess"></span>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -6265,6 +6284,10 @@
 							<div class="wuxSectionHeaderFooter"></div>
 
 							<div class="wuxSectionContent">
+								<span class="wuxHeader">Section Description</span>
+								<span class="wuxDescription">This is the Techniques Section. Techniques you have learned will appear here. You can learn additional techniques by entering the Technique Selection page above in Technique Options.</span>
+								<span class="wuxDescription">Techniques can be locked into their tech slots by selecting the circle button. Any technqique can be used be pressing their name.</span>
+								<span class="wuxHeader">Section Options</span>
 								<div class="wuxFlexTable">
 									<div class="wuxFlexTableItemGroup wuxNoPadding">
 										<div class="wuxFlexTable">
@@ -6286,7 +6309,7 @@
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemSubheader">Score</span>
-														<span class="wuxFlexTableItemData" name="attr_techslot-job">0</span>
+														<span class="wuxFlexTableItemData" name="attr_techslot-job_max">0</span>
 													</div>
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemSubheader">Bonus</span>
@@ -6299,7 +6322,7 @@
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemSubheader">Score</span>
-														<span class="wuxFlexTableItemData" name="attr_techslot-active">0</span>
+														<span class="wuxFlexTableItemData" name="attr_techslot-active_max">0</span>
 													</div>
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemSubheader">Bonus</span>
@@ -6316,7 +6339,7 @@
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemSubheader">Score</span>
-														<span class="wuxFlexTableItemData" name="attr_techslot-passive">0</span>
+														<span class="wuxFlexTableItemData" name="attr_techslot-passive_max">0</span>
 													</div>
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemSubheader">Bonus</span>
@@ -6329,7 +6352,7 @@
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemSubheader">Score</span>
-														<span class="wuxFlexTableItemData" name="attr_techslot-support">0</span>
+														<span class="wuxFlexTableItemData" name="attr_techslot-support_max">0</span>
 													</div>
 													<div class="wuxFlexTableItemGroup">
 														<span class="wuxFlexTableItemSubheader">Bonus</span>
@@ -6340,6 +6363,830 @@
 										</div>
 									</div>
 								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-techSlots1 wuxTab">
+						<div class="techSlots-job wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Job Techniques</div>
+								<div class="wuxDistinctSection">
+									<div class="wuxDistinctField">
+										<span class="wuxDistinctTitle">Tech Slots</span>
+										<input type="hidden" class="wuxErrorField-flag" name="attr_techslots-error-job" value="0">
+										<span class='wuxDistinctData'>
+											<span name='techslot-job' value="0">0</span>
+											<span>/ </span>
+											<span name='attr_techslot-job_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
+
+								<div class="wuxNoRepControl">
+									<fieldset class="repeating_jobtechniques">
+										<div class="wuxTechnique">
+											<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="">
+											<div class="wuxTechniqueHeader">
+												<input type="hidden" class="wuxHiddenField-flag wuxTechniqueType-flag" name="attr_technique-type">
+												<div class="wuxHiddenField wuxTechniqueType" name="attr_technique-type" value="">
+													<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
+													<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
+												</div>
+												<span class="wuxTechniqueHeaderName" name="attr_technique-name">Technique</span>
+												<div class="wuxTechniqueHeaderInfo">
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Base</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-action" value="">
+													<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">: </span>
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+													<span class="wuxHiddenInlineField">, </span>
+													<span name="attr_technique-limits"></span>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+											<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Prerequisites: </strong></span>
+														<span name="attr_technique-prerequisite"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits0"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits1"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits2"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits3"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits4"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits5"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span name="attr_technique-requirement"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Trigger: </strong></span>
+														<span name="attr_technique-trigger"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Resources: </strong></span>
+														<span name="attr_technique-resourceCost"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span name="attr_technique-range"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span name="attr_technique-target"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<strong><span name="attr_technique-skill"></span></strong>
+		
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockDefense">
+															<span> vs. </span>
+															<span name="attr_technique-defense"></span>
+														</div>
+														<div class="wuxHiddenAuxField wuxTechniqueAttackBlockDefense">
+															<span> Check</span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<span name="attr_technique-damageString"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+												<div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+													<div class="wuxHiddenBlockField">
+														<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+													</div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+													<div class="wuxHiddenBlockField">
+														<div class="wuxTechniqueDescriptionBlockDesc">
+															<strong>On Hit: </strong>
+															<span name="attr_technique-onSuccess"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+
+							</div>
+						</div>
+						<div class="techSlots-active wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Active Techniques</div>
+								<div class="wuxDistinctSection">
+									<div class="wuxDistinctField">
+										<span class="wuxDistinctTitle">Tech Slots</span>
+										<input type="hidden" class="wuxErrorField-flag" name="attr_techslots-error-active" value="0">
+										<span class='wuxDistinctData'>
+											<span name='techslot-active' value="0">0</span>
+											<span>/ </span>
+											<span name='attr_techslot-active_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
+
+								<div class="wuxNoRepControl">
+									<fieldset class="repeating_activetechniques">
+										<div class="wuxTechnique">
+											<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="">
+											<div class="wuxTechniqueHeader">
+												<input type="hidden" class="wuxHiddenField-flag wuxTechniqueType-flag" name="attr_technique-type">
+												<div class="wuxHiddenField wuxTechniqueType" name="attr_technique-type" value="">
+													<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
+													<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
+												</div>
+												<span class="wuxTechniqueHeaderName" name="attr_technique-name">Technique</span>
+												<div class="wuxTechniqueHeaderInfo">
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Base</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-action" value="">
+													<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">: </span>
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+													<span class="wuxHiddenInlineField">, </span>
+													<span name="attr_technique-limits"></span>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+											<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Prerequisites: </strong></span>
+														<span name="attr_technique-prerequisite"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits0"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits1"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits2"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits3"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits4"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits5"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span name="attr_technique-requirement"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Trigger: </strong></span>
+														<span name="attr_technique-trigger"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Resources: </strong></span>
+														<span name="attr_technique-resourceCost"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span name="attr_technique-range"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span name="attr_technique-target"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<strong><span name="attr_technique-skill"></span></strong>
+		
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockDefense">
+															<span> vs. </span>
+															<span name="attr_technique-defense"></span>
+														</div>
+														<div class="wuxHiddenAuxField wuxTechniqueAttackBlockDefense">
+															<span> Check</span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<span name="attr_technique-damageString"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+												<div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+													<div class="wuxHiddenBlockField">
+														<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+													</div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+													<div class="wuxHiddenBlockField">
+														<div class="wuxTechniqueDescriptionBlockDesc">
+															<strong>On Hit: </strong>
+															<span name="attr_technique-onSuccess"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="tab-techSlots2 wuxTab">
+						<div class="techSlots-passive wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Passive Techniques</div>
+								<div class="wuxDistinctSection">
+									<div class="wuxDistinctField">
+										<span class="wuxDistinctTitle">Tech Slots</span>
+										<input type="hidden" class="wuxErrorField-flag" name="attr_techslots-error-passive" value="0">
+										<span class='wuxDistinctData'>
+											<span name='techslot-passive' value="0">0</span>
+											<span>/ </span>
+											<span name='attr_techslot-passive_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
+
+								<div class="wuxNoRepControl">
+									<fieldset class="repeating_passivetechniques">
+										<div class="wuxTechnique">
+											<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="">
+											<div class="wuxTechniqueHeader">
+												<input type="hidden" class="wuxHiddenField-flag wuxTechniqueType-flag" name="attr_technique-type">
+												<div class="wuxHiddenField wuxTechniqueType" name="attr_technique-type" value="">
+													<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
+													<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
+												</div>
+												<span class="wuxTechniqueHeaderName" name="attr_technique-name">Technique</span>
+												<div class="wuxTechniqueHeaderInfo">
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Base</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-action" value="">
+													<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">: </span>
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+													<span class="wuxHiddenInlineField">, </span>
+													<span name="attr_technique-limits"></span>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+											<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Prerequisites: </strong></span>
+														<span name="attr_technique-prerequisite"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits0"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits1"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits2"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits3"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits4"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits5"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span name="attr_technique-requirement"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Trigger: </strong></span>
+														<span name="attr_technique-trigger"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Resources: </strong></span>
+														<span name="attr_technique-resourceCost"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span name="attr_technique-range"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span name="attr_technique-target"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<strong><span name="attr_technique-skill"></span></strong>
+		
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockDefense">
+															<span> vs. </span>
+															<span name="attr_technique-defense"></span>
+														</div>
+														<div class="wuxHiddenAuxField wuxTechniqueAttackBlockDefense">
+															<span> Check</span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<span name="attr_technique-damageString"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+												<div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+													<div class="wuxHiddenBlockField">
+														<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+													</div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+													<div class="wuxHiddenBlockField">
+														<div class="wuxTechniqueDescriptionBlockDesc">
+															<strong>On Hit: </strong>
+															<span name="attr_technique-onSuccess"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+
+							</div>
+						</div>
+						<div class="techSlots-support wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Support Techniques</div>
+								<div class="wuxDistinctSection">
+									<div class="wuxDistinctField">
+										<span class="wuxDistinctTitle">Tech Slots</span>
+										<input type="hidden" class="wuxErrorField-flag" name="attr_techslots-error-support" value="0">
+										<span class='wuxDistinctData'>
+											<span name='techslot-support' value="0">0</span>
+											<span>/ </span>
+											<span name='attr_techslot-support_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
+
+								<div class="wuxNoRepControl">
+									<fieldset class="repeating_supporttechniques">
+										<div class="wuxTechnique">
+											<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="">
+											<div class="wuxTechniqueHeader">
+												<input type="hidden" class="wuxHiddenField-flag wuxTechniqueType-flag" name="attr_technique-type">
+												<div class="wuxHiddenField wuxTechniqueType" name="attr_technique-type" value="">
+													<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
+													<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
+												</div>
+												<span class="wuxTechniqueHeaderName" name="attr_technique-name">Technique</span>
+												<div class="wuxTechniqueHeaderInfo">
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Base</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-action" value="">
+													<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">: </span>
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+													<span class="wuxHiddenInlineField">, </span>
+													<span name="attr_technique-limits"></span>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+											<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Prerequisites: </strong></span>
+														<span name="attr_technique-prerequisite"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits0"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits1"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits2"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits3"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits4"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits5"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span name="attr_technique-requirement"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Trigger: </strong></span>
+														<span name="attr_technique-trigger"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Resources: </strong></span>
+														<span name="attr_technique-resourceCost"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span name="attr_technique-range"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span name="attr_technique-target"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<strong><span name="attr_technique-skill"></span></strong>
+		
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockDefense">
+															<span> vs. </span>
+															<span name="attr_technique-defense"></span>
+														</div>
+														<div class="wuxHiddenAuxField wuxTechniqueAttackBlockDefense">
+															<span> Check</span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<span name="attr_technique-damageString"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+												<div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+													<div class="wuxHiddenBlockField">
+														<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+													</div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+													<div class="wuxHiddenBlockField">
+														<div class="wuxTechniqueDescriptionBlockDesc">
+															<strong>On Hit: </strong>
+															<span name="attr_technique-onSuccess"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+
+							</div>
+						</div>
+						<div class="techSlots-permanent wuxSectionBlock wuxLayoutItem">
+							<div class="wuxSectionContent">
+								<div class="wuxHeader">Permanent Techniques</div>
+								<div class="wuxDistinctSection">
+									<div class="wuxDistinctField">
+										<span class="wuxDistinctTitle">Tech Slots</span>
+										<input type="hidden" class="wuxErrorField-flag" name="attr_techslots-error-permanent" value="0">
+										<span class='wuxDistinctData'>
+											<span name='techslot-permanent' value="0">0</span>
+											<span>/ </span>
+											<span name='attr_techslot-permanent_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
+
+								<div class="wuxNoRepControl">
+									<fieldset class="repeating_permanenttechniques">
+										<div class="wuxTechnique">
+											<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="">
+											<div class="wuxTechniqueHeader">
+												<input type="hidden" class="wuxHiddenField-flag wuxTechniqueType-flag" name="attr_technique-type">
+												<div class="wuxHiddenField wuxTechniqueType" name="attr_technique-type" value="">
+													<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
+													<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
+												</div>
+												<span class="wuxTechniqueHeaderName" name="attr_technique-name">Technique</span>
+												<div class="wuxTechniqueHeaderInfo">
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Base</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-action" value="">
+													<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">: </span>
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+													<span class="wuxHiddenInlineField">, </span>
+													<span name="attr_technique-limits"></span>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+											<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Prerequisites: </strong></span>
+														<span name="attr_technique-prerequisite"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits0"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits1"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits2"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits3"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits4"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits5"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span name="attr_technique-requirement"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Trigger: </strong></span>
+														<span name="attr_technique-trigger"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Resources: </strong></span>
+														<span name="attr_technique-resourceCost"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span name="attr_technique-range"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span name="attr_technique-target"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<strong><span name="attr_technique-skill"></span></strong>
+		
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockDefense">
+															<span> vs. </span>
+															<span name="attr_technique-defense"></span>
+														</div>
+														<div class="wuxHiddenAuxField wuxTechniqueAttackBlockDefense">
+															<span> Check</span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<span name="attr_technique-damageString"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+												<div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+													<div class="wuxHiddenBlockField">
+														<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+													</div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+													<div class="wuxHiddenBlockField">
+														<div class="wuxTechniqueDescriptionBlockDesc">
+															<strong>On Hit: </strong>
+															<span name="attr_technique-onSuccess"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+
 							</div>
 						</div>
 					</div>
@@ -9585,7 +10432,7 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = traitsDb[i].name;
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = traitsDb[i].description;
 		} else {
-			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = "";
+			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = "0";
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = "";
 		}
 	}
@@ -11886,7 +12733,7 @@ function GetAbilityScoreMod(score) {
 	function GetAncestryTechniqueInfo(name) {
 	switch (name.toLowerCase()) {
 	case "unarmed attack":
-	return {"name":"Unarmed Attack","augmentBase":"","techniqueGroup":"Ancestry","techniqueSubGroup":"Human","techniqueType":"Permanent","action":"","traits":"","limits":"","resourceCost":"","description":"You gain the Unarmed weapon. It has the following stats:\n\nSkill: Brawling\nAbility: Finesse\nRange: 1T\nDamage: 1d3 + P\nType: Force","onSuccess":"","trigger":"","requirement":"","prerequisite":"","skill":"","defense":"","range":"","target":"","targetCode":"","onHit":"","damage":"","damageType":"","element":"","specBonus":"","augments":[]}
+	return {"name":"Unarmed Attack","augmentBase":"","techniqueGroup":"Ancestry","techniqueSubGroup":"Human","techniqueType":"Permanent","action":"","traits":"Armament","limits":"1/Round","resourceCost":"1 Mana","description":"You gain the Unarmed weapon. It has the following stats:\n\nSkill: Brawling\nAbility: Finesse\nRange: 1T\nDamage: 1d3 + P\nType: Force","onSuccess":"","trigger":"","requirement":"","prerequisite":"","skill":"","defense":"","range":"","target":"","targetCode":"","onHit":"","damage":"","damageType":"","element":"","specBonus":"","augments":[]}
 	default:
 	return {"name":"","augmentBase":"","techniqueGroup":"","techniqueSubGroup":"","techniqueType":"","action":"","traits":"","limits":"","resourceCost":"","description":"","onSuccess":"","trigger":"","requirement":"","prerequisite":"","skill":"","defense":"","range":"","target":"","targetCode":"","onHit":"","damage":"","damageType":"","element":"","specBonus":"","augments":[]}
 	

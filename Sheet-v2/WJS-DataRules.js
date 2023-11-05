@@ -86,7 +86,7 @@ function GetAbilityScoreMod(score) {
 	function GetAncestryTechniqueInfo(name) {
 	switch (name.toLowerCase()) {
 	case "unarmed attack":
-	return {"name":"Unarmed Attack","augmentBase":"","techniqueGroup":"Ancestry","techniqueSubGroup":"Human","techniqueType":"Permanent","action":"","traits":"","limits":"","resourceCost":"","description":"You gain the Unarmed weapon. It has the following stats:\n\nSkill: Brawling\nAbility: Finesse\nRange: 1T\nDamage: 1d3 + P\nType: Force","onSuccess":"","trigger":"","requirement":"","prerequisite":"","skill":"","defense":"","range":"","target":"","targetCode":"","onHit":"","damage":"","damageType":"","element":"","specBonus":"","augments":[]}
+	return {"name":"Unarmed Attack","augmentBase":"","techniqueGroup":"Ancestry","techniqueSubGroup":"Human","techniqueType":"Permanent","action":"","traits":"Armament","limits":"1/Round","resourceCost":"1 Mana","description":"You gain the Unarmed weapon. It has the following stats:\n\nSkill: Brawling\nAbility: Finesse\nRange: 1T\nDamage: 1d3 + P\nType: Force","onSuccess":"","trigger":"","requirement":"","prerequisite":"","skill":"","defense":"","range":"","target":"","targetCode":"","onHit":"","damage":"","damageType":"","element":"","specBonus":"","augments":[]}
 	default:
 	return {"name":"","augmentBase":"","techniqueGroup":"","techniqueSubGroup":"","techniqueType":"","action":"","traits":"","limits":"","resourceCost":"","description":"","onSuccess":"","trigger":"","requirement":"","prerequisite":"","skill":"","defense":"","range":"","target":"","targetCode":"","onHit":"","damage":"","damageType":"","element":"","specBonus":"","augments":[]}
 	
