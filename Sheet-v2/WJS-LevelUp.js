@@ -2,6 +2,7 @@
 
 function SetLevelUpData (update, startingStatistics, endingStatistics, classUpdates, mainUpdate) {
 
+	console.log(`classUpdates: ${JSON.stringify(startingStatistics)}`);
 	// setup the class update
 	let i = 0;
 	let max = 3;
@@ -37,53 +38,53 @@ function SetLevelUpData (update, startingStatistics, endingStatistics, classUpda
 	update[`levelUp-desc-main`] = mainUpdate.desc;
 
 	// update the growths
-	update["levelUp-growth-CON"] = (startingStatistics.CON == endingStatistics.CON 
-		? startingStatistics.CON 
-		: `${startingStatistics.CON} => ${endingStatistics.CON}`
+	update["levelUp-growth-CON"] = (startingStatistics.scores["CON"] == endingStatistics.scores["CON"]
+		? startingStatistics.scores["CON"]
+		: `${startingStatistics.scores["CON"]} => ${endingStatistics.scores["CON"]}`
 	);
-	update["levelUp-growth-DEX"] = (startingStatistics.DEX == endingStatistics.DEX 
-		? startingStatistics.DEX 
-		: `${startingStatistics.DEX} => ${endingStatistics.DEX}`
+	update["levelUp-growth-DEX"] = (startingStatistics.scores["DEX"] == endingStatistics.scores["DEX"]
+		? startingStatistics.scores["DEX"]
+		: `${startingStatistics.scores["DEX"]} => ${endingStatistics.scores["DEX"]}`
 	);
-	update["levelUp-growth-QCK"] = (startingStatistics.QCK == endingStatistics.QCK 
-		? startingStatistics.QCK 
-		: `${startingStatistics.QCK} => ${endingStatistics.QCK}`
+	update["levelUp-growth-QCK"] = (startingStatistics.scores["QCK"] == endingStatistics.scores["QCK"]
+		? startingStatistics.scores["QCK"]
+		: `${startingStatistics.scores["QCK"]} => ${endingStatistics.scores["QCK"]}`
 	);
-	update["levelUp-growth-STR"] = (startingStatistics.STR == endingStatistics.STR 
-		? startingStatistics.STR 
-		: `${startingStatistics.STR} => ${endingStatistics.STR}`
+	update["levelUp-growth-STR"] = (startingStatistics.scores["STR"] == endingStatistics.scores["STR"]
+		? startingStatistics.scores["STR"]
+		: `${startingStatistics.scores["STR"]} => ${endingStatistics.scores["STR"]}`
 	);
-	update["levelUp-growth-CHA"] = (startingStatistics.CHA == endingStatistics.CHA 
-		? startingStatistics.CHA 
-		: `${startingStatistics.CHA} => ${endingStatistics.CHA}`
+	update["levelUp-growth-CHA"] = (startingStatistics.scores["CHA"] == endingStatistics.scores["CHA"]
+		? startingStatistics.scores["CHA"]
+		: `${startingStatistics.scores["CHA"]} => ${endingStatistics.scores["CHA"]}`
 	);
-	update["levelUp-growth-INT"] = (startingStatistics.INT == endingStatistics.INT 
-		? startingStatistics.INT 
-		: `${startingStatistics.INT} => ${endingStatistics.INT}`
+	update["levelUp-growth-INT"] = (startingStatistics.scores["INT"] == endingStatistics.scores["INT"]
+		? startingStatistics.scores["INT"]
+		: `${startingStatistics.scores["INT"]} => ${endingStatistics.scores["INT"]}`
 	);
-	update["levelUp-growth-PER"] = (startingStatistics.PER == endingStatistics.PER 
-		? startingStatistics.PER 
-		: `${startingStatistics.PER} => ${endingStatistics.PER}`
+	update["levelUp-growth-PER"] = (startingStatistics.scores["PER"] == endingStatistics.scores["PER"]
+		? startingStatistics.scores["PER"]
+		: `${startingStatistics.scores["PER"]} => ${endingStatistics.scores["PER"]}`
 	);
-	update["levelUp-growth-WIL"] = (startingStatistics.WIL == endingStatistics.WIL 
-		? startingStatistics.WIL 
-		: `${startingStatistics.WIL} => ${endingStatistics.WIL}`
+	update["levelUp-growth-WIL"] = (startingStatistics.scores["WIL"] == endingStatistics.scores["WIL"]
+		? startingStatistics.scores["WIL"]
+		: `${startingStatistics.scores["WIL"]} => ${endingStatistics.scores["WIL"]}`
 	);
-	update["levelUp-growth-HP"] = (startingStatistics.hp == endingStatistics.hp 
-		? startingStatistics.hp 
-		: `${startingStatistics.hp} => ${endingStatistics.hp}`
+	update["levelUp-growth-HP"] = (startingStatistics.scores["hp"] == endingStatistics.scores["hp"]
+		? startingStatistics.scores["hp"]
+		: `${startingStatistics.scores["hp"]} => ${endingStatistics.scores["hp"]}`
 	);
-	update["levelUp-growth-Vitality"] = (startingStatistics.vitality == endingStatistics.vitality 
-		? startingStatistics.vitality 
-		: `${startingStatistics.vitality} => ${endingStatistics.vitality}`
+	update["levelUp-growth-Vitality"] = (startingStatistics.scores["vitality"] == endingStatistics.scores["vitality"]
+		? startingStatistics.scores["vitality"]
+		: `${startingStatistics.scores["vitality"]} => ${endingStatistics.scores["vitality"]}`
 	);
-	update["levelUp-growth-KiCharge"] = (startingStatistics.kiCharge == endingStatistics.kiCharge 
-		? startingStatistics.kiCharge 
-		: `${startingStatistics.kiCharge} => ${endingStatistics.kiCharge}`
+	update["levelUp-growth-KiCharge"] = (startingStatistics.scores["kiCharge"] == endingStatistics.scores["kiCharge"]
+		? startingStatistics.scores["kiCharge"]
+		: `${startingStatistics.scores["kiCharge"]} => ${endingStatistics.scores["kiCharge"]}`
 	);
-	update["levelUp-growth-Spellforce"] = (startingStatistics.spellForce == endingStatistics.spellForce 
-		? startingStatistics.spellForce 
-		: `${startingStatistics.spellForce} => ${endingStatistics.spellForce}`
+	update["levelUp-growth-Spellforce"] = (startingStatistics.scores["spellForce"] == endingStatistics.scores["spellForce"]
+		? startingStatistics.scores["spellForce"]
+		: `${startingStatistics.scores["spellForce"]} => ${endingStatistics.scores["spellForce"]}`
 	);
 
 	return update;

@@ -688,6 +688,7 @@ div.wuxDescription .wuxTitle
 }
 
 .wuxFlexTableItemGroup,
+.wuxFlexTableItemGroup2,
 .wuxFlexTableItemGroup3,
 .wuxFlexTableItemGroup8
 {
@@ -699,6 +700,11 @@ div.wuxDescription .wuxTitle
 .wuxFlexTableItemGroup
 {
 	flex: 1;
+}
+
+.wuxFlexTableItemGroup2
+{
+	flex: 2;
 }
 
 .wuxFlexTableItemGroup3

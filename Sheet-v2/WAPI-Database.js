@@ -52,6 +52,25 @@ function GetFieldNameAttribute(fieldName) {
     return fieldName;
 }
 
+// ====== Creation
+
+function CreateDictionary() {
+    return {
+        keys: [],
+        values: {},
+
+        add: function(key, value) {
+            if (!this.keys.includes(key)) {
+                this.keys.push(key);
+            }
+            this.values[key] = value;
+        },
+        has: function(key) {
+            return this.keys.includes(key);
+        }
+    }
+}
+
 // ====== Language
 
 function GetLanguageName(language) {

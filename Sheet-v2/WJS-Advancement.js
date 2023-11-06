@@ -54,11 +54,12 @@ on("change:advancement-button-back", function () {
 
 var update_advancement_back = function () {
 
-	let mod_attrs = [`advancement-previousPage`];
+	let mod_attrs = ["advancement-previousPage", "advancement-level-total"];
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
 
+		update = ResetAdvancement(update, v);
 		update["characterSheetDisplayStyle"] = v["advancement-previousPage"];
 		update["advancement-previousPage"] = "";
 		update["advancement-button-reset-everything"] = "on";
@@ -83,13 +84,16 @@ var update_advancement_submit = function () {
 	let growthArray = GetGrowthList(true);
 	let skillsList = GetAllSkillsList(true);
 
-	let mod_attrs = ["base_level", "statbonus_pb", "builder-ancestry", "builder-baseAbilityScores", "advancement-level-total", "builder-baseGrowths", "builder-baseGrowthsTotal", "advancement-advancementGrowthsTotal", "branchpoints_bonus"];
+	let mod_attrs = ["base_level", "statbonus_pb", "builder-ancestry", "builder-baseAbilityScores", "advancement-level-total", "builder-baseGrowths", "builder-baseGrowthsTotal", "advancement-advancementGrowthsTotal", "branchpoints_bonus", "skills-nextPage", "techniques-jobTech"];
 	mod_attrs = mod_attrs.concat(growthArray);
 	mod_attrs = mod_attrs.concat(GetSkillTrainingFieldList());
 	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
 	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
 	mod_attrs = mod_attrs.concat(GetDerivedBonusStatsList());
 	mod_attrs = mod_attrs.concat(GetBranchesTrainingList());
+	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(false));
+	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(true));
+	mod_attrs = mod_attrs.concat(GetTechSlotTechniquesFieldList());
 
 	getAttrs(mod_attrs, function (v) {
 
@@ -124,23 +128,43 @@ var update_advancement_submit = function () {
 		let bonusGrowths = SetBonusGrowthFieldArray(v);
 		let coreData = SetCoreDataFieldArray(v, "");
 
-		var classUpdates = [];
-		let classUpdate;
-		let pathUpdate = "";
+		let advancementUpdate = {
+			mainLevel: {
+				header: "Character Level Increased!",
+				desc: ""
+			},
+			levelUp: [],
+			currentLevelIndex: 0,
+			techniques: CreateDictionary(),
+
+			addDesc: function(desc) {
+				if (this.levelUp[this.currentLevelIndex].desc != "") {
+					this.levelUp[this.currentLevelIndex].desc += "\n";
+				}
+				this.levelUp[this.currentLevelIndex].desc += desc;
+			},
+
+			addLevel: function(baseHeader) {
+				this.currentLevelIndex = this.levelUp.length;
+				this.levelUp.push({
+					header: `${baseHeader}`,
+					desc: ``
+				});
+			},
+
+			addMainDesc: function(desc) {
+				if (this.mainLevel.desc != "") {
+					this.mainLevel.desc += "\n";
+				}
+				this.mainLevel.desc += desc;
+			}
+		};
 
 		let classData;
 		let classFieldName = "";
 		let classLevel;
-		let techLevel;
-		let techModLevel;
-		let advancement = {
-			keys: [],
-			values: {}
-		};
-		let tech = {};
-		let levelCheck = 0;
 
-		// iterate through the classes and record any advancement changes. Also reset UI from the advancement page
+		// Create advancement changes
 		for (let i = 0; i < levelData.keys.length; i++) {
 
 			classLevel = levelData.values[levelData.keys[i]];
@@ -152,41 +176,10 @@ var update_advancement_submit = function () {
 				advancementGrowthsTotal = AddGrowths(advancementGrowthsTotal, MultiplyGrowths(classData.growths, classLevel.increase));
 				classLevelTotal = classLevel.current + classLevel.increase;
 
-				// update the level up update
-				classUpdate = {
-					header: `${classData.name} Level Up!`,
-					desc: `${classData.name} ${classLevel.current} -> ${classLevelTotal}`
-				};
-
-				// iterate through the advancement gains
-				techLevel = classLevel.current + 1;
-				if (techLevel == 1) {
-					tech = { name: classData.jobTechnique, type: "T" };
-					advancement = AddAdvancementTech(advancement, tech);
-					classUpdate.desc += `\n[Level ${techLevel}]`;
-					classUpdate.desc += `\nGained the ${tech.name} technique.`;
-				}
-				while (techLevel <= 20 && techLevel <= classLevelTotal) {
-
-					// only check advancement on even class levels
-					if (techLevel % 2 == 0) {
-						techModLevel = Math.floor(techLevel / 2) - 1;
-						if (techModLevel >= 0) {
-							tech = classData.advancement[techModLevel];
-
-							if (tech != undefined) {
-
-								advancement = AddAdvancementTech(advancement, tech);
-								classUpdate.desc += `\n[Level ${techLevel}]`;
-								classUpdate.desc += `\n${tech.type == "T" ? `Gained the ${tech.name} technique.` : tech.name}`;
-							}
-						}
-					}
-					techLevel++;
-				}
-
-				// add the updates
-				classUpdates.push(classUpdate);
+				// update the advancement update
+				advancementUpdate.addLevel(`${classData.name} Level Up!`);
+				advancementUpdate.addDesc(`${classData.name} ${classLevel.current} -> ${classLevelTotal}`);
+				advancementUpdate = CreateClassTechniqueUpdate(advancementUpdate, classData, classLevel.current, classLevelTotal);
 
 				// update UI
 				classFieldName = ToCamelCase(levelData.keys[i]);
@@ -196,79 +189,8 @@ var update_advancement_submit = function () {
 			}
 		}
 
-		// iterate through the levels for new path growths
-		let mainUpdate = {
-			header: `Character Level Increased!`,
-			desc: `Character Level ${baseLevel} -> ${totalLevel}`
-		};
-		for (let i = baseLevel; i < totalLevel; i++) {
-			levelCheck = i + 1;
-			pathUpdate = "";
-
-			// set level bonuses
-			switch (levelCheck) {
-				case 1:
-					tech = { name: "Gain a Path Technique.", type: "PS" };
-					pathUpdate += `\n${tech.name}`;
-					advancement = AddAdvancementTech(advancement, tech);
-					tech = { name: "Gain 2 Spell Techniques.", type: "SPS" };
-					pathUpdate += `\n${tech.name}`;
-					advancement = AddAdvancementTech(advancement, tech);
-					advancement = AddAdvancementTech(advancement, tech);
-					break;
-
-				case 6:
-				case 31:
-					tech = { name: "Gain an Active Tech Slot.", type: "ATS" };
-					pathUpdate += `\n${tech.name}`;
-					advancement = AddAdvancementTech(advancement, tech);
-					break;
-
-				case 21:
-					tech = { name: "Gain an Active Tech Slot.", type: "ATS" };
-					pathUpdate += `\n${tech.name}`;
-					advancement = AddAdvancementTech(advancement, tech);
-					tech = { name: "Gain a Job Tech Slot", type: "JTS" };
-					pathUpdate += `\n${tech.name}`;
-					advancement = AddAdvancementTech(advancement, tech);
-					break;
-
-				case 11:
-				case 26:
-				case 36:
-					tech = { name: "Gain a Passive and Support Tech Slot.", type: "PTS" };
-					pathUpdate += `\n${tech.name}`;
-					advancement = AddAdvancementTech(advancement, tech);
-					break;
-			}
-
-			if ((levelCheck % 5) - 2 == 0) {
-				tech = { name: "Gain a Skill Technique.", type: "AS" };
-				pathUpdate += `\n${tech.name}`;
-				advancement = AddAdvancementTech(advancement, tech);
-			}
-			else if ((levelCheck % 5) - 3 == 0) {
-				tech = { name: "Gain a Training Path Technique.", type: "TPS" };
-				pathUpdate += `\n${tech.name}`;
-				advancement = AddAdvancementTech(advancement, tech);
-			}
-			else if ((levelCheck % 5) - 4 == 0) {
-				tech = { name: "Gain a Path Technique.", type: "APS" };
-				pathUpdate += `\n${tech.name}`;
-				advancement = AddAdvancementTech(advancement, tech);
-			}
-			else if ((levelCheck % 5) == 0) {
-				tech = { name: "Gain a Spell Technique.", type: "SPS" };
-				pathUpdate += `\n${tech.name}`;
-				advancement = AddAdvancementTech(advancement, tech);
-			}
-
-			if (pathUpdate != "") {
-				pathUpdate = `\n[Level ${levelCheck}]${pathUpdate}`;
-				mainUpdate.desc += pathUpdate;
-			}
-
-		}
+		advancementUpdate = CreateCharacterAdvancementUpdate(advancementUpdate, baseLevel, totalLevel);
+		update = SetTechniqueAdvancementFields(update, v, totalLevel, advancementUpdate.techniques);
 
 		// calculate final growths
 		baseGrowthsTotal = AddGrowths(baseGrowthsTotal, MultiplyGrowths(baseGrowths, totalLevel - baseLevel));
@@ -283,14 +205,15 @@ var update_advancement_submit = function () {
 		update = SetLevelUpData(update, 
 			GetCharacterStatGrowths(startingStatistics, bonusGrowths, ancestryData),
 			GetCharacterStatGrowths(endingStatistics, bonusGrowths, ancestryData),
-			classUpdates, mainUpdate
+			advancementUpdate.levelUp, advancementUpdate.mainLevel
 		);
 
 		// set updates
 		update["base_level"] = totalLevel;
 		coreData["pb"] = AttrParseInt(v, "statbonus_pb") + GetProfBonusMod(totalLevel);
 		update["pb"] = coreData["pb"];
-		update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, true));
+		levelData = ResetAdvancementLevel(levelData, true);
+		update["advancement-level-total"] = JSON.stringify(levelData);
 		update = SetCharacterSkillsUpdateData(update, v, skillsList, coreData);
 
 		update = GoToNextPage(update, AttrParseString(v, "skills-nextPage", "LevelUp"), "Advancement");
@@ -300,6 +223,128 @@ var update_advancement_submit = function () {
 
 	});
 
+}
+
+function CreateClassTechniqueUpdate(advancementUpdate, classData, currentLevel, maxLevel) {
+	// iterate through the advancement gains
+	let techLevel = currentLevel + 1;
+	let techModLevel = 0;
+	let tech = {};
+
+	// first level gets special features
+	if (techLevel == 1) {
+		tech = { name: classData.jobTechnique, type: "T" };
+		advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+		advancementUpdate.addDesc(`[Level ${techLevel}]`);
+		advancementUpdate.addDesc(`Gained the ${tech.name} technique.`);
+	}
+	while (techLevel <= 20 && techLevel <= maxLevel) {
+
+		// only check advancement on even class levels
+		if (techLevel % 2 == 0) {
+			techModLevel = Math.floor(techLevel / 2) - 1;
+			if (techModLevel >= 0) {
+				tech = classData.advancement[techModLevel];
+
+				if (tech != undefined) {
+					advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+					advancementUpdate.addDesc(`[Level ${techLevel}]`);
+					advancementUpdate.addDesc(`${tech.type == "T" ? `Gained the ${tech.name} technique.` : tech.name}`);
+				}
+			}
+		}
+		techLevel++;
+	}
+
+	return advancementUpdate;
+}
+
+function CreateCharacterAdvancementUpdate(advancementUpdate, currentLevel, maxLevel) {
+
+	// iterate through the levels for new path growths
+	advancementUpdate.addMainDesc(`Character Level ${currentLevel} -> ${maxLevel}`);
+	let pathUpdate = "";
+	let levelCheck = 0;
+
+	for (let i = currentLevel; i < maxLevel; i++) {
+		levelCheck = i + 1;
+		pathUpdate = "";
+
+		// set level bonuses
+		switch (levelCheck) {
+			case 1:
+				tech = { name: "Gain a Path Technique.", type: "PS" };
+				pathUpdate += `\n${tech.name}`;
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				tech = { name: "Gain 2 Spell Techniques.", type: "SPS" };
+				pathUpdate += `\n${tech.name}`;
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				tech = { name: "Gain a Job Tech Slot", type: "JTS" };
+				pathUpdate += `\n${tech.name}`;
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				tech = { name: "Gain an Active Tech Slot.", type: "ATS" };
+				pathUpdate += `\n${tech.name}`;
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				tech = { name: "Gain a Passive and Support Tech Slot.", type: "PTS" };
+				pathUpdate += `\n${tech.name}`;
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				break;
+
+			case 6:
+			case 31:
+				tech = { name: "Gain an Active Tech Slot.", type: "ATS" };
+				pathUpdate += `\n${tech.name}`;
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				break;
+
+			case 21:
+				tech = { name: "Gain a Job Tech Slot", type: "JTS" };
+				pathUpdate += `\n${tech.name}`;
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				tech = { name: "Gain an Active Tech Slot.", type: "ATS" };
+				pathUpdate += `\n${tech.name}`;
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				break;
+
+			case 11:
+			case 26:
+			case 36:
+				tech = { name: "Gain a Passive and Support Tech Slot.", type: "PTS" };
+				pathUpdate += `\n${tech.name}`;
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				break;
+		}
+
+		if ((levelCheck % 5) - 2 == 0) {
+			tech = { name: "Gain a Skill Technique.", type: "AS" };
+			pathUpdate += `\n${tech.name}`;
+			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+		}
+		else if ((levelCheck % 5) - 3 == 0) {
+			tech = { name: "Gain a Training Path Technique.", type: "TPS" };
+			pathUpdate += `\n${tech.name}`;
+			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+		}
+		else if ((levelCheck % 5) - 4 == 0) {
+			tech = { name: "Gain a Path Technique.", type: "PS" };
+			pathUpdate += `\n${tech.name}`;
+			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+		}
+		else if ((levelCheck % 5) == 0) {
+			tech = { name: "Gain a Spell Technique.", type: "SPS" };
+			pathUpdate += `\n${tech.name}`;
+			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+		}
+
+		if (pathUpdate != "") {
+			pathUpdate = `[Level ${levelCheck}]${pathUpdate}`;
+			advancementUpdate.addMainDesc(pathUpdate);
+		}
+
+	}
+
+	return advancementUpdate;
 }
 
 function AddAdvancementTech(advancement, tech) {
@@ -340,34 +385,39 @@ var update_advancement_reset = function () {
 	getAttrs(mod_attrs, function (v) {
 
 		let update = {};
-		let levelData = GetAdvancementLevelData(v["advancement-level-total"]);
-
-		let classData;
-		let classLevel;
-		let classFieldName;
-
-		// iterate through the classes and record any advancement changes. Also reset UI from the advancement page
-		for (let i = 0; i < levelData.keys.length; i++) {
-
-			classLevel = levelData.values[levelData.keys[i]];
-			if (classLevel.increase > 0) {
-
-				// update UI
-				classData = GetClassesInfo(levelData.keys[i]);
-				classFieldName = ToCamelCase(levelData.keys[i]);
-				update[`advancement-level-${classFieldName}_max`] = classLevel.current;
-				update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${classLevel.current}`
-			}
-		}
-
-		// set updates
-		update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, false));
-		update["advancement-button-reset-everything"] = "on";
+		update = ResetAdvancement(update, v);
 
 		setAttrs(update, { silent: true });
 
 	});
+}
 
+function ResetAdvancement (update, attrArray) {
+
+	let levelData = GetAdvancementLevelData(attrArray["advancement-level-total"]);
+
+	let classData;
+	let classLevel;
+	let classFieldName;
+
+	// iterate through the classes and record any advancement changes. Also reset UI from the advancement page
+	for (let i = 0; i < levelData.keys.length; i++) {
+
+		classLevel = levelData.values[levelData.keys[i]];
+		if (classLevel.increase > 0) {
+
+			// update UI
+			classData = GetClassesInfo(levelData.keys[i]);
+			classFieldName = ToCamelCase(levelData.keys[i]);
+			update[`advancement-level-${classFieldName}_max`] = classLevel.current;
+			update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${classLevel.current}`
+		}
+	}
+
+	// set updates
+	update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, false));
+	update["advancement-button-reset-everything"] = "on";
+	return update;
 }
 
 

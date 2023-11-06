@@ -1,3 +1,111 @@
+// ======== Techniques
+
+function GetTechSlotTechniquesFieldList() {
+	return ["character-techslots-job", "character-techslots-active", "character-techslots-passive", "character-techslots-support",
+		"techslotbonus-job", "techslotbonus-active", "techslotbonus-passive", "techslotbonus-support"];
+}
+
+on("change:techslotbonus-job change:techslotbonus-active change:techslotbonus-passive change:techslotbonus-support", function (eventinfo) {
+
+	UpdateCharacterStatGrowths(GetFieldNameAttribute(eventinfo.sourceAttribute));
+});
+
+function UpdateCharacterTechSlotCounts(slotType) {
+
+	let mod_attrs = ["base_level", `character-techslots-${slotType}`, `techslotbonus-${slotType}`];
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+		update = SetCharacterTechSlotCounts(update, v, AttrParseInt(v, "base_level"), [slotType]);
+		setAttrs(update, { silent: true });
+	});
+}
+
+function SetCharacterTechSlotCounts(update, attrArray, totalLevel, slotTypes) {
+	
+	let defaultStats = GetStatisticsDefaults();
+	let countMax = 0;
+	let slotType = {};
+
+	for (let i = 0; i < slotTypes.length; i++) {
+
+		// determine the max count
+		slotType = slotTypes[i];
+		countMax = 0;
+		switch(slotType) {
+			case "job":
+				countMax = defaultStats.techSlotJob;
+				if (totalLevel >= 21) {
+					countMax += 1;
+				}
+			break;
+			case "active":
+				countMax = defaultStats.techSlotActive;
+				if (totalLevel >= 31) {
+					countMax += 3;
+				}
+				else  if (totalLevel >= 21) {
+					countMax += 2;
+				}
+				else  if (totalLevel >= 6) {
+					countMax += 1;
+				}
+			break;
+			case "passive":
+				countMax = defaultStats.techSlotPassive;
+				if (totalLevel >= 36) {
+					countMax += 3;
+				}
+				else  if (totalLevel >= 26) {
+					countMax += 2;
+				}
+				else  if (totalLevel >= 11) {
+					countMax += 1;
+				}
+			break;
+			case "support":
+				countMax = defaultStats.techSlotSupport;
+				if (totalLevel >= 36) {
+					countMax += 3;
+				}
+				else  if (totalLevel >= 26) {
+					countMax += 2;
+				}
+				else  if (totalLevel >= 11) {
+					countMax += 1;
+				}
+			break;
+		}
+
+		if (countMax != 0) {
+			let count = AttrParseString(attrArray, `character-techslots-${slotType}`);
+			if (count != "") {
+				count = count.split(";").length;
+			}
+			else {
+				count = 0;
+			}
+			update[`techslot-${slotType}`] = countMax - count;
+			update[`techslot-${slotType}_max`] = countMax;
+		}
+	}
+	return update;
+}
+
+function AddCharacterClassTechniques(update, attrArray, techniqueNames) {
+
+	let technique = {};
+
+	// iterate through the names and add the techniques to the appropriate arrays
+	for (let i = 0; i < techniqueNames.length; i++) {
+		technique = GetClassTechniquesInfo(techniqueNames[i]);
+	}
+
+	return update;
+}
+
+
+
 // ======== Growths
 
 function GetStatGrowthBonusList() {

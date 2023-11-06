@@ -1,5 +1,9 @@
 <div class="wuxCharacterSheetDisplayStyle-Character">
 	<input type="hidden" name="attr_character-baseGrowthStats" value="">
+	<input type="hidden" name="attr_character-techslots-job" value="">
+	<input type="hidden" name="attr_character-techslots-active" value="">
+	<input type="hidden" name="attr_character-techslots-passive" value="">
+	<input type="hidden" name="attr_character-techslots-support" value="">
 
 	<div class="wuxFloatHeader wuxStickyHeader">
 		<div class="wuxSectionBlock wuxLargeLayoutItem wuxStickyHeaderMain">
@@ -612,7 +616,7 @@
 										<span class="wuxDistinctTitle">Tech Slots</span>
 										<input type="hidden" class="wuxErrorField-flag" name="attr_techslots-error-job" value="0">
 										<span class='wuxDistinctData'>
-											<span name='techslot-job' value="0">0</span>
+											<span name='attr_techslot-job' value="0">0</span>
 											<span>/ </span>
 											<span name='attr_techslot-job_max' value="0">0</span>
 										</span>
@@ -776,7 +780,7 @@
 										<span class="wuxDistinctTitle">Tech Slots</span>
 										<input type="hidden" class="wuxErrorField-flag" name="attr_techslots-error-active" value="0">
 										<span class='wuxDistinctData'>
-											<span name='techslot-active' value="0">0</span>
+											<span name='attr_techslot-active' value="0">0</span>
 											<span>/ </span>
 											<span name='attr_techslot-active_max' value="0">0</span>
 										</span>
@@ -800,7 +804,7 @@
 										<span class="wuxDistinctTitle">Tech Slots</span>
 										<input type="hidden" class="wuxErrorField-flag" name="attr_techslots-error-passive" value="0">
 										<span class='wuxDistinctData'>
-											<span name='techslot-passive' value="0">0</span>
+											<span name='attr_techslot-passive' value="0">0</span>
 											<span>/ </span>
 											<span name='attr_techslot-passive_max' value="0">0</span>
 										</span>
@@ -822,7 +826,7 @@
 										<span class="wuxDistinctTitle">Tech Slots</span>
 										<input type="hidden" class="wuxErrorField-flag" name="attr_techslots-error-support" value="0">
 										<span class='wuxDistinctData'>
-											<span name='techslot-support' value="0">0</span>
+											<span name='attr_techslot-support' value="0">0</span>
 											<span>/ </span>
 											<span name='attr_techslot-support_max' value="0">0</span>
 										</span>
@@ -841,17 +845,6 @@
 						<div class="techSlots-permanent wuxSectionBlock wuxLayoutItem">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Permanent Techniques</div>
-								<div class="wuxDistinctSection">
-									<div class="wuxDistinctField">
-										<span class="wuxDistinctTitle">Tech Slots</span>
-										<input type="hidden" class="wuxErrorField-flag" name="attr_techslots-error-permanent" value="0">
-										<span class='wuxDistinctData'>
-											<span name='techslot-permanent' value="0">0</span>
-											<span>/ </span>
-											<span name='attr_techslot-permanent_max' value="0">0</span>
-										</span>
-									</div>
-								</div>
 
 								<div class="wuxNoRepControl">
 									<fieldset class="repeating_permanenttechniques">
@@ -1405,6 +1398,10 @@
 													</div>
 												</div>
 											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxNoPadding">
+										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroup wuxNoPadding">
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemGroup">

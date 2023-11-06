@@ -291,7 +291,7 @@ on("change:builder-base-CON change:builder-base-DEX change:builder-base-QCK chan
 });
 
 var update_builder_base_ability_scores = function () {
-	update_builder_ability_scores("builder-baseAbilityScorePoints", "builder-base-", 10, 40);
+	update_builder_ability_scores("builder-baseAbilityScorePoints", "builder-base-", 10, 30);
 }
 
 
@@ -307,7 +307,7 @@ on("change:builder-baseGrowth-CON change:builder-baseGrowth-DEX change:builder-b
 });
 
 var update_builder_growth_ability_scores = function () {
-	update_builder_ability_scores("builder-growthAbilityScorePoints", "builder-baseGrowth-", 3, 16);
+	update_builder_ability_scores("builder-growthAbilityScorePoints", "builder-baseGrowth-", 3, 12);
 }
 
 var update_builder_ability_scores = function (pointsAttr, absAttr, indivPointMax, pointsMax) {
@@ -350,21 +350,21 @@ on("change:builder-growthAbilityScore-randomize", function () {
 });
 
 var update_builder_base_ability_scores_randomize = function () {
-	update_builder_ability_scores_randomize("builder-baseAbilityScorePoints", "builder-base-", 10);
+	update_builder_ability_scores_randomize("builder-baseAbilityScorePoints", "builder-base-", 10, 30);
 }
 
 var update_builder_growth_ability_scores_randomize = function () {
-	update_builder_ability_scores_randomize("builder-growthAbilityScorePoints", "builder-baseGrowth-", 3);
+	update_builder_ability_scores_randomize("builder-growthAbilityScorePoints", "builder-baseGrowth-", 3, 12);
 }
 
-var update_builder_ability_scores_randomize = function (pointsAttr, absAttr, indivPointMax) {
+var update_builder_ability_scores_randomize = function (pointsAttr, absAttr, indivPointMax, pointsMax) {
 
 	let mod_attrs = [pointsAttr];
 	mod_attrs = mod_attrs.concat(GetSectionIdNameFromArray(absAttr, "", GetAbilityScoreList(true)));
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
-		let pointCount = AttrParseInt(v, pointsAttr, indivPointMax);
+		let pointCount = AttrParseInt(v, pointsAttr, pointsMax);
 
 		let abilityScoreNames = GetAbilityScoreList(true);
 		let abilityScores = SetAbilityScoreFieldArray(v, absAttr);
@@ -378,9 +378,7 @@ var update_builder_ability_scores_randomize = function (pointsAttr, absAttr, ind
 			}
 		}
 
-		for (let i = 0; i < abilityScoreNames.length; i++) {
-			update[`${absAttr}${abilityScoreNames[i]}`] = abilityScores[abilityScoreNames[i]];
-		}
+		update = SetAbilityScoreUpdate(update, absAttr, abilityScores);
 		update[`${pointsAttr}`] = pointCount;
 
 		setAttrs(update, { silent: true });
@@ -402,11 +400,11 @@ on("change:builder-growthAbilityScore-reset", function () {
 });
 
 var update_builder_base_ability_scores_reset = function () {
-	update_builder_ability_scores_reset("builder-baseAbilityScorePoints", "builder-base-", 40);
+	update_builder_ability_scores_reset("builder-baseAbilityScorePoints", "builder-base-", 30);
 }
 
 var update_builder_growth_ability_scores_reset = function () {
-	update_builder_ability_scores_reset("builder-growthAbilityScorePoints", "builder-baseGrowth-", 16);
+	update_builder_ability_scores_reset("builder-growthAbilityScorePoints", "builder-baseGrowth-", 12);
 }
 
 var update_builder_ability_scores_reset = function (pointsAttr, absAttr, pointsMax) {

@@ -62,11 +62,11 @@ function GetAbilityScoreMod(score) {
 	function GetPathInfo(name) {
 	switch (name.toLowerCase()) {
 	case "common":
-	return {"name":"Common","description":"Common characters represent the majority of creatures found throughout Wuxing. They receive no special bonuses throughout character creation and as they advance.","abilityScorePts":"40"}
+	return {"name":"Common","description":"Common characters represent the majority of creatures found throughout Wuxing. They receive no special bonuses throughout character creation and as they advance.","abilityScorePts":"30"}
 	case "hero":
-	return {"name":"Hero","description":"Player characters typically fall into the Hero path. This path is represented by those who have the resolve to push boundaries and survive the impossible. This path grants characters bonuses at character creation, increased growths throughout their advancement, and some unique actions.","abilityScorePts":"60"}
+	return {"name":"Hero","description":"Player characters typically fall into the Hero path. This path is represented by those who have the resolve to push boundaries and survive the impossible. This path grants characters bonuses at character creation, increased growths throughout their advancement, and some unique actions.","abilityScorePts":"50"}
 	case "paragon":
-	return {"name":"Paragon","description":"Paragon characters are those who excel beyond that of a hero into something very unique. They gain the bonuses of the Hero path characters plus additional benefits determined by the GM.","abilityScorePts":"60"}
+	return {"name":"Paragon","description":"Paragon characters are those who excel beyond that of a hero into something very unique. They gain the bonuses of the Hero path characters plus additional benefits determined by the GM.","abilityScorePts":"50"}
 	default:
 	return {"name":"","description":"","abilityScorePts":""}
 	
