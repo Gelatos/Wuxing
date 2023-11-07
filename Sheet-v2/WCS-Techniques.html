@@ -220,7 +220,7 @@
 															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillmagic" placeholder="0"></span>
 														</div>
 													</div>
-												</div>å
+												</div>
 												<div class="wuxFlexTableItemGroup wuxNoPadding">
 													<div class="wuxFlexTable">
 														<div class="wuxFlexTableItemGroup3">
@@ -302,6 +302,615 @@
 									</div>
 								</div>
 							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="techniques-filters wuxSegment">
+				<div class="wuxTab">
+					<div class="wuxSectionBlock wuxLayoutItem">
+						<div class="wuxSectionContent">
+							<span class="wuxHeader">Filters</span>
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_techniques-button-clearfilter">
+							<div class="wuxHiddenAuxField">
+								<div class="wuxMultiRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_techniques-button-clearfilter">
+										<span>Clear Filters</span>
+									</div>
+								</div>
+							</div>
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_techniques-button-clearfilter">
+							<div class="wuxHiddenField">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<span class="wuxFlexTableItemHeader wuxTextLeft">General Filters</span>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxSizeSmall">
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-selectedtech">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-selectedtech">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-selectedtech">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-selectedtech">
+														<span class="wuxHeader">All Selected Techniques</span>
+													</div>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-pathsAll">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-pathsAll">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-pathsAll">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-pathsAll">
+														<span class="wuxHeader">All Path Techniques</span>
+													</div>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-skillAll">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillAll">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillAll">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillAll">
+														<span class="wuxHeader">All Skill Techniques</span>
+													</div>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellAll">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellAll">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellAll">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellAll">
+														<span class="wuxHeader">All Spell Techniques</span>
+													</div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<span class="wuxFlexTableItemHeader wuxTextLeft">Path Techniques</span>
+										<div class="wuxFlexTableItemData wuxTextLeft">
+											<div class="wuxInteractiveBlock wuxSizeSmall">
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-pathsTraining">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-pathsTraining">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-pathsTraining">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-pathsTraining">
+														<span class="wuxHeader">Training Path</span>
+													</div>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-pathsGeneral">
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-pathsGeneral">
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-pathsGeneral">
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-pathsGeneral">
+														<span class="wuxHeader">General Path</span>
+													</div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup2">
+										<span class="wuxFlexTableItemHeader wuxTextLeft">Skill Techniques</span>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTableItemData wuxTextLeft">
+													<div class="wuxInteractiveBlock wuxSizeSmall">
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-skillDefensive">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillDefensive">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillDefensive">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillDefensive">
+																<span class="wuxHeader">Defensive Skills</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-skillMartial">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillMartial">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillMartial">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillMartial">
+																<span class="wuxHeader">Martial Skills</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-skillMagic">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillMagic">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillMagic">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillMagic">
+																<span class="wuxHeader">Magic Skills</span>
+															</div>
+														</div>
+
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTableItemData wuxTextLeft">
+													<div class="wuxInteractiveBlock wuxSizeSmall">
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-skillBody">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillBody">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillBody">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillBody">
+																<span class="wuxHeader">Body Skills</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-skillKnowledge">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillKnowledge">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillKnowledge">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillKnowledge">
+																<span class="wuxHeader">Knowledge Skills</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-skillSocial">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillSocial">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillSocial">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillSocial">
+																<span class="wuxHeader">Social Skills</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-skillTechnical">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillTechnical">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillTechnical">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-skillTechnical">
+																<span class="wuxHeader">Technical Skills</span>
+															</div>
+														</div>
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup2">
+										<span class="wuxFlexTableItemHeader wuxTextLeft">Spell Techniques</span>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTableItemData wuxTextLeft">
+													<div class="wuxInteractiveBlock wuxSizeSmall">
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellWoodAll">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWoodAll">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWoodAll">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWoodAll">
+																<span class="wuxHeader">All Wood Spells</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellWoodBasic">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWoodBasic">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWoodBasic">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWoodBasic">
+																<span class="wuxHeader">Basic Wood Spells</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellWoodWind">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWoodWind">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWoodWind">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWoodWind">
+																<span class="wuxHeader">Wind Spells</span>
+															</div>
+														</div>
+
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTableItemData wuxTextLeft">
+													<div class="wuxInteractiveBlock wuxSizeSmall">
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellFireAll">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellFireAll">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellFireAll">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellFireAll">
+																<span class="wuxHeader">All Fire Spells</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellFireBasic">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellFireBasic">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellFireBasic">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellFireBasic">
+																<span class="wuxHeader">Basic Fire Spells</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellFireLight">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellFireLight">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellFireLight">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellFireLight">
+																<span class="wuxHeader">Light Spells</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTableItemData wuxTextLeft">
+													<div class="wuxInteractiveBlock wuxSizeSmall">
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellEarthAll">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellEarthAll">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellEarthAll">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellEarthAll">
+																<span class="wuxHeader">All Earth Spells</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellEarthBasic">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellEarthBasic">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellEarthBasic">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellEarthBasic">
+																<span class="wuxHeader">Basic Earth Spells</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellEarthShadow">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellEarthShadow">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellEarthShadow">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellEarthShadow">
+																<span class="wuxHeader">Shadow Spells</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTableItemData wuxTextLeft">
+													<div class="wuxInteractiveBlock wuxSizeSmall">
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellMetalAll">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellMetalAll">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellMetalAll">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellMetalAll">
+																<span class="wuxHeader">All Metal Spells</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellMetalBasic">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellMetalBasic">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellMetalBasic">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellMetalBasic">
+																<span class="wuxHeader">Basic Metal Spells</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellMetalLightning">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellMetalLightning">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellMetalLightning">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellMetalLightning">
+																<span class="wuxHeader">Lightning Spells</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxNoPadding">
+												<div class="wuxFlexTableItemData wuxTextLeft">
+													<div class="wuxInteractiveBlock wuxSizeSmall">
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellWaterAll">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWaterAll">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWaterAll">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWaterAll">
+																<span class="wuxHeader">All Water Spells</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellWaterBasic">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWaterBasic">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWaterBasic">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWaterBasic">
+																<span class="wuxHeader">Basic Water Spells</span>
+															</div>
+														</div>
+														<div class="wuxInteractiveInnerBlock">
+															<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-spellWaterStorm">
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWaterStorm">
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWaterStorm">
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techniques-filter-spellWaterStorm">
+																<span class="wuxHeader">Storm Spells</span>
+															</div>
+														</div>
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="wuxMultiRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_techniques-button-showtech">
+										<span>Show Techniques</span>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="techniques-display wuxSegment">
+				<div class="wuxTab">
+					<div class="techSlots-permanent wuxSectionBlock wuxLayoutItem">
+						<div class="wuxSectionContent">
+							<div class="wuxHeader">Filtered Techniques</div>
+
+							<div class="wuxNoRepControl">
+								<div class="wuxTechniqueTable">
+									<div class="wuxTechniqueTableHeader">
+										<div class="wuxTechniqueTableHeaderInteractBlock"><span>Dtls</span></div>
+										<div class="wuxTechniqueTableHeaderInteractBlock"><span>Select</span></div>
+									</div>
+								</div>
+								<fieldset class="repeating_filteredtechniques">
+									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select" value="1">
+									<div class="wuxTechnique">
+										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="">
+										<div class="wuxTechniqueHeader">
+											<input type="hidden" class="wuxHiddenField-flag wuxTechniqueType-flag" name="attr_technique-type-flag">
+											<div class="wuxHiddenField">
+												<div class="wuxTechniqueType" name="attr_technique-type" value="">
+													<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
+													<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
+												</div>
+											</div>
+
+											<div class="wuxTechniqueHeaderInteractBlock">
+												<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand">
+												<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+												<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+												<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+												<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+											</div>
+											<div class="wuxTechniqueHeaderInteractBlock">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isMultiple">
+												<div class="wuxHiddenAuxField">
+													<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-select" value="1">
+													<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-select" value="1">
+													<span class="wuxTechniqueHeaderInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-select" value="1">
+													<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9634;</span>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isMultiple">
+												<div class="wuxHiddenField">
+													<input type="number" class="wuxTechniqueHeaderInteractiveAuxIcon" name="attr_technique-select">
+												</div>
+											</div>
+
+											<div class="wuxTechniqueHeaderDisplayBlock">
+												<span class="wuxTechniqueHeaderName" name="attr_technique-name">Technique</span>
+												<div class="wuxTechniqueHeaderInfo">
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Base</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-action" value="">
+													<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">: </span>
+													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+													<span class="wuxHiddenInlineField">, </span>
+													<span name="attr_technique-limits"></span>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand">
+										<div class="wuxTechniqueExpandingContent">
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+											<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Prerequisites: </strong></span>
+														<span name="attr_technique-prerequisite"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits0"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits1"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits2"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits3"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits4"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_technique-traits5"></span>
+															<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span name="attr_technique-requirement"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Trigger: </strong></span>
+														<span name="attr_technique-trigger"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Resources: </strong></span>
+														<span name="attr_technique-resourceCost"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span name="attr_technique-range"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span name="attr_technique-target"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<strong><span name="attr_technique-skill"></span></strong>
+		
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+														<div class="wuxHiddenField wuxTechniqueAttackBlockDefense">
+															<span> vs. </span>
+															<span name="attr_technique-defense"></span>
+														</div>
+														<div class="wuxHiddenAuxField wuxTechniqueAttackBlockDefense">
+															<span> Check</span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxTechniqueAttackBlockRow">
+														<span name="attr_technique-damageString"></span>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+											<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+												<div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+													<div class="wuxHiddenBlockField">
+														<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+													</div>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+													<div class="wuxHiddenBlockField">
+														<div class="wuxTechniqueDescriptionBlockDesc">
+															<strong>On Hit: </strong>
+															<span name="attr_technique-onSuccess"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+
 						</div>
 					</div>
 				</div>

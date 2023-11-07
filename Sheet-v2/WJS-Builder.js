@@ -199,6 +199,7 @@ var update_builder_ancestry_info = function (newValue) {
 	update["builder-growth-Spellforce"] = ancestryData.growths.spellForce;
 
 	// create the techniques and update the skills
+	ClearAllSectionIds("repeating_ancestrytechniques");
 	update = SetTechniqueDataList(update, "repeating_ancestrytechniques", ancestryTechniques);
 	update = update_builder_ancestrySkills(update, ancestryData);
 	update_skills_defensivePhys_skills();

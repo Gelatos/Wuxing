@@ -34,8 +34,6 @@ function SetLevelUpData (update, startingStatistics, endingStatistics, classUpda
 		}
 		i++;
 	}
-	update[`levelUp-header-main`] = mainUpdate.header;
-	update[`levelUp-desc-main`] = mainUpdate.desc;
 
 	// update the growths
 	update["levelUp-growth-CON"] = (startingStatistics.scores["CON"] == endingStatistics.scores["CON"]
@@ -82,10 +80,21 @@ function SetLevelUpData (update, startingStatistics, endingStatistics, classUpda
 		? startingStatistics.scores["kiCharge"]
 		: `${startingStatistics.scores["kiCharge"]} => ${endingStatistics.scores["kiCharge"]}`
 	);
-	update["levelUp-growth-Spellforce"] = (startingStatistics.scores["spellForce"] == endingStatistics.scores["spellForce"]
-		? startingStatistics.scores["spellForce"]
-		: `${startingStatistics.scores["spellForce"]} => ${endingStatistics.scores["spellForce"]}`
-	);
+
+	if (startingStatistics.scores["spellForce"] == endingStatistics.scores["spellForce"]) {
+		update["levelUp-growth-Spellforce"] = startingStatistics.scores["spellForce"];
+	}
+	else {
+		update["levelUp-growth-Spellforce"] = `${startingStatistics.scores["spellForce"]} => ${endingStatistics.scores["spellForce"]}`;
+
+		if (endingStatistics.scores["spellForce"] % 2 == 0) {
+			// the player gained a branch
+			mainUpdate.desc += "\nGained a new branch";
+		}
+	}
+
+	update[`levelUp-header-main`] = mainUpdate.header;
+	update[`levelUp-desc-main`] = mainUpdate.desc;
 
 	return update;
 }

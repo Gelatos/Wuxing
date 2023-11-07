@@ -981,7 +981,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
     position: relative;
     display: block;
 	width: 100%;
-    min-width: 120px;
+    min-width: 150px;
 
 	min-height: 25px;
 	margin: 0px 0px 5px 0px;
@@ -1317,7 +1317,8 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     Techniques
 ========================================*/
 
-.wuxTechnique
+.wuxTechnique,
+.wuxTechniqueTable
 {
     position: relative;
     display: inline-block;
@@ -1325,21 +1326,33 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     max-width: 500px; 
     width: calc(100% - 10px);
 
+    flex: 1;
+}
+
+.wuxTechnique
+{
     font-size: 12px;
 
     border: 3px solid black; 
     background: #cacbcf;
-
-    flex: 1;
 }
 
-.wuxTechniqueHeader
+input[type=hidden].wuxTechnique-flag:not([value="0"]) + .wuxTechnique
+{
+    border: 3px solid #ba7417;
+}
+
+.wuxTechniqueHeader,
+.wuxTechniqueTableHeader
 {
     position: relative;
     display: block; 
     width: calc(100% - 10px);
     padding: 0px 0px 5px 10px; 
-    
+}
+
+.wuxTechniqueHeader
+{
     background: #c0e7d5;
     border-bottom: 1px solid #efefef; 
 }
@@ -1424,10 +1437,68 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
     font-size: 7px;
 }
 
-.wuxTechniqueHeaderName
+.wuxTechniqueHeaderInteractBlock,
+.wuxTechniqueTableHeaderInteractBlock 
+{
+    position: relative;
+	display: inline-block;
+	width: 25px;
+	height: 100%;
+}
+
+.wuxTechniqueTableHeaderInteractBlock span
+{
+    color: #d0d0d0;
+    font-size: 8px;
+    text-align: center;
+}
+
+.wuxTechniqueHeaderInteractiveIcon,
+.wuxTechniqueHeaderInteractiveAuxIcon
+{
+    position: relative;
+    bottom: 5px;
+
+    color: #000;
+    font-size: 20px;
+}
+
+input[type=number].wuxTechniqueHeaderInteractiveAuxIcon
+{
+    max-width: 20px;
+
+    font-size: 12px;
+
+    background: #FFF;
+}
+
+.wuxTechniqueHeaderInteractiveIcon
+{
+	display: none;
+}
+
+input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + .wuxTechniqueHeaderInteractiveIcon,
+.wuxTechniqueHeaderInteractiveAuxIcon
+{
+    display: inline-block;
+}
+
+input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + .wuxTechniqueHeaderInteractiveAuxIcon
+{
+    display: none;
+}
+
+.wuxTechniqueHeaderDisplayBlock
 {
     display:inline-block; 
-    width: calc(100% - 65px);
+    width: calc(100% - 115px);
+}
+
+.wuxTechniqueHeaderName
+{
+    display: block; 
+
+    width: 100%;
     margin-top: 5px; 
     
     font-size: 13px; 
@@ -1437,7 +1508,6 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
 .wuxTechniqueHeaderInfo
 {
     display: block; 
-    width: calc(100% - 65px);
 
     font-size: 11px;
 }
@@ -1445,6 +1515,28 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
 .wuxTechniqueHeaderInfoType
 {
     font-weight: bold;
+}
+
+.wuxTechniqueExpandingContent
+{
+    display: none;
+}
+
+input[type="checkbox"].wuxTechniqueHeaderInteractBlock-flag
+{
+    opacity: 0;    
+    position: absolute;
+	display: block;
+    top: 0px;
+	left: 0px;
+	right: 0px;
+    min-height: 25px;
+    z-index: 100;
+}
+
+input[type=hidden].wuxTechniqueHeaderInteractBlock-flag[value="on"] + .wuxTechniqueExpandingContent
+{
+    display: block;
 }
 
 .wuxTechniqueFunctionBlock
@@ -1565,7 +1657,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     visibility: hidden;
     background: #fff;
     border-radius: 6px;
-   
+   border: 2px solid black;
   }
   
   .wuxTrait:hover .wuxTooltiptext

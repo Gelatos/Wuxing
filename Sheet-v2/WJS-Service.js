@@ -366,45 +366,58 @@ function GetTechniqueDataArray(type, techniques) {
 	return output;
 }
 
-function SetTechniqueDataList(update, repeatingSection, techniqueList) {
+function SetTechniqueDataList(update, repeatingSection, techniqueList, selectedTechniques, autoExpand) {
 
 	// start by clearing the section Ids
-	ClearAllSectionIds(repeatingSection);
 	let newrowid;
+	let name = "";
 
 	// iterate through each technique
 	for (let i = 0; i < techniqueList.length; i++) {
 		newrowid = generateRowID();
-		update = SetTechniqueData(update, newrowid, repeatingSection, techniqueList[i]);
-
-		// iterate through the augments and get them as well
-		for (let j = 0; j < techniqueList[i].augments.length; j++) {
-			newrowid = generateRowID();
-			update = SetTechniqueData(update, newrowid, repeatingSection, techniqueList[i].augments[j]);
-		}
+		name = techniqueList[i];
+		update = SetTechniqueData(update, newrowid, repeatingSection, name, TechniqueIsSelected(selectedTechniques, name), autoExpand);
 	}
 
 	return update;
 
 }
 
-function SetTechniqueData(update, newrowid, repeatingSection, technique) {
+function TechniqueIsSelected(selectedTechniques, name) {
+	if (selectedTechniques == undefined) {
+		return 0;
+	}
+	else if (selectedTechniques.keys.includes(name)) {
+		return selectedTechniques.values[name];
+	}
+	return 0;
+}
+
+function SetTechniqueData(update, newrowid, repeatingSection, technique, select, autoExpand) {
+
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-select")] = select;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-expand")] = autoExpand ? "on" : "0";
 
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-header")] = technique.augmentBase == "" ? technique.action : "Augment";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-name")] = technique.name;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-augmentBase")] = technique.augmentBase == "" ? "Base" : technique.augmentBase;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-group")] = technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-type-flag")] = technique.techniqueType != "" ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-type")] = technique.techniqueType;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-action")] = technique.action;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-limits")] = technique.limits;
 
 	// set the function block
+	var isMultiple = false;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-functionBlock")] =
 		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "" || technique.resourceCost != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-traits")] = technique.traits;
 	var traitsDb = GetTraitsDictionary(technique.traits, "technique");
 	for (var i = 0; i < 6; i++) {
 		if (i < traitsDb.length) {
+			if (traitsDb[i].name.toLowerCase() == "multiple") {
+				isMultiple = true;
+			}
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = traitsDb[i].name;
 			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = traitsDb[i].description;
 		} else {
@@ -416,6 +429,7 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique) {
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-requirement")] = technique.requirement;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-prerequisite")] = technique.prerequisite;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-resourceCost")] = technique.resourceCost;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-isMultiple")] = isMultiple ? "1" : "0";
 
 	// set the description
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-descriptionBlock")] = (technique.description != "" || technique.onSuccess != "") ? "1" : "0";
