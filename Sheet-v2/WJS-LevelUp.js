@@ -2,7 +2,6 @@
 
 function SetLevelUpData (update, startingStatistics, endingStatistics, classUpdates, mainUpdate) {
 
-	console.log(`classUpdates: ${JSON.stringify(startingStatistics)}`);
 	// setup the class update
 	let i = 0;
 	let max = 3;

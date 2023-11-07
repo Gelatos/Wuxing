@@ -39,12 +39,12 @@ function AttrParseJSON(attrArray, fieldName, defaultValue) {
 
 
 // ======== Section Ids
-function GetSectionIdValues(idarray, sectionName, variableArray) {
+function GetSectionIdValues(idarray, repeatingSection, variableArray) {
 	var output = [];
 
 	_.each(idarray, function (currentID) {
 		_.each(variableArray, function (variableName) {
-			output.push(GetSectionIdName(sectionName, currentID, variableName));
+			output.push(GetSectionIdName(repeatingSection, currentID, variableName));
 		});
 	});
 
@@ -370,13 +370,14 @@ function SetTechniqueDataList(update, repeatingSection, techniqueList, selectedT
 
 	// start by clearing the section Ids
 	let newrowid;
-	let name = "";
+	let technique;
+	console.log("received: " + JSON.stringify(selectedTechniques));
 
 	// iterate through each technique
 	for (let i = 0; i < techniqueList.length; i++) {
 		newrowid = generateRowID();
-		name = techniqueList[i];
-		update = SetTechniqueData(update, newrowid, repeatingSection, name, TechniqueIsSelected(selectedTechniques, name), autoExpand);
+		technique = techniqueList[i];
+		update = SetTechniqueData(update, newrowid, repeatingSection, technique, TechniqueIsSelected(selectedTechniques, technique.name), autoExpand);
 	}
 
 	return update;
@@ -395,6 +396,9 @@ function TechniqueIsSelected(selectedTechniques, name) {
 
 function SetTechniqueData(update, newrowid, repeatingSection, technique, select, autoExpand) {
 
+	if (select != 0) {
+		console.log(technique.name + ": " + select);
+	}
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-select")] = select;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-expand")] = autoExpand ? "on" : "0";
 

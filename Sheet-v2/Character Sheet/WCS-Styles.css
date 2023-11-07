@@ -1465,7 +1465,8 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
 
 input[type=number].wuxTechniqueHeaderInteractiveAuxIcon
 {
-    max-width: 20px;
+    max-width: 25px;
+    margin-left: -5px;
 
     font-size: 12px;
 

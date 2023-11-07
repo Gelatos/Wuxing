@@ -498,3 +498,54 @@ function GetTechniquesLearnedTechNames(learnedTech, workingTechniqueNames) {
 	return workingTechniqueNames;
 }
 
+
+
+// ======== Technique Selection
+
+on("change:repeating_filteredtechniques:technique-select", function (eventinfo) {
+	UpdateTechniquesSelectedTechniques(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_filteredtechniques"), eventinfo.newValue);
+});
+
+function UpdateTechniquesSelectedTechniques(repeatingId, newValue) {
+
+	let repeatingSection = "repeating_filteredtechniques";
+	
+	let mod_attrs = ["techniques-learnedNewTech"];
+	mod_attrs = mod_attrs.concat(GetSectionIdValues([repeatingId], repeatingSection, ["technique-name"]));
+	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(false));
+	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(true));
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let techName = AttrParseString(v, GetSectionIdName(repeatingSection, repeatingId, "technique-name"));
+		if (techName == "") {
+			return;
+		}
+
+		let learnedTech = AttrParseJSON(v, "techniques-learnedNewTech");
+		if (learnedTech == "") {
+			learnedTech = CreateDictionary();
+		}
+
+		if (newValue.toString() == "0") {
+			// this technique is being unselected
+			if (learnedTech.keys.includes(techName)) {
+				learnedTech.keys = learnedTech.keys.splice(learnedTech.keys.indexOf(techName), 1);
+				delete learnedTech.values[techName];
+			}
+		}
+		else if (learnedTech.keys.includes(techName)) {
+			learnedTech.values[techName] = newValue;
+		}
+		else {
+			learnedTech.keys.push(techName);
+			learnedTech.values[techName] = newValue;
+		}
+
+		update["techniques-learnedNewTech"] = JSON.stringify(learnedTech);
+		
+		setAttrs(update, { silent: true });
+	});
+}
+

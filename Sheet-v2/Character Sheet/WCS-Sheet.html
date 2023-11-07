@@ -6482,7 +6482,7 @@
 											</div>
 											<div class="wuxTechniqueHeaderInteractBlock">
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isMultiple">
-												<div class="wuxHiddenAuxField">
+												<div class="wuxHiddenAuxField" style="margin-left: -5px;">
 													<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-select" value="1">
 													<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-select" value="1">
 													<span class="wuxTechniqueHeaderInteractiveIcon">&#9635;</span>
@@ -10400,12 +10400,12 @@ function AttrParseJSON(attrArray, fieldName, defaultValue) {
 
 
 // ======== Section Ids
-function GetSectionIdValues(idarray, sectionName, variableArray) {
+function GetSectionIdValues(idarray, repeatingSection, variableArray) {
 	var output = [];
 
 	_.each(idarray, function (currentID) {
 		_.each(variableArray, function (variableName) {
-			output.push(GetSectionIdName(sectionName, currentID, variableName));
+			output.push(GetSectionIdName(repeatingSection, currentID, variableName));
 		});
 	});
 
@@ -10731,13 +10731,14 @@ function SetTechniqueDataList(update, repeatingSection, techniqueList, selectedT
 
 	// start by clearing the section Ids
 	let newrowid;
-	let name = "";
+	let technique;
+	console.log("received: " + JSON.stringify(selectedTechniques));
 
 	// iterate through each technique
 	for (let i = 0; i < techniqueList.length; i++) {
 		newrowid = generateRowID();
-		name = techniqueList[i];
-		update = SetTechniqueData(update, newrowid, repeatingSection, name, TechniqueIsSelected(selectedTechniques, name), autoExpand);
+		technique = techniqueList[i];
+		update = SetTechniqueData(update, newrowid, repeatingSection, technique, TechniqueIsSelected(selectedTechniques, technique.name), autoExpand);
 	}
 
 	return update;
@@ -10756,6 +10757,9 @@ function TechniqueIsSelected(selectedTechniques, name) {
 
 function SetTechniqueData(update, newrowid, repeatingSection, technique, select, autoExpand) {
 
+	if (select != 0) {
+		console.log(technique.name + ": " + select);
+	}
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-select")] = select;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-expand")] = autoExpand ? "on" : "0";
 
@@ -12204,7 +12208,6 @@ var update_advancement_class_level = function (classFieldName) {
 
 function SetLevelUpData (update, startingStatistics, endingStatistics, classUpdates, mainUpdate) {
 
-	console.log(`classUpdates: ${JSON.stringify(startingStatistics)}`);
 	// setup the class update
 	let i = 0;
 	let max = 3;
@@ -12236,8 +12239,6 @@ function SetLevelUpData (update, startingStatistics, endingStatistics, classUpda
 		}
 		i++;
 	}
-	update[`levelUp-header-main`] = mainUpdate.header;
-	update[`levelUp-desc-main`] = mainUpdate.desc;
 
 	// update the growths
 	update["levelUp-growth-CON"] = (startingStatistics.scores["CON"] == endingStatistics.scores["CON"]
@@ -12284,10 +12285,21 @@ function SetLevelUpData (update, startingStatistics, endingStatistics, classUpda
 		? startingStatistics.scores["kiCharge"]
 		: `${startingStatistics.scores["kiCharge"]} => ${endingStatistics.scores["kiCharge"]}`
 	);
-	update["levelUp-growth-Spellforce"] = (startingStatistics.scores["spellForce"] == endingStatistics.scores["spellForce"]
-		? startingStatistics.scores["spellForce"]
-		: `${startingStatistics.scores["spellForce"]} => ${endingStatistics.scores["spellForce"]}`
-	);
+
+	if (startingStatistics.scores["spellForce"] == endingStatistics.scores["spellForce"]) {
+		update["levelUp-growth-Spellforce"] = startingStatistics.scores["spellForce"];
+	}
+	else {
+		update["levelUp-growth-Spellforce"] = `${startingStatistics.scores["spellForce"]} => ${endingStatistics.scores["spellForce"]}`;
+
+		if (endingStatistics.scores["spellForce"] % 2 == 0) {
+			// the player gained a branch
+			mainUpdate.desc += "\nGained a new branch";
+		}
+	}
+
+	update[`levelUp-header-main`] = mainUpdate.header;
+	update[`levelUp-desc-main`] = mainUpdate.desc;
 
 	return update;
 }// ======== Submission
@@ -12788,6 +12800,57 @@ function GetTechniquesLearnedTechNames(learnedTech, workingTechniqueNames) {
 		}
 	}
 	return workingTechniqueNames;
+}
+
+
+
+// ======== Technique Selection
+
+on("change:repeating_filteredtechniques:technique-select", function (eventinfo) {
+	UpdateTechniquesSelectedTechniques(GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, "repeating_filteredtechniques"), eventinfo.newValue);
+});
+
+function UpdateTechniquesSelectedTechniques(repeatingId, newValue) {
+
+	let repeatingSection = "repeating_filteredtechniques";
+	
+	let mod_attrs = ["techniques-learnedNewTech"];
+	mod_attrs = mod_attrs.concat(GetSectionIdValues([repeatingId], repeatingSection, ["technique-name"]));
+	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(false));
+	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(true));
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let techName = AttrParseString(v, GetSectionIdName(repeatingSection, repeatingId, "technique-name"));
+		if (techName == "") {
+			return;
+		}
+
+		let learnedTech = AttrParseJSON(v, "techniques-learnedNewTech");
+		if (learnedTech == "") {
+			learnedTech = CreateDictionary();
+		}
+
+		if (newValue.toString() == "0") {
+			// this technique is being unselected
+			if (learnedTech.keys.includes(techName)) {
+				learnedTech.keys = learnedTech.keys.splice(learnedTech.keys.indexOf(techName), 1);
+				delete learnedTech.values[techName];
+			}
+		}
+		else if (learnedTech.keys.includes(techName)) {
+			learnedTech.values[techName] = newValue;
+		}
+		else {
+			learnedTech.keys.push(techName);
+			learnedTech.values[techName] = newValue;
+		}
+
+		update["techniques-learnedNewTech"] = JSON.stringify(learnedTech);
+		
+		setAttrs(update, { silent: true });
+	});
 }
 
 // ======== Techniques
