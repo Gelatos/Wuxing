@@ -511,7 +511,7 @@ function UpdateTechniquesSelectedTechniques(repeatingId, newValue) {
 	let repeatingSection = "repeating_filteredtechniques";
 	
 	let mod_attrs = ["techniques-learnedNewTech"];
-	mod_attrs = mod_attrs.concat(GetSectionIdValues([repeatingId], repeatingSection, ["technique-name"]));
+	mod_attrs = mod_attrs.concat(GetSectionIdValues([repeatingId], repeatingSection, ["technique-name", "technique-group", "technique-subgroup"]));
 	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(false));
 	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(true));
 
@@ -522,30 +522,42 @@ function UpdateTechniquesSelectedTechniques(repeatingId, newValue) {
 		if (techName == "") {
 			return;
 		}
+		let techGroup = AttrParseString(v, GetSectionIdName(repeatingSection, repeatingId, "technique-group"));
 
 		let learnedTech = AttrParseJSON(v, "techniques-learnedNewTech");
 		if (learnedTech == "") {
 			learnedTech = CreateDictionary();
 		}
-
-		if (newValue.toString() == "0") {
-			// this technique is being unselected
-			if (learnedTech.keys.includes(techName)) {
-				learnedTech.keys = learnedTech.keys.splice(learnedTech.keys.indexOf(techName), 1);
-				delete learnedTech.values[techName];
-			}
-		}
-		else if (learnedTech.keys.includes(techName)) {
-			learnedTech.values[techName] = newValue;
-		}
-		else {
-			learnedTech.keys.push(techName);
-			learnedTech.values[techName] = newValue;
-		}
-
+		learnedTech = SetTechniquesSelectedTechnique(learnedTech, techName, newValue);
 		update["techniques-learnedNewTech"] = JSON.stringify(learnedTech);
+		
+		update = SetTechniquesSelectedTechniquePoints(update, v, techName, techGroup);
 		
 		setAttrs(update, { silent: true });
 	});
 }
 
+function SetTechniquesSelectedTechnique(learnedTech, techName, newValue) {
+    
+    if (newValue.toString() == "0") {
+		// this technique is being unselected
+		if (learnedTech.keys.includes(techName)) {
+			learnedTech.keys = learnedTech.keys.splice(learnedTech.keys.indexOf(techName), 1);
+			delete learnedTech.values[techName];
+		}
+	}
+	else if (learnedTech.keys.includes(techName)) {
+		learnedTech.values[techName] = newValue;
+	}
+	else {
+		learnedTech.keys.push(techName);
+		learnedTech.values[techName] = newValue;
+	}
+	
+	return learnedTech;
+}
+
+function SetTechniquesSelectedTechniquePoints(update, attrArray, techName, techGroup) {
+    
+    
+}
