@@ -735,6 +735,7 @@
 									</div>
 								</div>
 								<fieldset class="repeating_filteredtechniques">
+									<input type="hidden" name="attr_technique-isCustom" value="0">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select" value="1">
 									<div class="wuxTechnique">
 										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="">
@@ -743,7 +744,9 @@
 											<div class="wuxHiddenField">
 												<div class="wuxTechniqueType" name="attr_technique-type" value="">
 													<span class="wuxTechniqueTypeHeader" name="attr_technique-type">Active</span>
-													<span class="wuxTechniqueTypeFooter" name="attr_technique-group">Group</span>
+													<span class="wuxTechniqueTypeFooter" name="attr_technique-displaygroup">Group</span>
+									                <input type="hidden" name="attr_technique-group">
+									                <input type="hidden" name="attr_technique-subgroup">
 												</div>
 											</div>
 
