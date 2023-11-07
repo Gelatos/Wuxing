@@ -366,7 +366,7 @@ function GetTechniqueDataArray(type, techniques) {
 	return output;
 }
 
-function SetTechniqueDataList(update, repeatingSection, techniqueList, selectedTechniques, autoExpand) {
+function SetTechniqueDataList(update, repeatingSection, techniqueList, selectedTechniques, autoExpand, isCustom) {
 
 	// start by clearing the section Ids
 	let newrowid;
@@ -377,7 +377,7 @@ function SetTechniqueDataList(update, repeatingSection, techniqueList, selectedT
 	for (let i = 0; i < techniqueList.length; i++) {
 		newrowid = generateRowID();
 		technique = techniqueList[i];
-		update = SetTechniqueData(update, newrowid, repeatingSection, technique, TechniqueIsSelected(selectedTechniques, technique.name), autoExpand);
+		update = SetTechniqueData(update, newrowid, repeatingSection, technique, TechniqueIsSelected(selectedTechniques, technique.name), autoExpand, isCustom);
 	}
 
 	return update;
@@ -394,18 +394,21 @@ function TechniqueIsSelected(selectedTechniques, name) {
 	return 0;
 }
 
-function SetTechniqueData(update, newrowid, repeatingSection, technique, select, autoExpand) {
+function SetTechniqueData(update, newrowid, repeatingSection, technique, select, autoExpand, isCustom) {
 
 	if (select != 0) {
 		console.log(technique.name + ": " + select);
 	}
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-select")] = select;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-expand")] = autoExpand ? "on" : "0";
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-isCustom")] = isCustom == undefined ? "Learned" : isCustom;
 
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-header")] = technique.augmentBase == "" ? technique.action : "Augment";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-name")] = technique.name;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-augmentBase")] = technique.augmentBase == "" ? "Base" : technique.augmentBase;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-group")] = technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-displaygroup")] = technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-subgroup")] = technique.techniqueSubGroup;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-group")] = technique.techniqueGroup;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-type-flag")] = technique.techniqueType != "" ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-type")] = technique.techniqueType;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-action")] = technique.action;
