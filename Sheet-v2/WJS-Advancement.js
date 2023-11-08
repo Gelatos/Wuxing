@@ -84,7 +84,11 @@ var update_advancement_submit = function () {
 	let growthArray = GetGrowthList(true);
 	let skillsList = GetAllSkillsList(true);
 
-	let mod_attrs = ["base_level", "statbonus_pb", "builder-ancestry", "builder-baseAbilityScores", "advancement-level-total", "builder-baseGrowths", "builder-baseGrowthsTotal", "advancement-advancementGrowthsTotal", "branchpoints_bonus", "skills-nextPage", "techniques-jobTech"];
+	let mod_attrs = ["base_level", "statbonus_pb", "branchpoints_bonus", 
+		"builder-ancestry", "builder-baseAbilityScores", "builder-baseGrowths", "builder-baseGrowthsTotal", 
+		"advancement-level-total", "advancement-advancementGrowthsTotal", 
+		"techniques-techpoints", "techniques-jobTech", "techniques-learnedNewTech"
+	];
 	mod_attrs = mod_attrs.concat(growthArray);
 	mod_attrs = mod_attrs.concat(GetSkillTrainingFieldList());
 	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
@@ -93,6 +97,7 @@ var update_advancement_submit = function () {
 	mod_attrs = mod_attrs.concat(GetBranchesTrainingList());
 	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(false));
 	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(true));
+	mod_attrs = mod_attrs.concat(GetTechniquePointBonusFieldsList());
 	mod_attrs = mod_attrs.concat(GetTechSlotTechniquesFieldList());
 
 	getAttrs(mod_attrs, function (v) {
@@ -216,7 +221,7 @@ var update_advancement_submit = function () {
 		update["advancement-level-total"] = JSON.stringify(levelData);
 		update = SetCharacterSkillsUpdateData(update, v, skillsList, coreData);
 
-		update = GoToNextPage(update, AttrParseString(v, "skills-nextPage", "LevelUp"), "Advancement");
+		update = GoToNextPage(update, "LevelUp", "Advancement");
 		update["advancement-button-reset-everything"] = "on";
 
 		setAttrs(update, { silent: true });

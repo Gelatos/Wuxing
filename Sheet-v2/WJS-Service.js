@@ -37,6 +37,10 @@ function AttrParseJSON(attrArray, fieldName, defaultValue) {
 	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName] == "" ? defaultValue : JSON.parse(attrArray[fieldName]);
 }
 
+function AttrParseJSONDictionary(attrArray, fieldName) {
+	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName] == "" ? CreateDictionary() : JSON.parse(attrArray[fieldName]);
+}
+
 
 // ======== Section Ids
 function GetSectionIdValues(idarray, repeatingSection, variableArray) {
@@ -389,7 +393,7 @@ function TechniqueIsSelected(selectedTechniques, name) {
 		return 0;
 	}
 	else if (selectedTechniques.keys.includes(name)) {
-		return selectedTechniques.values[name];
+		return selectedTechniques.values[name].count;
 	}
 	return 0;
 }
@@ -407,8 +411,8 @@ function SetTechniqueData(update, newrowid, repeatingSection, technique, select,
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-name")] = technique.name;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-augmentBase")] = technique.augmentBase == "" ? "Base" : technique.augmentBase;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-displaygroup")] = technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-subgroup")] = technique.techniqueSubGroup;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-group")] = technique.techniqueGroup;
+	update[GetSectionIdName(repeatingSection, newrowid, "technique-subgroup")] = technique.techniqueSubGroup;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-type-flag")] = technique.techniqueType != "" ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-type")] = technique.techniqueType;
 	update[GetSectionIdName(repeatingSection, newrowid, "technique-action")] = technique.action;
