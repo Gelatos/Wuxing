@@ -5,6 +5,7 @@
 	<input type="hidden" name="attr_techniques-jobTech" value="">
 	<input type="hidden" name="attr_techniques-learnedTech" value="">
 	<input type="hidden" name="attr_techniques-learnedNewTech" value="">
+	<input type="hidden" name="attr_techniques-filteredTech" value="">
 
 	<div class="main-TopRow wuxFloatHeader wuxHorizontalFlex">
 		<div class="segment-Basis wuxSegment">
@@ -20,8 +21,8 @@
 										<span>Submit</span>
 									</div>
 									<div class="wuxButton">
-										<input type="checkbox"  name="attr_characterSheetDisplayStyle" value="Character">
-										<span>Leave</span>
+										<input type="checkbox"  name="attr_techniques-button-back">
+										<span>Back</span>
 									</div>
 								</div>
 							</div>
@@ -914,6 +915,17 @@
 										</div>
 									</div>
 								</fieldset>
+							</div>
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_techniques-remainingFilteredTech">
+							<div class="wuxHiddenAuxField">
+								<div class="wuxMultiRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_techniques-button-loadfiltertech">
+										<span>Load </span>
+										<span name="attr_techniques-remainingFilteredTech"></span>
+										<span> Techniques</span>
+									</div>
+								</div>
 							</div>
 
 						</div>
