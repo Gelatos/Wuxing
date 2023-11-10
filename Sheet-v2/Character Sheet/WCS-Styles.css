@@ -6471,6 +6471,11 @@ Quest Box
     padding: 0px;
 }
 
+.wuxMinSize150
+{
+    min-width: 150px;
+}
+
 /*========================================
     Button
 ========================================*/
@@ -6536,6 +6541,13 @@ button[type=roll].wuxButton span,
     color: #1d1e1f;
     font-size: 12px;
     font-weight: normal;
+}
+
+button[type=roll].wuxButton span span,
+.wuxButton span span
+{
+    display: inline;
+    width: auto;
 }
 
 /*========================================

@@ -504,20 +504,21 @@ function UpdateTechniquesFilteredTechniques() {
 		workingTechniqueNames = workingTechniqueNames.concat(GetTechniquesSpellTechNames(v));
 		workingTechniqueNames = GetTechniquesLearnedTechNames(learnedTech.keys, workingTechniqueNames);
 
-		update = SetTechniquesFilteredTechniques(update, workingTechniqueNames);
+		update = SetTechniquesFilteredTechniques(update, workingTechniqueNames, learnedTech);
 
 		setAttrs(update, { silent: true });
 	});
 }
 
 function UpdateTechniquesLoadMoreFilteredTechniques() {
-    let mod_attrs = ["techniques-filteredTech"];
+    let mod_attrs = ["techniques-filteredTech", "techniques-learnedNewTech"];
     
     getAttrs(mod_attrs, function (v) {
 		let update = {};
 		let filteredTech = AttrParseJSON(v, "techniques-filteredTech");
+		let learnedTech = AttrParseJSONDictionary(v, "techniques-learnedNewTech");
 		
-		update = SetTechniquesFilteredTechniques(update, filteredTech);
+		update = SetTechniquesFilteredTechniques(update, filteredTech, learnedTech);
 
 		setAttrs(update, { silent: true });
 	});
@@ -656,13 +657,13 @@ function GetTechniquesLearnedTechNames(learnedTech, workingTechniqueNames) {
 	return workingTechniqueNames;
 }
 
-function SetTechniquesFilteredTechniques(update, filteredTech) {
+function SetTechniquesFilteredTechniques(update, filteredTech, learnedTech) {
     
     let workingTechniques = [];
     let iterator = 0;
 		
 	// iterate through the list of names
-	while (iterator < 10 && iterator < filteredTech.length) {
+	while (iterator < 10 && filteredTech.length > 0) {
     	workingTechniques.push(GetTechniquesInfo(filteredTech[0]));
     	filteredTech.splice(0, 1);
 	    iterator++;
@@ -670,7 +671,7 @@ function SetTechniquesFilteredTechniques(update, filteredTech) {
 	
     update = SetTechniqueDataList(update, "repeating_filteredtechniques", workingTechniques, learnedTech, true, "1");
     update["techniques-filteredTech"] = JSON.stringify(filteredTech);
-    Update["techniques-remainingFilteredTech"] = filteredTech.length > 10 ? 10 : filteredTech.length;
+    update["techniques-remainingFilteredTech"] = filteredTech.length > 10 ? 10 : filteredTech.length;
     return update;
 }
 

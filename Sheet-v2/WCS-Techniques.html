@@ -70,21 +70,88 @@
 						<div class="wuxSectionContent">
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup wuxNoPadding">
-									<div class="wuxFlexTable">
+									<span class="wuxFlexTableItemHeader">Path Techniques</span>
+									<div class="wuxFlexTable wuxMinSize150">
+										<div class="wuxFlexTableItemGroup3">
+											<span class="wuxFlexTableItemSubheader">Points</span>
+											<div class="wuxFlexTableItemData">
+												<div class="wuxDistinctSection wuxSizeInverse">
+													<div class="wuxDistinctField">
+														<span class="wuxDistinctTitle">General</span>
+														<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-pathgeneral-error" value="0">
+														<span class='wuxDistinctData'>
+															<span name='attr_techpoints-pathgeneral' value="0">0</span>
+															<span>/ </span>
+															<span name='attr_techpoints-pathgeneral_max' value="0">0</span>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
 										<div class="wuxFlexTableItemGroup">
-											<span class="wuxFlexTableItemHeader">Path Techniques</span>
-											<div class="wuxFlexTable">
+											<span class="wuxFlexTableItemSubheader">Bonus</span>
+											<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-pathgeneral" placeholder="0"></span>
+										</div>
+									</div>
+									<div class="wuxFlexTable wuxMinSize150">
+										<div class="wuxFlexTableItemGroup3">
+											<div class="wuxDistinctSection wuxSizeInverse">
+												<div class="wuxDistinctField">
+													<span class="wuxDistinctTitle">Training</span>
+													<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-pathtraining-error" value="0">
+													<span class='wuxDistinctData'>
+														<span name='attr_techpoints-pathtraining' value="0">0</span>
+														<span>/ </span>
+														<span name='attr_techpoints-pathtraining_max' value="0">0</span>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup">
+											<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-pathtraining" placeholder="0"></span>
+										</div>
+									</div>
+									<span class="wuxFlexTableItemHeader">Spell Techniques</span>
+									<div class="wuxFlexTable wuxMinSize150">
+										<div class="wuxFlexTableItemGroup3">
+											<span class="wuxFlexTableItemSubheader">Points</span>
+											<div class="wuxFlexTableItemData">
+												<div class="wuxDistinctSection wuxSizeInverse">
+													<div class="wuxDistinctField">
+														<span class="wuxDistinctTitle">General</span>
+														<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-spellgeneral-error" value="0">
+														<span class='wuxDistinctData'>
+															<span name='attr_techpoints-spellgeneral' value="0">0</span>
+															<span>/ </span>
+															<span name='attr_techpoints-spellgeneral_max' value="0">0</span>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup">
+											<span class="wuxFlexTableItemSubheader">Bonus</span>
+											<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-spellgeneral" placeholder="0"></span>
+										</div>
+									</div>
+								</div>
+								<div class="wuxFlexTableItemGroup2 wuxNoPadding">
+									<span class="wuxFlexTableItemHeader">Skill Techniques</span>
+									
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable wuxMinSize150">
 												<div class="wuxFlexTableItemGroup3">
 													<span class="wuxFlexTableItemSubheader">Points</span>
 													<div class="wuxFlexTableItemData">
 														<div class="wuxDistinctSection wuxSizeInverse">
 															<div class="wuxDistinctField">
 																<span class="wuxDistinctTitle">General</span>
-																<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-pathgeneral-error" value="0">
+																<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillgeneral-error" value="0">
 																<span class='wuxDistinctData'>
-																	<span name='attr_techpoints-pathgeneral' value="0">0</span>
+																	<span name='attr_techpoints-skillgeneral' value="0">0</span>
 																	<span>/ </span>
-																	<span name='attr_techpoints-pathgeneral_max' value="0">0</span>
+																	<span name='attr_techpoints-skillgeneral_max' value="0">0</span>
 																</span>
 															</div>
 														</div>
@@ -92,212 +159,137 @@
 												</div>
 												<div class="wuxFlexTableItemGroup">
 													<span class="wuxFlexTableItemSubheader">Bonus</span>
-													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-pathgeneral" placeholder="0"></span>
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillgeneral" placeholder="0"></span>
 												</div>
 											</div>
-											<div class="wuxFlexTable">
+											<div class="wuxFlexTable wuxMinSize150">
 												<div class="wuxFlexTableItemGroup3">
 													<div class="wuxDistinctSection wuxSizeInverse">
 														<div class="wuxDistinctField">
-															<span class="wuxDistinctTitle">Training</span>
-															<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-pathtraining-error" value="0">
+															<span class="wuxDistinctTitle">Defensive</span>
+															<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skilldefensive-error" value="0">
 															<span class='wuxDistinctData'>
-																<span name='attr_techpoints-pathtraining' value="0">0</span>
+																<span name='attr_techpoints-skilldefensive' value="0">0</span>
 																<span>/ </span>
-																<span name='attr_techpoints-pathtraining_max' value="0">0</span>
+																<span name='attr_techpoints-skilldefensive_max' value="0">0</span>
 															</span>
 														</div>
 													</div>
 												</div>
 												<div class="wuxFlexTableItemGroup">
-													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-pathtraining" placeholder="0"></span>
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skilldefensive" placeholder="0"></span>
 												</div>
 											</div>
-											<span class="wuxFlexTableItemHeader">Spell Techniques</span>
-											<div class="wuxFlexTable">
+											<div class="wuxFlexTable wuxMinSize150">
+												<div class="wuxFlexTableItemGroup3">
+													<div class="wuxDistinctSection wuxSizeInverse">
+														<div class="wuxDistinctField">
+															<span class="wuxDistinctTitle">Martial</span>
+															<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillmartial-error" value="0">
+															<span class='wuxDistinctData'>
+																<span name='attr_techpoints-skillmartial' value="0">0</span>
+																<span>/ </span>
+																<span name='attr_techpoints-skillmartial_max' value="0">0</span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillmartial" placeholder="0"></span>
+												</div>
+											</div>
+											<div class="wuxFlexTable wuxMinSize150">
+												<div class="wuxFlexTableItemGroup3">
+													<div class="wuxDistinctSection wuxSizeInverse">
+														<div class="wuxDistinctField">
+															<span class="wuxDistinctTitle">Magic</span>
+															<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillmagic-error" value="0">
+															<span class='wuxDistinctData'>
+																<span name='attr_techpoints-skillmagic' value="0">0</span>
+																<span>/ </span>
+																<span name='attr_techpoints-skillmagic_max' value="0">0</span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillmagic" placeholder="0"></span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable wuxMinSize150">
 												<div class="wuxFlexTableItemGroup3">
 													<span class="wuxFlexTableItemSubheader">Points</span>
-													<div class="wuxFlexTableItemData">
-														<div class="wuxDistinctSection wuxSizeInverse">
-															<div class="wuxDistinctField">
-																<span class="wuxDistinctTitle">General</span>
-																<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-spellgeneral-error" value="0">
-																<span class='wuxDistinctData'>
-																	<span name='attr_techpoints-spellgeneral' value="0">0</span>
-																	<span>/ </span>
-																	<span name='attr_techpoints-spellgeneral_max' value="0">0</span>
-																</span>
-															</div>
+													<div class="wuxDistinctSection wuxSizeInverse">
+														<div class="wuxDistinctField">
+															<span class="wuxDistinctTitle">Body</span>
+															<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillbody-error" value="0">
+															<span class='wuxDistinctData'>
+																<span name='attr_techpoints-skillbody' value="0">0</span>
+																<span>/ </span>
+																<span name='attr_techpoints-skillbody_max' value="0">0</span>
+															</span>
 														</div>
 													</div>
 												</div>
 												<div class="wuxFlexTableItemGroup">
 													<span class="wuxFlexTableItemSubheader">Bonus</span>
-													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-spellgeneral" placeholder="0"></span>
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillbody" placeholder="0"></span>
 												</div>
 											</div>
-										</div>
-									</div>
-								</div>
-								<div class="wuxFlexTableItemGroup2 wuxNoPadding">
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroup">
-											<span class="wuxFlexTableItemHeader">Skill Techniques</span>
-											
-											<div class="wuxFlexTable">
-												<div class="wuxFlexTableItemGroup wuxNoPadding">
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup3">
-															<span class="wuxFlexTableItemSubheader">Points</span>
-															<div class="wuxFlexTableItemData">
-																<div class="wuxDistinctSection wuxSizeInverse">
-																	<div class="wuxDistinctField">
-																		<span class="wuxDistinctTitle">General</span>
-																		<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillgeneral-error" value="0">
-																		<span class='wuxDistinctData'>
-																			<span name='attr_techpoints-skillgeneral' value="0">0</span>
-																			<span>/ </span>
-																			<span name='attr_techpoints-skillgeneral_max' value="0">0</span>
-																		</span>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Bonus</span>
-															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillgeneral" placeholder="0"></span>
-														</div>
-													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup3">
-															<div class="wuxDistinctSection wuxSizeInverse">
-																<div class="wuxDistinctField">
-																	<span class="wuxDistinctTitle">Defensive</span>
-																	<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skilldefensive-error" value="0">
-																	<span class='wuxDistinctData'>
-																		<span name='attr_techpoints-skilldefensive' value="0">0</span>
-																		<span>/ </span>
-																		<span name='attr_techpoints-skilldefensive_max' value="0">0</span>
-																	</span>
-																</div>
-															</div>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skilldefensive" placeholder="0"></span>
-														</div>
-													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup3">
-															<div class="wuxDistinctSection wuxSizeInverse">
-																<div class="wuxDistinctField">
-																	<span class="wuxDistinctTitle">Martial</span>
-																	<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillmartial-error" value="0">
-																	<span class='wuxDistinctData'>
-																		<span name='attr_techpoints-skillmartial' value="0">0</span>
-																		<span>/ </span>
-																		<span name='attr_techpoints-skillmartial_max' value="0">0</span>
-																	</span>
-																</div>
-															</div>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillmartial" placeholder="0"></span>
-														</div>
-													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup3">
-															<div class="wuxDistinctSection wuxSizeInverse">
-																<div class="wuxDistinctField">
-																	<span class="wuxDistinctTitle">Magic</span>
-																	<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillmagic-error" value="0">
-																	<span class='wuxDistinctData'>
-																		<span name='attr_techpoints-skillmagic' value="0">0</span>
-																		<span>/ </span>
-																		<span name='attr_techpoints-skillmagic_max' value="0">0</span>
-																	</span>
-																</div>
-															</div>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillmagic" placeholder="0"></span>
+											<div class="wuxFlexTable wuxMinSize150">
+												<div class="wuxFlexTableItemGroup3">
+													<div class="wuxDistinctSection wuxSizeInverse">
+														<div class="wuxDistinctField">
+															<span class="wuxDistinctTitle">Knowledge</span>
+															<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillknowledge-error" value="0">
+															<span class='wuxDistinctData'>
+																<span name='attr_techpoints-skillknowledge' value="0">0</span>
+																<span>/ </span>
+																<span name='attr_techpoints-skillknowledge_max' value="0">0</span>
+															</span>
 														</div>
 													</div>
 												</div>
-												<div class="wuxFlexTableItemGroup wuxNoPadding">
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup3">
-															<span class="wuxFlexTableItemSubheader">Points</span>
-															<div class="wuxDistinctSection wuxSizeInverse">
-																<div class="wuxDistinctField">
-																	<span class="wuxDistinctTitle">Body</span>
-																	<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillbody-error" value="0">
-																	<span class='wuxDistinctData'>
-																		<span name='attr_techpoints-skillbody' value="0">0</span>
-																		<span>/ </span>
-																		<span name='attr_techpoints-skillbody_max' value="0">0</span>
-																	</span>
-																</div>
-															</div>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Bonus</span>
-															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillbody" placeholder="0"></span>
+												<div class="wuxFlexTableItemGroup">
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillknowledge" placeholder="0"></span>
+												</div>
+											</div>
+											<div class="wuxFlexTable wuxMinSize150">
+												<div class="wuxFlexTableItemGroup3">
+													<div class="wuxDistinctSection wuxSizeInverse">
+														<div class="wuxDistinctField">
+															<span class="wuxDistinctTitle">Social</span>
+															<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillsocial-error" value="0">
+															<span class='wuxDistinctData'>
+																<span name='attr_techpoints-skillsocial' value="0">0</span>
+																<span>/ </span>
+																<span name='attr_techpoints-skillsocial_max' value="0">0</span>
+															</span>
 														</div>
 													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup3">
-															<div class="wuxDistinctSection wuxSizeInverse">
-																<div class="wuxDistinctField">
-																	<span class="wuxDistinctTitle">Knowledge</span>
-																	<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillknowledge-error" value="0">
-																	<span class='wuxDistinctData'>
-																		<span name='attr_techpoints-skillknowledge' value="0">0</span>
-																		<span>/ </span>
-																		<span name='attr_techpoints-skillknowledge_max' value="0">0</span>
-																	</span>
-																</div>
-															</div>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillknowledge" placeholder="0"></span>
-														</div>
-													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup3">
-															<div class="wuxDistinctSection wuxSizeInverse">
-																<div class="wuxDistinctField">
-																	<span class="wuxDistinctTitle">Social</span>
-																	<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skillsocial-error" value="0">
-																	<span class='wuxDistinctData'>
-																		<span name='attr_techpoints-skillsocial' value="0">0</span>
-																		<span>/ </span>
-																		<span name='attr_techpoints-skillsocial_max' value="0">0</span>
-																	</span>
-																</div>
-															</div>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillsocial" placeholder="0"></span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skillsocial" placeholder="0"></span>
+												</div>
+											</div>
+											<div class="wuxFlexTable wuxMinSize150">
+												<div class="wuxFlexTableItemGroup3">
+													<div class="wuxDistinctSection wuxSizeInverse">
+														<div class="wuxDistinctField">
+															<span class="wuxDistinctTitle">Technical</span>
+															<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skilltechnical-error" value="0">
+															<span class='wuxDistinctData'>
+																<span name='attr_techpoints-skilltechnical' value="0">0</span>
+																<span>/ </span>
+																<span name='attr_techpoints-skilltechnical_max' value="0">0</span>
+															</span>
 														</div>
 													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup3">
-															<div class="wuxDistinctSection wuxSizeInverse">
-																<div class="wuxDistinctField">
-																	<span class="wuxDistinctTitle">Technical</span>
-																	<input type="hidden" class="wuxErrorField-flag" name="attr_techpoints-skilltechnical-error" value="0">
-																	<span class='wuxDistinctData'>
-																		<span name='attr_techpoints-skilltechnical' value="0">0</span>
-																		<span>/ </span>
-																		<span name='attr_techpoints-skilltechnical_max' value="0">0</span>
-																	</span>
-																</div>
-															</div>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skilltechnical" placeholder="0"></span>
-														</div>
-													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techbonus-skilltechnical" placeholder="0"></span>
 												</div>
 											</div>
 										</div>
@@ -328,7 +320,7 @@
 								<div class="wuxFlexTable">
 									<div class="wuxFlexTableItemGroup">
 										<span class="wuxFlexTableItemHeader wuxTextLeft">General Filters</span>
-										<div class="wuxFlexTableItemData wuxTextLeft">
+										<div class="wuxFlexTableItemData wuxTextLeft wuxMinSize150">
 											<div class="wuxInteractiveBlock wuxSizeSmall">
 												<div class="wuxInteractiveInnerBlock">
 													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-selectedtech">
@@ -380,7 +372,7 @@
 									</div>
 									<div class="wuxFlexTableItemGroup">
 										<span class="wuxFlexTableItemHeader wuxTextLeft">Path Techniques</span>
-										<div class="wuxFlexTableItemData wuxTextLeft">
+										<div class="wuxFlexTableItemData wuxTextLeft wuxMinSize150">
 											<div class="wuxInteractiveBlock wuxSizeSmall">
 												<div class="wuxInteractiveInnerBlock">
 													<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_techniques-filter-pathsTraining">
@@ -411,7 +403,7 @@
 									<div class="wuxFlexTableItemGroup2">
 										<span class="wuxFlexTableItemHeader wuxTextLeft">Skill Techniques</span>
 										<div class="wuxFlexTable">
-											<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTableItemGroup wuxNoPadding wuxMinSize150">
 												<div class="wuxFlexTableItemData wuxTextLeft">
 													<div class="wuxInteractiveBlock wuxSizeSmall">
 														<div class="wuxInteractiveInnerBlock">
@@ -451,7 +443,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTableItemGroup wuxNoPadding wuxMinSize150">
 												<div class="wuxFlexTableItemData wuxTextLeft">
 													<div class="wuxInteractiveBlock wuxSizeSmall">
 														<div class="wuxInteractiveInnerBlock">
@@ -509,7 +501,7 @@
 									<div class="wuxFlexTableItemGroup2">
 										<span class="wuxFlexTableItemHeader wuxTextLeft">Spell Techniques</span>
 										<div class="wuxFlexTable">
-											<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTableItemGroup wuxNoPadding wuxMinSize150">
 												<div class="wuxFlexTableItemData wuxTextLeft">
 													<div class="wuxInteractiveBlock wuxSizeSmall">
 														<div class="wuxInteractiveInnerBlock">
@@ -549,7 +541,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTableItemGroup wuxNoPadding wuxMinSize150">
 												<div class="wuxFlexTableItemData wuxTextLeft">
 													<div class="wuxInteractiveBlock wuxSizeSmall">
 														<div class="wuxInteractiveInnerBlock">
@@ -588,7 +580,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTableItemGroup wuxNoPadding wuxMinSize150">
 												<div class="wuxFlexTableItemData wuxTextLeft">
 													<div class="wuxInteractiveBlock wuxSizeSmall">
 														<div class="wuxInteractiveInnerBlock">
@@ -627,7 +619,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTableItemGroup wuxNoPadding wuxMinSize150">
 												<div class="wuxFlexTableItemData wuxTextLeft">
 													<div class="wuxInteractiveBlock wuxSizeSmall">
 														<div class="wuxInteractiveInnerBlock">
@@ -666,7 +658,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTableItemGroup wuxNoPadding wuxMinSize150">
 												<div class="wuxFlexTableItemData wuxTextLeft">
 													<div class="wuxInteractiveBlock wuxSizeSmall">
 														<div class="wuxInteractiveInnerBlock">
@@ -917,13 +909,15 @@
 								</fieldset>
 							</div>
 							<input type="hidden" class="wuxHiddenField-flag" name="attr_techniques-remainingFilteredTech">
-							<div class="wuxHiddenAuxField">
+							<div class="wuxHiddenField">
 								<div class="wuxMultiRow">
 									<div class="wuxButton">
 										<input type="checkbox" name="attr_techniques-button-loadfiltertech">
-										<span>Load </span>
-										<span name="attr_techniques-remainingFilteredTech"></span>
-										<span> Techniques</span>
+										<span>
+											<span>Load </span>
+											<span name="attr_techniques-remainingFilteredTech"></span>
+											<span>More Techniques</span>
+										</span>
 									</div>
 								</div>
 							</div>
