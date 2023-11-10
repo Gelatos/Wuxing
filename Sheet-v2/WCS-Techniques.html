@@ -721,7 +721,7 @@
 						<div class="wuxSectionContent">
 							<div class="wuxHeader">Filtered Techniques</div>
 
-							<div class="wuxNoRepControl">
+							<div class="wuxRepeatingFlexSection">
 								<div class="wuxTechniqueTable">
 									<div class="wuxTechniqueTableHeader">
 										<div class="wuxTechniqueTableHeaderInteractBlock"><span>Dtls</span></div>
@@ -731,7 +731,7 @@
 								<fieldset class="repeating_filteredtechniques">
 									<input type="hidden" name="attr_technique-isCustom" value="0">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select" value="1">
-									<div class="wuxTechnique">
+									<div class="wuxTechnique wuxMinSize300">
 										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="">
 										<div class="wuxTechniqueHeader">
 											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-type-flag">
@@ -855,14 +855,18 @@
 												<div class="wuxHiddenBlockField">
 													<div class="wuxTechniqueAttackBlockRow">
 														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
-														<div class="wuxHiddenField wuxTechniqueAttackBlockRange">
-															<span><strong>Range: </strong></span>
-															<span name="attr_technique-range"></span>
+														<div class="wuxHiddenInlineField">
+															<div class="wuxTechniqueAttackBlockRange">
+																<span><strong>Range: </strong></span>
+																<span name="attr_technique-range"></span>
+															</div>
 														</div>
-														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
-														<div class="wuxHiddenField wuxTechniqueAttackBlockTarget">
-															<span><strong>Target: </strong></span>
-															<span name="attr_technique-target"></span>
+														<div class="wuxTechniqueAttackBlockTarget">
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+															<div class="wuxHiddenField">
+																<span><strong>Target: </strong></span>
+																<span name="attr_technique-target"></span>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -872,11 +876,12 @@
 														<strong><span name="attr_technique-skill"></span></strong>
 		
 														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
-														<div class="wuxHiddenField wuxTechniqueAttackBlockDefense">
+														<div class="wuxHiddenField">
 															<span> vs. </span>
 															<span name="attr_technique-defense"></span>
 														</div>
-														<div class="wuxHiddenAuxField wuxTechniqueAttackBlockDefense">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+														<div class="wuxHiddenAuxField">
 															<span> Check</span>
 														</div>
 													</div>

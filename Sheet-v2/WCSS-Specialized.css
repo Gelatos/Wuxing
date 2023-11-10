@@ -454,7 +454,6 @@ input[type=hidden].wuxTechniqueHeaderInteractBlock-flag[value="on"] + .wuxTechni
 
 .wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow,
 .wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockRange,
-.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockDefense,
 .wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockTarget
 {
     position: relative;
@@ -466,10 +465,9 @@ input[type=hidden].wuxTechniqueHeaderInteractBlock-flag[value="on"] + .wuxTechni
     width: calc(100% - 22px);
 }
 
-.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockRange,
-.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockDefense
+.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockRange
 {
-    width: calc(35% - 5px);
+    padding-right: 10px;
 }
 
 .wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockTarget
