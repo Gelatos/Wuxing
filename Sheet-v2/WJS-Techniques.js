@@ -7,16 +7,50 @@ on("change:techniques-button-submit", function () {
 
 var update_techniques_submit = function () {
 
-	let mod_attrs = ["base_level"];
+	let mod_attrs = ["techniques-nextPage", "techniques-learnedTech", "techniques-learnedNewTech"];
 	getAttrs(mod_attrs, function (v) {
 
 		let update = {};
 
 		// set updates
-		update["characterSheetDisplayStyle"] = "Character";
-
+		update["techniques-learnedTech"] = v["techniques-learnedNewTech"];
+		
+		update["techniques-button-clearfilter"] = "on";
+		UpdateTechniquesClearFilter("on");
+		
+		update = GoToNextPage(update, "Character", "Techniques");
 		setAttrs(update, { silent: true });
 
+	});
+
+}
+
+
+
+
+// ======== Back Button
+
+on("change:techniques-button-back", function () {
+
+	update_techniques_back();
+});
+
+var update_techniques_back = function () {
+
+	let mod_attrs = ["techniques-previousPage", "techniques-learnedTech"];
+
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		update["techniques-learnedNewTech"] = v["techniques-learnedTech"];
+		
+		update["techniques-button-clearfilter"] = "on";
+		UpdateTechniquesClearFilter("on");
+		
+		update["characterSheetDisplayStyle"] = v["techniques-previousPage"];
+		update["techniques-previousPage"] = "";
+
+		setAttrs(update, { silent: true });
 	});
 
 }
@@ -439,6 +473,10 @@ on("change:techniques-button-showtech", function () {
 	UpdateTechniquesFilteredTechniques();
 });
 
+on("change:techniques-button-loadfiltertech", function () {
+	UpdateTechniquesLoadMoreFilteredTechniques();
+});
+
 function UpdateTechniquesFilteredTechniques() {
 
 	let mod_attrs = ["techniques-learnedNewTech",
@@ -457,7 +495,6 @@ function UpdateTechniquesFilteredTechniques() {
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
 		let workingTechniqueNames = [];
-		let workingTechniques = [];
 		let learnedTech = AttrParseJSONDictionary(v, "techniques-learnedNewTech");
 		update["techniques-button-clearfilter"] = 0;
 
@@ -467,11 +504,20 @@ function UpdateTechniquesFilteredTechniques() {
 		workingTechniqueNames = workingTechniqueNames.concat(GetTechniquesSpellTechNames(v));
 		workingTechniqueNames = GetTechniquesLearnedTechNames(learnedTech.keys, workingTechniqueNames);
 
-		// iterate through the list of names
-		for (var i = 0; i < workingTechniqueNames.length; i++) {
-			workingTechniques.push(GetTechniquesInfo(workingTechniqueNames[i]));
-		}
-		update = SetTechniqueDataList(update, "repeating_filteredtechniques", workingTechniques, learnedTech, true, "1");
+		update = SetTechniquesFilteredTechniques(update, workingTechniqueNames);
+
+		setAttrs(update, { silent: true });
+	});
+}
+
+function UpdateTechniquesLoadMoreFilteredTechniques() {
+    let mod_attrs = ["techniques-filteredTech"];
+    
+    getAttrs(mod_attrs, function (v) {
+		let update = {};
+		let filteredTech = AttrParseJSON(v, "techniques-filteredTech");
+		
+		update = SetTechniquesFilteredTechniques(update, filteredTech);
 
 		setAttrs(update, { silent: true });
 	});
@@ -610,6 +656,23 @@ function GetTechniquesLearnedTechNames(learnedTech, workingTechniqueNames) {
 	return workingTechniqueNames;
 }
 
+function SetTechniquesFilteredTechniques(update, filteredTech) {
+    
+    let workingTechniques = [];
+    let iterator = 0;
+		
+	// iterate through the list of names
+	while (iterator < 10 && iterator < filteredTech.length) {
+    	workingTechniques.push(GetTechniquesInfo(filteredTech[0]));
+    	filteredTech.splice(0, 1);
+	    iterator++;
+	}
+	
+    update = SetTechniqueDataList(update, "repeating_filteredtechniques", workingTechniques, learnedTech, true, "1");
+    update["techniques-filteredTech"] = JSON.stringify(filteredTech);
+    Update["techniques-remainingFilteredTech"] = filteredTech.length > 10 ? 10 : filteredTech.length;
+    return update;
+}
 
 
 // ======== Technique Selection
