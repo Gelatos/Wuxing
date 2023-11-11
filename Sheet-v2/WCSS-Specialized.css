@@ -216,7 +216,8 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     background: #cacbcf;
 }
 
-input[type=hidden].wuxTechnique-flag:not([value="0"]) + .wuxTechnique
+input[type=hidden].wuxTechnique-flag[value="1"] + .wuxTechnique,
+input[type=hidden].wuxTechnique-flag[value="on"] + .wuxTechnique
 {
     border: 3px solid #ba7417;
 }
@@ -317,12 +318,13 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
 }
 
 .wuxTechniqueHeaderInteractBlock,
+.wuxTechniqueHeaderInteractInnerBlock,
 .wuxTechniqueTableHeaderInteractBlock 
 {
     position: relative;
 	display: inline-block;
 	width: 25px;
-	height: 100%;
+	height: 20px;
 }
 
 .wuxTechniqueTableHeaderInteractBlock span
@@ -333,6 +335,7 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType
 }
 
 .wuxTechniqueHeaderInteractiveIcon,
+.wuxTechniqueHeaderInteractivePictosIcon,
 .wuxTechniqueHeaderInteractiveAuxIcon
 {
     position: relative;
@@ -357,15 +360,28 @@ input[type=number].wuxTechniqueHeaderInteractiveAuxIcon
 	display: none;
 }
 
-input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + .wuxTechniqueHeaderInteractiveIcon,
+input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag[value="on"] + .wuxTechniqueHeaderInteractiveIcon,
+input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag[value="1"] + .wuxTechniqueHeaderInteractiveIcon,
 .wuxTechniqueHeaderInteractiveAuxIcon
 {
     display: inline-block;
 }
 
-input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + .wuxTechniqueHeaderInteractiveAuxIcon
+input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag[value="on"] + .wuxTechniqueHeaderInteractiveAuxIcon,
+input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag[value="1"] + .wuxTechniqueHeaderInteractiveAuxIcon
 {
     display: none;
+}
+
+.wuxTechniqueHeaderInteractivePictosIcon
+{
+    font-family: pictos;
+    color: #FFF;
+}
+
+input[type=hidden].wuxTechniqueHeaderInteractivePictosIcon-flag:not([value="0"]) + .wuxTechniqueHeaderInteractivePictosIcon
+{
+    color: #000;
 }
 
 .wuxTechniqueHeaderDisplayBlock
@@ -407,6 +423,7 @@ input[type="checkbox"].wuxTechniqueHeaderInteractBlock-flag
     opacity: 0;    
     position: absolute;
 	display: block;
+    pointer-events: inherit;
     top: 0px;
 	left: 0px;
 	right: 0px;
@@ -417,6 +434,11 @@ input[type="checkbox"].wuxTechniqueHeaderInteractBlock-flag
 input[type=hidden].wuxTechniqueHeaderInteractBlock-flag[value="on"] + .wuxTechniqueExpandingContent
 {
     display: block;
+}
+
+input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + input.wuxTechniqueHeaderInteractBlock-flag
+{
+    pointer-events: none;
 }
 
 .wuxTechniqueFunctionBlock
@@ -475,8 +497,10 @@ input[type=hidden].wuxTechniqueHeaderInteractBlock-flag[value="on"] + .wuxTechni
     width: calc(65% - 5px);
 }
 
-.wuxTechniqueDescriptionBlock
+.wuxTechniqueDescriptionBlock,
+.wuxTechniqueEditBlock
 {
+    display: block;
     width: calc(100% - 20px);
     padding: 5px 10px; 
 
@@ -488,6 +512,11 @@ input[type=hidden].wuxTechniqueHeaderInteractBlock-flag[value="on"] + .wuxTechni
     display: block;
     white-space: pre-line;
     word-break: break-word;
+}
+
+.wuxTechniqueEditBlock
+{
+    background-color: #1d1e1f;
 }
 
 /*========================================

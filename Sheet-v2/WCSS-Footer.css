@@ -7,19 +7,86 @@
     text-align: left;
 }
 
+.wuxMarginLeft5
+{
+    margin-left: 5px;
+}
+
 .wuxNoPadding
 {
     padding: 0px;
 }
 
-.wuxMinSize150
+.wuxWidth50
+{
+    width: 50px;
+}
+
+.wuxMinWidth150
 {
     min-width: 150px;
 }
 
-.wuxMinSize300
+.wuxMinWidth300
 {
     min-width: 300px;
+}
+
+.wuxHeight60
+{
+    height: 60px;
+}
+
+.wuxHeight150
+{
+    height: 150px;
+}
+
+/*========================================
+    CheckBox
+========================================*/
+
+.wuxCheckbox
+{
+    position: relative;
+	display: inline-block;
+	width: 25px;
+	height: 20px;
+}
+
+input[type="checkbox"].wuxCheckbox-flag
+{
+    opacity: 0;    
+    position: absolute;
+	display: block;
+    pointer-events: inherit;
+    top: 0px;
+	left: 0px;
+	right: 0px;
+    min-height: 25px;
+    z-index: 100;
+}
+
+.wuxCheckboxIcon,
+.wuxCheckboxAuxIcon
+{
+	display: none;
+    position: relative;
+    bottom: 0px;
+
+    color: #d0d0d0;
+    font-size: 20px;
+}
+
+input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxCheckboxIcon,
+.wuxCheckboxAuxIcon
+{
+    display: inline-block;
+}
+
+input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxCheckboxAuxIcon
+{
+    display: none;
 }
 
 /*========================================

@@ -52,6 +52,21 @@ function GetFieldNameAttribute(fieldName) {
     return fieldName;
 }
 
+function GetRepeatingSectionFromFieldName(fieldName) {
+    if (fieldName.indexOf("_") >= 0) {
+		fieldName = fieldName.substring(fieldName.indexOf("_") + 1);
+        if (fieldName.indexOf("_") >= 0) {
+            fieldName = "repeating_" + fieldName.substring(0, fieldName.indexOf("_"));
+        }
+	}
+    return fieldName;
+}
+
+function GetRepeatingSectionIdFromId(id, repeatingSection) {
+	var len = repeatingSection.length + 1;
+	return id.substr(len, 20);
+}
+
 // ====== Creation
 
 function CreateDictionary() {

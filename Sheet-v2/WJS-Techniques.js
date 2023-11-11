@@ -46,6 +46,8 @@ var update_techniques_back = function () {
 		
 		update["techniques-button-clearfilter"] = "on";
 		UpdateTechniquesClearFilter("on");
+		update["techniques-filteredTech"] = JSON.stringify({});
+		update["techniques-remainingFilteredTech"] = 0;
 		
 		update["characterSheetDisplayStyle"] = v["techniques-previousPage"];
 		update["techniques-previousPage"] = "";
@@ -669,7 +671,7 @@ function SetTechniquesFilteredTechniques(update, filteredTech, learnedTech) {
 	    iterator++;
 	}
 	
-    update = SetTechniqueDataList(update, "repeating_filteredtechniques", workingTechniques, learnedTech, true, "1");
+    update = SetTechniqueDataList(update, "repeating_filteredtechniques", workingTechniques, learnedTech, true, true);
     update["techniques-filteredTech"] = JSON.stringify(filteredTech);
     update["techniques-remainingFilteredTech"] = filteredTech.length > 10 ? 10 : filteredTech.length;
     return update;

@@ -600,15 +600,25 @@ input[type=hidden].wuxSectionExpandIcon-flag[value="on"] + .wuxSectionExpandAuxI
     border-image: linear-gradient(to right, #DE9B72ff 0%, #DE9B72ff 50%, #DE9B7200 100%) 1;
 }
 
-.wuxHeader2
+.wuxHeader2,
+.wuxData
 {
     display: inline-block;
-    width: 100%;
-	padding-top: 5px;
     
     color: #d0d0d0;
     font-size: 12px;
     font-weight: bold;
+}
+
+.wuxHeader2
+{
+	padding-top: 5px;
+    width: 100%;
+}
+
+.wuxData
+{
+    width: auto;
 }
 
 .wuxSectionBlock .wuxHeader2
@@ -649,7 +659,6 @@ div.wuxDescription .wuxTitle
 
     font-weight: bold;
 }
-
 
 .wuxInput
 {

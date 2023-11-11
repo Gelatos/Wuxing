@@ -1,4 +1,4 @@
-// ======== Techniques
+// ======== Techniques - Tech Slots
 
 function GetTechSlotTechniquesFieldList() {
 	return ["character-techslots-job", "character-techslots-active", "character-techslots-passive", "character-techslots-support",
@@ -7,7 +7,7 @@ function GetTechSlotTechniquesFieldList() {
 
 on("change:techslotbonus-job change:techslotbonus-active change:techslotbonus-passive change:techslotbonus-support", function (eventinfo) {
 
-	UpdateCharacterStatGrowths(GetFieldNameAttribute(eventinfo.sourceAttribute));
+	UpdateCharacterTechSlotCounts(GetFieldNameAttribute(eventinfo.sourceAttribute));
 });
 
 function UpdateCharacterTechSlotCounts(slotType) {
@@ -92,6 +92,11 @@ function SetCharacterTechSlotCounts(update, attrArray, totalLevel, slotTypes) {
 	return update;
 }
 
+
+
+
+// ======== Techniques - Database Techniques
+
 function AddCharacterClassTechniques(update, attrArray, techniqueNames) {
 
 	let technique = {};
@@ -106,7 +111,243 @@ function AddCharacterClassTechniques(update, attrArray, techniqueNames) {
 
 
 
-// ======== Growths
+
+// ======== Techniques - Custom Techniques
+
+on("change:repeating_jobtechniques:technique-edit", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	UpdateDefaultActiveCheckbox(eventinfo);
+});
+
+
+
+
+// ======== Techniques - Custom Techniques Header
+on("change:repeating_jobtechniques:technique-isBase", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	UpdateDefaultActiveCheckbox(eventinfo);
+	UpdateCharacterCustomTechniqueHeaderTypeFromBase(eventinfo, eventinfo.newValue);
+});
+
+function UpdateCharacterCustomTechniqueHeaderTypeFromBase(eventinfo, newValue) {
+
+	if (newValue != "0") {
+		let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
+		let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+
+		let mod_attrs = [GetSectionIdName(repeatingSection, id, "technique-action")];
+		getAttrs(mod_attrs, function (v) {
+
+			UpdateCharacterCustomTechniqueHeaderType(eventinfo, v[GetSectionIdName(repeatingSection, id, "technique-action")]);
+		});
+	}
+	else {
+		UpdateCharacterCustomTechniqueHeaderType(eventinfo, "Augment");
+	}
+}
+
+on("change:repeating_jobtechniques:technique-action", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	UpdateDefaultActiveCheckbox(eventinfo);
+	UpdateCharacterCustomTechniqueHeaderType(eventinfo, eventinfo.newValue);
+});
+
+function UpdateCharacterCustomTechniqueHeaderType(eventinfo, newValue) {
+
+	let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
+	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+
+	let update = {};
+	update[GetSectionIdName(repeatingSection, id, "technique-header")] = newValue;
+	setAttrs(update, { silent: true });
+}
+
+
+
+
+
+// ======== Techniques - Custom Techniques Function Block
+on("change:repeating_jobtechniques:technique-trigger change:repeating_jobtechniques:technique-requirement change:repeating_jobtechniques:technique-resourceCost", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo, eventinfo.newValue);
+});
+
+on("change:repeating_jobtechniques:technique-traits", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo);
+	UpdateCharacterCustomTechniqueTraits(eventinfo);
+});
+
+function UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo) {
+
+	if (eventinfo.newValue == "") {
+		let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
+		let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+		let mod_attrs = GetSectionIdNameFromArray(repeatingSection, id, ["technique-traits", "technique-trigger", "technique-requirement", "technique-resourceCost"]);
+		getAttrs(mod_attrs, function (v) {
+
+			let newValue = "0";
+			if (v[GetSectionIdName(repeatingSection, id, "technique-traits")] != ""
+				|| v[GetSectionIdName(repeatingSection, id, "technique-trigger")] != ""
+				|| v[GetSectionIdName(repeatingSection, id, "technique-requirement")] != ""
+				|| v[GetSectionIdName(repeatingSection, id, "technique-resourceCost")] != "") {
+
+				newValue = "1";
+			}
+			UpdateCharacterCustomTechniqueFunctionBlockDisplay(eventinfo, newValue);
+		});
+	}
+	else {
+		UpdateCharacterCustomTechniqueFunctionBlockDisplay(eventinfo, "1");
+	}
+}
+
+function UpdateCharacterCustomTechniqueFunctionBlockDisplay(eventinfo, newValue) {
+
+	let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
+	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+
+	let update = {};
+	update[GetSectionIdName(repeatingSection, id, "technique-functionBlock")] = newValue;
+	setAttrs(update, { silent: true });
+}
+
+function UpdateCharacterCustomTechniqueTraits(eventinfo) {
+	let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
+	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+
+	let update = {};
+	update = SetTechniqueDataTraits(update, repeatingSection, id, eventinfo.newValue);
+	setAttrs(update, { silent: true });
+
+}
+
+
+
+
+// ======== Techniques - Custom Techniques Attack Block
+
+on("change:repeating_jobtechniques:technique-range change:repeating_jobtechniques:technique-target change:repeating_jobtechniques:technique-skill change:repeating_jobtechniques:technique-defense change:repeating_jobtechniques:technique-dieValue change:repeating_jobtechniques:technique-dieType change:repeating_jobtechniques:technique-addPower change:repeating_jobtechniques:technique-damageType change:repeating_jobtechniques:technique-element", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo);
+});
+
+function UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo) {
+
+	let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
+	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+	let mod_attrs = GetSectionIdNameFromArray(repeatingSection, id, ["technique-range", "technique-target", "technique-skill", "technique-defense", "technique-dieValue", "technique-dieType", "technique-addPower", "technique-damageType", "technique-element"]);
+	getAttrs(mod_attrs, function (v) {
+		let update = {};
+
+		let attackBlockTarget = "0";
+		if (v[GetSectionIdName(repeatingSection, id, "technique-range")] != ""
+			|| v[GetSectionIdName(repeatingSection, id, "technique-target")] != ""
+		) {
+			attackBlockTarget = "1";
+		}
+		let attackBlockSkill = "0";
+		if (v[GetSectionIdName(repeatingSection, id, "technique-skill")] != ""
+			|| v[GetSectionIdName(repeatingSection, id, "technique-defense")] != ""
+		) {
+			attackBlockSkill = "1";
+		}
+		let attackBlockDamage = "0";
+		let dieValue = AttrParseInt(v, GetSectionIdName(repeatingSection, id, "technique-dieValue"));
+		let powerOn = AttrParseString(v, GetSectionIdName(repeatingSection, id, "technique-addPower")) != "0" ? true : false;
+		let dieType = AttrParseString(v, GetSectionIdName(repeatingSection, id, "technique-dieType"));
+		if (dieValue > 0 || powerOn || dieType != "") {
+			attackBlockDamage = "1";
+
+			let damageString = "";
+			let trueDamage = "";
+			if (dieValue > 0) {
+				damageString = `${dieValue}${dieType}`;
+				trueDamage = `${dieValue}${dieType == "d6" ? "d" : "h"}`;
+			}
+			if (powerOn) {
+				damageString += "+ P";
+				trueDamage += ";Power";
+			}
+			
+			damageString += ` ${v[GetSectionIdName(repeatingSection, id, "technique-damageType")]}`;
+			let element = v[GetSectionIdName(repeatingSection, id, "technique-element")];
+			if (element != "") {
+				damageString += ` [${technique.element}]`;
+			}
+			update[GetSectionIdName(repeatingSection, id, "technique-damage")] = trueDamage;
+			update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = damageString;
+		}
+		
+		update[GetSectionIdName(repeatingSection, id, "technique-attackBlockTarget")] = attackBlockTarget;
+		update[GetSectionIdName(repeatingSection, id, "technique-attackBlockSkill")] = attackBlockSkill;
+		update[GetSectionIdName(repeatingSection, id, "technique-attackBlockDamage")] = attackBlockDamage;
+
+		if (attackBlockTarget == "1" || attackBlockSkill == "1" || attackBlockDamage == "1") {
+			update[GetSectionIdName(repeatingSection, id, "technique-attackBlock")] = "1";
+		}
+		else {
+			update[GetSectionIdName(repeatingSection, id, "technique-attackBlock")] = "0";
+		}
+		setAttrs(update, { silent: true });
+	});
+}
+
+
+
+
+// ======== Techniques - Custom Techniques Description Block
+
+on("change:repeating_jobtechniques:technique-description change:repeating_jobtechniques:technique-onSuccess", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	UpdateCharacterCustomTechniqueDescription(eventinfo);
+});
+
+function UpdateCharacterCustomTechniqueDescription(eventinfo) {
+	
+	let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
+	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+	let mod_attrs = GetSectionIdNameFromArray(repeatingSection, id, ["technique-description", "technique-onSuccess"]);
+	Log(JSON.stringify(mod_attrs));
+	getAttrs(mod_attrs, function (v) {
+
+		let update = {};
+		let newValue = "0";
+		if (v[GetSectionIdName(repeatingSection, id, "technique-description")] != ""
+			|| v[GetSectionIdName(repeatingSection, id, "technique-onSuccess")] != "") {
+
+			newValue = "1";
+		}
+		update[GetSectionIdName(repeatingSection, id, "technique-descriptionBlock")] = newValue;
+		setAttrs(update, { silent: true });
+	});
+}
+
+
+
+
+// ======== Statistics - Growths
 
 function GetStatGrowthBonusList() {
 	let growthArray = GetGrowthList(true);
@@ -210,7 +451,7 @@ function GetCharacterStatGrowths(currentGrowths, bonusGrowths, ancestryData) {
 
 
 
-// ======== Derived Stat Setters
+// ======== Statistics - Derived Stat Setters
 
 function GetDerivedBonusStatsList() {
 	return ["statbonus_initiative", "statbonus_power", "statbonus_stress", "statbonus_barrier"];
@@ -306,7 +547,7 @@ function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 
 
 
-// ======== Branches 
+// ======== Statistics - Branches 
 function GetBranchesTrainingList() {
 	return GetSectionIdNameFromArray(`branch-`, "", GetBranchesList(true));
 }
@@ -351,7 +592,7 @@ function GetBranchPointsTotal(attrArray) {
 
 
 
-// ======== Other Stat Setters
+// ======== Statistics - Other Stat Setters
 
 on("change:statbonus_speed", function () {
 

@@ -55,11 +55,6 @@ function GetSectionIdValues(idarray, repeatingSection, variableArray) {
 	return output;
 }
 
-function GetRepeatingSectionIdFromId(id, repeatingSection) {
-	var len = repeatingSection.length + 1;
-	return id.substr(len, 20);
-}
-
 function ClearAllSectionIds(repeatingSection) {
 
 	getSectionIDs(repeatingSection, function (idarray) {
@@ -370,7 +365,7 @@ function GetTechniqueDataArray(type, techniques) {
 	return output;
 }
 
-function SetTechniqueDataList(update, repeatingSection, techniqueList, selectedTechniques, autoExpand, isCustom) {
+function SetTechniqueDataList(update, repeatingSection, techniqueList, selectedTechniques, autoExpand, isDatabase) {
 
 	// start by clearing the section Ids
 	let newrowid;
@@ -381,7 +376,7 @@ function SetTechniqueDataList(update, repeatingSection, techniqueList, selectedT
 	for (let i = 0; i < techniqueList.length; i++) {
 		newrowid = generateRowID();
 		technique = techniqueList[i];
-		update = SetTechniqueData(update, newrowid, repeatingSection, technique, TechniqueIsSelected(selectedTechniques, technique.name), autoExpand, isCustom);
+		update = SetTechniqueData(update, repeatingSection, newrowid, technique, TechniqueIsSelected(selectedTechniques, technique.name), autoExpand, isDatabase);
 	}
 
 	return update;
@@ -398,81 +393,96 @@ function TechniqueIsSelected(selectedTechniques, name) {
 	return 0;
 }
 
-function SetTechniqueData(update, newrowid, repeatingSection, technique, select, autoExpand, isCustom) {
+function SetTechniqueData(update, repeatingSection, id, technique, select, autoExpand, isDatabase) {
 
 	if (select != 0) {
 		console.log(technique.name + ": " + select);
 	}
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-select")] = select;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-expand")] = autoExpand ? "on" : "0";
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-isCustom")] = isCustom == undefined ? "Learned" : isCustom;
+	update[GetSectionIdName(repeatingSection, id, "technique-select")] = select;
+	update[GetSectionIdName(repeatingSection, id, "technique-expand")] = autoExpand ? "on" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-isDatabase")] = isDatabase ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-edit")] = "0";
 
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-header")] = technique.augmentBase == "" ? technique.action : "Augment";
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-name")] = technique.name;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-augmentBase")] = technique.augmentBase == "" ? "Base" : `Augment: ${technique.augmentBase}`;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-displaygroup")] = technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-group")] = technique.techniqueGroup;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-subgroup")] = technique.techniqueSubGroup;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-type-flag")] = technique.techniqueType != "" ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-type")] = technique.techniqueType;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-action")] = technique.action;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-limits")] = technique.limits;
+	let isBase = technique.augmentBase == "";
+	update[GetSectionIdName(repeatingSection, id, "technique-header")] = isBase ? technique.action : "Augment";
+	update[GetSectionIdName(repeatingSection, id, "technique-name")] = technique.name;
+	update[GetSectionIdName(repeatingSection, id, "technique-isBase")] = isBase ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-augmentBase")] = technique.augmentBase;
+	update[GetSectionIdName(repeatingSection, id, "technique-displaygroup")] = technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup;
+	update[GetSectionIdName(repeatingSection, id, "technique-group")] = technique.techniqueGroup;
+	update[GetSectionIdName(repeatingSection, id, "technique-subgroup")] = technique.techniqueSubGroup;
+	update[GetSectionIdName(repeatingSection, id, "technique-type")] = technique.techniqueType;
+	update[GetSectionIdName(repeatingSection, id, "technique-action")] = technique.action;
+	update[GetSectionIdName(repeatingSection, id, "technique-limits")] = technique.limits;
 
 	// set the function block
 	var isMultiple = false;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-functionBlock")] =
+	update[GetSectionIdName(repeatingSection, id, "technique-functionBlock")] =
 		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "" || technique.resourceCost != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-traits")] = technique.traits;
-	var traitsDb = GetTraitsDictionary(technique.traits, "technique");
+	update[GetSectionIdName(repeatingSection, id, "technique-traits")] = technique.traits;
+	update = SetTechniqueDataTraits(update, repeatingSection, id, technique.traits);
+
+	update[GetSectionIdName(repeatingSection, id, "technique-trigger")] = technique.trigger;
+	update[GetSectionIdName(repeatingSection, id, "technique-requirement")] = technique.requirement;
+	update[GetSectionIdName(repeatingSection, id, "technique-prerequisite")] = technique.prerequisite;
+	update[GetSectionIdName(repeatingSection, id, "technique-resourceCost")] = technique.resourceCost;
+	update[GetSectionIdName(repeatingSection, id, "technique-isMultiple")] = isMultiple ? "1" : "0";
+
+	// set the description
+	update[GetSectionIdName(repeatingSection, id, "technique-descriptionBlock")] = (technique.description != "" || technique.onSuccess != "") ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-description")] = technique.description;
+	update[GetSectionIdName(repeatingSection, id, "technique-onSuccess")] = technique.onSuccess;
+
+	// set the attack block
+	update[GetSectionIdName(repeatingSection, id, "technique-attackBlock")] =
+		(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") ? "1" : "0";
+
+	update[GetSectionIdName(repeatingSection, id, "technique-attackBlockTarget")] = (technique.range != "" || technique.target != "") ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-range")] = technique.range;
+	update[GetSectionIdName(repeatingSection, id, "technique-target")] = technique.target;
+	update[GetSectionIdName(repeatingSection, id, "technique-targetCode")] = technique.targetCode;
+
+	update[GetSectionIdName(repeatingSection, id, "technique-attackBlockSkill")] = (technique.skill != "" || technique.defense != "") ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-skill")] = technique.skill;
+	update[GetSectionIdName(repeatingSection, id, "technique-defense")] = technique.defense;
+
+	// set the damage
+	update[GetSectionIdName(repeatingSection, id, "technique-attackBlockDamage")] = (technique.damage != "" || technique.damageType != "") ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-damage")] = technique.damage;
+	update[GetSectionIdName(repeatingSection, id, "technique-damageType")] = technique.damageType;
+	update[GetSectionIdName(repeatingSection, id, "technique-element")] = technique.element;
+	if (technique.damageType != "") {
+		update = SetTechniqueDataDamageString(update, repeatingSection, id, technique.damage, technique.damageType, technique.element);
+	}
+
+	// set special data
+	update[GetSectionIdName(repeatingSection, id, "technique-onHit")] = technique.onHit;
+	update[GetSectionIdName(repeatingSection, id, "technique-specBonus")] = technique.specBonus;
+
+	return update;
+}
+
+function SetTechniqueDataTraits(update, repeatingSection, id, traits) {
+
+	var traitsDb = GetTraitsDictionary(traits, "technique");
 	for (var i = 0; i < 6; i++) {
 		if (i < traitsDb.length) {
 			if (traitsDb[i].name.toLowerCase() == "multiple") {
 				isMultiple = true;
 			}
-			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = traitsDb[i].name;
-			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = traitsDb[i].description;
+			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i)] = traitsDb[i].name;
+			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i + "Desc")] = traitsDb[i].description;
 		} else {
-			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i)] = "0";
-			update[GetSectionIdName(repeatingSection, newrowid, "technique-traits" + i + "Desc")] = "";
+			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i)] = "0";
+			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i + "Desc")] = "";
 		}
 	}
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-trigger")] = technique.trigger;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-requirement")] = technique.requirement;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-prerequisite")] = technique.prerequisite;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-resourceCost")] = technique.resourceCost;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-isMultiple")] = isMultiple ? "1" : "0";
+	return update;
+}
 
-	// set the description
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-descriptionBlock")] = (technique.description != "" || technique.onSuccess != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-description")] = technique.description;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-onSuccess")] = technique.onSuccess;
-
-	// set the attack block
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlock")] =
-		(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") ? "1" : "0";
-
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockTarget")] = (technique.range != "" || technique.target != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-range")] = technique.range;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-target")] = technique.target;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-targetCode")] = technique.targetCode;
-
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockSkill")] = (technique.skill != "" || technique.defense != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-skill")] = technique.skill;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-defense")] = technique.defense;
-
-	// set the damage
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-attackBlockDamage")] = (technique.damage != "" || technique.damageType != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-damage")] = technique.damage;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-damageType")] = technique.damageType;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-element")] = technique.element;
-	if (technique.damageType != "") {
-		let damageString = `${FormatDamageString(technique.damage)}${technique.damageType}${technique.element == "" ? "" : ` [${technique.element}]`}`;
-		update[GetSectionIdName(repeatingSection, newrowid, "technique-damageString")] = damageString;
-	}
-
-	// set special data
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-onHit")] = technique.onHit;
-	update[GetSectionIdName(repeatingSection, newrowid, "technique-specBonus")] = technique.specBonus;
+function SetTechniqueDataDamageString(update, repeatingSection, id, damage, damageType, element) {
+	let damageString = `${FormatDamageString(damage)}${damageType}${element == "" ? "" : ` [${technique.element}]`}`;
+	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = damageString;
 
 	return update;
 }
@@ -515,11 +525,25 @@ function ReplaceDamageDice(element) {
 
 
 
-// ======== Page Progression
+// ======== General Sheetworker
 
 function GoToNextPage(update, nextPage, currentPage) {
 	update[`${ToCamelCase(nextPage)}-previousPage`] = currentPage;
 	update["characterSheetDisplayStyle"] = nextPage;
 	return update;
+}
+
+function UpdateDefaultActiveCheckbox(eventinfo, correctNewValue) {
+	
+	if (eventinfo.previousValue == eventinfo.newValue) {
+		let update = {};
+		eventinfo.newValue = correctNewValue == undefined ? "0" : correctNewValue;
+		update[eventinfo.sourceAttribute] = eventinfo.newValue;
+		setAttrs(update, { silent: true });
+	}
+}
+
+function Log (output) {
+	console.log(output);
 }
 
