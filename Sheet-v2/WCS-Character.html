@@ -527,7 +527,7 @@
 							<div class="wuxSectionContent">
 								<span class="wuxHeader">Section Description</span>
 								<span class="wuxDescription">This is the Techniques Section. Techniques you have learned will appear here. You can learn additional techniques by entering the Technique Selection page above in Technique Options.</span>
-								<span class="wuxDescription">Techniques can be locked into their tech slots by selecting the circle button. Any technqique can be used be pressing their name.</span>
+								<span class="wuxDescription">Techniques can be locked into their tech slots by pressing their selection button. Only base technqiues can be equipped to tech slots. Every augment of the technique are automatically equipped.</span>
 								<span class="wuxHeader">Section Options</span>
 								<div class="wuxFlexTable">
 									<div class="wuxFlexTableItemGroup wuxNoPadding">
@@ -538,6 +538,10 @@
 													<div class="wuxButton">
 														<input type="checkbox" name="attr_character-button-techniques">
 														<span>Select Techniques</span>
+													</div>
+													<div class="wuxButton">
+														<input type="checkbox" name="attr_character-button-techniquesrefresh">
+														<span>Refresh Techniques</span>
 													</div>
 												</div>
 											</div>
@@ -624,7 +628,6 @@
 								</div>
 
 								<fieldset class="repeating_jobtechniques">
-									<input type="hidden" name="attr_technique-isDatabase" value="0">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 									<div class="wuxTechnique wuxMinWidth300">
 										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
@@ -649,8 +652,8 @@
 													<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
 												</div>
 
-												<input type="hidden" name="attr_technique-isDatabase" value="0">
-												<div class="wuxHiddenAuxField wuxTechniqueHeaderInteractInnerBlock">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isDatabase" value="0">
+												<div class="wuxHiddenInlineAuxField wuxTechniqueHeaderInteractInnerBlock">
 													<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-edit" value="on">
 													<input type="hidden" class="wuxTechniqueHeaderInteractivePictosIcon-flag" name="attr_technique-edit" value="on">
 													<span class="wuxTechniqueHeaderInteractivePictosIcon">W</span>
@@ -681,7 +684,7 @@
 														<span class="wuxTechniqueHeaderInfoType">: </span>
 														<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action" value="Quick">Quick</span>
 														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
-														<span class="wuxHiddenInlineField">, </span>
+														<span class="wuxHiddenInlineField">; </span>
 														<span name="attr_technique-limits"></span>
 													</div>
 												</div>
@@ -1163,7 +1166,6 @@
 								</div>
 
 								<fieldset class="repeating_activetechniques">
-									<input type="hidden" name="attr_technique-isDatabase" value="0">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 									<div class="wuxTechnique wuxMinWidth300">
 										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
@@ -1188,7 +1190,7 @@
 													<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
 												</div>
 
-												<input type="hidden" name="attr_technique-isDatabase" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isDatabase" value="0">
 												<div class="wuxHiddenAuxField wuxTechniqueHeaderInteractInnerBlock">
 													<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-edit" value="on">
 													<input type="hidden" class="wuxTechniqueHeaderInteractivePictosIcon-flag" name="attr_technique-edit" value="on">
@@ -1220,7 +1222,7 @@
 														<span class="wuxTechniqueHeaderInfoType">: </span>
 														<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action" value="Quick">Quick</span>
 														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
-														<span class="wuxHiddenInlineField">, </span>
+														<span class="wuxHiddenInlineField">; </span>
 														<span name="attr_technique-limits"></span>
 													</div>
 												</div>
@@ -1705,7 +1707,6 @@
 								</div>
 
 								<fieldset class="repeating_passivetechniques">
-									<input type="hidden" name="attr_technique-isDatabase" value="0">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 									<div class="wuxTechnique wuxMinWidth300">
 										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
@@ -1730,7 +1731,7 @@
 													<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
 												</div>
 
-												<input type="hidden" name="attr_technique-isDatabase" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isDatabase" value="0">
 												<div class="wuxHiddenAuxField wuxTechniqueHeaderInteractInnerBlock">
 													<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-edit" value="on">
 													<input type="hidden" class="wuxTechniqueHeaderInteractivePictosIcon-flag" name="attr_technique-edit" value="on">
@@ -1762,7 +1763,7 @@
 														<span class="wuxTechniqueHeaderInfoType">: </span>
 														<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action" value="Quick">Quick</span>
 														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
-														<span class="wuxHiddenInlineField">, </span>
+														<span class="wuxHiddenInlineField">; </span>
 														<span name="attr_technique-limits"></span>
 													</div>
 												</div>
@@ -2245,7 +2246,6 @@
 								</div>
 
 								<fieldset class="repeating_supporttechniques">
-									<input type="hidden" name="attr_technique-isDatabase" value="0">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 									<div class="wuxTechnique wuxMinWidth300">
 										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
@@ -2270,7 +2270,7 @@
 													<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
 												</div>
 
-												<input type="hidden" name="attr_technique-isDatabase" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isDatabase" value="0">
 												<div class="wuxHiddenAuxField wuxTechniqueHeaderInteractInnerBlock">
 													<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-edit" value="on">
 													<input type="hidden" class="wuxTechniqueHeaderInteractivePictosIcon-flag" name="attr_technique-edit" value="on">
@@ -2302,7 +2302,7 @@
 														<span class="wuxTechniqueHeaderInfoType">: </span>
 														<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action" value="Quick">Quick</span>
 														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
-														<span class="wuxHiddenInlineField">, </span>
+														<span class="wuxHiddenInlineField">; </span>
 														<span name="attr_technique-limits"></span>
 													</div>
 												</div>
@@ -2776,7 +2776,6 @@
 								<div class="wuxHeader">Permanent Techniques</div>
 
 								<fieldset class="repeating_permanenttechniques">
-									<input type="hidden" name="attr_technique-isDatabase" value="0">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 									<div class="wuxTechnique wuxMinWidth300">
 										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
@@ -2801,7 +2800,7 @@
 													<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
 												</div>
 
-												<input type="hidden" name="attr_technique-isDatabase" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isDatabase" value="0">
 												<div class="wuxHiddenAuxField wuxTechniqueHeaderInteractInnerBlock">
 													<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-edit" value="on">
 													<input type="hidden" class="wuxTechniqueHeaderInteractivePictosIcon-flag" name="attr_technique-edit" value="on">
@@ -2833,7 +2832,7 @@
 														<span class="wuxTechniqueHeaderInfoType">: </span>
 														<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action" value="Quick">Quick</span>
 														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
-														<span class="wuxHiddenInlineField">, </span>
+														<span class="wuxHiddenInlineField">; </span>
 														<span name="attr_technique-limits"></span>
 													</div>
 												</div>

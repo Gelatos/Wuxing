@@ -365,40 +365,31 @@ function GetTechniqueDataArray(type, techniques) {
 	return output;
 }
 
-function SetTechniqueDataList(update, repeatingSection, techniqueList, selectedTechniques, autoExpand, isDatabase) {
+function SetTechniqueDataList(update, repeatingSection, techniqueList, autoExpand, isDatabase) {
 
 	// start by clearing the section Ids
 	let newrowid;
 	let technique;
-	console.log("received: " + JSON.stringify(selectedTechniques));
 
 	// iterate through each technique
 	for (let i = 0; i < techniqueList.length; i++) {
 		newrowid = generateRowID();
 		technique = techniqueList[i];
-		update = SetTechniqueData(update, repeatingSection, newrowid, technique, TechniqueIsSelected(selectedTechniques, technique.name), autoExpand, isDatabase);
+		update = SetTechniqueData(update, repeatingSection, newrowid, technique, autoExpand, isDatabase);
 	}
 
 	return update;
 
 }
 
-function TechniqueIsSelected(selectedTechniques, name) {
-	if (selectedTechniques == undefined) {
-		return 0;
-	}
-	else if (selectedTechniques.keys.includes(name)) {
-		return selectedTechniques.values[name].count;
-	}
-	return 0;
+function SetTechniqueSelect(technique, selectedTechniques) {
+	technique.select = selectedTechniques.keys.includes(technique.name);
+	return technique;
 }
 
-function SetTechniqueData(update, repeatingSection, id, technique, select, autoExpand, isDatabase) {
+function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, isDatabase) {
 
-	if (select != 0) {
-		console.log(technique.name + ": " + select);
-	}
-	update[GetSectionIdName(repeatingSection, id, "technique-select")] = select;
+	update[GetSectionIdName(repeatingSection, id, "technique-select")] = technique.select != undefined ? technique.select : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-expand")] = autoExpand ? "on" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-isDatabase")] = isDatabase ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-edit")] = "0";

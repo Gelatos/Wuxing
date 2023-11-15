@@ -97,16 +97,117 @@ function SetCharacterTechSlotCounts(update, attrArray, totalLevel, slotTypes) {
 
 // ======== Techniques - Database Techniques
 
-function AddCharacterClassTechniques(update, attrArray, techniqueNames) {
+on("change:character-button-techniquesrefresh", function () {
 
-	let technique = {};
+	UpdateLearnedTechniques();
+});
 
-	// iterate through the names and add the techniques to the appropriate arrays
-	for (let i = 0; i < techniqueNames.length; i++) {
-		technique = GetClassTechniquesInfo(techniqueNames[i]);
+function UpdateLearnedTechniques() {
+
+	let mod_attrs = ["techniques-jobTech", "techniques-learnedTech"];
+	
+	let repeatingJob = "repeating_jobtechniques";
+	let repeatingActive = "repeating_activetechniques";
+	let repeatingPassive = "repeating_passivetechniques";
+	let repeatingSupport = "repeating_supporttechniques";
+	let repeatingPermanent = "repeating_permanenttechniques";
+
+	getSectionIDs(repeatingJob, function (jobArray) {
+		mod_attrs = mod_attrs.concat(GetSectionIdValues(jobArray, repeatingJob, ["technique-name", "technique-isDatabase"]));
+		getSectionIDs(repeatingActive, function (activeArray) {
+			mod_attrs = mod_attrs.concat(GetSectionIdValues(activeArray, repeatingActive, ["technique-name", "technique-isDatabase"]));
+			getSectionIDs(repeatingPassive, function (passiveArray) {
+				mod_attrs = mod_attrs.concat(GetSectionIdValues(passiveArray, repeatingPassive, ["technique-name", "technique-isDatabase"]));
+				getSectionIDs(repeatingSupport, function (supportArray) {
+					mod_attrs = mod_attrs.concat(GetSectionIdValues(supportArray, repeatingSupport, ["technique-name", "technique-isDatabase"]));
+					getSectionIDs(repeatingPermanent, function (permanentArray) {
+						mod_attrs = mod_attrs.concat(GetSectionIdValues(permanentArray, repeatingPermanent, ["technique-name", "technique-isDatabase"]));
+						getAttrs(mod_attrs, function (v) {
+							let activeLearnedTech = [];
+							activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingJob, jobArray);
+							activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingActive, activeArray);
+							activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingPassive, passiveArray);
+							activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingSupport, supportArray);
+							activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingPermanent, permanentArray);
+
+							let newTechniques = {
+								job: [],
+								active: [],
+								passive: [],
+								support: [],
+								permanent: []
+							}
+							let technique = {};
+
+							let jobTech = AttrParseString(v, "techniques-jobTech");
+							jobTech = jobTech.split(";");
+							for (let i = 0; i < jobTech.length; i++) {
+								if (!activeLearnedTech.includes(jobTech[i].trim())) {
+									technique = GetClassTechniquesInfo(jobTech[i]);
+									newTechniques = SetCharacterLearnedTechnique(newTechniques, technique);
+								}
+							}
+							
+							let learnedTech = AttrParseJSONDictionary(v, "techniques-learnedTech");
+							for (let i = 0; i < learnedTech.keys.length; i++) {
+								if (!activeLearnedTech.includes(learnedTech.keys[i])) {
+									technique = GetTechniquesInfo(learnedTech.keys[i]);
+									newTechniques = SetCharacterLearnedTechnique(newTechniques, technique);
+								}
+							}
+
+							let update = {};
+    						update = SetTechniqueDataList(update, repeatingJob, newTechniques.job, false, true);
+    						update = SetTechniqueDataList(update, repeatingActive, newTechniques.active, false, true);
+    						update = SetTechniqueDataList(update, repeatingPassive, newTechniques.passive, false, true);
+    						update = SetTechniqueDataList(update, repeatingSupport, newTechniques.support, false, true);
+    						update = SetTechniqueDataList(update, repeatingPermanent, newTechniques.permanent, false, true);
+							setAttrs(update, { silent: true });
+
+						});
+					});
+				});
+			});
+		});
+	});
+}
+
+function SetCurrentDatabaseTech(activeLearnedTech, attrArray, repeatingSection, idArray) {
+	for (let i = 0; i < idArray.length; i++) {
+		if (AttrParseString(attrArray, GetSectionIdName(repeatingSection, idArray[i], "technique-isDatabase")) == "1") {
+			activeLearnedTech.push(AttrParseString(attrArray, GetSectionIdName(repeatingSection, idArray[i], "technique-name")));
+		}
 	}
+	return activeLearnedTech;
+}
 
-	return update;
+function SetCharacterLearnedTechnique(newTechniques, technique) {
+
+	Log("adding technique " + technique.name + " which is " + technique.techniqueType);
+
+	switch (technique.techniqueType) {
+		case "Job": 
+			newTechniques.job.push(technique);
+			Log("added to job");
+			break;
+		case "Active": 
+			newTechniques.active.push(technique);
+			Log("added to active");
+			break;
+		case "Passive": 
+			newTechniques.passive.push(technique);
+			Log("added to passive");
+			break;
+		case "Support": 
+			newTechniques.support.push(technique);
+			Log("added to support");
+			break;
+		case "Permanent": 
+			newTechniques.permanent.push(technique);
+			Log("added to permanent");
+			break;
+	}
+	return newTechniques;
 }
 
 

@@ -224,7 +224,9 @@ var update_advancement_submit = function () {
 		update = GoToNextPage(update, "LevelUp", "Advancement");
 		update["advancement-button-reset-everything"] = "on";
 
-		setAttrs(update, { silent: true });
+		setAttrs(update, { silent: true }, function() {
+			UpdateLearnedTechniques();
+		});
 
 	});
 

@@ -19,7 +19,10 @@ var update_techniques_submit = function () {
 		UpdateTechniquesClearFilter("on");
 		
 		update = GoToNextPage(update, "Character", "Techniques");
-		setAttrs(update, { silent: true });
+		
+		setAttrs(update, { silent: true }, function() {
+			UpdateLearnedTechniques();
+		});
 
 	});
 
@@ -246,9 +249,6 @@ function SetTechniquesJobTechniques(update, attrArray, techniques) {
 	}
 	jobs += techniques;
 	update["techniques-jobTech"] = jobs;
-
-	// update character sheet techniques by gaining these new techs
-	update = AddCharacterClassTechniques(update, attrArray, techniques.split(";"));
 
 	return update;
 }
@@ -663,15 +663,18 @@ function SetTechniquesFilteredTechniques(update, filteredTech, learnedTech) {
     
     let workingTechniques = [];
     let iterator = 0;
+	let technique = {};
 		
 	// iterate through the list of names
 	while (iterator < 10 && filteredTech.length > 0) {
-    	workingTechniques.push(GetTechniquesInfo(filteredTech[0]));
+		technique = GetTechniquesInfo(filteredTech[0]);
+		technique = SetTechniqueSelect(technique, learnedTech);
+    	workingTechniques.push(technique);
     	filteredTech.splice(0, 1);
 	    iterator++;
 	}
 	
-    update = SetTechniqueDataList(update, "repeating_filteredtechniques", workingTechniques, learnedTech, true, true);
+    update = SetTechniqueDataList(update, "repeating_filteredtechniques", workingTechniques, true, true);
     update["techniques-filteredTech"] = JSON.stringify(filteredTech);
     update["techniques-remainingFilteredTech"] = filteredTech.length > 10 ? 10 : filteredTech.length;
     return update;
