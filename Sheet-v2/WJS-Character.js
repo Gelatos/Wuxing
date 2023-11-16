@@ -590,7 +590,6 @@ function UpdateCharacterProficiencyBonus() {
 
 on("change:statbonus_initiative change:statbonus_power change:statbonus_stress change:statbonus_barrier", function (eventinfo) {
 
-	console.log(`updating: ${GetFieldNameAttribute(eventinfo.sourceAttribute)}`);
 	UpdateCharacterDerivedStat(GetFieldNameAttribute(eventinfo.sourceAttribute));
 
 });
@@ -604,7 +603,7 @@ function UpdateCharacterDerivedStat(fieldName) {
 	switch (fieldName) {
 		case "initiative": mod_attrs = mod_attrs.concat(["statbonus_initiative", "QCK"]); growthList.push("QCK"); break;
 		case "power": mod_attrs = mod_attrs.concat(["statbonus_power", "STR"]); growthList.push("STR"); console.log("POWER"); break;
-		case "barrier": mod_attrs = mod_attrs.concat(["statbonus_barrier", "WIL"]); growthList.push("WIL"); break;
+		case "barrier": mod_attrs = mod_attrs.concat(["statbonus_barrier", "WIL", "block"]); growthList.push("WIL"); break;
 		case "stress": mod_attrs = mod_attrs.concat(["statbonus_stress", "WIL"]); growthList.push("WIL"); break;
 	}
 
@@ -623,6 +622,7 @@ function UpdateCharacterDerivedStat(fieldName) {
 function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 
 	let name = "";
+	let total = 0;
 
 	for (let i = 0; i < growthList.length; i++) {
 		name = growthList[i];
@@ -636,8 +636,12 @@ function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 				// update["carryCapacity"] = defaultStats["carryCapacity"] + AttrParseInt(attrArray, `statscore_${name}`) + AttrParseInt(attrArray, "statbonus_carryCapacity");
 				break;
 			case "WIL":
-				update["barrier"] = parseInt(ancestryData.barrier) + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_barrier");
-				update["stress_max"] = AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_stress");
+				total = parseInt(ancestryData.barrier) + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_barrier");;
+				update["barrier"] = total
+				update["tempHp_max"] = total + AttrParseInt("block");
+
+				total = AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_stress");
+				update["stress_max"] = Math.max(0, total);
 				break;
 		}
 	}

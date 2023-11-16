@@ -150,8 +150,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 {
     display: inline-block;
     margin: 0px -4px 0px 0px;
-    padding: 0px 4px 0px 0px;
-    padding-left: 5px;
+    padding: 0px 4px 0px 5px;
     vertical-align: bottom;
 
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -160,6 +159,9 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection .wuxDistinctTitle,
 .wuxDistinctSection .wuxDistinctSubtitle
 {
+    position: relative;
+    width: 25%;
+
     text-transform: capitalize;
     color: #ffffdf;
 
@@ -170,9 +172,6 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 
 .wuxDistinctSection .wuxDistinctTitle
 {
-    position: relative;
-    width: 25%;
-
     font-size: 10px;
     line-height: 22px;
     text-align: right;
@@ -183,10 +182,6 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 
 .wuxDistinctSection .wuxDistinctSubtitle
 {
-    position: relative;
-    left: 20px;
-    width: calc(25% - 20px);
-
     font-size: 8px;
     line-height: 15px;
     text-align: right;
@@ -200,11 +195,6 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctSubtitle
 {
     width: calc(65% - 15px);
-}
-
-.wuxDistinctSection.wuxSizeInverse .wuxDistinctSubtitle
-{
-    left: 0px;
 }
 
 .wuxDistinctSection .wuxDistinctData,
@@ -271,34 +261,35 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
     background: #efefef;
 }
 
-.wuxDistinctSection input[type=number].wuxDistinctData,
-.wuxDistinctSection input[type=number].wuxDistinctSubdata
-{
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-
 .wuxDistinctSection.wuxSizeInverse input.wuxDistinctData,
 .wuxDistinctSection.wuxSizeInverse input.wuxDistinctSubdata
 {
     width: calc(35% + 6px);
 }
 
-/* .wuxDistinctSection .wuxDistinctSubdata
+.wuxDistinctSection .wuxDistinctData input,
+.wuxDistinctSection .wuxDistinctSubdata input
 {
-    position: relative;
-    left: 20px;
     width: 30px;
+    padding: 1.5px 3px;
 
-    font-size: 10px;
-    line-height: 10px;
-    text-align: center;
-    font-weight: normal;
+    color: #1d1e1f;
+    font-style: normal;
+    font-size: 12px;
 
+    background: #efefef;
+}
+
+.wuxDistinctSection .wuxDistinctSubdata input
+{
+    padding: 0px 3px;
+    line-height: 15px;
+}
+
+.wuxDistinctSection .wuxDistinctSubdata
+{
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
-    border: 0px solid #000;
-    border-width: 1px 1px 1px 0px;
-} */
+}
 
 input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 {

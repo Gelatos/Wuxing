@@ -6684,31 +6684,6 @@
 				<input type="text" name="attr_nickname" placeholder="Display Name" />
 			</div>
 		</div>
-		<div class="wuxSectionBlock wuxSmallLayoutItem">
-			<div class="wuxHeader2">
-				<span>Ki</span>
-			</div>
-			<div class="wuxHeader">
-				<input type="text" class="wuxSizeSmall" name="attr_ki" value="0" />
-				<span>/ </span>
-				<span name='attr_ki_max' value="25">25</span>
-			</div>
-		</div>
-		<div class="wuxSectionBlock wuxLayoutItem">
-			<div class="wuxHeader2">
-				<span>Injuries</span>
-			</div>
-			<div class="wuxHeader">
-				<input type="text" class="wuxSizeSmall" name="attr_wounds" value="0" />
-				<span class="wuxSubheader">wounds </span>
-				<input type="text" class="wuxSizeSmall" name="attr_stress" value="0" />
-				<span class="wuxSubheader">stress </span>
-				<span class="wuxSizeSmall" name="attr_trauma" value="0">0</span>
-				<span>/ </span>
-				<span name='attr_trauma_max' value="1">1</span>
-				<span class="wuxSubheader">trauma </span>
-			</div>
-		</div>
 	</div>
 
 	<div class="wumMainSheet">
@@ -6850,8 +6825,82 @@
 
 				<div class="wuxTab">
 					<div class="tab-combatOptions wuxTab">
-						<div class="combat-GeneralStats wuxSectionBlock wuxLayoutItem">
+						<div class="combat-vitals wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-combat-vitals" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-vitals">
+								<span class="wuxSectionExpandIcon">&#9662;</span>
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-vitals">
+								<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+								<span>Vitals</span>
+							</div>
+							<div class="wuxSectionHeaderFooter"></div>
+
 							<div class="wuxSectionContent">
+								<div class="wuxFlexTable">
+									<div class="vitals-hp wuxFlexTableItemGroup wuxMinWidth150">
+										<div class="wuxDistinctSection">
+											<div class="wuxDistinctField">
+												<span class="wuxDistinctTitle">HP</span>
+												<span class='wuxDistinctData'>
+													<input type="number"  name='attr_hp'>
+													<span>/ </span>
+													<span name='attr_hp_max' value="0">0</span>
+												</span>
+
+												<span class="wuxDistinctSubtitle">Temp.HP</span>
+												<span class='wuxDistinctSubdata'>
+													<input type="number"  name='attr_tempHp' value="0">
+													<span>/ </span>
+													<span name='attr_tempHp_max' value="0">0</span>
+												</span>
+
+												<span class="wuxDistinctSubtitle">Vitality</span>
+												<span class='wuxDistinctSubdata'>
+													<input type="number"  name='attr_vitality'>
+													<span>/ </span>
+													<span name='attr_vitality_max' value="0">0</span>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="vitals-trauma wuxFlexTableItemGroup wuxMinWidth150">
+										<div class="wuxDistinctSection">
+											<div class="wuxDistinctField">
+												<span class="wuxDistinctTitle">Trauma</span>
+												<span class='wuxDistinctData'>
+													<input type="number"  name='attr_trauma'>
+													<span>/ </span>
+													<span name='attr_trauma_max' value="0">0</span>
+												</span>
+												<span class="wuxDistinctSubtitle">Stress</span>
+												<span class='wuxDistinctSubdata'>
+													<input type="number"  name='attr_stress'>
+													<span>/ </span>
+													<span name='attr_stress_max' value="0">0</span>
+												</span>
+												<span class="wuxDistinctSubtitle">Wounds</span>
+												<span class='wuxDistinctSubdata'>
+													<input type="number"  name='attr_wounds'>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="vitals-ki wuxFlexTableItemGroup wuxMinWidth150">
+										<div class="wuxDistinctSection">
+											<div class="wuxDistinctField">
+												<span class="wuxDistinctTitle">Ki</span>
+												<span class='wuxDistinctData'>
+													<input type="number"  name='attr_ki'>
+													<span>/ </span>
+													<span name='attr_ki_max' value="0">0</span>
+												</span>
+												<span class="wuxDistinctTitle">Speed</span>
+												<span class='wuxDistinctData' name="attr_speed"></span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -7194,7 +7243,7 @@
 							<div class="wuxSectionContent">
 								<span class="wuxHeader">Section Description</span>
 								<span class="wuxDescription">This is the Techniques Section. Techniques you have learned will appear here. You can learn additional techniques by entering the Technique Selection page above in Technique Options.</span>
-								<span class="wuxDescription">Techniques can be locked into their tech slots by selecting the circle button. Any technqique can be used be pressing their name.</span>
+								<span class="wuxDescription">Techniques can be locked into their tech slots by pressing their selection button. Only base technqiues can be equipped to tech slots. Every augment of the technique are automatically equipped.</span>
 								<span class="wuxHeader">Section Options</span>
 								<div class="wuxFlexTable">
 									<div class="wuxFlexTableItemGroup wuxNoPadding">
@@ -7279,7 +7328,7 @@
 						</div>
 					</div>
 					<div class="tab-techSlots1 wuxTab">
-						<div class="techSlots-job wuxSectionBlock wuxLayoutItem">
+						<div class="techSlots-job wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Job Techniques</div>
 								<div class="wuxDistinctSection">
@@ -7817,7 +7866,7 @@
 								</fieldset>
 							</div>
 						</div>
-						<div class="techSlots-active wuxSectionBlock wuxLayoutItem">
+						<div class="techSlots-active wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Active Techniques</div>
 								<div class="wuxDistinctSection">
@@ -8358,7 +8407,7 @@
 						</div>
 					</div>
 					<div class="tab-techSlots2 wuxTab">
-						<div class="techSlots-passive wuxSectionBlock wuxLayoutItem">
+						<div class="techSlots-passive wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Passive Techniques</div>
 								<div class="wuxDistinctSection">
@@ -8897,7 +8946,7 @@
 
 							</div>
 						</div>
-						<div class="techSlots-support wuxSectionBlock wuxLayoutItem">
+						<div class="techSlots-support wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Support Techniques</div>
 								<div class="wuxDistinctSection">
@@ -9438,7 +9487,7 @@
 						</div>
 					</div>
 					<div class="tab-techSlots3 wuxTab">
-						<div class="techSlots-permanent wuxSectionBlock wuxLayoutItem">
+						<div class="techSlots-permanent wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Permanent Techniques</div>
 
@@ -16150,7 +16199,6 @@ function UpdateCharacterProficiencyBonus() {
 
 on("change:statbonus_initiative change:statbonus_power change:statbonus_stress change:statbonus_barrier", function (eventinfo) {
 
-	console.log(`updating: ${GetFieldNameAttribute(eventinfo.sourceAttribute)}`);
 	UpdateCharacterDerivedStat(GetFieldNameAttribute(eventinfo.sourceAttribute));
 
 });
@@ -16164,7 +16212,7 @@ function UpdateCharacterDerivedStat(fieldName) {
 	switch (fieldName) {
 		case "initiative": mod_attrs = mod_attrs.concat(["statbonus_initiative", "QCK"]); growthList.push("QCK"); break;
 		case "power": mod_attrs = mod_attrs.concat(["statbonus_power", "STR"]); growthList.push("STR"); console.log("POWER"); break;
-		case "barrier": mod_attrs = mod_attrs.concat(["statbonus_barrier", "WIL"]); growthList.push("WIL"); break;
+		case "barrier": mod_attrs = mod_attrs.concat(["statbonus_barrier", "WIL", "block"]); growthList.push("WIL"); break;
 		case "stress": mod_attrs = mod_attrs.concat(["statbonus_stress", "WIL"]); growthList.push("WIL"); break;
 	}
 
@@ -16183,6 +16231,7 @@ function UpdateCharacterDerivedStat(fieldName) {
 function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 
 	let name = "";
+	let total = 0;
 
 	for (let i = 0; i < growthList.length; i++) {
 		name = growthList[i];
@@ -16196,8 +16245,12 @@ function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 				// update["carryCapacity"] = defaultStats["carryCapacity"] + AttrParseInt(attrArray, `statscore_${name}`) + AttrParseInt(attrArray, "statbonus_carryCapacity");
 				break;
 			case "WIL":
-				update["barrier"] = parseInt(ancestryData.barrier) + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_barrier");
-				update["stress_max"] = AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_stress");
+				total = parseInt(ancestryData.barrier) + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_barrier");;
+				update["barrier"] = total
+				update["tempHp_max"] = total + AttrParseInt("block");
+
+				total = AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_stress");
+				update["stress_max"] = Math.max(0, total);
 				break;
 		}
 	}
@@ -17846,15 +17899,15 @@ function GetTechniquesInfo(name) {
 		case "vitality boost ++":
 			return { "name": "Vitality Boost ++", "augmentBase": "Vitality Boost", "techniqueGroup": "General Path", "techniqueSubGroup": "", "techniqueType": "", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "Your Vitality increases by 1.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "Character Level 29", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "advanced defensive skill":
-			return { "name": "Advanced Defensive Skill", "augmentBase": "", "techniqueGroup": "Defensive Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Defensive Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Advanced Defensive Skill", "augmentBase": "", "techniqueGroup": "Defensive Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Defensive Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "hp up":
-			return { "name": "HP Up", "augmentBase": "", "techniqueGroup": "Defensive Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "Gain a bonus to HP equal to half your character level. Whenever you gain an even numbered character level you also gain 1 HP.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "HP Up", "augmentBase": "", "techniqueGroup": "Defensive Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "", "limits": "", "resourceCost": "", "description": "Gain a bonus to HP equal to half your character level. Whenever you gain an even numbered character level you also gain 1 HP.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "improved initiative":
-			return { "name": "Improved Initiative", "augmentBase": "", "techniqueGroup": "Defensive Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "Your initiative increases by 4.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Improved Initiative", "augmentBase": "", "techniqueGroup": "Defensive Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "", "limits": "", "resourceCost": "", "description": "Your initiative increases by 4.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "advanced martial skill":
-			return { "name": "Advanced Martial Skill", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Martial Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Advanced Martial Skill", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Martial Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "brawler":
-			return { "name": "Brawler", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "Your Unarmed Strike damage increases to 2d3.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "Human Ancestry", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Brawler", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "", "limits": "", "resourceCost": "", "description": "Your Unarmed Strike damage increases to 2d3.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "Human Ancestry", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "crushing blade":
 			return { "name": "Crushing Blade", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Full", "traits": "Armament [F]", "limits": "", "resourceCost": "", "description": "You attempt to power through any defense the foe has. Make a melee attack.", "onSuccess": "", "trigger": "", "requirement": "Must be attacking with a Might weapon", "prerequisite": "Trained in Might", "skill": "Weapon", "defense": "Reflex DC", "range": "", "target": "One Target", "targetCode": "Single", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Staggering Blade"] }
 		case "staggering blade":
@@ -17884,11 +17937,11 @@ function GetTechniquesInfo(name) {
 		case "follow up launcher":
 			return { "name": "Follow Up Launcher", "augmentBase": "Uppercut", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "", "onSuccess": "Before the end of your turn, if you attack the same character with a Brawling melee attack, they do not lose the Launched status.", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "advanced magic skill":
-			return { "name": "Advanced Magic Skill", "augmentBase": "", "techniqueGroup": "Magic Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Magic Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Advanced Magic Skill", "augmentBase": "", "techniqueGroup": "Magic Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Magic Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "learn spell":
-			return { "name": "Learn Spell", "augmentBase": "", "techniqueGroup": "Magic Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Learn a Spell Technique that you meet the prerequisites for. This technique can be taken multiple times, each time you learn a new spell technique.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Learn Spell", "augmentBase": "", "techniqueGroup": "Magic Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Learn a Spell Technique that you meet the prerequisites for. This technique can be taken multiple times, each time you learn a new spell technique.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "advanced active skill":
-			return { "name": "Advanced Active Skill", "augmentBase": "", "techniqueGroup": "Body Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Body Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Advanced Active Skill", "augmentBase": "", "techniqueGroup": "Body Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Body Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "acceleration":
 			return { "name": "Acceleration", "augmentBase": "", "techniqueGroup": "Body Skill", "techniqueSubGroup": "", "techniqueType": "Support", "action": "Quick", "traits": "", "limits": "1/Round", "resourceCost": "1 Mana", "description": "Until the end of your turn, your speed increases by 2. You may then move up to half your speed.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "Trained in Athletics", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Power Vault"] }
 		case "power vault":
@@ -17916,17 +17969,17 @@ function GetTechniquesInfo(name) {
 		case "tumble":
 			return { "name": "Tumble", "augmentBase": "", "techniqueGroup": "Body Skill", "techniqueSubGroup": "", "techniqueType": "Support", "action": "Quick", "traits": "", "limits": "", "resourceCost": "", "description": "You move at least 1 space, up to your speed. During this movement, you can try to move through the space of one enemy. Attempt an Acrobatics check against the enemy’s Reflex DC as soon as you try to enter its space. ", "onSuccess": "You do not trigger engagement and may continue moving.", "trigger": "", "requirement": "", "prerequisite": "Trained in Acrobatics", "skill": "Acrobatics", "defense": "Reflex DC", "range": "1", "target": "One Target", "targetCode": "Single", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "advanced knowledge skill":
-			return { "name": "Advanced Knowledge Skill", "augmentBase": "", "techniqueGroup": "Knowledge Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Knowledge Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Advanced Knowledge Skill", "augmentBase": "", "techniqueGroup": "Knowledge Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Knowledge Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "broad study":
-			return { "name": "Broad Study", "augmentBase": "", "techniqueGroup": "Knowledge Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "You are well read in a lot of different subjects. Gain a +1 bonus whenever making a Recall Knowledge check.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Broad Study", "augmentBase": "", "techniqueGroup": "Knowledge Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "", "limits": "", "resourceCost": "", "description": "You are well read in a lot of different subjects. Gain a +1 bonus whenever making a Recall Knowledge check.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "experienced tracker":
-			return { "name": "Experienced Tracker", "augmentBase": "", "techniqueGroup": "Knowledge Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "You track at your full speed.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "Trained in Survival", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Experienced Tracker", "augmentBase": "", "techniqueGroup": "Knowledge Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "", "limits": "", "resourceCost": "", "description": "You track at your full speed.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "Trained in Survival", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "multilingual":
-			return { "name": "Multilingual", "augmentBase": "", "techniqueGroup": "Knowledge Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "You gain three Languages.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Multilingual", "augmentBase": "", "techniqueGroup": "Knowledge Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "You gain three Languages.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "specialized knowledge":
-			return { "name": "Specialized Knowledge", "augmentBase": "", "techniqueGroup": "Knowledge Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "You gain three Lore Knowledges.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Specialized Knowledge", "augmentBase": "", "techniqueGroup": "Knowledge Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "You gain three Lore Knowledges.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "advanced social skill":
-			return { "name": "Advanced Social Skill", "augmentBase": "", "techniqueGroup": "Social Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Social Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Advanced Social Skill", "augmentBase": "", "techniqueGroup": "Social Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Social Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "create diversion":
 			return { "name": "Create Diversion", "augmentBase": "", "techniqueGroup": "Social Skill", "techniqueSubGroup": "", "techniqueType": "Support", "action": "Quick", "traits": "", "limits": "", "resourceCost": "", "description": "With a gesture, a trick, or some distracting words, you can create a diversion that draws creatures' attention elsewhere. ", "onSuccess": "Until the end of this turn, you have +1 advantage on the next attack roll against the target.", "trigger": "", "requirement": "", "prerequisite": "Trained in Deception", "skill": "Deception", "defense": "Insight DC", "range": "3", "target": "One Target", "targetCode": "Single", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "demoralize":
@@ -17934,11 +17987,11 @@ function GetTechniquesInfo(name) {
 		case "fascinate":
 			return { "name": "Fascinate", "augmentBase": "", "techniqueGroup": "Social Skill", "techniqueSubGroup": "", "techniqueType": "Support", "action": "Full", "traits": "", "limits": "", "resourceCost": "", "description": "Through fancy footwork, vicious mockery, or a startling performance, you draw the attention of those nearby.\n\nRegardless of your result, targets are temporarily immune to your attempts to Fascinate them for 5 minutes.", "onSuccess": "The target gains the staggered condition.", "trigger": "", "requirement": "", "prerequisite": "Trained in Performance", "skill": "Performance", "defense": "Insight DC", "range": "3", "target": "Up to three targets", "targetCode": "Single", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "impersonator":
-			return { "name": "Impersonator", "augmentBase": "", "techniqueGroup": "Social Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "If you spend 5 minutes studying a person you are trying to impersonate, you gain +1 advantage on all deception checks to pass yourself off as that person.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "Trained in Deception", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Impersonator", "augmentBase": "", "techniqueGroup": "Social Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "", "limits": "", "resourceCost": "", "description": "If you spend 5 minutes studying a person you are trying to impersonate, you gain +1 advantage on all deception checks to pass yourself off as that person.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "Trained in Deception", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "advanced technical skill":
-			return { "name": "Advanced Technical Skill", "augmentBase": "", "techniqueGroup": "Technical Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Technical Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Advanced Technical Skill", "augmentBase": "", "techniqueGroup": "Technical Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "Multiple", "limits": "", "resourceCost": "", "description": "Choose a Technical Skill. You gain a +2 bonus to the selected skill. This technique can be taken multiple times, each time it applies to a different skill.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "first aid":
-			return { "name": "First Aid", "augmentBase": "", "techniqueGroup": "Technical Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "", "traits": "", "limits": "", "resourceCost": "", "description": "When treating wounds during a long rest, unless the wound has unique end conditions, you always succeed at your Medicine check.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "Trained in Medicine", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "First Aid", "augmentBase": "", "techniqueGroup": "Technical Skill", "techniqueSubGroup": "", "techniqueType": "Permanent", "action": "None", "traits": "", "limits": "", "resourceCost": "", "description": "When treating wounds during a long rest, unless the wound has unique end conditions, you always succeed at your Medicine check.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "Trained in Medicine", "skill": "", "defense": "", "range": "", "target": "", "targetCode": "", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "shape material":
 			return { "name": "Shape Material", "augmentBase": "", "techniqueGroup": "Arcane", "techniqueSubGroup": "Creation", "techniqueType": "Support", "action": "Full", "traits": "Material", "limits": "", "resourceCost": "1 Mana", "description": "You may craft an item using Tier 1 material dust. The item you craft can be created in an adjacent space or immediately donned into yours or a willing adjacent character's gear slot.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "1T", "target": "One Target", "targetCode": "Field", "onHit": "", "damage": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Quickcraft", "Improved Shaping", "Greater Shaping", "Legendary Shaping"] }
 		case "quickcraft":

@@ -17,31 +17,6 @@
 				<input type="text" name="attr_nickname" placeholder="Display Name" />
 			</div>
 		</div>
-		<div class="wuxSectionBlock wuxSmallLayoutItem">
-			<div class="wuxHeader2">
-				<span>Ki</span>
-			</div>
-			<div class="wuxHeader">
-				<input type="text" class="wuxSizeSmall" name="attr_ki" value="0" />
-				<span>/ </span>
-				<span name='attr_ki_max' value="25">25</span>
-			</div>
-		</div>
-		<div class="wuxSectionBlock wuxLayoutItem">
-			<div class="wuxHeader2">
-				<span>Injuries</span>
-			</div>
-			<div class="wuxHeader">
-				<input type="text" class="wuxSizeSmall" name="attr_wounds" value="0" />
-				<span class="wuxSubheader">wounds </span>
-				<input type="text" class="wuxSizeSmall" name="attr_stress" value="0" />
-				<span class="wuxSubheader">stress </span>
-				<span class="wuxSizeSmall" name="attr_trauma" value="0">0</span>
-				<span>/ </span>
-				<span name='attr_trauma_max' value="1">1</span>
-				<span class="wuxSubheader">trauma </span>
-			</div>
-		</div>
 	</div>
 
 	<div class="wumMainSheet">
@@ -183,8 +158,82 @@
 
 				<div class="wuxTab">
 					<div class="tab-combatOptions wuxTab">
-						<div class="combat-GeneralStats wuxSectionBlock wuxLayoutItem">
+						<div class="combat-vitals wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-combat-vitals" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-vitals">
+								<span class="wuxSectionExpandIcon">&#9662;</span>
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-vitals">
+								<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+								<span>Vitals</span>
+							</div>
+							<div class="wuxSectionHeaderFooter"></div>
+
 							<div class="wuxSectionContent">
+								<div class="wuxFlexTable">
+									<div class="vitals-hp wuxFlexTableItemGroup wuxMinWidth150">
+										<div class="wuxDistinctSection">
+											<div class="wuxDistinctField">
+												<span class="wuxDistinctTitle">HP</span>
+												<span class='wuxDistinctData'>
+													<input type="number"  name='attr_hp'>
+													<span>/ </span>
+													<span name='attr_hp_max' value="0">0</span>
+												</span>
+
+												<span class="wuxDistinctSubtitle">Temp.HP</span>
+												<span class='wuxDistinctSubdata'>
+													<input type="number"  name='attr_tempHp' value="0">
+													<span>/ </span>
+													<span name='attr_tempHp_max' value="0">0</span>
+												</span>
+
+												<span class="wuxDistinctSubtitle">Vitality</span>
+												<span class='wuxDistinctSubdata'>
+													<input type="number"  name='attr_vitality'>
+													<span>/ </span>
+													<span name='attr_vitality_max' value="0">0</span>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="vitals-trauma wuxFlexTableItemGroup wuxMinWidth150">
+										<div class="wuxDistinctSection">
+											<div class="wuxDistinctField">
+												<span class="wuxDistinctTitle">Trauma</span>
+												<span class='wuxDistinctData'>
+													<input type="number"  name='attr_trauma'>
+													<span>/ </span>
+													<span name='attr_trauma_max' value="0">0</span>
+												</span>
+												<span class="wuxDistinctSubtitle">Stress</span>
+												<span class='wuxDistinctSubdata'>
+													<input type="number"  name='attr_stress'>
+													<span>/ </span>
+													<span name='attr_stress_max' value="0">0</span>
+												</span>
+												<span class="wuxDistinctSubtitle">Wounds</span>
+												<span class='wuxDistinctSubdata'>
+													<input type="number"  name='attr_wounds'>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="vitals-ki wuxFlexTableItemGroup wuxMinWidth150">
+										<div class="wuxDistinctSection">
+											<div class="wuxDistinctField">
+												<span class="wuxDistinctTitle">Ki</span>
+												<span class='wuxDistinctData'>
+													<input type="number"  name='attr_ki'>
+													<span>/ </span>
+													<span name='attr_ki_max' value="0">0</span>
+												</span>
+												<span class="wuxDistinctTitle">Speed</span>
+												<span class='wuxDistinctData' name="attr_speed"></span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -612,7 +661,7 @@
 						</div>
 					</div>
 					<div class="tab-techSlots1 wuxTab">
-						<div class="techSlots-job wuxSectionBlock wuxLayoutItem">
+						<div class="techSlots-job wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Job Techniques</div>
 								<div class="wuxDistinctSection">
@@ -1150,7 +1199,7 @@
 								</fieldset>
 							</div>
 						</div>
-						<div class="techSlots-active wuxSectionBlock wuxLayoutItem">
+						<div class="techSlots-active wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Active Techniques</div>
 								<div class="wuxDistinctSection">
@@ -1691,7 +1740,7 @@
 						</div>
 					</div>
 					<div class="tab-techSlots2 wuxTab">
-						<div class="techSlots-passive wuxSectionBlock wuxLayoutItem">
+						<div class="techSlots-passive wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Passive Techniques</div>
 								<div class="wuxDistinctSection">
@@ -2230,7 +2279,7 @@
 
 							</div>
 						</div>
-						<div class="techSlots-support wuxSectionBlock wuxLayoutItem">
+						<div class="techSlots-support wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Support Techniques</div>
 								<div class="wuxDistinctSection">
@@ -2771,7 +2820,7 @@
 						</div>
 					</div>
 					<div class="tab-techSlots3 wuxTab">
-						<div class="techSlots-permanent wuxSectionBlock wuxLayoutItem">
+						<div class="techSlots-permanent wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 							<div class="wuxSectionContent">
 								<div class="wuxHeader">Permanent Techniques</div>
 
