@@ -24,6 +24,58 @@
 		<!-- Quick Access -->
 		<div class="main-Sidebar wuxFloatSidebar">
 			<div class="wuxSheetSidebar">
+
+				<div class="wuxDistinctSection wuxSizeInverse">
+					<div class="wuxDistinctField">
+						<span class="wuxDistinctSubtitle">Ki</span>
+						<span class='wuxDistinctSubdata'>
+							<span name='attr_ki' value="0">0</span>
+							<span class="wuxFontSize7">/ </span>
+							<span class="wuxFontSize7" name='attr_ki_max' value="30">30</span>
+						</span>
+					</div>
+				</div>
+				<div class="wuxDistinctSection wuxSizeInverse">
+					<div class="wuxDistinctField">
+						<span class="wuxDistinctSubtitle">Chakra</span>
+						<span class='wuxDistinctSubdata'>
+							<span name='attr_chakra' value="0">0</span>
+							<span class="wuxFontSize7">/ </span>
+							<span class="wuxFontSize7" name='attr_chakra_max' value="0">0</span>
+						</span>
+					</div>
+				</div>
+
+				<div class="wuxDistinctSection wuxSizeInverse">
+					<div class="wuxDistinctField">
+						<span class="wuxDistinctSubtitle">Vitality</span>
+						<span class='wuxDistinctSubdata'>
+							<span name='attr_vitality_max' value="0">0</span>
+							<span class="wuxFontSize7">/ </span>
+							<span class="wuxFontSize7" name='attr_vitality_max' value="0">0</span>
+						</span>
+					</div>
+				</div>
+				<div class="wuxDistinctSection wuxSizeInverse">
+					<div class="wuxDistinctField">
+						<span class="wuxDistinctSubtitle">Trauma</span>
+						<span class='wuxDistinctSubdata'>
+							<span name='attr_trauma' value="0">0</span>
+							<span class="wuxFontSize7">/ </span>
+							<span class="wuxFontSize7" name='attr_trauma_max' value="0">0</span>
+						</span>
+					</div>
+				</div>
+				<div class="wuxDistinctSection wuxSizeInverse">
+					<div class="wuxDistinctField">
+						<span class="wuxDistinctSubtitle">Speed</span>
+						<span class='wuxDistinctSubdata'>
+							<span name='attr_speed' value="0">0</span>
+							<span class="wuxFontSize7">&nbsp;</span>
+						</span>
+					</div>
+				</div>
+
 				<div class="wuxHeader">Skills</div>
 				<div class="wuxInteractiveBlock wuxSizeSmall">
 
@@ -187,13 +239,6 @@
 													<span>/ </span>
 													<span name='attr_tempHp_max' value="0">0</span>
 												</span>
-
-												<span class="wuxDistinctSubtitle">Vitality</span>
-												<span class='wuxDistinctSubdata'>
-													<input type="number"  name='attr_vitality'>
-													<span>/ </span>
-													<span name='attr_vitality_max' value="0">0</span>
-												</span>
 											</div>
 										</div>
 									</div>
@@ -222,14 +267,52 @@
 									<div class="vitals-ki wuxFlexTableItemGroup wuxMinWidth150">
 										<div class="wuxDistinctSection">
 											<div class="wuxDistinctField">
+												<span class="wuxDistinctTitle">Vitality</span>
+												<span class='wuxDistinctData'>
+													<input type="number"  name='attr_vitality'>
+													<span>/ </span>
+													<span name='attr_vitality_max' value="0">0</span>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="combat-resources wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-combat-resources" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-resources">
+								<span class="wuxSectionExpandIcon">&#9662;</span>
+								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-resources">
+								<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+								<span>Resources</span>
+							</div>
+							<div class="wuxSectionHeaderFooter"></div>
+
+							<div class="wuxSectionContent">
+								<div class="wuxFlexTable">
+									<div class="resources-ki wuxFlexTableItemGroup wuxMinWidth150">
+										<div class="wuxDistinctSection">
+											<div class="wuxDistinctField">
 												<span class="wuxDistinctTitle">Ki</span>
 												<span class='wuxDistinctData'>
 													<input type="number"  name='attr_ki'>
 													<span>/ </span>
 													<span name='attr_ki_max' value="0">0</span>
 												</span>
-												<span class="wuxDistinctTitle">Speed</span>
-												<span class='wuxDistinctData' name="attr_speed"></span>
+											</div>
+										</div>
+									</div>
+									<div class="resources-ki wuxFlexTableItemGroup wuxMinWidth150">
+										<div class="wuxDistinctSection">
+											<div class="wuxDistinctField">
+												<span class="wuxDistinctTitle">Chakra</span>
+												<span class='wuxDistinctData'>
+													<input type="number"  name='attr_chakra'>
+													<span>/ </span>
+													<span name='attr_chakra_max' value="0">0</span>
+												</span>
 											</div>
 										</div>
 									</div>
@@ -556,8 +639,8 @@
 				</div>
 			</div>
 
-			<div class="segment-learnedTech wuxSegment">
-				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-learnedTech" checked="checked">
+			<div class="segment-techniques wuxSegment">
+				<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-techniques" checked="checked">
 				<div class="wuxTabHeader"><span class="wuxInnerHeader">Techniques</span></div>
 
 				<div class="wuxTab">
@@ -588,11 +671,15 @@
 														<input type="checkbox" name="attr_character-button-techniques">
 														<span>Select Techniques</span>
 													</div>
+												</div>
+												<span class="wuxFlexTableItemHeader">Reset</span>
+												<div class="wuxFlexTableItemData">
 													<div class="wuxButton">
 														<input type="checkbox" name="attr_character-button-techniquesrefresh">
-														<span>Refresh Techniques</span>
+														<span>Refresh Learned Techniques</span>
 													</div>
 												</div>
+												
 											</div>
 										</div>
 									</div>
@@ -752,9 +839,9 @@
 														<div class="wuxCheckbox">
 															<input class="wuxCheckbox-flag" type="checkbox" name="attr_technique-isBase" value="1">
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-isBase" value="1">
-															<span class="wuxCheckboxAuxIcon">&#9635;</span>
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9635;</span>
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-isBase" value="1">
-															<span class="wuxCheckboxIcon">&#9634;</span>
+															<span class="wuxRepeatingCheckboxIcon">&#9634;</span>
 														</div>
 														<span class="wuxData">Is Augment</span>
 													</div>
@@ -1018,9 +1105,9 @@
 														<div class="wuxCheckbox">
 															<input class="wuxCheckbox-flag" type="checkbox" name="attr_technique-addPower">
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-addPower">
-															<span class="wuxCheckboxAuxIcon">&#9634;</span>
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9634;</span>
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-addPower">
-															<span class="wuxCheckboxIcon">&#9635;</span>
+															<span class="wuxRepeatingCheckboxIcon">&#9635;</span>
 														</div>
 														<span class="wuxData">Add Power</span>
 													</div>
@@ -1290,9 +1377,9 @@
 														<div class="wuxCheckbox">
 															<input class="wuxCheckbox-flag" type="checkbox" name="attr_technique-isBase" value="1">
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-isBase" value="1">
-															<span class="wuxCheckboxAuxIcon">&#9635;</span>
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9635;</span>
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-isBase" value="1">
-															<span class="wuxCheckboxIcon">&#9634;</span>
+															<span class="wuxRepeatingCheckboxIcon">&#9634;</span>
 														</div>
 														<span class="wuxData">Is Augment</span>
 													</div>
@@ -1556,9 +1643,9 @@
 														<div class="wuxCheckbox">
 															<input class="wuxCheckbox-flag" type="checkbox" name="attr_technique-addPower">
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-addPower">
-															<span class="wuxCheckboxAuxIcon">&#9634;</span>
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9634;</span>
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-addPower">
-															<span class="wuxCheckboxIcon">&#9635;</span>
+															<span class="wuxRepeatingCheckboxIcon">&#9635;</span>
 														</div>
 														<span class="wuxData">Add Power</span>
 													</div>
@@ -1831,9 +1918,9 @@
 														<div class="wuxCheckbox">
 															<input class="wuxCheckbox-flag" type="checkbox" name="attr_technique-isBase" value="1">
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-isBase" value="1">
-															<span class="wuxCheckboxAuxIcon">&#9635;</span>
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9635;</span>
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-isBase" value="1">
-															<span class="wuxCheckboxIcon">&#9634;</span>
+															<span class="wuxRepeatingCheckboxIcon">&#9634;</span>
 														</div>
 														<span class="wuxData">Is Augment</span>
 													</div>
@@ -2097,9 +2184,9 @@
 														<div class="wuxCheckbox">
 															<input class="wuxCheckbox-flag" type="checkbox" name="attr_technique-addPower">
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-addPower">
-															<span class="wuxCheckboxAuxIcon">&#9634;</span>
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9634;</span>
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-addPower">
-															<span class="wuxCheckboxIcon">&#9635;</span>
+															<span class="wuxRepeatingCheckboxIcon">&#9635;</span>
 														</div>
 														<span class="wuxData">Add Power</span>
 													</div>
@@ -2370,9 +2457,9 @@
 														<div class="wuxCheckbox">
 															<input class="wuxCheckbox-flag" type="checkbox" name="attr_technique-isBase" value="1">
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-isBase" value="1">
-															<span class="wuxCheckboxAuxIcon">&#9635;</span>
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9635;</span>
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-isBase" value="1">
-															<span class="wuxCheckboxIcon">&#9634;</span>
+															<span class="wuxRepeatingCheckboxIcon">&#9634;</span>
 														</div>
 														<span class="wuxData">Is Augment</span>
 													</div>
@@ -2636,9 +2723,9 @@
 														<div class="wuxCheckbox">
 															<input class="wuxCheckbox-flag" type="checkbox" name="attr_technique-addPower">
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-addPower">
-															<span class="wuxCheckboxAuxIcon">&#9634;</span>
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9634;</span>
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-addPower">
-															<span class="wuxCheckboxIcon">&#9635;</span>
+															<span class="wuxRepeatingCheckboxIcon">&#9635;</span>
 														</div>
 														<span class="wuxData">Add Power</span>
 													</div>
@@ -2900,9 +2987,9 @@
 														<div class="wuxCheckbox">
 															<input class="wuxCheckbox-flag" type="checkbox" name="attr_technique-isBase" value="1">
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-isBase" value="1">
-															<span class="wuxCheckboxAuxIcon">&#9635;</span>
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9635;</span>
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-isBase" value="1">
-															<span class="wuxCheckboxIcon">&#9634;</span>
+															<span class="wuxRepeatingCheckboxIcon">&#9634;</span>
 														</div>
 														<span class="wuxData">Is Augment</span>
 													</div>
@@ -3166,9 +3253,9 @@
 														<div class="wuxCheckbox">
 															<input class="wuxCheckbox-flag" type="checkbox" name="attr_technique-addPower">
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-addPower">
-															<span class="wuxCheckboxAuxIcon">&#9634;</span>
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9634;</span>
 															<input type="hidden" class="wuxCheckbox-flag" name="attr_technique-addPower">
-															<span class="wuxCheckboxIcon">&#9635;</span>
+															<span class="wuxRepeatingCheckboxIcon">&#9635;</span>
 														</div>
 														<span class="wuxData">Add Power</span>
 													</div>
@@ -5084,14 +5171,13 @@
 				<div class="wuxTabHeader"><span class="wuxInnerHeader">Options</span></div>
 
 				<div class="wuxTab">
-					<div class="options-Advancement wuxSectionBlock wuxLayoutItem">
-						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-Advancement" checked="checked" style="display: block">
-						<div class="wuxSectionHeader">Advancement</div>
-						<div class="wuxSectionHeaderFooter"></div>
+					<div class="options-advancement wuxTab">
+						<div class="options-experience wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-experience" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">Experience</div>
+							<div class="wuxSectionHeaderFooter"></div>
 
-						<div class="wuxSectionContent">
-							<div class="options-Experiemnce">
-								<span class="wuxHeader">Experience</span>
+							<div class="wuxSectionContent">
 								<span class='wuxHeader2'>Exp. Multiplier</span>
 								<div class="wuxRow">
 									<input type="text" class='wuxInput' name='attr_expMultiplier' value="1">
@@ -5101,38 +5187,83 @@
 									<input type="text" class='wuxInput' name='attr_shareExp' value="">
 								</div>
 							</div>
+						</div>
+						<div class="options-pages wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-pages" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">Pages</div>
+							<div class="wuxSectionHeaderFooter"></div>
 
-							<div class="wuxRow">&nbsp;</div>
-							<span class='wuxHeader'>Advancement</span>
-							<div class="wuxMultiRow">
-								<div class="wuxButton">
-									<input type="checkbox" name="attr_character-button-advancement">
-									<span>Level Up</span>
+							<div class="wuxSectionContent">
+								<div class="wuxMultiRow">
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_character-button-advancement">
+										<span>Level Up</span>
+									</div>
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_character-button-builder">
+										<span>Character Builder</span>
+									</div>
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_character-button-skills">
+										<span>Skill Training</span>
+									</div>
+									<div class="wuxButton">
+										<input type="checkbox" name="attr_character-button-techniques">
+										<span>Select Techniques</span>
+									</div>
 								</div>
-								<div class="wuxButton">
-									<input type="checkbox" name="attr_character-button-builder">
-									<span>Character Builder</span>
+							</div>
+							<div class="wuxSectionContentCollapsed"></div>
+						</div>
+						<div class="options-displayoptions wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-displayoptions" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">Display Options</div>
+							<div class="wuxSectionHeaderFooter"></div>
+
+							<div class="wuxSectionContent">
+								<span class='wuxHeader2'>Display Format</span>
+								<div class="wuxRow">
+									<select class='wuxInput' name='attr_displayStyle' value="Character">
+										<option value="Character">Character</option>
+										<option value="PartyManager">Party Manager</option>
+										<option value="BattleLog">Battle Log</option>
+									</select>
 								</div>
-								<div class="wuxButton">
-									<input type="checkbox" name="attr_character-button-skills">
-									<span>Skill Training</span>
+								<div class="wuxRow">
+									<div class="wuxCheckbox">
+										<input class="wuxCheckbox-flag" type="checkbox" name="attr_isGeneric">
+										<input type="hidden" class="wuxCheckbox-flag" name="attr_isGeneric">
+										<span class="wuxCheckboxAuxIcon">&#9634;</span>
+										<input type="hidden" class="wuxCheckbox-flag" name="attr_isGeneric">
+										<span class="wuxCheckboxIcon">&#9635;</span>
+									</div>
+									<span class="wuxData">Is Generic</span>
 								</div>
-								<div class="wuxButton">
-									<input type="checkbox" name="attr_character-button-techniques">
-									<span>Select Techniques</span>
+								<div class="wuxRow">
+									<div class="wuxCheckbox">
+										<input class="wuxCheckbox-flag" type="checkbox" name="attr_maintainsSpirits">
+										<input type="hidden" class="wuxCheckbox-flag" name="attr_maintainsSpirits">
+										<span class="wuxCheckboxAuxIcon">&#9634;</span>
+										<input type="hidden" class="wuxCheckbox-flag" name="attr_maintainsSpirits">
+										<span class="wuxCheckboxIcon">&#9635;</span>
+									</div>
+									<span class="wuxData">Maintains Spirits</span>
+								</div>
+
+								<span class='wuxHeader2'>Version</span>
+								<div class="wuxRow">
+									<input type="text" class='wuxInput' name='attr_version' value="0">
 								</div>
 							</div>
 						</div>
-						<div class="wuxSectionContentCollapsed"></div>
 					</div>
-					<div class="options-Storyteller wuxSectionBlock wuxLayoutItem">
-						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-Storyteller" checked="checked" style="display: block">
-						<div class="wuxSectionHeader">Storyteller</div>
-						<div class="wuxSectionHeaderFooter"></div>
+					<div class="options-storyteller wuxTab">
+						<div class="options-Cutscenes wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-Cutscenes" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">Cutscenes</div>
+							<div class="wuxSectionHeaderFooter"></div>
 
-						<div class="wuxSectionContent">
-							<div class="options-StorytellerPostBox chat-chatBox">
-								<div class='wuxHeader'>Cutscene Post Area</div>
+							<div class="wuxSectionContent">
 								<div class="wuxEmotePostGroup">
 									<div class="wuxFieldSet">
 										<input type="text" class="wuxFormInput wuxSizeHuge" name="attr_emotePostContent" placeholder="Type your post here then select an emote to use from the options below">
@@ -5151,9 +5282,13 @@
 									</div>
 								</div>
 							</div>
-							<div class="wuxRow">&nbsp;</div>
-							<div class="options-StorytellerExport">
-								<span class='wuxHeader'>Storyteller Exporter</span>
+						</div>
+						<div class="options-exporter wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-exporter" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">Storyteller Exporter</div>
+							<div class="wuxSectionHeaderFooter"></div>
+
+							<div class="wuxSectionContent">
 
 								<span class="wuxFormHeader">Export Data</span>
 								<div class="wuxMultiRow">
@@ -5173,128 +5308,47 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="options-interaction wuxSectionBlock wuxLayoutItem">
+							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-interaction" checked="checked" style="display: block">
+							<div class="wuxSectionHeader">System Interaction</div>
+							<div class="wuxSectionHeaderFooter"></div>
 
-							<input type="hidden" class="wuxEmoteDisplayStyleField-flag" name="attr_emoteDisplayStyle" value="0">
-							<div class="options-StorytellerRecasting wuxEmoteDisplayStyleRecast">
+							<div class="wuxSectionContent">
+								<div class="options-Introduction">
+									<span class="wuxHeader">Introduction</span>
+									<span class='wuxHeader2'>Emote</span>
+									<div class="wuxRow">
+										<input type="text" class='wuxInput' name='attr_introduction_emote' value="???">
+									</div>
+									<span class='wuxHeader2'>Display Name</span>
+									<div class="wuxRow">
+										<input type="text" class='wuxInput' name='attr_introduction_nickname' value="???">
+									</div>
+									<span class='wuxHeader2'>Title</span>
+									<div class="wuxRow">
+										<input type="text" class='wuxInput' name='attr_introduction_title' value="???">
+									</div>
+								</div>
+
 								<div class="wuxRow">&nbsp;</div>
-								<span class='wuxHeader'>Recast</span>
-								<input type="hidden" name="attr_recastCharacterNames" value="">
-								<fieldset class="repeating_chararecast">
-									<div class="wuxFieldSet">
-										<div class="wuxMultiRow">
-											<div class="wuxFormEntry">
-												<input type="text" class="wuxFormHeaderSelect" name="attr_recastName" value="">
-											</div>
-										</div>
+								<div class="options-Interactions">
+									<input type="hidden" class="" name="attr_spell_prof-effect" value="0">
+									<span class="wuxHeader">Check Message</span>
+
+									<span class='wuxHeader2'>Emote</span>
+									<div class="wuxRow">
+										<input type="text" class='wuxInput' name='attr_interaction_keyemote' value="???">
 									</div>
-								</fieldset>
-							</div>
-
-							<div class="wuxRow">&nbsp;</div>
-							<div class="options-Introduction">
-								<span class="wuxHeader">Introduction</span>
-								<span class='wuxHeader2'>Emote</span>
-								<div class="wuxRow">
-									<input type="text" class='wuxInput' name='attr_introduction_emote' value="???">
-								</div>
-								<span class='wuxHeader2'>Display Name</span>
-								<div class="wuxRow">
-									<input type="text" class='wuxInput' name='attr_introduction_nickname' value="???">
-								</div>
-								<span class='wuxHeader2'>Title</span>
-								<div class="wuxRow">
-									<input type="text" class='wuxInput' name='attr_introduction_title' value="???">
-								</div>
-							</div>
-
-							<div class="wuxRow">&nbsp;</div>
-							<div class="options-Interactions">
-								<input type="hidden" class="" name="attr_spell_prof-effect" value="0">
-								<span class="wuxHeader">Check Message</span>
-
-								<span class='wuxHeader2'>Emote</span>
-								<div class="wuxRow">
-									<input type="text" class='wuxInput' name='attr_interaction_keyemote' value="???">
-								</div>
-								<span class='wuxHeader2'>Phrase</span>
-								<div class="wuxRow">
-									<input type="text" class='wuxInput' name='attr_interaction_keyphrase' value="???">
-								</div>
-							</div>
-
-						</div>
-						<div class="wuxSectionContentCollapsed"></div>
-					</div>
-					<div class="options-SheetDisplay wuxSectionBlock wuxLayoutItem">
-						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-options-SheetDisplay" checked="checked" style="display: block">
-						<div class="wuxSectionHeader">Sheet Options</div>
-						<div class="wuxSectionHeaderFooter"></div>
-
-						<div class="wuxSectionContent">
-							<div class="options-OptionalDisplays">
-								<span class='wuxHeader'>Optional Sections</span>
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeLarge">Show Old Information</span>
-									<select class='wuxFormInput wuxSizeSmall' name='attr_showOldInformation'>
-										<option value='0' selected="selected">No</option>
-										<option value='1-'>Yes</option>
-									</select>
-								</div>
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeLarge">Maintains Spirits</span>
-									<select class='wuxFormInput wuxSizeSmall' name='attr_maintainsSpirits' value="0">
-										<option value="0">No</option>
-										<option value="1">Yes</option>
-									</select>
-								</div>
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeLarge">Emote Style</span>
-									<select class='wuxFormInput wuxSizeMed' name='attr_emoteDisplayStyle' value="0">
-										<option value="0">Normal</option>
-										<option value="List">List</option>
-										<option value="Recast">Recast</option>
-									</select>
-								</div>
-							</div>
-							<div class="wuxRow">&nbsp;</div>
-							<div class="options-SheetData">
-								<span class='wuxHeader'>Sheet Data</span>
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeSmall">Format</span>
-									<select class='wuxFormInput wuxSizeMedium' name='attr_displayStyle' value="Character">
-										<option value="Character">Character</option>
-										<option value="Clone">Clone</option>
-										<option value="PartyManager">Party Manager</option>
-										<option value="BattleLog">Battle Log</option>
-									</select>
-								</div>
-								<input type="hidden" class="wuxDisplayStyleField-flag" name="attr_displayStyle" value="Character">
-								<div class="wuxRow wuxDisplayStyleClone">
-									<span class="wuxFormTitle wuxSizeLarge">Sheet Name</span>
-									<input type="text" class='wuxFormInput wuxSizeMed' name='attr_sheet_name'>
-								</div>
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeSmall">Style</span>
-									<select class="wuxFormInput wuxSizeMedium" name="attr_difficultyStyle" value="0">
-										<option value="0" selected>Normal</option>
-										<option value="1">Enemy</option>
-										<option value="2">Boss</option>
-										<option value="3">Minion</option>
-									</select>
-								</div>
-								<div class="wuxRow">
-									<span class="wuxFormTitle wuxSizeHuge">Version</span>
-									<input type="text" class='wuxFormInput wuxSizeTiny' name='attr_version' value="1.0">
-								</div>
-								<div class="wuxActionRow">
-									<div class="wuxFormButton wuxSizeLarge">
-										<input type="checkbox" class="" name="attr_refreshActions" value="1">
-										<span class="">Refresh Actions</span>
+									<span class='wuxHeader2'>Phrase</span>
+									<div class="wuxRow">
+										<input type="text" class='wuxInput' name='attr_interaction_keyphrase' value="???">
 									</div>
 								</div>
+
 							</div>
+							<div class="wuxSectionContentCollapsed"></div>
 						</div>
-						<div class="wuxSectionContentCollapsed"></div>
 					</div>
 				</div>
 			</div>

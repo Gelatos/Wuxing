@@ -27,6 +27,11 @@
     min-width: 150px;
 }
 
+.wuxMinWidth200
+{
+    min-width: 200px;
+}
+
 .wuxMinWidth300
 {
     min-width: 300px;
@@ -40,6 +45,11 @@
 .wuxHeight150
 {
     height: 150px;
+}
+
+.wuxFontSize7
+{
+    font-size: 7px;
 }
 
 /*========================================
@@ -68,7 +78,9 @@ input[type="checkbox"].wuxCheckbox-flag
 }
 
 .wuxCheckboxIcon,
-.wuxCheckboxAuxIcon
+.wuxRepeatingCheckboxIcon,
+.wuxCheckboxAuxIcon,
+.wuxRepeatingCheckboxAuxIcon
 {
 	display: none;
     position: relative;
@@ -78,13 +90,16 @@ input[type="checkbox"].wuxCheckbox-flag
     font-size: 20px;
 }
 
-input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxCheckboxIcon,
-.wuxCheckboxAuxIcon
+input[type=hidden].wuxCheckbox-flag[value="on"] + .wuxCheckboxIcon,
+.wuxCheckboxAuxIcon,
+input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxRepeatingCheckboxIcon,
+.wuxRepeatingCheckboxAuxIcon
 {
     display: inline-block;
 }
 
-input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxCheckboxAuxIcon
+input[type=hidden].wuxCheckbox-flag[value="on"] + .wuxCheckboxAuxIcon,
+input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxRepeatingCheckboxAuxIcon
 {
     display: none;
 }
@@ -98,7 +113,7 @@ input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxCheckboxAuxIcon
     position: relative;
     display: inline-block;
 	width: auto;
-    min-width: 100px;
+    min-width: 98px;
 	padding: 0px 10px;
 
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);

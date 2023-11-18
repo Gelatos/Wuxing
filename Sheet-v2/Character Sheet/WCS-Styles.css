@@ -859,7 +859,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection .wuxDistinctSubtitle
 {
     font-size: 8px;
-    line-height: 15px;
+    line-height: 16px;
     text-align: right;
 
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
@@ -870,7 +870,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctTitle,
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctSubtitle
 {
-    width: calc(65% - 15px);
+    width: calc(60% - 20px);
 }
 
 .wuxDistinctSection .wuxDistinctData,
@@ -880,7 +880,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 {
     margin: 0px;
 	padding: 0px 0px 0px 5px;
-    width: calc(75% - 15px);
+    width: calc(75% - 25px);
 
     color: #fff;
     font-weight: bold;
@@ -915,7 +915,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection .wuxDistinctSubdata,
 .wuxDistinctSection .wuxDistinctSubdata select
 {
-    line-height: 15px;
+    border: 1px solid #000;
+    line-height: 14.5px;
 }
 
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctData,
@@ -923,7 +924,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctSubdata,
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctSubdata select
 {
-    width: 35%;
+    width: 40%;
 }
 
 .wuxDistinctSection input.wuxDistinctData,
@@ -940,7 +941,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection.wuxSizeInverse input.wuxDistinctData,
 .wuxDistinctSection.wuxSizeInverse input.wuxDistinctSubdata
 {
-    width: calc(35% + 6px);
+    width: calc(40% + 6px);
 }
 
 .wuxDistinctSection .wuxDistinctData input,
@@ -964,18 +965,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 
 .wuxDistinctSection .wuxDistinctSubdata
 {
-    /* position: relative;
-    left: 20px;
-    width: 30px;
-
-    font-size: 10px;
-    line-height: 10px;
-    text-align: center;
-    font-weight: normal; */
-
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
-    /* border: 0px solid #000;
-    border-width: 1px 1px 1px 0px; */
 }
 
 input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
@@ -6524,6 +6514,11 @@ Quest Box
     min-width: 150px;
 }
 
+.wuxMinWidth200
+{
+    min-width: 200px;
+}
+
 .wuxMinWidth300
 {
     min-width: 300px;
@@ -6537,6 +6532,11 @@ Quest Box
 .wuxHeight150
 {
     height: 150px;
+}
+
+.wuxFontSize7
+{
+    font-size: 7px;
 }
 
 /*========================================
@@ -6565,7 +6565,9 @@ input[type="checkbox"].wuxCheckbox-flag
 }
 
 .wuxCheckboxIcon,
-.wuxCheckboxAuxIcon
+.wuxRepeatingCheckboxIcon,
+.wuxCheckboxAuxIcon,
+.wuxRepeatingCheckboxAuxIcon
 {
 	display: none;
     position: relative;
@@ -6575,13 +6577,16 @@ input[type="checkbox"].wuxCheckbox-flag
     font-size: 20px;
 }
 
-input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxCheckboxIcon,
-.wuxCheckboxAuxIcon
+input[type=hidden].wuxCheckbox-flag[value="on"] + .wuxCheckboxIcon,
+.wuxCheckboxAuxIcon,
+input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxRepeatingCheckboxIcon,
+.wuxRepeatingCheckboxAuxIcon
 {
     display: inline-block;
 }
 
-input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxCheckboxAuxIcon
+input[type=hidden].wuxCheckbox-flag[value="on"] + .wuxCheckboxAuxIcon,
+input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxRepeatingCheckboxAuxIcon
 {
     display: none;
 }
@@ -6595,7 +6600,7 @@ input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxCheckboxAuxIcon
     position: relative;
     display: inline-block;
 	width: auto;
-    min-width: 100px;
+    min-width: 98px;
 	padding: 0px 10px;
 
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);

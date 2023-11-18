@@ -543,7 +543,7 @@ function GetCharacterStatGrowths(currentGrowths, bonusGrowths, ancestryData) {
 	}
 
 	// update more scores
-	output.scores["vitality"] += GetAbilityScoreMod(output.scores["CON"]);
+	output.scores["vitality"] += Math.max(GetAbilityScoreMod(output.scores["CON"]), 0);
 	output.scores["ki_max"] = defaultStats.kiLimit + (5 * output.scores["spellForce"]) + bonusGrowths["kiLimit"];
 	output.scores["branchpoints"] = Math.floor(output.scores["spellForce"] * 0.5) + bonusGrowths["branchpoints"];
 	return output;
@@ -943,6 +943,8 @@ on("change:character-button-skills", function () {
 var update_character_toSkills = function () {
 	let update = {};
 
+	update["tabSection-origin-AncestrySkills"] = "0";
+	update["tabSection-origin-ExtraSkills"] = "on";
 	update["skills-previousPage"] = "Character";
 	update["skills-nextPage"] = "Character";
 	update["characterSheetDisplayStyle"] = "Skills";

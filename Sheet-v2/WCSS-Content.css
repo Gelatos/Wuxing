@@ -183,7 +183,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection .wuxDistinctSubtitle
 {
     font-size: 8px;
-    line-height: 15px;
+    line-height: 16px;
     text-align: right;
 
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
@@ -194,7 +194,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctTitle,
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctSubtitle
 {
-    width: calc(65% - 15px);
+    width: calc(60% - 20px);
 }
 
 .wuxDistinctSection .wuxDistinctData,
@@ -204,7 +204,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 {
     margin: 0px;
 	padding: 0px 0px 0px 5px;
-    width: calc(75% - 15px);
+    width: calc(75% - 25px);
 
     color: #fff;
     font-weight: bold;
@@ -239,7 +239,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection .wuxDistinctSubdata,
 .wuxDistinctSection .wuxDistinctSubdata select
 {
-    line-height: 15px;
+    border: 1px solid #000;
+    line-height: 14.5px;
 }
 
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctData,
@@ -247,7 +248,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctSubdata,
 .wuxDistinctSection.wuxSizeInverse .wuxDistinctSubdata select
 {
-    width: 35%;
+    width: 40%;
 }
 
 .wuxDistinctSection input.wuxDistinctData,
@@ -264,7 +265,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 .wuxDistinctSection.wuxSizeInverse input.wuxDistinctData,
 .wuxDistinctSection.wuxSizeInverse input.wuxDistinctSubdata
 {
-    width: calc(35% + 6px);
+    width: calc(40% + 6px);
 }
 
 .wuxDistinctSection .wuxDistinctData input,
