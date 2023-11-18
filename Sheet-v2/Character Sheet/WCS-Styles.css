@@ -187,18 +187,24 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 .wumMainSheet 
 {
     display: flex;
-    flex-flow: row;
-    align-content: flex-start;
+    /* flex-flow: row;
+    align-content: flex-start; */
 }
 
 /*========================================
   Segments
 ========================================*/
 
-.wuxMainContent
+.wuxMainContent,
+.wuxMainCharacterContent
 {
     display: inline-block;
     flex: 5;
+}
+
+.wuxMainCharacterContent
+{
+    width: calc(100% - 90px);
 }
 
 .wuxSegment
@@ -272,7 +278,9 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 
 .wuxFloatSidebar
 {
+    float: left;
     flex: 1;
+    top: 50px;
 
     min-width: 80px;
     max-width: 80px;
