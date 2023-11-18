@@ -755,7 +755,7 @@
 											</div>
 											<div class="wuxTechniqueHeaderInteractBlock">
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isMultiple">
-												<div class="wuxHiddenAuxField wuxMarginLeft5">
+												<div class="wuxHiddenAuxField">
 													<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-select" value="1">
 													<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-select" value="1">
 													<span class="wuxTechniqueHeaderInteractiveIcon">&#9635;</span>
@@ -779,10 +779,13 @@
 													<span class="wuxHiddenInlineAuxField wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase">Skill Name</span>
 													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-action" value="">
 													<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">: </span>
-													<span class="wuxTechniqueHeaderInfoType" name="attr_technique-action">Full</span>
+													<span name="attr_technique-action">Full</span>
 													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
-													<span class="wuxHiddenInlineField">, </span>
+													<span class="wuxHiddenInlineField">; </span>
 													<span name="attr_technique-limits"></span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+													<span class="wuxHiddenInlineField">; </span>
+													<span name="attr_technique-resourceCost"></span>
 												</div>
 											</div>
 										</div>
@@ -847,13 +850,6 @@
 														<span name="attr_technique-trigger"></span>
 													</div>
 												</div>
-												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
-												<div class="wuxHiddenBlockField">
-													<div class="wuxTechniqueFunctionBlockRow">
-														<span><strong>Resources: </strong></span>
-														<span name="attr_technique-resourceCost"></span>
-													</div>
-												</div>
 											</div>
 											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
 											<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
@@ -908,10 +904,8 @@
 													</div>
 													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
 													<div class="wuxHiddenBlockField">
-														<div class="wuxTechniqueDescriptionBlockDesc">
-															<strong>On Hit: </strong>
-															<span name="attr_technique-onSuccess"></span>
-														</div>
+														<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
+														<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-onSuccess"></span>
 													</div>
 												</div>
 											</div>
