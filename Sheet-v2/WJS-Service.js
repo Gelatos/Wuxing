@@ -464,6 +464,7 @@ function SetTechniqueUseData(update, technique, repeatingSection, id) {
 		output += "{{type-base=1}} ";
 	}
 
+	output += `{{Username=@{nickname}}}`;
 	output += `{{Name=${technique.name}}}`;
 	output += `{{Type=${technique.techniqueType}}}`;
 	output += `{{type-${technique.techniqueType}=1}} `;

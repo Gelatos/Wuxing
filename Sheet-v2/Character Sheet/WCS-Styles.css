@@ -1338,6 +1338,11 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 
     flex: 1;
 }
+.sheet-rolltemplate-technique
+{
+    margin: 0px 10px 0px -40px; 
+    line-height: 12px;
+}
 
 .wuxTechnique,
 .sheet-rolltemplate-technique
@@ -1451,6 +1456,7 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType,
 .wuxTechniqueType .wuxTechniqueTypeHeader,
 .sheet-rolltemplate-technique .sheet-wuxTechniqueType .sheet-wuxTechniqueTypeHeader
 {
+    position: relative;
     display: block;
 
     font-size: 9px; 
@@ -1460,6 +1466,7 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType,
 .wuxTechniqueType .wuxTechniqueTypeFooter,
 .sheet-rolltemplate-technique .sheet-wuxTechniqueType .sheet-wuxTechniqueTypeFooter
 {
+    position: relative;
     display: block;
     font-size: 7px;
 }
@@ -1534,6 +1541,7 @@ input[type=hidden].wuxTechniqueHeaderInteractivePictosIcon-flag:not([value="0"])
 .wuxTechniqueHeaderDisplayBlock,
 .sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderDisplayBlock
 {
+    position: relative;
     display:inline-block; 
     width: calc(100% - 115px);
 }
@@ -1541,6 +1549,7 @@ input[type=hidden].wuxTechniqueHeaderInteractivePictosIcon-flag:not([value="0"])
 .wuxTechniqueHeaderName,
 .sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderName
 {
+    position: relative;
     display: block; 
 
     width: 100%;
@@ -1553,6 +1562,7 @@ input[type=hidden].wuxTechniqueHeaderInteractivePictosIcon-flag:not([value="0"])
 .wuxTechniqueHeaderInfo,
 .sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderInfo
 {
+    position: relative;
     display: block; 
 
     font-size: 11px;
@@ -1561,12 +1571,14 @@ input[type=hidden].wuxTechniqueHeaderInteractivePictosIcon-flag:not([value="0"])
 .wuxTechniqueHeaderInfoType,
 .sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderInfoType
 {
+    position: relative;
     font-weight: bold;
 }
 
 .wuxTechniqueExpandingContent,
 .sheet-rolltemplate-technique .sheet-wuxTechniqueExpandingContent
 {
+    position: relative;
     display: none;
 }
 
@@ -1619,6 +1631,7 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
 .wuxTechniqueAttackBlock,
 .sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock
 {
+    position: relative;
     width: calc(100% - 30px);
     padding: 5px 5px; 
     margin: 5px 10px; 
@@ -1662,6 +1675,7 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
 .sheet-rolltemplate-technique .sheet-wuxTechniqueDescriptionBlock,
 .wuxTechniqueEditBlock
 {
+    position: relative;
     display: block;
     width: calc(100% - 20px);
     padding: 5px 10px; 
@@ -4287,11 +4301,11 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-results .sheet-wuxTrait .sheet-wuxTooltiptext 
 {
     position: absolute;
+    z-index: 1000;
     top: 18px;
     left: 0px;
     width: 240px;
     padding: 5px;
-    z-index: 1000;
 
     color: #3e3e3e;
     font-size: 11px;
