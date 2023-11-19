@@ -213,9 +213,14 @@ function SetCharacterLearnedTechnique(newTechniques, technique) {
 
 
 
+// ======== Techniques - Database Techniques
+
+
+
+
 // ======== Techniques - Custom Techniques
 
-on("change:repeating_jobtechniques:technique-edit", function (eventinfo) {
+on("change:repeating_jobtechniques:technique-edit change:repeating_activetechniques:technique-edit change:repeating_passivetechniques:technique-edit change:repeating_supporttechniques:technique-edit change:repeating_permanenttechniques:technique-edit", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -227,7 +232,7 @@ on("change:repeating_jobtechniques:technique-edit", function (eventinfo) {
 
 
 // ======== Techniques - Custom Techniques Header
-on("change:repeating_jobtechniques:technique-isBase", function (eventinfo) {
+on("change:repeating_jobtechniques:technique-isBase change:repeating_activetechniques:technique-isBase change:repeating_passivetechniques:technique-isBase change:repeating_supporttechniques:technique-isBase change:repeating_permanenttechniques:technique-isBase", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -253,7 +258,7 @@ function UpdateCharacterCustomTechniqueHeaderTypeFromBase(eventinfo, newValue) {
 	}
 }
 
-on("change:repeating_jobtechniques:technique-action", function (eventinfo) {
+on("change:repeating_jobtechniques:technique-action change:repeating_activetechniques:technique-action change:repeating_passivetechniques:technique-action change:repeating_supporttechniques:technique-action change:repeating_permanenttechniques:technique-action", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -277,7 +282,7 @@ function UpdateCharacterCustomTechniqueHeaderType(eventinfo, newValue) {
 
 
 // ======== Techniques - Custom Techniques Function Block
-on("change:repeating_jobtechniques:technique-trigger change:repeating_jobtechniques:technique-requirement change:repeating_jobtechniques:technique-resourceCost", function (eventinfo) {
+on("change:repeating_jobtechniques:technique-trigger change:repeating_jobtechniques:technique-requirement change:repeating_jobtechniques:technique-resourceCost change:repeating_activetechniques:technique-trigger change:repeating_activetechniques:technique-requirement change:repeating_activetechniques:technique-resourceCost change:repeating_passivetechniques:technique-trigger change:repeating_passivetechniques:technique-requirement change:repeating_passivetechniques:technique-resourceCost change:repeating_supporttechniques:technique-trigger change:repeating_supporttechniques:technique-requirement change:repeating_supporttechniques:technique-resourceCost change:repeating_permanenttechniques:technique-trigger change:repeating_permanenttechniques:technique-requirement change:repeating_permanenttechniques:technique-resourceCost", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -285,7 +290,7 @@ on("change:repeating_jobtechniques:technique-trigger change:repeating_jobtechniq
 	UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo, eventinfo.newValue);
 });
 
-on("change:repeating_jobtechniques:technique-traits", function (eventinfo) {
+on("change:repeating_jobtechniques:technique-traits change:repeating_activetechniques:technique-traits change:repeating_passivetechniques:technique-traits change:repeating_supporttechniques:technique-traits change:repeating_permanenttechniques:technique-traits", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -343,7 +348,7 @@ function UpdateCharacterCustomTechniqueTraits(eventinfo) {
 
 // ======== Techniques - Custom Techniques Attack Block
 
-on("change:repeating_jobtechniques:technique-range change:repeating_jobtechniques:technique-target change:repeating_jobtechniques:technique-skill change:repeating_jobtechniques:technique-defense change:repeating_jobtechniques:technique-dieValue change:repeating_jobtechniques:technique-dieType change:repeating_jobtechniques:technique-addPower change:repeating_jobtechniques:technique-damageType change:repeating_jobtechniques:technique-element", function (eventinfo) {
+on("change:repeating_jobtechniques:technique-range change:repeating_jobtechniques:technique-target change:repeating_jobtechniques:technique-skill change:repeating_jobtechniques:technique-defense change:repeating_jobtechniques:technique-dieValue change:repeating_jobtechniques:technique-dieType change:repeating_jobtechniques:technique-addPower change:repeating_jobtechniques:technique-damageType change:repeating_jobtechniques:technique-element change:repeating_activetechniques:technique-range change:repeating_activetechniques:technique-target change:repeating_activetechniques:technique-skill change:repeating_activetechniques:technique-defense change:repeating_activetechniques:technique-dieValue change:repeating_activetechniques:technique-dieType change:repeating_activetechniques:technique-addPower change:repeating_activetechniques:technique-damageType change:repeating_activetechniques:technique-element change:repeating_passivetechniques:technique-range change:repeating_passivetechniques:technique-target change:repeating_passivetechniques:technique-skill change:repeating_passivetechniques:technique-defense change:repeating_passivetechniques:technique-dieValue change:repeating_passivetechniques:technique-dieType change:repeating_passivetechniques:technique-addPower change:repeating_passivetechniques:technique-damageType change:repeating_passivetechniques:technique-element change:repeating_supporttechniques:technique-range change:repeating_supporttechniques:technique-target change:repeating_supporttechniques:technique-skill change:repeating_supporttechniques:technique-defense change:repeating_supporttechniques:technique-dieValue change:repeating_supporttechniques:technique-dieType change:repeating_supporttechniques:technique-addPower change:repeating_supporttechniques:technique-damageType change:repeating_supporttechniques:technique-element change:repeating_permanenttechniques:technique-range change:repeating_permanenttechniques:technique-target change:repeating_permanenttechniques:technique-skill change:repeating_permanenttechniques:technique-defense change:repeating_permanenttechniques:technique-dieValue change:repeating_permanenttechniques:technique-dieType change:repeating_permanenttechniques:technique-addPower change:repeating_permanenttechniques:technique-damageType change:repeating_permanenttechniques:technique-element ", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -417,7 +422,7 @@ function UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo) {
 
 // ======== Techniques - Custom Techniques Description Block
 
-on("change:repeating_jobtechniques:technique-description change:repeating_jobtechniques:technique-onSuccess", function (eventinfo) {
+on("change:repeating_jobtechniques:technique-description change:repeating_jobtechniques:technique-onSuccess change:repeating_activetechniques:technique-description change:repeating_activetechniques:technique-onSuccess change:repeating_passivetechniques:technique-description change:repeating_passivetechniques:technique-onSuccess change:repeating_supporttechniques:technique-description change:repeating_supporttechniques:technique-onSuccess change:repeating_permanenttechniques:technique-description change:repeating_permanenttechniques:technique-onSuccess", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
