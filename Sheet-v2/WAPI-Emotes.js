@@ -1,11 +1,3 @@
-/*
-Roll20AM script:
-Original Author: Scott C.
-Current Author: Victor B.
-Contact: https://app.roll20.net/users/3135709/victor-b
-Thanks to: The Aaron, Arcane Scriptomancer and Stephen S. for their help Alpha and Beta Testing this script.  Recent modifications by Victor B.
-*/
-
 var EmoteController = EmoteController || (function() {
     'use strict';
     
@@ -408,7 +400,7 @@ function GetOutfitEmoteData(target) {
 
 function SetSpiritRealmEffect(target) {
     
-    let spiritRealm = getAttrByName(target.charId, "isSpiritRealm");
+    let spiritRealm = getAttrByName(target.charId, "status-ethereal");
     let element = "";
     if (spiritRealm == "1") {
         if (target.tokenId != "") {

@@ -754,7 +754,7 @@ function GetTokenTargetData(token) {
         id = token.get('represents');
         if (id != undefined && id != "") {
             displayName = getAttrByName(id, "nickname");
-            if (getAttrByName(id, "difficultyStyle") == "3" || displayName == undefined || displayName.trim() == "") {
+            if (displayName == undefined || displayName.trim() == "") {
                 tokenName = token.get("name");
                 if (tokenName != "") {
                     displayName = tokenName;
@@ -783,7 +783,7 @@ function GetTokenIdListTargetData(idList) {
             if (token) {
                 id = token.get('represents');
                 displayName = getAttrByName(id, "nickname");
-                if (getAttrByName(id, "difficultyStyle") == "3" || displayName == undefined || displayName.trim() == "") {
+                if (displayName == undefined || displayName.trim() == "") {
                     tokenName = token.get("name");
                     if (tokenName != "") {
                         displayName = tokenName;

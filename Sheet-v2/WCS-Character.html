@@ -226,14 +226,14 @@
 										<div class="wuxDistinctField">
 											<span class="wuxDistinctTitle">HP</span>
 											<span class='wuxDistinctData'>
-												<input type="number"  name='attr_hp'>
+												<input type="number" name='attr_hp'>
 												<span>/ </span>
 												<span name='attr_hp_max' value="0">0</span>
 											</span>
 
 											<span class="wuxDistinctSubtitle">Temp.HP</span>
 											<span class='wuxDistinctSubdata'>
-												<input type="number"  name='attr_tempHp' value="0">
+												<input type="number" name='attr_tempHp' value="0">
 												<span>/ </span>
 												<span name='attr_tempHp_max' value="0">0</span>
 											</span>
@@ -245,19 +245,19 @@
 										<div class="wuxDistinctField">
 											<span class="wuxDistinctTitle">Trauma</span>
 											<span class='wuxDistinctData'>
-												<input type="number"  name='attr_trauma'>
+												<input type="number" name='attr_trauma'>
 												<span>/ </span>
 												<span name='attr_trauma_max' value="0">0</span>
 											</span>
 											<span class="wuxDistinctSubtitle">Stress</span>
 											<span class='wuxDistinctSubdata'>
-												<input type="number"  name='attr_stress'>
+												<input type="number" name='attr_stress'>
 												<span>/ </span>
 												<span name='attr_stress_max' value="0">0</span>
 											</span>
 											<span class="wuxDistinctSubtitle">Wounds</span>
 											<span class='wuxDistinctSubdata'>
-												<input type="number"  name='attr_wounds'>
+												<input type="number" name='attr_wounds'>
 											</span>
 										</div>
 									</div>
@@ -267,7 +267,7 @@
 										<div class="wuxDistinctField">
 											<span class="wuxDistinctTitle">Vitality</span>
 											<span class='wuxDistinctData'>
-												<input type="number"  name='attr_vitality'>
+												<input type="number" name='attr_vitality'>
 												<span>/ </span>
 												<span name='attr_vitality_max' value="0">0</span>
 											</span>
@@ -295,7 +295,7 @@
 										<div class="wuxDistinctField">
 											<span class="wuxDistinctTitle">Ki</span>
 											<span class='wuxDistinctData'>
-												<input type="number"  name='attr_ki' value="0">
+												<input type="number" name='attr_ki' value="0">
 												<span>/ </span>
 												<span name='attr_ki_max' value="0">0</span>
 											</span>
@@ -307,7 +307,7 @@
 										<div class="wuxDistinctField">
 											<span class="wuxDistinctTitle">Chakra</span>
 											<span class='wuxDistinctData'>
-												<input type="number"  name='attr_chakra' value="0">
+												<input type="number" name='attr_chakra' value="0">
 												<span>/ </span>
 												<span name='attr_chakra_max' value="0">0</span>
 											</span>
@@ -315,6 +315,34 @@
 									</div>
 								</div>
 							</div>
+						</div>
+					</div>
+					<div class="combat-status wuxSectionBlock wuxLayoutItem">
+						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-combat-status" checked="checked" style="display: block">
+						<div class="wuxSectionHeader">
+							<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-status">
+							<span class="wuxSectionExpandIcon">&#9662;</span>
+							<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-status">
+							<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+							<span>Status and Conditions</span>
+						</div>
+						<div class="wuxSectionHeaderFooter"></div>
+
+						<div class="wuxSectionContent">
+							<span class="wuxHeader">Status</span>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxCheckbox">
+										<input class="wuxCheckbox-flag" type="checkbox" name="attr_status-ethereal">
+										<input type="hidden" class="wuxCheckbox-flag" name="attr_status-ethereal">
+										<span class="wuxCheckboxAuxIcon">&#9634;</span>
+										<input type="hidden" class="wuxCheckbox-flag" name="attr_status-ethereal">
+										<span class="wuxCheckboxIcon">&#9635;</span>
+									</div>
+									<span class="wuxData">Ethereal</span>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>
@@ -639,7 +667,9 @@
 
 		<div class="segment-techniques wuxSegment">
 			<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-techniques" checked="checked">
-			<div class="wuxTabHeader"><span class="wuxInnerHeader">Techniques</span></div>
+			<div class="wuxTabHeader">
+				<span class="wuxInnerHeader">Techniques</span>
+			</div>
 
 			<div class="wuxTab">
 				<div class="tab-learnedTechOptions wuxTab">
@@ -656,8 +686,7 @@
 
 						<div class="wuxSectionContent">
 							<span class="wuxHeader">Section Description</span>
-							<span class="wuxDescription">This is the Techniques Section. Techniques you have learned will appear here. You can learn additional techniques by entering the Technique Selection page above in Technique Options.</span>
-							<span class="wuxDescription">Techniques can be locked into their tech slots by pressing their selection button. Only base technqiues can be equipped to tech slots. Every augment of the technique are automatically equipped.</span>
+							<span class="wuxDescription">This is the Techniques Section. Techniques you have learned will appear here. You can learn additional techniques by entering the Technique Selection page.</span>
 							<span class="wuxHeader">Section Options</span>
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup wuxNoPadding">
@@ -677,7 +706,7 @@
 													<span>Refresh Learned Techniques</span>
 												</div>
 											</div>
-											
+
 										</div>
 									</div>
 								</div>
@@ -749,6 +778,7 @@
 					<div class="techSlots-job wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 						<div class="wuxSectionContent">
 							<div class="wuxHeader">Job Techniques</div>
+							<span class="wuxDescription">Techniques can be locked into their tech slots by selecting their equip button. Only base technqiues can be equipped to tech slots. Every augment of the technique are automatically equipped. When a technique is equipped it is added to the combat section.</span>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
 									<span class="wuxDistinctTitle">Tech Slots</span>
@@ -762,6 +792,8 @@
 							</div>
 
 							<fieldset class="repeating_jobtechniques">
+								<input type="hidden" name="attr_technique-onUse" value="">
+								<input type="hidden" name="attr_technique-equippedWeapon" value="">
 								<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 								<div class="wuxTechnique wuxMinWidth300">
 									<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
@@ -795,7 +827,7 @@
 										</div>
 										<div class="wuxTechniqueHeaderInteractBlock">
 											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase">
-											<div class="wuxHiddenField wuxMarginLeft5">
+											<div class="wuxHiddenField">
 												<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-select">
 												<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-select">
 												<span class="wuxTechniqueHeaderInteractiveIcon">&#9635;</span>
@@ -1272,6 +1304,9 @@
 													</div>
 												</div>
 											</div>
+											<div>
+												<button class="wuxButton" type="roll" value="@{technique-onUse}"><span>Use Technique</span></button>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -1281,6 +1316,7 @@
 					<div class="techSlots-active wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 						<div class="wuxSectionContent">
 							<div class="wuxHeader">Active Techniques</div>
+							<span class="wuxDescription">Techniques can be locked into their tech slots by selecting their equip button. Only base technqiues can be equipped to tech slots. Every augment of the technique are automatically equipped. When a technique is equipped it is added to the combat section.</span>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
 									<span class="wuxDistinctTitle">Tech Slots</span>
@@ -1294,6 +1330,8 @@
 							</div>
 
 							<fieldset class="repeating_activetechniques">
+								<input type="hidden" name="attr_technique-onUse" value="">
+								<input type="hidden" name="attr_technique-equippedWeapon" value="">
 								<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 								<div class="wuxTechnique wuxMinWidth300">
 									<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
@@ -1327,7 +1365,7 @@
 										</div>
 										<div class="wuxTechniqueHeaderInteractBlock">
 											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase">
-											<div class="wuxHiddenField wuxMarginLeft5">
+											<div class="wuxHiddenField">
 												<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-select">
 												<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-select">
 												<span class="wuxTechniqueHeaderInteractiveIcon">&#9635;</span>
@@ -1746,7 +1784,7 @@
 													</div>
 												</div>
 											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0" />
 											<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
 												<div class="wuxHiddenBlockField">
@@ -1790,7 +1828,7 @@
 													</div>
 												</div>
 											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0" />
 											<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
 												<div>
 													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
@@ -1804,6 +1842,9 @@
 													</div>
 												</div>
 											</div>
+											<div>
+												<button class="wuxButton" type="roll" value="@{technique-onUse}"><span>Use Technique</span></button>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -1816,6 +1857,7 @@
 					<div class="techSlots-passive wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 						<div class="wuxSectionContent">
 							<div class="wuxHeader">Passive Techniques</div>
+							<span class="wuxDescription">Techniques can be locked into their tech slots by selecting their equip button. Only base technqiues can be equipped to tech slots. Every augment of the technique are automatically equipped. When a technique is equipped it is added to the combat section.</span>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
 									<span class="wuxDistinctTitle">Tech Slots</span>
@@ -1829,6 +1871,8 @@
 							</div>
 
 							<fieldset class="repeating_passivetechniques">
+								<input type="hidden" name="attr_technique-onUse" value="">
+								<input type="hidden" name="attr_technique-equippedWeapon" value="">
 								<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 								<div class="wuxTechnique wuxMinWidth300">
 									<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
@@ -1862,7 +1906,7 @@
 										</div>
 										<div class="wuxTechniqueHeaderInteractBlock">
 											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase">
-											<div class="wuxHiddenField wuxMarginLeft5">
+											<div class="wuxHiddenField">
 												<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-select">
 												<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-select">
 												<span class="wuxTechniqueHeaderInteractiveIcon">&#9635;</span>
@@ -2339,6 +2383,9 @@
 													</div>
 												</div>
 											</div>
+											<div>
+												<button class="wuxButton" type="roll" value="@{technique-onUse}"><span>Use Technique</span></button>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -2349,6 +2396,7 @@
 					<div class="techSlots-support wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 						<div class="wuxSectionContent">
 							<div class="wuxHeader">Support Techniques</div>
+							<span class="wuxDescription">Techniques can be locked into their tech slots by selecting their equip button. Only base technqiues can be equipped to tech slots. Every augment of the technique are automatically equipped. When a technique is equipped it is added to the combat section.</span>
 							<div class="wuxDistinctSection">
 								<div class="wuxDistinctField">
 									<span class="wuxDistinctTitle">Tech Slots</span>
@@ -2362,6 +2410,8 @@
 							</div>
 
 							<fieldset class="repeating_supporttechniques">
+								<input type="hidden" name="attr_technique-onUse" value="">
+								<input type="hidden" name="attr_technique-equippedWeapon" value="">
 								<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 								<div class="wuxTechnique wuxMinWidth300">
 									<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
@@ -2395,7 +2445,7 @@
 										</div>
 										<div class="wuxTechniqueHeaderInteractBlock">
 											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase">
-											<div class="wuxHiddenField wuxMarginLeft5">
+											<div class="wuxHiddenField">
 												<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-select">
 												<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-select">
 												<span class="wuxTechniqueHeaderInteractiveIcon">&#9635;</span>
@@ -2872,6 +2922,9 @@
 													</div>
 												</div>
 											</div>
+											<div>
+												<button class="wuxButton" type="roll" value="@{technique-onUse}"><span>Use Technique</span></button>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -2884,8 +2937,11 @@
 					<div class="techSlots-permanent wuxSectionBlock wuxLayoutItem wuxMinWidth300">
 						<div class="wuxSectionContent">
 							<div class="wuxHeader">Permanent Techniques</div>
+							<span class="wuxDescription">Permanent techniques are always available to the character. You can press the + button on a technique to add it to the combat section for your convenience.</span>
 
 							<fieldset class="repeating_permanenttechniques">
+								<input type="hidden" name="attr_technique-onUse" value="">
+								<input type="hidden" name="attr_technique-equippedWeapon" value="">
 								<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 								<div class="wuxTechnique wuxMinWidth300">
 									<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
@@ -2918,13 +2974,10 @@
 											</div>
 										</div>
 										<div class="wuxTechniqueHeaderInteractBlock">
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase">
-											<div class="wuxHiddenField wuxMarginLeft5">
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" />
+											<div class="wuxHiddenField">
 												<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-select">
-												<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-select">
-												<span class="wuxTechniqueHeaderInteractiveIcon">&#9635;</span>
-												<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-select">
-												<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9634;</span>
+												<span class="wuxTechniqueHeaderInteractiveAuxIcon wuxPictos">+</span>
 											</div>
 										</div>
 
@@ -3382,7 +3435,7 @@
 													</div>
 												</div>
 											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0" />
 											<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
 												<div>
 													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
@@ -3395,6 +3448,9 @@
 														<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-onSuccess"></span>
 													</div>
 												</div>
+											</div>
+											<div>
+												<button class="wuxButton" type="roll" value="@{technique-onUse}"><span>Use Technique</span></button>
 											</div>
 										</div>
 									</div>
@@ -5320,8 +5376,8 @@
 				</div>
 			</div>
 		</div>
-		
-		<div class="wuxSegment">
+
+		<div class="segment-endblock wuxSegment">
 			&nbsp;
 		</div>
 	</div>

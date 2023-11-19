@@ -225,7 +225,7 @@ input[type=hidden].wuxTechnique-flag[value="on"] + .wuxTechnique
 }
 
 .wuxTechniqueHeader,
-.sheet-wuxTechniqueHeader,
+.sheet-rolltemplate-technique .sheet-wuxTechniqueHeader,
 .wuxTechniqueTableHeader
 {
     position: relative;
@@ -235,44 +235,44 @@ input[type=hidden].wuxTechnique-flag[value="on"] + .wuxTechnique
 }
 
 .wuxTechniqueHeader,
-.sheet-wuxTechniqueHeader
+.sheet-rolltemplate-technique .sheet-wuxTechniqueHeader
 {
     background: #c0e7d5;
     border-bottom: 1px solid #efefef; 
 }
 
 input.wuxTechniqueHeader-flag[value="Quick"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-Quick
+.sheet-rolltemplate-technique .wuxTechniqueHeader-Quick
 {
     background-color: #fbe5e5;
 }
 
 input.wuxTechniqueHeader-flag[value="Full"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-Full
+.sheet-rolltemplate-technique .wuxTechniqueHeader-Full
 {
     background-color: #d7a0a0;
 }
 
 input.wuxTechniqueHeader-flag[value="Reaction"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-Reaction
+.sheet-rolltemplate-technique .wuxTechniqueHeader-Reaction
 {
     background-color: #e5eafb;
 }
 
 input.wuxTechniqueHeader-flag[value="Free"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-Free
+.sheet-rolltemplate-technique .wuxTechniqueHeader-Free
 {
     background-color: #e5fbf1;
 }
 
 input.wuxTechniqueHeader-flag[value="Augment"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-Augment
+.sheet-rolltemplate-technique .wuxTechniqueHeader-Augment
 {
     background-color: #acacac;
 }
 
 .wuxTechniqueType,
-.sheet-wuxTechniqueType
+.sheet-rolltemplate-technique .sheet-wuxTechniqueType
 {
     position: absolute;
     display: inline-block;
@@ -289,37 +289,37 @@ input.wuxTechniqueHeader-flag[value="Augment"] + .wuxTechniqueHeader,
 }
 
 input.wuxTechniqueType-flag[value="Active"] + .wuxTechniqueType,
-.wuxTechniqueType-Active
+.sheet-rolltemplate-technique .wuxTechniqueType-Active
 {
     background-color: #b60003;
 }
 
 input.wuxTechniqueType-flag[value="Passive"] + .wuxTechniqueType,
-.wuxTechniqueType-Passive
+.sheet-rolltemplate-technique .wuxTechniqueType-Passive
 {
     background-color: #4db600;
 }
 
 input.wuxTechniqueType-flag[value="Support"] + .wuxTechniqueType,
-.wuxTechniqueType-Support
+.sheet-rolltemplate-technique .wuxTechniqueType-Support
 {
     background-color: #00b0b6;
 }
 
 input.wuxTechniqueType-flag[value="Job"] + .wuxTechniqueType,
-.wuxTechniqueType-Job
+.sheet-rolltemplate-technique .wuxTechniqueType-Job
 {
     background-color: #7800b6;
 }
 
 input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType,
-.wuxTechniqueType-Standard
+.sheet-rolltemplate-technique .wuxTechniqueType-Standard
 {
     background-color: #b66f00;
 }
 
 .wuxTechniqueType .wuxTechniqueTypeHeader,
-.sheet-wuxTechniqueType .sheet-wuxTechniqueTypeHeader
+.sheet-rolltemplate-technique .sheet-wuxTechniqueType .sheet-wuxTechniqueTypeHeader
 {
     display: block;
 
@@ -328,7 +328,7 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType,
 }
 
 .wuxTechniqueType .wuxTechniqueTypeFooter,
-.sheet-wuxTechniqueType .sheet-wuxTechniqueTypeFooter
+.sheet-rolltemplate-technique .sheet-wuxTechniqueType .sheet-wuxTechniqueTypeFooter
 {
     display: block;
     font-size: 7px;
@@ -402,14 +402,14 @@ input[type=hidden].wuxTechniqueHeaderInteractivePictosIcon-flag:not([value="0"])
 }
 
 .wuxTechniqueHeaderDisplayBlock,
-.sheet-wuxTechniqueHeaderDisplayBlock
+.sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderDisplayBlock
 {
     display:inline-block; 
     width: calc(100% - 115px);
 }
 
 .wuxTechniqueHeaderName,
-.sheet-wuxTechniqueHeaderName
+.sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderName
 {
     display: block; 
 
@@ -421,7 +421,7 @@ input[type=hidden].wuxTechniqueHeaderInteractivePictosIcon-flag:not([value="0"])
 }
 
 .wuxTechniqueHeaderInfo,
-.sheet-wuxTechniqueHeaderInfo
+.sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderInfo
 {
     display: block; 
 
@@ -429,13 +429,13 @@ input[type=hidden].wuxTechniqueHeaderInteractivePictosIcon-flag:not([value="0"])
 }
 
 .wuxTechniqueHeaderInfoType,
-.sheet-wuxTechniqueHeaderInfoType
+.sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderInfoType
 {
     font-weight: bold;
 }
 
 .wuxTechniqueExpandingContent,
-.sheet-wuxTechniqueExpandingContent
+.sheet-rolltemplate-technique .sheet-wuxTechniqueExpandingContent
 {
     display: none;
 }
@@ -464,7 +464,7 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
 }
 
 .wuxTechniqueFunctionBlock,
-.sheet-wuxTechniqueFunctionBlock
+.sheet-rolltemplate-technique .sheet-wuxTechniqueFunctionBlock
 {
     position: relative;
     display: block;
@@ -480,14 +480,14 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
 }
 
 .wuxTechniqueFunctionBlock .wuxTechniqueFunctionBlockRow,
-.sheet-wuxTechniqueFunctionBlock .sheet-wuxTechniqueFunctionBlockRow
+.sheet-rolltemplate-technique .sheet-wuxTechniqueFunctionBlock .sheet-wuxTechniqueFunctionBlockRow
 {
     position: relative;
     display: block;
 }
 
 .wuxTechniqueAttackBlock,
-.sheet-wuxTechniqueAttackBlock
+.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock
 {
     width: calc(100% - 30px);
     padding: 5px 5px; 
@@ -502,34 +502,34 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
 .wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow,
 .wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockRange,
 .wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockTarget,
-.sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow,
-.sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockRange,
-.sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockTarget
+.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow,
+.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockRange,
+.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockTarget
 {
     position: relative;
     display: inline-block;
 }
 
 .wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow,
-.sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow
+.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow
 {
     width: calc(100% - 22px);
 }
 
 .wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockRange,
-.sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockRange
+.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockRange
 {
     padding-right: 10px;
 }
 
 .wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockTarget,
-.sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockTarget
+.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockTarget
 {
     width: calc(65% - 5px);
 }
 
 .wuxTechniqueDescriptionBlock,
-.sheet-wuxTechniqueDescriptionBlock,
+.sheet-rolltemplate-technique .sheet-wuxTechniqueDescriptionBlock,
 .wuxTechniqueEditBlock
 {
     display: block;
@@ -540,7 +540,7 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
 }
 
 .wuxTechniqueDescriptionBlock .wuxTechniqueDescriptionBlockDesc,
-.sheet-wuxTechniqueDescriptionBlock .sheet-wuxTechniqueDescriptionBlockDesc
+.sheet-rolltemplate-technique .sheet-wuxTechniqueDescriptionBlock .sheet-wuxTechniqueDescriptionBlockDesc
 {
     display: inline-block;
     white-space: pre-line;
@@ -557,7 +557,7 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
 ========================================*/
 
 .wuxTrait,
-.sheet-wuxTrait
+.sheet-rolltemplate-technique .sheet-wuxTrait
 {
     display: none;
     padding: 0px 3px;
@@ -565,13 +565,13 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
 
 input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .wuxShownTraits .wuxTrait,
-.sheet-wuxTrait
+.sheet-rolltemplate-technique .sheet-wuxTrait
 {
     display: inline-block;
 }
 
 .wuxTraitText,
-.sheet-wuxTraitText
+.sheet-rolltemplate-technique .sheet-wuxTraitText
 {
     font-size: 11px;
     color: #0000FF;
@@ -580,7 +580,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 }
 
 .wuxTrait .wuxTooltiptext,
-.sheet-wuxTrait .sheet-wuxTooltiptext
+.sheet-rolltemplate-technique .sheet-wuxTrait .sheet-wuxTooltiptext
 {
     position: absolute;
     top: 18px;
@@ -600,7 +600,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
   }
   
   .wuxTrait:hover .wuxTooltiptext,
-  .sheet-wuxTrait:hover .sheet-wuxTooltiptext
+  .sheet-rolltemplate-technique .sheet-wuxTrait:hover .sheet-wuxTooltiptext
   {
     visibility: visible;
   }

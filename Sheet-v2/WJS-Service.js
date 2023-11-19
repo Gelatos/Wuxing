@@ -407,9 +407,9 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 	update[GetSectionIdName(repeatingSection, id, "technique-limits")] = technique.limits;
 
 	// set the function block
-	var isMultiple = false;
+	var isMultiple = technique.traits.toLowerCase().indexOf("multiple") >= 0;
 	update[GetSectionIdName(repeatingSection, id, "technique-functionBlock")] =
-		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "" || technique.resourceCost != "") ? "1" : "0";
+		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-traits")] = technique.traits;
 	update = SetTechniqueDataTraits(update, repeatingSection, id, technique.traits);
 
@@ -446,11 +446,239 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 		update = SetTechniqueDataDamageString(update, repeatingSection, id, technique.damage, technique.damageType, technique.element);
 	}
 
-	// set special data
-	update[GetSectionIdName(repeatingSection, id, "technique-onHit")] = technique.onHit;
-	update[GetSectionIdName(repeatingSection, id, "technique-specBonus")] = technique.specBonus;
+	// set use data
+	update = SetTechniqueUseData(update, technique, repeatingSection, id);
 
 	return update;
+}
+
+function SetTechniqueUseData(update, technique, repeatingSection, id) {
+
+	let output = "";
+
+	// if this is an augment, incorporate the base into the rolltemplate
+	if (technique.augmentBase != "") {
+		technique = SetAugmentTechnique(technique);
+	}
+	else {
+		output += "{{type-base=1}} ";
+	}
+
+	output += `{{Name=${technique.name}}}`;
+	output += `{{Type=${technique.techniqueType}}}`;
+	output += `{{type-${technique.techniqueType}=1}} `;
+	output += `{{Group=${technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup}}}`;
+
+	// create the action line
+	let actionLine = "";
+	if (technique.action != "") {
+		output += `{{type-${technique.action}=1}} `;
+		actionLine += technique.action;
+	}
+	if (technique.limits != "") {
+		if (actionLine != "") {
+			actionLine += "; ";
+		}
+		actionLine += technique.limits;
+	}
+	if (technique.resourceCost != "") {
+		if (actionLine != "") {
+			actionLine += "; ";
+		}
+		actionLine += technique.resourceCost;
+	}
+	if (actionLine != "") {
+		output += `{{ActionLine=${actionLine}}} `;
+	}
+	if (technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "") {
+		output += "{{type-FunctionBlock=1}} ";
+
+		if (technique.traits != "") {
+			var traitsDb = GetTraitsDictionary(technique.traits, "technique");
+			for (var i = 0; i < traitsDb.length; i++) {
+				if (traitsDb[i].name.indexOf("Armament") >= 0) {
+					output += "{{weapon=@{technique-equippedWeapon}}} ";
+				}
+				output += `{{Trait${i}=${traitsDb[i].name}}} {{Trait${i}Desc=${traitsDb[i].description}}} `;
+			}
+		}
+		if (technique.trigger != "") {
+			output += `{{Trigger=${technique.trigger}}} `;
+		}
+		if (technique.requirement != "") {
+			output += `{{Requirement=${technique.requirement}}} `;
+		}
+		if (technique.prerequisite != "") {
+			output += `{{Prerequisites=${technique.prerequisite}}} `;
+		}
+	}
+	if (technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") {
+		output += "{{type-AttackBlock=1}} ";
+
+		if (technique.range != "" || technique.target != "") {
+			output += "{{type-AttackBlockTarget=1}} ";
+
+			if (technique.range != "") {
+				output += `{{Range=${technique.range}}} `;
+			}
+			if (technique.target != "") {
+				output += `{{Target=${technique.target}}} `;
+			}
+		}
+		if (technique.skill != "") {
+			let skill = "";
+			if (technique.defense != "") {
+				if (technique.defense.indexOf("DC")) {
+					skill = technique.defense;
+				}
+				else {
+					skill = `${technique.defense} Check`;
+				}
+			}
+			else {
+				skill = "DC 15";
+			}
+			skill = `${technique.skill} vs. ${skill}`;
+			output += `{{SkillString=${skill}}} `;
+		}
+		if (technique.damage != "" || technique.damageType != "") {
+			let damageString = `${FormatDamageString(technique.damage)}${technique.damageType}${technique.element == "" ? "" : ` [${technique.element}]`}`;
+			output += `{{DamageString=${damageString}}} `;
+		}
+	}
+	if (technique.description != "" || technique.onSuccess != "") {
+		output += "{{type-DescBlock=1}} ";
+		if (technique.description != "") {
+			output += `{{Desc=${technique.description}}} `;
+		}
+		if (technique.onSuccess != "") {
+			output += `{{OnHit=${technique.onSuccess}}} `;
+		}
+	}
+
+	// add technique data for the api
+	let usedTechData = JSON.stringify({
+		resources: technique.resourceCost,
+		traits: technique.traits,
+		onSuccess: technique.onSuccess,
+		onHit: technique.onHit,
+		specBonus: technique.specBonus,
+
+		hasCheck: (technique.skill != "" || technique.defense != "") ? true : false,
+		skill: technique.skill,
+		defense: technique.defense,
+
+		hasDamage: (technique.damage != "" || technique.damageType != "") ? true : false,
+		damage: technique.damage,
+		damageType: technique.damageType,
+		element: technique.element
+	});
+	output += `##${usedTechData}`;
+
+	output = `&{template:technique} ${output.trim()}`;
+	update[GetSectionIdName(repeatingSection, id, "technique-onUse")] = output;
+	return update;
+}
+
+function SetAugmentTechnique(technique) {
+
+	// passive and permanent techniques are displayed exactly as is when referenced
+	if (technique.techniqueType == "Permanent" || technique.techniqueType == "Passive") {
+		return technique;
+	}
+
+	// grab the base technique
+	let newTechnique = {};
+	switch (technique.techniqueGroup) {
+		case "Class":
+			newTechnique = GetClassTechniquesInfo(technique.augmentBase);
+			break;
+		case "Ancestry":
+			newTechnique = GetAncestryTechniqueInfo(technique.augmentBase);
+			break;
+		default:
+			newTechnique = GetTechniquesInfo(technique.augmentBase);
+	}
+	
+	// replacing statistics
+	newTechnique.name = technique.name;
+	newTechnique.augmentBase = technique.augmentBase;
+	if (technique.techniqueGroup != "") {
+		newTechnique.techniqueGroup = technique.techniqueGroup;
+	}
+	if (technique.techniqueSubGroup != "") {
+		newTechnique.techniqueSubGroup = technique.techniqueSubGroup;
+	}
+	if (technique.techniqueType != "") {
+		newTechnique.techniqueType = technique.techniqueType;
+	}
+	if (technique.action != "") {
+		newTechnique.action = technique.action;
+	}
+	if (technique.traits != "") {
+		newTechnique.traits = technique.traits;
+	}
+	if (technique.limits != "") {
+		newTechnique.limits = technique.limits;
+	}
+	if (technique.resourceCost != "") {
+		newTechnique.resourceCost = technique.resourceCost;
+	}
+	if (technique.trigger != "") {
+		newTechnique.trigger = technique.trigger;
+	}
+	if (technique.requirement != "") {
+		newTechnique.requirement = technique.requirement;
+	}
+	if (technique.prerequisite != "") {
+		newTechnique.prerequisite = technique.prerequisite;
+	}
+	if (technique.skill != "") {
+		newTechnique.skill = technique.skill;
+	}
+	if (technique.defense != "") {
+		newTechnique.defense = technique.defense;
+	}
+	if (technique.range != "") {
+		newTechnique.range = technique.range;
+	}
+	if (technique.target != "") {
+		newTechnique.target = technique.target;
+	}
+	if (technique.targetCode != "") {
+		newTechnique.targetCode = technique.targetCode;
+	}
+	if (technique.onHit != "") {
+		newTechnique.onHit = technique.onHit;
+	}
+	if (technique.damage != "") {
+		newTechnique.damage = technique.damage;
+	}
+	if (technique.damageType != "") {
+		newTechnique.damageType = technique.damageType;
+	}
+	if (technique.element != "") {
+		newTechnique.element = technique.element;
+	}
+	if (technique.specBonus != "") {
+		newTechnique.specBonus = technique.specBonus;
+	}
+
+	// additive statistics
+	if (technique.description != "") {
+		if (newTechnique.description != "") {
+			newTechnique.description += "\n";
+		}
+		newTechnique.description += technique.description;
+	}
+	if (technique.onSuccess != "") {
+		if (newTechnique.onSuccess != "") {
+			newTechnique.onSuccess += "\n";
+		}
+		newTechnique.onSuccess += technique.onSuccess;
+	}
+
+	return newTechnique;
 }
 
 function SetTechniqueDataTraits(update, repeatingSection, id, traits) {
@@ -458,9 +686,6 @@ function SetTechniqueDataTraits(update, repeatingSection, id, traits) {
 	var traitsDb = GetTraitsDictionary(traits, "technique");
 	for (var i = 0; i < 6; i++) {
 		if (i < traitsDb.length) {
-			if (traitsDb[i].name.toLowerCase() == "multiple") {
-				isMultiple = true;
-			}
 			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i)] = traitsDb[i].name;
 			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i + "Desc")] = traitsDb[i].description;
 		} else {
@@ -472,7 +697,7 @@ function SetTechniqueDataTraits(update, repeatingSection, id, traits) {
 }
 
 function SetTechniqueDataDamageString(update, repeatingSection, id, damage, damageType, element) {
-	let damageString = `${FormatDamageString(damage)}${damageType}${element == "" ? "" : ` [${technique.element}]`}`;
+	let damageString = `${FormatDamageString(damage)}${damageType}${element == "" ? "" : ` [${element}]`}`;
 	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = damageString;
 
 	return update;

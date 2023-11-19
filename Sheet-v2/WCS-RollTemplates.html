@@ -6,8 +6,21 @@
     </rolltemplate>
 
 	<rolltemplate class="sheet-rolltemplate-technique">
+		{{#type-Quick}}
+		<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+		{{/type-Quick}}
+		{{#type-Full}}
+		<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+		{{/type-Full}}
+		{{#type-Reaction}}
+		<div class="wuxTechniqueHeader wuxTechniqueHeader-Reaction">
+		{{/type-Reaction}}
+		{{#type-Free}}
+		<div class="wuxTechniqueHeader wuxTechniqueHeader-Free">
+		{{/type-Free}}
+		{{#type-Other}}
 		<div class="wuxTechniqueHeader">
-			{{#type-base}}
+		{{/type-Other}}
 			{{#type-Active}}
 			<div class="wuxTechniqueType wuxTechniqueType-Active">
 			{{/type-Active}}
@@ -23,33 +36,23 @@
 			{{#type-Standard}}
 			<div class="wuxTechniqueType wuxTechniqueType-Standard">
 			{{/type-Standard}}
-				<span class="wuxTechniqueTypeHeader">{{type}}</span>
+				<span class="wuxTechniqueTypeHeader">{{Type}}</span>
 				<span class="wuxTechniqueTypeFooter">{{Group}}</span>
 			</div>
-			{{/type-base}}
 
 			<div class="wuxTechniqueHeaderDisplayBlock">
-				<span class="wuxTechniqueHeaderName">{{name}}</span>
+				<span class="wuxTechniqueHeaderName">{{Name}}</span>
 				<div class="wuxTechniqueHeaderInfo">
 					
 					{{#type-base}}
-					<span class="wuxTechniqueHeaderInfoType">Base</span>
+					<span class="wuxTechniqueHeaderInfoType">Base </span>
 					{{/type-base}}
-					{{#augment}}
-					<span class="wuxTechniqueHeaderInfoType">Augment: </span>
-					<span class="wuxTechniqueHeaderInfoType">{{augment}}</span>
-					{{/augment}}
-					{{#Action}}
-					<span>{{Action}}</span>
-					{{/Action}}
-					{{#Limit}}
-					<span class="wuxHiddenInlineField">; </span>
-					<span>{{Limit}}</span>
-					{{/Limit}}
-					{{#ResourceCost}}
-					<span class="wuxHiddenInlineField">; </span>
-					<span>{{ResourceCost}}</span>
-					{{/ResourceCost}}
+					{{^type-base}}
+					<span class="wuxTechniqueHeaderInfoType">Augment </span>
+					{{/type-base}}
+					{{#ActionLine}}
+					<span>{{ActionLine}}</span>
+					{{/ActionLine}}
 				</div>
 			</div>
 		</div>
@@ -61,46 +64,46 @@
 				<span>{{Prerequisites}}</span>
 			</div>
 			{{/Prerequisites}}
-			{{Trait0}}
+			{{#Trait0}}
 			<div class="wuxTechniqueFunctionBlockRow">
 				<span><strong>Traits: </strong></span>
 				
-				{{#trait0}}
+				{{#Trait0}}
 				<div class="wuxTrait">
-					<span class="wuxTraitText">{{trait0}}</span>
-					<span class="wuxTooltiptext">{{trait0Desc}}</span>
+					<span class="wuxTraitText">{{Trait0}}</span>
+					<span class="wuxTooltiptext">{{Trait0Desc}}</span>
 				</div>
-				{{/trait0}}
-				{{#trait1}}
+				{{/Trait0}}
+				{{#Trait1}}
 				<div class="wuxTrait">
-					<span class="wuxTraitText">{{trait1}}</span>
-					<span class="wuxTooltiptext">{{trait1Desc}}</span>
+					<span class="wuxTraitText">{{Trait1}}</span>
+					<span class="wuxTooltiptext">{{Trait1Desc}}</span>
 				</div>
-				{{/trait1}}
-				{{#trait2}}
+				{{/Trait1}}
+				{{#Trait2}}
 				<div class="wuxTrait">
-					<span class="wuxTraitText">{{trait2}}</span>
-					<span class="wuxTooltiptext">{{trait2Desc}}</span>
+					<span class="wuxTraitText">{{Trait2}}</span>
+					<span class="wuxTooltiptext">{{Trait2Desc}}</span>
 				</div>
-				{{/trait2}}
-				{{#trait3}}
+				{{/Trait2}}
+				{{#Trait3}}
 				<div class="wuxTrait">
-					<span class="wuxTraitText">{{trait3}}</span>
-					<span class="wuxTooltiptext">{{trait3Desc}}</span>
+					<span class="wuxTraitText">{{Trait3}}</span>
+					<span class="wuxTooltiptext">{{Trait3Desc}}</span>
 				</div>
-				{{/trait3}}
-				{{#trait4}}
+				{{/Trait3}}
+				{{#Trait4}}
 				<div class="wuxTrait">
-					<span class="wuxTraitText">{{trait4}}</span>
-					<span class="wuxTooltiptext">{{trait4Desc}}</span>
+					<span class="wuxTraitText">{{Trait4}}</span>
+					<span class="wuxTooltiptext">{{Trait4Desc}}</span>
 				</div>
-				{{/trait4}}
-				{{#trait5}}
+				{{/Trait4}}
+				{{#Trait5}}
 				<div class="wuxTrait">
-					<span class="wuxTraitText">{{trait5}}</span>
-					<span class="wuxTooltiptext">{{trait5Desc}}</span>
+					<span class="wuxTraitText">{{Trait5}}</span>
+					<span class="wuxTooltiptext">{{Trait5Desc}}</span>
 				</div>
-				{{/trait5}}
+				{{/Trait5}}
 			</div>
 			{{/Trait0}}
 			{{#Requirement}}
@@ -138,15 +141,13 @@
 			{{/type-AttackBlockTarget}}
 			{{#SkillString}}
 			<div class="wuxTechniqueAttackBlockRow">
-				<strong>{{SkillString}}</strong>
-				{{#TargetDefense}}
-				<span> vs. </span>
-				<span>{{TargetDefense}}</span>
-				{{/TargetDefense}}
+				<strong>Check: </strong>
+				<span>{{SkillString}}</span>
 			</div>
-			{{/Skill}}
+			{{/SkillString}}
 			{{#DamageString}}
 			<div class="wuxTechniqueAttackBlockRow">
+				<strong>Damage: </strong>
 				<span>{{DamageString}}</span>
 			</div>
 			{{/DamageString}}
@@ -170,6 +171,7 @@
 			</div>
 		</div>
 		{{/type-DescBlock}}
+
 	</rolltemplate>
 
     <rolltemplate class="sheet-rolltemplate-action">
