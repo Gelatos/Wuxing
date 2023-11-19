@@ -1,0 +1,179 @@
+<div class="segment-combat wuxSegment">
+	<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-combat" checked="checked">
+	<div class="wuxTabHeader"><span class="wuxInnerHeader">Combat</span></div>
+
+	<div class="wuxTab">
+		<div class="tab-combatOptions wuxTab">
+			<div class="combat-vitals wuxSectionBlock wuxLayoutItem">
+				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-combat-vitals" checked="checked" style="display: block">
+				<div class="wuxSectionHeader">
+					<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-vitals">
+					<span class="wuxSectionExpandIcon">&#9662;</span>
+					<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-vitals">
+					<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+					<span>Vitals</span>
+				</div>
+				<div class="wuxSectionHeaderFooter"></div>
+
+				<div class="wuxSectionContent">
+					<div class="wuxFlexTable">
+						<div class="vitals-hp wuxFlexTableItemGroup wuxMinWidth150">
+							<div class="wuxDistinctSection">
+								<div class="wuxDistinctField">
+									<span class="wuxDistinctTitle">HP</span>
+									<span class='wuxDistinctData'>
+										<input type="number" name='attr_hp'>
+										<span>/ </span>
+										<span name='attr_hp_max' value="0">0</span>
+									</span>
+
+									<span class="wuxDistinctSubtitle">Temp.HP</span>
+									<span class='wuxDistinctSubdata'>
+										<input type="number" name='attr_tempHp' value="0">
+										<span>/ </span>
+										<span name='attr_tempHp_max' value="0">0</span>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="vitals-trauma wuxFlexTableItemGroup wuxMinWidth150">
+							<div class="wuxDistinctSection">
+								<div class="wuxDistinctField">
+									<span class="wuxDistinctTitle">Trauma</span>
+									<span class='wuxDistinctData'>
+										<input type="number" name='attr_trauma'>
+										<span>/ </span>
+										<span name='attr_trauma_max' value="0">0</span>
+									</span>
+									<span class="wuxDistinctSubtitle">Stress</span>
+									<span class='wuxDistinctSubdata'>
+										<input type="number" name='attr_stress'>
+										<span>/ </span>
+										<span name='attr_stress_max' value="0">0</span>
+									</span>
+									<span class="wuxDistinctSubtitle">Wounds</span>
+									<span class='wuxDistinctSubdata'>
+										<input type="number" name='attr_wounds'>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="vitals-ki wuxFlexTableItemGroup wuxMinWidth150">
+							<div class="wuxDistinctSection">
+								<div class="wuxDistinctField">
+									<span class="wuxDistinctTitle">Vitality</span>
+									<span class='wuxDistinctData'>
+										<input type="number" name='attr_vitality'>
+										<span>/ </span>
+										<span name='attr_vitality_max' value="0">0</span>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="combat-resources wuxSectionBlock wuxLayoutItem">
+				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-combat-resources" checked="checked" style="display: block">
+				<div class="wuxSectionHeader">
+					<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-resources">
+					<span class="wuxSectionExpandIcon">&#9662;</span>
+					<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-resources">
+					<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+					<span>Resources</span>
+				</div>
+				<div class="wuxSectionHeaderFooter"></div>
+
+				<div class="wuxSectionContent">
+					<div class="wuxFlexTable">
+						<div class="resources-ki wuxFlexTableItemGroup wuxMinWidth150">
+							<div class="wuxDistinctSection">
+								<div class="wuxDistinctField">
+									<span class="wuxDistinctTitle">Ki</span>
+									<span class='wuxDistinctData'>
+										<input type="number" name='attr_ki' value="0">
+										<span>/ </span>
+										<span name='attr_ki_max' value="0">0</span>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="resources-ki wuxFlexTableItemGroup wuxMinWidth150">
+							<div class="wuxDistinctSection">
+								<div class="wuxDistinctField">
+									<span class="wuxDistinctTitle">Chakra</span>
+									<span class='wuxDistinctData'>
+										<input type="number" name='attr_chakra' value="0">
+										<span>/ </span>
+										<span name='attr_chakra_max' value="0">0</span>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="combat-status wuxSectionBlock wuxLayoutItem">
+				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-combat-status" checked="checked" style="display: block">
+				<div class="wuxSectionHeader">
+					<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-status">
+					<span class="wuxSectionExpandIcon">&#9662;</span>
+					<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-status">
+					<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+					<span>Status and Conditions</span>
+				</div>
+				<div class="wuxSectionHeaderFooter"></div>
+
+				<div class="wuxSectionContent">
+					<span class="wuxHeader">Status</span>
+					<div class="wuxFlexTable">
+						<div class="wuxFlexTableItemGroup">
+							<div class="wuxCheckbox">
+								<input class="wuxCheckbox-flag" type="checkbox" name="attr_status-ethereal">
+								<input type="hidden" class="wuxCheckbox-flag" name="attr_status-ethereal">
+								<span class="wuxCheckboxAuxIcon">&#9634;</span>
+								<input type="hidden" class="wuxCheckbox-flag" name="attr_status-ethereal">
+								<span class="wuxCheckboxIcon">&#9635;</span>
+							</div>
+							<span class="wuxData">Ethereal</span>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="tab-combatOptions wuxTab">
+			<div class="combat-vitals wuxSectionBlock wuxLayoutItem">
+				<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-combat-vitals" checked="checked" style="display: block">
+				<div class="wuxSectionHeader">
+					<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-vitals">
+					<span class="wuxSectionExpandIcon">&#9662;</span>
+					<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-combat-vitals">
+					<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+					<span>Vitals</span>
+				</div>
+				<div class="wuxSectionHeaderFooter"></div>
+
+				<div class="wuxSectionContent">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="segment-gear wuxSegment">
+	<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-gear" checked="checked">
+	<div class="wuxTabHeader"><span class="wuxInnerHeader">Gear</span></div>
+
+	<div class="wuxTab">
+		<div class="tab-gearOptions wuxTab">
+			<div class="gear-GeneralStats wuxSectionBlock wuxLayoutItem">
+				<div class="wuxSectionContent">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--End -->
