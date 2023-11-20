@@ -106,68 +106,38 @@ function UpdateLearnedTechniques() {
 
 	let mod_attrs = ["techniques-jobTech", "techniques-learnedTech"];
 	
-	let repeatingJob = "repeating_jobtechniques";
-	let repeatingActive = "repeating_activetechniques";
-	let repeatingPassive = "repeating_passivetechniques";
-	let repeatingSupport = "repeating_supporttechniques";
-	let repeatingPermanent = "repeating_permanenttechniques";
+	let repeatingSection = "repeating_learnedtechniques";
 
-	getSectionIDs(repeatingJob, function (jobArray) {
-		mod_attrs = mod_attrs.concat(GetSectionIdValues(jobArray, repeatingJob, ["technique-name", "technique-isDatabase"]));
-		getSectionIDs(repeatingActive, function (activeArray) {
-			mod_attrs = mod_attrs.concat(GetSectionIdValues(activeArray, repeatingActive, ["technique-name", "technique-isDatabase"]));
-			getSectionIDs(repeatingPassive, function (passiveArray) {
-				mod_attrs = mod_attrs.concat(GetSectionIdValues(passiveArray, repeatingPassive, ["technique-name", "technique-isDatabase"]));
-				getSectionIDs(repeatingSupport, function (supportArray) {
-					mod_attrs = mod_attrs.concat(GetSectionIdValues(supportArray, repeatingSupport, ["technique-name", "technique-isDatabase"]));
-					getSectionIDs(repeatingPermanent, function (permanentArray) {
-						mod_attrs = mod_attrs.concat(GetSectionIdValues(permanentArray, repeatingPermanent, ["technique-name", "technique-isDatabase"]));
-						getAttrs(mod_attrs, function (v) {
-							let activeLearnedTech = [];
-							activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingJob, jobArray);
-							activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingActive, activeArray);
-							activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingPassive, passiveArray);
-							activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingSupport, supportArray);
-							activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingPermanent, permanentArray);
+	getSectionIDs(repeatingSection, function (idArray) {
+		mod_attrs = mod_attrs.concat(GetSectionIdValues(idArray, repeatingSection, ["technique-name", "technique-isDatabase"]));
+		getAttrs(mod_attrs, function (v) {
+			let activeLearnedTech = [];
+			activeLearnedTech = SetCurrentDatabaseTech(activeLearnedTech, v, repeatingSection, idArray);
 
-							let newTechniques = {
-								job: [],
-								active: [],
-								passive: [],
-								support: [],
-								permanent: []
-							}
-							let technique = {};
+			let newTechniques = [];
+			let technique = {};
 
-							let jobTech = AttrParseString(v, "techniques-jobTech");
-							jobTech = jobTech.split(";");
-							for (let i = 0; i < jobTech.length; i++) {
-								if (!activeLearnedTech.includes(jobTech[i].trim())) {
-									technique = GetClassTechniquesInfo(jobTech[i]);
-									newTechniques = SetCharacterLearnedTechnique(newTechniques, technique);
-								}
-							}
-							
-							let learnedTech = AttrParseJSONDictionary(v, "techniques-learnedTech");
-							for (let i = 0; i < learnedTech.keys.length; i++) {
-								if (!activeLearnedTech.includes(learnedTech.keys[i])) {
-									technique = GetTechniquesInfo(learnedTech.keys[i]);
-									newTechniques = SetCharacterLearnedTechnique(newTechniques, technique);
-								}
-							}
+			let jobTech = AttrParseString(v, "techniques-jobTech");
+			jobTech = jobTech.split(";");
+			for (let i = 0; i < jobTech.length; i++) {
+				if (!activeLearnedTech.includes(jobTech[i].trim())) {
+					technique = GetClassTechniquesInfo(jobTech[i]);
+					newTechniques.push(technique);
+				}
+			}
+			
+			let learnedTech = AttrParseJSONDictionary(v, "techniques-learnedTech");
+			for (let i = 0; i < learnedTech.keys.length; i++) {
+				if (!activeLearnedTech.includes(learnedTech.keys[i])) {
+					technique = GetTechniquesInfo(learnedTech.keys[i]);
+					newTechniques.push(technique);
+				}
+			}
 
-							let update = {};
-    						update = SetTechniqueDataList(update, repeatingJob, newTechniques.job, false, true);
-    						update = SetTechniqueDataList(update, repeatingActive, newTechniques.active, false, true);
-    						update = SetTechniqueDataList(update, repeatingPassive, newTechniques.passive, false, true);
-    						update = SetTechniqueDataList(update, repeatingSupport, newTechniques.support, false, true);
-    						update = SetTechniqueDataList(update, repeatingPermanent, newTechniques.permanent, false, true);
-							setAttrs(update, { silent: true });
+			let update = {};
+			update = SetTechniqueDataList(update, repeatingSection, newTechniques, false, true);
+			setAttrs(update, { silent: true });
 
-						});
-					});
-				});
-			});
 		});
 	});
 }
@@ -181,46 +151,41 @@ function SetCurrentDatabaseTech(activeLearnedTech, attrArray, repeatingSection, 
 	return activeLearnedTech;
 }
 
-function SetCharacterLearnedTechnique(newTechniques, technique) {
 
-	Log("adding technique " + technique.name + " which is " + technique.techniqueType);
 
-	switch (technique.techniqueType) {
-		case "Job": 
-			newTechniques.job.push(technique);
-			Log("added to job");
-			break;
-		case "Active": 
-			newTechniques.active.push(technique);
-			Log("added to active");
-			break;
-		case "Passive": 
-			newTechniques.passive.push(technique);
-			Log("added to passive");
-			break;
-		case "Support": 
-			newTechniques.support.push(technique);
-			Log("added to support");
-			break;
-		case "Permanent": 
-			newTechniques.permanent.push(technique);
-			Log("added to permanent");
-			break;
-	}
-	return newTechniques;
+
+// ======== Techniques - Select Technique
+
+on("change:repeating_learnedtechniques:technique-select", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	UpdateDefaultActiveCheckbox(eventinfo);
+});
+
+function UpdateCharacterTechniqueSelect(eventinfo) {
+
+	let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
+	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+
+	let mod_attrs = GetSectionIdNameFromArray(repeatingSection, id, ["technique-name", "technique-isDatabase", "technique-action"]);
+	getSectionIDs(repeatingSection, function (idArray) {
+		mod_attrs = mod_attrs.concat(GetSectionIdValues(idArray, repeatingSection, ["technique-name", "technique-isDatabase", "technique-augmentBase", "technique-select"]));
+		getAttrs(mod_attrs, function (v) {
+			let update = {};
+			let customTechniquesArray = [];
+
+			// iterate through all of the learned techniques 
+		});
+
+	});
 }
-
-
-
-
-// ======== Techniques - Database Techniques
-
-
 
 
 // ======== Techniques - Custom Techniques
 
-on("change:repeating_jobtechniques:technique-edit change:repeating_activetechniques:technique-edit change:repeating_passivetechniques:technique-edit change:repeating_supporttechniques:technique-edit change:repeating_permanenttechniques:technique-edit", function (eventinfo) {
+on("change:repeating_learnedtechniques:technique-edit", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -232,7 +197,7 @@ on("change:repeating_jobtechniques:technique-edit change:repeating_activetechniq
 
 
 // ======== Techniques - Custom Techniques Header
-on("change:repeating_jobtechniques:technique-isBase change:repeating_activetechniques:technique-isBase change:repeating_passivetechniques:technique-isBase change:repeating_supporttechniques:technique-isBase change:repeating_permanenttechniques:technique-isBase", function (eventinfo) {
+on("change:repeating_learnedtechniques:technique-isBase", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -258,7 +223,7 @@ function UpdateCharacterCustomTechniqueHeaderTypeFromBase(eventinfo, newValue) {
 	}
 }
 
-on("change:repeating_jobtechniques:technique-action change:repeating_activetechniques:technique-action change:repeating_passivetechniques:technique-action change:repeating_supporttechniques:technique-action change:repeating_permanenttechniques:technique-action", function (eventinfo) {
+on("change:repeating_learnedtechniques:technique-action", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -282,7 +247,7 @@ function UpdateCharacterCustomTechniqueHeaderType(eventinfo, newValue) {
 
 
 // ======== Techniques - Custom Techniques Function Block
-on("change:repeating_jobtechniques:technique-trigger change:repeating_jobtechniques:technique-requirement change:repeating_jobtechniques:technique-resourceCost change:repeating_activetechniques:technique-trigger change:repeating_activetechniques:technique-requirement change:repeating_activetechniques:technique-resourceCost change:repeating_passivetechniques:technique-trigger change:repeating_passivetechniques:technique-requirement change:repeating_passivetechniques:technique-resourceCost change:repeating_supporttechniques:technique-trigger change:repeating_supporttechniques:technique-requirement change:repeating_supporttechniques:technique-resourceCost change:repeating_permanenttechniques:technique-trigger change:repeating_permanenttechniques:technique-requirement change:repeating_permanenttechniques:technique-resourceCost", function (eventinfo) {
+on("change:repeating_learnedtechniques:technique-trigger change:repeating_learnedtechniques:technique-requirement change:repeating_learnedtechniques:technique-resourceCost", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -290,7 +255,7 @@ on("change:repeating_jobtechniques:technique-trigger change:repeating_jobtechniq
 	UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo, eventinfo.newValue);
 });
 
-on("change:repeating_jobtechniques:technique-traits change:repeating_activetechniques:technique-traits change:repeating_passivetechniques:technique-traits change:repeating_supporttechniques:technique-traits change:repeating_permanenttechniques:technique-traits", function (eventinfo) {
+on("change:repeating_learnedtechniques:technique-traits", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -348,7 +313,7 @@ function UpdateCharacterCustomTechniqueTraits(eventinfo) {
 
 // ======== Techniques - Custom Techniques Attack Block
 
-on("change:repeating_jobtechniques:technique-range change:repeating_jobtechniques:technique-target change:repeating_jobtechniques:technique-skill change:repeating_jobtechniques:technique-defense change:repeating_jobtechniques:technique-dieValue change:repeating_jobtechniques:technique-dieType change:repeating_jobtechniques:technique-addPower change:repeating_jobtechniques:technique-damageType change:repeating_jobtechniques:technique-element change:repeating_activetechniques:technique-range change:repeating_activetechniques:technique-target change:repeating_activetechniques:technique-skill change:repeating_activetechniques:technique-defense change:repeating_activetechniques:technique-dieValue change:repeating_activetechniques:technique-dieType change:repeating_activetechniques:technique-addPower change:repeating_activetechniques:technique-damageType change:repeating_activetechniques:technique-element change:repeating_passivetechniques:technique-range change:repeating_passivetechniques:technique-target change:repeating_passivetechniques:technique-skill change:repeating_passivetechniques:technique-defense change:repeating_passivetechniques:technique-dieValue change:repeating_passivetechniques:technique-dieType change:repeating_passivetechniques:technique-addPower change:repeating_passivetechniques:technique-damageType change:repeating_passivetechniques:technique-element change:repeating_supporttechniques:technique-range change:repeating_supporttechniques:technique-target change:repeating_supporttechniques:technique-skill change:repeating_supporttechniques:technique-defense change:repeating_supporttechniques:technique-dieValue change:repeating_supporttechniques:technique-dieType change:repeating_supporttechniques:technique-addPower change:repeating_supporttechniques:technique-damageType change:repeating_supporttechniques:technique-element change:repeating_permanenttechniques:technique-range change:repeating_permanenttechniques:technique-target change:repeating_permanenttechniques:technique-skill change:repeating_permanenttechniques:technique-defense change:repeating_permanenttechniques:technique-dieValue change:repeating_permanenttechniques:technique-dieType change:repeating_permanenttechniques:technique-addPower change:repeating_permanenttechniques:technique-damageType change:repeating_permanenttechniques:technique-element ", function (eventinfo) {
+on("change:repeating_learnedtechniques:technique-range change:repeating_learnedtechniques:technique-target change:repeating_learnedtechniques:technique-skill change:repeating_learnedtechniques:technique-defense change:repeating_learnedtechniques:technique-dieValue change:repeating_learnedtechniques:technique-dieType change:repeating_learnedtechniques:technique-addPower change:repeating_learnedtechniques:technique-damageType change:repeating_learnedtechniques:technique-element", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -422,7 +387,7 @@ function UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo) {
 
 // ======== Techniques - Custom Techniques Description Block
 
-on("change:repeating_jobtechniques:technique-description change:repeating_jobtechniques:technique-onSuccess change:repeating_activetechniques:technique-description change:repeating_activetechniques:technique-onSuccess change:repeating_passivetechniques:technique-description change:repeating_passivetechniques:technique-onSuccess change:repeating_supporttechniques:technique-description change:repeating_supporttechniques:technique-onSuccess change:repeating_permanenttechniques:technique-description change:repeating_permanenttechniques:technique-onSuccess", function (eventinfo) {
+on("change:repeating_learnedtechniques:technique-description change:repeating_learnedtechniques:technique-onSuccess", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
