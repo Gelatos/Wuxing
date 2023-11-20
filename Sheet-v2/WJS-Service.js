@@ -434,6 +434,7 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 
 	// set the function block
 	var isMultiple = technique.traits.toLowerCase().indexOf("multiple") >= 0;
+	var isArmament = technique.traits.toLowerCase().indexOf("armament") >= 0;
 	update[GetSectionIdName(repeatingSection, id, "technique-functionBlock")] =
 		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-traits")] = technique.traits;
@@ -444,6 +445,7 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 	update[GetSectionIdName(repeatingSection, id, "technique-prerequisite")] = technique.prerequisite;
 	update[GetSectionIdName(repeatingSection, id, "technique-resourceCost")] = technique.resourceCost;
 	update[GetSectionIdName(repeatingSection, id, "technique-isMultiple")] = isMultiple ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-isArmament")] = isArmament ? "1" : "0";
 
 	// set the description
 	update[GetSectionIdName(repeatingSection, id, "technique-descriptionBlock")] = (technique.description != "" || technique.onSuccess != "") ? "1" : "0";

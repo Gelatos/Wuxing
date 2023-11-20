@@ -6458,6 +6458,8 @@
 									<input type="hidden" name="attr_technique-onUse" value="0">
 									<input type="hidden" name="attr_technique-isBase" value="0">
 									<input type="hidden" name="attr_technique-isDatabase" value="0">
+									<input type="hidden" name="attr_technique-isArmament" value="0">
+									<input type="hidden" name="attr_technique-equippedWeapon" value="">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select" value="1">
 									<div class="wuxTechnique wuxMinWidth300">
 										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header">
@@ -6869,7 +6871,7 @@
 			<div class="wuxTabHeader"><span class="wuxInnerHeader">Action</span></div>
 
 			<div class="wuxTab">
-				<div class="tab-actionOptions wuxTab">
+				<div class="tab-actionStats wuxTab">
 					<div class="action-vitals wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-action-vitals" checked="checked" style="display: block">
 						<div class="wuxSectionHeader">
@@ -7025,7 +7027,6 @@
 
 								<fieldset class="repeating_fulllearnedtechniques">
 									<input type="hidden" name="attr_technique-onUse" value="">
-									<input type="hidden" name="attr_technique-equippedWeapon" value="">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 									<div class="wuxTechnique wuxMinWidth300">
 										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Full">
@@ -7066,6 +7067,14 @@
 													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
 													<span class="wuxHiddenInlineField">; </span>
 													<span name="attr_technique-resourceCost"></span>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+												<div class="wuxHiddenField wuxTechniqueHeaderInfo">
+													<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
+														<option value="@{equipment-main}">Main Weapon</option>
+														<option value="@{equipment-sub}">Sub Weapon</option>
+														<option value="@{equipment-support}">Support Weapon</option>
+													</select>
 												</div>
 											</div>
 										</div>
@@ -7685,7 +7694,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="tab-techSlots wuxTab">
+				<div class="tab-learnedTech wuxTab">
 					<div class="wuxSectionBlock wuxLayoutItem">
 						<div class="wuxSectionContent">
 							<div class="wuxHeader">Learned Techniques</div>
@@ -7694,6 +7703,7 @@
 							<div class="wuxRepeatingFlexSection">
 								<fieldset class="repeating_learnedtechniques">
 									<input type="hidden" name="attr_technique-onUse" value="">
+									<input type="hidden" name="attr_technique-isArmament" value="0">
 									<input type="hidden" name="attr_technique-equippedWeapon" value="">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
 									<div class="wuxTechnique wuxMinWidth300">
@@ -11641,6 +11651,7 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 
 	// set the function block
 	var isMultiple = technique.traits.toLowerCase().indexOf("multiple") >= 0;
+	var isArmament = technique.traits.toLowerCase().indexOf("armament") >= 0;
 	update[GetSectionIdName(repeatingSection, id, "technique-functionBlock")] =
 		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-traits")] = technique.traits;
@@ -11651,6 +11662,7 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 	update[GetSectionIdName(repeatingSection, id, "technique-prerequisite")] = technique.prerequisite;
 	update[GetSectionIdName(repeatingSection, id, "technique-resourceCost")] = technique.resourceCost;
 	update[GetSectionIdName(repeatingSection, id, "technique-isMultiple")] = isMultiple ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-isArmament")] = isArmament ? "1" : "0";
 
 	// set the description
 	update[GetSectionIdName(repeatingSection, id, "technique-descriptionBlock")] = (technique.description != "" || technique.onSuccess != "") ? "1" : "0";
