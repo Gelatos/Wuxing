@@ -365,6 +365,32 @@ function GetTechniqueDataArray(type, techniques) {
 	return output;
 }
 
+function SetTechniqueDataAugmentTechData(technique, baseTech) {
+	if (technique.augmentBase == "") {
+		return technique;
+	}
+
+	if (baseTech == undefined) {
+		baseTech = GetAugmentBaseDatabaseTechnique(technique);
+	}
+	technique.augmentTech = baseTech;
+	return technique;
+}
+
+function GetAugmentBaseDatabaseTechnique(technique) {
+	// grab the base technique
+	let newTechnique = {};
+	switch (technique.techniqueGroup) {
+		case "Ancestry":
+			newTechnique = GetAncestryTechniqueInfo(technique.augmentBase);
+			break;
+		default:
+			newTechnique = GetTechniquesInfo(technique.augmentBase);
+			break;
+	}
+	return newTechnique;
+}
+
 function SetTechniqueDataList(update, repeatingSection, techniqueList, autoExpand, isDatabase) {
 
 	// start by clearing the section Ids
@@ -395,7 +421,7 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 	update[GetSectionIdName(repeatingSection, id, "technique-edit")] = "0";
 
 	let isBase = technique.augmentBase == "";
-	update[GetSectionIdName(repeatingSection, id, "technique-header")] = isBase ? technique.action : "Augment";
+	update[GetSectionIdName(repeatingSection, id, "technique-header")] = isBase || technique.isSpecAugment ? technique.action : "Augment";
 	update[GetSectionIdName(repeatingSection, id, "technique-name")] = technique.name;
 	update[GetSectionIdName(repeatingSection, id, "technique-isBase")] = isBase ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-augmentBase")] = technique.augmentBase;
@@ -458,7 +484,9 @@ function SetTechniqueUseData(update, technique, repeatingSection, id) {
 
 	// if this is an augment, incorporate the base into the rolltemplate
 	if (technique.augmentBase != "") {
-		technique = SetAugmentTechnique(technique);
+		if (technique.augmentTech != undefined) {
+			technique = SetAugmentTechnique(technique, technique.augmentTech);
+		}
 	}
 	else {
 		output += "{{type-base=1}} ";
@@ -581,105 +609,97 @@ function SetTechniqueUseData(update, technique, repeatingSection, id) {
 	return update;
 }
 
-function SetAugmentTechnique(technique) {
+function SetAugmentTechnique(technique, baseTechnique) {
 
 	// passive and permanent techniques are displayed exactly as is when referenced
 	if (technique.techniqueType == "Permanent" || technique.techniqueType == "Passive") {
 		return technique;
 	}
 
-	// grab the base technique
-	let newTechnique = {};
-	switch (technique.techniqueGroup) {
-		case "Class":
-			newTechnique = GetClassTechniquesInfo(technique.augmentBase);
-			break;
-		case "Ancestry":
-			newTechnique = GetAncestryTechniqueInfo(technique.augmentBase);
-			break;
-		default:
-			newTechnique = GetTechniquesInfo(technique.augmentBase);
+	if (baseTechnique == undefined) {
+		return technique;
 	}
 	
 	// replacing statistics
-	newTechnique.name = technique.name;
-	newTechnique.augmentBase = technique.augmentBase;
+	baseTechnique.isSpecAugment = true;
+	baseTechnique.name = technique.name;
+	baseTechnique.augmentBase = technique.augmentBase;
 	if (technique.techniqueGroup != "") {
-		newTechnique.techniqueGroup = technique.techniqueGroup;
+		baseTechnique.techniqueGroup = technique.techniqueGroup;
 	}
 	if (technique.techniqueSubGroup != "") {
-		newTechnique.techniqueSubGroup = technique.techniqueSubGroup;
+		baseTechnique.techniqueSubGroup = technique.techniqueSubGroup;
 	}
 	if (technique.techniqueType != "") {
-		newTechnique.techniqueType = technique.techniqueType;
+		baseTechnique.techniqueType = technique.techniqueType;
 	}
 	if (technique.action != "") {
-		newTechnique.action = technique.action;
+		baseTechnique.action = technique.action;
 	}
 	if (technique.traits != "") {
-		newTechnique.traits = technique.traits;
+		baseTechnique.traits = technique.traits;
 	}
 	if (technique.limits != "") {
-		newTechnique.limits = technique.limits;
+		baseTechnique.limits = technique.limits;
 	}
 	if (technique.resourceCost != "") {
-		newTechnique.resourceCost = technique.resourceCost;
+		baseTechnique.resourceCost = technique.resourceCost;
 	}
 	if (technique.trigger != "") {
-		newTechnique.trigger = technique.trigger;
+		baseTechnique.trigger = technique.trigger;
 	}
 	if (technique.requirement != "") {
-		newTechnique.requirement = technique.requirement;
+		baseTechnique.requirement = technique.requirement;
 	}
 	if (technique.prerequisite != "") {
-		newTechnique.prerequisite = technique.prerequisite;
+		baseTechnique.prerequisite = technique.prerequisite;
 	}
 	if (technique.skill != "") {
-		newTechnique.skill = technique.skill;
+		baseTechnique.skill = technique.skill;
 	}
 	if (technique.defense != "") {
-		newTechnique.defense = technique.defense;
+		baseTechnique.defense = technique.defense;
 	}
 	if (technique.range != "") {
-		newTechnique.range = technique.range;
+		baseTechnique.range = technique.range;
 	}
 	if (technique.target != "") {
-		newTechnique.target = technique.target;
+		baseTechnique.target = technique.target;
 	}
 	if (technique.targetCode != "") {
-		newTechnique.targetCode = technique.targetCode;
+		baseTechnique.targetCode = technique.targetCode;
 	}
 	if (technique.onHit != "") {
-		newTechnique.onHit = technique.onHit;
+		baseTechnique.onHit = technique.onHit;
 	}
 	if (technique.damage != "") {
-		newTechnique.damage = technique.damage;
+		baseTechnique.damage = technique.damage;
 	}
 	if (technique.damageType != "") {
-		newTechnique.damageType = technique.damageType;
+		baseTechnique.damageType = technique.damageType;
 	}
 	if (technique.element != "") {
-		newTechnique.element = technique.element;
+		baseTechnique.element = technique.element;
 	}
 	if (technique.specBonus != "") {
-		newTechnique.specBonus = technique.specBonus;
+		baseTechnique.specBonus = technique.specBonus;
 	}
 
 	// additive statistics
 	if (technique.description != "") {
-		if (newTechnique.description != "") {
-			newTechnique.description += "\n";
+		if (baseTechnique.description != "") {
+			baseTechnique.description += "\n";
 		}
-		newTechnique.description += technique.description;
+		baseTechnique.description += technique.description;
 	}
 	if (technique.onSuccess != "") {
-		if (newTechnique.onSuccess != "") {
-			newTechnique.onSuccess += "\n";
+		if (baseTechnique.onSuccess != "") {
+			baseTechnique.onSuccess += "\n";
 		}
-		newTechnique.onSuccess += technique.onSuccess;
+		baseTechnique.onSuccess += technique.onSuccess;
 	}
 
-	return newTechnique;
+	return baseTechnique;
 }
 
 function SetTechniqueDataTraits(update, repeatingSection, id, traits) {
@@ -702,6 +722,10 @@ function SetTechniqueDataDamageString(update, repeatingSection, id, damage, dama
 	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = damageString;
 
 	return update;
+}
+
+function CreateTechniqueDataFromRepeatingSection(attrArray, repeatingSection, id) {
+
 }
 
 

@@ -269,6 +269,12 @@ input.wuxTechniqueHeader-flag[value="Free"] + .wuxTechniqueHeader,
     background-color: #e5fbf1;
 }
 
+input.wuxTechniqueHeader-flag[value="None"] + .wuxTechniqueHeader,
+.sheet-rolltemplate-technique .wuxTechniqueHeader-None
+{
+    background-color: #f0e5fb;
+}
+
 input.wuxTechniqueHeader-flag[value="Augment"] + .wuxTechniqueHeader,
 .sheet-rolltemplate-technique .wuxTechniqueHeader-Augment
 {
@@ -405,6 +411,33 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag[value="1"] + .wuxTechn
 input[type=hidden].wuxTechniqueHeaderInteractivePictosIcon-flag:not([value="0"]) + .wuxTechniqueHeaderInteractivePictosIcon
 {
     color: #000;
+}
+
+button[type=roll].wuxTechniqueHeaderInteractiveButton
+{
+    position: relative;
+    left: -5px;
+    top: -8px;
+    margin: 0px;
+    padding: 0px;
+
+    font-family: pictos;
+    font-size: 20px;
+    color: #000;
+
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+button[type=roll].wuxTechniqueHeaderInteractiveButton:hover
+{
+    color: #FFF;
+}
+
+button[type=roll].wuxTechniqueHeaderInteractiveButton::before
+{
+    content: "" !important;
 }
 
 .wuxTechniqueHeaderDisplayBlock,

@@ -121,7 +121,8 @@ function UpdateLearnedTechniques() {
 			jobTech = jobTech.split(";");
 			for (let i = 0; i < jobTech.length; i++) {
 				if (!activeLearnedTech.includes(jobTech[i].trim())) {
-					technique = GetClassTechniquesInfo(jobTech[i]);
+					technique = GetTechniquesInfo(jobTech[i]);
+					technique = SetTechniqueDataAugmentTechData(technique);
 					newTechniques.push(technique);
 				}
 			}
@@ -130,6 +131,7 @@ function UpdateLearnedTechniques() {
 			for (let i = 0; i < learnedTech.keys.length; i++) {
 				if (!activeLearnedTech.includes(learnedTech.keys[i])) {
 					technique = GetTechniquesInfo(learnedTech.keys[i]);
+					technique = SetTechniqueDataAugmentTechData(technique);
 					newTechniques.push(technique);
 				}
 			}
@@ -161,26 +163,304 @@ on("change:repeating_learnedtechniques:technique-select", function (eventinfo) {
 		return;
 	};
 
-	UpdateDefaultActiveCheckbox(eventinfo);
+	UpdateCharacterTechniqueSelect();
 });
 
-function UpdateCharacterTechniqueSelect(eventinfo) {
+function UpdateCharacterTechniqueSelect() {
 
-	let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
-	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+	let repeatingLearned = "repeating_learnedtechniques";
+	let repeatingQuick = "repeating_quicklearnedtechniques";
+	let repeatingFull = "repeating_fulllearnedtechniques";
+	let repeatingReaction = "repeating_reactionlearnedtechniques";
+	let repeatingFree = "repeating_freelearnedtechniques";
+	let repeatingNone = "repeating_nonelearnedtechniques";
+	
+	let mod_attrs = ["techslot-job_max", "techslot-active_max", "techslot-passive_max", "techslot-support_max"];
+	getSectionIDs(repeatingLearned, function (learnedArray) {
+		mod_attrs = mod_attrs.concat(GetSectionIdValues(learnedArray, repeatingLearned, 
+			["technique-name", "technique-isDatabase", "technique-type", "technique-action", "technique-augmentBase", "technique-select"
+			// add all tech data
+		]));
+		getSectionIDs(repeatingFull, function (fullArray) {
+			mod_attrs = mod_attrs.concat(GetSectionIdValues(fullArray, repeatingFull, ["technique-name"]));
+			// getSectionIDs(repeatingQuick, function (quickArray) {
+			// 	mod_attrs = mod_attrs.concat(GetSectionIdValues(quickArray, repeatingQuick, ["technique-name"]));
+			// 	getSectionIDs(repeatingReaction, function (reactionArray) {
+			// 		mod_attrs = mod_attrs.concat(GetSectionIdValues(reactionArray, repeatingReaction, ["technique-name"]));
+			// 		getSectionIDs(repeatingFree, function (freeArray) {
+			// 			mod_attrs = mod_attrs.concat(GetSectionIdValues(freeArray, repeatingFree, ["technique-name"]));
+			// 			getSectionIDs(repeatingNone, function (noneArray) {
+			// 				mod_attrs = mod_attrs.concat(GetSectionIdValues(noneArray, repeatingNone, ["technique-name"]));
 
-	let mod_attrs = GetSectionIdNameFromArray(repeatingSection, id, ["technique-name", "technique-isDatabase", "technique-action"]);
-	getSectionIDs(repeatingSection, function (idArray) {
-		mod_attrs = mod_attrs.concat(GetSectionIdValues(idArray, repeatingSection, ["technique-name", "technique-isDatabase", "technique-augmentBase", "technique-select"]));
-		getAttrs(mod_attrs, function (v) {
-			let update = {};
-			let customTechniquesArray = [];
+							getAttrs(mod_attrs, function (v) {
+								let selectedBaseActions = [];
+								let customTechniquesList = CreateDictionary();
+								let actions = {
+									full: CreateLearnedTechniquesDataObj(v, repeatingFull, fullArray)
+								}
+								let slots = {
+									job: AttrParseInt(v, "techslot-job_max"),
+									active: AttrParseInt(v, "techslot-active_max"),
+									passive: AttrParseInt(v, "techslot-passive_max"),
+									support: AttrParseInt(v, "techslot-support_max")
+								}
+								let techName = "";
+					
+								// iterate through every learned technique and find the ones that are selected
+								for (let i = 0; i < learnedArray.length; i++) {
+									if (AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-select"), "0") != "0") {
+										switch(AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-type"))) {
+											case "Job": slots.job--; break;
+											case "Active": slots.active--; break;
+											case "Passive": slots.passive--; break;
+											case "Support": slots.support--; break;
+										}
+										switch(AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-action"))) {
+											case "Full":
+												actions.full.addBaseTech(
+													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
+													learnedArray[i],
+													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
+												);
+											break;
+										}
+										selectedBaseActions.push(AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")));
+									}
+									if (AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"), "0") != "1") {
+										techName = AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name"));
+										customTechniquesList.keys.push(techName);
+										customTechniquesList.values[techName] = {
+											name: techName,
+											id: learnedArray[i]
+										}
+									}
+								}
 
-			// iterate through all of the learned techniques 
-		});
+								// iterate through all of the learned techniques and find augments for the selected techniques
+								for (let i = 0; i < learnedArray.length; i++) {
+									if (selectedBaseActions.includes(AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-augmentBase")))) {
+										Log(`Checking Tech ${AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name"))} with base: ${AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-action"))}`);
 
-	});
+										switch(AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-action"))) {
+											case "Full":
+												actions.full.addAugmentTech(
+													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
+													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-augmentBase")),
+													learnedArray[i],
+													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
+												);
+											break;
+										}
+									}
+								}
+
+								SetCharacterTechniqueSelect(v, actions, slots, customTechniquesList, fullArray);//, quickArray, reactionArray, freeArray, noneArray);
+							});
+						});
+					});
+				// });
+	// 		});
+	// 	});
+	// });
 }
+
+function CreateLearnedTechniquesDataObj(attrArray, repeatingSection, idArray) {
+
+	let output = {
+		current: [],
+		found: [],
+		new: CreateDictionary(),
+		newCustom: CreateDictionary(),
+
+		addBaseTech: function(techName, techId, isDatabase) {
+			if (this.current.includes(techName)) {
+				this.found.push(techName);
+			}
+			else if (isDatabase == "1") {
+				this.new.keys.push(techName);
+				this.new.values[techName] = {
+					name: techName,
+					id: techId,
+					isAugment: false,
+					auguments: CreateDictionary(),
+					customAugments: CreateDictionary()
+				};
+			}
+			else {
+				this.newCustom.keys.push(techName);
+				this.newCustom.values[techName] = {
+					name: techName,
+					id: techId,
+					isAugment: false,
+					customAugments: CreateDictionary()
+				};
+				return true;
+			}
+			return false;
+		},
+
+		addAugmentTech: function(techName, baseName, techId, isDatabase) {
+
+			if (this.new.keys.includes(baseName)) {
+				if (this.current.includes(techName)) {
+					this.found.push(techName);
+				}
+				else if (isDatabase == "1") {
+					this.new.values[baseName].auguments.keys.push(techName);
+					this.new.values[baseName].auguments.values[techName] = {
+						name: techName,
+						id: techId
+					};
+				}
+				else {
+					this.new.values[baseName].customAugments.keys.push(techName);
+					this.new.values[baseName].customAugments.values[techName] = {
+						name: techName,
+						id: techId
+					};
+					return true;
+				}
+			}
+			else if (this.newCustom.keys.includes(baseName)) {
+				if (this.current.includes(techName)) {
+					this.found.push(techName);
+				}
+				else {
+					this.newCustom.values[baseName].customAugments.keys.push(techName);
+					this.newCustom.values[baseName].customAugments.values[techName] = {
+						name: techName,
+						id: techId
+					};
+					return true;
+				}
+			}
+			else {
+				if (this.current.includes(techName)) {
+					this.found.push(techName);
+				}
+				else if (isDatabase == "1") {
+					this.new.keys.push(techName);
+					this.new.values[techName] = {
+						name: techName,
+						id: techId,
+						isAugment: true
+					};
+				}
+				else {
+					this.newCustom.keys.push(techName);
+					this.newCustom.values[techName] = {
+						name: techName,
+						id: techId,
+						isAugment: true
+					};
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	for (let i = 0; i < idArray.length; i++) {
+		output.current.push(attrArray[GetSectionIdName(repeatingSection, idArray[i], "technique-name")]);
+	}
+
+	return output;
+}
+
+function SetCharacterTechniqueSelect(attrArray, actions, slots, customTechniquesList, fullArray, quickArray, reactionArray, freeArray, noneArray) {
+
+	let repeatingLearned = "repeating_learnedtechniques";
+	let repeatingQuick = "repeating_quicklearnedtechniques";
+	let repeatingFull = "repeating_fulllearnedtechniques";
+	let repeatingReaction = "repeating_reactionlearnedtechniques";
+	let repeatingFree = "repeating_freelearnedtechniques";
+	let repeatingNone = "repeating_nonelearnedtechniques";
+
+	let update = {};
+	update["techslot-job"] = slots.job;
+	update["techslot-active"] = slots.active;
+	update["techslot-passive"] = slots.passive;
+	update["techslot-support"] = slots.support;
+
+	update = SetCharacterActionsNewLearnedTechniques(update, attrArray, actions.full, repeatingFull, customTechniquesList);
+	RemoveCharacterActionsLearnedTechniques(actions.full, fullArray, repeatingFull);
+	
+	setAttrs(update, { silent: true });
+}
+
+function SetCharacterActionsNewLearnedTechniques(update, attrArray, dataObj, repeatingSection, customTechniquesList) {
+
+	let repeatingLearned = "repeating_learnedtechniques";
+	let techName = "";
+	let augName = "";
+	let newTechniques = [];
+	let technique = {};
+	let baseCustomTechnique = {};
+
+	for (let i = 0; i < dataObj.new.keys.length; i++) {
+		techName = dataObj.new.keys[i];
+		technique = GetTechniquesInfo(techName);
+		technique = SetTechniqueDataAugmentTechData(technique);
+		technique = SetAugmentTechnique(technique, technique.augmentTech);
+		newTechniques.push(technique);
+		if (!dataObj.new.values[techName].isAugment) {
+			for (let j = 0; j < dataObj.new.values[techName].auguments.keys.length; j++) {
+				augName = dataObj.new.values[techName].auguments.keys[j];
+				technique = GetTechniquesInfo(augName);
+				technique = SetTechniqueDataAugmentTechData(technique);
+				technique = SetAugmentTechnique(technique, technique.augmentTech);
+				newTechniques.push(technique);
+			}
+			for (let j = 0; j < dataObj.new.values[techName].customAugments.keys.length; j++) {
+				// create the augment data
+				augName = dataObj.new.values[techName].customAugments.keys[j];
+				technique = CreateTechniqueDataFromRepeatingSection(attrArray, repeatingLearned, dataObj.new.values[techName].customAugments.values[augName].id);
+				technique = SetTechniqueDataAugmentTechData(technique);
+				technique = SetAugmentTechnique(technique, technique.augmentTech);
+				newTechniques.push(technique);
+			}
+		}
+	}
+
+	// do the same for custom actions
+	for (let i = 0; i < dataObj.newCustom.keys.length; i++) {
+		techName = dataObj.newCustom.keys[i];
+		technique = CreateTechniqueDataFromRepeatingSection(attrArray, repeatingLearned, dataObj.newCustom.values[techName].id);
+		if (customTechniquesList.keys.includes(technique.augmentBase)) {
+			baseCustomTechnique = CreateTechniqueDataFromRepeatingSection(attrArray, repeatingLearned, customTechniquesList.values[technique.augmentBase].id);
+			technique = SetTechniqueDataAugmentTechData(technique, baseCustomTechnique);
+			technique = SetAugmentTechnique(technique, technique.augmentTech);
+		}
+		newTechniques.push(technique);
+		if (!dataObj.new.values[techName].isAugment) {
+			for (let j = 0; j < dataObj.newCustom.values[techName].customAugments.keys.length; j++) {
+				// create the augment data
+				augName = dataObj.newCustom.values[techName].customAugments.keys[j];
+				technique = CreateTechniqueDataFromRepeatingSection(attrArray, repeatingLearned, dataObj.newCustom.values[techName].customAugments.values[augName].id);
+				if (customTechniquesList.keys.includes(technique.augmentBase)) {
+					baseCustomTechnique = CreateTechniqueDataFromRepeatingSection(attrArray, repeatingLearned, customTechniquesList.values[technique.augmentBase].id);
+					technique = SetTechniqueDataAugmentTechData(technique, baseCustomTechnique);
+					technique = SetAugmentTechnique(technique, technique.augmentTech);
+				}
+				newTechniques.push(technique);
+			}
+		}
+	}
+
+	update = SetTechniqueDataList(update, repeatingSection, newTechniques, false, true);
+	return update;
+}
+
+function RemoveCharacterActionsLearnedTechniques(dataObj, idArray, repeatingSection) {
+
+	for (let i = 0; i < dataObj.current.length; i++) {
+		if (!dataObj.found.includes(dataObj.current[i])) {
+			RemoveSectionId(repeatingSection, idArray[i]);
+		}
+	}
+}
+
+
 
 
 // ======== Techniques - Custom Techniques
