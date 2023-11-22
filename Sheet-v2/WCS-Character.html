@@ -4,6 +4,9 @@
 	<input type="hidden" name="attr_character-techslots-active" value="">
 	<input type="hidden" name="attr_character-techslots-passive" value="">
 	<input type="hidden" name="attr_character-techslots-support" value="">
+	<input type="hidden" name="attr_equipment-main" value="">
+	<input type="hidden" name="attr_equipment-sub" value="">
+	<input type="hidden" name="attr_equipment-support" value="">
 
 	<div class="wuxFloatHeader wuxStickyHeader">
 		<div class="wuxSectionBlock wuxLargeLayoutItem wuxStickyHeaderMain">
@@ -346,201 +349,2596 @@
 						</div>
 					</div>
 				</div>
-				<div class="tab-actiontechniques wuxTab">
-					<div class="techSlots-permanent wuxSectionBlock wuxLayoutItem wuxMinWidth300">
-						<div class="action-full wuxSectionBlock wuxLayoutItem">
-							<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-action-full" checked="checked" style="display: block">
-							<div class="wuxSectionHeader">
-								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-full">
-								<span class="wuxSectionExpandIcon">&#9662;</span>
-								<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-full">
-								<span class="wuxSectionExpandAuxIcon">&#9656;</span>
-								<span>Full Actions</span>
-							</div>
-							<div class="wuxSectionHeaderFooter"></div>
-	
-							<div class="wuxSectionContent wuxNoRepControl wuxRepeatingFlexSection">
 
-								<fieldset class="repeating_fulllearnedtechniques">
-									<input type="hidden" name="attr_technique-onUse" value="">
-									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
-									<div class="wuxTechnique wuxMinWidth300">
-										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Full">
-										<div class="wuxTechniqueHeader">
-											<input type="hidden" class="wuxTechniqueType-flag" name="attr_technique-type" value="Permanent">
-											<div class="wuxTechniqueType">
-												<span class="wuxTechniqueTypeHeader" name="attr_technique-type" value="Permanent">Permanent</span>
-												<span class="wuxTechniqueTypeFooter" name="attr_technique-displaygroup" value="Custom">Custom</span>
-												<input type="hidden" name="attr_technique-group" value="Custom">
-												<input type="hidden" name="attr_technique-subgroup" value="">
-											</div>
+				<!-- Character Action Techniques -->
+				<div class="tab-actionTecniques">
+					<div class="tab-fullactiontechniques wuxTab">
+						<div class="wuxSectionBlock wuxLayoutItem wuxMinWidth300">
+							<div class="action-full wuxSectionBlock wuxLayoutItem">
+								<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-action-full" checked="checked" style="display: block">
+								<div class="wuxSectionHeader">
+									<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-full">
+									<span class="wuxSectionExpandIcon">&#9662;</span>
+									<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-full">
+									<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+									<span>Full Actions</span>
+								</div>
+								<div class="wuxSectionHeaderFooter"></div>
 
-											<div class="wuxTechniqueHeaderInteractBlock">
-												<div class="wuxTechniqueHeaderInteractInnerBlock">
-													<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand">
-													<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
-													<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
-													<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
-													<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+								<div class="wuxSectionContent">
+									<div class="wuxNoRepControl wuxRepeatingFlexSection">
+										<fieldset class="repeating_fulllearnedtechniques">
+											<input type="hidden" name="attr_technique-onUse" value="">
+											<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
+											<div class="wuxTechnique wuxMinWidth300">
+												<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Full">
+												<div class="wuxTechniqueHeader">
+													<input type="hidden" class="wuxTechniqueType-flag" name="attr_technique-type" value="Permanent">
+													<div class="wuxTechniqueType">
+														<span class="wuxTechniqueTypeHeader" name="attr_technique-type" value="Permanent">Permanent</span>
+														<span class="wuxTechniqueTypeFooter" name="attr_technique-displaygroup" value="Custom">Custom</span>
+														<input type="hidden" name="attr_technique-group" value="Custom">
+														<input type="hidden" name="attr_technique-subgroup" value="">
+													</div>
+
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<div class="wuxTechniqueHeaderInteractInnerBlock">
+															<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand">
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+															<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+															<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="@{technique-onUse}">9</button>
+													</div>
+
+													<div class="wuxTechniqueHeaderDisplayBlock">
+														<span class="wuxTechniqueHeaderName" name="attr_technique-name" value="Custom Technique">Custom Technique</span>
+														<div class="wuxTechniqueHeaderInfo">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
+															<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">Base</span>
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
+															<span class="wuxHiddenInlineAuxField wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase" value=""></span>
+
+															<span name="attr_technique-action" value="Quick">Quick</span>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+															<span class="wuxHiddenInlineField">; </span>
+															<span name="attr_technique-limits"></span>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+															<span class="wuxHiddenInlineField">; </span>
+															<span name="attr_technique-resourceCost"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<div class="wuxHiddenField wuxTechniqueHeaderInfo">
+															<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
+																<option value="@{equipment-main}">Main Weapon</option>
+																<option value="@{equipment-sub}">Sub Weapon</option>
+																<option value="@{equipment-support}">Support Weapon</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
+												<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand">
+												<div class="wuxTechniqueExpandingContent">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+													<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Prerequisites: </strong></span>
+																<span name="attr_technique-prerequisite"></span>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Traits: </strong></span>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits0"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits1"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits2"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits3"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits4"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits5"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Requirement: </strong></span>
+																<span name="attr_technique-requirement"></span>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Trigger: </strong></span>
+																<span name="attr_technique-trigger"></span>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+													<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+																<div class="wuxHiddenInlineField">
+																	<div class="wuxTechniqueAttackBlockRange">
+																		<span><strong>Range: </strong></span>
+																		<span name="attr_technique-range"></span>
+																	</div>
+																</div>
+																<div class="wuxTechniqueAttackBlockTarget">
+																	<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+																	<div class="wuxHiddenField">
+																		<span><strong>Target: </strong></span>
+																		<span name="attr_technique-target"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<span><strong>Check: </strong></span>
+																<span name="attr_technique-skill"></span>
+
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+																<div class="wuxHiddenField">
+																	<span> vs. </span>
+																	<span name="attr_technique-defense"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+																<div class="wuxHiddenAuxField">
+																	<span> Check</span>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<span><strong>Damage: </strong></span>
+																<span name="attr_technique-damageString"></span>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+													<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+														<div>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+															<div class="wuxHiddenBlockField">
+																<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+															</div>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+															<div class="wuxHiddenBlockField">
+																<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
+																<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-onSuccess"></span>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="wuxTechniqueHeaderInteractBlock">
-												<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="@{technique-onUse}">9</button>
-											</div>
+										</fieldset>
 
-											<div class="wuxTechniqueHeaderDisplayBlock">
-												<span class="wuxTechniqueHeaderName" name="attr_technique-name" value="Custom Technique">Custom Technique</span>
-												<div class="wuxTechniqueHeaderInfo">
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
-													<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">Base</span>
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
-													<span class="wuxHiddenInlineAuxField wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase" value=""></span>
-													
-													<span name="attr_technique-action" value="Quick">Quick</span>
-													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
-													<span class="wuxHiddenInlineField">; </span>
-													<span name="attr_technique-limits"></span>
-													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
-													<span class="wuxHiddenInlineField">; </span>
-													<span name="attr_technique-resourceCost"></span>
+										<span class="wuxHeader2">Basic Techniques</span>
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
 												</div>
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
-												<div class="wuxHiddenField wuxTechniqueHeaderInfo">
-													<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
-														<option value="@{equipment-main}">Main Weapon</option>
-														<option value="@{equipment-sub}">Sub Weapon</option>
-														<option value="@{equipment-support}">Support Weapon</option>
-													</select>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-aid">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-aid">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-aid">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
 												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Aid}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{Target=One target}} {{type-DescBlock=1}} {{Desc=You try to remove a condition afffecting you or an ally. Choose one of the following:
+	• Clear a condition that wasn’t caused by one of your own techniques or features.
+	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.
+	• Clear an adjacent allied character's prone or launched status.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Aid</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Full</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-aid">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span>1</span>
+														</div>
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One target</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You try to remove a condition afffecting you or an ally. Choose one of the following:<br />
+																	• Clear a condition that wasn’t caused by one of your own techniques or features.<br />
+																	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.<br />
+																	• Clear an adjacent allied character's prone or launched status.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
 											</div>
 										</div>
-										<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand">
-										<div class="wuxTechniqueExpandingContent">
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
-											<div class="wuxHiddenField wuxTechniqueFunctionBlock">
-												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
-												<div class="wuxHiddenBlockField">
-													<div class="wuxTechniqueFunctionBlockRow">
-														<span><strong>Prerequisites: </strong></span>
-														<span name="attr_technique-prerequisite"></span>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-stabilize">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-stabilize">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-stabilize">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
 													</div>
 												</div>
-												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
-												<div class="wuxHiddenBlockField">
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Stabilize}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full; 1 Vitality}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{Target=One target}} {{type-DescBlock=1}} {{Desc=You restore your HP to full and can do one of the following:
+	• Clear a condition that wasn’t caused by one of your own techniques or features.
+	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.
+	• Clear an adjacent allied character's prone or launched status.}}##{&#34;resources&#34;:&#34;1 Vitality&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;HP+100%&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Stabilize</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Full</span>
+														; <span>1 Vitality</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-stabilize">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span>1</span>
+														</div>
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One target</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You restore your HP to full and can do one of the following:<br />
+																	• Clear a condition that wasn’t caused by one of your own techniques or features.<br />
+																	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.<br />
+																	• Clear an adjacent allied character's prone or launched status.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-barrage">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-barrage">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-barrage">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Barrage}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-barrage}}} {{Trait0=Armament [F]}} {{Trait0Desc=This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament [F]; Brutal&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Barrage</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Full</span>
+
+													</div>
+													<div class="wuxTechniqueHeaderInfo">
+														<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon-barrage' value="@{equipment-main}">
+															<option value="@{equipment-main}">Main Weapon</option>
+															<option value="@{equipment-sub}">Sub Weapon</option>
+															<option value="@{equipment-support}">Support Weapon</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-barrage">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueFunctionBlock">
 													<div class="wuxTechniqueFunctionBlockRow">
 														<span><strong>Traits: </strong></span>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
-														<div class="wuxTrait">
-															<span class="wuxTraitText" name="attr_technique-traits0"></span>
-															<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+														<span class="wuxShownTraits">
+															<div class="wuxTrait">
+																<span class="wuxTraitText">Armament [F]</span>
+																<span class="wuxTooltiptext">This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.</span>
+															</div>
+															<div class="wuxTrait">
+																<span class="wuxTraitText">Brutal</span>
+																<span class="wuxTooltiptext">When this technique deals damage, roll all damage dice twice and take only the highest results.</span>
+															</div>
+														</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One Target</span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
-														<div class="wuxTrait">
-															<span class="wuxTraitText" name="attr_technique-traits1"></span>
-															<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+													</div>
+													<div class="wuxTechniqueAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Weaponvs; BR DC</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>Make a ranged attack.</p>
+															</span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
-														<div class="wuxTrait">
-															<span class="wuxTraitText" name="attr_technique-traits2"></span>
-															<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-disengage">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-disengage">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-disengage">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Disengage}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-DescBlock=1}} {{Desc=When you Disengage, you attempt to extricate yourself safely from a dangerous situation.
+	Until the end of your current turn, you ignore engagement and your movement does not provoke reactions.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Disengage</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Full</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-disengage">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>When you Disengage, you attempt to extricate yourself safely from a dangerous situation.<br />
+																	Until the end of your current turn, you ignore engagement and your movement does not provoke reactions.</p>
+															</span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
-														<div class="wuxTrait">
-															<span class="wuxTraitText" name="attr_technique-traits3"></span>
-															<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-skillCheck">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-skillCheck">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-skillCheck">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Skill Check}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-DescBlock=1}} {{Desc=You undertake an activity that isn’t covered by other actions but has a clear goal and is sufficiently complex to require a roll. The parameters and outcomes of Skill Checks are up to the GM, but they must be involved enough to require a full action. If you want to do something that can be done quickly, no action is required.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Skill Check</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Full</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-skillCheck">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You undertake an activity that isn’t covered by other actions but has a clear goal and is sufficiently complex to require a roll. The parameters and outcomes of Skill Checks are up to the GM, but they must be involved enough to require a full action. If you want to do something that can be done quickly, no action is required.</p>
+															</span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
-														<div class="wuxTrait">
-															<span class="wuxTraitText" name="attr_technique-traits4"></span>
-															<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-skirmish">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-skirmish">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-skirmish">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Skirmish}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-skirmish}}} {{Trait0=Armament [F]}} {{Trait0Desc=This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament [F]; Brutal&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Skirmish</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Full</span>
+
+													</div>
+													<div class="wuxTechniqueHeaderInfo">
+														<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon-skirmish' value="@{equipment-main}">
+															<option value="@{equipment-main}">Main Weapon</option>
+															<option value="@{equipment-sub}">Sub Weapon</option>
+															<option value="@{equipment-support}">Support Weapon</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-skirmish">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueFunctionBlock">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<span class="wuxShownTraits">
+															<div class="wuxTrait">
+																<span class="wuxTraitText">Armament [F]</span>
+																<span class="wuxTooltiptext">This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.</span>
+															</div>
+															<div class="wuxTrait">
+																<span class="wuxTraitText">Brutal</span>
+																<span class="wuxTooltiptext">When this technique deals damage, roll all damage dice twice and take only the highest results.</span>
+															</div>
+														</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One Target</span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
-														<div class="wuxTrait">
-															<span class="wuxTraitText" name="attr_technique-traits5"></span>
-															<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+													</div>
+													<div class="wuxTechniqueAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Weaponvs; BR DC</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>Make a melee attack.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-surge">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-surge">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-surge">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Surge}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-DescBlock=1}} {{Desc=You gain an amount of Ki equal to your Ki Charge. If this value would take you over your Ki Limit, you cap your ki to your Ki Limit.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;Surge&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Surge</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Full</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-surge">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You gain an amount of Ki equal to your Ki Charge. If this value would take you over your Ki Limit, you cap your ki to your Ki Limit.</p>
+															</span>
+														</div>
+														<div>
+															<span><strong>Ki Charge: </strong></span>
+															<span name="attr_kiCharge_max" value="0">0</span>
 														</div>
 													</div>
 												</div>
-												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
-												<div class="wuxHiddenBlockField">
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-surgeBeyondLimits">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-surgeBeyondLimits">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-surgeBeyondLimits">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Surge Beyond Limits}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-DescBlock=1}} {{Desc=You gain an amount of Ki equal to your Ki Charge. Your ki can increase beyond your Ki Limit.
+	Whenever you gain Ki and it pushes you over your Ki Limit, you immediately take 1 stress and gain the Dying condition. Whenever you start your turn and your ki is over you limit, you take 1 stress.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;SurgeV&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Surge Beyond Limits</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Full</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-surgeBeyondLimits">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You gain an amount of Ki equal to your Ki Charge. Your ki can increase beyond your Ki Limit.<br />
+																	Whenever you gain Ki and it pushes you over your Ki Limit, you immediately take 1 stress and gain the Dying condition. Whenever you start your turn and your ki is over you limit, you take 1 stress.</p>
+															</span>
+														</div>
+														<div>
+															<span><strong>Ki Charge: </strong></span>
+															<span name="attr_kiCharge_max" value="0">0</span>
+														</div>
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<input type="hidden" class="wuxHeroicTechniques-flag" name="attr_builder-basePath" value="Common">
+										<div class="wuxHeroicTechniques">
+											<span class="wuxHeader2">Heroic Techniques</span>
+											<div class="wuxTechnique">
+												<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+													<div class="wuxTechniqueType wuxTechniqueType-Standard">
+														<span class="wuxTechniqueTypeHeader">Standard</span>
+														<span class="wuxTechniqueTypeFooter">Hero</span>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<div class="wuxTechniqueHeaderInteractInnerBlock">
+															<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-center">
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-center">
+															<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-center">
+															<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Center}}{{Type=Standard}}{{type-Standard=1}} {{Group=Hero}}{{type-Full=1}} {{ActionLine=Full}} {{type-DescBlock=1}} {{Desc=You recenter yourself, allowing you to enter a new mental state. You may reconfigure your current tech slot loadout with a new combination of techniques you have learned.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+													</div>
+													<div class="wuxTechniqueHeaderDisplayBlock">
+														<span class="wuxTechniqueHeaderName">Center</span>
+														<div class="wuxTechniqueHeaderInfo">
+															<span class="wuxTechniqueHeaderInfoType">Base</span>
+															<span>Full</span>
+
+														</div>
+
+													</div>
+												</div>
+												<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-center">
+												<div class="wuxTechniqueExpandingContent">
+													<div class="wuxTechniqueDescriptionBlock">
+														<div>
+															<div>
+																<span class="wuxTechniqueDescriptionBlockDesc">
+																	<p>You recenter yourself, allowing you to enter a new mental state. You may reconfigure your current tech slot loadout with a new combination of techniques you have learned.</p>
+																</span>
+															</div>
+
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-quickactiontechniques wuxTab">
+						<div class="wuxSectionBlock wuxLayoutItem wuxMinWidth300">
+							<div class="action-quick wuxSectionBlock wuxLayoutItem">
+								<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-action-quick" checked="checked" style="display: block">
+								<div class="wuxSectionHeader">
+									<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-quick">
+									<span class="wuxSectionExpandIcon">&#9662;</span>
+									<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-quick">
+									<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+									<span>Quick Actions</span>
+								</div>
+								<div class="wuxSectionHeaderFooter"></div>
+
+								<div class="wuxSectionContent">
+									<div class="wuxNoRepControl wuxRepeatingFlexSection">
+										<fieldset class="repeating_quicklearnedtechniques">
+											<input type="hidden" name="attr_technique-onUse" value="">
+											<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
+											<div class="wuxTechnique wuxMinWidth300">
+												<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Full">
+												<div class="wuxTechniqueHeader">
+													<input type="hidden" class="wuxTechniqueType-flag" name="attr_technique-type" value="Permanent">
+													<div class="wuxTechniqueType">
+														<span class="wuxTechniqueTypeHeader" name="attr_technique-type" value="Permanent">Permanent</span>
+														<span class="wuxTechniqueTypeFooter" name="attr_technique-displaygroup" value="Custom">Custom</span>
+														<input type="hidden" name="attr_technique-group" value="Custom">
+														<input type="hidden" name="attr_technique-subgroup" value="">
+													</div>
+
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<div class="wuxTechniqueHeaderInteractInnerBlock">
+															<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand">
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+															<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+															<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="@{technique-onUse}">9</button>
+													</div>
+
+													<div class="wuxTechniqueHeaderDisplayBlock">
+														<span class="wuxTechniqueHeaderName" name="attr_technique-name" value="Custom Technique">Custom Technique</span>
+														<div class="wuxTechniqueHeaderInfo">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
+															<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">Base</span>
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
+															<span class="wuxHiddenInlineAuxField wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase" value=""></span>
+
+															<span name="attr_technique-action" value="Quick">Quick</span>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+															<span class="wuxHiddenInlineField">; </span>
+															<span name="attr_technique-limits"></span>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+															<span class="wuxHiddenInlineField">; </span>
+															<span name="attr_technique-resourceCost"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<div class="wuxHiddenField wuxTechniqueHeaderInfo">
+															<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
+																<option value="@{equipment-main}">Main Weapon</option>
+																<option value="@{equipment-sub}">Sub Weapon</option>
+																<option value="@{equipment-support}">Support Weapon</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
+												<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand">
+												<div class="wuxTechniqueExpandingContent">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+													<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Prerequisites: </strong></span>
+																<span name="attr_technique-prerequisite"></span>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Traits: </strong></span>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits0"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits1"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits2"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits3"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits4"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits5"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Requirement: </strong></span>
+																<span name="attr_technique-requirement"></span>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Trigger: </strong></span>
+																<span name="attr_technique-trigger"></span>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+													<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+																<div class="wuxHiddenInlineField">
+																	<div class="wuxTechniqueAttackBlockRange">
+																		<span><strong>Range: </strong></span>
+																		<span name="attr_technique-range"></span>
+																	</div>
+																</div>
+																<div class="wuxTechniqueAttackBlockTarget">
+																	<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+																	<div class="wuxHiddenField">
+																		<span><strong>Target: </strong></span>
+																		<span name="attr_technique-target"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<span><strong>Check: </strong></span>
+																<span name="attr_technique-skill"></span>
+
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+																<div class="wuxHiddenField">
+																	<span> vs. </span>
+																	<span name="attr_technique-defense"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+																<div class="wuxHiddenAuxField">
+																	<span> Check</span>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<span><strong>Damage: </strong></span>
+																<span name="attr_technique-damageString"></span>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+													<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+														<div>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+															<div class="wuxHiddenBlockField">
+																<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+															</div>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+															<div class="wuxHiddenBlockField">
+																<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
+																<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-onSuccess"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</fieldset>
+
+										<span class="wuxHeader2">Basic Techniques</span>
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-breakFree">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-breakFree">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-breakFree">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Break Free}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=You are grappled.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{Target=One Target}} {{SkillString=Physique vs. Physique DC}} {{type-DescBlock=1}} {{Desc=You attempt to end a grapple by breaking the grappler's grip.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Physique&#34;,&#34;defense&#34;:&#34;Physique DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Break Free</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-breakFree">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueFunctionBlock">
 													<div class="wuxTechniqueFunctionBlockRow">
 														<span><strong>Requirement: </strong></span>
-														<span name="attr_technique-requirement"></span>
+														<span>You are grappled.</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span>1</span>
+														</div>
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One Target</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Physiquevs; Physique DC</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You attempt to end a grapple by breaking the grappler's grip.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-escape">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-escape">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-escape">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Escape}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=You are grappled.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{Target=One Target}} {{SkillString=Acrobatics vs. Physique DC}} {{type-DescBlock=1}} {{Desc=You attempt to end a grapple by wrigglnig loose.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Acrobatics&#34;,&#34;defense&#34;:&#34;Physique DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Escape</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-escape">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueFunctionBlock">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span>You are grappled.</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span>1</span>
+														</div>
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One Target</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Acrobaticsvs; Physique DC</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You attempt to end a grapple by wrigglnig loose.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-dash">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-dash">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-dash">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Dash}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-DescBlock=1}} {{Desc=You move at least 1 space, up to half your speed. This allows you to make an extra movement, on top of your standard move. Certain techniques can only be used when you Dash, not when you make a standard move.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Dash</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-dash">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You move at least 1 space, up to half your speed. This allows you to make an extra movement, on top of your standard move. Certain techniques can only be used when you Dash, not when you make a standard move.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-grapple">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-grapple">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-grapple">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Grapple}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{Target=One Target}} {{SkillString=Physique vs. BR DC}} {{type-DescBlock=1}} {{Desc=You attempt to grapple a character.}} {{OnHit=Both characters gain the grappled status.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;Both characters gain the grappled status.&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Physique&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Grapple</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-grapple">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span>1</span>
+														</div>
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One Target</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Physiquevs; BR DC</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You attempt to grapple a character.</p>
+															</span>
+														</div>
+														<div>
+															<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
+															<span class="wuxTechniqueDescriptionBlockDesc">Both characters gain the grappled status.</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-hide">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-hide">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-hide">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Hide}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-DescBlock=1}} {{Desc=When you Hide, you obscure the position of your character in order to reposition, avoid incoming fire, repair, or ambush.
+	To Hide, you must not be Engaged and you must either be outside of any enemies’ line of sight, obscured by sufficient cover, or invisible. If you Hide while meeting one of these criteria, you gain the Hidden status.
+	Hard cover is sufficient to Hide as long as it is large enough to totally conceal you, but soft cover is only sufficient if you are completely inside an area or zone that grants soft cover.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Hide</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-hide">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>When you Hide, you obscure the position of your character in order to reposition, avoid incoming fire, repair, or ambush.<br />
+																	To Hide, you must not be Engaged and you must either be outside of any enemies’ line of sight, obscured by sufficient cover, or invisible. If you Hide while meeting one of these criteria, you gain the Hidden status.<br />
+																	Hard cover is sufficient to Hide as long as it is large enough to totally conceal you, but soft cover is only sufficient if you are completely inside an area or zone that grants soft cover.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-mount">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-mount">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-mount">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Mount}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-DescBlock=1}} {{Desc=You climb onto or into an object, usually a vehicle.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Mount</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-mount">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You climb onto or into an object, usually a vehicle.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-prepare">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-prepare">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-prepare">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Prepare}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-DescBlock=1}} {{Desc=You get ready to take an action at a specific time or when a specific condition is met. As a quick action, you can PREPARE any other quick action and specify a trigger. Until the start of your next turn, when it is triggered, you can take this action as a reaction.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Prepare</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-prepare">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You get ready to take an action at a specific time or when a specific condition is met. As a quick action, you can PREPARE any other quick action and specify a trigger. Until the start of your next turn, when it is triggered, you can take this action as a reaction.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-reposition">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-reposition">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-reposition">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Reposition}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=Target must be the same Size or smaller than you.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{Target=One Target}} {{SkillString=Physique vs. BR DC}} {{type-DescBlock=1}} {{Desc=You use your strength to force another character into another position. }} {{OnHit=You may choose to move the target one space, either to a space within reach or one space directly away from you. }}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;You may choose to move the target one space, either to a space within reach or one space directly away from you. &#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Physique&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Reposition</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-reposition">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueFunctionBlock">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span>Target must be the same Size or smaller than you.</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span>1</span>
+														</div>
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One Target</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Physiquevs; BR DC</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You use your strength to force another character into another position. </p>
+															</span>
+														</div>
+														<div>
+															<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
+															<span class="wuxTechniqueDescriptionBlockDesc">You may choose to move the target one space, either to a space within reach or one space directly away from you. </span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-seach">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-seach">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-seach">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Seach}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=Target must be a character you suspect is Hidden.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=5}} {{Target=One Target}} {{SkillString=Investigate vs. Stealth DC}} {{type-DescBlock=1}} {{Desc=You try to find a hidden character.}} {{OnHit=The target immediately loses Hidden and can be located again by any character.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;The target immediately loses Hidden and can be located again by any character.&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Investigate&#34;,&#34;defense&#34;:&#34;Stealth DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Seach</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-seach">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueFunctionBlock">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span>Target must be a character you suspect is Hidden.</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span>5</span>
+														</div>
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One Target</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Investigatevs; Stealth DC</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You try to find a hidden character.</p>
+															</span>
+														</div>
+														<div>
+															<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
+															<span class="wuxTechniqueDescriptionBlockDesc">The target immediately loses Hidden and can be located again by any character.</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-shoot">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-shoot">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-shoot">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Shoot}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-shoot}}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, range/threat, and damage statistics of an equipped weapon.}} {{Requirement=Weapon must not have the loading trait.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Shoot</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+													<div class="wuxTechniqueHeaderInfo">
+														<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon-shoot' value="@{equipment-main}">
+															<option value="@{equipment-main}">Main Weapon</option>
+															<option value="@{equipment-sub}">Sub Weapon</option>
+															<option value="@{equipment-support}">Support Weapon</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-shoot">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueFunctionBlock">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<span class="wuxShownTraits">
+															<div class="wuxTrait">
+																<span class="wuxTraitText">Armament</span>
+																<span class="wuxTooltiptext">This technique uses the skill, range/threat, and damage statistics of an equipped weapon.</span>
+															</div>
+														</span>
+													</div>
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span>Weapon must not have the loading trait.</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One target</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Weaponvs; BR DC</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>Make a ranged attack.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-strike">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-strike">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-strike">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Strike}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-strike}}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, range/threat, and damage statistics of an equipped weapon.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Strike</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+													<div class="wuxTechniqueHeaderInfo">
+														<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon-strike' value="@{equipment-main}">
+															<option value="@{equipment-main}">Main Weapon</option>
+															<option value="@{equipment-sub}">Sub Weapon</option>
+															<option value="@{equipment-support}">Support Weapon</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-strike">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueFunctionBlock">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<span class="wuxShownTraits">
+															<div class="wuxTrait">
+																<span class="wuxTraitText">Armament</span>
+																<span class="wuxTooltiptext">This technique uses the skill, range/threat, and damage statistics of an equipped weapon.</span>
+															</div>
+														</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<div class="wuxTechniqueAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One target</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Weaponvs; BR DC</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>Make a melee attack.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-freeactiontechniques wuxTab">
+						<div class="wuxSectionBlock wuxLayoutItem wuxMinWidth300">
+							<div class="action-free wuxSectionBlock wuxLayoutItem">
+								<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-action-free" checked="checked" style="display: block">
+								<div class="wuxSectionHeader">
+									<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-free">
+									<span class="wuxSectionExpandIcon">&#9662;</span>
+									<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-free">
+									<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+									<span>Free Actions</span>
+								</div>
+								<div class="wuxSectionHeaderFooter"></div>
+
+								<div class="wuxSectionContent">
+									<div class="wuxNoRepControl wuxRepeatingFlexSection">
+										<fieldset class="repeating_freelearnedtechniques">
+											<input type="hidden" name="attr_technique-onUse" value="">
+											<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
+											<div class="wuxTechnique wuxMinWidth300">
+												<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Full">
+												<div class="wuxTechniqueHeader">
+													<input type="hidden" class="wuxTechniqueType-flag" name="attr_technique-type" value="Permanent">
+													<div class="wuxTechniqueType">
+														<span class="wuxTechniqueTypeHeader" name="attr_technique-type" value="Permanent">Permanent</span>
+														<span class="wuxTechniqueTypeFooter" name="attr_technique-displaygroup" value="Custom">Custom</span>
+														<input type="hidden" name="attr_technique-group" value="Custom">
+														<input type="hidden" name="attr_technique-subgroup" value="">
+													</div>
+
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<div class="wuxTechniqueHeaderInteractInnerBlock">
+															<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand">
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+															<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+															<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="@{technique-onUse}">9</button>
+													</div>
+
+													<div class="wuxTechniqueHeaderDisplayBlock">
+														<span class="wuxTechniqueHeaderName" name="attr_technique-name" value="Custom Technique">Custom Technique</span>
+														<div class="wuxTechniqueHeaderInfo">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
+															<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">Base</span>
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
+															<span class="wuxHiddenInlineAuxField wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase" value=""></span>
+
+															<span name="attr_technique-action" value="Quick">Quick</span>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+															<span class="wuxHiddenInlineField">; </span>
+															<span name="attr_technique-limits"></span>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+															<span class="wuxHiddenInlineField">; </span>
+															<span name="attr_technique-resourceCost"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<div class="wuxHiddenField wuxTechniqueHeaderInfo">
+															<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
+																<option value="@{equipment-main}">Main Weapon</option>
+																<option value="@{equipment-sub}">Sub Weapon</option>
+																<option value="@{equipment-support}">Support Weapon</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
+												<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand">
+												<div class="wuxTechniqueExpandingContent">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+													<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Prerequisites: </strong></span>
+																<span name="attr_technique-prerequisite"></span>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Traits: </strong></span>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits0"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits1"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits2"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits3"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits4"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits5"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Requirement: </strong></span>
+																<span name="attr_technique-requirement"></span>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Trigger: </strong></span>
+																<span name="attr_technique-trigger"></span>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+													<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+																<div class="wuxHiddenInlineField">
+																	<div class="wuxTechniqueAttackBlockRange">
+																		<span><strong>Range: </strong></span>
+																		<span name="attr_technique-range"></span>
+																	</div>
+																</div>
+																<div class="wuxTechniqueAttackBlockTarget">
+																	<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+																	<div class="wuxHiddenField">
+																		<span><strong>Target: </strong></span>
+																		<span name="attr_technique-target"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<span><strong>Check: </strong></span>
+																<span name="attr_technique-skill"></span>
+
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+																<div class="wuxHiddenField">
+																	<span> vs. </span>
+																	<span name="attr_technique-defense"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+																<div class="wuxHiddenAuxField">
+																	<span> Check</span>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<span><strong>Damage: </strong></span>
+																<span name="attr_technique-damageString"></span>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+													<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+														<div>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+															<div class="wuxHiddenBlockField">
+																<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+															</div>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+															<div class="wuxHiddenBlockField">
+																<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
+																<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-onSuccess"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</fieldset>
+
+										<span class="wuxHeader2">Basic Techniques</span>
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Free">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-equip">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-equip">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-equip">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Equip}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Free=1}} {{ActionLine=Free; 1/Round}} {{type-DescBlock=1}} {{Desc=You equip a weapon or piece of gear. You may optionally unequip and stow any weapon(s) or gear you are currently wielding to free up space.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Equip</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Free</span>
+														; <span>1/Round</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-equip">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You equip a weapon or piece of gear. You may optionally unequip and stow any weapon(s) or gear you are currently wielding to free up space.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Free">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-interact">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-interact">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-interact">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Interact}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Free=1}} {{ActionLine=Free; 1/Round}} {{type-DescBlock=1}} {{Desc=You use your hand or hands to manipulate an object or the terrain. You can grab an unattended or stored object, open a door, or produce some similar effect. You might have to attempt a skill check to determine if your Interact action was successful.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Interact</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Free</span>
+														; <span>1/Round</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-interact">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You use your hand or hands to manipulate an object or the terrain. You can grab an unattended or stored object, open a door, or produce some similar effect. You might have to attempt a skill check to determine if your Interact action was successful.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<input type="hidden" class="wuxHeroicTechniques-flag" name="attr_builder-basePath" value="Common">
+										<div class="wuxHeroicTechniques">
+											<span class="wuxHeader2">Heroic Techniques</span>
+											<div class="wuxTechnique">
+												<div class="wuxTechniqueHeader wuxTechniqueHeader-Free">
+													<div class="wuxTechniqueType wuxTechniqueType-Standard">
+														<span class="wuxTechniqueTypeHeader">Standard</span>
+														<span class="wuxTechniqueTypeFooter">Hero</span>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<div class="wuxTechniqueHeaderInteractInnerBlock">
+															<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-overdrive">
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-overdrive">
+															<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-overdrive">
+															<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Overdrive}}{{Type=Standard}}{{type-Standard=1}} {{Group=Hero}}{{type-Free=1}} {{ActionLine=Free; 1/Round; 1 Vitality; 1 Chakra}} {{type-DescBlock=1}} {{Desc=You gain one additional Quick Action this turn. 
+	The second time you use this action will cause you to take 3 Stress at the end of your turn. Using this action a third time will cause you to take 6 Stress at the end of your turn. Any uses after this causes instant death. These uses reset when you perform a long rest.}}##{&#34;resources&#34;:&#34;1 Vitality; 1 Chakra&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+													</div>
+													<div class="wuxTechniqueHeaderDisplayBlock">
+														<span class="wuxTechniqueHeaderName">Overdrive</span>
+														<div class="wuxTechniqueHeaderInfo">
+															<span class="wuxTechniqueHeaderInfoType">Base</span>
+															<span>Free</span>
+															; <span>1/Round</span>
+															; <span>1 Vitality; 1 Chakra</span>
+
+														</div>
+
+													</div>
+												</div>
+												<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-overdrive">
+												<div class="wuxTechniqueExpandingContent">
+													<div class="wuxTechniqueDescriptionBlock">
+														<div>
+															<div>
+																<span class="wuxTechniqueDescriptionBlockDesc">
+																	<p>You gain one additional Quick Action this turn. <br />
+																		The second time you use this action will cause you to take 3 Stress at the end of your turn. Using this action a third time will cause you to take 6 Stress at the end of your turn. Any uses after this causes instant death. These uses reset when you perform a long rest.</p>
+																</span>
+															</div>
+
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-reactionactiontechniques wuxTab">
+						<div class="wuxSectionBlock wuxLayoutItem wuxMinWidth300">
+							<div class="action-reaction wuxSectionBlock wuxLayoutItem">
+								<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-action-reaction" checked="checked" style="display: block">
+								<div class="wuxSectionHeader">
+									<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-reaction">
+									<span class="wuxSectionExpandIcon">&#9662;</span>
+									<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-reaction">
+									<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+									<span>Reaction Actions</span>
+								</div>
+								<div class="wuxSectionHeaderFooter"></div>
+
+								<div class="wuxSectionContent">
+									<div class="wuxNoRepControl wuxRepeatingFlexSection">
+										<fieldset class="repeating_reactionlearnedtechniques">
+											<input type="hidden" name="attr_technique-onUse" value="">
+											<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
+											<div class="wuxTechnique wuxMinWidth300">
+												<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Full">
+												<div class="wuxTechniqueHeader">
+													<input type="hidden" class="wuxTechniqueType-flag" name="attr_technique-type" value="Permanent">
+													<div class="wuxTechniqueType">
+														<span class="wuxTechniqueTypeHeader" name="attr_technique-type" value="Permanent">Permanent</span>
+														<span class="wuxTechniqueTypeFooter" name="attr_technique-displaygroup" value="Custom">Custom</span>
+														<input type="hidden" name="attr_technique-group" value="Custom">
+														<input type="hidden" name="attr_technique-subgroup" value="">
+													</div>
+
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<div class="wuxTechniqueHeaderInteractInnerBlock">
+															<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand">
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+															<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+															<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="@{technique-onUse}">9</button>
+													</div>
+
+													<div class="wuxTechniqueHeaderDisplayBlock">
+														<span class="wuxTechniqueHeaderName" name="attr_technique-name" value="Custom Technique">Custom Technique</span>
+														<div class="wuxTechniqueHeaderInfo">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
+															<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">Base</span>
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
+															<span class="wuxHiddenInlineAuxField wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase" value=""></span>
+
+															<span name="attr_technique-action" value="Quick">Quick</span>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+															<span class="wuxHiddenInlineField">; </span>
+															<span name="attr_technique-limits"></span>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+															<span class="wuxHiddenInlineField">; </span>
+															<span name="attr_technique-resourceCost"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<div class="wuxHiddenField wuxTechniqueHeaderInfo">
+															<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
+																<option value="@{equipment-main}">Main Weapon</option>
+																<option value="@{equipment-sub}">Sub Weapon</option>
+																<option value="@{equipment-support}">Support Weapon</option>
+															</select>
+														</div>
 													</div>
 												</div>
 												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
-												<div class="wuxHiddenBlockField">
+												<div class="wuxHiddenField wuxTechniqueFunctionBlock">
 													<div class="wuxTechniqueFunctionBlockRow">
 														<span><strong>Trigger: </strong></span>
 														<span name="attr_technique-trigger"></span>
 													</div>
 												</div>
-											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
-											<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
-												<div class="wuxHiddenBlockField">
-													<div class="wuxTechniqueAttackBlockRow">
-														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
-														<div class="wuxHiddenInlineField">
-															<div class="wuxTechniqueAttackBlockRange">
-																<span><strong>Range: </strong></span>
-																<span name="attr_technique-range"></span>
+												<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand">
+												<div class="wuxTechniqueExpandingContent">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+													<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Prerequisites: </strong></span>
+																<span name="attr_technique-prerequisite"></span>
 															</div>
 														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Traits: </strong></span>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits0"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits1"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits2"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits3"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits4"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits5"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Requirement: </strong></span>
+																<span name="attr_technique-requirement"></span>
+															</div>
+														</div>
+
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+													<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+																<div class="wuxHiddenInlineField">
+																	<div class="wuxTechniqueAttackBlockRange">
+																		<span><strong>Range: </strong></span>
+																		<span name="attr_technique-range"></span>
+																	</div>
+																</div>
+																<div class="wuxTechniqueAttackBlockTarget">
+																	<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+																	<div class="wuxHiddenField">
+																		<span><strong>Target: </strong></span>
+																		<span name="attr_technique-target"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<span><strong>Check: </strong></span>
+																<span name="attr_technique-skill"></span>
+
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+																<div class="wuxHiddenField">
+																	<span> vs. </span>
+																	<span name="attr_technique-defense"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+																<div class="wuxHiddenAuxField">
+																	<span> Check</span>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<span><strong>Damage: </strong></span>
+																<span name="attr_technique-damageString"></span>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+													<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+														<div>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+															<div class="wuxHiddenBlockField">
+																<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+															</div>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+															<div class="wuxHiddenBlockField">
+																<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
+																<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-onSuccess"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</fieldset>
+
+										<span class="wuxHeader2">Basic Techniques</span>
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Reaction">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-follow-UpAttack">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-follow-UpAttack">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-follow-UpAttack">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Follow-Up Attack}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Reaction=1}} {{ActionLine=Reaction; 1/Round}} {{type-FunctionBlock=1}} {{Trigger=An ally makes a melee or ranged attack against a character and you are engaged with the character.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=You perform a melee attack against your ally's target.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Follow-Up Attack</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Reaction</span>
+														; <span>1/Round</span>
+
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxTechniqueFunctionBlock">
+												<div class="wuxTechniqueFunctionBlockRow">
+													<span><strong>Trigger: </strong></span>
+													<span>An ally makes a melee or ranged attack against a character and you are engaged with the character.</span>
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-follow-UpAttack">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
 														<div class="wuxTechniqueAttackBlockTarget">
-															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
-															<div class="wuxHiddenField">
-																<span><strong>Target: </strong></span>
-																<span name="attr_technique-target"></span>
-															</div>
+															<span><strong>Target: </strong></span>
+															<span>One Target</span>
 														</div>
 													</div>
-												</div>
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
-												<div class="wuxHiddenBlockField">
 													<div class="wuxTechniqueAttackBlockRow">
-														<strong><span name="attr_technique-skill"></span></strong>
-		
-														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
-														<div class="wuxHiddenField">
-															<span> vs. </span>
-															<span name="attr_technique-defense"></span>
+														<span><strong>Check: </strong></span>
+														<span>Weaponvs; BR DC</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You perform a melee attack against your ally's target.</p>
+															</span>
 														</div>
-														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
-														<div class="wuxHiddenAuxField">
-															<span> Check</span>
-														</div>
+
 													</div>
 												</div>
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
-												<div class="wuxHiddenBlockField">
-													<div class="wuxTechniqueAttackBlockRow">
-														<span name="attr_technique-damageString"></span>
-													</div>
-												</div>
-											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
-											<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
-												<div>
-													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
-													<div class="wuxHiddenBlockField">
-														<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
-													</div>
-													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
-													<div class="wuxHiddenBlockField">
-														<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
-														<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-onSuccess"></span>
-													</div>
-												</div>
+
 											</div>
 										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Reaction">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-grabAnEdge">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-grabAnEdge">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-grabAnEdge">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Grab an Edge}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Reaction=1}} {{ActionLine=Reaction; 1/Round}} {{type-FunctionBlock=1}} {{Trigger=When you fall off or past an edge or other handhold}} {{type-AttackBlock=1}} {{SkillString=Reflex vs. DC 15}} {{type-DescBlock=1}} {{Desc=You can try to grab the ledge, potentially stopping your fall. You must succeed at a Reflex save. }} {{OnHit=You stop at the edge. If an adjacent space is unoccupied you may immediately climb up and move to the space.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;You stop at the edge. If an adjacent space is unoccupied you may immediately climb up and move to the space.&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Reflex&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Grab an Edge</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Reaction</span>
+														; <span>1/Round</span>
+
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxTechniqueFunctionBlock">
+												<div class="wuxTechniqueFunctionBlockRow">
+													<span><strong>Trigger: </strong></span>
+													<span>When you fall off or past an edge or other handhold</span>
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-grabAnEdge">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueAttackBlock">
+													<div class="wuxTechniqueAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Reflex vs. DC 15</span>
+													</div>
+
+												</div>
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You can try to grab the ledge, potentially stopping your fall. You must succeed at a Reflex save. </p>
+															</span>
+														</div>
+														<div>
+															<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
+															<span class="wuxTechniqueDescriptionBlockDesc">You stop at the edge. If an adjacent space is unoccupied you may immediately climb up and move to the space.</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxTechnique">
+											<div class="wuxTechniqueHeader wuxTechniqueHeader-Reaction">
+												<div class="wuxTechniqueType wuxTechniqueType-Standard">
+													<span class="wuxTechniqueTypeHeader">Standard</span>
+													<span class="wuxTechniqueTypeFooter">Basic</span>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<div class="wuxTechniqueHeaderInteractInnerBlock">
+														<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-totalDefense">
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-totalDefense">
+														<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-totalDefense">
+														<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxTechniqueHeaderInteractBlock">
+													<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Total Defense}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Reaction=1}} {{ActionLine=Reaction; 1/Round}} {{type-FunctionBlock=1}} {{Trigger=You are hit by an attack and damage has been rolled.}} {{type-DescBlock=1}} {{Desc=You count as having Resistance to all damage from the triggering attack, and until the end of your next turn, all other attacks against you are made at +1 Disadvantage.
+	Due to the stress of defending, you cannot take reactions until the end of your next turn and on that turn, you can only take one quick action – you cannot standard move, take full actions, or take free actions.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxTechniqueHeaderDisplayBlock">
+													<span class="wuxTechniqueHeaderName">Total Defense</span>
+													<div class="wuxTechniqueHeaderInfo">
+														<span class="wuxTechniqueHeaderInfoType">Base</span>
+														<span>Reaction</span>
+														; <span>1/Round</span>
+
+													</div>
+
+												</div>
+											</div>
+											<div class="wuxTechniqueFunctionBlock">
+												<div class="wuxTechniqueFunctionBlockRow">
+													<span><strong>Trigger: </strong></span>
+													<span>You are hit by an attack and damage has been rolled.</span>
+												</div>
+											</div>
+											<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-totalDefense">
+											<div class="wuxTechniqueExpandingContent">
+												<div class="wuxTechniqueDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxTechniqueDescriptionBlockDesc">
+																<p>You count as having Resistance to all damage from the triggering attack, and until the end of your next turn, all other attacks against you are made at +1 Disadvantage.<br />
+																	Due to the stress of defending, you cannot take reactions until the end of your next turn and on that turn, you can only take one quick action – you cannot standard move, take full actions, or take free actions.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<input type="hidden" class="wuxHeroicTechniques-flag" name="attr_builder-basePath" value="Common">
+										<div class="wuxHeroicTechniques">
+											<span class="wuxHeader2">Heroic Techniques</span>
+											<div class="wuxTechnique">
+												<div class="wuxTechniqueHeader wuxTechniqueHeader-Reaction">
+													<div class="wuxTechniqueType wuxTechniqueType-Standard">
+														<span class="wuxTechniqueTypeHeader">Standard</span>
+														<span class="wuxTechniqueTypeFooter">Hero</span>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<div class="wuxTechniqueHeaderInteractInnerBlock">
+															<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-holdOut">
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-holdOut">
+															<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand-holdOut">
+															<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Hold Out}}{{Type=Standard}}{{type-Standard=1}} {{Group=Hero}}{{type-Reaction=1}} {{ActionLine=Reaction; 1/Rest}} {{type-FunctionBlock=1}} {{Trigger=You take a wound and it would knock you unconscious.}} {{type-DescBlock=1}} {{Desc=You are not knocked unconscious. }}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+													</div>
+													<div class="wuxTechniqueHeaderDisplayBlock">
+														<span class="wuxTechniqueHeaderName">Hold Out</span>
+														<div class="wuxTechniqueHeaderInfo">
+															<span class="wuxTechniqueHeaderInfoType">Base</span>
+															<span>Reaction</span>
+															; <span>1/Rest</span>
+
+														</div>
+
+													</div>
+												</div>
+												<div class="wuxTechniqueFunctionBlock">
+													<div class="wuxTechniqueFunctionBlockRow">
+														<span><strong>Trigger: </strong></span>
+														<span>You take a wound and it would knock you unconscious.</span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand-holdOut">
+												<div class="wuxTechniqueExpandingContent">
+													<div class="wuxTechniqueDescriptionBlock">
+														<div>
+															<div>
+																<span class="wuxTechniqueDescriptionBlockDesc">
+																	<p>You are not knocked unconscious. </p>
+																</span>
+															</div>
+
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+
 									</div>
-								</fieldset>
+								</div>
 							</div>
 						</div>
 					</div>
+					<div class="tab-noneactiontechniques wuxTab">
+						<div class="wuxSectionBlock wuxLayoutItem wuxMinWidth300">
+							<div class="action-none wuxSectionBlock wuxLayoutItem">
+								<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-action-none" checked="checked" style="display: block">
+								<div class="wuxSectionHeader">
+									<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-none">
+									<span class="wuxSectionExpandIcon">&#9662;</span>
+									<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-action-none">
+									<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+									<span>None Actions</span>
+								</div>
+								<div class="wuxSectionHeaderFooter"></div>
+
+								<div class="wuxSectionContent">
+									<div class="wuxNoRepControl wuxRepeatingFlexSection">
+										<fieldset class="repeating_nonelearnedtechniques">
+											<input type="hidden" name="attr_technique-onUse" value="">
+											<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
+											<div class="wuxTechnique wuxMinWidth300">
+												<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Full">
+												<div class="wuxTechniqueHeader">
+													<input type="hidden" class="wuxTechniqueType-flag" name="attr_technique-type" value="Permanent">
+													<div class="wuxTechniqueType">
+														<span class="wuxTechniqueTypeHeader" name="attr_technique-type" value="Permanent">Permanent</span>
+														<span class="wuxTechniqueTypeFooter" name="attr_technique-displaygroup" value="Custom">Custom</span>
+														<input type="hidden" name="attr_technique-group" value="Custom">
+														<input type="hidden" name="attr_technique-subgroup" value="">
+													</div>
+
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<div class="wuxTechniqueHeaderInteractInnerBlock">
+															<input class="wuxTechniqueHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand">
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+															<span class="wuxTechniqueHeaderInteractiveIcon">&#9662;</span>
+															<input type="hidden" class="wuxTechniqueHeaderInteractiveIcon-flag" name="attr_technique-expand">
+															<span class="wuxTechniqueHeaderInteractiveAuxIcon">&#9656;</span>
+														</div>
+													</div>
+													<div class="wuxTechniqueHeaderInteractBlock">
+														<button class="wuxTechniqueHeaderInteractiveButton" type="roll" value="@{technique-onUse}">9</button>
+													</div>
+
+													<div class="wuxTechniqueHeaderDisplayBlock">
+														<span class="wuxTechniqueHeaderName" name="attr_technique-name" value="Custom Technique">Custom Technique</span>
+														<div class="wuxTechniqueHeaderInfo">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
+															<span class="wuxHiddenInlineField wuxTechniqueHeaderInfoType">Base</span>
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase" value="1">
+															<span class="wuxHiddenInlineAuxField wuxTechniqueHeaderInfoType" name="attr_technique-augmentBase" value=""></span>
+
+															<span name="attr_technique-action" value="Quick">Quick</span>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-limits" value="">
+															<span class="wuxHiddenInlineField">; </span>
+															<span name="attr_technique-limits"></span>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-resourceCost" value="">
+															<span class="wuxHiddenInlineField">; </span>
+															<span name="attr_technique-resourceCost"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<div class="wuxHiddenField wuxTechniqueHeaderInfo">
+															<select class='wuxTechniqueHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
+																<option value="@{equipment-main}">Main Weapon</option>
+																<option value="@{equipment-sub}">Sub Weapon</option>
+																<option value="@{equipment-support}">Support Weapon</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
+												<input type="hidden" class="wuxTechniqueHeaderInteractBlock-flag" name="attr_technique-expand">
+												<div class="wuxTechniqueExpandingContent">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-functionBlock" value="0">
+													<div class="wuxHiddenField wuxTechniqueFunctionBlock">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-prerequisite" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Prerequisites: </strong></span>
+																<span name="attr_technique-prerequisite"></span>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-traits" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Traits: </strong></span>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits0" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits0"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits0Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits1" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits1"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits1Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits2" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits2"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits2Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits3" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits3"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits3Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits4" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits4"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits4Desc"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-traits5" value="0">
+																<div class="wuxTrait">
+																	<span class="wuxTraitText" name="attr_technique-traits5"></span>
+																	<span class="wuxTooltiptext" name="attr_technique-traits5Desc"></span>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-requirement" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Requirement: </strong></span>
+																<span name="attr_technique-requirement"></span>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-trigger" value="">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueFunctionBlockRow">
+																<span><strong>Trigger: </strong></span>
+																<span name="attr_technique-trigger"></span>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlock" value="0">
+													<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockTarget" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-range" value="">
+																<div class="wuxHiddenInlineField">
+																	<div class="wuxTechniqueAttackBlockRange">
+																		<span><strong>Range: </strong></span>
+																		<span name="attr_technique-range"></span>
+																	</div>
+																</div>
+																<div class="wuxTechniqueAttackBlockTarget">
+																	<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-target" value="">
+																	<div class="wuxHiddenField">
+																		<span><strong>Target: </strong></span>
+																		<span name="attr_technique-target"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockSkill" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<span><strong>Check: </strong></span>
+																<span name="attr_technique-skill"></span>
+
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+																<div class="wuxHiddenField">
+																	<span> vs. </span>
+																	<span name="attr_technique-defense"></span>
+																</div>
+																<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-defense" value="">
+																<div class="wuxHiddenAuxField">
+																	<span> Check</span>
+																</div>
+															</div>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-attackBlockDamage" value="0">
+														<div class="wuxHiddenBlockField">
+															<div class="wuxTechniqueAttackBlockRow">
+																<span><strong>Damage: </strong></span>
+																<span name="attr_technique-damageString"></span>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-descriptionBlock" value="0">
+													<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+														<div>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-description" value="">
+															<div class="wuxHiddenBlockField">
+																<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-description"></span>
+															</div>
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_technique-onSuccess" value="">
+															<div class="wuxHiddenBlockField">
+																<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
+																<span class="wuxTechniqueDescriptionBlockDesc" name="attr_technique-onSuccess"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</fieldset>
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
 				</div>
+				<!-- end -->
+
 			</div>
 		</div>
 
@@ -1042,7 +3440,7 @@
 									<input type="hidden" name="attr_technique-isArmament" value="0">
 									<input type="hidden" name="attr_technique-equippedWeapon" value="">
 									<input type="hidden" class="wuxTechnique-flag" name="attr_technique-select">
-									<div class="wuxTechnique wuxMinWidth300">
+									<div class="wuxTechnique">
 										<input type="hidden" class="wuxTechniqueHeader-flag" name="attr_technique-header" value="Quick">
 										<div class="wuxTechniqueHeader">
 											<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isBase">

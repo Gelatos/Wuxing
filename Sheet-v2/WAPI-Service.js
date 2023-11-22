@@ -293,6 +293,14 @@ on("chat:message", function(msg) {
             let playerid = msg.content.indexOf("playerid=") > -1 ? msg.content.split("playerid=")[1].split("}")[0] : msg.playerid;
             HandleHiddenAction(msg, charId, playerid);
         }
+        else if (["technique"].indexOf(msg.rolltemplate) > -1) {
+            if (msg.content.indexOf("##") >= 0) {
+                let stringout = msg.content.split("##")[1];
+                let js = JSON.parse(stringout);
+                log (`js: ${js}`);
+                log (`js: ${JSON.stringify(js)}`);
+            }
+        }
     }
 });
 

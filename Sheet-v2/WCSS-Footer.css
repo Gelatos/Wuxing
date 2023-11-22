@@ -37,6 +37,11 @@
     min-width: 300px;
 }
 
+.wuxMinWidth350
+{
+    min-width: 350px;
+}
+
 .wuxHeight60
 {
     height: 60px;

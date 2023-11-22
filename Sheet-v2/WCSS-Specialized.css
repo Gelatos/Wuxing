@@ -202,9 +202,10 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 {
     position: relative;
     display: inline-block;
-    min-width: 200px; 
+    min-width: 300px; 
     max-width: 500px; 
     width: calc(100% - 10px);
+    height: min-content;
 
     flex: 1;
 }
@@ -220,6 +221,11 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 
     border: 3px solid black; 
     background: #cacbcf;
+}
+
+.sheet-rolltemplate-technique
+{
+    min-width: 200px; 
 }
 
 input[type=hidden].wuxTechnique-flag[value="1"] + .wuxTechnique,
@@ -246,36 +252,42 @@ input[type=hidden].wuxTechnique-flag[value="on"] + .wuxTechnique
 }
 
 input.wuxTechniqueHeader-flag[value="Quick"] + .wuxTechniqueHeader,
+.wuxTechniqueHeader-Quick,
 .sheet-rolltemplate-technique .wuxTechniqueHeader-Quick
 {
     background-color: #fbe5e5;
 }
 
 input.wuxTechniqueHeader-flag[value="Full"] + .wuxTechniqueHeader,
+.wuxTechniqueHeader-Full,
 .sheet-rolltemplate-technique .wuxTechniqueHeader-Full
 {
     background-color: #d7a0a0;
 }
 
 input.wuxTechniqueHeader-flag[value="Reaction"] + .wuxTechniqueHeader,
+.wuxTechniqueHeader-Reaction,
 .sheet-rolltemplate-technique .wuxTechniqueHeader-Reaction
 {
     background-color: #e5eafb;
 }
 
 input.wuxTechniqueHeader-flag[value="Free"] + .wuxTechniqueHeader,
+.wuxTechniqueHeader-Free,
 .sheet-rolltemplate-technique .wuxTechniqueHeader-Free
 {
     background-color: #e5fbf1;
 }
 
 input.wuxTechniqueHeader-flag[value="None"] + .wuxTechniqueHeader,
+.wuxTechniqueHeader-None,
 .sheet-rolltemplate-technique .wuxTechniqueHeader-None
 {
     background-color: #f0e5fb;
 }
 
 input.wuxTechniqueHeader-flag[value="Augment"] + .wuxTechniqueHeader,
+.wuxTechniqueHeader-Augment,
 .sheet-rolltemplate-technique .wuxTechniqueHeader-Augment
 {
     background-color: #acacac;
@@ -299,30 +311,35 @@ input.wuxTechniqueHeader-flag[value="Augment"] + .wuxTechniqueHeader,
 }
 
 input.wuxTechniqueType-flag[value="Active"] + .wuxTechniqueType,
+.wuxTechniqueType-Active,
 .sheet-rolltemplate-technique .wuxTechniqueType-Active
 {
     background-color: #b60003;
 }
 
 input.wuxTechniqueType-flag[value="Passive"] + .wuxTechniqueType,
+.wuxTechniqueType-Passive,
 .sheet-rolltemplate-technique .wuxTechniqueType-Passive
 {
     background-color: #4db600;
 }
 
 input.wuxTechniqueType-flag[value="Support"] + .wuxTechniqueType,
+.wuxTechniqueType-Support,
 .sheet-rolltemplate-technique .wuxTechniqueType-Support
 {
     background-color: #00b0b6;
 }
 
 input.wuxTechniqueType-flag[value="Job"] + .wuxTechniqueType,
+.wuxTechniqueType-Job,
 .sheet-rolltemplate-technique .wuxTechniqueType-Job
 {
     background-color: #7800b6;
 }
 
 input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType,
+.wuxTechniqueType-Standard,
 .sheet-rolltemplate-technique .wuxTechniqueType-Standard
 {
     background-color: #b66f00;
@@ -649,6 +666,22 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
   .sheet-rolltemplate-technique .sheet-wuxTrait:hover .sheet-wuxTooltiptext
   {
     visibility: visible;
+  }
+
+  /*========================================
+     Heroic Techniques
+  ========================================*/
+
+  .wuxHeroicTechniques 
+  {
+    position: relative;
+    display: none;
+    width: 100%;
+  }
+
+  input[type=hidden].wuxHeroicTechniques-flag:not([value="Common"]) + .wuxHeroicTechniques
+  {
+    display: block;
   }
 
 /*========================================

@@ -83,7 +83,7 @@ function RemoveSectionId(repeatingSection, repeatingSectionId) {
 		kiLimit: 25,
 		chakra: 1,
 		spellForceLimit: 9,
-		kiChargeLimit: 40,
+		kiChargeLimit: 30,
 		techSlotJob: 1,
 		techSlotActive: 1,
 		techSlotPassive: 1,
@@ -786,7 +786,7 @@ function UpdateDefaultActiveCheckbox(eventinfo, correctNewValue) {
 	}
 }
 
-function Log (output) {
+function log (output) {
 	console.log(output);
 }
 
