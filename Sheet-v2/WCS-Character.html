@@ -4,12 +4,9 @@
 	<input type="hidden" name="attr_character-techslots-active" value="">
 	<input type="hidden" name="attr_character-techslots-passive" value="">
 	<input type="hidden" name="attr_character-techslots-support" value="">
-	<input type="hidden" name="attr_equipment-main" value="">
+	<input type="hidden" name="attr_equipment-main" value="{{WeaponName=Longsword}}">
 	<input type="hidden" name="attr_equipment-sub" value="">
 	<input type="hidden" name="attr_equipment-support" value="">
-	<input type="hidden" name="attr_equipment-data-main" value="">
-	<input type="hidden" name="attr_equipment-data-sub" value="">
-	<input type="hidden" name="attr_equipment-data-support" value="">
 
 	<div class="wuxFloatHeader wuxStickyHeader">
 		<div class="wuxSectionBlock wuxLargeLayoutItem wuxStickyHeaderMain">
@@ -559,41 +556,60 @@
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
 													<div class="wuxFeatureHeaderInteractInnerBlock">
-														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-aid">
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-aid">
+														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-skirmish">
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-skirmish">
 														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-aid">
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-skirmish">
 														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Aid}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{Target=One target}} {{type-DescBlock=1}} {{Desc=You try to remove a condition afffecting you or an ally. Choose one of the following:
-	• Clear a condition that wasn’t caused by one of your own techniques or features.
-	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.
-	• Clear an adjacent allied character's prone or launched status.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Skirmish}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-skirmish}}} {{Trait0=Armament [F]}} {{Trait0Desc=This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament [F]; Brutal&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
-													<span class="wuxFeatureHeaderName">Aid</span>
+													<span class="wuxFeatureHeaderName">Skirmish</span>
 													<div class="wuxFeatureHeaderInfo">
 														<span class="wuxFeatureHeaderInfoType">Base</span>
 														<span>Full</span>
 
 													</div>
-
+													<div class="wuxFeatureHeaderInfo">
+														<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon-skirmish' value="@{equipment-main}">
+															<option value="@{equipment-main}">Main Weapon</option>
+															<option value="@{equipment-sub}">Sub Weapon</option>
+															<option value="@{equipment-support}">Support Weapon</option>
+														</select>
+													</div>
 												</div>
 											</div>
-											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-aid">
+											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-skirmish">
 											<div class="wuxFeatureExpandingContent">
+												<div class="wuxFeatureFunctionBlock">
+													<div class="wuxFeatureFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<span class="wuxShownTraits">
+															<div class="wuxTrait">
+																<span class="wuxTraitText">Armament [F]</span>
+																<span class="wuxTooltiptext">This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.</span>
+															</div>
+															<div class="wuxTrait">
+																<span class="wuxTraitText">Brutal</span>
+																<span class="wuxTooltiptext">When this technique deals damage, roll all damage dice twice and take only the highest results.</span>
+															</div>
+														</span>
+													</div>
+
+												</div>
 												<div class="wuxFeatureAttackBlock">
 													<div class="wuxFeatureAttackBlockRow">
-														<div class="wuxFeatureAttackBlockRange">
-															<span><strong>Range: </strong></span>
-															<span>1</span>
-														</div>
 														<div class="wuxFeatureAttackBlockTarget">
 															<span><strong>Target: </strong></span>
-															<span>One target</span>
+															<span>One Target</span>
 														</div>
+													</div>
+													<div class="wuxFeatureAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Weaponvs; BR DC</span>
 													</div>
 
 												</div>
@@ -601,74 +617,7 @@
 													<div>
 														<div>
 															<span class="wuxFeatureDescriptionBlockDesc">
-																<p>You try to remove a condition afffecting you or an ally. Choose one of the following:<br />
-																	• Clear a condition that wasn’t caused by one of your own techniques or features.<br />
-																	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.<br />
-																	• Clear an adjacent allied character's prone or launched status.</p>
-															</span>
-														</div>
-
-													</div>
-												</div>
-
-											</div>
-										</div>
-
-										<div class="wuxFeature">
-											<div class="wuxFeatureHeader wuxFeatureHeader-Full">
-												<div class="wuxFeatureType wuxFeatureType-Standard">
-													<span class="wuxFeatureTypeHeader">Standard</span>
-													<span class="wuxFeatureTypeFooter">Basic</span>
-												</div>
-												<div class="wuxFeatureHeaderInteractBlock">
-													<div class="wuxFeatureHeaderInteractInnerBlock">
-														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-stabilize">
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-stabilize">
-														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-stabilize">
-														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
-													</div>
-												</div>
-												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Stabilize}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full; 1 Vitality}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{Target=One target}} {{type-DescBlock=1}} {{Desc=You restore your HP to full and can do one of the following:
-	• Clear a condition that wasn’t caused by one of your own techniques or features.
-	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.
-	• Clear an adjacent allied character's prone or launched status.}}##{&#34;resources&#34;:&#34;1 Vitality&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;HP+100%&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
-												</div>
-												<div class="wuxFeatureHeaderDisplayBlock">
-													<span class="wuxFeatureHeaderName">Stabilize</span>
-													<div class="wuxFeatureHeaderInfo">
-														<span class="wuxFeatureHeaderInfoType">Base</span>
-														<span>Full</span>
-														; <span>1 Vitality</span>
-
-													</div>
-
-												</div>
-											</div>
-											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-stabilize">
-											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<div class="wuxFeatureAttackBlockRange">
-															<span><strong>Range: </strong></span>
-															<span>1</span>
-														</div>
-														<div class="wuxFeatureAttackBlockTarget">
-															<span><strong>Target: </strong></span>
-															<span>One target</span>
-														</div>
-													</div>
-
-												</div>
-												<div class="wuxFeatureDescriptionBlock">
-													<div>
-														<div>
-															<span class="wuxFeatureDescriptionBlockDesc">
-																<p>You restore your HP to full and can do one of the following:<br />
-																	• Clear a condition that wasn’t caused by one of your own techniques or features.<br />
-																	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.<br />
-																	• Clear an adjacent allied character's prone or launched status.</p>
+																<p>Make a melee attack.</p>
 															</span>
 														</div>
 
@@ -748,6 +697,133 @@
 														<div>
 															<span class="wuxFeatureDescriptionBlockDesc">
 																<p>Make a ranged attack.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxFeature">
+											<div class="wuxFeatureHeader wuxFeatureHeader-Full">
+												<div class="wuxFeatureType wuxFeatureType-Standard">
+													<span class="wuxFeatureTypeHeader">Standard</span>
+													<span class="wuxFeatureTypeFooter">Basic</span>
+												</div>
+												<div class="wuxFeatureHeaderInteractBlock">
+													<div class="wuxFeatureHeaderInteractInnerBlock">
+														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-aid">
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-aid">
+														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-aid">
+														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderInteractBlock">
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Aid}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{Target=One target}} {{type-DescBlock=1}} {{Desc=You try to remove a condition afffecting you or an ally. Choose one of the following:
+	• Clear a condition on yourself.
+	• Clear an adjacent allied character’s condition. 
+	• Clear an adjacent allied character's prone or launched status.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxFeatureHeaderDisplayBlock">
+													<span class="wuxFeatureHeaderName">Aid</span>
+													<div class="wuxFeatureHeaderInfo">
+														<span class="wuxFeatureHeaderInfoType">Base</span>
+														<span>Full</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-aid">
+											<div class="wuxFeatureExpandingContent">
+												<div class="wuxFeatureAttackBlock">
+													<div class="wuxFeatureAttackBlockRow">
+														<div class="wuxFeatureAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span>1</span>
+														</div>
+														<div class="wuxFeatureAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One target</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxFeatureDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxFeatureDescriptionBlockDesc">
+																<p>You try to remove a condition afffecting you or an ally. Choose one of the following:<br />
+																	• Clear a condition on yourself.<br />
+																	• Clear an adjacent allied character’s condition. <br />
+																	• Clear an adjacent allied character's prone or launched status.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxFeature">
+											<div class="wuxFeatureHeader wuxFeatureHeader-Full">
+												<div class="wuxFeatureType wuxFeatureType-Standard">
+													<span class="wuxFeatureTypeHeader">Standard</span>
+													<span class="wuxFeatureTypeFooter">Basic</span>
+												</div>
+												<div class="wuxFeatureHeaderInteractBlock">
+													<div class="wuxFeatureHeaderInteractInnerBlock">
+														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-stabilize">
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-stabilize">
+														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-stabilize">
+														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderInteractBlock">
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Stabilize}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full; 1 Vitality}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{Target=One target}} {{type-DescBlock=1}} {{Desc=You restore your HP to full and can do one of the following:
+	• Clear a condition that wasn’t caused by one of your own techniques or features.
+	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.
+	• Clear an adjacent allied character's prone or launched status.}}##{&#34;resources&#34;:&#34;1 Vitality&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;HP+100%&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxFeatureHeaderDisplayBlock">
+													<span class="wuxFeatureHeaderName">Stabilize</span>
+													<div class="wuxFeatureHeaderInfo">
+														<span class="wuxFeatureHeaderInfoType">Base</span>
+														<span>Full</span>
+														; <span>1 Vitality</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-stabilize">
+											<div class="wuxFeatureExpandingContent">
+												<div class="wuxFeatureAttackBlock">
+													<div class="wuxFeatureAttackBlockRow">
+														<div class="wuxFeatureAttackBlockRange">
+															<span><strong>Range: </strong></span>
+															<span>1</span>
+														</div>
+														<div class="wuxFeatureAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One target</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxFeatureDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxFeatureDescriptionBlockDesc">
+																<p>You restore your HP to full and can do one of the following:<br />
+																	• Clear a condition that wasn’t caused by one of your own techniques or features.<br />
+																	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.<br />
+																	• Clear an adjacent allied character's prone or launched status.</p>
 															</span>
 														</div>
 
@@ -855,85 +931,6 @@
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
 													<div class="wuxFeatureHeaderInteractInnerBlock">
-														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-skirmish">
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-skirmish">
-														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-skirmish">
-														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
-													</div>
-												</div>
-												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Skirmish}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-skirmish}}} {{Trait0=Armament [F]}} {{Trait0Desc=This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament [F]; Brutal&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
-												</div>
-												<div class="wuxFeatureHeaderDisplayBlock">
-													<span class="wuxFeatureHeaderName">Skirmish</span>
-													<div class="wuxFeatureHeaderInfo">
-														<span class="wuxFeatureHeaderInfoType">Base</span>
-														<span>Full</span>
-
-													</div>
-													<div class="wuxFeatureHeaderInfo">
-														<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon-skirmish' value="@{equipment-main}">
-															<option value="@{equipment-main}">Main Weapon</option>
-															<option value="@{equipment-sub}">Sub Weapon</option>
-															<option value="@{equipment-support}">Support Weapon</option>
-														</select>
-													</div>
-												</div>
-											</div>
-											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-skirmish">
-											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureFunctionBlock">
-													<div class="wuxFeatureFunctionBlockRow">
-														<span><strong>Traits: </strong></span>
-														<span class="wuxShownTraits">
-															<div class="wuxTrait">
-																<span class="wuxTraitText">Armament [F]</span>
-																<span class="wuxTooltiptext">This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.</span>
-															</div>
-															<div class="wuxTrait">
-																<span class="wuxTraitText">Brutal</span>
-																<span class="wuxTooltiptext">When this technique deals damage, roll all damage dice twice and take only the highest results.</span>
-															</div>
-														</span>
-													</div>
-
-												</div>
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<div class="wuxFeatureAttackBlockTarget">
-															<span><strong>Target: </strong></span>
-															<span>One Target</span>
-														</div>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Check: </strong></span>
-														<span>Weaponvs; BR DC</span>
-													</div>
-
-												</div>
-												<div class="wuxFeatureDescriptionBlock">
-													<div>
-														<div>
-															<span class="wuxFeatureDescriptionBlockDesc">
-																<p>Make a melee attack.</p>
-															</span>
-														</div>
-
-													</div>
-												</div>
-
-											</div>
-										</div>
-
-										<div class="wuxFeature">
-											<div class="wuxFeatureHeader wuxFeatureHeader-Full">
-												<div class="wuxFeatureType wuxFeatureType-Standard">
-													<span class="wuxFeatureTypeHeader">Standard</span>
-													<span class="wuxFeatureTypeFooter">Basic</span>
-												</div>
-												<div class="wuxFeatureHeaderInteractBlock">
-													<div class="wuxFeatureHeaderInteractInnerBlock">
 														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-surge">
 														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-surge">
 														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
@@ -990,7 +987,7 @@
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
 													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Surge Beyond Limits}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-DescBlock=1}} {{Desc=You gain an amount of Ki equal to your Ki Charge. Your ki can increase beyond your Ki Limit.
-	Whenever you gain Ki and it pushes you over your Ki Limit, you immediately take 1 stress and gain the Dying condition. Whenever you start your turn and your ki is over you limit, you take 1 stress.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;SurgeV&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+	Whenever you gain Ki and it pushes you over your Ki Limit you immediately take 1 stress and gain the Dying condition. }}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;SurgeV&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Surge Beyond Limits</span>
@@ -1009,7 +1006,7 @@
 														<div>
 															<span class="wuxFeatureDescriptionBlockDesc">
 																<p>You gain an amount of Ki equal to your Ki Charge. Your ki can increase beyond your Ki Limit.<br />
-																	Whenever you gain Ki and it pushes you over your Ki Limit, you immediately take 1 stress and gain the Dying condition. Whenever you start your turn and your ki is over you limit, you take 1 stress.</p>
+																	Whenever you gain Ki and it pushes you over your Ki Limit you immediately take 1 stress and gain the Dying condition. </p>
 															</span>
 														</div>
 														<div>
@@ -1033,18 +1030,18 @@
 													</div>
 													<div class="wuxFeatureHeaderInteractBlock">
 														<div class="wuxFeatureHeaderInteractInnerBlock">
-															<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-center">
-															<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-center">
+															<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-changeTechSlots">
+															<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-changeTechSlots">
 															<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-															<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-center">
+															<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-changeTechSlots">
 															<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
 														</div>
 													</div>
 													<div class="wuxFeatureHeaderInteractBlock">
-														<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Center}}{{Type=Standard}}{{type-Standard=1}} {{Group=Hero}}{{type-Full=1}} {{ActionLine=Full}} {{type-DescBlock=1}} {{Desc=You recenter yourself, allowing you to enter a new mental state. You may reconfigure your current tech slot loadout with a new combination of techniques you have learned.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+														<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Change Tech Slots}}{{Type=Standard}}{{type-Standard=1}} {{Group=Hero}}{{type-Full=1}} {{ActionLine=Full}} {{type-DescBlock=1}} {{Desc=You recenter yourself to enter a new mental state. You may reconfigure your current tech slot loadout with a new combination of techniques you have learned.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
 													</div>
 													<div class="wuxFeatureHeaderDisplayBlock">
-														<span class="wuxFeatureHeaderName">Center</span>
+														<span class="wuxFeatureHeaderName">Change Tech Slots</span>
 														<div class="wuxFeatureHeaderInfo">
 															<span class="wuxFeatureHeaderInfoType">Base</span>
 															<span>Full</span>
@@ -1053,13 +1050,13 @@
 
 													</div>
 												</div>
-												<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-center">
+												<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-changeTechSlots">
 												<div class="wuxFeatureExpandingContent">
 													<div class="wuxFeatureDescriptionBlock">
 														<div>
 															<div>
 																<span class="wuxFeatureDescriptionBlockDesc">
-																	<p>You recenter yourself, allowing you to enter a new mental state. You may reconfigure your current tech slot loadout with a new combination of techniques you have learned.</p>
+																	<p>You recenter yourself to enter a new mental state. You may reconfigure your current tech slot loadout with a new combination of techniques you have learned.</p>
 																</span>
 															</div>
 
@@ -1280,6 +1277,160 @@
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
 													<div class="wuxFeatureHeaderInteractInnerBlock">
+														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-strike">
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-strike">
+														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-strike">
+														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderInteractBlock">
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Strike}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-strike}}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, range/threat, and damage statistics of an equipped weapon.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxFeatureHeaderDisplayBlock">
+													<span class="wuxFeatureHeaderName">Strike</span>
+													<div class="wuxFeatureHeaderInfo">
+														<span class="wuxFeatureHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+													<div class="wuxFeatureHeaderInfo">
+														<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon-strike' value="@{equipment-main}">
+															<option value="@{equipment-main}">Main Weapon</option>
+															<option value="@{equipment-sub}">Sub Weapon</option>
+															<option value="@{equipment-support}">Support Weapon</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-strike">
+											<div class="wuxFeatureExpandingContent">
+												<div class="wuxFeatureFunctionBlock">
+													<div class="wuxFeatureFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<span class="wuxShownTraits">
+															<div class="wuxTrait">
+																<span class="wuxTraitText">Armament</span>
+																<span class="wuxTooltiptext">This technique uses the skill, range/threat, and damage statistics of an equipped weapon.</span>
+															</div>
+														</span>
+													</div>
+
+												</div>
+												<div class="wuxFeatureAttackBlock">
+													<div class="wuxFeatureAttackBlockRow">
+														<div class="wuxFeatureAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One target</span>
+														</div>
+													</div>
+													<div class="wuxFeatureAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Weaponvs; BR DC</span>
+													</div>
+
+												</div>
+												<div class="wuxFeatureDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxFeatureDescriptionBlockDesc">
+																<p>Make a melee attack.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxFeature">
+											<div class="wuxFeatureHeader wuxFeatureHeader-Quick">
+												<div class="wuxFeatureType wuxFeatureType-Standard">
+													<span class="wuxFeatureTypeHeader">Standard</span>
+													<span class="wuxFeatureTypeFooter">Basic</span>
+												</div>
+												<div class="wuxFeatureHeaderInteractBlock">
+													<div class="wuxFeatureHeaderInteractInnerBlock">
+														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-shoot">
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-shoot">
+														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-shoot">
+														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderInteractBlock">
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Shoot}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-shoot}}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, range/threat, and damage statistics of an equipped weapon.}} {{Requirement=Weapon must not have the loading trait.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxFeatureHeaderDisplayBlock">
+													<span class="wuxFeatureHeaderName">Shoot</span>
+													<div class="wuxFeatureHeaderInfo">
+														<span class="wuxFeatureHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+													<div class="wuxFeatureHeaderInfo">
+														<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon-shoot' value="@{equipment-main}">
+															<option value="@{equipment-main}">Main Weapon</option>
+															<option value="@{equipment-sub}">Sub Weapon</option>
+															<option value="@{equipment-support}">Support Weapon</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-shoot">
+											<div class="wuxFeatureExpandingContent">
+												<div class="wuxFeatureFunctionBlock">
+													<div class="wuxFeatureFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<span class="wuxShownTraits">
+															<div class="wuxTrait">
+																<span class="wuxTraitText">Armament</span>
+																<span class="wuxTooltiptext">This technique uses the skill, range/threat, and damage statistics of an equipped weapon.</span>
+															</div>
+														</span>
+													</div>
+													<div class="wuxFeatureFunctionBlockRow">
+														<span><strong>Requirement: </strong></span>
+														<span>Weapon must not have the loading trait.</span>
+													</div>
+
+												</div>
+												<div class="wuxFeatureAttackBlock">
+													<div class="wuxFeatureAttackBlockRow">
+														<div class="wuxFeatureAttackBlockTarget">
+															<span><strong>Target: </strong></span>
+															<span>One target</span>
+														</div>
+													</div>
+													<div class="wuxFeatureAttackBlockRow">
+														<span><strong>Check: </strong></span>
+														<span>Weaponvs; BR DC</span>
+													</div>
+
+												</div>
+												<div class="wuxFeatureDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxFeatureDescriptionBlockDesc">
+																<p>Make a ranged attack.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxFeature">
+											<div class="wuxFeatureHeader wuxFeatureHeader-Quick">
+												<div class="wuxFeatureType wuxFeatureType-Standard">
+													<span class="wuxFeatureTypeHeader">Standard</span>
+													<span class="wuxFeatureTypeFooter">Basic</span>
+												</div>
+												<div class="wuxFeatureHeaderInteractBlock">
+													<div class="wuxFeatureHeaderInteractInnerBlock">
 														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-breakFree">
 														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-breakFree">
 														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
@@ -1348,6 +1499,50 @@
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
 													<div class="wuxFeatureHeaderInteractInnerBlock">
+														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-dash">
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-dash">
+														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
+														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-dash">
+														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderInteractBlock">
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Dash}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-DescBlock=1}} {{Desc=You move at least 1 space, up to half your speed. This allows you to make an extra movement, on top of your standard move. Certain techniques can only be used when you Dash, not when you make a standard move.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+												</div>
+												<div class="wuxFeatureHeaderDisplayBlock">
+													<span class="wuxFeatureHeaderName">Dash</span>
+													<div class="wuxFeatureHeaderInfo">
+														<span class="wuxFeatureHeaderInfoType">Base</span>
+														<span>Quick</span>
+
+													</div>
+
+												</div>
+											</div>
+											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-dash">
+											<div class="wuxFeatureExpandingContent">
+												<div class="wuxFeatureDescriptionBlock">
+													<div>
+														<div>
+															<span class="wuxFeatureDescriptionBlockDesc">
+																<p>You move at least 1 space, up to half your speed. This allows you to make an extra movement, on top of your standard move. Certain techniques can only be used when you Dash, not when you make a standard move.</p>
+															</span>
+														</div>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="wuxFeature">
+											<div class="wuxFeatureHeader wuxFeatureHeader-Quick">
+												<div class="wuxFeatureType wuxFeatureType-Standard">
+													<span class="wuxFeatureTypeHeader">Standard</span>
+													<span class="wuxFeatureTypeFooter">Basic</span>
+												</div>
+												<div class="wuxFeatureHeaderInteractBlock">
+													<div class="wuxFeatureHeaderInteractInnerBlock">
 														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-escape">
 														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-escape">
 														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
@@ -1399,50 +1594,6 @@
 														<div>
 															<span class="wuxFeatureDescriptionBlockDesc">
 																<p>You attempt to end a grapple by wrigglnig loose.</p>
-															</span>
-														</div>
-
-													</div>
-												</div>
-
-											</div>
-										</div>
-
-										<div class="wuxFeature">
-											<div class="wuxFeatureHeader wuxFeatureHeader-Quick">
-												<div class="wuxFeatureType wuxFeatureType-Standard">
-													<span class="wuxFeatureTypeHeader">Standard</span>
-													<span class="wuxFeatureTypeFooter">Basic</span>
-												</div>
-												<div class="wuxFeatureHeaderInteractBlock">
-													<div class="wuxFeatureHeaderInteractInnerBlock">
-														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-dash">
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-dash">
-														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-dash">
-														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
-													</div>
-												</div>
-												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Dash}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-DescBlock=1}} {{Desc=You move at least 1 space, up to half your speed. This allows you to make an extra movement, on top of your standard move. Certain techniques can only be used when you Dash, not when you make a standard move.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:false,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
-												</div>
-												<div class="wuxFeatureHeaderDisplayBlock">
-													<span class="wuxFeatureHeaderName">Dash</span>
-													<div class="wuxFeatureHeaderInfo">
-														<span class="wuxFeatureHeaderInfoType">Base</span>
-														<span>Quick</span>
-
-													</div>
-
-												</div>
-											</div>
-											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-dash">
-											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureDescriptionBlock">
-													<div>
-														<div>
-															<span class="wuxFeatureDescriptionBlockDesc">
-																<p>You move at least 1 space, up to half your speed. This allows you to make an extra movement, on top of your standard move. Certain techniques can only be used when you Dash, not when you make a standard move.</p>
 															</span>
 														</div>
 
@@ -1789,160 +1940,6 @@
 														<div>
 															<strong class="wuxFeatureDescriptionBlockDesc">On Hit: </strong>
 															<span class="wuxFeatureDescriptionBlockDesc">The target immediately loses Hidden and can be located again by any character.</span>
-														</div>
-
-													</div>
-												</div>
-
-											</div>
-										</div>
-
-										<div class="wuxFeature">
-											<div class="wuxFeatureHeader wuxFeatureHeader-Quick">
-												<div class="wuxFeatureType wuxFeatureType-Standard">
-													<span class="wuxFeatureTypeHeader">Standard</span>
-													<span class="wuxFeatureTypeFooter">Basic</span>
-												</div>
-												<div class="wuxFeatureHeaderInteractBlock">
-													<div class="wuxFeatureHeaderInteractInnerBlock">
-														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-shoot">
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-shoot">
-														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-shoot">
-														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
-													</div>
-												</div>
-												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Shoot}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-shoot}}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, range/threat, and damage statistics of an equipped weapon.}} {{Requirement=Weapon must not have the loading trait.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
-												</div>
-												<div class="wuxFeatureHeaderDisplayBlock">
-													<span class="wuxFeatureHeaderName">Shoot</span>
-													<div class="wuxFeatureHeaderInfo">
-														<span class="wuxFeatureHeaderInfoType">Base</span>
-														<span>Quick</span>
-
-													</div>
-													<div class="wuxFeatureHeaderInfo">
-														<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon-shoot' value="@{equipment-main}">
-															<option value="@{equipment-main}">Main Weapon</option>
-															<option value="@{equipment-sub}">Sub Weapon</option>
-															<option value="@{equipment-support}">Support Weapon</option>
-														</select>
-													</div>
-												</div>
-											</div>
-											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-shoot">
-											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureFunctionBlock">
-													<div class="wuxFeatureFunctionBlockRow">
-														<span><strong>Traits: </strong></span>
-														<span class="wuxShownTraits">
-															<div class="wuxTrait">
-																<span class="wuxTraitText">Armament</span>
-																<span class="wuxTooltiptext">This technique uses the skill, range/threat, and damage statistics of an equipped weapon.</span>
-															</div>
-														</span>
-													</div>
-													<div class="wuxFeatureFunctionBlockRow">
-														<span><strong>Requirement: </strong></span>
-														<span>Weapon must not have the loading trait.</span>
-													</div>
-
-												</div>
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<div class="wuxFeatureAttackBlockTarget">
-															<span><strong>Target: </strong></span>
-															<span>One target</span>
-														</div>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Check: </strong></span>
-														<span>Weaponvs; BR DC</span>
-													</div>
-
-												</div>
-												<div class="wuxFeatureDescriptionBlock">
-													<div>
-														<div>
-															<span class="wuxFeatureDescriptionBlockDesc">
-																<p>Make a ranged attack.</p>
-															</span>
-														</div>
-
-													</div>
-												</div>
-
-											</div>
-										</div>
-
-										<div class="wuxFeature">
-											<div class="wuxFeatureHeader wuxFeatureHeader-Quick">
-												<div class="wuxFeatureType wuxFeatureType-Standard">
-													<span class="wuxFeatureTypeHeader">Standard</span>
-													<span class="wuxFeatureTypeFooter">Basic</span>
-												</div>
-												<div class="wuxFeatureHeaderInteractBlock">
-													<div class="wuxFeatureHeaderInteractInnerBlock">
-														<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_technique-expand-strike">
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-strike">
-														<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-														<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_technique-expand-strike">
-														<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
-													</div>
-												</div>
-												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Strike}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-strike}}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, range/threat, and damage statistics of an equipped weapon.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
-												</div>
-												<div class="wuxFeatureHeaderDisplayBlock">
-													<span class="wuxFeatureHeaderName">Strike</span>
-													<div class="wuxFeatureHeaderInfo">
-														<span class="wuxFeatureHeaderInfoType">Base</span>
-														<span>Quick</span>
-
-													</div>
-													<div class="wuxFeatureHeaderInfo">
-														<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon-strike' value="@{equipment-main}">
-															<option value="@{equipment-main}">Main Weapon</option>
-															<option value="@{equipment-sub}">Sub Weapon</option>
-															<option value="@{equipment-support}">Support Weapon</option>
-														</select>
-													</div>
-												</div>
-											</div>
-											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-strike">
-											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureFunctionBlock">
-													<div class="wuxFeatureFunctionBlockRow">
-														<span><strong>Traits: </strong></span>
-														<span class="wuxShownTraits">
-															<div class="wuxTrait">
-																<span class="wuxTraitText">Armament</span>
-																<span class="wuxTooltiptext">This technique uses the skill, range/threat, and damage statistics of an equipped weapon.</span>
-															</div>
-														</span>
-													</div>
-
-												</div>
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<div class="wuxFeatureAttackBlockTarget">
-															<span><strong>Target: </strong></span>
-															<span>One target</span>
-														</div>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Check: </strong></span>
-														<span>Weaponvs; BR DC</span>
-													</div>
-
-												</div>
-												<div class="wuxFeatureDescriptionBlock">
-													<div>
-														<div>
-															<span class="wuxFeatureDescriptionBlockDesc">
-																<p>Make a melee attack.</p>
-															</span>
 														</div>
 
 													</div>
@@ -3604,6 +3601,7 @@
 													<div class="wuxRow">
 														<select class='wuxInput' name='attr_technique-skill' value="">
 															<option value="">-</option>
+															<!-- Skills Selector -->
 															<option value="Brace">Brace Check</option>
 															<option value="Brace DC">Brace DC</option>
 															<option value="Insight">Insight Check</option>
@@ -3620,12 +3618,12 @@
 															<option value="Brawling DC">Brawling DC</option>
 															<option value="Finesse">Finesse Check</option>
 															<option value="Finesse DC">Finesse DC</option>
+															<option value="Lunge">Lunge Check</option>
+															<option value="Lunge DC">Lunge DC</option>
 															<option value="Marksmanship">Marksmanship Check</option>
 															<option value="Marksmanship DC">Marksmanship DC</option>
 															<option value="Might">Might Check</option>
 															<option value="Might DC">Might DC</option>
-															<option value="Polearm">Polearm Check</option>
-															<option value="Polearm DC">Polearm DC</option>
 															<option value="Throw">Throw Check</option>
 															<option value="Throw DC">Throw DC</option>
 															<option value="Assault">Assault Check</option>
@@ -3694,9 +3692,7 @@
 													<div class="wuxRow">
 														<select class='wuxInput' name='attr_technique-defense' value="">
 															<option value="">-</option>
-															<option value="BR DC">BR DC</option>
-															<option value="PR DC">PR DC</option>
-															<option value="BP DC">BP DC</option>
+															<!-- Skills Selector -->
 															<option value="Brace">Brace Check</option>
 															<option value="Brace DC">Brace DC</option>
 															<option value="Insight">Insight Check</option>
@@ -3713,12 +3709,12 @@
 															<option value="Brawling DC">Brawling DC</option>
 															<option value="Finesse">Finesse Check</option>
 															<option value="Finesse DC">Finesse DC</option>
+															<option value="Lunge">Lunge Check</option>
+															<option value="Lunge DC">Lunge DC</option>
 															<option value="Marksmanship">Marksmanship Check</option>
 															<option value="Marksmanship DC">Marksmanship DC</option>
 															<option value="Might">Might Check</option>
 															<option value="Might DC">Might DC</option>
-															<option value="Polearm">Polearm Check</option>
-															<option value="Polearm DC">Polearm DC</option>
 															<option value="Throw">Throw Check</option>
 															<option value="Throw DC">Throw DC</option>
 															<option value="Assault">Assault Check</option>
@@ -4720,17 +4716,8 @@
 			<div class="wuxTab">
 				<div class="tab-skillOptions wuxTab">
 					<div class="statistics-GeneralStats wuxSectionBlock wuxLayoutItem">
-						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-skills-skillOptions" checked="checked" style="display: block">
-						<div class="wuxSectionHeader">
-							<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-skills-skillOptions">
-							<span class="wuxSectionExpandIcon">&#9662;</span>
-							<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-skills-skillOptions">
-							<span class="wuxSectionExpandAuxIcon">&#9656;</span>
-							<span>Skill Options</span>
-						</div>
-						<div class="wuxSectionHeaderFooter"></div>
-
 						<div class="wuxSectionContent">
+							<div class="wuxHeader">Skill Options</div>
 							<div class="wuxMultiRow">
 								<div class="wuxButton">
 									<input type="checkbox" name="attr_character-button-skills">
@@ -4929,6 +4916,24 @@
 											<div class="wuxFlexTable">
 												<div class="wuxFlexTableItemGroup">
 
+													<span class="wuxFlexTableItemHeader">Lunge</span>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Ability</span>
+															<span class="wuxFlexTableItemData">DEX</span>
+														</div>
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Score</span>
+															<span class="wuxFlexTableItemData" name="attr_skill_lunge">0</span>
+														</div>
+														<div class="wuxFlexTableItemGroup">
+															<span class="wuxFlexTableItemSubheader">Bonus</span>
+															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_lunge" placeholder="0"></span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+
 													<span class="wuxFlexTableItemHeader">Marksmanship</span>
 													<div class="wuxFlexTable">
 														<div class="wuxFlexTableItemGroup">
@@ -4945,6 +4950,11 @@
 														</div>
 													</div>
 												</div>
+
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxFlexTable">
 												<div class="wuxFlexTableItemGroup">
 
 													<span class="wuxFlexTableItemHeader">Might</span>
@@ -4960,29 +4970,6 @@
 														<div class="wuxFlexTableItemGroup">
 															<span class="wuxFlexTableItemSubheader">Bonus</span>
 															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_might" placeholder="0"></span>
-														</div>
-													</div>
-												</div>
-
-											</div>
-										</div>
-										<div class="wuxFlexTableItemGroup wuxNoPadding">
-											<div class="wuxFlexTable">
-												<div class="wuxFlexTableItemGroup">
-
-													<span class="wuxFlexTableItemHeader">Polearm</span>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Ability</span>
-															<span class="wuxFlexTableItemData">DEX</span>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Score</span>
-															<span class="wuxFlexTableItemData" name="attr_skill_polearm">0</span>
-														</div>
-														<div class="wuxFlexTableItemGroup">
-															<span class="wuxFlexTableItemSubheader">Bonus</span>
-															<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_skillbonus_polearm" placeholder="0"></span>
 														</div>
 													</div>
 												</div>

@@ -22,7 +22,7 @@ function UpdateCharacterTechSlotCounts(slotType) {
 }
 
 function SetCharacterTechSlotCounts(update, attrArray, totalLevel, slotTypes) {
-	
+
 	let defaultStats = GetStatisticsDefaults();
 	let countMax = 0;
 	let slotType = {};
@@ -32,49 +32,49 @@ function SetCharacterTechSlotCounts(update, attrArray, totalLevel, slotTypes) {
 		// determine the max count
 		slotType = slotTypes[i];
 		countMax = 0;
-		switch(slotType) {
+		switch (slotType) {
 			case "job":
 				countMax = defaultStats.techSlotJob;
 				if (totalLevel >= 21) {
 					countMax += 1;
 				}
-			break;
+				break;
 			case "active":
 				countMax = defaultStats.techSlotActive;
 				if (totalLevel >= 31) {
 					countMax += 3;
 				}
-				else  if (totalLevel >= 21) {
+				else if (totalLevel >= 21) {
 					countMax += 2;
 				}
-				else  if (totalLevel >= 6) {
+				else if (totalLevel >= 6) {
 					countMax += 1;
 				}
-			break;
+				break;
 			case "passive":
 				countMax = defaultStats.techSlotPassive;
 				if (totalLevel >= 36) {
 					countMax += 3;
 				}
-				else  if (totalLevel >= 26) {
+				else if (totalLevel >= 26) {
 					countMax += 2;
 				}
-				else  if (totalLevel >= 11) {
+				else if (totalLevel >= 11) {
 					countMax += 1;
 				}
-			break;
+				break;
 			case "support":
 				countMax = defaultStats.techSlotSupport;
 				if (totalLevel >= 36) {
 					countMax += 3;
 				}
-				else  if (totalLevel >= 26) {
+				else if (totalLevel >= 26) {
 					countMax += 2;
 				}
-				else  if (totalLevel >= 11) {
+				else if (totalLevel >= 11) {
 					countMax += 1;
 				}
-			break;
+				break;
 		}
 
 		if (countMax != 0) {
@@ -105,7 +105,7 @@ on("change:character-button-techniquesrefresh", function () {
 function UpdateLearnedTechniques() {
 
 	let mod_attrs = ["techniques-jobTech", "techniques-learnedTech"];
-	
+
 	let repeatingSection = "repeating_learnedtechniques";
 
 	getSectionIDs(repeatingSection, function (idArray) {
@@ -126,7 +126,7 @@ function UpdateLearnedTechniques() {
 					newTechniques.push(technique);
 				}
 			}
-			
+
 			let learnedTech = AttrParseJSONDictionary(v, "techniques-learnedTech");
 			for (let i = 0; i < learnedTech.keys.length; i++) {
 				if (!activeLearnedTech.includes(learnedTech.keys[i])) {
@@ -174,13 +174,13 @@ function UpdateCharacterTechniqueSelect() {
 	let repeatingReaction = "repeating_reactionlearnedtechniques";
 	let repeatingFree = "repeating_freelearnedtechniques";
 	let repeatingNone = "repeating_nonelearnedtechniques";
-	
+
 	let mod_attrs = ["techslot-job_max", "techslot-active_max", "techslot-passive_max", "techslot-support_max"];
 	getSectionIDs(repeatingLearned, function (learnedArray) {
-		mod_attrs = mod_attrs.concat(GetSectionIdValues(learnedArray, repeatingLearned, 
+		mod_attrs = mod_attrs.concat(GetSectionIdValues(learnedArray, repeatingLearned,
 			["technique-name", "technique-isDatabase", "technique-type", "technique-action", "technique-augmentBase", "technique-select"
-			// add all tech data
-		]));
+				// add all tech data
+			]));
 		getSectionIDs(repeatingFull, function (fullArray) {
 			mod_attrs = mod_attrs.concat(GetSectionIdValues(fullArray, repeatingFull, ["technique-name"]));
 			getSectionIDs(repeatingQuick, function (quickArray) {
@@ -209,52 +209,52 @@ function UpdateCharacterTechniqueSelect() {
 									support: AttrParseInt(v, "techslot-support_max")
 								}
 								let techName = "";
-					
+
 								// iterate through every learned technique and find the ones that are selected
 								for (let i = 0; i < learnedArray.length; i++) {
 									if (AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-select"), "0") != "0") {
-										switch(AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-type"))) {
+										switch (AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-type"))) {
 											case "Job": slots.job--; break;
 											case "Active": slots.active--; break;
 											case "Passive": slots.passive--; break;
 											case "Support": slots.support--; break;
 										}
-										switch(AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-action"))) {
+										switch (AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-action"))) {
 											case "Full":
 												actions.full.addBaseTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
-											break;
+												break;
 											case "Quick":
 												actions.quick.addBaseTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
-											break;
+												break;
 											case "Reaction":
 												actions.reaction.addBaseTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
-											break;
+												break;
 											case "Free":
 												actions.free.addBaseTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
-											break;
+												break;
 											case "None":
 												actions.none.addBaseTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
-											break;
+												break;
 										}
 										selectedBaseActions.push(AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")));
 									}
@@ -272,7 +272,7 @@ function UpdateCharacterTechniqueSelect() {
 								for (let i = 0; i < learnedArray.length; i++) {
 									if (selectedBaseActions.includes(AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-augmentBase")))) {
 
-										switch(AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-action"))) {
+										switch (AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-action"))) {
 											case "Full":
 												actions.full.addAugmentTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
@@ -280,7 +280,7 @@ function UpdateCharacterTechniqueSelect() {
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
-											break;
+												break;
 											case "Quick":
 												actions.quick.addAugmentTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
@@ -288,7 +288,7 @@ function UpdateCharacterTechniqueSelect() {
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
-											break;
+												break;
 											case "Reaction":
 												actions.reaction.addAugmentTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
@@ -296,7 +296,7 @@ function UpdateCharacterTechniqueSelect() {
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
-											break;
+												break;
 											case "Free":
 												actions.free.addAugmentTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
@@ -304,7 +304,7 @@ function UpdateCharacterTechniqueSelect() {
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
-											break;
+												break;
 											case "None":
 												actions.none.addAugmentTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
@@ -312,7 +312,7 @@ function UpdateCharacterTechniqueSelect() {
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
-											break;
+												break;
 										}
 									}
 								}
@@ -335,7 +335,7 @@ function CreateLearnedTechniquesDataObj(attrArray, repeatingSection, idArray) {
 		new: CreateDictionary(),
 		newCustom: CreateDictionary(),
 
-		addBaseTech: function(techName, techId, isDatabase) {
+		addBaseTech: function (techName, techId, isDatabase) {
 			if (this.current.includes(techName)) {
 				this.found.push(techName);
 			}
@@ -362,7 +362,7 @@ function CreateLearnedTechniquesDataObj(attrArray, repeatingSection, idArray) {
 			return false;
 		},
 
-		addAugmentTech: function(techName, baseName, techId, isDatabase) {
+		addAugmentTech: function (techName, baseName, techId, isDatabase) {
 
 			if (this.new.keys.includes(baseName)) {
 				if (this.current.includes(techName)) {
@@ -422,7 +422,7 @@ function CreateLearnedTechniquesDataObj(attrArray, repeatingSection, idArray) {
 			return false;
 		}
 	}
-	
+
 	for (let i = 0; i < idArray.length; i++) {
 		output.current.push(attrArray[GetSectionIdName(repeatingSection, idArray[i], "technique-name")]);
 	}
@@ -454,7 +454,7 @@ function SetCharacterTechniqueSelect(attrArray, actions, slots, customTechniques
 	RemoveCharacterActionsLearnedTechniques(actions.full, freeArray, repeatingFree);
 	update = SetCharacterActionsNewLearnedTechniques(update, attrArray, actions.none, repeatingNone, customTechniquesList);
 	RemoveCharacterActionsLearnedTechniques(actions.full, noneArray, repeatingNone);
-	
+
 	setAttrs(update, { silent: true });
 }
 
@@ -708,7 +708,7 @@ function UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo) {
 				damageString += "+ P";
 				trueDamage += ";Power";
 			}
-			
+
 			damageString += ` ${v[GetSectionIdName(repeatingSection, id, "technique-damageType")]}`;
 			let element = v[GetSectionIdName(repeatingSection, id, "technique-element")];
 			if (element != "") {
@@ -717,7 +717,7 @@ function UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo) {
 			update[GetSectionIdName(repeatingSection, id, "technique-damage")] = trueDamage;
 			update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = damageString;
 		}
-		
+
 		update[GetSectionIdName(repeatingSection, id, "technique-attackBlockTarget")] = attackBlockTarget;
 		update[GetSectionIdName(repeatingSection, id, "technique-attackBlockSkill")] = attackBlockSkill;
 		update[GetSectionIdName(repeatingSection, id, "technique-attackBlockDamage")] = attackBlockDamage;
@@ -746,7 +746,7 @@ on("change:repeating_learnedtechniques:technique-description change:repeating_le
 });
 
 function UpdateCharacterCustomTechniqueDescription(eventinfo) {
-	
+
 	let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
 	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
 	let mod_attrs = GetSectionIdNameFromArray(repeatingSection, id, ["technique-description", "technique-onSuccess"]);
@@ -1145,13 +1145,13 @@ function SetCharacterTraumaLimit(update, attrArray, path) {
 
 
 // ======== Character Skills Update
-on("change:skillbonus_brace change:skillbonus_insight change:skillbonus_notice change:skillbonus_presence change:skillbonus_reflex change:skillbonus_resolve change:skillbonus_brawling change:skillbonus_finesse change:skillbonus_marksmanship change:skillbonus_might change:skillbonus_polearm change:skillbonus_throw change:skillbonus_assault change:skillbonus_conjure change:skillbonus_enchant change:skillbonus_ethereal change:skillbonus_field change:skillbonus_structure change:skillbonus_acrobatics change:skillbonus_athletics change:skillbonus_fortitude change:skillbonus_legerdemain change:skillbonus_physique change:skillbonus_stealth change:skillbonus_academics change:skillbonus_culture change:skillbonus_investigation change:skillbonus_nature change:skillbonus_tracking change:skillbonus_vocation change:skillbonus_charm change:skillbonus_deception change:skillbonus_intimidation change:skillbonus_leadership change:skillbonus_negotiation change:skillbonus_performance change:skillbonus_artisan change:skillbonus_cook change:skillbonus_heal change:skillbonus_herbalism change:skillbonus_mechanical change:skillbonus_pilot", function (eventinfo) {
+on("change:skillbonus_brace change:skillbonus_insight change:skillbonus_notice change:skillbonus_presence change:skillbonus_reflex change:skillbonus_resolve change:skillbonus_brawling change:skillbonus_finesse change:skillbonus_lunge change:skillbonus_marksmanship change:skillbonus_might change:skillbonus_throw change:skillbonus_assault change:skillbonus_conjure change:skillbonus_enchant change:skillbonus_ethereal change:skillbonus_field change:skillbonus_structure change:skillbonus_acrobatics change:skillbonus_athletics change:skillbonus_fortitude change:skillbonus_legerdemain change:skillbonus_physique change:skillbonus_stealth change:skillbonus_academics change:skillbonus_culture change:skillbonus_investigation change:skillbonus_nature change:skillbonus_tracking change:skillbonus_vocation change:skillbonus_charm change:skillbonus_deception change:skillbonus_intimidation change:skillbonus_leadership change:skillbonus_negotiation change:skillbonus_performance change:skillbonus_artisan change:skillbonus_cook change:skillbonus_heal change:skillbonus_herbalism change:skillbonus_mechanical change:skillbonus_pilot", function (eventinfo) {
 
 	UpdateCharacterSingleSkill(eventinfo.sourceAttribute);
 });
 
 function GetBonusSkillsList() {
-	return ["skillbonus_brace", "skillbonus_insight", "skillbonus_notice", "skillbonus_presence", "skillbonus_reflex", "skillbonus_resolve", "skillbonus_brawling", "skillbonus_finesse", "skillbonus_marksmanship", "skillbonus_might", "skillbonus_polearm", "skillbonus_throw", "skillbonus_assault", "skillbonus_conjure", "skillbonus_enchant", "skillbonus_ethereal", "skillbonus_field", "skillbonus_structure", "skillbonus_acrobatics", "skillbonus_athletics", "skillbonus_fortitude", "skillbonus_legerdemain", "skillbonus_physique", "skillbonus_stealth", "skillbonus_academics", "skillbonus_culture", "skillbonus_investigation", "skillbonus_nature", "skillbonus_tracking", "skillbonus_vocation", "skillbonus_charm", "skillbonus_deception", "skillbonus_intimidation", "skillbonus_leadership", "skillbonus_negotiation", "skillbonus_performance", "skillbonus_artisan", "skillbonus_cook", "skillbonus_heal", "skillbonus_herbalism", "skillbonus_mechanical", "skillbonus_pilot"];
+	return ["skillbonus_brace", "skillbonus_insight", "skillbonus_notice", "skillbonus_presence", "skillbonus_reflex", "skillbonus_resolve", "skillbonus_brawling", "skillbonus_finesse", "skillbonus_lunge", "skillbonus_marksmanship", "skillbonus_might", "skillbonus_throw", "skillbonus_assault", "skillbonus_conjure", "skillbonus_enchant", "skillbonus_ethereal", "skillbonus_field", "skillbonus_structure", "skillbonus_acrobatics", "skillbonus_athletics", "skillbonus_fortitude", "skillbonus_legerdemain", "skillbonus_physique", "skillbonus_stealth", "skillbonus_academics", "skillbonus_culture", "skillbonus_investigation", "skillbonus_nature", "skillbonus_tracking", "skillbonus_vocation", "skillbonus_charm", "skillbonus_deception", "skillbonus_intimidation", "skillbonus_leadership", "skillbonus_negotiation", "skillbonus_performance", "skillbonus_artisan", "skillbonus_cook", "skillbonus_heal", "skillbonus_herbalism", "skillbonus_mechanical", "skillbonus_pilot"];
 }
 // -- end
 

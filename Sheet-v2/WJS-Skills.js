@@ -171,7 +171,7 @@ on("change:skills-defensive-reset", function () {
 	update_skills_Defensive_skills_reset();
 });
 
-on("change:skills-trainingphysical-brawling change:skills-trainingphysical-finesse change:skills-trainingphysical-marksmanship change:skills-trainingphysical-might change:skills-trainingphysical-polearm change:skills-trainingphysical-throw change:skills-trainingphysical-acrobatics change:skills-trainingphysical-athletics change:skills-trainingphysical-fortitude change:skills-trainingphysical-legerdemain change:skills-trainingphysical-physique change:skills-trainingphysical-stealth change:skills-trainingphysical-artisan change:skills-trainingphysical-cook change:skills-trainingphysical-heal change:skills-trainingphysical-herbalism change:skills-trainingphysical-mechanical change:skills-trainingphysical-pilot", function (eventinfo) {
+on("change:skills-trainingphysical-brawling change:skills-trainingphysical-finesse change:skills-trainingphysical-lunge change:skills-trainingphysical-marksmanship change:skills-trainingphysical-might change:skills-trainingphysical-throw change:skills-trainingphysical-acrobatics change:skills-trainingphysical-athletics change:skills-trainingphysical-fortitude change:skills-trainingphysical-legerdemain change:skills-trainingphysical-physique change:skills-trainingphysical-stealth change:skills-trainingphysical-artisan change:skills-trainingphysical-cook change:skills-trainingphysical-heal change:skills-trainingphysical-herbalism change:skills-trainingphysical-mechanical change:skills-trainingphysical-pilot", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -197,7 +197,7 @@ on("change:skills-mental-reset", function () {
 	update_skills_mental_skills_reset();
 });
 
-on("change:skills-trainingchoice-brawling change:skills-trainingchoice-finesse change:skills-trainingchoice-marksmanship change:skills-trainingchoice-might change:skills-trainingchoice-polearm change:skills-trainingchoice-throw change:skills-trainingchoice-acrobatics change:skills-trainingchoice-athletics change:skills-trainingchoice-fortitude change:skills-trainingchoice-legerdemain change:skills-trainingchoice-physique change:skills-trainingchoice-stealth change:skills-trainingchoice-artisan change:skills-trainingchoice-cook change:skills-trainingchoice-heal change:skills-trainingchoice-herbalism change:skills-trainingchoice-mechanical change:skills-trainingchoice-pilot change:skills-trainingchoice-assault change:skills-trainingchoice-conjure change:skills-trainingchoice-enchant change:skills-trainingchoice-ethereal change:skills-trainingchoice-field change:skills-trainingchoice-structure change:skills-trainingchoice-academics change:skills-trainingchoice-culture change:skills-trainingchoice-investigation change:skills-trainingchoice-nature change:skills-trainingchoice-tracking change:skills-trainingchoice-vocation change:skills-trainingchoice-charm change:skills-trainingchoice-deception change:skills-trainingchoice-intimidation change:skills-trainingchoice-leadership change:skills-trainingchoice-negotiation change:skills-trainingchoice-performance", function (eventinfo) {
+on("change:skills-trainingchoice-brawling change:skills-trainingchoice-finesse change:skills-trainingchoice-lunge change:skills-trainingchoice-marksmanship change:skills-trainingchoice-might change:skills-trainingchoice-throw change:skills-trainingchoice-acrobatics change:skills-trainingchoice-athletics change:skills-trainingchoice-fortitude change:skills-trainingchoice-legerdemain change:skills-trainingchoice-physique change:skills-trainingchoice-stealth change:skills-trainingchoice-artisan change:skills-trainingchoice-cook change:skills-trainingchoice-heal change:skills-trainingchoice-herbalism change:skills-trainingchoice-mechanical change:skills-trainingchoice-pilot change:skills-trainingchoice-assault change:skills-trainingchoice-conjure change:skills-trainingchoice-enchant change:skills-trainingchoice-ethereal change:skills-trainingchoice-field change:skills-trainingchoice-structure change:skills-trainingchoice-academics change:skills-trainingchoice-culture change:skills-trainingchoice-investigation change:skills-trainingchoice-nature change:skills-trainingchoice-tracking change:skills-trainingchoice-vocation change:skills-trainingchoice-charm change:skills-trainingchoice-deception change:skills-trainingchoice-intimidation change:skills-trainingchoice-leadership change:skills-trainingchoice-negotiation change:skills-trainingchoice-performance", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -209,7 +209,8 @@ on("change:skills-choice-reset", function () {
 
 	update_skills_choice_skills_reset();
 });
-// -- End
+
+//--end
 
 var update_skills_defensivePhys_skills = function () {
 	update_skills_training("DefensivePhys", GetDefensivePhysSkillsList(true));

@@ -527,9 +527,6 @@ function SetTechniqueUseData(update, technique, repeatingSection, id) {
 		if (technique.traits != "") {
 			var traitsDb = GetTraitsDictionary(technique.traits, "technique");
 			for (var i = 0; i < traitsDb.length; i++) {
-				if (traitsDb[i].name.indexOf("Armament") >= 0) {
-					output += "{{weapon=@{technique-equippedWeapon}}} ";
-				}
 				output += `{{Trait${i}=${traitsDb[i].name}}} {{Trait${i}Desc=${traitsDb[i].description}}} `;
 			}
 		}
@@ -585,6 +582,10 @@ function SetTechniqueUseData(update, technique, repeatingSection, id) {
 		if (technique.onSuccess != "") {
 			output += `{{OnHit=${technique.onSuccess}}} `;
 		}
+	}
+
+	if (technique.traits != "" && technique.traits.indexOf("Armament") >= 0) {
+		output += "@{technique-equippedWeapon} ";
 	}
 
 	// add technique data for the api
