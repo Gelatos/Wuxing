@@ -1326,9 +1326,9 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     Techniques
 ========================================*/
 
-.wuxTechnique,
+.wuxFeature,
 .sheet-rolltemplate-technique,
-.wuxTechniqueTable
+.wuxFeatureTable
 {
     position: relative;
     display: inline-block;
@@ -1344,7 +1344,7 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     line-height: 12px;
 }
 
-.wuxTechnique,
+.wuxFeature,
 .sheet-rolltemplate-technique
 {
     font-size: 12px;
@@ -1358,15 +1358,15 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     min-width: 200px; 
 }
 
-input[type=hidden].wuxTechnique-flag[value="1"] + .wuxTechnique,
-input[type=hidden].wuxTechnique-flag[value="on"] + .wuxTechnique
+input[type=hidden].wuxFeature-flag[value="1"] + .wuxFeature,
+input[type=hidden].wuxFeature-flag[value="on"] + .wuxFeature
 {
     border: 3px solid #ba7417;
 }
 
-.wuxTechniqueHeader,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueHeader,
-.wuxTechniqueTableHeader
+.wuxFeatureHeader,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader,
+.wuxFeatureTableHeader
 {
     position: relative;
     display: block; 
@@ -1374,57 +1374,57 @@ input[type=hidden].wuxTechnique-flag[value="on"] + .wuxTechnique
     padding: 0px 0px 5px 10px; 
 }
 
-.wuxTechniqueHeader,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueHeader
+.wuxFeatureHeader,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader
 {
     background: #c0e7d5;
     border-bottom: 1px solid #efefef; 
 }
 
-input.wuxTechniqueHeader-flag[value="Quick"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-Quick,
-.sheet-rolltemplate-technique .wuxTechniqueHeader-Quick
+input.wuxFeatureHeader-flag[value="Quick"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Quick,
+.sheet-rolltemplate-technique .wuxFeatureHeader-Quick
 {
     background-color: #fbe5e5;
 }
 
-input.wuxTechniqueHeader-flag[value="Full"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-Full,
-.sheet-rolltemplate-technique .wuxTechniqueHeader-Full
+input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Full,
+.sheet-rolltemplate-technique .wuxFeatureHeader-Full
 {
     background-color: #d7a0a0;
 }
 
-input.wuxTechniqueHeader-flag[value="Reaction"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-Reaction,
-.sheet-rolltemplate-technique .wuxTechniqueHeader-Reaction
+input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Reaction,
+.sheet-rolltemplate-technique .wuxFeatureHeader-Reaction
 {
     background-color: #e5eafb;
 }
 
-input.wuxTechniqueHeader-flag[value="Free"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-Free,
-.sheet-rolltemplate-technique .wuxTechniqueHeader-Free
+input.wuxFeatureHeader-flag[value="Free"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Free,
+.sheet-rolltemplate-technique .wuxFeatureHeader-Free
 {
     background-color: #e5fbf1;
 }
 
-input.wuxTechniqueHeader-flag[value="None"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-None,
-.sheet-rolltemplate-technique .wuxTechniqueHeader-None
+input.wuxFeatureHeader-flag[value="None"] + .wuxFeatureHeader,
+.wuxFeatureHeader-None,
+.sheet-rolltemplate-technique .wuxFeatureHeader-None
 {
     background-color: #f0e5fb;
 }
 
-input.wuxTechniqueHeader-flag[value="Augment"] + .wuxTechniqueHeader,
-.wuxTechniqueHeader-Augment,
-.sheet-rolltemplate-technique .wuxTechniqueHeader-Augment
+input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Augment,
+.sheet-rolltemplate-technique .wuxFeatureHeader-Augment
 {
     background-color: #acacac;
 }
 
-.wuxTechniqueType,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueType
+.wuxFeatureType,
+.sheet-rolltemplate-technique .sheet-wuxFeatureType
 {
     position: absolute;
     display: inline-block;
@@ -1440,43 +1440,43 @@ input.wuxTechniqueHeader-flag[value="Augment"] + .wuxTechniqueHeader,
     background: #000000;
 }
 
-input.wuxTechniqueType-flag[value="Active"] + .wuxTechniqueType,
-.wuxTechniqueType-Active,
-.sheet-rolltemplate-technique .wuxTechniqueType-Active
+input.wuxFeatureType-flag[value="Active"] + .wuxFeatureType,
+.wuxFeatureType-Active,
+.sheet-rolltemplate-technique .wuxFeatureType-Active
 {
     background-color: #b60003;
 }
 
-input.wuxTechniqueType-flag[value="Passive"] + .wuxTechniqueType,
-.wuxTechniqueType-Passive,
-.sheet-rolltemplate-technique .wuxTechniqueType-Passive
+input.wuxFeatureType-flag[value="Passive"] + .wuxFeatureType,
+.wuxFeatureType-Passive,
+.sheet-rolltemplate-technique .wuxFeatureType-Passive
 {
     background-color: #4db600;
 }
 
-input.wuxTechniqueType-flag[value="Support"] + .wuxTechniqueType,
-.wuxTechniqueType-Support,
-.sheet-rolltemplate-technique .wuxTechniqueType-Support
+input.wuxFeatureType-flag[value="Support"] + .wuxFeatureType,
+.wuxFeatureType-Support,
+.sheet-rolltemplate-technique .wuxFeatureType-Support
 {
     background-color: #00b0b6;
 }
 
-input.wuxTechniqueType-flag[value="Job"] + .wuxTechniqueType,
-.wuxTechniqueType-Job,
-.sheet-rolltemplate-technique .wuxTechniqueType-Job
+input.wuxFeatureType-flag[value="Job"] + .wuxFeatureType,
+.wuxFeatureType-Job,
+.sheet-rolltemplate-technique .wuxFeatureType-Job
 {
     background-color: #7800b6;
 }
 
-input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType,
-.wuxTechniqueType-Standard,
-.sheet-rolltemplate-technique .wuxTechniqueType-Standard
+input.wuxFeatureType-flag[value="Standard"] + .wuxFeatureType,
+.wuxFeatureType-Standard,
+.sheet-rolltemplate-technique .wuxFeatureType-Standard
 {
     background-color: #b66f00;
 }
 
-.wuxTechniqueType .wuxTechniqueTypeHeader,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueType .sheet-wuxTechniqueTypeHeader
+.wuxFeatureType .wuxFeatureTypeHeader,
+.sheet-rolltemplate-technique .sheet-wuxFeatureType .sheet-wuxFeatureTypeHeader
 {
     position: relative;
     display: block;
@@ -1485,17 +1485,17 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType,
     font-weight: bold;
 }
 
-.wuxTechniqueType .wuxTechniqueTypeFooter,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueType .sheet-wuxTechniqueTypeFooter
+.wuxFeatureType .wuxFeatureTypeFooter,
+.sheet-rolltemplate-technique .sheet-wuxFeatureType .sheet-wuxFeatureTypeFooter
 {
     position: relative;
     display: block;
     font-size: 7px;
 }
 
-.wuxTechniqueHeaderInteractBlock,
-.wuxTechniqueHeaderInteractInnerBlock,
-.wuxTechniqueTableHeaderInteractBlock 
+.wuxFeatureHeaderInteractBlock,
+.wuxFeatureHeaderInteractInnerBlock,
+.wuxFeatureTableHeaderInteractBlock 
 {
     position: relative;
 	display: inline-block;
@@ -1503,16 +1503,16 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType,
 	height: 20px;
 }
 
-.wuxTechniqueTableHeaderInteractBlock span
+.wuxFeatureTableHeaderInteractBlock span
 {
     color: #d0d0d0;
     font-size: 8px;
     text-align: center;
 }
 
-.wuxTechniqueHeaderInteractiveIcon,
-.wuxTechniqueHeaderInteractivePictosIcon,
-.wuxTechniqueHeaderInteractiveAuxIcon
+.wuxFeatureHeaderInteractiveIcon,
+.wuxFeatureHeaderInteractivePictosIcon,
+.wuxFeatureHeaderInteractiveAuxIcon
 {
     position: relative;
     bottom: 5px;
@@ -1521,7 +1521,7 @@ input.wuxTechniqueType-flag[value="Standard"] + .wuxTechniqueType,
     font-size: 20px;
 }
 
-input[type=number].wuxTechniqueHeaderInteractiveAuxIcon
+input[type=number].wuxFeatureHeaderInteractiveAuxIcon
 {
     max-width: 25px;
     margin-left: -5px;
@@ -1531,36 +1531,36 @@ input[type=number].wuxTechniqueHeaderInteractiveAuxIcon
     background: #FFF;
 }
 
-.wuxTechniqueHeaderInteractiveIcon
+.wuxFeatureHeaderInteractiveIcon
 {
 	display: none;
 }
 
-input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag[value="on"] + .wuxTechniqueHeaderInteractiveIcon,
-input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag[value="1"] + .wuxTechniqueHeaderInteractiveIcon,
-.wuxTechniqueHeaderInteractiveAuxIcon
+input[type=hidden].wuxFeatureHeaderInteractiveIcon-flag[value="on"] + .wuxFeatureHeaderInteractiveIcon,
+input[type=hidden].wuxFeatureHeaderInteractiveIcon-flag[value="1"] + .wuxFeatureHeaderInteractiveIcon,
+.wuxFeatureHeaderInteractiveAuxIcon
 {
     display: inline-block;
 }
 
-input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag[value="on"] + .wuxTechniqueHeaderInteractiveAuxIcon,
-input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag[value="1"] + .wuxTechniqueHeaderInteractiveAuxIcon
+input[type=hidden].wuxFeatureHeaderInteractiveIcon-flag[value="on"] + .wuxFeatureHeaderInteractiveAuxIcon,
+input[type=hidden].wuxFeatureHeaderInteractiveIcon-flag[value="1"] + .wuxFeatureHeaderInteractiveAuxIcon
 {
     display: none;
 }
 
-.wuxTechniqueHeaderInteractivePictosIcon
+.wuxFeatureHeaderInteractivePictosIcon
 {
     font-family: pictos;
     color: #FFF;
 }
 
-input[type=hidden].wuxTechniqueHeaderInteractivePictosIcon-flag:not([value="0"]) + .wuxTechniqueHeaderInteractivePictosIcon
+input[type=hidden].wuxFeatureHeaderInteractivePictosIcon-flag:not([value="0"]) + .wuxFeatureHeaderInteractivePictosIcon
 {
     color: #000;
 }
 
-button[type=roll].wuxTechniqueHeaderInteractiveButton
+button[type=roll].wuxFeatureHeaderInteractiveButton
 {
     position: relative;
     left: -5px;
@@ -1577,26 +1577,26 @@ button[type=roll].wuxTechniqueHeaderInteractiveButton
     box-shadow: none;
 }
 
-button[type=roll].wuxTechniqueHeaderInteractiveButton:hover
+button[type=roll].wuxFeatureHeaderInteractiveButton:hover
 {
     color: #FFF;
 }
 
-button[type=roll].wuxTechniqueHeaderInteractiveButton::before
+button[type=roll].wuxFeatureHeaderInteractiveButton::before
 {
     content: "" !important;
 }
 
-.wuxTechniqueHeaderDisplayBlock,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderDisplayBlock
+.wuxFeatureHeaderDisplayBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayBlock
 {
     position: relative;
     display:inline-block; 
     width: calc(100% - 115px);
 }
 
-.wuxTechniqueHeaderName,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderName
+.wuxFeatureHeaderName,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderName
 {
     position: relative;
     display: block; 
@@ -1608,8 +1608,8 @@ button[type=roll].wuxTechniqueHeaderInteractiveButton::before
     font-weight: bold;
 }
 
-.wuxTechniqueHeaderInfo,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderInfo
+.wuxFeatureHeaderInfo,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfo
 {
     position: relative;
     display: block; 
@@ -1617,21 +1617,21 @@ button[type=roll].wuxTechniqueHeaderInteractiveButton::before
     font-size: 11px;
 }
 
-.wuxTechniqueHeaderInfoType,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueHeaderInfoType
+.wuxFeatureHeaderInfoType,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoType
 {
     position: relative;
     font-weight: bold;
 }
 
-.wuxTechniqueExpandingContent,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueExpandingContent
+.wuxFeatureExpandingContent,
+.sheet-rolltemplate-technique .sheet-wuxFeatureExpandingContent
 {
     position: relative;
     display: none;
 }
 
-input[type="checkbox"].wuxTechniqueHeaderInteractBlock-flag
+input[type="checkbox"].wuxFeatureHeaderInteractBlock-flag
 {
     opacity: 0;    
     position: absolute;
@@ -1644,18 +1644,18 @@ input[type="checkbox"].wuxTechniqueHeaderInteractBlock-flag
     z-index: 100;
 }
 
-input[type=hidden].wuxTechniqueHeaderInteractBlock-flag[value="on"] + .wuxTechniqueExpandingContent
+input[type=hidden].wuxFeatureHeaderInteractBlock-flag[value="on"] + .wuxFeatureExpandingContent
 {
     display: block;
 }
 
-input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + input.wuxTechniqueHeaderInteractBlock-flag
+input[type=hidden].wuxFeatureHeaderInteractiveIcon-flag:not([value="0"]) + input.wuxFeatureHeaderInteractBlock-flag
 {
     pointer-events: none;
 }
 
-.wuxTechniqueFunctionBlock,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueFunctionBlock
+.wuxFeatureFunctionBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock
 {
     position: relative;
     display: block;
@@ -1670,15 +1670,15 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
     background: #fbf9e5;
 }
 
-.wuxTechniqueFunctionBlock .wuxTechniqueFunctionBlockRow,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueFunctionBlock .sheet-wuxTechniqueFunctionBlockRow
+.wuxFeatureFunctionBlock .wuxFeatureFunctionBlockRow,
+.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock .sheet-wuxFeatureFunctionBlockRow
 {
     position: relative;
     display: block;
 }
 
-.wuxTechniqueAttackBlock,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock
+.wuxFeatureAttackBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock
 {
     position: relative;
     width: calc(100% - 30px);
@@ -1691,38 +1691,38 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
     background: #e8c5c5;
 }
 
-.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow,
-.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockRange,
-.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockTarget,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockRange,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockTarget
+.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow,
+.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow .wuxFeatureAttackBlockRange,
+.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow .wuxFeatureAttackBlockTarget,
+.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow,
+.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockRange,
+.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockTarget
 {
     position: relative;
     display: inline-block;
 }
 
-.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow
+.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow,
+.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow
 {
     width: calc(100% - 22px);
 }
 
-.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockRange,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockRange
+.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow .wuxFeatureAttackBlockRange,
+.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockRange
 {
     padding-right: 10px;
 }
 
-.wuxTechniqueAttackBlock .wuxTechniqueAttackBlockRow .wuxTechniqueAttackBlockTarget,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueAttackBlock .sheet-wuxTechniqueAttackBlockRow .sheet-wuxTechniqueAttackBlockTarget
+.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow .wuxFeatureAttackBlockTarget,
+.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockTarget
 {
     width: calc(65% - 5px);
 }
 
-.wuxTechniqueDescriptionBlock,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueDescriptionBlock,
-.wuxTechniqueEditBlock
+.wuxFeatureDescriptionBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureDescriptionBlock,
+.wuxFeatureEditBlock
 {
     position: relative;
     display: block;
@@ -1732,15 +1732,15 @@ input[type=hidden].wuxTechniqueHeaderInteractiveIcon-flag:not([value="0"]) + inp
     font-size: 11px;
 }
 
-.wuxTechniqueDescriptionBlock .wuxTechniqueDescriptionBlockDesc,
-.sheet-rolltemplate-technique .sheet-wuxTechniqueDescriptionBlock .sheet-wuxTechniqueDescriptionBlockDesc
+.wuxFeatureDescriptionBlock .wuxFeatureDescriptionBlockDesc,
+.sheet-rolltemplate-technique .sheet-wuxFeatureDescriptionBlock .sheet-wuxFeatureDescriptionBlockDesc
 {
     display: inline-block;
     white-space: pre-line;
     word-break: break-word;
 }
 
-.wuxTechniqueEditBlock
+.wuxFeatureEditBlock
 {
     background-color: #1d1e1f;
 }

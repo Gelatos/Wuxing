@@ -7,52 +7,52 @@
 
 	<rolltemplate class="sheet-rolltemplate-technique">
 		{{#type-Quick}}
-		<div class="wuxTechniqueHeader wuxTechniqueHeader-Quick">
+		<div class="wuxFeatureHeader wuxFeatureHeader-Quick">
 		{{/type-Quick}}
 		{{#type-Full}}
-		<div class="wuxTechniqueHeader wuxTechniqueHeader-Full">
+		<div class="wuxFeatureHeader wuxFeatureHeader-Full">
 		{{/type-Full}}
 		{{#type-Reaction}}
-		<div class="wuxTechniqueHeader wuxTechniqueHeader-Reaction">
+		<div class="wuxFeatureHeader wuxFeatureHeader-Reaction">
 		{{/type-Reaction}}
 		{{#type-Free}}
-		<div class="wuxTechniqueHeader wuxTechniqueHeader-Free">
+		<div class="wuxFeatureHeader wuxFeatureHeader-Free">
 		{{/type-Free}}
 		{{#type-None}}
-		<div class="wuxTechniqueHeader wuxTechniqueHeader-None">
+		<div class="wuxFeatureHeader wuxFeatureHeader-None">
 		{{/type-None}}
 		{{#type-Other}}
-		<div class="wuxTechniqueHeader">
+		<div class="wuxFeatureHeader">
 		{{/type-Other}}
 			{{#type-Active}}
-			<div class="wuxTechniqueType wuxTechniqueType-Active">
+			<div class="wuxFeatureType wuxFeatureType-Active">
 			{{/type-Active}}
 			{{#type-Passive}}
-			<div class="wuxTechniqueType wuxTechniqueType-Passive">
+			<div class="wuxFeatureType wuxFeatureType-Passive">
 			{{/type-Passive}}
 			{{#type-Support}}
-			<div class="wuxTechniqueType wuxTechniqueType-Support">
+			<div class="wuxFeatureType wuxFeatureType-Support">
 			{{/type-Support}}
 			{{#type-Job}}
-			<div class="wuxTechniqueType wuxTechniqueType-Job">
+			<div class="wuxFeatureType wuxFeatureType-Job">
 			{{/type-Job}}
 			{{#type-Standard}}
-			<div class="wuxTechniqueType wuxTechniqueType-Standard">
+			<div class="wuxFeatureType wuxFeatureType-Standard">
 			{{/type-Standard}}
-				<span class="wuxTechniqueTypeHeader">{{Type}}</span>
-				<span class="wuxTechniqueTypeFooter">{{Group}}</span>
+				<span class="wuxFeatureTypeHeader">{{Type}}</span>
+				<span class="wuxFeatureTypeFooter">{{Group}}</span>
 			</div>
 
-			<div class="wuxTechniqueHeaderDisplayBlock">
-                <span class="wuxTechniqueHeaderInfoType">{{Username}}</span>
-				<span class="wuxTechniqueHeaderName">{{Name}}</span>
-				<div class="wuxTechniqueHeaderInfo">
+			<div class="wuxFeatureHeaderDisplayBlock">
+                <span class="wuxFeatureHeaderInfoType">{{Username}}</span>
+				<span class="wuxFeatureHeaderName">{{Name}}</span>
+				<div class="wuxFeatureHeaderInfo">
 					
 					{{#type-base}}
-					<span class="wuxTechniqueHeaderInfoType">Base </span>
+					<span class="wuxFeatureHeaderInfoType">Base </span>
 					{{/type-base}}
 					{{^type-base}}
-					<span class="wuxTechniqueHeaderInfoType">Augment </span>
+					<span class="wuxFeatureHeaderInfoType">Augment </span>
 					{{/type-base}}
 					{{#ActionLine}}
 					<span>{{ActionLine}}</span>
@@ -61,15 +61,15 @@
 			</div>
 		</div>
 		{{#type-FunctionBlock}}
-		<div class="wuxTechniqueFunctionBlock">
+		<div class="wuxFeatureFunctionBlock">
 			{{#Prerequisites}}
-			<div class="wuxTechniqueFunctionBlockRow">
+			<div class="wuxFeatureFunctionBlockRow">
 				<span><strong>Prerequisites: </strong></span>
 				<span>{{Prerequisites}}</span>
 			</div>
 			{{/Prerequisites}}
 			{{#Trait0}}
-			<div class="wuxTechniqueFunctionBlockRow">
+			<div class="wuxFeatureFunctionBlockRow">
 				<span><strong>Traits: </strong></span>
 				
 				{{#Trait0}}
@@ -111,13 +111,13 @@
 			</div>
 			{{/Trait0}}
 			{{#Requirement}}
-			<div class="wuxTechniqueFunctionBlockRow">
+			<div class="wuxFeatureFunctionBlockRow">
 				<span><strong>Requirement: </strong></span>
 				<span>{{Requirement}}</span>
 			</div>
 			{{/Requirement}}
 			{{#Trigger}}
-			<div class="wuxTechniqueFunctionBlockRow">
+			<div class="wuxFeatureFunctionBlockRow">
 				<span><strong>Trigger: </strong></span>
 				<span>{{Trigger}}</span>
 			</div>
@@ -126,17 +126,17 @@
 		{{/type-FunctionBlock}}
 		
 		{{#type-AttackBlock}}
-		<div class="wuxHiddenBlockField wuxTechniqueAttackBlock">
+		<div class="wuxHiddenBlockField wuxFeatureAttackBlock">
 			{{#type-AttackBlockTarget}}
-			<div class="wuxTechniqueAttackBlockRow">
+			<div class="wuxFeatureAttackBlockRow">
 				{{#Range}}
-				<div class="wuxTechniqueAttackBlockRange">
+				<div class="wuxFeatureAttackBlockRange">
 					<span><strong>Range: </strong></span>
 					<span>{{Range}}</span>
 				</div>
 				{{/Range}}
 				{{#Target}}
-				<div class="wuxTechniqueAttackBlockRange">
+				<div class="wuxFeatureAttackBlockRange">
 					<span><strong>Target: </strong></span>
 					<span>{{Target}}</span>
 				</div>
@@ -144,13 +144,13 @@
 			</div>
 			{{/type-AttackBlockTarget}}
 			{{#SkillString}}
-			<div class="wuxTechniqueAttackBlockRow">
+			<div class="wuxFeatureAttackBlockRow">
 				<strong>Check: </strong>
 				<span>{{SkillString}}</span>
 			</div>
 			{{/SkillString}}
 			{{#DamageString}}
-			<div class="wuxTechniqueAttackBlockRow">
+			<div class="wuxFeatureAttackBlockRow">
 				<strong>Damage: </strong>
 				<span>{{DamageString}}</span>
 			</div>
@@ -159,17 +159,17 @@
 		{{/type-AttackBlock}}
 		
 		{{#type-DescBlock}}
-		<div class="wuxHiddenBlockField wuxTechniqueDescriptionBlock">
+		<div class="wuxHiddenBlockField wuxFeatureDescriptionBlock">
 			<div>
 				{{#Desc}}
 				<div>
-					<span class="wuxTechniqueDescriptionBlockDesc">{{Desc}}</span>
+					<span class="wuxFeatureDescriptionBlockDesc">{{Desc}}</span>
 				</div>
 				{{/Desc}}
 				{{#OnHit}}
 				<div>
-					<strong class="wuxTechniqueDescriptionBlockDesc">On Hit: </strong>
-					<span class="wuxTechniqueDescriptionBlockDesc">{{OnHit}}</span>
+					<strong class="wuxFeatureDescriptionBlockDesc">On Hit: </strong>
+					<span class="wuxFeatureDescriptionBlockDesc">{{OnHit}}</span>
 				</div>
 				{{/OnHit}}
 			</div>
