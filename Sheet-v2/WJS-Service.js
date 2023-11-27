@@ -76,7 +76,7 @@ function RemoveSectionId(repeatingSection, repeatingSectionId) {
 
   function GetStatisticsDefaults(path) {
 	return {
-		carryCapacity: 40,
+		capacity: 40,
 		vitality: 2,
 		traumaLimit: path == "Common" ? 1 : 3,
 		kiCharge: 5,
@@ -815,6 +815,7 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 	update = SetItemDataTraits(update, repeatingSection, id, item.traits);
 	update[GetSectionIdName(repeatingSection, id, "item-bulk")] = item.bulk;
 	update[GetSectionIdName(repeatingSection, id, "item-valuetier")] = item.values;
+	update[GetSectionIdName(repeatingSection, id, "item-valuetype")] = "CP";
 	update[GetSectionIdName(repeatingSection, id, "item-value")] = GetItemValueInCP(item);
 
 	// set crafting rules
@@ -839,7 +840,7 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 			update[GetSectionIdName(repeatingSection, id, "item-threat")] = item.threat;
 			update[GetSectionIdName(repeatingSection, id, "item-block")] = item.block;
 			update[GetSectionIdName(repeatingSection, id, "item-armor")] = item.armor;
-			update[GetSectionIdName(repeatingSection, id, "item-flexibility")] = item.flexibility;
+			update[GetSectionIdName(repeatingSection, id, "item-reflexPen")] = item.reflexPen;
 			update[GetSectionIdName(repeatingSection, id, "item-speedPen")] = item.speedPen;
 		break;
 	}

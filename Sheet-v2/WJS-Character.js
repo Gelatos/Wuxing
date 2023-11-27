@@ -906,7 +906,7 @@ function GetCharacterStatGrowths(currentGrowths, bonusGrowths, ancestryData) {
 // ======== Statistics - Derived Stat Setters
 
 function GetDerivedBonusStatsList() {
-	return ["statbonus_initiative", "statbonus_power", "statbonus_stress", "statbonus_barrier"];
+	return ["statbonus_initiative", "statbonus_power", "statbonus_stress", "statbonus_barrier", "statbonus_capacity"];
 }
 
 on("change:statbonus_pb", function () {
@@ -983,8 +983,8 @@ function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 				break;
 			case "STR":
 				update["power"] = AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_power");
-				// let defaultStats = GetStatisticsDefaults();
-				// update["carryCapacity"] = defaultStats["carryCapacity"] + AttrParseInt(attrArray, `statscore_${name}`) + AttrParseInt(attrArray, "statbonus_carryCapacity");
+				let defaultStats = GetStatisticsDefaults();
+				update["capacity_max"] = defaultStats["capacity"] + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_capacity");
 				break;
 			case "WIL":
 				total = parseInt(ancestryData.barrier) + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_barrier");;
@@ -1057,7 +1057,7 @@ on("change:statbonus_speed", function () {
 
 function UpdateCharacterSpeed() {
 
-	let mod_attrs = ["statbonus_speed", "builder-ancestry"];
+	let mod_attrs = ["statbonus_speed", "builder-ancestry", "item-speedPen"];
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -1071,7 +1071,7 @@ function UpdateCharacterSpeed() {
 
 function SetCharacterSpeed(update, attrArray, ancestryData) {
 
-	update["speed"] = parseInt(ancestryData.speed) + AttrParseInt(attrArray, "statbonus_speed");
+	update["speed"] = parseInt(ancestryData.speed) + AttrParseInt(attrArray, "statbonus_speed") + AttrParseInt(attrArray, "item-speedPen");
 	return update;
 }
 
@@ -1196,7 +1196,7 @@ function UpdateCharacterSingleSkill(fieldName) {
 function UpdateCharacterSkills(skillsList) {
 	let abilityScoreArray = GetAbilityScoreList(true);
 	let bonusFieldArray = GetSectionIdNameFromArray(`skillbonus_`, "", skillsList);
-	let mod_attrs = ["pb", "skills-baseSkills", "skills-baseChoiceSkills", "skills-baseExtraSkills"];
+	let mod_attrs = ["pb", "skills-baseSkills", "skills-baseChoiceSkills", "skills-baseExtraSkills", "reflexPen"];
 	mod_attrs = mod_attrs.concat(abilityScoreArray).concat(bonusFieldArray);
 
 	getAttrs(mod_attrs, function (v) {
@@ -1232,6 +1232,9 @@ function CreateCharacterSkillsUpdateData(attrArray, skillArray, trainingList) {
 		skillName = skillArray[i];
 		skill = GetSkillsInfo(skillName);
 		skill.bonus = AttrParseInt(attrArray, `skillbonus_${skillName}`);
+		if (skillName == "reflex") {
+			skill.bonus += AttrParseInt(attrArray, `reflexPen`);
+		}
 		skill.isTrained = trainingList.includes(skillName);
 		skillData.push(skill);
 	}

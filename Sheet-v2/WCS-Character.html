@@ -2964,67 +2964,116 @@
 							<span class="wuxDescription">This is the Gear Section. All forms of items can be found in this section.</span>
 							<span class="wuxHeader">Section Options</span>
 							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup wuxNoPadding">
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">Block</span>
 									<div class="wuxFlexTable">
 										<div class="wuxFlexTableItemGroup">
-											<span class="wuxFlexTableItemHeader">Job Slots</span>
-											<div class="wuxFlexTable">
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemSubheader">Score</span>
-													<span class="wuxFlexTableItemData" name="attr_techslot-job_max">0</span>
-												</div>
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemSubheader">Bonus</span>
-													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-job" placeholder="0"></span>
-												</div>
-											</div>
-										</div>
-										<div class="wuxFlexTableItemGroup">
-											<span class="wuxFlexTableItemHeader">Active Slots</span>
-											<div class="wuxFlexTable">
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemSubheader">Score</span>
-													<span class="wuxFlexTableItemData" name="attr_techslot-active_max">0</span>
-												</div>
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemSubheader">Bonus</span>
-													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-active" placeholder="0"></span>
-												</div>
-											</div>
+											<span class="wuxFlexTableItemSubheader">Bonus</span>
+											<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_block" placeholder="0"></span>
 										</div>
 									</div>
 								</div>
-								<div class="wuxFlexTableItemGroup wuxNoPadding">
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">Armor</span>
 									<div class="wuxFlexTable">
 										<div class="wuxFlexTableItemGroup">
-											<span class="wuxFlexTableItemHeader">Passive Slots</span>
-											<div class="wuxFlexTable">
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemSubheader">Score</span>
-													<span class="wuxFlexTableItemData" name="attr_techslot-passive_max">0</span>
-												</div>
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemSubheader">Bonus</span>
-													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-passive" placeholder="0"></span>
-												</div>
-											</div>
+											<span class="wuxFlexTableItemSubheader">Bonus</span>
+											<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_armor" placeholder="0"></span>
 										</div>
+									</div>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">Reflex.Pen.</span>
+									<div class="wuxFlexTable">
 										<div class="wuxFlexTableItemGroup">
-											<span class="wuxFlexTableItemHeader">Support Slots</span>
-											<div class="wuxFlexTable">
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemSubheader">Score</span>
-													<span class="wuxFlexTableItemData" name="attr_techslot-support_max">0</span>
-												</div>
-												<div class="wuxFlexTableItemGroup">
-													<span class="wuxFlexTableItemSubheader">Bonus</span>
-													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-support" placeholder="0"></span>
-												</div>
-											</div>
+											<span class="wuxFlexTableItemSubheader">Bonus</span>
+											<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_reflexPen" placeholder="0"></span>
+										</div>
+									</div>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">Speed.Pen.</span>
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<span class="wuxFlexTableItemSubheader">Bonus</span>
+											<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_speedPen" placeholder="0"></span>
+										</div>
+									</div>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<span class="wuxFlexTableItemHeader">Carrying.Capacity</span>
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<span class="wuxFlexTableItemSubheader">Bonus</span>
+											<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_statbonus_capacity" placeholder="0"></span>
 										</div>
 									</div>
 								</div>
 							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-gearStats wuxTab">
+					<div class="wuxSectionBlock wuxLayoutItem">
+						<div class="wuxSectionContent">
+							<div class="wuxFlexTable">
+								<div class="gear-armor wuxFlexTableItemGroup2 wuxMinWidth150">
+									<span class="wuxHeader">Armor Stats</span>
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxDistinctSection wuxSizeInverse">
+												<div class="wuxDistinctField">
+													<span class="wuxDistinctTitle">Block</span>
+													<span class='wuxDistinctData' name='attr_block' value="0">0</span>
+												</div>
+												<div class="wuxDistinctField">
+													<span class="wuxDistinctTitle">Armor</span>
+													<span class='wuxDistinctData' name='attr_armor' value="0">0</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup wuxNoPadding">
+											<div class="wuxDistinctSection wuxSizeInverse">
+												<div class="wuxDistinctField">
+													<span class="wuxDistinctTitle">Reflex.Pen.</span>
+													<span class='wuxDistinctData' name='attr_reflexPen' value="0">0</span>
+												</div>
+												<div class="wuxDistinctField">
+													<span class="wuxDistinctTitle">Speed.Pen.</span>
+													<span class='wuxDistinctData' name='attr_speedPen' value="0">0</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="gear-currency wuxFlexTableItemGroup wuxMinWidth150">
+									<span class="wuxHeader">Currency</span>
+									<div class="wuxDistinctSection wuxSizeInverse">
+										<div class="wuxDistinctField">
+											<span class="wuxDistinctTitle">CP</span>
+											<input class='wuxDistinctData' type="number" name='attr_currency_cp'>
+										</div>
+										<div class="wuxDistinctField">
+											<span class="wuxDistinctTitle">Jin</span>
+											<input class='wuxDistinctData' type="number" name='attr_currency_jin'>
+										</div>
+									</div>
+								</div>
+								<div class="vitals-ki wuxFlexTableItemGroup wuxMinWidth150">
+									<span class="wuxHeader">Carrying Capacity</span>
+									<div class="wuxDistinctSection wuxSizeInverse">
+										<div class="wuxDistinctField">
+											<span class="wuxDistinctTitle">Capacity</span>
+											<span class='wuxDistinctData'>
+												<span name='attr_capacity' value="0">0</span>
+												<span>/ </span>
+												<span name='attr_capacity_max' value="0">0</span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -3166,15 +3215,15 @@
 														<span name="attr_item-armor"></span>
 														<span>&nbsp;</span>
 													</div>
-													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-flexibility" value="">
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-reflexPen" value="">
 													<div class="wuxHiddenInlineField">
-														<span><strong>Flexibility: </strong></span>
-														<span name="attr_item-flexibility"></span>
+														<span><strong>Reflex.Pen: </strong></span>
+														<span name="attr_item-reflexPen"></span>
 														<span>&nbsp;</span>
 													</div>
 													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-speedPen" value="">
 													<div class="wuxHiddenField">
-														<span><strong>Speed Penalty: </strong></span>
+														<span><strong>Speed.Pen: </strong></span>
 														<span name="attr_item-speedPen"></span>
 														<span>&nbsp;</span>
 													</div>
@@ -3357,9 +3406,9 @@
 														<div class="wuxRow">
 															<input type="number" class='wuxInput' name='attr_item-armor'>
 														</div>
-														<span class='wuxHeader2'>Flexibility</span>
+														<span class='wuxHeader2'>Reflex Penalty</span>
 														<div class="wuxRow">
-															<input type="number" class='wuxInput' name='attr_item-flexibility'>
+															<input type="number" class='wuxInput' name='attr_item-reflexPen'>
 														</div>
 														<span class='wuxHeader2'>Speed Penality</span>
 														<div class="wuxRow">
