@@ -921,7 +921,7 @@ function UpdateCharacterDerivedStat(fieldName) {
 
 	switch (fieldName) {
 		case "initiative": mod_attrs = mod_attrs.concat(["statbonus_initiative", "QCK"]); growthList.push("QCK"); break;
-		case "power": mod_attrs = mod_attrs.concat(["statbonus_power", "STR"]); growthList.push("STR"); console.log("POWER"); break;
+		case "power": mod_attrs = mod_attrs.concat(["statbonus_power", "STR"]); growthList.push("STR"); break;
 		case "barrier": mod_attrs = mod_attrs.concat(["statbonus_barrier", "WIL", "block"]); growthList.push("WIL"); break;
 		case "stress": mod_attrs = mod_attrs.concat(["statbonus_stress", "WIL"]); growthList.push("WIL"); break;
 	}
@@ -950,7 +950,7 @@ function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 				update["initiative"] = AttrParseInt(attrArray, "pb") + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_initiative");
 				break;
 			case "STR":
-				update["power"] = AttrParseInt(attrArray, "pb") + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_power");
+				update["power"] = AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_power");
 				// let defaultStats = GetStatisticsDefaults();
 				// update["carryCapacity"] = defaultStats["carryCapacity"] + AttrParseInt(attrArray, `statscore_${name}`) + AttrParseInt(attrArray, "statbonus_carryCapacity");
 				break;

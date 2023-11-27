@@ -293,6 +293,13 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeader,
     background-color: #acacac;
 }
 
+input.wuxFeatureHeader-flag[value="Equipment"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Equipment,
+.sheet-rolltemplate-technique .wuxFeatureHeader-Equipment
+{
+    background-color: #987da8;
+}
+
 .wuxFeatureType,
 .sheet-rolltemplate-technique .sheet-wuxFeatureType
 {
@@ -522,6 +529,29 @@ input[type=hidden].wuxFeatureHeaderInteractBlock-flag[value="on"] + .wuxFeatureE
 input[type=hidden].wuxFeatureHeaderInteractiveIcon-flag:not([value="0"]) + input.wuxFeatureHeaderInteractBlock-flag
 {
     pointer-events: none;
+}
+
+.wuxFeatureTypeEquipSlot-Weapon, 
+.wuxFeatureTypeEquipSlot-Chest, 
+.wuxFeatureTypeEquipSlot-Armor, 
+.wuxFeatureTypeEquipSlot-Head, 
+.wuxFeatureTypeEquipSlot-Arms, 
+.wuxFeatureTypeEquipSlot-Legs
+{
+    display: none;
+}
+
+input.wuxFeatureTypeEquipSlot-flag[value="Weapon"] + .wuxFeatureTypeEquipSlot-Weapon, 
+input.wuxFeatureTypeEquipSlot-flag[value="Chest Armor"] + .wuxFeatureTypeEquipSlot-Chest, 
+input.wuxFeatureTypeEquipSlot-flag[value="Head Armor"] + .wuxFeatureTypeEquipSlot-Head, 
+input.wuxFeatureTypeEquipSlot-flag[value="Arms Armor"] + .wuxFeatureTypeEquipSlot-Arms, 
+input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlot-Legs, 
+input.wuxFeatureTypeEquipSlot-flag[value="Chest Armor"] + .wuxFeatureTypeEquipSlot-Armor, 
+input.wuxFeatureTypeEquipSlot-flag[value="Head Armor"] + .wuxFeatureTypeEquipSlot-Armor, 
+input.wuxFeatureTypeEquipSlot-flag[value="Arms Armor"] + .wuxFeatureTypeEquipSlot-Armor, 
+input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlot-Armor
+{
+    display: inline-block;
 }
 
 .wuxFeatureFunctionBlock,

@@ -370,7 +370,7 @@
 										<fieldset class="repeating_fulllearnedtechniques">
 											<input type="hidden" name="attr_technique-onUse" value="">
 											<input type="hidden" class="wuxFeature-flag" name="attr_technique-select">
-											<div class="wuxFeature wuxMinWidth300">
+											<div class="wuxFeature">
 												<input type="hidden" class="wuxFeatureHeader-flag" name="attr_technique-header" value="Full">
 												<div class="wuxFeatureHeader">
 													<input type="hidden" class="wuxFeatureType-flag" name="attr_technique-type" value="Permanent">
@@ -410,7 +410,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -1131,7 +1131,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -2012,7 +2012,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -2356,7 +2356,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -2792,7 +2792,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -2948,15 +2948,486 @@
 
 			<div class="wuxTab">
 				<div class="tab-gearOptions wuxTab">
-					<div class="gear-GeneralStats wuxSectionBlock wuxLayoutItem">
+					<div class="wuxSectionBlock wuxLayoutItem">
+						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-gear-gearOptions" checked="checked" style="display: block">
+						<div class="wuxSectionHeader">
+							<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-gear-gearOptions">
+							<span class="wuxSectionExpandIcon">&#9662;</span>
+							<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-gear-gearOptions">
+							<span class="wuxSectionExpandAuxIcon">&#9656;</span>
+							<span>Gear Options</span>
+						</div>
+						<div class="wuxSectionHeaderFooter"></div>
+
 						<div class="wuxSectionContent">
+							<span class="wuxHeader">Section Description</span>
+							<span class="wuxDescription">This is the Gear Section. All forms of items can be found in this section.</span>
+							<span class="wuxHeader">Section Options</span>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<span class="wuxFlexTableItemHeader">Job Slots</span>
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemSubheader">Score</span>
+													<span class="wuxFlexTableItemData" name="attr_techslot-job_max">0</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemSubheader">Bonus</span>
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-job" placeholder="0"></span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup">
+											<span class="wuxFlexTableItemHeader">Active Slots</span>
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemSubheader">Score</span>
+													<span class="wuxFlexTableItemData" name="attr_techslot-active_max">0</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemSubheader">Bonus</span>
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-active" placeholder="0"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="wuxFlexTableItemGroup wuxNoPadding">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<span class="wuxFlexTableItemHeader">Passive Slots</span>
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemSubheader">Score</span>
+													<span class="wuxFlexTableItemData" name="attr_techslot-passive_max">0</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemSubheader">Bonus</span>
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-passive" placeholder="0"></span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup">
+											<span class="wuxFlexTableItemHeader">Support Slots</span>
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemSubheader">Score</span>
+													<span class="wuxFlexTableItemData" name="attr_techslot-support_max">0</span>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxFlexTableItemSubheader">Bonus</span>
+													<input type="number" class="wuxFlexTableItemData wuxSizeSmall" name="attr_techslotbonus-support" placeholder="0"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-gearEquipment wuxTab">
+					<div class="wuxSectionBlock wuxLayoutItem">
+						<div class="wuxSectionContent">
+							<div class="wuxHeader">Equipment</div>
+
+							<fieldset class="repeating_gearequipment">
+								<input type="hidden" name="attr_item-onUse" value="">
+								<input type="hidden" class="wuxFeature-flag" name="attr_item-select">
+								<div class="wuxFeature">
+									<input type="hidden" class="wuxFeatureHeader-flag" name="attr_item-type" value="Weapon">
+									<div class="wuxFeatureHeader">
+										<input type="hidden" class="wuxFeatureType-flag" name="attr_item-type" value="Weapon">
+										<div class="wuxFeatureType">
+											<span class="wuxFeatureTypeHeader" name="attr_item-type" value="Weapon">Weapon</span>
+											<span class="wuxFeatureTypeFooter" name="attr_item-group" value="Custom">Custom</span>
+										</div>
+
+										<div class="wuxFeatureHeaderInteractBlock">
+											<div class="wuxFeatureHeaderInteractInnerBlock">
+												<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_item-expand" value="on">
+												<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_item-expand" value="on">
+												<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
+												<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_item-expand" value="on">
+												<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
+											</div>
+											<div class="wuxFeatureHeaderInteractInnerBlock">
+												<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_item-edit" value="on">
+												<input type="hidden" class="wuxFeatureHeaderInteractivePictosIcon-flag" name="attr_item-edit" value="on">
+												<span class="wuxFeatureHeaderInteractivePictosIcon">W</span>
+											</div>
+										</div>
+
+										<div class="wuxFeatureHeaderDisplayBlock">
+											<span class="wuxFeatureHeaderName" name="attr_item-name" value="Equipment">Equipment</span>
+											<div class="wuxFeatureHeaderInfo">
+												<span name="attr_item-action" value="Quick">Quick</span>
+												<span class="wuxFeatureHeaderInfoType">: </span>
+												<span name="attr_item-action" value="Quick">Quick</span>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-limits" value="">
+												<span class="wuxHiddenInlineField">; </span>
+												<span name="attr_item-limits"></span>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-resourceCost" value="">
+												<span class="wuxHiddenInlineField">; </span>
+												<span name="attr_item-resourceCost"></span>
+											</div>
+											<input type="hidden" class="wuxFeatureTypeEquipSlot-flag" name="attr_item-type" value="Weapon">
+											<div class="wuxFeatureTypeEquipSlot-Weapon wuxFeatureHeaderInfo">
+												<select class='wuxFeatureHeaderInfoType' name='attr_item-equipState' value="">
+													<option value="">Unequipped</option>
+													<option value="Main">Main Weapon</option>
+													<option value="Sub">Sub Weapon</option>
+													<option value="Support">Support Weapon</option>
+												</select>
+											</div>
+											<input type="hidden" class="wuxFeatureTypeEquipSlot-flag" name="attr_item-type" value="Weapon">
+											<div class="wuxFeatureTypeEquipSlot-Chest wuxFeatureHeaderInfo">
+												<select class='wuxFeatureHeaderInfoType' name='attr_item-equipState' value="">
+													<option value="">Unequipped</option>
+													<option value="Chest">Chest Armor</option>
+												</select>
+											</div>
+											<input type="hidden" class="wuxFeatureTypeEquipSlot-flag" name="attr_item-type" value="Weapon">
+											<div class="wuxFeatureTypeEquipSlot-Head wuxFeatureHeaderInfo">
+												<select class='wuxFeatureHeaderInfoType' name='attr_item-equipState' value="">
+													<option value="">Unequipped</option>
+													<option value="Head">Head Armor</option>
+												</select>
+											</div>
+											<input type="hidden" class="wuxFeatureTypeEquipSlot-flag" name="attr_item-type" value="Weapon">
+											<div class="wuxFeatureTypeEquipSlot-Arms wuxFeatureHeaderInfo">
+												<select class='wuxFeatureHeaderInfoType' name='attr_item-equipState' value="">
+													<option value="">Unequipped</option>
+													<option value="Arms">Arms Armor</option>
+												</select>
+											</div>
+											<input type="hidden" class="wuxFeatureTypeEquipSlot-flag" name="attr_item-type" value="Weapon">
+											<div class="wuxFeatureTypeEquipSlot-Legs wuxFeatureHeaderInfo">
+												<select class='wuxFeatureHeaderInfoType' name='attr_item-equipState' value="">
+													<option value="">Unequipped</option>
+													<option value="Leg">Legs Armor</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_item-edit" value="on">
+									<div class="wuxHiddenBlockField">
+										<div class="wuxFeatureEditBlock">
+											<div class="item-Base">
+												<span class="wuxHeader">Prefab Search</span>
+												<div class="wuxRow">
+													<input type="text" class='wuxInput' list="equipmentlist" name='attr_item-prefab'>
+												</div>
+											</div>
+											<div class="item-Base">
+												<span class="wuxHeader">Basics</span>
+												<span class='wuxHeader2'>Name</span>
+												<div class="wuxRow">
+													<input type="text" class='wuxInput' name='attr_item-name' value="Equipment">
+												</div>
+												<span class='wuxHeader2'>Type</span>
+												<div class="wuxRow">
+													<select class='wuxInput' name='attr_item-type' value="Weapon">
+														<option value="Weapon">Weapon</option>
+														<option value="Chest Armor">Chest Armor</option>
+														<option value="Head Armor">Head Armor</option>
+														<option value="Arms Armor">Arms Armor</option>
+														<option value="Legs Armor">Legs Armor</option>
+													</select>
+												</div>
+												<span class='wuxHeader2'>Group</span>
+												<div class="wuxRow">
+													<input type="text" class='wuxInput' name='attr_item-group' value="Custom">
+												</div>
+												<span class='wuxHeader2'>Traits</span>
+												<div class="wuxRow">
+													<input type="text" class='wuxInput' name='attr_item-traits' placeholder="Separate traits with ;">
+												</div>
+												<span class='wuxHeader2'>Bulk</span>
+												<div class="wuxRow">
+													<input type="number" class='wuxInput' name='attr_item-bulk' value="1">
+												</div>
+												<span class='wuxHeader2'>Value</span>
+												<div class="wuxRow">
+													<input type="number" class='wuxInput' name='attr_item-value' value="1">
+												</div>
+											</div>
+											<div class="wuxRow">&nbsp;</div>
+											<div class="item-Crafting">
+												<span class="wuxHeader">Crafting Rules</span>
+												<span class='wuxHeader2'>Complexity</span>
+												<div class="wuxRow">
+													<input type="text" class='wuxInput' name='attr_item-complexity'>
+												</div>
+												<span class='wuxHeader2'>Time</span>
+												<div class="wuxRow">
+													<input type="number" class='wuxInput' name='attr_item-time'>
+												</div>
+												<span class='wuxHeader2'>Components</span>
+												<div class="wuxRow">
+													<input type="text" class='wuxInput' name='attr_item-components'>
+												</div>
+											</div>
+											<div class="wuxRow">&nbsp;</div>
+											<div class="item-Equipment">
+												<span class="wuxHeader">Equipment Stats</span>
+												<span class='wuxHeader2'>Abilities</span>
+												<div class="wuxRow">
+													<input type="text" class='wuxInput' name='attr_item-abilities' placeholder="Separate abilities with ;">
+												</div>
+												<input type="hidden" class="wuxFeatureTypeEquipSlot-flag" name="attr_item-type" value="Weapon">
+												<div class="wuxFeatureTypeEquipSlot-Weapon">
+													<span class='wuxHeader2'>Threat</span>
+													<div class="wuxRow">
+														<input type="number" class='wuxInput' name='attr_item-threat'>
+													</div>
+													<span class='wuxHeader2'>Range</span>
+													<div class="wuxRow">
+														<input type="number" class='wuxInput' name='attr_item-range'>
+													</div>
+													<span class='wuxHeader2'>Skill</span>
+													<div class="wuxRow">
+														<select class='wuxInput' name='attr_item-skill' value="">
+															<option value="">-</option>
+															<option value="Brawling">Brawling</option>
+															<option value="Finesse">Finesse</option>
+															<option value="Lunge">Lunge</option>
+															<option value="Marksmanship">Marksmanship</option>
+															<option value="Might">Might</option>
+															<option value="Throw">Throw</option>
+														</select>
+													</div>
+													<span class='wuxHeader2'>Damage Dice</span>
+													<div class="wuxRow">
+														<input type="hidden" name='attr_item-damage'>
+														<input type="number" class='wuxInput wuxWidth50' name='attr_item-dieValue' value="0">
+														<select class='wuxInput wuxWidth50' name='attr_item-dieType' value="">
+															<option value="d6">d6</option>
+															<option value="d3">d3</option>
+														</select>
+													</div>
+													<div>
+														<div class="wuxCheckbox">
+															<input class="wuxCheckbox-flag" type="checkbox" name="attr_item-addPower">
+															<input type="hidden" class="wuxCheckbox-flag" name="attr_item-addPower">
+															<span class="wuxRepeatingCheckboxAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxCheckbox-flag" name="attr_item-addPower">
+															<span class="wuxRepeatingCheckboxIcon">&#9635;</span>
+														</div>
+														<span class="wuxData">Add Power</span>
+													</div>
+													<span class='wuxHeader2'>Damage Type</span>
+													<div class="wuxRow">
+														<select class='wuxInput' name='attr_item-damageType' value="">
+															<option value="">-</option>
+															<option value="Burn">Burn</option>
+															<option value="Cold">Cold</option>
+															<option value="Energy">Energy</option>
+															<option value="Force">Force</option>
+															<option value="Piercing">Piercing</option>
+															<option value="Tension">Tension</option>
+														</select>
+													</div>
+												</div>
+												<input type="hidden" class="wuxFeatureTypeEquipSlot-flag" name="attr_item-type" value="Weapon">
+												<div class="wuxFeatureTypeEquipSlot-Armor">
+													<span class='wuxHeader2'>Block</span>
+													<div class="wuxRow">
+														<input type="number" class='wuxInput' name='attr_item-block'>
+													</div>
+													<span class='wuxHeader2'>Armor</span>
+													<div class="wuxRow">
+														<input type="number" class='wuxInput' name='attr_item-armor'>
+													</div>
+													<span class='wuxHeader2'>Flexibility</span>
+													<div class="wuxRow">
+														<input type="number" class='wuxInput' name='attr_item-flexibility'>
+													</div>
+													<span class='wuxHeader2'>Speed Penality</span>
+													<div class="wuxRow">
+														<input type="number" class='wuxInput' name='attr_item-speedpen'>
+													</div>
+												</div>
+											</div>
+											<div class="wuxRow">&nbsp;</div>
+											<div class="technique-FunctionBlock">
+												<span class="wuxHeader">Description Block</span>
+												<span class='wuxHeader2'>Description</span>
+												<div class="wuxRow">
+													<textarea class="wuxInput wuxHeight150" name="attr_item-description"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+									<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_item-expand">
+									<div class="wuxFeatureExpandingContent">
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_item-edit">
+										<div class="wuxHiddenAuxField">
+											<div class="wuxFeatureDescriptionBlock">
+												<div class="wuxFeatureType">
+													<span class="wuxFeatureTypeHeader">Crafting</span>
+													<span class="wuxFeatureTypeFooter">
+														<span name="attr_item-complexity"></span>
+														<strong><span name="attr_item-time"></span></strong>
+													</span>
+													<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-components" value="">
+													<div class="wuxHiddenBlockField">
+														<div class="wuxFeatureTypeFooter">
+															<span name="attr_item-components"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-traits" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxFeatureFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-traits0" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-traits0"></span>
+															<span class="wuxTooltiptext" name="attr_item-traits0Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-traits1" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-traits1"></span>
+															<span class="wuxTooltiptext" name="attr_item-traits1Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-traits2" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-traits2"></span>
+															<span class="wuxTooltiptext" name="attr_item-traits2Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-traits3" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-traits3"></span>
+															<span class="wuxTooltiptext" name="attr_item-traits3Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-traits4" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-traits4"></span>
+															<span class="wuxTooltiptext" name="attr_item-traits4Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-traits5" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-traits5"></span>
+															<span class="wuxTooltiptext" name="attr_item-traits5Desc"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-abilities" value="">
+												<div class="wuxHiddenBlockField">
+													<div class="wuxFeatureFunctionBlockRow">
+														<span><strong>Traits: </strong></span>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-ability0" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-ability0"></span>
+															<span class="wuxTooltiptext" name="attr_item-ability0Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-ability1" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-ability1"></span>
+															<span class="wuxTooltiptext" name="attr_item-ability1Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-ability2" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-ability2"></span>
+															<span class="wuxTooltiptext" name="attr_item-ability2Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-ability3" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-ability3"></span>
+															<span class="wuxTooltiptext" name="attr_item-ability3Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-ability4" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-ability4"></span>
+															<span class="wuxTooltiptext" name="attr_item-ability4Desc"></span>
+														</div>
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_item-ability5" value="0">
+														<div class="wuxTrait">
+															<span class="wuxTraitText" name="attr_item-ability5"></span>
+															<span class="wuxTooltiptext" name="attr_item-ability5Desc"></span>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxFeatureTypeEquipSlot-flag" name="attr_item-type" value="Weapon">
+												<div class="wuxFeatureTypeEquipSlot-Weapon">
+													<div class="wuxFeatureFunctionBlockRow">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-range" value="">
+														<div class="wuxHiddenInlineField">
+															<div class="wuxFeatureAttackBlockRange">
+																<span><strong>Threat: </strong></span>
+																<span name="attr_item-threat"></span>
+															</div>
+														</div>
+														<div class="wuxFeatureAttackBlockTarget">
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-target" value="">
+															<div class="wuxHiddenField">
+																<span><strong>Range: </strong></span>
+																<span name="attr_item-range"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFeatureFunctionBlockRow">
+														<span name="attr_item-damageString"></span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxFeatureTypeEquipSlot-flag" name="attr_item-type" value="Weapon">
+												<div class="wuxFeatureTypeEquipSlot-Armor">
+													<div class="wuxFeatureFunctionBlockRow">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-block" value="">
+														<div class="wuxHiddenInlineField">
+															<div class="wuxFeatureAttackBlockRange">
+																<span><strong>Block: </strong></span>
+																<span name="attr_item-threat"></span>
+															</div>
+														</div>
+														<div class="wuxFeatureAttackBlockTarget">
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-armor" value="">
+															<div class="wuxHiddenField">
+																<span><strong>Armor: </strong></span>
+																<span name="attr_item-armor"></span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFeatureFunctionBlockRow">
+														<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-flexibility" value="">
+														<div class="wuxHiddenInlineField">
+															<div class="wuxFeatureAttackBlockRange">
+																<span><strong>Flexibility: </strong></span>
+																<span name="attr_item-flexibility"></span>
+															</div>
+														</div>
+														<div class="wuxFeatureAttackBlockTarget">
+															<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-speedpen" value="">
+															<div class="wuxHiddenField">
+																<span><strong>Speed Penalty: </strong></span>
+																<span name="attr_item-speedpen"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenBlankField-flag" name="attr_item-description" value="">
+												<div class="wuxHiddenBlockField">
+													<span class="wuxFeatureDescriptionBlockDesc" name="attr_item-description"></span>
+												</div>
+											</div>
+											<div>
+												<button class="wuxButton" type="roll" value="@{item-onUse}"><span>Show</span></button>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+							</fieldset>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="segment-chat wuxSegment">
+		<div class="segment-chat wuxSegment" style="display: none;">
 			<input class="wuxTab-flag" type="checkbox" name="attr_tabSection-chat" checked="checked">
 			<div class="wuxTabHeader"><span class="wuxInnerHeader">Chat</span></div>
 
@@ -3266,7 +3737,7 @@
 
 			<div class="wuxTab">
 				<div class="tab-learnedTechOptions wuxTab">
-					<div class="learnedTech-GeneralStats wuxSectionBlock wuxLayoutItem">
+					<div class="wuxSectionBlock wuxLayoutItem">
 						<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-learnedTech-learnedTechOptions" checked="checked" style="display: block">
 						<div class="wuxSectionHeader">
 							<input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_tabSection-learnedTech-learnedTechOptions">
@@ -3437,7 +3908,7 @@
 							<div class="wuxRepeatingFlexSection">
 								<fieldset class="repeating_learnedtechniques">
 									<input type="hidden" name="attr_technique-onUse" value="">
-									<input type="hidden" name="attr_technique-isArmament" value="0">
+									<input type="hidden" name="attr_technique-isWeapon" value="0">
 									<input type="hidden" name="attr_technique-equippedWeapon" value="">
 									<input type="hidden" class="wuxFeature-flag" name="attr_technique-select">
 									<div class="wuxFeature">
@@ -4897,7 +5368,7 @@
 													<div class="wuxFlexTable">
 														<div class="wuxFlexTableItemGroup">
 															<span class="wuxFlexTableItemSubheader">Ability</span>
-															<span class="wuxFlexTableItemData">DEX</span>
+															<span class="wuxFlexTableItemData">QCK</span>
 														</div>
 														<div class="wuxFlexTableItemGroup">
 															<span class="wuxFlexTableItemSubheader">Score</span>
@@ -4961,7 +5432,7 @@
 													<div class="wuxFlexTable">
 														<div class="wuxFlexTableItemGroup">
 															<span class="wuxFlexTableItemSubheader">Ability</span>
-															<span class="wuxFlexTableItemData">DEX</span>
+															<span class="wuxFlexTableItemData">STR</span>
 														</div>
 														<div class="wuxFlexTableItemGroup">
 															<span class="wuxFlexTableItemSubheader">Score</span>

@@ -114,6 +114,7 @@ input[type=number]::-webkit-inner-spin-button
 .wuxRepeatingFlexSection,
 .wuxRepeatingFlexSection .repcontainer
 {
+    width: 100%;
     display: flex;
     flex-flow: wrap row;
     align-content: flex-start;
