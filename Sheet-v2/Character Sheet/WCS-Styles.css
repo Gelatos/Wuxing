@@ -6660,6 +6660,11 @@ Quest Box
     width: 50px;
 }
 
+.wuxMinWidth100
+{
+    min-width: 100px;
+}
+
 .wuxMinWidth150
 {
     min-width: 150px;
@@ -6678,6 +6683,11 @@ Quest Box
 .wuxMinWidth350
 {
     min-width: 350px;
+}
+
+.wuxMaxWidth100
+{
+    max-width: 100px;
 }
 
 .wuxHeight60

@@ -7,9 +7,13 @@ function GetTechniqueTraitsInfo(name) {
 		case "ap (x)":
 			return { "name": "AP (X)", "group": "Technique", "description": "This technique adds armor piercing. Ignore up to X Armor on the target." }
 		case "armament":
-			return { "name": "Armament", "group": "Technique", "description": "This technique uses the skill, range/threat, and damage statistics of an equipped weapon." }
+			return { "name": "Armament", "group": "Technique", "description": "This technique uses the skill, threat, and damage statistics of an equipped melee weapon." }
 		case "armament [f]":
-			return { "name": "Armament [F]", "group": "Technique", "description": "This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon." }
+			return { "name": "Armament [F]", "group": "Technique", "description": "This technique uses the skill, threat, and damage statistics and all abilities of an equipped melee weapon." }
+		case "arsenal":
+			return { "name": "Arsenal", "group": "Technique", "description": "This technique uses the skill, range, and damage statistics of an equipped ranged weapon." }
+		case "arsenal [f]":
+			return { "name": "Arsenal [F]", "group": "Technique", "description": "This technique uses the skill, range, and damage statistics and all abilities of an equipped ranged weapon." }
 		case "brutal":
 			return { "name": "Brutal", "group": "Technique", "description": "When this technique deals damage, roll all damage dice twice and take only the highest results." }
 		case "focus":
@@ -32,18 +36,18 @@ function GetTechniqueTraitsInfo(name) {
 	}
 }
 
-function GetWeaponTraitsInfo(name) {
+function GetItemTraitsInfo(name) {
 	switch (name.toLowerCase()) {
 		case "arcing":
-			return { "name": "Arcing", "group": "Weapon", "description": "This weapon can be fired over obstacles, usually by lobbing a projectile in an arc. Attacks made with this weapon don’t require line of sight, as long as it’s possible to trace a path to the target; however, they are still affected by cover." }
+			return { "name": "Arcing", "group": "Item", "description": "This weapon can be fired over obstacles, usually by lobbing a projectile in an arc. Attacks made with this weapon don’t require line of sight, as long as it’s possible to trace a path to the target; however, they are still affected by cover." }
 		case "shield":
-			return { "name": "Shield", "group": "Weapon", "description": "This weapon provides additional defenses. While it is equipped, you gain +1 Armor, and -1 Flexibility." }
+			return { "name": "Shield", "group": "Item", "description": "This weapon provides additional defenses. While it is equipped, you gain +1 Armor, and -1 Flexibility." }
 		case "thrown":
-			return { "name": "Thrown", "group": "Weapon", "description": "This weapon is made to be thrown with its range value. When throwing in this way, the weapon uses the Thrown skill." }
+			return { "name": "Thrown", "group": "Item", "description": "This weapon is made to be thrown with its range value. When throwing in this way, the weapon uses the Thrown skill." }
 		case "two-handed":
-			return { "name": "Two-Handed", "group": "Weapon", "description": "This weapon is required to be wielded in two hands." }
+			return { "name": "Two-Handed", "group": "Item", "description": "This weapon is required to be wielded in two hands." }
 		case "loud":
-			return { "name": "Loud", "group": "Weapon", "description": "This weapon creates a loud booming noise, audible to those within 300 feet of the source." }
+			return { "name": "Loud", "group": "Item", "description": "This weapon creates a loud booming noise, audible to those within 300 feet of the source." }
 		default:
 			return { "name": "", "group": "", "description": "" }
 

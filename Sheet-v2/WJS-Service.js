@@ -333,7 +333,7 @@ function GetTraitsDictionary(traits, traitType) {
 
 			switch (traitType.toLowerCase()) {
 				case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
-				case "weapon": traitInfo = GetWeaponTraitsInfo(lookup); break;
+				case "item": traitInfo = GetItemTraitsInfo(lookup); break;
 				case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
 				case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
 			}
@@ -736,15 +736,12 @@ function CreateTechniqueDataFromRepeatingSection(attrArray, repeatingSection, id
 
 // ======== Damage Values
 
-function FormatDamageString(element, condensed) {
+function FormatDamageString(damageData) {
 	var output = "";
 	var damage = "";
-	var elements = element.split(";");
+	var elements = damageData.split(";");
 	for (var i = 0; i < elements.length; i++) {
 		damage = ReplaceDamageDice(elements[i]).trim();
-		if (condensed && damage == "Power") {
-			damage = "P";
-		}
 
 		// form output string
 		if (output != "") {
@@ -753,6 +750,42 @@ function FormatDamageString(element, condensed) {
 		output += `${damage} `;
 	}
 	return output;
+}
+
+function SetDamageValuesFromDamageData(update, repeatingSection, id, damageData) {
+	
+	var elements = damageData.split(";");
+	var regexH = /(\d+)h/g;
+	var regexD = /(\d+)d/g;
+	var count = 0;
+	damageData = {
+		dieValue: 0,
+		dieType: "d3",
+		addPower: 0
+	}
+	for (var i = 0; i < elements.length; i++) {
+		
+		count = parseInt(elements[i].match(regexH));
+		if (!isNaN(count)) {
+			damageData.dieValue = count;
+			damageData.dieType = "d3";
+		}
+		else {
+			count = parseInt(elements[i].match(regexD));
+			if (!isNaN(count)) {
+				damageData.dieValue = count;
+				damageData.dieType = "d6";
+			}
+			else if (elements[i].indexOf("Power") >= 0) {
+				damageData.addPower = "on";
+			}
+		}
+	}
+
+	update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = damageData.dieValue;
+	update[GetSectionIdName(repeatingSection, id, "item-dieType")] = damageData.dieType;
+	update[GetSectionIdName(repeatingSection, id, "item-addPower")] = damageData.addPower;
+	return update;
 }
 
 function ReplaceDamageDice(element) {
@@ -764,6 +797,101 @@ function ReplaceDamageDice(element) {
 
 	// Use String.replace() with the regular expression
 	return element.replace(regexD, replacementD).replace(regexH, replacementH);
+}
+
+
+
+
+// ======== Items
+
+function SetItemData(update, repeatingSection, id, item, autoExpand) {
+
+	update[GetSectionIdName(repeatingSection, id, "item-expand")] = autoExpand ? "on" : "0";
+
+	update[GetSectionIdName(repeatingSection, id, "item-name")] = item.name;
+	update[GetSectionIdName(repeatingSection, id, "item-type")] = item.type;
+	update[GetSectionIdName(repeatingSection, id, "item-group")] = item.group;
+	update[GetSectionIdName(repeatingSection, id, "item-traits")] = item.traits;
+	update = SetItemDataTraits(update, repeatingSection, id, item.traits);
+	update[GetSectionIdName(repeatingSection, id, "item-bulk")] = item.bulk;
+	update[GetSectionIdName(repeatingSection, id, "item-valuetier")] = item.values;
+	update[GetSectionIdName(repeatingSection, id, "item-value")] = GetItemValueInCP(item);
+
+	// set crafting rules
+	update[GetSectionIdName(repeatingSection, id, "item-complexity")] = item.complexity;
+	update[GetSectionIdName(repeatingSection, id, "item-time")] = item.time;
+	update[GetSectionIdName(repeatingSection, id, "item-components")] = item.components;
+
+	switch(item.type) {
+		case "Weapon":
+		case "Chest Armor":
+		case "Head Armor":
+		case "Arms Armor":
+		case "Legs Armor":
+			update[GetSectionIdName(repeatingSection, id, "item-abilities")] = item.abilities;
+			update = SetItemDataAbilities(update, repeatingSection, id, item.abilities);
+			update[GetSectionIdName(repeatingSection, id, "item-skill")] = item.skill;
+			update[GetSectionIdName(repeatingSection, id, "item-damage")] = item.dmg;
+			update = SetDamageValuesFromDamageData(update, repeatingSection, id, item.dmg);
+			let damageString = `${FormatDamageString(item.dmg)}${item.dmgType}`;
+			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = damageString;
+			update[GetSectionIdName(repeatingSection, id, "item-range")] = item.range;
+			update[GetSectionIdName(repeatingSection, id, "item-threat")] = item.threat;
+			update[GetSectionIdName(repeatingSection, id, "item-block")] = item.block;
+			update[GetSectionIdName(repeatingSection, id, "item-armor")] = item.armor;
+			update[GetSectionIdName(repeatingSection, id, "item-flexibility")] = item.flexibility;
+			update[GetSectionIdName(repeatingSection, id, "item-speedPen")] = item.speedPen;
+		break;
+	}
+
+	return update;
+}
+
+function SetItemDataTraits(update, repeatingSection, id, traits) {
+
+	var traitsDb = GetTraitsDictionary(traits, "item");
+	for (var i = 0; i < 6; i++) {
+		if (i < traitsDb.length) {
+			update[GetSectionIdName(repeatingSection, id, "item-traits" + i)] = traitsDb[i].name;
+			update[GetSectionIdName(repeatingSection, id, "item-traits" + i + "Desc")] = traitsDb[i].description;
+		} else {
+			update[GetSectionIdName(repeatingSection, id, "item-traits" + i)] = "0";
+			update[GetSectionIdName(repeatingSection, id, "item-traits" + i + "Desc")] = "";
+		}
+	}
+	return update;
+}
+
+function SetItemDataAbilities(update, repeatingSection, id, abilities) {
+
+	var traitsDb = GetTraitsDictionary(abilities, "ability");
+	for (var i = 0; i < 6; i++) {
+		if (i < traitsDb.length) {
+			update[GetSectionIdName(repeatingSection, id, "item-ability" + i)] = traitsDb[i].name;
+			update[GetSectionIdName(repeatingSection, id, "item-ability" + i + "Desc")] = traitsDb[i].description;
+		} else {
+			update[GetSectionIdName(repeatingSection, id, "item-ability" + i)] = "0";
+			update[GetSectionIdName(repeatingSection, id, "item-ability" + i + "Desc")] = "";
+		}
+	}
+	return update;
+}
+
+function GetItemValueInCP(itemData) {
+
+  var baseValue = 10;
+  var incrementer = itemData.value;
+  var valueMultiplier = 4;
+  while (incrementer > 0) {
+    baseValue *= valueMultiplier;
+    if (valueMultiplier > 2) {
+      valueMultiplier--;
+    }
+    incrementer--;
+  }
+  var bulkValue = baseValue / 20;
+
+  return baseValue + (itemData.bulk * bulkValue);
 }
 
 

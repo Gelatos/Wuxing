@@ -767,6 +767,38 @@ function UpdateCharacterCustomTechniqueDescription(eventinfo) {
 
 
 
+// ======== Gear - Prefabs
+
+on("change:repeating_gearequipment:item-prefab", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	UpdateCharacterGearPrefab(eventinfo);
+});
+
+function UpdateCharacterGearPrefab(eventinfo) {
+
+	let repeatingSection = GetRepeatingSectionFromFieldName(eventinfo.sourceAttribute);
+	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+	let itemData = {};
+
+	switch(repeatingSection) {
+		case "repeating_gearequipment":
+			itemData = GetEquipmentInfo(eventinfo.newValue == undefined ? "" : eventinfo.newValue);
+		break;
+	}
+
+	if (itemData != {}) {
+		let update = {};
+		update = SetItemData(update, repeatingSection, id, itemData, false);
+		setAttrs(update, { silent: true });
+	}
+}
+
+
+
+
 // ======== Statistics - Growths
 
 function GetStatGrowthBonusList() {
