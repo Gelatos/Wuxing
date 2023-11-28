@@ -814,12 +814,12 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 	update[GetSectionIdName(repeatingSection, id, "item-traits")] = item.traits;
 	update = SetItemDataTraits(update, repeatingSection, id, item.traits);
 	update[GetSectionIdName(repeatingSection, id, "item-bulk")] = item.bulk;
-	update[GetSectionIdName(repeatingSection, id, "item-valuetier")] = item.values;
+	update[GetSectionIdName(repeatingSection, id, "item-valuetier")] = item.value;
 	update[GetSectionIdName(repeatingSection, id, "item-valuetype")] = "CP";
 	update[GetSectionIdName(repeatingSection, id, "item-value")] = GetItemValueInCP(item);
 
 	// set crafting rules
-	update[GetSectionIdName(repeatingSection, id, "item-complexity")] = item.complexity;
+	update[GetSectionIdName(repeatingSection, id, "item-complexity")] = item.complexity == "" ? "0:Artisan" : item.complexity;
 	update[GetSectionIdName(repeatingSection, id, "item-time")] = item.time;
 	update[GetSectionIdName(repeatingSection, id, "item-components")] = item.components;
 
@@ -833,6 +833,7 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 			update = SetItemDataAbilities(update, repeatingSection, id, item.abilities);
 			update[GetSectionIdName(repeatingSection, id, "item-skill")] = item.skill;
 			update[GetSectionIdName(repeatingSection, id, "item-damage")] = item.dmg;
+			update[GetSectionIdName(repeatingSection, id, "item-damageType")] = item.dmgType;
 			update = SetDamageValuesFromDamageData(update, repeatingSection, id, item.dmg);
 			let damageString = `${FormatDamageString(item.dmg)}${item.dmgType}`;
 			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = damageString;
@@ -893,6 +894,52 @@ function GetItemValueInCP(itemData) {
   var bulkValue = baseValue / 20;
 
   return baseValue + (itemData.bulk * bulkValue);
+}
+
+function CreateItemDataFromRepeatingSection(attrArray, repeatingSection, id) {
+
+	let itemData = GetGearInfo("");
+	itemData.name = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-name"));
+	itemData.type = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-type"));
+	itemData.group = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-group"));
+	itemData.traits = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-traits"));
+	itemData.bulk = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-bulk"));
+	itemData.value = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-valuetier"));
+	itemData.complexity = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-complexity"));
+	itemData.time = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-time"));
+	itemData.components = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-components"));
+	return itemData;
+}
+
+function CreateEquipmentItemDataFromRepeatingSection(attrArray, repeatingSection, id) {
+
+	let itemData = CreateItemDataFromRepeatingSection(attrArray, repeatingSection, id);
+	itemData.abilities = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-abilities"));
+	itemData.skill = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-skill"));
+	itemData.dmg = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damage"));
+	itemData.dmgType = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damageType"));
+	itemData.damageString = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damageString"));
+	itemData.range = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-range"));
+	itemData.threat = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-threat"));
+	itemData.block = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-block"));
+	itemData.armor = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-armor"));
+	itemData.reflexPen = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-reflexPen"));
+	itemData.speedPen = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-speedPen"));
+	return itemData;
+}
+
+function ConvertEquipmentDataToWeaponData(itemData) {
+	let weaponData = {};
+
+	weaponData.name = itemData.name;
+	weaponData.traits = itemData.traits;
+	weaponData.abilities = itemData.abilities;
+	weaponData.skill = itemData.skill;
+	weaponData.dmg = itemData.dmg;
+	weaponData.dmgType = itemData.dmgType;
+	weaponData.range = itemData.range;
+	weaponData.threat = itemData.threat;
+	return weaponData;
 }
 
 

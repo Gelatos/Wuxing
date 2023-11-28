@@ -799,6 +799,143 @@ function UpdateCharacterGearPrefab(eventinfo) {
 
 
 
+// ======== Gear - Equipment
+
+on("change:repeating_gearequipment:item-equipState", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+
+	UpdateCharacterGearEquipItem(eventinfo);
+});
+
+function UpdateCharacterGearEquipItem(eventinfo) {
+
+	let repeatingSection = "repeating_gearequipment";
+	let id = GetRepeatingSectionIdFromId(eventinfo.sourceAttribute, repeatingSection);
+	let abilityScoreArray = GetAbilityScoreList(true);
+	let mod_attrs = ["pb", "statbonus_block", "statbonus_armor", "statbonus_reflexPen", "statbonus_speedPen", 
+		"statbonus_reflex", "skills-baseSkills", "skills-baseChoiceSkills", "skills-baseExtraSkills", 
+		"statbonus_speed", "builder-ancestry"
+	];
+	mod_attrs = mod_attrs.concat(abilityScoreArray);
+
+	getSectionIDs(repeatingSection, function (idArray) {
+		mod_attrs = mod_attrs.concat(GetSectionIdValues(idArray, repeatingSection, ["item-name", "item-traits", "item-abilities", "item-equipState",
+			"item-skill", "item-damage", "item-range", "item-threat", "item-block", "item-armor", "item-reflexPen", "item-speedPen"
+		]));
+		mod_attrs = mod_attrs.concat(GetSectionIdValues(idArray, repeatingSection, ["item-equipState"]));
+		getAttrs(mod_attrs, function (v) {
+
+			let update = {};
+			let ancestryData = GetAncestryInfo(AttrParseString(v, "builder-ancestry", "Human"));
+			let coreData = SetCoreDataFieldArray(v, "");
+
+			let armorBonuses = {
+				block: 0, 
+				armor: 0,
+				reflexPen: 0,
+				speedPen: 0
+			}
+
+			let newEquippedItemState = eventinfo.newValue;
+			let equipState = "";
+			let itemData = {};
+			for (let i = 0; i < idArray.length; i++) {
+				equipState = AttrParseString(v, GetSectionIdName(repeatingSection, idArray[i], "item-equipState"));
+				if (equipState != "") {
+					if (equipState == newEquippedItemState && idArray[i] != id) {
+						update[GetSectionIdName(repeatingSection, idArray[i], "item-equipState")] = "";
+					}
+					else {
+						itemData = CreateEquipmentItemDataFromRepeatingSection(v, repeatingSection, idArray[i]);
+						switch(equipState) {
+							case "Main":
+								update = SetCharacterEquippedWeapon(update, itemData, "equipment-main");
+							break;
+							case "Sub":
+								update = SetCharacterEquippedWeapon(update, itemData, "equipment-sub");
+							break;
+							case "Support":
+								update = SetCharacterEquippedWeapon(update, itemData, "equipment-support");
+							break;
+							case "Chest":
+							case "Head":
+							case "Arms":
+							case "Legs":
+								armorBonuses.block += itemData.block;
+								armorBonuses.armor += itemData.armor;
+								armorBonuses.reflexPen += itemData.reflexPen;
+								armorBonuses.speedPen += itemData.speedPen;
+							break;
+						}
+					}
+				}
+				else if (idArray[i] == id) {
+					switch(eventinfo.previousValue) {
+						case "Main":
+							update["equipment-main"] = "";
+						break;
+						case "Sub":
+							update["equipment-sub"] = "";
+						break;
+						case "Support":
+							update["equipment-support"] = "";
+						break;
+					}
+				}
+			}
+			update["block"] = armorBonuses.block + AttrParseInt(v, "statbonus_block");
+			update["armor"] = armorBonuses.armor + AttrParseInt(v, "statbonus_armor");
+
+			update["reflexPen"] = armorBonuses.reflexPen + AttrParseInt(v, "statbonus_reflexPen");
+			v["reflexPen"] = update["reflexPen"];
+			update = SetCharacterSkillsUpdateData(update, v, ["reflex"], coreData);
+
+			update["speedPen"] = armorBonuses.speedPen + AttrParseInt(v, "statbonus_speedPen");
+			v["speedPen"] = update["speedPen"];
+			update = SetCharacterSpeed(update, v, ancestryData);
+
+			setAttrs(update, { silent: true });
+
+		});
+	});
+}
+
+function SetCharacterEquippedWeapon(update, itemData, gearSlot) {
+
+	let output = "";
+	output += `{{WpnName=${itemData.name}}} `;
+
+	var traitsDb = GetTraitsDictionary(itemData.traits, "item");
+	for (var i = 0; i < traitsDb.length; i++) {
+		output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
+	}
+
+	traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
+	for (var i = 0; i < traitsDb.length; i++) {
+		output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
+	}
+
+	if (itemData.range != "") {
+		output += `{{WpnRange=${itemData.range}}} `;
+	}
+	if (itemData.threat != "") {
+		output += `{{WpnThreat=${itemData.threat}}} `;
+	}
+	output += `{{WpnDamage=${itemData.damageString}}} `;
+	output += `{{WpnSkill=${itemData.skill}}} `;
+
+	let weaponData = ConvertEquipmentDataToWeaponData(itemData);
+	output += `##${JSON.stringify(weaponData)}`;
+
+	update[gearSlot] = output;
+	return update;
+}
+
+
+
+
 // ======== Statistics - Growths
 
 function GetStatGrowthBonusList() {
@@ -1057,7 +1194,7 @@ on("change:statbonus_speed", function () {
 
 function UpdateCharacterSpeed() {
 
-	let mod_attrs = ["statbonus_speed", "builder-ancestry", "item-speedPen"];
+	let mod_attrs = ["statbonus_speed", "builder-ancestry", "speedPen"];
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -1071,7 +1208,7 @@ function UpdateCharacterSpeed() {
 
 function SetCharacterSpeed(update, attrArray, ancestryData) {
 
-	update["speed"] = parseInt(ancestryData.speed) + AttrParseInt(attrArray, "statbonus_speed") + AttrParseInt(attrArray, "item-speedPen");
+	update["speed"] = parseInt(ancestryData.speed) + AttrParseInt(attrArray, "statbonus_speed") + AttrParseInt(attrArray, "speedPen");
 	return update;
 }
 
