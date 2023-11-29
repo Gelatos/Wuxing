@@ -25,23 +25,6 @@ function GetSectionIdNameFromArray(sectionName, currentID, variableNames) {
     return output;
 }
 
-function ToCamelCase(inputString) {
-
-    if (inputString == "") {
-        return inputString;
-    }
-
-    // Split the input string by spaces and iterate through the words
-    let words = inputString.split(' ');
-    words[0] = words[0][0].toLowerCase() + words[0].slice(1);
-    for (let i = 1; i < words.length; i++) {
-        // Capitalize the first letter of each word (except the first word)
-        words[i] = words[i][0].toUpperCase() + words[i].slice(1);
-    }
-
-    return words.join('');
-}
-
 function GetFieldNameAttribute(fieldName) {
     if (fieldName.indexOf("_") >= 0) {
 		fieldName = fieldName.match(/_([^_]*)$/)[1];
@@ -67,7 +50,7 @@ function GetRepeatingSectionIdFromId(id, repeatingSection) {
 	return id.substr(len, 20);
 }
 
-// ====== Creation
+// ====== Formatters
 
 function CreateDictionary() {
     return {
@@ -84,6 +67,23 @@ function CreateDictionary() {
             return this.keys.includes(key);
         }
     }
+}
+
+function ToCamelCase(inputString) {
+
+    if (inputString == "") {
+        return inputString;
+    }
+
+    // Split the input string by spaces and iterate through the words
+    let words = inputString.split(' ');
+    words[0] = words[0][0].toLowerCase() + words[0].slice(1);
+    for (let i = 1; i < words.length; i++) {
+        // Capitalize the first letter of each word (except the first word)
+        words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+    }
+
+    return words.join('');
 }
 
 // ====== Language
@@ -225,5 +225,229 @@ function GetLanguageTag(language) {
         default:
             return "{{language-default=1}}";
     }
+}
+
+// ===== Generators
+// =================================================
+
+function GetBlankCharacter() {
+    return {
+        name: "",
+        nationality: "",
+        nature: "",
+        ancestry: "",
+        gender: "",
+        classCategory: "",
+        sector: "",
+        profession: "",
+        rapport: 0,
+        favors: 0
+    };
+}
+
+function CharacterNationalityGenerator() {
+    var rnd = Math.floor(Math.random() * 5);
+    switch (rnd) {
+        case 0:
+            return "Minerva";
+        case 1:
+            return "Apollo";
+        case 2:
+            return "Juno";
+        case 3:
+            return "Ceres";
+        case 4:
+            return "Liber";
+        default:
+            return "Minerva";
+    }
+}
+
+function CharacterRaceGenerator(nationality) {
+    var races = [];
+
+    // change the odds based on nationality
+    switch (nationality) {
+        case "Minerva":
+            races = GetRaceList(60, 12, 10, 17, 1);
+            break;
+        case "Apollo":
+            races = GetRaceList(3, 85, 2, 10, 0);
+            break;
+        case "Juno":
+            races = GetRaceList(3, 2, 80, 10, 5);
+            break;
+        case "Ceres":
+            races = GetRaceList(10, 30, 4, 55, 1);
+            break;
+        case "Liber":
+            races = GetRaceList(1, 0, 2, 2, 95);
+            break;
+        default:
+            races = GetRaceList(20, 20, 20, 20, 20);
+            break;
+    }
+
+    // roll on the randomizer
+    var rnd = Math.floor(Math.random() * 100);
+
+    for (var i = 0; i < races.length; i++) {
+        if (rnd < races[i].odds) {
+            return races[i].race;
+        }
+        rnd -= races[i].odds;
+    }
+
+    return "Coastborne";
+}
+
+function CharacterGenderGenerator() {
+    var rnd = Math.floor(Math.random() * 2);
+    if (rnd == 0) {
+        return "Male";
+    } else {
+        return "Female";
+    }
+}
+
+function CharacterNameGenerator(nationality, race, gender) {
+    var firstNameList = [""];
+    var lastNameList = [""];
+    var firstName = "";
+    var lastName = "";
+    var rnd = 0;
+
+    // Choose whether to select a name based on race or nationality. 
+    rnd = Math.random() * 100;
+
+    // The logic here is that race has less of an effect than nationality on first names
+    if (rnd < 70) {
+        firstNameList = GetNameList(nationality, gender);
+    } else {
+        firstNameList = GetNameList(race, gender);
+    }
+
+    // The logic here is that race has more of an effect than nationality on last names
+    if (rnd < 15) {
+        lastNameList = GetNameList(nationality, "last");
+    } else {
+        lastNameList = GetNameList(race, "last");
+    }
+
+    // choose the names
+    firstName = firstNameList[Math.floor(Math.random() * firstNameList.length)];
+    lastName = lastNameList[Math.floor(Math.random() * lastNameList.length)];
+
+    if (lastName != "") {
+        return firstName + " " + lastName;
+    } else {
+        return firstName;
+    }
+}
+
+function CharacterNatureGenerator() {
+    var natures = GetNatureList();
+
+    var rnd = Math.floor(Math.random() * natures.length);
+
+    return natures[rnd];
+}
+
+function CharacterClassGenerator(venueClass) {
+    // set up variables
+    var maxRoll = 0;
+    var eliteRoll = 0;
+    var highRoll = 0;
+    var mediumRoll = 0;
+    var lowRoll = 0;
+
+
+    // these represent ratios or chances each class might show up
+    var eliteMod = 1;
+    var highMod = 9;
+    var mediumMod = 60;
+    var lowMod = 120;
+
+
+    // first we need to determine the maxRoll value which represents the highest possible roll
+    maxRoll += eliteMod;
+    eliteRoll = maxRoll;
+    maxRoll += highMod;
+    highRoll = maxRoll;
+
+
+    // add the other sets if the class is potentially lower
+    if (venueClass != "High") {
+        maxRoll += mediumMod;
+        mediumRoll = maxRoll;
+    }
+    if (venueClass != "High" && venueClass != "Medium") {
+        maxRoll += lowMod;
+        lowRoll = maxRoll;
+    }
+
+
+    // select a random number within the Max Range
+    var rnd = Math.floor(Math.random() * maxRoll);
+
+
+    // return a class
+    if (rnd <= eliteRoll) {
+        return "Elite";
+    } else if (rnd <= highRoll) {
+        return "High";
+    } else if (rnd <= mediumRoll) {
+        return "Medium";
+    } else {
+        return "Low";
+    }
+}
+
+function CharacterSectorGenerator(classCategory) {
+    var sectors = GetSectorProbabilityList(classCategory);
+    var i = 0;
+
+    // determine the number of odds
+    var maxRnd = 0;
+    for (i = 0; i < sectors.length; i++) {
+        maxRnd += sectors[i].odds;
+    }
+
+    // select a random sector
+    var rnd = Math.floor(Math.random() * maxRnd);
+    for (i = 0; i < sectors.length; i++) {
+        if (rnd < sectors[i].odds) {
+            return sectors[i].sector;
+        }
+        rnd -= sectors[i].odds;
+    }
+
+    return "";
+}
+
+function CharacterProfessionGenerator(classCategory, sector) {
+    var professions = GetProfessionList(sector);
+    var professionsList = [];
+
+    switch (classCategory) {
+        case "Elite":
+            professionsList = professions.elite;
+            break;
+        case "High":
+            professionsList = professions.high;
+            break;
+        case "Medium":
+            professionsList = professions.medium;
+            break;
+        case "Low":
+        default:
+            professionsList = professions.low;
+            break;
+    }
+
+    // select a random number within the list
+    var rnd = Math.floor(Math.random() * professionsList.length);
+
+    return professionsList[rnd];
 }
 

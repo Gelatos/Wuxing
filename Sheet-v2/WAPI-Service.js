@@ -11,6 +11,8 @@ on("chat:message", function(msg) {
              content = msg.content.substring(firstSpace).trim();
         }
 
+        WuxingCombat.HandleInput(msg, tag, content);
+
         switch(tag) {
             case "!m":
             case "!w":

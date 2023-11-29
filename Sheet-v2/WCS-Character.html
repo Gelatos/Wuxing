@@ -7,6 +7,10 @@
 	<input type="hidden" name="attr_equipment-main" value="{{WeaponName=Longsword}}">
 	<input type="hidden" name="attr_equipment-sub" value="">
 	<input type="hidden" name="attr_equipment-support" value="">
+	<input type="hidden" name="attr_scan-summary" value="">
+	<input type="hidden" name="attr_scan-baseStats" value="">
+	<input type="hidden" name="attr_scan-vitals" value="">
+	<input type="hidden" name="attr_scan-equipment" value="">
 
 	<div class="wuxFloatHeader wuxStickyHeader">
 		<div class="wuxSectionBlock wuxLargeLayoutItem wuxStickyHeaderMain">
@@ -4702,24 +4706,73 @@
 											<div class="wuxFlexTable">
 												<div class="wuxFlexTableItemGroup">
 													<span class="wuxFlexTableItemHeader">Affinities</span>
-													<span class="wuxFlexTableItemData">Primary</span>
-													<select class='wuxFlexTableItemData wuxInput' name='attr_builder-prime_element' value="0">
-														<option value="0">-</option>
-														<option value="Wood">Wood</option>
-														<option value="Fire">Fire</option>
-														<option value="Earth">Earth</option>
-														<option value="Metal">Metal</option>
-														<option value="Water">Water</option>
-													</select>
-													<span class="wuxFlexTableItemData">Secondary</span>
-													<select class='wuxFlexTableItemData wuxInput' name='attr_builder-second_element' value="0">
-														<option value="0">-</option>
-														<option value="Wood">Wood</option>
-														<option value="Fire">Fire</option>
-														<option value="Earth">Earth</option>
-														<option value="Metal">Metal</option>
-														<option value="Water">Water</option>
-													</select>
+													<div class="wuxDistinctSection">
+														<div class="wuxDistinctField">
+															<span class="wuxDistinctTitle">Primary</span>
+															<input type="hidden" name="attr_token_element">
+															<span class='wuxDistinctData' name='attr_prime_element'></span>
+														</div>
+													</div>
+													<div class="wuxFlexTableItemData wuxTextLeft">
+														<div class="wuxInteractiveBlock wuxSizeSmall">
+															<div class="wuxInteractiveInnerBlock">
+																<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_element-Wood">
+																<div class="wuxInteractiveContent">
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Wood">
+																	<span class="wuxInteractiveIcon">&#9635;</span>
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Wood">
+																	<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Wood">
+																	<span class="wuxHeader">Wood</span>
+																</div>
+															</div>
+															<div class="wuxInteractiveInnerBlock">
+																<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_element-Fire">
+																<div class="wuxInteractiveContent">
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Fire">
+																	<span class="wuxInteractiveIcon">&#9635;</span>
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Fire">
+																	<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Fire">
+																	<span class="wuxHeader">Fire</span>
+																</div>
+															</div>
+															<div class="wuxInteractiveInnerBlock">
+																<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_element-Earth">
+																<div class="wuxInteractiveContent">
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Earth">
+																	<span class="wuxInteractiveIcon">&#9635;</span>
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Earth">
+																	<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Earth">
+																	<span class="wuxHeader">Earth</span>
+																</div>
+															</div>
+															<div class="wuxInteractiveInnerBlock">
+																<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_element-Metal">
+																<div class="wuxInteractiveContent">
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Metal">
+																	<span class="wuxInteractiveIcon">&#9635;</span>
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Metal">
+																	<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Metal">
+																	<span class="wuxHeader">Metal</span>
+																</div>
+															</div>
+															<div class="wuxInteractiveInnerBlock">
+																<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_element-Water">
+																<div class="wuxInteractiveContent">
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Water">
+																	<span class="wuxInteractiveIcon">&#9635;</span>
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Water">
+																	<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																	<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_element-Water">
+																	<span class="wuxHeader">Water</span>
+																</div>
+															</div>
+
+														</div>
+													</div>
 												</div>
 
 												<!-- Character Branches -->

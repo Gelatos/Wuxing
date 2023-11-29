@@ -1089,7 +1089,7 @@ function UpdateCharacterDerivedStat(fieldName) {
 	switch (fieldName) {
 		case "initiative": mod_attrs = mod_attrs.concat(["statbonus_initiative", "QCK"]); growthList.push("QCK"); break;
 		case "power": mod_attrs = mod_attrs.concat(["statbonus_power", "STR"]); growthList.push("STR"); break;
-		case "barrier": mod_attrs = mod_attrs.concat(["statbonus_barrier", "WIL", "block"]); growthList.push("WIL"); break;
+		case "barrier": mod_attrs = mod_attrs.concat(["statbonus_barrier", "WIL"]); growthList.push("WIL"); break;
 		case "stress": mod_attrs = mod_attrs.concat(["statbonus_stress", "WIL"]); growthList.push("WIL"); break;
 	}
 
@@ -1122,7 +1122,7 @@ function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 				update["capacity_max"] = defaultStats["capacity"] + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_capacity");
 				break;
 			case "WIL":
-				total = parseInt(ancestryData.barrier) + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_barrier");;
+				total = parseInt(ancestryData.barrier) + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_barrier");
 				update["barrier"] = total
 				update["tempHp_max"] = total + AttrParseInt("block");
 
@@ -1265,7 +1265,7 @@ on("change:statbonus_block", function () {
 
 function UpdateCharacterBlock() {
 
-	let mod_attrs = ["statbonus_block"];
+	let mod_attrs = ["statbonus_block", "barrier"];
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -1279,6 +1279,7 @@ function UpdateCharacterBlock() {
 function SetCharacterBlock(update, attrArray) {
 
 	update["block"] = AttrParseInt(attrArray, "statbonus_block");
+	update["tempHp_max"] = total + AttrParseInt("block");
 	return update;
 }
 

@@ -129,6 +129,14 @@ var update_builder_submit = function () {
 		// set variables
 		update["builder-basePath"] = pathName;
 		update["prime_element"] = v["builder-prime_element"];
+		switch(v["builder-prime_element"]) {
+			case "Wood": update["token_element"] = "status_green"; break;
+			case "Fire": update["token_element"] = "status_red"; break;
+			case "Earth": update["token_element"] = "status_brown"; break;
+			case "Metal": update["token_element"] = "status_purple"; break;
+			case "Water": update["token_element"] = "status_blue"; break;
+		}
+		update[`element-${v["builder-prime_element"]}`] = "on";
 		update["builder-baseAncestry"] = ancestryName;
 		update["builder-baseAbilityScores"] = JSON.stringify(baseAbilityScores);
 		update["builder-baseGrowths"] = JSON.stringify(baseGrowths);
