@@ -584,10 +584,6 @@ function SetTechniqueUseData(update, technique, repeatingSection, id) {
 		}
 	}
 
-	if (technique.traits != "" && technique.traits.indexOf("Armament") >= 0) {
-		output += "@{technique-equippedWeapon} ";
-	}
-
 	// add technique data for the api
 	let usedTechData = JSON.stringify({
 		resources: technique.resourceCost,
@@ -606,6 +602,11 @@ function SetTechniqueUseData(update, technique, repeatingSection, id) {
 		element: technique.element
 	});
 	output += `##${usedTechData}`;
+
+	// add the equopped action at the end
+	if (technique.traits != "" && technique.traits.indexOf("Armament") >= 0) {
+		output += "##@{technique-equippedWeapon}";
+	}
 
 	output = `&{template:technique} ${output.trim()}`;
 	update[GetSectionIdName(repeatingSection, id, "technique-onUse")] = output;

@@ -178,6 +178,118 @@
 
 	</rolltemplate>
 
+    <rolltemplate class="sheet-rolltemplate-techniqueResolver">
+		{{#wpnName}}
+		<div class="wuxFeatureHeader wuxFeatureHeader-Equipment">
+
+			<div class="wuxFeatureHeaderDisplayBlock">
+				<span class="wuxFeatureHeaderName">{{wpnName}}</span>
+                {{#WpnTrait0}}
+                <div class="wuxFeatureHeaderInfo">
+                    <span><strong>Traits: </strong></span>
+                    
+                    {{#WpnTrait0}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait0}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait0Desc}}</span>
+                    </div>
+                    {{/WpnTrait0}}
+                    {{#WpnTrait1}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait1}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait1Desc}}</span>
+                    </div>
+                    {{/WpnTrait1}}
+                    {{#WpnTrait2}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait2}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait2Desc}}</span>
+                    </div>
+                    {{/WpnTrait2}}
+                    {{#WpnTrait3}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait3}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait3Desc}}</span>
+                    </div>
+                    {{/WpnTrait3}}
+                    {{#WpnTrait4}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait4}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait4Desc}}</span>
+                    </div>
+                    {{/WpnTrait4}}
+                    {{#WpnTrait5}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait5}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait5Desc}}</span>
+                    </div>
+                    {{/WpnTrait5}}
+                </div>
+                {{/WpnTrait0}}
+                {{#WpnAbility0}}
+                <div class="wuxFeatureHeaderInfo">
+                    <span><strong>Abilities: </strong></span>
+                    
+                    {{#WpnAbility0}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility0}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility0Desc}}</span>
+                    </div>
+                    {{/WpnAbility0}}
+                    {{#WpnAbility1}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility1}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility1Desc}}</span>
+                    </div>
+                    {{/WpnAbility1}}
+                    {{#WpnAbility2}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility2}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility2Desc}}</span>
+                    </div>
+                    {{/WpnAbility2}}
+                    {{#WpnAbility3}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility3}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility3Desc}}</span>
+                    </div>
+                    {{/WpnAbility3}}
+                    {{#WpnAbility4}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility4}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility4Desc}}</span>
+                    </div>
+                    {{/WpnAbility4}}
+                    {{#WpnAbility5}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility5}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility5Desc}}</span>
+                    </div>
+                    {{/WpnAbility5}}
+                </div>
+                {{/WpnAbility0}}
+				<div class="wuxFeatureHeaderInfo">
+                    <div class="wuxFeatureFunctionBlockRow">
+                        {{#WpnThreat}}
+                        <span><strong>Threat: </strong></span>
+                        <span>{{WpnThreat}}</span>
+                        <span>&nbsp;</span>
+                        {{/WpnThreat}}
+                        {{#WpnRange}}
+                        <span><strong>Range: </strong></span>
+                        <span>{{WpnRange}}</span>
+                        <span>&nbsp;</span>
+                        {{/WpnRange}}
+                        <span><strong>Damage: </strong></span>
+                        <span>{{WpnDamage}}</span>
+                    </div>
+				</div>
+			</div>
+        </div>
+		{{/wpnName}}
+
+	</rolltemplate>
+
     <rolltemplate class="sheet-rolltemplate-action">
         <div>&nbsp;</div>
         <div class="formattedTextbox">

@@ -904,32 +904,30 @@ function UpdateCharacterGearEquipItem(eventinfo) {
 
 function SetCharacterEquippedWeapon(update, itemData, gearSlot) {
 
-	let output = "";
-	output += `{{WpnName=${itemData.name}}} `;
+	// let output = "";
+	// output += `{{WpnName=${itemData.name}}} `;
 
-	var traitsDb = GetTraitsDictionary(itemData.traits, "item");
-	for (var i = 0; i < traitsDb.length; i++) {
-		output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
-	}
+	// var traitsDb = GetTraitsDictionary(itemData.traits, "item");
+	// for (var i = 0; i < traitsDb.length; i++) {
+	// 	output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
+	// }
 
-	traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
-	for (var i = 0; i < traitsDb.length; i++) {
-		output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
-	}
+	// traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
+	// for (var i = 0; i < traitsDb.length; i++) {
+	// 	output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
+	// }
 
-	if (itemData.range != "") {
-		output += `{{WpnRange=${itemData.range}}} `;
-	}
-	if (itemData.threat != "") {
-		output += `{{WpnThreat=${itemData.threat}}} `;
-	}
-	output += `{{WpnDamage=${itemData.damageString}}} `;
-	output += `{{WpnSkill=${itemData.skill}}} `;
+	// if (itemData.range != "") {
+	// 	output += `{{WpnRange=${itemData.range}}} `;
+	// }
+	// if (itemData.threat != "") {
+	// 	output += `{{WpnThreat=${itemData.threat}}} `;
+	// }
+	// output += `{{WpnDamage=${itemData.damageString}}} `;
+	// output += `{{WpnSkill=${itemData.skill}}} `;
 
 	let weaponData = ConvertEquipmentDataToWeaponData(itemData);
-	output += `##${JSON.stringify(weaponData)}`;
-
-	update[gearSlot] = output;
+	update[gearSlot] = JSON.stringify(weaponData);
 	return update;
 }
 

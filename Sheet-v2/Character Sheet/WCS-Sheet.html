@@ -8175,7 +8175,7 @@
 										<fieldset class="repeating_fulllearnedtechniques">
 											<input type="hidden" name="attr_technique-onUse" value="">
 											<input type="hidden" class="wuxFeature-flag" name="attr_technique-select">
-											<div class="wuxFeature">
+											<div class="wuxFeature wuxMinWidth300">
 												<input type="hidden" class="wuxFeatureHeader-flag" name="attr_technique-header" value="Full">
 												<div class="wuxFeatureHeader">
 													<input type="hidden" class="wuxFeatureType-flag" name="attr_technique-type" value="Permanent">
@@ -8215,7 +8215,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -8369,7 +8369,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Skirmish}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-skirmish}}} {{Trait0=Armament [F]}} {{Trait0Desc=This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament [F]; Brutal&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Skirmish}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{Trait0=Armament [F]}} {{Trait0Desc=This technique uses the skill, threat, and damage statistics and all abilities of an equipped melee weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament [F]; Brutal&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}##@{technique-equippedWeapon-skirmish}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Skirmish</span>
@@ -8395,7 +8395,7 @@
 														<span class="wuxShownTraits">
 															<div class="wuxTrait">
 																<span class="wuxTraitText">Armament [F]</span>
-																<span class="wuxTooltiptext">This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.</span>
+																<span class="wuxTooltiptext">This technique uses the skill, threat, and damage statistics and all abilities of an equipped melee weapon.</span>
 															</div>
 															<div class="wuxTrait">
 																<span class="wuxTraitText">Brutal</span>
@@ -8448,7 +8448,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Barrage}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-barrage}}} {{Trait0=Armament [F]}} {{Trait0Desc=This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament [F]; Brutal&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Barrage}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{Trait0=Arsenal [F]}} {{Trait0Desc=This technique uses the skill, range, and damage statistics and all abilities of an equipped ranged weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Arsenal [F]; Brutal&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}##@{technique-equippedWeapon-barrage}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Barrage</span>
@@ -8473,8 +8473,8 @@
 														<span><strong>Traits: </strong></span>
 														<span class="wuxShownTraits">
 															<div class="wuxTrait">
-																<span class="wuxTraitText">Armament [F]</span>
-																<span class="wuxTooltiptext">This technique uses the skill, range/threat, damage, and all abilities of an equipped weapon.</span>
+																<span class="wuxTraitText">Arsenal [F]</span>
+																<span class="wuxTooltiptext">This technique uses the skill, range, and damage statistics and all abilities of an equipped ranged weapon.</span>
 															</div>
 															<div class="wuxTrait">
 																<span class="wuxTraitText">Brutal</span>
@@ -8936,7 +8936,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -9090,7 +9090,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Strike}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-strike}}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, range/threat, and damage statistics of an equipped weapon.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Strike}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, threat, and damage statistics of an equipped melee weapon.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}##@{technique-equippedWeapon-strike}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Strike</span>
@@ -9116,7 +9116,7 @@
 														<span class="wuxShownTraits">
 															<div class="wuxTrait">
 																<span class="wuxTraitText">Armament</span>
-																<span class="wuxTooltiptext">This technique uses the skill, range/threat, and damage statistics of an equipped weapon.</span>
+																<span class="wuxTooltiptext">This technique uses the skill, threat, and damage statistics of an equipped melee weapon.</span>
 															</div>
 														</span>
 													</div>
@@ -9165,7 +9165,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Shoot}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{weapon=@{technique-equippedWeapon-shoot}}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, range/threat, and damage statistics of an equipped weapon.}} {{Requirement=Weapon must not have the loading trait.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Shoot}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Trait0=Arsenal}} {{Trait0Desc=This technique uses the skill, range, and damage statistics of an equipped ranged weapon.}} {{Requirement=Weapon must not have the loading trait.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}##{&#34;resources&#34;:&#34;&#34;,&#34;traits&#34;:&#34;Arsenal&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;hasCheck&#34;:true,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;hasDamage&#34;:false,&#34;damage&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;}##@{technique-equippedWeapon-shoot}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Shoot</span>
@@ -9190,8 +9190,8 @@
 														<span><strong>Traits: </strong></span>
 														<span class="wuxShownTraits">
 															<div class="wuxTrait">
-																<span class="wuxTraitText">Armament</span>
-																<span class="wuxTooltiptext">This technique uses the skill, range/threat, and damage statistics of an equipped weapon.</span>
+																<span class="wuxTraitText">Arsenal</span>
+																<span class="wuxTooltiptext">This technique uses the skill, range, and damage statistics of an equipped ranged weapon.</span>
 															</div>
 														</span>
 													</div>
@@ -9817,7 +9817,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -10161,7 +10161,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -10597,7 +10597,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -10878,7 +10878,7 @@
 									</div>
 								</div>
 							</div>
-							
+
 						</div>
 					</div>
 				</div>
@@ -11271,7 +11271,7 @@
 											</div>
 										</div>
 									</div>
-									
+
 								</div>
 							</fieldset>
 						</div>
@@ -14426,6 +14426,118 @@
 
 	</rolltemplate>
 
+    <rolltemplate class="sheet-rolltemplate-techniqueResolver">
+		{{#wpnName}}
+		<div class="wuxFeatureHeader wuxFeatureHeader-Equipment">
+
+			<div class="wuxFeatureHeaderDisplayBlock">
+				<span class="wuxFeatureHeaderName">{{wpnName}}</span>
+                {{#WpnTrait0}}
+                <div class="wuxFeatureHeaderInfo">
+                    <span><strong>Traits: </strong></span>
+                    
+                    {{#WpnTrait0}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait0}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait0Desc}}</span>
+                    </div>
+                    {{/WpnTrait0}}
+                    {{#WpnTrait1}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait1}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait1Desc}}</span>
+                    </div>
+                    {{/WpnTrait1}}
+                    {{#WpnTrait2}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait2}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait2Desc}}</span>
+                    </div>
+                    {{/WpnTrait2}}
+                    {{#WpnTrait3}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait3}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait3Desc}}</span>
+                    </div>
+                    {{/WpnTrait3}}
+                    {{#WpnTrait4}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait4}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait4Desc}}</span>
+                    </div>
+                    {{/WpnTrait4}}
+                    {{#WpnTrait5}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait5}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait5Desc}}</span>
+                    </div>
+                    {{/WpnTrait5}}
+                </div>
+                {{/WpnTrait0}}
+                {{#WpnAbility0}}
+                <div class="wuxFeatureHeaderInfo">
+                    <span><strong>Abilities: </strong></span>
+                    
+                    {{#WpnAbility0}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility0}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility0Desc}}</span>
+                    </div>
+                    {{/WpnAbility0}}
+                    {{#WpnAbility1}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility1}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility1Desc}}</span>
+                    </div>
+                    {{/WpnAbility1}}
+                    {{#WpnAbility2}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility2}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility2Desc}}</span>
+                    </div>
+                    {{/WpnAbility2}}
+                    {{#WpnAbility3}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility3}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility3Desc}}</span>
+                    </div>
+                    {{/WpnAbility3}}
+                    {{#WpnAbility4}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility4}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility4Desc}}</span>
+                    </div>
+                    {{/WpnAbility4}}
+                    {{#WpnAbility5}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility5}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility5Desc}}</span>
+                    </div>
+                    {{/WpnAbility5}}
+                </div>
+                {{/WpnAbility0}}
+				<div class="wuxFeatureHeaderInfo">
+                    <div class="wuxFeatureFunctionBlockRow">
+                        {{#WpnThreat}}
+                        <span><strong>Threat: </strong></span>
+                        <span>{{WpnThreat}}</span>
+                        <span>&nbsp;</span>
+                        {{/WpnThreat}}
+                        {{#WpnRange}}
+                        <span><strong>Range: </strong></span>
+                        <span>{{WpnRange}}</span>
+                        <span>&nbsp;</span>
+                        {{/WpnRange}}
+                        <span><strong>Damage: </strong></span>
+                        <span>{{WpnDamage}}</span>
+                    </div>
+				</div>
+			</div>
+        </div>
+		{{/wpnName}}
+
+	</rolltemplate>
+
     <rolltemplate class="sheet-rolltemplate-action">
         <div>&nbsp;</div>
         <div class="formattedTextbox">
@@ -15886,10 +15998,6 @@ function SetTechniqueUseData(update, technique, repeatingSection, id) {
 		}
 	}
 
-	if (technique.traits != "" && technique.traits.indexOf("Armament") >= 0) {
-		output += "@{technique-equippedWeapon} ";
-	}
-
 	// add technique data for the api
 	let usedTechData = JSON.stringify({
 		resources: technique.resourceCost,
@@ -15908,6 +16016,11 @@ function SetTechniqueUseData(update, technique, repeatingSection, id) {
 		element: technique.element
 	});
 	output += `##${usedTechData}`;
+
+	// add the equopped action at the end
+	if (technique.traits != "" && technique.traits.indexOf("Armament") >= 0) {
+		output += "##@{technique-equippedWeapon}";
+	}
 
 	output = `&{template:technique} ${output.trim()}`;
 	update[GetSectionIdName(repeatingSection, id, "technique-onUse")] = output;
@@ -19350,7 +19463,6 @@ function UpdateCharacterGearEquipItem(eventinfo) {
 							case "Head":
 							case "Arms":
 							case "Legs":
-								log("armorBonuses.block " + armorBonuses.block);
 								armorBonuses.block += itemData.block;
 								armorBonuses.armor += itemData.armor;
 								armorBonuses.reflexPen += itemData.reflexPen;
@@ -19392,32 +19504,30 @@ function UpdateCharacterGearEquipItem(eventinfo) {
 
 function SetCharacterEquippedWeapon(update, itemData, gearSlot) {
 
-	let output = "";
-	output += `{{WpnName=${itemData.name}}} `;
+	// let output = "";
+	// output += `{{WpnName=${itemData.name}}} `;
 
-	var traitsDb = GetTraitsDictionary(itemData.traits, "item");
-	for (var i = 0; i < traitsDb.length; i++) {
-		output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
-	}
+	// var traitsDb = GetTraitsDictionary(itemData.traits, "item");
+	// for (var i = 0; i < traitsDb.length; i++) {
+	// 	output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
+	// }
 
-	traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
-	for (var i = 0; i < traitsDb.length; i++) {
-		output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
-	}
+	// traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
+	// for (var i = 0; i < traitsDb.length; i++) {
+	// 	output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
+	// }
 
-	if (itemData.range != "") {
-		output += `{{WpnRange=${itemData.range}}} `;
-	}
-	if (itemData.threat != "") {
-		output += `{{WpnThreat=${itemData.threat}}} `;
-	}
-	output += `{{WpnDamage=${itemData.damageString}}} `;
-	output += `{{WpnSkill=${itemData.skill}}} `;
+	// if (itemData.range != "") {
+	// 	output += `{{WpnRange=${itemData.range}}} `;
+	// }
+	// if (itemData.threat != "") {
+	// 	output += `{{WpnThreat=${itemData.threat}}} `;
+	// }
+	// output += `{{WpnDamage=${itemData.damageString}}} `;
+	// output += `{{WpnSkill=${itemData.skill}}} `;
 
 	let weaponData = ConvertEquipmentDataToWeaponData(itemData);
-	output += `##${JSON.stringify(weaponData)}`;
-
-	update[gearSlot] = output;
+	update[gearSlot] = JSON.stringify(weaponData);
 	return update;
 }
 
