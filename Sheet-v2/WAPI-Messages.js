@@ -1,6 +1,18 @@
-var EmoteController = EmoteController || (function() {
+var WuxingMessages = WuxingMessages || (function() {
     'use strict';
     
+    var schemaVersion = "0.1.0",
+
+    checkInstall = function() {
+        if( ! state.hasOwnProperty('WuxingMessages') || state.WuxingMessages.version !== schemaVersion) {
+            state.WuxingMessages = {
+                version: schemaVersion
+            };
+        }
+    },
+
+    // Commands
+    // ---------------------------
     handleInput = function(msg, tag, content){
         switch (tag) {
             case "!m":
@@ -22,14 +34,87 @@ var EmoteController = EmoteController || (function() {
             return;
             case "!emotemessage":
                 commandSendEmoteMessage(msg, content);
-        };
+        }
+    },
+    
+    // Send Targets
+    // ---------------------------
+    sendChatToTargets = function (message, targets, sendUser, noarchive) {
+        if (sendUser == undefined) {
+            sendUser = "Wuxing Manager";
+        }
+
+        // send the message to each target
+        if (targets != undefined) {
+            targets = targets.split(',');
+            _.each(targets, function(target) {
+                if (target != "") {
+                    if (noarchive) {
+                        sendChat(sendUser, "/w " + target + " " + message);
+                    }
+                    else {
+                        sendChat(sendUser, "/w " + target + " " + message, null, {noarchive:true});
+                    }
+                }
+            });
+        }
+        else {
+            if (noarchive) {
+                sendChat(sendUser, message);
+            }
+            else {
+                sendChat(sendUser, message, null, {noarchive:true});
+            }
+        }
+    },
+    
+
+    // Public Send Messages
+    // ---------------------------
+    sendSystemMessage = function (message, targets, sendUser, noarchive) {
+
+        let output = `&{template:systemBox} {{message=${message}}}`;
+        sendChatToTargets(output, targets, sendUser, noarchive);
+    },
+
+    sendTableMessage = function (headers, tableData, targets, sendUser, noarchive) {
+
+        let tableHeader = "";
+        for (let i = 0; i < headers.length; i++) {
+            tableHeader += `<th class="sheet-wuxTableHeader">${headers[i]}</th>`;
+        }
+
+        let tableRow = "";
+        let tableRows = "";
+        for (let i = 0; i < tableData.length; i++) {
+            tableRow = "";
+            for (let j = 0; j < tableData[i].length; j++) {
+                tableRow += `<td class="sheet-wuxTableData">${tableData[i][j]}</td>`;
+            }
+            tableRows += `<tr>${tableRow}</tr>`;
+        }
+
+        let output = `<div class="sheet-rolltemplate-systemBox"><div>&nbsp;</div><div class="sheet-formattedTextbox"><table class="sheet-wuxTable"><tr>${tableHeader}</tr>${tableRows}</table></div></div>`;
+
+        sendChatToTargets(output, targets, sendUser, noarchive);
     }
+
     ;
     return {
-        HandleInput: handleInput
+        CheckInstall: checkInstall,
+        HandleInput: handleInput,
+        SendSystemMessage: sendSystemMessage,
+        SendTableMessage: sendTableMessage
     };
 
-})
+}());
+
+
+on("ready",function(){
+    'use strict';
+
+	WuxingMessages.CheckInstall(); 
+});
 
 
 // ======= Emote Object

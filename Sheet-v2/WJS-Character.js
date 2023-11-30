@@ -885,6 +885,7 @@ function UpdateCharacterGearEquipItem(eventinfo) {
 					}
 				}
 			}
+			update["statscore_block"] = armorBonuses.block;
 			update["block"] = armorBonuses.block + AttrParseInt(v, "statbonus_block");
 			update["armor"] = armorBonuses.armor + AttrParseInt(v, "statbonus_armor");
 
@@ -1124,7 +1125,7 @@ function SetDerivedStats(update, attrArray, ancestryData, growthList) {
 			case "WIL":
 				total = parseInt(ancestryData.barrier) + AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_barrier");
 				update["barrier"] = total
-				update["tempHp_max"] = total + AttrParseInt("block");
+				update["tempHpTotal"] = total + AttrParseInt("block");
 
 				total = AttrParseInt(attrArray, name) + AttrParseInt(attrArray, "statbonus_stress");
 				update["stress_max"] = Math.max(0, total);
@@ -1265,7 +1266,7 @@ on("change:statbonus_block", function () {
 
 function UpdateCharacterBlock() {
 
-	let mod_attrs = ["statbonus_block", "barrier"];
+	let mod_attrs = ["statbonus_block", "statscore_block", "barrier"];
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -1278,8 +1279,9 @@ function UpdateCharacterBlock() {
 
 function SetCharacterBlock(update, attrArray) {
 
-	update["block"] = AttrParseInt(attrArray, "statbonus_block");
-	update["tempHp_max"] = total + AttrParseInt("block");
+	let total = AttrParseInt(attrArray, "statscore_block") + AttrParseInt(attrArray, "statbonus_block");
+	update["block"] = total;
+	update["tempHpTotal"] = total + AttrParseInt(attrArray, "barrier");
 	return update;
 }
 

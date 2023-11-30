@@ -12,6 +12,7 @@ on("chat:message", function(msg) {
         }
 
         WuxingCombat.HandleInput(msg, tag, content);
+        WuxingMessages.HandleInput(msg, tag, content);
 
         switch(tag) {
             case "!m":
@@ -306,6 +307,174 @@ on("chat:message", function(msg) {
     }
 });
 
+// Data Retrieval
+function GetCharacterAttribute (charId, attrName) {
+
+    var returnVal = undefined;
+    var chracterAttributes = findObjs({
+        _characterid: charId,
+        _type: "attribute",
+        name: attrName
+    }, {caseInsensitive: true});
+
+    if (chracterAttributes.length > 0) {
+        returnVal = chracterAttributes[0];
+    }
+
+    return returnVal;
+}
+
+function AttrParseInt(charId, fieldName, defaultValue) {
+
+	return ParseIntValue(getAttrByName(charId, fieldName), defaultValue);
+}
+
+function ParseIntValue(value, defaultValue) {
+	if (defaultValue == undefined) {
+		defaultValue = 0;
+	}
+	return isNaN(parseInt(value)) ? defaultValue : parseInt(value);
+}
+
+function AttrParseFloat(charId, fieldName, defaultValue) {
+
+	return ParseFloatValue(getAttrByName(charId, fieldName), defaultValue);
+}
+
+
+// attribute creation
+function CreateRepeatingRowAttribute(repeatingSection, id, name, value, charId) {
+
+    return createObj("attribute", {"name": GetSectionIdName(repeatingSection, id, name), "current": value, "_characterid": charId});
+}
+
+function CreateNormalAttribute(name, value, charId, max) {
+    log (`Creating Attribute ${name} with value ${value}`);
+
+    if (max != undefined) {
+        return createObj("attribute", {"name": name, "current": value, "max": max, "_characterid": charId});
+    }
+
+    return createObj("attribute", {"name": name, "current": value, "_characterid": charId});
+}
+
+function CreateAbility (name, pattern, charId) {
+    var checkAbility = findObjs({
+        _type: 'ability',
+        _characterid: charId,
+        name: name
+    });
+
+    if (checkAbility[0]) {
+        checkAbility[0].set({
+            action: pattern
+        });
+    } else {
+        createObj('ability', {
+            name: name,
+            action: pattern,
+            characterid: charId,
+            istokenaction: true
+        });
+    }
+}
+
+function RemoveRowData(charId, rowId) {
+    var chracterAttributes = findObjs({
+        _characterid: charId,
+        _type: "attribute",
+        name: rowId
+    }, {caseInsensitive: true});
+    
+    if (chracterAttributes.length > 0)
+    {
+        chracterAttributes[0].remove(); 
+    }
+}
+
+// uuid generation
+function GenerateUUID() {
+
+    var a = 0, b = [];
+    return function() {
+        var c = (new Date()).getTime() + 0, d = c === a;
+        a = c;
+        for (var e = new Array(8), f = 7; 0 <= f; f--) {
+            e[f] = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(c % 64);
+            c = Math.floor(c / 64);
+        }
+        c = e.join("");
+        if (d) {
+            for (f = 11; 0 <= f && 63 === b[f]; f--) {
+                b[f] = 0;
+            }
+            b[f]++;
+        } else {
+            for (f = 0; 12 > f; f++) {
+                b[f] = Math.floor(64 * Math.random());
+            }
+        }
+        for (f = 0; 12 > f; f++){
+            c += "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(b[f]);
+        }
+        return c;
+    };
+};
+
+function GenerateRowID() {
+
+    return GenerateUUID().replace(/_/g, "Z");
+};
+
+// Sanitization
+function SanitizeSheetRoll(roll) {
+    var sheetRoll = roll;
+    sheetRoll = sheetRoll.replace(/%/g, "&#37;");
+    sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+    sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+    sheetRoll = sheetRoll.replace(/\</g, "&#60;");
+    sheetRoll = sheetRoll.replace(/\>/g, "&#62;");
+    sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
+    sheetRoll = sheetRoll.replace(/@/g, "&#64;");
+    sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
+    sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+    sheetRoll = sheetRoll.replace(/\n/g, "<br />");
+    return sheetRoll;
+}
+
+function SanitizeSheetRollAction(roll) {
+    var sheetRoll = roll;
+    sheetRoll = sheetRoll.replace(/%/g, "&#37;");
+    sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+    sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+    sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+    sheetRoll = sheetRoll.replace(/:/g, "");
+    sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
+    sheetRoll = sheetRoll.replace(/@/g, "&#64;");
+    sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
+    sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+    sheetRoll = sheetRoll.replace(/\n/g, "&&");
+    return sheetRoll;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Old
+// =================================================
 
 function SendChatMessage(snd, msg, alt, opt) {
     
@@ -317,221 +486,7 @@ function SendChatMessage(snd, msg, alt, opt) {
     }
 }
 
-// ======= Help
 
-function CommandHelpCommands(msg, options) {
-    
-    // format the message
-    var sendingPlayer = getObj('player', msg.playerid);
-    var sendingPlayerName = sendingPlayer.get("_displayname").split(" ")[0];
-    var sendString = "/w " + sendingPlayerName;
-    
-    switch(options)
-    {
-        case "gen":
-        case "general":
-        case "various":
-        case "misc":
-            // Misc Commands
-            sendString += " <div>&nbsp;</div>";
-            sendString += "<div style='position: relative; margin: 0px 10px 0px -30px; display: inline-block; font-size: 12px; padding: 5px; vertical-align: top; ";
-            sendString += "border: 1px solid grey; background-color: #e9f7f7; font-family: Courier, monospace;'>";
-            sendString += "<b style='font-size: 14px;'>Misc Commands</b>";
-            sendString += "<br /><span style='width: 260px; display: inline-block; font-size: 10px;'>";
-            sendString += "These are various commands useful to all players.";
-            sendString += "</span>";
-            sendString += "<hr /><table style='border: 0px;'>";
-            if (playerIsGM(msg.playerid)) {
-                sendString += GetHelpTableLine("start", "Starts the session");
-                sendString += GetHelpTableLine("fail", "Randomly selects a critical fail event");
-                sendString += GetHelpTableLine("npc", "Sets NPC stats");
-            }
-            sendString += "</table>";
-            sendString += "</div>";
-            break;
-        case "chat":
-            // Chat Commands
-            sendString += " <div>&nbsp;</div>";
-            sendString += "<div style='position: relative; margin: 0px 10px 0px -30px; display: inline-block; font-size: 12px; padding: 5px; vertical-align: top; ";
-            sendString += "border: 1px solid grey; background-color: #e9f7f7; font-family: Courier, monospace;'>";
-            sendString += "<b style='font-size: 14px;'>Character Commands</b>";
-            sendString += "<br /><span style='width: 260px; display: inline-block; font-size: 10px;'>";
-            sendString += "These commands only work when a character is selected. ";
-            sendString += "A character can be selected either by selecting their token on the map or via the as selector below this chat window.";
-            sendString += "</span>";
-            sendString += "<br /><span style='width: 260px; display: inline-block; font-size: 10px;'>";
-            sendString += "Messaged, Whispered, and Yelled messages all can be modified.";
-            sendString += "Add a / followed by a message and ending with another / to have the message spoken to a specific person or group";
-            sendString += "</span>";
-            sendString += "<br /><span style='width: 260px; display: inline-block; font-size: 10px;'>";
-            sendString += "Example: !y /these dumbasses beside her/ You are all dumbasses!";
-            sendString += "</span>";
-            sendString += "<hr /><table style='border: 0px;'>";
-            sendString += GetHelpTableLine("!m", "Say a message said aloud");
-            sendString += GetHelpTableLine("!w", "Whisper a message said quietly");
-            sendString += GetHelpTableLine("!y", "Yell a message said loudly");
-            sendString += GetHelpTableLine("!t", "Send a message that is thought");
-            sendString += GetHelpTableLine("!d", "Send a message describing an action");
-            sendString += "</table>";
-            sendString += "</div>";
-            break;
-        case "char":
-        case "target":
-            // Misc Commands
-            sendString += " <div>&nbsp;</div>";
-            sendString += "<div style='position: relative; margin: 0px 10px 0px -30px; display: inline-block; font-size: 12px; padding: 5px; vertical-align: top; ";
-            sendString += "border: 1px solid grey; background-color: #e9f7f7; font-family: Courier, monospace;'>";
-            sendString += "<b style='font-size: 14px;'>Character Commands</b>";
-            sendString += "<br /><span style='width: 260px; display: inline-block; font-size: 10px;'>";
-            if (playerIsGM(msg.playerid)) {
-                sendString += "These commands start with !p, !pc, !u, or !c. <br />";
-                sendString += "They can be followed with an 's' for shouted messages. <br />";
-            } else {
-                sendString += "These commands start with \"!c \" and affect whatever character you have selected on the map or in your character chat menu. <br />";
-                sendString += "After the \"!c \" you need to add a command to determine what you are doing with the selected character.";
-            }
-            sendString += "Use one of the commands below to perform an action.";
-            sendString += "</span><hr />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px; font-weight: bold;'>";
-            sendString += "Emote Related";
-            sendString += "</span><br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px;'>";
-            sendString += "Change aspects of how you display emotes. These require that you supply a type ";
-            sendString += "that you write in anywhere after the command.";
-            sendString += "</span><br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px;'>Example: !c lang 1</span>";
-            sendString += "<table style='border: 0px;'>";
-            sendString += GetHelpTableLine("o", "Get a list of outfits on the character that can be selected as the worn outfit.");
-            sendString += GetHelpTableLine("lang", "Changes the speaking language to a supplied language number or the supplied language.");
-            sendString += "</table>";
-            
-            if (playerIsGM(msg.playerid)) {
-                sendString += "<br />";
-                sendString += "<span style='width: 260px; display: inline-block; font-size: 10px; font-weight: bold;'>";
-                sendString += "XP Related";
-                sendString += "</span><br />";
-                sendString += "<span style='width: 260px; display: inline-block; font-size: 10px;'>";
-                sendString += "Grant XP to Targets. Follow command with amount.";
-                sendString += "</span>";
-                sendString += "<hr /><table style='border: 0px;'>";
-                sendString += GetHelpTableLine("xp", "Grants XP.");
-                sendString += GetHelpTableLine("kxp", "Kills selected and grants XP from kill to targets.");
-                sendString += "</table>";
-            }
-            
-            sendString += "<br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px; font-weight: bold;'>";
-            sendString += "Special Related";
-            sendString += "</span><br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px;'>";
-            sendString += "Request or spend special currencies.";
-            sendString += "</span><br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px;'>Example: !c mor</span>";
-            sendString += "<table style='border: 0px;'>";
-            sendString += GetHelpTableLine("inspiration, insp", "Spends Inspiration if you have any.");
-            sendString += GetHelpTableLine("morale, mor", "Requests Morale from the GM. Additional commands after this one will be sent to the GM and can be used to give reason for your request. For example: !c mor I want Morale");
-            sendString += GetHelpTableLine("resolve, res", "Spends your highest tier of Resolve if you have any.");
-            sendString += GetHelpTableLine("karma, kar", "Requests Karma from the GM. Additional commands after this one will be sent to the GM and can be used to give reason for your request. For example: !c kar I want Karma");
-            sendString += GetHelpTableLine("fate", "Spends 1 Fate if you have any.");
-            sendString += "</table>";
-            
-            sendString += "<br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px; font-weight: bold;'>";
-            sendString += "Currency Related";
-            sendString += "</span><br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px;'>";
-            sendString += "Grants currency. Follow command with amount. Add an 's' to the end of the command to add to storage instead.";
-            sendString += "</span><br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px;'>Example: !c jins 200</span>";
-            sendString += "<table style='border: 0px;'>";
-            sendString += GetHelpTableLine("jin", "Adds Jin.");
-            sendString += GetHelpTableLine("frt", "Adds Forta.");
-            sendString += GetHelpTableLine("syr", "Adds Syre.");
-            sendString += GetHelpTableLine("gp", "Adds Gold.");
-            sendString += GetHelpTableLine("cp", "Adds Copper.");
-            sendString += "</table>";
-            
-            sendString += "<br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px; font-weight: bold;'>";
-            sendString += "Skill Related";
-            sendString += "</span><br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px;'>";
-            sendString += "Call a skill check roll.";
-            sendString += "</span><br />";
-            sendString += "<span style='width: 260px; display: inline-block; font-size: 10px;'>Example: !c per</span>";
-            sendString += "<table style='border: 0px;'>";
-            sendString += GetHelpTableLine("acrobatics, acr", "Roll acrobatics");
-            sendString += GetHelpTableLine("animalhandling, ani", "Roll animal handling");
-            sendString += GetHelpTableLine("athletics, ath", "Roll athletics");
-            sendString += GetHelpTableLine("deception, dec", "Roll deception");
-            sendString += GetHelpTableLine("history, his", "Roll history");
-            sendString += GetHelpTableLine("insight, ins", "Roll insight");
-            sendString += GetHelpTableLine("intimidation, inti", "Roll intimidation");
-            sendString += GetHelpTableLine("investigation, inv", "Roll investigation");
-            sendString += GetHelpTableLine("medicine, med", "Roll medicine");
-            sendString += GetHelpTableLine("nature, nat", "Roll nature");
-            sendString += GetHelpTableLine("perception, per", "Roll perception");
-            sendString += GetHelpTableLine("performance, prf, perf", "Roll performance");
-            sendString += GetHelpTableLine("persuasion, prs, pers", "Roll persuasion");
-            sendString += GetHelpTableLine("religion, rel", "Roll religion");
-            sendString += GetHelpTableLine("sleightOfHand, sle", "Roll sleightOfHand");
-            sendString += GetHelpTableLine("stealth, ste", "Roll stealth");
-            sendString += GetHelpTableLine("survival, sur", "Roll survival");
-            sendString += "</table>";
-            
-            if (playerIsGM(msg.playerid)) {
-                sendString += "<br />";
-                sendString += "<span style='width: 260px; display: inline-block; font-size: 10px; font-weight: bold;'>";
-                sendString += "Rest Related";
-                sendString += "</span><br />";
-                sendString += "<span style='width: 260px; display: inline-block; font-size: 10px;'>";
-                sendString += "Cause a type of rest to be performed.";
-                sendString += "</span>";
-                sendString += "<table style='border: 0px;'>";
-                sendString += GetHelpTableLine("brief", "Recover all of the party's barrier");
-                sendString += GetHelpTableLine("long", "Restores all spell slots, barrier, and heals 1 hit point");
-                sendString += "</table>";
-            }
-            sendString += "</div>";
-            break;
-        default:
-            // Help Commands
-            sendString += " <div>&nbsp;</div>";
-            sendString += "<div style='position: relative; margin: 0px 10px 0px -30px; display: inline-block; font-size: 12px; padding: 5px; vertical-align: top; ";
-            sendString += "border: 1px solid grey; background-color: #e9f7f7; font-family: Courier, monospace;'>";
-            sendString += "<b style='font-size: 14px;'>Help Commands</b>";
-            sendString += "<br /><span style='width: 260px; display: inline-block; font-size: 10px;'>";
-            sendString += "Please choose a help option below or add one of the following commands after !help to go directly to the section next time.";
-            sendString += "</span>";
-            sendString += "<table style='border: 0px;'>";
-            sendString += GetHelpTableLine("misc", "[Misc](!help misc)");
-            sendString += GetHelpTableLine("chat", "[Chat](!help chat)");
-            sendString += GetHelpTableLine("char", "[Character](!help char)");
-            sendString += "</div>";
-            break;
-            
-    }
-    sendChat("API Help", sendString, null, {noarchive:true});
-} 
-
-function GetHelpTableLine(title, message) {
-    
-    var sendString = "";
-    sendString += "<tr style='border-bottom: 1px solid #ddd;'>";
-    sendString +=   "<td style='width: 80px; display: inline-block; vertical-align: top; ";
-    sendString +=   "font-size: 9px; line-height: 10px; font-weight: bold; '>";
-    sendString +=     title;
-    sendString +=   "</td>";
-    sendString +=   "<td style='width: 170px; display: inline-block; text-align: right; ";
-    sendString +=   "font-size: 8px; line-height: 10px;'>"; 
-    sendString +=     message;
-    sendString +=   "</td>";
-    sendString += "</tr>";
-    return sendString;
-}
-
-// Data Retrieval Functions
-// =================================================
 
 function CommandImportPartyStats(msg) {
     
@@ -674,33 +629,6 @@ function GetSelectedCharacter(msg, sendingPlayerName, msgwho, ignoreToken, token
     
     sendChat("Game Manager", "/w " + sendingPlayerName + " There was an error in your message. You do not have a selected token or selected an invalid character.", null, {noarchive:true});
     return null;
-}
-
-function GetCharacterAttribute(characterId, attrName) {
-    
-    var returnVal = GetSafeCharacterAttribute(characterId, attrName);
-    
-    if (returnVal == undefined) {
-        log ("attrName " + attrName + " does not exist.");
-    }
-    
-    return returnVal;
-}
-
-function GetSafeCharacterAttribute(characterId, attrName) {
-    
-    var returnVal = undefined;
-    var chracterAttributes = findObjs({
-        _characterid: characterId,
-        _type: "attribute",
-        name: attrName
-    }, {caseInsensitive: true});
-    
-    if (chracterAttributes.length > 0) {
-        returnVal = chracterAttributes[0];
-    }
-    
-    return returnVal;
 }
 
 function GetAttributeInt(charAtrr, state, defaultVal) {
@@ -864,118 +792,4 @@ function FormTargetData(charId, charName, tokenId, displayName) {
     };
 }
 
-function RemoveRowData(charId, rowId) {
-    var chracterAttributes = findObjs({
-        _characterid: charId,
-        _type: "attribute",
-        name: rowId
-    }, {caseInsensitive: true});
-    
-    if (chracterAttributes.length > 0)
-    {
-        chracterAttributes[0].remove(); 
-    }
-}
 
-// uuid generation
-var generateUUID = (function() {
-    "use strict";
-
-    var a = 0, b = [];
-    return function() {
-        var c = (new Date()).getTime() + 0, d = c === a;
-        a = c;
-        for (var e = new Array(8), f = 7; 0 <= f; f--) {
-            e[f] = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(c % 64);
-            c = Math.floor(c / 64);
-        }
-        c = e.join("");
-        if (d) {
-            for (f = 11; 0 <= f && 63 === b[f]; f--) {
-                b[f] = 0;
-            }
-            b[f]++;
-        } else {
-            for (f = 0; 12 > f; f++) {
-                b[f] = Math.floor(64 * Math.random());
-            }
-        }
-        for (f = 0; 12 > f; f++){
-            c += "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(b[f]);
-        }
-        return c;
-    };
-}()),
-
-generateRowID = function () {
-    "use strict";
-    return generateUUID().replace(/_/g, "Z");
-};
-
-// Sanitization
-function SanitizeSheetRoll(roll) {
-    var sheetRoll = roll;
-    sheetRoll = sheetRoll.replace(/%/g, "&#37;");
-    sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-    sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-    sheetRoll = sheetRoll.replace(/\</g, "&#60;");
-    sheetRoll = sheetRoll.replace(/\>/g, "&#62;");
-    sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
-    sheetRoll = sheetRoll.replace(/@/g, "&#64;");
-    sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
-    sheetRoll = sheetRoll.replace(/]/g, "&#93;");
-    sheetRoll = sheetRoll.replace(/\n/g, "<br />");
-    return sheetRoll;
-}
-
-function SanitizeSheetRollAction(roll) {
-    var sheetRoll = roll;
-    sheetRoll = sheetRoll.replace(/%/g, "&#37;");
-    sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
-    sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-    sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-    sheetRoll = sheetRoll.replace(/:/g, "");
-    sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
-    sheetRoll = sheetRoll.replace(/@/g, "&#64;");
-    sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
-    sheetRoll = sheetRoll.replace(/]/g, "&#93;");
-    sheetRoll = sheetRoll.replace(/\n/g, "&&");
-    return sheetRoll;
-}
-
-// asset creation
-function CreateRepeatingRowAttribute(repeatingSection, id, name, value, charId) {
-
-    return createObj("attribute", {"name": GetSectionIdName(repeatingSection, id, name), "current": value, "_characterid": charId});
-}
-
-function CreateNormalAttribute(name, value, charId, max) {
-    log (`Creating Attribute ${name} with value ${value}`);
-
-    if (max != undefined) {
-        return createObj("attribute", {"name": name, "current": value, "max": max, "_characterid": charId});
-    }
-
-    return createObj("attribute", {"name": name, "current": value, "_characterid": charId});
-}
-
-function CreateAbility (name, pattern, charId) {
-    var checkAbility = findObjs({
-        _type: 'ability',
-        _characterid: charId,
-        name: name
-    });
-
-    if (checkAbility[0]) {
-        checkAbility[0].set({
-            action: pattern
-        });
-    } else {
-        createObj('ability', {
-            name: name,
-            action: pattern,
-            characterid: charId,
-            istokenaction: true
-        });
-    }
-}

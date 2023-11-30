@@ -193,6 +193,9 @@ function TargetOptions(msg, action, modifiers, sendTargets, targets) {
 
     if (playerIsGM(msg.playerid)) {
         switch (action.toLowerCase()) {
+            // TURN
+            case "startturn":
+
             // EXPERIENCE
             case "xp":
                 TargetAddExp(sendTargets, targets, modifiers); 
@@ -265,6 +268,9 @@ function TargetOptions(msg, action, modifiers, sendTargets, targets) {
         break;
 
         // SKILLS
+        case "rollinit":
+            TargetGetCompareChart(sendTargets, targets, "Initiative", "initiative_bonus");
+        break;
         case "sensepresence":
             TargetGetCompareChart(sendTargets, targets, "Sense Presence", "sensepresence_mod");
         break;
@@ -756,7 +762,7 @@ function TargetAddWeek(targets, modifiers) {
 
     // iterate through targets
     _.each(targets, function(target) {
-        newId = generateRowID();
+        newId = GenerateRowID();
         createObj("attribute", {"name":"repeating_downtime_" + newId + "_week",
                                 "current":weekName,
                                 "_characterid":target.charId});
@@ -786,7 +792,7 @@ function TargetAddSocializingCharacter(sendTargets, targets, modifiers) {
 
     // iterate through targets
     _.each(targets, function(target) {
-        newId = generateRowID();
+        newId = GenerateRowID();
         createObj("attribute", {"name":"repeating_socializingactivities_" + newId + "_name",
                                 "current":settings[nameId],
                                 "_characterid":target.charId});
