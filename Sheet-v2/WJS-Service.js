@@ -415,6 +415,7 @@ function SetTechniqueSelect(technique, selectedTechniques) {
 
 function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, isDatabase) {
 
+	technique.username = "@{nickname}";
 	update[GetSectionIdName(repeatingSection, id, "technique-select")] = technique.select != undefined ? technique.select : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-expand")] = autoExpand ? "on" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-isDatabase")] = isDatabase ? "1" : "0";
@@ -454,10 +455,11 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 
 	// set the attack block
 	update[GetSectionIdName(repeatingSection, id, "technique-attackBlock")] =
-		(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") ? "1" : "0";
+		(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "") ? "1" : "0";
 
 	update[GetSectionIdName(repeatingSection, id, "technique-attackBlockTarget")] = (technique.range != "" || technique.target != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-range")] = technique.range;
+	update[GetSectionIdName(repeatingSection, id, "technique-rType")] = technique.rType;
 	update[GetSectionIdName(repeatingSection, id, "technique-target")] = technique.target;
 	update[GetSectionIdName(repeatingSection, id, "technique-targetCode")] = technique.targetCode;
 
@@ -467,149 +469,15 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 
 	// set the damage
 	update[GetSectionIdName(repeatingSection, id, "technique-attackBlockDamage")] = (technique.damage != "" || technique.damageType != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-damage")] = technique.damage;
+	update[GetSectionIdName(repeatingSection, id, "technique-dieValue")] = damageData.dVal;
+	update[GetSectionIdName(repeatingSection, id, "technique-dieType")] = damageData.dType;
+	update[GetSectionIdName(repeatingSection, id, "technique-addPower")] = damageData.dBonus.indexOf("Power") >= 0 ? "on" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-damageType")] = technique.damageType;
 	update[GetSectionIdName(repeatingSection, id, "technique-element")] = technique.element;
-	if (technique.damageType != "") {
-		update = SetTechniqueDataDamageString(update, repeatingSection, id, technique.damage, technique.damageType, technique.element);
-	}
+	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = FormatDamageString(technique);
+	update[GetSectionIdName(repeatingSection, id, "technique-onInfo")] = TechniqueHandler.GetRollTemplate(technique);
+	update[GetSectionIdName(repeatingSection, id, "technique-onUse")] = TechniqueHandler.GetConsumeUsePost(technique);
 
-	// set use data
-	update = SetTechniqueUseData(update, technique, repeatingSection, id);
-
-	return update;
-}
-
-function SetTechniqueUseData(update, technique, repeatingSection, id) {
-
-	let output = "";
-
-	// if this is an augment, incorporate the base into the rolltemplate
-	if (technique.augmentBase != "") {
-		if (technique.augmentTech != undefined) {
-			technique = SetAugmentTechnique(technique, technique.augmentTech);
-		}
-	}
-	else {
-		output += "{{type-base=1}} ";
-	}
-
-	output += `{{Username=@{nickname}}}`;
-	output += `{{Name=${technique.name}}}`;
-	output += `{{Type=${technique.techniqueType}}}`;
-	output += `{{type-${technique.techniqueType}=1}} `;
-	output += `{{Group=${technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup}}}`;
-
-	// create the action line
-	let actionLine = "";
-	if (technique.action != "") {
-		output += `{{type-${technique.action}=1}} `;
-		actionLine += technique.action;
-	}
-	if (technique.limits != "") {
-		if (actionLine != "") {
-			actionLine += "; ";
-		}
-		actionLine += technique.limits;
-	}
-	if (technique.resourceCost != "") {
-		if (actionLine != "") {
-			actionLine += "; ";
-		}
-		actionLine += technique.resourceCost;
-	}
-	if (actionLine != "") {
-		output += `{{ActionLine=${actionLine}}} `;
-	}
-	if (technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "") {
-		output += "{{type-FunctionBlock=1}} ";
-
-		if (technique.traits != "") {
-			var traitsDb = GetTraitsDictionary(technique.traits, "technique");
-			for (var i = 0; i < traitsDb.length; i++) {
-				output += `{{Trait${i}=${traitsDb[i].name}}} {{Trait${i}Desc=${traitsDb[i].description}}} `;
-			}
-		}
-		if (technique.trigger != "") {
-			output += `{{Trigger=${technique.trigger}}} `;
-		}
-		if (technique.requirement != "") {
-			output += `{{Requirement=${technique.requirement}}} `;
-		}
-		if (technique.prerequisite != "") {
-			output += `{{Prerequisites=${technique.prerequisite}}} `;
-		}
-	}
-	if (technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || technique.damage != "" || technique.damageType != "") {
-		output += "{{type-AttackBlock=1}} ";
-
-		if (technique.range != "" || technique.target != "") {
-			output += "{{type-AttackBlockTarget=1}} ";
-
-			if (technique.range != "") {
-				output += `{{Range=${technique.range}}} `;
-			}
-			if (technique.target != "") {
-				output += `{{Target=${technique.target}}} `;
-			}
-		}
-		if (technique.skill != "") {
-			let skill = "";
-			if (technique.defense != "") {
-				if (technique.defense.indexOf("DC")) {
-					skill = technique.defense;
-				}
-				else {
-					skill = `${technique.defense} Check`;
-				}
-			}
-			else {
-				skill = "DC 15";
-			}
-			skill = `${technique.skill} vs. ${skill}`;
-			output += `{{SkillString=${skill}}} `;
-		}
-		if (technique.damage != "" || technique.damageType != "") {
-			let damageString = `${FormatDamageString(technique.damage)}${technique.damageType}${technique.element == "" ? "" : ` [${technique.element}]`}`;
-			output += `{{DamageString=${damageString}}} `;
-		}
-	}
-	if (technique.description != "" || technique.onSuccess != "") {
-		output += "{{type-DescBlock=1}} ";
-		if (technique.description != "") {
-			output += `{{Desc=${technique.description}}} `;
-		}
-		if (technique.onSuccess != "") {
-			output += `{{OnHit=${technique.onSuccess}}} `;
-		}
-	}
-
-	// add technique data for the api
-	let usedTechData = JSON.stringify({
-		resources: technique.resourceCost,
-		traits: technique.traits,
-		onSuccess: technique.onSuccess,
-		onHit: technique.onHit,
-		specBonus: technique.specBonus,
-
-		hasCheck: (technique.skill != "" || technique.defense != "") ? true : false,
-		skill: technique.skill,
-		defense: technique.defense,
-
-		hasDamage: (technique.damage != "" || technique.damageType != "") ? true : false,
-		damage: technique.damage,
-		damageType: technique.damageType,
-		element: technique.element
-	});
-	output += `##${usedTechData}`;
-
-	// add the equopped action at the end
-	if (technique.traits != "" && technique.traits.indexOf("Armament") >= 0) {
-		output += "##@{technique-equippedWeapon}";
-	}
-
-	output = `&{template:technique} ${output.trim()}`;
-	update[GetSectionIdName(repeatingSection, id, "technique-onUse")] = output;
 	return update;
 }
 
@@ -667,6 +535,9 @@ function SetAugmentTechnique(technique, baseTechnique) {
 	if (technique.range != "") {
 		baseTechnique.range = technique.range;
 	}
+	if (technique.rType != "") {
+		baseTechnique.rType = technique.rType;
+	}
 	if (technique.target != "") {
 		baseTechnique.target = technique.target;
 	}
@@ -676,8 +547,14 @@ function SetAugmentTechnique(technique, baseTechnique) {
 	if (technique.onHit != "") {
 		baseTechnique.onHit = technique.onHit;
 	}
-	if (technique.damage != "") {
-		baseTechnique.damage = technique.damage;
+	if (technique.dVal != "") {
+		baseTechnique.dVal = technique.dVal;
+	}
+	if (technique.dType != "") {
+		baseTechnique.dType = technique.dType;
+	}
+	if (technique.dBonus != "") {
+		baseTechnique.dBonus = technique.dBonus;
 	}
 	if (technique.damageType != "") {
 		baseTechnique.damageType = technique.damageType;
@@ -721,13 +598,6 @@ function SetTechniqueDataTraits(update, repeatingSection, id, traits) {
 	return update;
 }
 
-function SetTechniqueDataDamageString(update, repeatingSection, id, damage, damageType, element) {
-	let damageString = `${FormatDamageString(damage)}${damageType}${element == "" ? "" : ` [${element}]`}`;
-	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = damageString;
-
-	return update;
-}
-
 function CreateTechniqueDataFromRepeatingSection(attrArray, repeatingSection, id) {
 
 }
@@ -737,57 +607,28 @@ function CreateTechniqueDataFromRepeatingSection(attrArray, repeatingSection, id
 
 // ======== Damage Values
 
-function FormatDamageString(damageData) {
+function FormatDamageString(feature) {
+
 	var output = "";
-	var damage = "";
-	var elements = damageData.split(";");
-	for (var i = 0; i < elements.length; i++) {
-		damage = ReplaceDamageDice(elements[i]).trim();
-
-		// form output string
-		if (output != "") {
-			output += "+ ";
-		}
-		output += `${damage} `;
+  
+	if (feature.dVal != "" && feature.dVal > 0) {
+	  output += feature.dVal + "d" + feature.dType;
 	}
-	return output;
-}
-
-function SetDamageValuesFromDamageData(update, repeatingSection, id, damageData) {
+	if (feature.dBonus != "") {
+	  var elements = feature.dBonus.split(";");
+	  for (var i = 0; i < elements.length; i++) {
+		output += `+${elements[i]}`;
+	  }
+	}
+	if (feature.damageType != "") {
+	  output += ` ${feature.damageType}`;
+	}
+	if (feature.element != undefined && feature.element != "") {
+	  output += ` [${feature.element}]`;
+	}
 	
-	var elements = damageData.split(";");
-	var regexH = /(\d+)h/g;
-	var regexD = /(\d+)d/g;
-	var count = 0;
-	damageData = {
-		dieValue: 0,
-		dieType: "d3",
-		addPower: 0
-	}
-	for (var i = 0; i < elements.length; i++) {
-		
-		count = parseInt(elements[i].match(regexH));
-		if (!isNaN(count)) {
-			damageData.dieValue = count;
-			damageData.dieType = "d3";
-		}
-		else {
-			count = parseInt(elements[i].match(regexD));
-			if (!isNaN(count)) {
-				damageData.dieValue = count;
-				damageData.dieType = "d6";
-			}
-			else if (elements[i].indexOf("Power") >= 0) {
-				damageData.addPower = "on";
-			}
-		}
-	}
-
-	update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = damageData.dieValue;
-	update[GetSectionIdName(repeatingSection, id, "item-dieType")] = damageData.dieType;
-	update[GetSectionIdName(repeatingSection, id, "item-addPower")] = damageData.addPower;
-	return update;
-}
+	return output;
+  }
 
 function ReplaceDamageDice(element) {
 	// Define a regular expression and the replacement string
@@ -836,8 +677,10 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 			update[GetSectionIdName(repeatingSection, id, "item-damage")] = item.dmg;
 			update[GetSectionIdName(repeatingSection, id, "item-damageType")] = item.dmgType;
 			update = SetDamageValuesFromDamageData(update, repeatingSection, id, item.dmg);
-			let damageString = `${FormatDamageString(item.dmg)}${item.dmgType}`;
-			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = damageString;
+			update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = damageData.dVal;
+			update[GetSectionIdName(repeatingSection, id, "item-dieType")] = damageData.dType;
+			update[GetSectionIdName(repeatingSection, id, "item-addPower")] = damageData.dBonus.indexOf("Power") >= 0 ? "on" : "0";
+			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = FormatDamageString(item);
 			update[GetSectionIdName(repeatingSection, id, "item-range")] = item.range;
 			update[GetSectionIdName(repeatingSection, id, "item-threat")] = item.threat;
 			update[GetSectionIdName(repeatingSection, id, "item-block")] = item.block;

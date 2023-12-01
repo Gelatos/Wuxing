@@ -1,3 +1,138 @@
+var TechniqueHandler = TechniqueHandler || (function () {
+    'use strict';
+
+    var 
+        getRollTemplate = function(technique) {
+        
+            let output = "";
+        
+            // if this is an augment, incorporate the base into the rolltemplate
+            if (technique.augmentBase != "") {
+                if (technique.augmentTech != undefined) {
+                    technique = SetAugmentTechnique(technique, technique.augmentTech);
+                }
+            }
+            else {
+                output += "{{type-base=1}} ";
+            }
+        
+            output += `{{Username=${technique.username}}}`;
+            output += `{{Name=${technique.name}}}`;
+            output += `{{Type=${technique.techniqueType}}}`;
+            output += `{{type-${technique.techniqueType}=1}} `;
+            output += `{{Group=${technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup}}}`;
+        
+            // create the action line
+            let actionLine = "";
+            if (technique.action != "") {
+                output += `{{type-${technique.action}=1}} `;
+                actionLine += technique.action;
+            }
+            if (technique.limits != "") {
+                if (actionLine != "") {
+                    actionLine += "; ";
+                }
+                actionLine += technique.limits;
+            }
+            if (technique.resourceCost != "") {
+                if (actionLine != "") {
+                    actionLine += "; ";
+                }
+                actionLine += technique.resourceCost;
+            }
+            if (actionLine != "") {
+                output += `{{ActionLine=${actionLine}}} `;
+            }
+            if (technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "") {
+                output += "{{type-FunctionBlock=1}} ";
+        
+                if (technique.traits != "") {
+                    var traitsDb = GetTraitsDictionary(technique.traits, "technique");
+                    for (var i = 0; i < traitsDb.length; i++) {
+                        output += `{{Trait${i}=${traitsDb[i].name}}} {{Trait${i}Desc=${traitsDb[i].description}}} `;
+                    }
+                }
+                if (technique.trigger != "") {
+                    output += `{{Trigger=${technique.trigger}}} `;
+                }
+                if (technique.requirement != "") {
+                    output += `{{Requirement=${technique.requirement}}} `;
+                }
+                if (technique.prerequisite != "") {
+                    output += `{{Prerequisites=${technique.prerequisite}}} `;
+                }
+            }
+            if (technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "") {
+                output += "{{type-AttackBlock=1}} ";
+        
+                if (technique.range != "" || technique.target != "") {
+                    output += "{{type-AttackBlockTarget=1}} ";
+        
+                    if (technique.range != "") {
+                        output += `{{Range=${technique.range}}} {{RType=${technique.rType}}} `;
+                    }
+                    if (technique.target != "") {
+                        output += `{{Target=${technique.target}}} `;
+                    }
+                }
+                if (technique.skill != "") {
+                    let skill = "";
+                    if (technique.defense != "") {
+                        if (technique.defense.indexOf("DC")) {
+                            skill = technique.defense;
+                        }
+                        else {
+                            skill = `${technique.defense} Check`;
+                        }
+                    }
+                    else {
+                        skill = "DC 15";
+                    }
+                    skill = `${technique.skill} vs. ${skill}`;
+                    output += `{{SkillString=${skill}}} `;
+                }
+                if ((technique.dVal != "" && technique.dVal > 0) || technique.damageType != "") {
+                    output += `{{DamageString=${FormatDamageString(technique)}}} `;
+                }
+            }
+            if (technique.description != "" || technique.onSuccess != "") {
+                output += "{{type-DescBlock=1}} ";
+                if (technique.description != "") {
+                    output += `{{Desc=${technique.description}}} `;
+                }
+                if (technique.onSuccess != "") {
+                    output += `{{OnHit=${technique.onSuccess}}} `;
+                }
+            }
+        
+            
+        
+            output = `&{template:technique} ${output.trim()}`;
+            return output;
+        },
+        
+        getConsumeUsePost = function(technique) {
+        
+            // add technique data for the api
+            technique.username = "@{character_name}";
+            let usedTechData = JSON.stringify(technique);
+        
+            // add the equopped action at the end
+            if (technique.traits != "" && (technique.traits.indexOf("Armament") >= 0 || technique.traits.indexOf("Arsenal") >= 0)) {
+                usedTechData += "##@{technique-equippedWeapon}";
+            }
+        
+            return `!ctech ${usedTechData}`;
+        }
+
+    ;
+    return {
+        GetRollTemplate: getRollTemplate,
+        GetConsumeUsePost: getConsumeUsePost
+    };
+
+}());
+
 // ====== Section Ids
 
 function GetSectionIdName(sectionName, currentID, variableName) {

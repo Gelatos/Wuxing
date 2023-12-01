@@ -45,8 +45,7 @@ var WuxingMessages = WuxingMessages || (function() {
         }
 
         // send the message to each target
-        if (targets != undefined) {
-            targets = targets.split(',');
+        if (targets != undefined && Array.isArray(targets)) {
             _.each(targets, function(target) {
                 if (target != "") {
                     if (noarchive) {
@@ -103,6 +102,7 @@ var WuxingMessages = WuxingMessages || (function() {
     return {
         CheckInstall: checkInstall,
         HandleInput: handleInput,
+        SendMessage: sendChatToTargets,
         SendSystemMessage: sendSystemMessage,
         SendTableMessage: sendTableMessage
     };

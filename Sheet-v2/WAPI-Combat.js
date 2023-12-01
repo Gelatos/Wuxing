@@ -65,12 +65,13 @@ var WuxingCombat = WuxingCombat || (function () {
         
         commandConsumeTechnique = function (msg, content) {
             let components = content.split("##");
-            let technique = JSON.stringify(components[0]);
+            let technique = JSON.parse(components[0]);
             let tokenData = getTokenDataFromTechnique(technique);
 
             // consume resources
             if (consumeTechniqueResources(tokenData, technique)) {
-                displayTechnique(tokenData, technique, components.length > 1 ? JSON.stringify(components[1]) : undefined);
+                log ("here");
+                displayTechnique(msg, tokenData, technique, components.length > 1 ? JSON.stringify(components[1]) : undefined);
             }
             else {
                 WuxingMessages.SendSystemMessage(`${tokenData.displayName} does not have the resources to use ${technique.name}`);
@@ -100,7 +101,7 @@ var WuxingCombat = WuxingCombat || (function () {
                 }
             });
             message = `${message} added as ${isAlly ? "allies" : "enemies"}`;
-            WuxingMessages.SendSystemMessage(message, "GM");
+            WuxingMessages.SendSystemMessage(message, ["GM"]);
 
         },
 
@@ -164,7 +165,7 @@ var WuxingCombat = WuxingCombat || (function () {
             else {
                 message += "Enemy Phase Start!";
             }
-            WuxingMessages.SendSystemMessage(message, "GM");
+            WuxingMessages.SendSystemMessage(message, ["GM"]);
         },
 
         commandEndTurn = function (msg) {
@@ -191,7 +192,7 @@ var WuxingCombat = WuxingCombat || (function () {
             state.WuxingCombat.lastActivePlayer = "";
             state.WuxingCombat.round = 0;
 
-            WuxingMessages.SendSystemMessage("Combat Has Finished", "GM");
+            WuxingMessages.SendSystemMessage("Combat Has Finished", ["GM"]);
         },
 
         // Technique Handling
@@ -206,52 +207,62 @@ var WuxingCombat = WuxingCombat || (function () {
             let cost, charResourceCost = 0;
             let charResource = {};
             _.each(resources, function (obj) {
-                obj = obj.trim().split(" ");
-                if (obj.length > 1) {
-                    cost =  ParseIntValue(obj[0]);
-                    resource = obj[1].toLowerCase();
-                    if (resource == "Mana") {
-                        charResource = GetCharacterAttribute(tokenData.charId, "ki");
-                        charResourceCost = ParseIntValue(charResource.get("current"));
+                obj = obj.trim();
+                if (obj != "") {
+                    obj = obj.split(" ");
+                    if (obj.length > 1) {
+                        cost =  ParseIntValue(obj[0]);
+                        resource = obj[1].toLowerCase();
+                        if (resource == "Mana") {
+                            charResource = GetCharacterAttribute(tokenData.charId, "ki");
+                            charResourceCost = ParseIntValue(charResource.get("current"));
 
-                        if (charResourceCost < cost) {
-                            canConsumeAllResources = false;
-                            break;
+                            if (charResourceCost < cost) {
+                                canConsumeAllResources = false;
+                            }
+                            charResources.push({
+                                resource: "Mana",
+                                cost: cost
+                            });
                         }
-                        charResources.push({
-                            resource: "Mana",
-                            cost: cost
-                        });
-                    }
-                    else {
-                        charResource = GetCharacterAttribute(tokenData.charId, resource);
-                        charResourceCost = Math.floor(ParseIntValue(charResource.get("current")) / 10);
+                        else {
+                            charResource = GetCharacterAttribute(tokenData.charId, resource);
+                            charResourceCost = Math.floor(ParseIntValue(charResource.get("current")) / 10);
 
-                        if (charResourceCost < cost) {
-                            canConsumeAllResources = false;
-                            break;
+                            if (charResourceCost < cost) {
+                                canConsumeAllResources = false;
+                            }
+                            charResources.push({
+                                resource: charResource,
+                                cost: cost
+                            });
                         }
-                        charResources.push({
-                            resource: charResource,
-                            cost: cost
-                        });
                     }
                 }
             });
             
             if (canConsumeAllResources) {
-                _.each(resources, function (obj) {
-                    if (obj.resource == "Mana") {
-                        addTokenDataKi(tokenData, obj.cost * -1, false);
-                    }
-                    else {
-                        obj.resource.set("current", ParseIntValue(charResource.get("current")) - obj.cost);
-                    }
-                });
+                if (charResources.length > 0) {
+                    _.each(charResources, function (obj) {
+                        if (obj.resource == "Mana") {
+                            addTokenDataKi(tokenData, obj.cost * -1, false);
+                        }
+                        else {
+                            obj.resource.set("current", ParseIntValue(charResource.get("current")) - obj.cost);
+                        }
+                    });
+                }
             }
             
             return canConsumeAllResources;
         },
+
+        displayTechnique = function (msg, tokenData, technique, weapon) {
+            technique.username = tokenData.displayName;
+            let output = TechniqueHandler.GetRollTemplate(technique);
+            
+            WuxingMessages.SendMessage(output, "", msg.who);
+        }
 
         // Active Token Data Creation and Removal
         // ---------------------------
