@@ -469,9 +469,9 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 
 	// set the damage
 	update[GetSectionIdName(repeatingSection, id, "technique-attackBlockDamage")] = (technique.damage != "" || technique.damageType != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-dieValue")] = damageData.dVal;
-	update[GetSectionIdName(repeatingSection, id, "technique-dieType")] = damageData.dType;
-	update[GetSectionIdName(repeatingSection, id, "technique-addPower")] = damageData.dBonus.indexOf("Power") >= 0 ? "on" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-dieValue")] = technique.dVal;
+	update[GetSectionIdName(repeatingSection, id, "technique-dieType")] = technique.dType;
+	update[GetSectionIdName(repeatingSection, id, "technique-addPower")] = technique.dBonus.indexOf("Power") >= 0 ? "on" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-damageType")] = technique.damageType;
 	update[GetSectionIdName(repeatingSection, id, "technique-element")] = technique.element;
 	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = FormatDamageString(technique);

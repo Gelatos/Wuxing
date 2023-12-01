@@ -1,3 +1,362 @@
+var WuxingTarget = WuxingTarget || (function () {
+    'use strict';
+
+    var schemaVersion = "0.1.0",
+
+        checkInstall = function () {
+            if (!state.hasOwnProperty('WuxingTarget') || state.WuxingTarget.version != schemaVersion) {
+                log (`Setting Wuxing Target version to v${WuxingTarget.schemaVersion}`);
+                state.WuxingTarget = {
+                    version: schemaVersion,
+                    activeCharacters: getDefaultActiveCharacters()
+                };
+            }
+        },
+
+        // Input Commands
+        // ---------------------------
+
+        handleInput = function (msg, tag, content) {
+            switch (tag) {
+                case "!actadd":
+                    commandAddCharacter(msg, content);
+                    break;
+                case "!actrem":
+                    commandRemoveCharacter(msg);
+                    break;
+                case "!actclr":
+                    commandClearActiveTargets();
+                    break;
+            };
+        },
+
+        commandAddCharacter = function (msg, content) {
+            let isAlly = content == "true" ? true : false;
+            let tokenData;
+            let message = "";
+            WuxingToken.IterateOverSelectedTokens(msg, function (token) {
+                tokenData = addCombatTokenToActiveTargets(token, isAlly);
+                if (tokenData != undefined) {
+                    if (message != "") {
+                        message += ", ";
+                    }
+                    message += `${tokenData.displayName}`;
+                }
+            });
+            message = `${message} added as ${isAlly ? "allies" : "enemies"}`;
+            WuxingMessages.SendSystemMessage(message, ["GM"]);
+
+        },
+
+        commandRemoveCharacter = function (msg) {
+            WuxingToken.IterateOverSelectedTokens(msg, function (token) {
+                removeActiveTargetData(token.get("id"));
+            });
+        },
+
+        commandClearActiveTargets = function () {
+            clearActiveTargetData();
+        },
+
+        // Active Characters
+        // ---------------------------
+
+        getDefaultActiveCharacters = function () {
+            return {
+                charNames: [],
+                tokenIds: [],
+                targetData: []
+            };
+        },
+
+        iterateOverActiveTargetData = function (callback) {
+            _.each(state.WuxingTarget.activeCharacters.targetData, function (obj) {
+                callback(obj);
+            });
+        },
+
+        addToActiveCharacters = function (targetData) {
+            if (targetData != undefined) {
+                if (state.WuxingTarget.activeCharacters.tokenIds.includes(targetData.tokenId)) {
+                    let index = tate.WuxingTarget.activeCharacters.tokenIds.indexOf(targetData.tokenId);
+                    state.WuxingTarget.activeCharacters.targetData = targetData;
+                }
+                else {
+                    state.WuxingTarget.activeCharacters.charNames.push(targetData.name);
+                    state.WuxingTarget.activeCharacters.tokenIds.push(targetData.tokenId);
+                    state.WuxingTarget.activeCharacters.targetData.push(targetData);
+                }
+            }
+        },
+
+        addCombatTokenToActiveTargets = function (token, isAlly) {
+            let targetData = createTargetData(token, isAlly);
+            addToActiveCharacters(targetData);
+            return targetData;
+        },
+
+        removeActiveTargetData = function (tokenId) {
+            for (var i = 0; i < state.WuxingTarget.activeCharacters.tokenId.length; i++) {
+                if (state.WuxingTarget.activeCharacters.tokenId[i] == tokenId) {
+                    state.WuxingTarget.activeCharacters.charNames[i].splice(i, 1);
+                    state.WuxingTarget.activeCharacters.tokenIds[i].splice(i, 1);
+                    state.WuxingTarget.activeCharacters.targetData[i].splice(i, 1);
+                    break;
+                }
+            }
+        },
+
+        clearActiveTargetData = function () {
+            state.WuxingTarget.activeCharacters = getDefaultActiveCharacters();
+        },
+
+        // Token Data Search
+        // ---------------------------
+
+        findActiveTargetDataByCharName = function (characterName) {
+            let index = state.WuxingTarget.activeCharacters.charNames.indexOf(characterName);
+            if (index >= 0) {
+                return state.WuxingTarget.activeCharacters.targetData[index];
+            }
+            return undefined;
+        },
+
+        findActiveTargetDataByTokenId = function (tokenId) {
+            let index = state.WuxingTarget.activeCharacters.tokenIds.indexOf(tokenId);
+            if (index >= 0) {
+                return state.WuxingTarget.activeCharacters.targetData[index];
+            }
+            return undefined;
+        },
+
+        // Target Data Creation
+        // ---------------------------
+
+        createTargetData = function (token, isAlly) {
+            let charId = token.get("represents");
+            if (charId != "") {
+                let character = getObj('character', charId);
+                let targetData = {
+                    name: character.get("name"),
+                    charId: charId,
+                    tokenId: token.get("id"),
+                    displayName: getAttrByName(charId, "nickname"),
+                    owner: character.get("controlledby"),
+                    elem: getAttrByName(charId, "token_element"),
+                    isAlly: isAlly
+                };
+                WuxingToken.AddToken(token, targetData);
+                return targetData;
+            }
+            return undefined;
+        }
+
+
+        ;
+    return {
+        CheckInstall: checkInstall,
+        HandleInput: handleInput,
+        IterateOverActiveTargetData: iterateOverActiveTargetData,
+        ClearActiveTargetData: clearActiveTargetData,
+        FindActiveTargetDataByCharName: findActiveTargetDataByCharName,
+        FindActiveTargetDataByTokenId: findActiveTargetDataByTokenId
+
+    };
+
+}());
+
+
+on("ready", function () {
+    'use strict';
+
+    WuxingTarget.CheckInstall();
+    WuxingToken.CheckInstall();
+});
+
+var WuxingToken = WuxingToken || (function () {
+    'use strict';
+
+    var schemaVersion = "0.1.0",
+
+        checkInstall = function () {
+            if (!state.hasOwnProperty('WuxingToken') || state.WuxingToken.version !== schemaVersion) {
+                state.WuxingToken = {
+                    version: schemaVersion,
+                    tokens: {}
+                };
+            }
+            state.WuxingToken.tokens = {};
+        },
+
+        getTargetToken = function (targetData) {
+            if (state.WuxingToken.tokens[targetData.tokenId] == undefined) {
+                let token = getObj('graphic', targetData.tokenId);
+                addToken(token, targetData);
+            }
+            return state.WuxingToken.tokens[targetData.tokenId];
+        },
+
+        iterateOverSelectedTokens = function (msg, callback) {
+            let token;
+            _.each(msg.selected, function (obj) {
+
+                // set token variables
+                token = getObj('graphic', obj._id);
+
+                if (token != undefined) {
+                    callback(token);
+                }
+            });
+        },
+
+        addToken = function(token, targetData) {
+            state.WuxingToken.tokens[targetData.tokenId] = token;
+        },
+
+        setTokenForBattle = function (tokenData) {
+            let token = getTargetToken(tokenData);
+
+            // set vitals
+            let hp = GetCharacterAttribute(tokenData.charId, "hp");
+            token.set("bar1_link", hp.get("_id"));
+            token.set("bar1_value", hp.get("max"));
+            token.set("showplayers_bar1", true);
+            token.set("showplayers_bar1text", "2");
+            let tempHp = GetCharacterAttribute(tokenData.charId, "tempHp");
+            token.set("bar2_link", tempHp.get("_id"));
+            token.set("showplayers_bar2", true);
+            token.set("showplayers_bar2text", "2");
+
+            // set token name
+            token.set("name", getAttrByName(tokenData.charId, "nickname"));
+            token.set("showname", true);
+            token.set("showplayers_name", true);
+            token.set("bar_location", "overlap_bottom");
+
+            // set the token element
+            token.set(getAttrByName(tokenData.charId, "token_element"), true);
+
+            // set tooltip
+            token.set("show_tooltip", true);
+            //token.set("tooltip", getAttrByName(tokenData.charId, "scan-summary"));
+        },
+
+        setTokenForNarative = function (tokenData) {
+            let token = getTargetToken(tokenData);
+            token.set("showplayers_bar1", false);
+            token.set("showplayers_bar2", false);
+            token.set("showname", false);
+            token.set(getAttrByName(tokenData.charId, "token_element"), false);
+            token.set("show_tooltip", false);
+            token.set("status_yellow", false);
+        },
+
+        addHp = function (tokenData, value) {
+            let token = getTargetToken(tokenData);
+
+            let total = parseInt(getAttrByName(tokenData.charId, "hp")) + value;
+            let remainder = 0;
+            if (total < 0) {
+                remainder = total;
+                total = 0;
+            }
+            token.set("bar1_value", total);
+            return remainder;
+        },
+
+        resetTempHp = function (tokenData) {
+            let token = getTargetToken(tokenData);
+            token.set("bar2_value", getAttrByName(tokenData.charId, "tempHpTotal"));
+        },
+
+        addTempHp = function (tokenData, value) {
+            let token = getTargetToken(tokenData);
+            let total = parseInt(token.get("bar2_value")) + value;
+            let remainder = 0;
+            if (total < 0) {
+                remainder = total;
+                total = 0;
+            }
+            token.set("bar2_value", total);
+            return remainder;
+        },
+
+        addDamage = function (tokenData, value, stopAtTempHp) {
+            let token = getTargetToken(tokenData);
+
+            // make the damage value negative
+            value *= -1;
+
+            // first deal any damage to tempHp
+            value = addTempHp(tokenData, value);
+
+            // if damage remains, go to health damage
+            if (!stopAtTempHp && value < 0) {
+                let currentHp = parseInt(token.get("bar2_value"));
+                let maxHp = parseInt(token.get("bar2_max"));
+                let trauma = GetCharacterAttribute(tokenData.charId, "trauma");
+                let woundDamage = 0;
+
+                while (value < 0) {
+                    currentHp += value;
+                    value = 0;
+                    if (currentHp <= 0) {
+                        woundDamage++;
+                        if (parseInt(trauma.get("current")) + woundDamage < parseInt(trauma.get("max"))) {
+                            value = currentHp;
+                            currentHp = maxHp;
+                        }
+                        else {
+                            currentHp = 0;
+                        }
+                    }
+                }
+
+                // set damage
+                token.set("bar2_value", currentHp);
+                if (woundDamage > 0) {
+                    let wounds = GetCharacterAttribute(tokenData.charId, "wounds");
+                    wounds.set("current", parseInt(wounds.get("current")) + woundDamage);
+                    trauma.set("current", parseInt(trauma.get("current")) + woundDamage);
+                }
+            }
+        },
+
+        addKi = function (tokenData, value, cap) {
+            let token = getTargetToken(tokenData);
+            let ki = GetCharacterAttribute(tokenData.charId, "ki");
+            let newValue = parseInt(ki.get("current")) + value;
+            if (cap && newValue > parseInt(ki.get("max"))) {
+                newValue = parseInt(ki.get("max"));
+            }
+            ki.set("current", newValue);
+            let mana = Math.floor(newValue / 10);
+            token.set(tokenData.elem, mana);
+        },
+
+        setTurnIcon = function (tokenData, value) {
+            let token = getTargetToken(tokenData);
+            token.set("status_yellow", value);
+        }
+
+
+        ;
+    return {
+        CheckInstall: checkInstall,
+        IterateOverSelectedTokens: iterateOverSelectedTokens,
+        AddToken: addToken,
+        SetTokenForBattle: setTokenForBattle,
+        SetTokenForNarative: setTokenForNarative,
+        AddHp: addHp,
+        ResetTempHp: resetTempHp,
+        AddTempHp: addTempHp,
+        AddDamage: addDamage,
+        AddKi: addKi,
+        SetTurnIcon: setTurnIcon
+    };
+
+}());
+
 // ======= Base
 // =================================================
 function CommandCharacterFunction(msg) {
@@ -14,10 +373,10 @@ function CommandCharacterFunction(msg) {
     else if (msg.content.indexOf("!cp ") == 0) {
         content = msg.content.replace("!cp ", "");
         sendTargets = "GM";
-    } 
+    }
     else if (msg.content.indexOf("!cps ") == 0) {
         content = msg.content.replace("!cps ", "");
-    } 
+    }
     else {
         content = msg.content.replace("!c ", "");
     }
@@ -55,7 +414,6 @@ function CommandTokenFunction(msg) {
     let targets = GetTokenIdListTargetData(contentSplit[0]);
 
     if (targets.length > 0) {
-        log ("Grabbing Targetting data for " + `${targets[0].charName}/${targets[0].charId}`);
 
         // get the action and modifiers
         var actionEnd = contentSplit[1].trim().indexOf(" ");
@@ -113,7 +471,6 @@ function CommandTargetNameFunction(msg) {
 
 function GetTargetOptionsFromTargetList(msg, sendTargets, contentSplit, targets) {
     if (targets.length > 0) {
-        log ("Grabbing Targetting data for " + `${targets[0].charName}/${targets[0].charId}`);
 
         // get the action and modifiers
         var actionEnd = contentSplit[1].trim().indexOf(" ");
@@ -151,7 +508,7 @@ function CommandPartyFunction(msg) {
     let targets = GetActorTargetData(getAttrByName(partyManager.id, "current_party_members"));
     let sendTargets = "";
 
-    
+
     if (msg.content.indexOf("!p") !== -1) {
         if (msg.content.indexOf("!ps ") !== -1) {
             content = msg.content.replace("!ps ", "");
@@ -198,46 +555,46 @@ function TargetOptions(msg, action, modifiers, sendTargets, targets) {
 
             // EXPERIENCE
             case "xp":
-                TargetAddExp(sendTargets, targets, modifiers); 
-            return;
-            case "setlevelxp": 
+                TargetAddExp(sendTargets, targets, modifiers);
+                return;
+            case "setlevelxp":
                 TargetSetBaseLevelExp(sendTargets, targets);
-            return;
+                return;
 
             // INSPIRATION
             case "gainmorale":
                 TargetsGainMorale(sendTargets, targets, modifiers);
-            return;
+                return;
             case "gainkarma":
                 TargetsGainKarma(sendTargets, targets, modifiers);
-            return;
-        
+                return;
+
             // SOCIAL
             case "addsocial":
                 TargetAddSocializingCharacter(sendTargets, targets, modifiers);
-            return;
-            
+                return;
+
             // REST
             case "brief":
                 TargetSetBriefRested(sendTargets, targets);
-            return;
+                return;
             case "short":
                 TargetSetShortRested(sendTargets, targets);
-            return;
+                return;
             case "long":
                 TargetSetLongRested(sendTargets, targets, modifiers);
-            return;
-            
+                return;
+
             // DOWNTIME
             case "addweek":
                 TargetAddWeek(targets, modifiers);
-            return;
+                return;
             case "clone":
-                _.each(targets, function(target) {
+                _.each(targets, function (target) {
                     SetCloneManagerClone(target.charId);
                 });
-            return;
-            
+                return;
+
         }
     }
 
@@ -245,38 +602,38 @@ function TargetOptions(msg, action, modifiers, sendTargets, targets) {
         // CHAT 
         case "name":
             TargetSetValue(sendingPlayerName, targets, "name", "nickname", modifiers);
-        break;
+            break;
         case "lang":
             TargetSetValue(sendingPlayerName, targets, "language", "speaking_language", modifiers);
-        break;
+            break;
 
         // INSPIRATION 
         case "insp":
             TargetSpendInspiration(sendTargets, targets);
-        break;
+            break;
         case "morale":
             TargetRequestMorale(targets);
-        break;
+            break;
         case "resolve":
             TargetSpendResolve(sendTargets, targets);
-        break;
+            break;
         case "karma":
             TargetRequestKarma(targets);
-        break;
+            break;
         case "fate":
             TargetSpendFate(sendTargets, targets);
-        break;
+            break;
 
         // SKILLS
         case "rollinit":
             TargetGetCompareChart(sendTargets, targets, "Initiative", "initiative_bonus");
-        break;
+            break;
         case "sensepresence":
             TargetGetCompareChart(sendTargets, targets, "Sense Presence", "sensepresence_mod");
-        break;
+            break;
         case "sensemotive":
             TargetGetCompareChart(sendTargets, targets, "Sense Motive", "sensemotive_mod");
-        break;
+            break;
 
         // MONEY
         case "jin":
@@ -309,16 +666,16 @@ function TargetOptions(msg, action, modifiers, sendTargets, targets) {
         case "cps":
             TargetModifyValue(sendTargets, targets, "CP", true, "cp_storage", modifiers);
             break;
-        
+
         // CHARACTER OPTION
         case "inspoptions":
             if (playerIsGM(msg.playerid)) {
                 TargetInspirationOptions(targets, "GM");
-            } 
+            }
             else {
                 TargetInspirationOptions(targets, sendingPlayerName);
             }
-        break;
+            break;
         default:
             sendChat("Wuxing Manager", "/w " + sendingPlayerName + ` You have entered an invalid command: ${action}`, null, {
                 noarchive: true
@@ -339,7 +696,7 @@ function TargetAddExp(sendTargets, targets, xp) {
     let subtargets = [];
 
     // iterate through targets
-    _.each(targets, function(mainTarget) {
+    _.each(targets, function (mainTarget) {
         xpShare = getAttrByName(mainTarget.charId, "shareExp");
         subtargets = [];
         subtargets.push(mainTarget);
@@ -347,17 +704,17 @@ function TargetAddExp(sendTargets, targets, xp) {
             subtargets = subtargets.concat(GetActorTargetData(xpShare));
         }
 
-        _.each(subtargets, function(target) {
+        _.each(subtargets, function (target) {
             xpObj = GetCharacterAttribute(target.charId, "experience");
             xpMod = parseInt(getAttrByName(target.charId, "expMultiplier"));
             xpMod = (isNaN(xpMod) || xpMod == 0) ? "1" : xpMod;
-                
+
             if (xpObj != undefined) {
                 newXp = Math.floor(xp * xpMod);
                 val = parseInt(xpObj.get("current")) + parseInt(newXp);
                 xpObj.set("current", val);
                 sceneMessages.push(target.displayName + " earned " + newXp + " exp");
-                
+
                 // get level data
                 level = isNaN(parseInt(getAttrByName(target.charId, "base_level"))) ? 1 : parseInt(getAttrByName(target.charId, "base_level"));
                 currentlevelExp = parseInt(GetExpToNextLevel(level - 1));
@@ -392,10 +749,10 @@ function TargetSetBaseLevelExp(sendTargets, targets) {
     let xpObj, level, xpMod, newXp, val;
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
         xpObj = GetCharacterAttribute(target.charId, "experience");
         level = parseInt(getAttrByName(target.charId, "level"));
-            
+
         if (xpObj != undefined && !isNaN(level)) {
             newXp = GetExpToNextLevel(level - 1);
             xpObj.set("current", newXp);
@@ -420,11 +777,11 @@ function TargetGetCompareChart(sendTargets, targets, title, attrs) {
     let mod, roll, rolltwo, rollLine;
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
 
         // calculate the total mod
         totalmod = 0;
-        _.each(attrs, function(attr) {
+        _.each(attrs, function (attr) {
             if (attr != "") {
                 mod = parseInt(getAttrByName(target.charId, attr.trim()));
                 totalmod += isNaN(mod) ? 0 : mod;
@@ -453,7 +810,7 @@ function TargetGetCompareChart(sendTargets, targets, title, attrs) {
     let output = "";
     sceneMessages.sort();
     sceneMessages.reverse();
-    _.each(sceneMessages, function(sceneMessage) {
+    _.each(sceneMessages, function (sceneMessage) {
         output += sceneMessage + "/";
     });
 
@@ -470,7 +827,7 @@ function TargetSetValue(sendTargets, targets, title, attr, newValue) {
     let attrObj;
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
 
         attrObj = GetCharacterAttribute(target.charId, attr);
         if (attrObj != undefined) {
@@ -508,7 +865,7 @@ function TargetModifyValue(sendTargets, targets, title, isStorage, attr, count) 
     let currencyObj, val;
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
 
         currencyObj = GetCharacterAttribute(target.charId, attr);
         if (currencyObj != undefined) {
@@ -527,14 +884,14 @@ function TargetModifyValue(sendTargets, targets, title, isStorage, attr, count) 
 }
 
 function TargetSetBriefRested(sendTargets, targets) {
-    
+
     // declare variables
     var sceneMessages = [];
     var briefrestResources, briefrestResource;
     let repeatingSection = "repeating_resources";
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
 
         // recover their barrier
         target.getToken().set("bar2_value", target.getToken().get("bar2_max"));
@@ -543,7 +900,7 @@ function TargetSetBriefRested(sendTargets, targets) {
         briefrestResources = getAttrByName(target.charId, "briefRestResources");
         if (briefrestResources != "") {
             briefrestResources = briefrestResources.split(",");
-            _.each(briefrestResources, function(id) {
+            _.each(briefrestResources, function (id) {
                 briefrestResource = GetCharacterAttribute(target.charId, GetSectionIdName(repeatingSection, id, "resourcecount"));
                 if (briefrestResource != undefined) {
                     briefrestResource.set("current", briefrestResource.get("max"));
@@ -583,14 +940,14 @@ function TargetSetBriefRested(sendTargets, targets) {
 }
 
 function TargetSetShortRested(sendTargets, targets) {
-    
+
     // declare variables
     var sceneMessages = [];
     var barrierObj, kiObj, shortrestResources, shortrestResource;
     let repeatingSection = "repeating_resources";
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
 
         // recover their barrier
         barrierObj = GetCharacterAttribute(target.charId, "barrier");
@@ -608,7 +965,7 @@ function TargetSetShortRested(sendTargets, targets) {
         shortrestResources = getAttrByName(target.charId, "shortRestResources");
         if (shortrestResources != "") {
             shortrestResources = shortrestResources.split(",");
-            _.each(shortrestResources, function(id) {
+            _.each(shortrestResources, function (id) {
                 shortrestResource = GetCharacterAttribute(target.charId, GetSectionIdName(repeatingSection, id, "resourcecount"));
                 if (shortrestResource != undefined) {
                     shortrestResource.set("current", shortrestResource.get("max"));
@@ -673,7 +1030,7 @@ function TargetSetLongRested(sendTargets, targets, modifiers) {
     SendSystemMessage(sceneMessages, sendTargets);
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
 
         // recover their barrier
         barrierObj = GetCharacterAttribute(target.charId, "barrier");
@@ -705,7 +1062,7 @@ function TargetSetLongRested(sendTargets, targets, modifiers) {
         longrestResources = getAttrByName(target.charId, "longRestResources");
         if (longrestResources != "") {
             longrestResources = longrestResources.split(",");
-            _.each(longrestResources, function(id) {
+            _.each(longrestResources, function (id) {
                 longrestResource = GetCharacterAttribute(target.charId, GetSectionIdName(repeatingSection, id, "resourcecount"));
                 if (longrestResource != undefined) {
                     longrestResource.set("current", longrestResource.get("max"));
@@ -737,8 +1094,8 @@ function TargetSetLongRested(sendTargets, targets, modifiers) {
                     resolveObj.set("current", lodgingResolve);
                     moraleObj.set("current", lodgingMorale);
 
-                    SendChatMessageToTargets(target.displayName + " has " + lodgingResolve + " resolve and " + lodgingMorale + " morale.", 
-                        GetCharacter(target.charId).get('controlledby')); 
+                    SendChatMessageToTargets(target.displayName + " has " + lodgingResolve + " resolve and " + lodgingMorale + " morale.",
+                        GetCharacter(target.charId).get('controlledby'));
                 }
             }
         }
@@ -758,17 +1115,21 @@ function TargetAddWeek(targets, modifiers) {
         weekSpecial = splits[1];
     }
     let newId;
-    sceneMessages.push (GetCharactersListFromTargetsMessage(targets) + " added " + weekName);
+    sceneMessages.push(GetCharactersListFromTargetsMessage(targets) + " added " + weekName);
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
         newId = GenerateRowID();
-        createObj("attribute", {"name":"repeating_downtime_" + newId + "_week",
-                                "current":weekName,
-                                "_characterid":target.charId});
-        createObj("attribute", {"name":"repeating_downtime_" + newId + "_special",
-                                "current":weekSpecial,
-                                "_characterid":target.charId});
+        createObj("attribute", {
+            "name": "repeating_downtime_" + newId + "_week",
+            "current": weekName,
+            "_characterid": target.charId
+        });
+        createObj("attribute", {
+            "name": "repeating_downtime_" + newId + "_special",
+            "current": weekSpecial,
+            "_characterid": target.charId
+        });
     });
 
     SendSystemMessage(sceneMessages, "GM");
@@ -791,29 +1152,43 @@ function TargetAddSocializingCharacter(sendTargets, targets, modifiers) {
     var settings = modifiers.split("@");
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
         newId = GenerateRowID();
-        createObj("attribute", {"name":"repeating_socializingactivities_" + newId + "_name",
-                                "current":settings[nameId],
-                                "_characterid":target.charId});
-        createObj("attribute", {"name":"repeating_socializingactivities_" + newId + "_race",
-                                "current":settings[raceId],
-                                "_characterid":target.charId});
-        createObj("attribute", {"name":"repeating_socializingactivities_" + newId + "_gender",
-                                "current":settings[genderId],
-                                "_characterid":target.charId});
-        createObj("attribute", {"name":"repeating_socializingactivities_" + newId + "_classCategory",
-                                "current":settings[classId],
-                                "_characterid":target.charId});
-        createObj("attribute", {"name":"repeating_socializingactivities_" + newId + "_profession",
-                                "current":settings[professionId],
-                                "_characterid":target.charId});
-        createObj("attribute", {"name":"repeating_socializingactivities_" + newId + "_rapport",
-                                "current":settings[rapportId],
-                                "_characterid":target.charId});
-        createObj("attribute", {"name":"repeating_socializingactivities_" + newId + "_favors",
-                                "current":settings[favorsId],
-                                "_characterid":target.charId});
+        createObj("attribute", {
+            "name": "repeating_socializingactivities_" + newId + "_name",
+            "current": settings[nameId],
+            "_characterid": target.charId
+        });
+        createObj("attribute", {
+            "name": "repeating_socializingactivities_" + newId + "_race",
+            "current": settings[raceId],
+            "_characterid": target.charId
+        });
+        createObj("attribute", {
+            "name": "repeating_socializingactivities_" + newId + "_gender",
+            "current": settings[genderId],
+            "_characterid": target.charId
+        });
+        createObj("attribute", {
+            "name": "repeating_socializingactivities_" + newId + "_classCategory",
+            "current": settings[classId],
+            "_characterid": target.charId
+        });
+        createObj("attribute", {
+            "name": "repeating_socializingactivities_" + newId + "_profession",
+            "current": settings[professionId],
+            "_characterid": target.charId
+        });
+        createObj("attribute", {
+            "name": "repeating_socializingactivities_" + newId + "_rapport",
+            "current": settings[rapportId],
+            "_characterid": target.charId
+        });
+        createObj("attribute", {
+            "name": "repeating_socializingactivities_" + newId + "_favors",
+            "current": settings[favorsId],
+            "_characterid": target.charId
+        });
     });
 
     // format the scene message
@@ -823,7 +1198,7 @@ function TargetAddSocializingCharacter(sendTargets, targets, modifiers) {
     else {
         sceneMessages.push(GetCharactersListFromTargetsMessage(targets) + " has gained the friendship of " + settings[nameId] + "!");
     }
-    sceneMessages.push(settings[nameId] +  " can now be selected in the socializing menu.");
+    sceneMessages.push(settings[nameId] + " can now be selected in the socializing menu.");
     SendSystemMessage(sceneMessages, sendTargets);
 }
 
@@ -838,7 +1213,7 @@ function TargetSpendInspiration(sendTargets, targets) {
     var resourceObj, charImage;
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
         resourceObj = GetCharacterAttribute(target.charId, "inspiration");
         if (resourceObj != undefined && resourceObj.get("current") == "on") {
             resourceObj.set("current", 0);
@@ -857,7 +1232,7 @@ function TargetRequestMorale(targets) {
     var sceneMessages = [];
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
         sceneMessages.push(target.displayName + " is requesting Morale.");
         sceneMessages.push(GetRequestMoraleLine(target.charName, target.charId));
         sceneMessages.push(GetRequestKarmaLine(target.charName, target.charId));
@@ -886,12 +1261,12 @@ function TargetGainMorale(modifiers) {
 }
 
 function TargetsGainMorale(sendTargets, targets, modifiers) {
-    
+
     // declare variables
     var sceneMessages = [];
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
         sceneMessages = sceneMessages.concat(TargetSetMorale(target.charId, target.displayName, GetInspirationRoll(modifiers)));
     });
 
@@ -905,10 +1280,10 @@ function TargetSpendResolve(sendTargets, targets) {
     let resolve, dieRoll, message;
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
         resolve = parseInt(getAttrByName(target.charId, "resolve"));
         if (!isNaN(resolve) && resolve > 0) {
-            
+
             // determine the die roll to add
             dieRoll = "";
             if (resolve == 2) {
@@ -931,7 +1306,7 @@ function TargetSpendResolve(sendTargets, targets) {
                 message += "<br />Add [[" + dieRoll + "]] to the highest result of your roll.";
             }
             SendChatMessageToTargets(GetCutInMessage(target.displayName, target.charId, "Resolve", message), sendTargets);
-            
+
 
         } else {
             SendChatMessageToTargets(target.displayName + " has no resolve.", sendTargets);
@@ -946,7 +1321,7 @@ function TargetRequestKarma(targets) {
     var sceneMessages = [];
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
         sceneMessages.push(target.displayName + " is requesting Karma.");
         sceneMessages.push(GetRequestKarmaLine(target.charName, target.charId));
         sceneMessages.push(GetRequestMoraleLine(target.charName, target.charId));
@@ -975,12 +1350,12 @@ function TargetGainKarma(modifiers) {
 }
 
 function TargetsGainKarma(sendTargets, targets, modifiers) {
-    
+
     // declare variables
     var sceneMessages = [];
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
         sceneMessages = sceneMessages.concat(TargetSetKarma(target.charId, target.displayName, GetInspirationRoll(modifiers)));
     });
 
@@ -994,7 +1369,7 @@ function TargetSpendFate(sendTargets, targets) {
     var resourceObj;
 
     // iterate through targets
-    _.each(targets, function(target) {
+    _.each(targets, function (target) {
         resourceObj = GetCharacterAttribute(target.charId, "fate");
         if (resourceObj != undefined && !isNaN(parseInt(resourceObj.get("current"))) && parseInt(resourceObj.get("current")) > 0) {
 
@@ -1049,7 +1424,7 @@ function TargetSetMorale(charId, displayName, modMorale, modResolve) {
     if (modResolve == undefined) {
         modResolve = 0;
     }
-    
+
     let sceneMessages = [];
 
     // get the morale object
@@ -1068,7 +1443,7 @@ function TargetSetMorale(charId, displayName, modMorale, modResolve) {
                 sceneMessages.push("Gained " + (parseInt(adjustedResolveObj.resolve) - resolve) + " Resolve.");
                 resolveObj.set("current", adjustedResolveObj.resolve);
             }
-            
+
             // set morale
             moraleObj.set("current", adjustedResolveObj.morale);
         }
@@ -1081,7 +1456,7 @@ function TargetSetMorale(charId, displayName, modMorale, modResolve) {
 }
 
 function TargetSetKarma(charId, displayName, value) {
-    
+
     let sceneMessages = [];
     if (value != 0) {
 
@@ -1108,7 +1483,7 @@ function TargetSetKarma(charId, displayName, value) {
             else {
                 karmaObj.set("current", karma + parseInt(value));
             }
-            
+
         }
     }
 
@@ -1134,7 +1509,7 @@ function TargetShowActiveQuests(targets, sendingPlayerName) {
 }
 
 // Create Options
-function SendInspirationOptions (name, image, charId, sendTarget) {
+function SendInspirationOptions(name, image, charId, sendTarget) {
 
     let sceneMessages = [];
     let title, content;
@@ -1144,11 +1519,11 @@ function SendInspirationOptions (name, image, charId, sendTarget) {
     else {
         title = name + "' Inspired";
     }
-    
+
     var inspiration = GetCharacterAttribute(charId, "inspiration");
     if (inspiration != undefined && inspiration.get("current") == "on") {
         sceneMessages.push("<p>[Use Inspiration](!target " + charId + "@@@insp" + ")</p>");
-    } 
+    }
     else {
         sceneMessages.push("<p>" + name + " has no inspiration.</p>");
     }
@@ -1158,9 +1533,9 @@ function SendInspirationOptions (name, image, charId, sendTarget) {
     if (resolveObj != undefined) {
         resolve = isNaN(parseInt(resolveObj.get("current"))) ? 0 : parseInt(resolveObj.get("current"));
     }
-    if (resolve > 0 ) {
+    if (resolve > 0) {
         sceneMessages.push("<p>[Use Resolve](!target " + charId + "@@@resolve" + ") (" + resolve + " remaining)</p>");
-    } 
+    }
     else {
         sceneMessages.push("<p>" + name + " has no resolve.</p>");
     }
@@ -1170,9 +1545,9 @@ function SendInspirationOptions (name, image, charId, sendTarget) {
     if (fateObj != undefined) {
         fate = isNaN(parseInt(fateObj.get("current"))) ? 0 : parseInt(fateObj.get("current"));
     }
-    if (fate > 0 ) {
+    if (fate > 0) {
         sceneMessages.push("<p>[Use Fate](!target " + charId + "@@@fate" + ") (" + fate + " remaining)</p>");
-    } 
+    }
     else {
         sceneMessages.push("<p>" + name + " has no fate.</p>");
     }
@@ -1203,7 +1578,7 @@ function SendInspirationOptions (name, image, charId, sendTarget) {
     }
 
     content = "";
-    _.each(sceneMessages, function(message) {
+    _.each(sceneMessages, function (message) {
         if (message != "") {
             content += message;
         }
@@ -1240,14 +1615,14 @@ function AddTokenCondition(token, conditionList, sourceName, sourceData, conditi
     let conditionSourceConditions = [];
     let primaryCondition = "";
     let conditionData, printData;
-    for(let i = 0; i < conditions.length; i++) {
-        log ("conditions[" + i + "]: " + conditions[i]);
-        
+    for (let i = 0; i < conditions.length; i++) {
+        log("conditions[" + i + "]: " + conditions[i]);
+
         if (conditions[i] != "") {
             // determine what to print based on the condition type
             conditionData = GetTokenConditionData();
             conditionData.setConditionData(conditions[i], sourceName, sourceData, conditionSaveDc);
-            log ("conditionData: " + conditionData.getConditionDataString());
+            log("conditionData: " + conditionData.getConditionDataString());
             if (primaryCondition == "") {
                 if (conditionData.isSpec) {
                     primaryCondition = "0";
@@ -1280,8 +1655,8 @@ function AddTokenCondition(token, conditionList, sourceName, sourceData, conditi
         let setCondition, setIncrementer = false;
         let newConditionIndex = 1;
         for (let i = 0; i < currentConditions.length; i++) {
-            log (`currentConditions[${i}]: ${currentConditions[i].getSourceConditionDataString()}`);
-            
+            log(`currentConditions[${i}]: ${currentConditions[i].getSourceConditionDataString()}`);
+
             // determine if this condition matches our current condition
             if (currentConditions[i].sourceName == sourceName) {
                 setCondition = true;
@@ -1323,7 +1698,7 @@ function AddTokenCondition(token, conditionList, sourceName, sourceData, conditi
         resultsConditionMessages.img = conditionSource.sourceImage;
         SetTokenConditionSources(token, currentConditions);
     }
-    
+
     // set the token data
     token.set("statusmarkers", tokenStatusMarkers);
 
@@ -1393,33 +1768,33 @@ function GetTokenSourceConditionData() {
                     dataType = data.substring(0, data.indexOf(">")).toLowerCase().trim();
                     data = data.substring(data.indexOf(">") + 1);
                 }
-                switch(dataType) {
+                switch (dataType) {
                     case "n":
                         this.sourceName = data.trim();
-                    break;
+                        break;
                     case "sid":
                         this.sourceCharId = data.trim();
-                    break;
+                        break;
                     case "scn":
                         this.sourceCharName = data.trim();
-                    break;
+                        break;
                     case "sdc":
                         this.sourceDC = data.trim();
-                    break;
+                        break;
                     case "sp":
                         this.sourcePower = data.trim();
-                    break;
+                        break;
                     case "si":
                         this.sourceImage = data.trim();
-                    break;
+                        break;
                     case "r":
                         this.rounds = data.trim();
-                    break;
+                        break;
                     case "cd":
                         let conditions = data.trim().replace(/\]/g, "").split("[");
                         let conditionData = [];
                         let sourceData = FormTargetData(this.sourceCharId, this.sourceCharName, "", this.sourceCharName);
-                        for(let i = 0; i < conditions.length; i++) {
+                        for (let i = 0; i < conditions.length; i++) {
                             if (conditions[i] != "") {
 
                                 // determine what to print based on the condition type
@@ -1428,11 +1803,11 @@ function GetTokenSourceConditionData() {
                                 if (conditionData.isSpec) {
                                     this.isSpec = true;
                                 }
-                                log (`Creating condition ${i}: ${conditionData.getConditionDataString()} from: ${conditions[i]}`);
+                                log(`Creating condition ${i}: ${conditionData.getConditionDataString()} from: ${conditions[i]}`);
                                 this.conditions.push(conditionData);
                             }
                         }
-                    break;
+                        break;
                 }
             }
         },
@@ -1453,7 +1828,7 @@ function GetTokenSourceConditionData() {
                 desc: "",
                 img: this.sourceImage,
 
-                getStatusMarkerImage: function() {
+                getStatusMarkerImage: function () {
                     return GetTokenStatusMarkerData(this.img).img
                 }
             };
@@ -1480,7 +1855,7 @@ function GetTokenConditionData() {
         isTemp: true,
         isSpec: false,
 
-        setConditionData: function(content, sourceName, targetData, conditionSaveDc) {
+        setConditionData: function (content, sourceName, targetData, conditionSaveDc) {
             content = content.replace(/\[/g, "");
             content = content.replace(/\]/g, "");
 
@@ -1504,7 +1879,7 @@ function GetTokenConditionData() {
                     dataType = data.substring(0, data.indexOf(">")).toLowerCase().trim();
                     data = data.substring(data.indexOf(">") + 1);
                 }
-                switch(dataType) {
+                switch (dataType) {
                     case "d":
                         desc = data.trim();
                         if (desc.indexOf("{DC}") >= 0) {
@@ -1515,7 +1890,7 @@ function GetTokenConditionData() {
                         }
                         this.desc = desc;
 
-                    break;
+                        break;
                     case "e":
                         desc = data.trim();
                         if (desc.indexOf("{DC}") >= 0) {
@@ -1526,19 +1901,19 @@ function GetTokenConditionData() {
                         }
                         this.endConditions = desc;
                         this.isTemp = false;
-                    break;
+                        break;
                     case "sn":
                         this.sourceName = data.trim();
-                    break;
+                        break;
                 }
             }
         },
-        
-        getConditionDataString: function() {
+
+        getConditionDataString: function () {
             return `[${this.name}@d>${this.desc}@e>${this.endConditions}]`;
         },
 
-        getPrintoutData: function() {
+        getPrintoutData: function () {
             let output = {
                 title: this.name,
                 desc: this.desc
@@ -1573,13 +1948,13 @@ function GetTokenConditionSources(token) {
     if (tokenGmNotes == undefined || tokenGmNotes == "") {
         return [];
     }
-    
+
     tokenGmNotes = tokenGmNotes.replace(/\}/g, "");
     let sources = tokenGmNotes.split("{").sort();
     let source;
     let output = [];
     for (let i = 0; i < sources.length; i++) {
-        log (`[GetTokenConditionSources] ${i}: ${sources[i]}`);
+        log(`[GetTokenConditionSources] ${i}: ${sources[i]}`);
         if (sources[i].trim() != "") {
             source = GetTokenSourceConditionData();
             source.setSourceConditionDataFromString(sources[i]);
@@ -1602,8 +1977,7 @@ function SetTokenConditionSources(token, sources) {
 // token status markers
 function GetTokenStatusMarkerData(status) {
 
-    switch (String(status).toLowerCase())
-    {
+    switch (String(status).toLowerCase()) {
         case "marked":
             return {
                 name: "marked",
@@ -1731,31 +2105,31 @@ function GetTokenStatusMarkerData(status) {
                 img: "https://i.imgur.com/vShVhyH.png"
             }
         case "6":
-        return {
-            name: "6",
-            id: 1376868,
-            img: "https://i.imgur.com/epUbuX1.png"
-        }
+            return {
+                name: "6",
+                id: 1376868,
+                img: "https://i.imgur.com/epUbuX1.png"
+            }
         case "7":
-        return {
-            name: "7",
-            id: 1376868,
-            img: "https://i.imgur.com/LK4xXjj.png"
-        }
+            return {
+                name: "7",
+                id: 1376868,
+                img: "https://i.imgur.com/LK4xXjj.png"
+            }
         case "8":
-        return {
-            name: "8",
-            id: 1376868,
-            img: "https://i.imgur.com/mViHBTk.png"
-        }
+            return {
+                name: "8",
+                id: 1376868,
+                img: "https://i.imgur.com/mViHBTk.png"
+            }
         case "concentration":
-        return {
-            name: "concentration",
-            id: 4171912,
-            img: ""
-        }
+            return {
+                name: "concentration",
+                id: 4171912,
+                img: ""
+            }
     }
-        
+
     return {
         name: "",
         id: 0

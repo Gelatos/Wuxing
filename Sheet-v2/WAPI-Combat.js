@@ -2,7 +2,6 @@ var WuxingCombat = WuxingCombat || (function () {
     'use strict';
 
     var schemaVersion = "0.1.1",
-        tokens = {},
 
         checkInstall = function () {
             if (!state.hasOwnProperty('WuxingCombat') || state.WuxingCombat.version !== schemaVersion) {
@@ -10,25 +9,9 @@ var WuxingCombat = WuxingCombat || (function () {
                     version: schemaVersion,
                     lastActivePlayer: "",
                     round: 0,
-                    startSideIsAlly: "",
-                    activeCharacters: getDefaultActiveCharacters()
+                    startSideIsAlly: ""
                 };
             }
-        },
-
-        getDefaultActiveCharacters = function () {
-            return {
-                charNames: [],
-                tokenIds: [],
-                tokenData: []
-            };
-        },
-        
-        getToken = function (tokenId) {
-            if (!tokens.includes(tokenId)) {
-                tokens[tokenId] = getObj('graphic', tokenId);
-            }
-            return tokens[tokenId];
         },
 
         // Input Commands
@@ -42,14 +25,8 @@ var WuxingCombat = WuxingCombat || (function () {
                 case "!dmg":
                     commandDealDamage(msg, content);
                     break;
-                case "!combataddcharacter":
-                    commandAddCharacter(msg, content);
-                    break;
-                case "!combatremovecharacter":
-                    commandRemoveCharacter(msg);
-                    break;
-                case "!rollinitiative":
-                    commandRollInitiative();
+                case "!cmbstartcombat":
+                    commandStartBattle();
                     break;
                 case "!startround":
                     commandStartRound();
@@ -70,7 +47,6 @@ var WuxingCombat = WuxingCombat || (function () {
 
             // consume resources
             if (consumeTechniqueResources(tokenData, technique)) {
-                log ("here");
                 displayTechnique(msg, tokenData, technique, components.length > 1 ? JSON.stringify(components[1]) : undefined);
             }
             else {
@@ -80,87 +56,60 @@ var WuxingCombat = WuxingCombat || (function () {
 
         commandDealDamage = function (msg, content) {
             let tokenData;
-            iterateOverSelectedTokens(msg, function (token) {
-                tokenData = findTokenDataByTokenId(token.get("_id"));
-                addTokenDataDamage(tokenData, parseInt(content));
+            WuxingToken.IterateOverSelectedTokens(msg, function (token) {
+                tokenData = WuxingTarget.FindActiveTargetDataByTokenId(token.get("_id"));
+                WuxingToken.AddDamage(tokenData, parseInt(content));
             });
-        },
+        }, 
 
-        commandAddCharacter = function (msg, content) {
-            let isAlly = content == "true" ? true : false;
-            let tokenData;
-            let message = "";
-            iterateOverSelectedTokens(msg, function (token) {
-                tokenData = createTokenData(token, getObj('character', token.get("represents")), isAlly);
-                if (tokenData != undefined) {
-                    if (message != "") {
-                        message += ", ";
-                    }
-                    message += `${tokenData.displayName}`;
-                    setTokenDataDefault(tokenData);
-                }
-            });
-            message = `${message} added as ${isAlly ? "allies" : "enemies"}`;
-            WuxingMessages.SendSystemMessage(message, ["GM"]);
+        commandStartBattle = function () {
 
-        },
-
-        commandRemoveCharacter = function (msg) {
-            iterateOverSelectedTokens(msg, function (token) {
-                removeTokenData(token.get("id"));
-            });
-        },
-
-        commandRollInitiative = function () {
             let initiativeData = [];
-            let roll, tokenData, value;
 
-            iterateOverActiveTokenData(function (tokenData) {
-                // calculate the total mod
-                value = parseInt(getAttrByName(tokenData.charId, "initiative"));
-                roll = randomInteger(20) + value;
-                initiativeData.push(`${roll < 10 ? "0" : ""}${roll}.${value < 10 ? "0" : ""}${value < 0 ? "0" : value}@${tokenData.name}`);
+            WuxingTarget.IterateOverActiveTargetData(function (targetData) {
+                initiativeData.push(createInitiativeData(targetData));
+                WuxingToken.SetTokenForBattle(targetData);
             });
 
             // sort the initiative data
-            initiativeData.sort();
-            initiativeData.reverse();
+            sortInitiativeData(initiativeData);
 
             // create the table data
             let tableData = [];
+            let targetData;
             let obj;
             let firstPlayer = "";
 
             for (let i = 0; i < initiativeData.length; i++) {
                 obj = initiativeData[i].split("@");
-                tokenData = findTokenDataByCharacterName(obj[1]);
-                tableData.push([tokenData.displayName, obj[0]]);
+                targetData = WuxingTarget.FindActiveTargetDataByCharName(obj[1]);
+                tableData.push([targetData.displayName, obj[0]]);
 
                 if (i == 0) {
-                    state.WuxingCombat.startSideIsAlly = tokenData.isAlly;
+                    state.WuxingCombat.startSideIsAlly = targetData.isAlly;
                 }
 
-                if (firstPlayer == "" && tokenData.owner != "") {
-                    firstPlayer = tokenData.owner;
+                if (firstPlayer == "" && targetData.owner != "") {
+                    firstPlayer = targetData.owner;
                 }
             }
             state.WuxingCombat.lastActivePlayer = firstPlayer;
-            WuxingMessages.SendTableMessage(["Name", "Initiative"], tableData, "GM", undefined, true);
+            WuxingMessages.SendTableMessage(["Name", "Initiative"], tableData, ["GM"], undefined, true);
+            commandStartRound();
         },
 
         commandStartRound = function () {
 
-            iterateOverActiveTokenData(function (tokenData) {
-                resetTokenDataTempHp(tokenData);
-                addTokenDataKi(tokenData, 10, true);
-                setTokenDataTurnIcon(tokenData, true);
-
+            WuxingTarget.IterateOverActiveTargetData(function (tokenData) {
+                WuxingToken.ResetTempHp(tokenData);
+                // WuxingToken.AddKi(tokenData, 10, true);
+                WuxingToken.SetTurnIcon(tokenData, true);
             });
 
             state.WuxingCombat.round++;
             let message = `Round ${state.WuxingCombat.round} Begins!\n`;
             if (state.WuxingCombat.startSideIsAlly) {
-                message += `Ally Phase Start!\n${state.WuxingCombat.lastActivePlayer}, select the next character to have a turn`;
+                message += `Ally Phase Start!\n${state.WuxingCombat.lastActivePlayer == "" ? "GM" : state.WuxingCombat.lastActivePlayer}, select the next character to have a turn`;
             }
             else {
                 message += "Enemy Phase Start!";
@@ -170,8 +119,8 @@ var WuxingCombat = WuxingCombat || (function () {
 
         commandEndTurn = function (msg) {
             let message;
-            iterateOverSelectedTokens(msg, function (token) {
-                setTokenDataTurnIcon(tokenData, false);
+            WuxingToken.IterateOverSelectedTokens(msg, function (token) {
+                WuxingToken.SetTurnIcon(tokenData, false);
 
                 message = `${tokenData.displayName} Ends Turn\n${token.isAlly ? "Enemy" : "Ally"} Phase Start`;
                 if (isAlly) {
@@ -188,11 +137,32 @@ var WuxingCombat = WuxingCombat || (function () {
         },
 
         commandEndCombat = function () {
-            removeAllTokenData();
+            WuxingTarget.IterateOverActiveTargetData(function(targetData) {
+                WuxingToken.SetTokenForNarative(targetData);
+            });
+            WuxingTarget.ClearActiveTargetData();
             state.WuxingCombat.lastActivePlayer = "";
             state.WuxingCombat.round = 0;
 
             WuxingMessages.SendSystemMessage("Combat Has Finished", ["GM"]);
+        },
+
+        // Initiative Handling
+        // ---------------------------
+
+        rollInitiative = function() {
+
+        },
+
+        createInitiativeData = function(targetData) {
+            let value = parseInt(getAttrByName(targetData.charId, "initiative"));
+            let roll = randomInteger(20) + value;
+            return `${roll < 10 ? "0" : ""}${roll}.${value < 10 ? "0" : ""}${value < 0 ? "0" : value}@${targetData.name}`;
+        },
+
+        sortInitiativeData = function(initiativeData) {
+            initiativeData.sort();
+            initiativeData.reverse();
         },
 
         // Technique Handling
@@ -245,7 +215,7 @@ var WuxingCombat = WuxingCombat || (function () {
                 if (charResources.length > 0) {
                     _.each(charResources, function (obj) {
                         if (obj.resource == "Mana") {
-                            addTokenDataKi(tokenData, obj.cost * -1, false);
+                            WuxingToken.AddKi(tokenData, obj.cost * -1, false);
                         }
                         else {
                             obj.resource.set("current", ParseIntValue(charResource.get("current")) - obj.cost);
@@ -262,201 +232,10 @@ var WuxingCombat = WuxingCombat || (function () {
             let output = TechniqueHandler.GetRollTemplate(technique);
             
             WuxingMessages.SendMessage(output, "", msg.who);
-        }
-
-        // Active Token Data Creation and Removal
-        // ---------------------------
-        createTokenData = function (token, character, isAlly) {
-            if (character != undefined && character != "") {
-                let charId = token.get("represents");
-                let output = {
-                    name: character.get("name"),
-                    displayName: getAttrByName(charId, "nickname"),
-                    owner: character.get("controlledby"),
-                    charId: charId,
-                    tokenId: token.get("id"),
-                    elem: getAttrByName(charId, "token_element"),
-                    isAlly: isAlly
-                };
-                tokens[output.tokenId] = token;
-                state.WuxingCombat.activeCharacters.charNames.push(output.name);
-                state.WuxingCombat.activeCharacters.tokenIds.push(output.tokenId);
-                state.WuxingCombat.activeCharacters.tokenData.push(output);
-                return output;
-            }
-            return undefined;
-        },
-
-        removeTokenData = function (tokenId) {
-            for (var i = 0; i < state.WuxingCombat.activeCharacters.tokenId.length; i++) {
-                if (state.WuxingCombat.activeCharacters.tokenId[i] == tokenId) {
-                    state.WuxingCombat.activeCharacters.charNames[i].splice(i, 1);
-                    state.WuxingCombat.activeCharacters.tokenIds[i].splice(i, 1);
-                    state.WuxingCombat.activeCharacters.tokenData[i].splice(i, 1);
-                    break;
-                }
-            }
-        },
-
-        removeAllTokenData = function () {
-            state.WuxingCombat.activeCharacters = getDefaultActiveCharacters();
-        },
-
-        // Token Data Search
-        // ---------------------------
-
-        iterateOverActiveTokenData = function (callback) {
-            _.each(state.WuxingCombat.activeCharacters.tokenData, function (obj) {
-                callback(obj);
-            });
-        },
-
-        findTokenDataByCharacterName = function (characterName) {
-            let index = state.WuxingCombat.activeCharacters.charNames.indexOf(characterName);
-            if (index >= 0) {
-                return state.WuxingCombat.activeCharacters.tokenData[index];
-            }
-            return undefined;
-        },
-
-        findTokenDataByTokenId = function (tokenId) {
-            let index = state.WuxingCombat.activeCharacters.tokenIds.indexOf(tokenId);
-            if (index >= 0) {
-                return state.WuxingCombat.activeCharacters.tokenData[index];
-            }
-            return undefined;
         },
         
         getTokenDataFromTechnique = function (technique) {
-            return findTokenDataByCharacterName(technique.username);
-        },
-
-        // Token Data Manipulation
-        // ---------------------------
-
-        setTokenDataDefault = function (tokenData) {
-
-            // set vitals
-            let hp = GetCharacterAttribute(tokenData.charId, "hp");
-            getToken(tokenData.tokenId).set("bar1_link", hp.get("_id"));
-            getToken(tokenData.tokenId).set("bar1_value", hp.get("max"));
-            getToken(tokenData.tokenId).set("showplayers_bar1", true);
-            getToken(tokenData.tokenId).set("showplayers_bar1text", "2");
-            let tempHp = GetCharacterAttribute(tokenData.charId, "tempHp");
-            getToken(tokenData.tokenId).set("bar2_link", tempHp.get("_id"));
-            getToken(tokenData.tokenId).set("showplayers_bar2", true);
-            getToken(tokenData.tokenId).set("showplayers_bar2text", "2");
-
-            // set token name
-            getToken(tokenData.tokenId).set("name", getAttrByName(tokenData.charId, "nickname"));
-            getToken(tokenData.tokenId).set("showname", true);
-            getToken(tokenData.tokenId).set("showplayers_name", true);
-            getToken(tokenData.tokenId).set("bar_location", "overlap_bottom");
-
-            // set the token element
-            getToken(tokenData.tokenId).set(getAttrByName(tokenData.charId, "token_element"), true);
-
-            // set tooltip
-            getToken(tokenData.tokenId).set("show_tooltip", true);
-            //getToken(tokenData.tokenId).set("tooltip", getAttrByName(tokenData.charId, "scan-summary"));
-        },
-
-        addTokenDataHp = function (tokenData, value) {
-            let total = parseInt(getAttrByName(tokenData.charId, "hp")) + value;
-            let remainder = 0;
-            if (total < 0) {
-                remainder = total;
-                total = 0;
-            }
-            getToken(tokenData.tokenId).set("bar1_value", total);
-            return remainder;
-        },
-
-        resetTokenDataTempHp = function (tokenData) {
-            log ("token: " + getToken(tokenData.tokenId));
-            getToken(tokenData.tokenId).set("bar2_value", getAttrByName(tokenData.charId, "tempHpTotal"));
-        },
-
-        addTokenDataTempHp = function (tokenData, value) {
-            let total = parseInt(getToken(tokenData.tokenId).get("bar2_value")) + value;
-            let remainder = 0;
-            if (total < 0) {
-                remainder = total;
-                total = 0;
-            }
-            getToken(tokenData.tokenId).set("bar2_value", total);
-            return remainder;
-        },
-
-        addTokenDataDamage = function (tokenData, value, stopAtTempHp) {
-
-            // make the damage value negative
-            value *= -1;
-
-            // first deal any damage to tempHp
-            value = addTokenDataTempHp(tokenData, value);
-
-            // if damage remains, go to health damage
-            if (!stopAtTempHp && value < 0) {
-                let currentHp = parseInt(getToken(tokenData.tokenId).get("bar2_value"));
-                let maxHp = parseInt(getToken(tokenData.tokenId).get("bar2_max"));
-                let trauma = GetCharacterAttribute(tokenData.charId, "trauma");
-                let woundDamage = 0;
-
-                while (value < 0) {
-                    currentHp += value;
-                    value = 0;
-                    if (currentHp <= 0) {
-                        woundDamage++;
-                        if (parseInt(trauma.get("current")) + woundDamage < parseInt(trauma.get("max"))) {
-                            value = currentHp;
-                            currentHp = maxHp;
-                        }
-                        else {
-                            currentHp = 0;
-                        }
-                    }
-                }
-
-                // set damage
-                getToken(tokenData.tokenId).set("bar2_value", currentHp);
-                if (woundDamage > 0) {
-                    let wounds = GetCharacterAttribute(tokenData.charId, "wounds");
-                    wounds.set("current", parseInt(wounds.get("current")) + woundDamage);
-                    trauma.set("current", parseInt(trauma.get("current")) + woundDamage);
-                }
-            }
-        },
-
-        addTokenDataKi = function (tokenData, value, cap) {
-            let ki = GetCharacterAttribute(tokenData.charId, "ki");
-            let newValue = parseInt(ki.get("current")) + value;
-            if (cap && newValue > parseInt(ki.get("max"))) {
-                newValue = parseInt(ki.get("max"));
-            }
-            ki.set("current", newValue);
-            let mana = Math.floor(newValue / 10);
-            getToken(tokenData.tokenId).set(tokenData.elem, mana);
-        },
-
-        setTokenDataTurnIcon = function (tokenData, value) {
-            getToken(tokenData.tokenId).set("status_yellow", value);
-        },
-
-        // Token Manipulation
-        // ---------------------------
-
-        iterateOverSelectedTokens = function (msg, callback) {
-            let token;
-            _.each(msg.selected, function (obj) {
-
-                // set token variables
-                token = getObj('graphic', obj._id);
-
-                if (token != undefined) {
-                    callback(token);
-                }
-            });
+            return WuxingTarget.FindActiveTargetDataByCharName(technique.username);
         }
     ;
 

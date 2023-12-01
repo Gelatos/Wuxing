@@ -13,6 +13,7 @@ on("chat:message", function(msg) {
 
         WuxingCombat.HandleInput(msg, tag, content);
         WuxingMessages.HandleInput(msg, tag, content);
+        WuxingTarget.HandleInput(msg, tag, content);
 
         switch(tag) {
             case "!m":
