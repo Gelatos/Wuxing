@@ -815,3 +815,4 @@ function GetSelectedLanguage(charId) {
     // make sure it's formatted properly
 	return GetLanguageName(language);
 }
+

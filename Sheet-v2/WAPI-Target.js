@@ -2149,3 +2149,4 @@ function GetTokenStatusMarkerName(status) {
 function TokenHasStatusMarker(token, condition) {
     return token.get("statusmarkers").indexOf(GetTokenStatusMarkerName(condition)) > -1;
 }
+

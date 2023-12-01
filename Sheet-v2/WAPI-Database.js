@@ -47,7 +47,7 @@ var TechniqueHandler = TechniqueHandler || (function () {
                 output += "{{type-FunctionBlock=1}} ";
         
                 if (technique.traits != "") {
-                    var traitsDb = GetTraitsDictionary(technique.traits, "technique");
+                    var traitsDb = getTraitsDictionary(technique.traits, "technique");
                     for (var i = 0; i < traitsDb.length; i++) {
                         output += `{{Trait${i}=${traitsDb[i].name}}} {{Trait${i}Desc=${traitsDb[i].description}}} `;
                     }
@@ -123,6 +123,42 @@ var TechniqueHandler = TechniqueHandler || (function () {
             }
         
             return `!ctech ${usedTechData}`;
+        },
+
+        getTraitsDictionary = function(traits, traitType) {
+
+            let output = [];
+            if (traits != undefined) {
+                let keywordsSplit = traits.split(";");
+        
+                let name = "";
+                let lookup = "";
+                let traitInfo;
+        
+                for (let i = 0; i < keywordsSplit.length; i++) {
+                    name = "" + keywordsSplit[i].trim();
+        
+                    if (name.includes("Impact") || name.includes("Explosive")) {
+                        name = ReplaceDamageDice(name);
+                    }
+        
+                    lookup = name;
+                    if (lookup.indexOf("(") >= 0) {
+                        lookup = lookup.replace(/\([^)]*\)/g, "(X)");
+                    }
+        
+                    switch (traitType.toLowerCase()) {
+                        case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
+                        case "item": traitInfo = GetItemTraitsInfo(lookup); break;
+                        case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
+                        case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
+                    }
+                    traitInfo.name = name;
+                    output.push(traitInfo);
+                }
+            }
+        
+            return output;
         }
 
     ;
@@ -132,6 +168,8 @@ var TechniqueHandler = TechniqueHandler || (function () {
     };
 
 }());
+
+
 
 // ====== Section Ids
 

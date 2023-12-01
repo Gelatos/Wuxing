@@ -102,7 +102,7 @@ var WuxingCombat = WuxingCombat || (function () {
 
             WuxingTarget.IterateOverActiveTargetData(function (tokenData) {
                 WuxingToken.ResetTempHp(tokenData);
-                // WuxingToken.AddKi(tokenData, 10, true);
+                WuxingToken.AddKi(tokenData, 10, true);
                 WuxingToken.SetTurnIcon(tokenData, true);
             });
 
@@ -168,64 +168,76 @@ var WuxingCombat = WuxingCombat || (function () {
         // Technique Handling
         // ---------------------------
         
-        consumeTechniqueResources = function (tokenData, technique) {
+        consumeTechniqueResources = function (targetData, technique) {
             
-            let canConsumeAllResources = true;
+            let resourceDatas = iterateOverResources(targetData, technique);
+            if (resourceDatas == undefined) {
+                return false;
+            }
+            consumeResourceData(targetData, resourceDatas);
+            return true;
+        },
+
+        iterateOverResources = function(targetData, technique) {
+            
             let resources = technique.resourceCost.split(";");
-            let charResources = [];
-            let resource = "";
-            let cost, charResourceCost = 0;
-            let charResource = {};
-            _.each(resources, function (obj) {
-                obj = obj.trim();
-                if (obj != "") {
-                    obj = obj.split(" ");
-                    if (obj.length > 1) {
-                        cost =  ParseIntValue(obj[0]);
-                        resource = obj[1].toLowerCase();
-                        if (resource == "Mana") {
-                            charResource = GetCharacterAttribute(tokenData.charId, "ki");
-                            charResourceCost = ParseIntValue(charResource.get("current"));
-
-                            if (charResourceCost < cost) {
-                                canConsumeAllResources = false;
-                            }
-                            charResources.push({
-                                resource: "Mana",
-                                cost: cost
-                            });
-                        }
-                        else {
-                            charResource = GetCharacterAttribute(tokenData.charId, resource);
-                            charResourceCost = Math.floor(ParseIntValue(charResource.get("current")) / 10);
-
-                            if (charResourceCost < cost) {
-                                canConsumeAllResources = false;
-                            }
-                            charResources.push({
-                                resource: charResource,
-                                cost: cost
-                            });
-                        }
+            let resource, resourceData;
+            let resourceDatas = [];
+            for (let i = 0; i < resources.length; i++) {
+                resource = resources[i].trim().split(" ");
+                if (resource.length > 1) {
+                    resourceData = createResourceDataObj(targetData, resource);
+                    if (resourceData == undefined) {
+                        return undefined;
+                    }
+                    else {
+                        resourceDatas.push(resourceData);
                     }
                 }
-            });
+            }
+            return resourceDatas;
+        },
+
+        createResourceDataObj = function(targetData, resource) {
+            let resourceData = {
+                cost: ParseIntValue(resource[0]),
+                resourceName: resource[1].toLowerCase(),
+                resource: {},
+                newVal: 0
+            }
+            resourceData = setResourceDataObjResource(targetData, resourceData);
             
-            if (canConsumeAllResources) {
-                if (charResources.length > 0) {
-                    _.each(charResources, function (obj) {
-                        if (obj.resource == "Mana") {
-                            WuxingToken.AddKi(tokenData, obj.cost * -1, false);
-                        }
-                        else {
-                            obj.resource.set("current", ParseIntValue(charResource.get("current")) - obj.cost);
-                        }
-                    });
-                }
+            resourceData.newVal = ParseIntValue(resourceData.resource.get("current"));
+            if (resourceData.newVal >= resourceData.cost) {
+                resourceData.newVal -= resourceData.cost;
+                return resourceData;
             }
             
-            return canConsumeAllResources;
+            return undefined;
         },
+
+        setResourceDataObjResource = function(targetData, resourceData) {
+            if (resourceData.resourceName == "mana") {
+                resourceData.resource = GetCharacterAttribute(targetData.charId, "ki");
+                resourceData.cost *= 10;
+            }
+            else {
+                resourceData.resource = GetCharacterAttribute(targetData.charId, resourceData.resourceName);
+            }
+            return resourceData;
+        },
+
+        consumeResourceData = function(targetData, resourceDatas) {
+            _.each(resourceDatas, function (obj) {
+                if (obj.resourceName == "mana") {
+                    WuxingToken.AddKi(targetData, obj.cost * -1, false);
+                }
+                else {
+                    obj.resource.set("current", obj.newVal);
+                }
+            });
+        }
+
 
         displayTechnique = function (msg, tokenData, technique, weapon) {
             technique.username = tokenData.displayName;
@@ -252,3 +264,4 @@ on("ready", function () {
 
     WuxingCombat.CheckInstall();
 });
+

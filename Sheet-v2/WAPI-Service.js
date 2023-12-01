@@ -793,4 +793,3 @@ function FormTargetData(charId, charName, tokenId, displayName) {
     };
 }
 
-
