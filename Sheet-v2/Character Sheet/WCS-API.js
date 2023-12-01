@@ -445,6 +445,7 @@ function SanitizeSheetRoll(roll) {
 
 function SanitizeSheetRollAction(roll) {
     var sheetRoll = roll;
+    sheetRoll = sheetRoll.replace(/"/g, "&#34;");
     sheetRoll = sheetRoll.replace(/%/g, "&#37;");
     sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
     sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -842,7 +843,7 @@ var WuxingCombat = WuxingCombat || (function () {
 
             // consume resources
             if (consumeTechniqueResources(tokenData, technique)) {
-                displayTechnique(msg, tokenData, technique, components.length > 1 ? JSON.stringify(components[1]) : undefined);
+                displayTechnique(msg, tokenData, technique, components.length > 1 ? JSON.parse(components[1]) : undefined);
             }
             else {
                 WuxingMessages.SendSystemMessage(`${tokenData.displayName} does not have the resources to use ${technique.name}`);
@@ -1036,9 +1037,19 @@ var WuxingCombat = WuxingCombat || (function () {
 
         displayTechnique = function (msg, tokenData, technique, weapon) {
             technique.username = tokenData.displayName;
+
             let output = TechniqueHandler.GetRollTemplate(technique);
-            
+
+            technique.target = "@{target||token_id}";
+            let useTech = SanitizeSheetRollAction(JSON.stringify(technique));
+
+            if (weapon != undefined) {
+                output += ItemHandler.GetTechniqueWeaponRollTemplate(weapon);
+                useTech += `##${SanitizeSheetRollAction(JSON.stringify(weapon))}`;
+            }
+            output += `{{targetData=!utech ${useTech}}}`;
             WuxingMessages.SendMessage(output, "", msg.who);
+            
         },
         
         getTokenDataFromTechnique = function (technique) {
@@ -4079,7 +4090,7 @@ var TechniqueHandler = TechniqueHandler || (function () {
                 output += "{{type-FunctionBlock=1}} ";
         
                 if (technique.traits != "") {
-                    var traitsDb = getTraitsDictionary(technique.traits, "technique");
+                    var traitsDb = GetTraitsDictionary(technique.traits, "technique");
                     for (var i = 0; i < traitsDb.length; i++) {
                         output += `{{Trait${i}=${traitsDb[i].name}}} {{Trait${i}Desc=${traitsDb[i].description}}} `;
                     }
@@ -4155,42 +4166,6 @@ var TechniqueHandler = TechniqueHandler || (function () {
             }
         
             return `!ctech ${usedTechData}`;
-        },
-
-        getTraitsDictionary = function(traits, traitType) {
-
-            let output = [];
-            if (traits != undefined) {
-                let keywordsSplit = traits.split(";");
-        
-                let name = "";
-                let lookup = "";
-                let traitInfo;
-        
-                for (let i = 0; i < keywordsSplit.length; i++) {
-                    name = "" + keywordsSplit[i].trim();
-        
-                    if (name.includes("Impact") || name.includes("Explosive")) {
-                        name = ReplaceDamageDice(name);
-                    }
-        
-                    lookup = name;
-                    if (lookup.indexOf("(") >= 0) {
-                        lookup = lookup.replace(/\([^)]*\)/g, "(X)");
-                    }
-        
-                    switch (traitType.toLowerCase()) {
-                        case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
-                        case "item": traitInfo = GetItemTraitsInfo(lookup); break;
-                        case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
-                        case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
-                    }
-                    traitInfo.name = name;
-                    output.push(traitInfo);
-                }
-            }
-        
-            return output;
         }
 
     ;
@@ -4201,6 +4176,78 @@ var TechniqueHandler = TechniqueHandler || (function () {
 
 }());
 
+var ItemHandler = ItemHandler || (function() {
+    'use strict';
+
+    var 
+        getTechniqueWeaponRollTemplate = function(itemData) {
+            let output = "";
+            output += `{{WpnName=${itemData.name}}} `;
+
+            var traitsDb = GetTraitsDictionary(itemData.traits, "item");
+            for (var i = 0; i < traitsDb.length; i++) {
+                output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
+            }
+
+            traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
+            for (var i = 0; i < traitsDb.length; i++) {
+                output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
+            }
+
+            if (itemData.range != "") {
+                output += `{{WpnRange=${itemData.range}}} `;
+            }
+            if (itemData.threat != "") {
+                output += `{{WpnThreat=${itemData.threat}}} `;
+            }
+            output += `{{WpnDamage=${itemData.damageString}}} `;
+            output += `{{WpnSkill=${itemData.skill}}} `;
+
+            return output;
+        }
+
+    ;
+    return {
+        GetTechniqueWeaponRollTemplate: getTechniqueWeaponRollTemplate
+    };
+}());
+
+
+function GetTraitsDictionary (traits, traitType) {
+
+    let output = [];
+    if (traits != undefined) {
+        let keywordsSplit = traits.split(";");
+
+        let name = "";
+        let lookup = "";
+        let traitInfo;
+
+        for (let i = 0; i < keywordsSplit.length; i++) {
+            name = "" + keywordsSplit[i].trim();
+
+            if (name.includes("Impact") || name.includes("Explosive")) {
+                name = ReplaceDamageDice(name);
+            }
+
+            lookup = name;
+            if (lookup.indexOf("(") >= 0) {
+                lookup = lookup.replace(/\([^)]*\)/g, "(X)");
+            }
+
+            switch (traitType.toLowerCase()) {
+                case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
+                case "item": traitInfo = GetItemTraitsInfo(lookup); break;
+                case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
+                case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
+            }
+            traitInfo.name = name;
+            output.push(traitInfo);
+        }
+    }
+
+    return output;
+}
 
 
 // ====== Section Ids

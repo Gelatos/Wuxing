@@ -47,7 +47,7 @@ var WuxingCombat = WuxingCombat || (function () {
 
             // consume resources
             if (consumeTechniqueResources(tokenData, technique)) {
-                displayTechnique(msg, tokenData, technique, components.length > 1 ? JSON.stringify(components[1]) : undefined);
+                displayTechnique(msg, tokenData, technique, components.length > 1 ? JSON.parse(components[1]) : undefined);
             }
             else {
                 WuxingMessages.SendSystemMessage(`${tokenData.displayName} does not have the resources to use ${technique.name}`);
@@ -241,9 +241,19 @@ var WuxingCombat = WuxingCombat || (function () {
 
         displayTechnique = function (msg, tokenData, technique, weapon) {
             technique.username = tokenData.displayName;
+
             let output = TechniqueHandler.GetRollTemplate(technique);
-            
+
+            technique.target = "@{target||token_id}";
+            let useTech = SanitizeSheetRollAction(JSON.stringify(technique));
+
+            if (weapon != undefined) {
+                output += ItemHandler.GetTechniqueWeaponRollTemplate(weapon);
+                useTech += `##${SanitizeSheetRollAction(JSON.stringify(weapon))}`;
+            }
+            output += `{{targetData=!utech ${useTech}}}`;
             WuxingMessages.SendMessage(output, "", msg.who);
+            
         },
         
         getTokenDataFromTechnique = function (technique) {

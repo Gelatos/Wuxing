@@ -8602,7 +8602,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -8756,7 +8756,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Skirmish}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{Trait0=Armament [F]}} {{Trait0Desc=This technique uses the skill, threat, and damage statistics and all abilities of an equipped melee weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Skirmish&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;Armament [F]; Brutal&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;Make a melee attack.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}##@{technique-equippedWeapon-skirmish}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Skirmish}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{Trait0=Armament [F]}} {{Trait0Desc=This technique uses the skill, threat, and damage statistics and all abilities of an equipped melee weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Skirmish&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;Armament [F]; Brutal&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;Make a melee attack.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}##@{technique-equippedWeapon-skirmish}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Skirmish</span>
@@ -8803,10 +8803,6 @@
 														<span><strong>Check: </strong></span>
 														<span>Weaponvs; BR DC</span>
 													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
 
 												</div>
 												<div class="wuxFeatureDescriptionBlock">
@@ -8839,7 +8835,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Barrage}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{Trait0=Arsenal [F]}} {{Trait0Desc=This technique uses the skill, range, and damage statistics and all abilities of an equipped ranged weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Barrage&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;Arsenal [F]; Brutal&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;Make a ranged attack.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}##@{technique-equippedWeapon-barrage}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Barrage}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-FunctionBlock=1}} {{Trait0=Arsenal [F]}} {{Trait0Desc=This technique uses the skill, range, and damage statistics and all abilities of an equipped ranged weapon.}} {{Trait1=Brutal}} {{Trait1Desc=When this technique deals damage, roll all damage dice twice and take only the highest results.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Barrage&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;Arsenal [F]; Brutal&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;Make a ranged attack.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}##@{technique-equippedWeapon-barrage}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Barrage</span>
@@ -8886,10 +8882,6 @@
 														<span><strong>Check: </strong></span>
 														<span>Weaponvs; BR DC</span>
 													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
 
 												</div>
 												<div class="wuxFeatureDescriptionBlock">
@@ -8922,7 +8914,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Aid}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One target}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=You try to remove a condition afffecting you or an ally. Choose one of the following:
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Aid}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One target}} {{type-DescBlock=1}} {{Desc=You try to remove a condition afffecting you or an ally. Choose one of the following:
 	• Clear a condition on yourself.
 	• Clear an adjacent allied character’s condition. 
 	• Clear an adjacent allied character's prone or launched status.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Aid&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You try to remove a condition afffecting you or an ally. Choose one of the following:\n• Clear a condition on yourself.\n• Clear an adjacent allied character’s condition. \n• Clear an adjacent allied character's prone or launched status.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;range&#34;:&#34;1&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
@@ -8949,10 +8941,6 @@
 															<span><strong>Target: </strong></span>
 															<span>One target</span>
 														</div>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
 													</div>
 
 												</div>
@@ -8989,7 +8977,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Stabilize}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full; 1 Vitality}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One target}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=You restore your HP to full and can do one of the following:
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Stabilize}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Full=1}} {{ActionLine=Full; 1 Vitality}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One target}} {{type-DescBlock=1}} {{Desc=You restore your HP to full and can do one of the following:
 	• Clear a condition that wasn’t caused by one of your own techniques or features.
 	• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.
 	• Clear an adjacent allied character's prone or launched status.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Stabilize&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;1 Vitality&#34;,&#34;description&#34;:&#34;You restore your HP to full and can do one of the following:\n• Clear a condition that wasn’t caused by one of your own techniques or features.\n• Clear an adjacent allied character’s condition that wasn’t caused by one of their own techniques or features.\n• Clear an adjacent allied character's prone or launched status.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;&#34;,&#34;defense&#34;:&#34;&#34;,&#34;range&#34;:&#34;1&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;HP+100%&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
@@ -9017,10 +9005,6 @@
 															<span><strong>Target: </strong></span>
 															<span>One target</span>
 														</div>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
 													</div>
 
 												</div>
@@ -9072,13 +9056,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-disengage">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -9124,13 +9101,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-skillCheck">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -9175,13 +9145,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-surge">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -9230,13 +9193,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-surgeBeyondLimits">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -9288,13 +9244,6 @@
 												</div>
 												<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-changeTechSlots">
 												<div class="wuxFeatureExpandingContent">
-													<div class="wuxFeatureAttackBlock">
-														<div class="wuxFeatureAttackBlockRow">
-															<span><strong>Damage: </strong></span>
-															<span></span>
-														</div>
-
-													</div>
 													<div class="wuxFeatureDescriptionBlock">
 														<div>
 															<div>
@@ -9376,7 +9325,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -9530,7 +9479,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Strike}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, threat, and damage statistics of an equipped melee weapon.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Strike&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;Make a melee attack.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}##@{technique-equippedWeapon-strike}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Strike}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Trait0=Armament}} {{Trait0Desc=This technique uses the skill, threat, and damage statistics of an equipped melee weapon.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a melee attack.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Strike&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;Armament&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;Make a melee attack.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}##@{technique-equippedWeapon-strike}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Strike</span>
@@ -9573,10 +9522,6 @@
 														<span><strong>Check: </strong></span>
 														<span>Weaponvs; BR DC</span>
 													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
 
 												</div>
 												<div class="wuxFeatureDescriptionBlock">
@@ -9609,7 +9554,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Shoot}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Trait0=Arsenal}} {{Trait0Desc=This technique uses the skill, range, and damage statistics of an equipped ranged weapon.}} {{Requirement=Weapon must not have the loading trait.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Shoot&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;Arsenal&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;Make a ranged attack.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;Weapon must not have the loading trait.&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}##@{technique-equippedWeapon-shoot}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Shoot}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Trait0=Arsenal}} {{Trait0Desc=This technique uses the skill, range, and damage statistics of an equipped ranged weapon.}} {{Requirement=Weapon must not have the loading trait.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=Make a ranged attack.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Shoot&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;Arsenal&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;Make a ranged attack.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;Weapon must not have the loading trait.&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}##@{technique-equippedWeapon-shoot}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Shoot</span>
@@ -9656,10 +9601,6 @@
 														<span><strong>Check: </strong></span>
 														<span>Weaponvs; BR DC</span>
 													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
 
 												</div>
 												<div class="wuxFeatureDescriptionBlock">
@@ -9692,7 +9633,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Break Free}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=You are grappled.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One Target}} {{SkillString=Physique vs. Physique DC}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=You attempt to end a grapple by breaking the grappler's grip.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Break Free&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You attempt to end a grapple by breaking the grappler's grip.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;You are grappled.&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Physique&#34;,&#34;defense&#34;:&#34;Physique DC&#34;,&#34;range&#34;:&#34;1&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Break Free}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=You are grappled.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One Target}} {{SkillString=Physique vs. Physique DC}} {{type-DescBlock=1}} {{Desc=You attempt to end a grapple by breaking the grappler's grip.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Break Free&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You attempt to end a grapple by breaking the grappler's grip.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;You are grappled.&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Physique&#34;,&#34;defense&#34;:&#34;Physique DC&#34;,&#34;range&#34;:&#34;1&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Break Free</span>
@@ -9727,10 +9668,6 @@
 													<div class="wuxFeatureAttackBlockRow">
 														<span><strong>Check: </strong></span>
 														<span>Physiquevs; Physique DC</span>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
 													</div>
 
 												</div>
@@ -9778,13 +9715,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-dash">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -9815,7 +9745,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Escape}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=You are grappled.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One Target}} {{SkillString=Acrobatics vs. Physique DC}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=You attempt to end a grapple by wrigglnig loose.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Escape&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You attempt to end a grapple by wrigglnig loose.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;You are grappled.&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Acrobatics&#34;,&#34;defense&#34;:&#34;Physique DC&#34;,&#34;range&#34;:&#34;1&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Escape}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=You are grappled.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One Target}} {{SkillString=Acrobatics vs. Physique DC}} {{type-DescBlock=1}} {{Desc=You attempt to end a grapple by wrigglnig loose.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Escape&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You attempt to end a grapple by wrigglnig loose.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;You are grappled.&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Acrobatics&#34;,&#34;defense&#34;:&#34;Physique DC&#34;,&#34;range&#34;:&#34;1&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Escape</span>
@@ -9851,10 +9781,6 @@
 														<span><strong>Check: </strong></span>
 														<span>Acrobaticsvs; Physique DC</span>
 													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
 
 												</div>
 												<div class="wuxFeatureDescriptionBlock">
@@ -9887,7 +9813,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Grapple}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One Target}} {{SkillString=Physique vs. BR DC}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=You attempt to grapple a character.}} {{OnHit=Both characters gain the grappled status.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Grapple&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You attempt to grapple a character.&#34;,&#34;onSuccess&#34;:&#34;Both characters gain the grappled status.&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Physique&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;1&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Grapple}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One Target}} {{SkillString=Physique vs. BR DC}} {{type-DescBlock=1}} {{Desc=You attempt to grapple a character.}} {{OnHit=Both characters gain the grappled status.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Grapple&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You attempt to grapple a character.&#34;,&#34;onSuccess&#34;:&#34;Both characters gain the grappled status.&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Physique&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;1&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Grapple</span>
@@ -9915,10 +9841,6 @@
 													<div class="wuxFeatureAttackBlockRow">
 														<span><strong>Check: </strong></span>
 														<span>Physiquevs; BR DC</span>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
 													</div>
 
 												</div>
@@ -9972,13 +9894,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-hide">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -10025,13 +9940,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-mount">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -10076,13 +9984,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-prepare">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -10113,7 +10014,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Reposition}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=Target must be the same Size or smaller than you.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One Target}} {{SkillString=Physique vs. BR DC}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=You use your strength to force another character into another position. }} {{OnHit=You may choose to move the target one space, either to a space within reach or one space directly away from you. }}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Reposition&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You use your strength to force another character into another position. &#34;,&#34;onSuccess&#34;:&#34;You may choose to move the target one space, either to a space within reach or one space directly away from you. &#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;Target must be the same Size or smaller than you.&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Physique&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;1&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Reposition}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=Target must be the same Size or smaller than you.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=1}} {{RType=Threat}} {{Target=One Target}} {{SkillString=Physique vs. BR DC}} {{type-DescBlock=1}} {{Desc=You use your strength to force another character into another position. }} {{OnHit=You may choose to move the target one space, either to a space within reach or one space directly away from you. }}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Reposition&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You use your strength to force another character into another position. &#34;,&#34;onSuccess&#34;:&#34;You may choose to move the target one space, either to a space within reach or one space directly away from you. &#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;Target must be the same Size or smaller than you.&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Physique&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;1&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Reposition</span>
@@ -10148,10 +10049,6 @@
 													<div class="wuxFeatureAttackBlockRow">
 														<span><strong>Check: </strong></span>
 														<span>Physiquevs; BR DC</span>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
 													</div>
 
 												</div>
@@ -10189,7 +10086,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Seach}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=Target must be a character you suspect is Hidden.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=5}} {{RType=Threat}} {{Target=One Target}} {{SkillString=Investigate vs. Stealth DC}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=You try to find a hidden character.}} {{OnHit=The target immediately loses Hidden and can be located again by any character.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Seach&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You try to find a hidden character.&#34;,&#34;onSuccess&#34;:&#34;The target immediately loses Hidden and can be located again by any character.&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;Target must be a character you suspect is Hidden.&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Investigate&#34;,&#34;defense&#34;:&#34;Stealth DC&#34;,&#34;range&#34;:&#34;5&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Seach}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Quick=1}} {{ActionLine=Quick}} {{type-FunctionBlock=1}} {{Requirement=Target must be a character you suspect is Hidden.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Range=5}} {{RType=Threat}} {{Target=One Target}} {{SkillString=Investigate vs. Stealth DC}} {{type-DescBlock=1}} {{Desc=You try to find a hidden character.}} {{OnHit=The target immediately loses Hidden and can be located again by any character.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Seach&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You try to find a hidden character.&#34;,&#34;onSuccess&#34;:&#34;The target immediately loses Hidden and can be located again by any character.&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;requirement&#34;:&#34;Target must be a character you suspect is Hidden.&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Investigate&#34;,&#34;defense&#34;:&#34;Stealth DC&#34;,&#34;range&#34;:&#34;5&#34;,&#34;rType&#34;:&#34;Threat&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Seach</span>
@@ -10224,10 +10121,6 @@
 													<div class="wuxFeatureAttackBlockRow">
 														<span><strong>Check: </strong></span>
 														<span>Investigatevs; Stealth DC</span>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
 													</div>
 
 												</div>
@@ -10315,7 +10208,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -10484,13 +10377,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-equip">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -10536,13 +10422,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-interact">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -10593,13 +10472,6 @@
 												</div>
 												<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-overdrive">
 												<div class="wuxFeatureExpandingContent">
-													<div class="wuxFeatureAttackBlock">
-														<div class="wuxFeatureAttackBlockRow">
-															<span><strong>Damage: </strong></span>
-															<span></span>
-														</div>
-
-													</div>
 													<div class="wuxFeatureDescriptionBlock">
 														<div>
 															<div>
@@ -10682,7 +10554,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -10836,7 +10708,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Follow-Up Attack}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Reaction=1}} {{ActionLine=Reaction; 1/Round}} {{type-FunctionBlock=1}} {{Trigger=An ally makes a melee or ranged attack against a character and you are engaged with the character.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=You perform a melee attack against your ally's target.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Follow-Up Attack&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Reaction&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;1/Round&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You perform a melee attack against your ally's target.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;An ally makes a melee or ranged attack against a character and you are engaged with the character.&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Follow-Up Attack}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Reaction=1}} {{ActionLine=Reaction; 1/Round}} {{type-FunctionBlock=1}} {{Trigger=An ally makes a melee or ranged attack against a character and you are engaged with the character.}} {{type-AttackBlock=1}} {{type-AttackBlockTarget=1}} {{Target=One Target}} {{SkillString=Weapon vs. BR DC}} {{type-DescBlock=1}} {{Desc=You perform a melee attack against your ally's target.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Follow-Up Attack&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Reaction&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;1/Round&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You perform a melee attack against your ally's target.&#34;,&#34;onSuccess&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;An ally makes a melee or ranged attack against a character and you are engaged with the character.&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Weapon&#34;,&#34;defense&#34;:&#34;BR DC&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;One Target&#34;,&#34;targetCode&#34;:&#34;Single&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Follow-Up Attack</span>
@@ -10867,10 +10739,6 @@
 													<div class="wuxFeatureAttackBlockRow">
 														<span><strong>Check: </strong></span>
 														<span>Weaponvs; BR DC</span>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
 													</div>
 
 												</div>
@@ -10904,7 +10772,7 @@
 													</div>
 												</div>
 												<div class="wuxFeatureHeaderInteractBlock">
-													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Grab an Edge}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Reaction=1}} {{ActionLine=Reaction; 1/Round}} {{type-FunctionBlock=1}} {{Trigger=When you fall off or past an edge or other handhold}} {{type-AttackBlock=1}} {{SkillString=Reflex vs. DC 15}} {{DamageString=}} {{type-DescBlock=1}} {{Desc=You can try to grab the ledge, potentially stopping your fall. You must succeed at a Reflex save. }} {{OnHit=You stop at the edge. If an adjacent space is unoccupied you may immediately climb up and move to the space.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Grab an Edge&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Reaction&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;1/Round&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You can try to grab the ledge, potentially stopping your fall. You must succeed at a Reflex save. &#34;,&#34;onSuccess&#34;:&#34;You stop at the edge. If an adjacent space is unoccupied you may immediately climb up and move to the space.&#34;,&#34;trigger&#34;:&#34;When you fall off or past an edge or other handhold&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Reflex&#34;,&#34;defense&#34;:&#34;&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;targetCode&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
+													<button class="wuxFeatureHeaderInteractiveButton" type="roll" value="&{template:technique} {{type-base=1}} {{Username=@{nickname}}}{{Name=Grab an Edge}}{{Type=Standard}}{{type-Standard=1}} {{Group=Basic}}{{type-Reaction=1}} {{ActionLine=Reaction; 1/Round}} {{type-FunctionBlock=1}} {{Trigger=When you fall off or past an edge or other handhold}} {{type-AttackBlock=1}} {{SkillString=Reflex vs. DC 15}} {{type-DescBlock=1}} {{Desc=You can try to grab the ledge, potentially stopping your fall. You must succeed at a Reflex save. }} {{OnHit=You stop at the edge. If an adjacent space is unoccupied you may immediately climb up and move to the space.}}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech {&#34;name&#34;:&#34;Grab an Edge&#34;,&#34;augmentBase&#34;:&#34;&#34;,&#34;techniqueGroup&#34;:&#34;Basic&#34;,&#34;techniqueSubGroup&#34;:&#34;&#34;,&#34;techniqueType&#34;:&#34;Standard&#34;,&#34;action&#34;:&#34;Reaction&#34;,&#34;traits&#34;:&#34;&#34;,&#34;limits&#34;:&#34;1/Round&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;description&#34;:&#34;You can try to grab the ledge, potentially stopping your fall. You must succeed at a Reflex save. &#34;,&#34;onSuccess&#34;:&#34;You stop at the edge. If an adjacent space is unoccupied you may immediately climb up and move to the space.&#34;,&#34;trigger&#34;:&#34;When you fall off or past an edge or other handhold&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;prerequisite&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Reflex&#34;,&#34;defense&#34;:&#34;&#34;,&#34;range&#34;:&#34;&#34;,&#34;rType&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;targetCode&#34;:&#34;&#34;,&#34;onHit&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;dBonus&#34;:&#34;&#34;,&#34;damageType&#34;:&#34;&#34;,&#34;element&#34;:&#34;&#34;,&#34;specBonus&#34;:&#34;&#34;,&#34;augments&#34;:[],&#34;username&#34;:&#34;@{character_name}&#34;}">9</button>
 												</div>
 												<div class="wuxFeatureHeaderDisplayBlock">
 													<span class="wuxFeatureHeaderName">Grab an Edge</span>
@@ -10929,10 +10797,6 @@
 													<div class="wuxFeatureAttackBlockRow">
 														<span><strong>Check: </strong></span>
 														<span>Reflex vs. DC 15</span>
-													</div>
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
 													</div>
 
 												</div>
@@ -10992,13 +10856,6 @@
 											</div>
 											<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-totalDefense">
 											<div class="wuxFeatureExpandingContent">
-												<div class="wuxFeatureAttackBlock">
-													<div class="wuxFeatureAttackBlockRow">
-														<span><strong>Damage: </strong></span>
-														<span></span>
-													</div>
-
-												</div>
 												<div class="wuxFeatureDescriptionBlock">
 													<div>
 														<div>
@@ -11054,13 +10911,6 @@
 												</div>
 												<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_technique-expand-holdOut">
 												<div class="wuxFeatureExpandingContent">
-													<div class="wuxFeatureAttackBlock">
-														<div class="wuxFeatureAttackBlockRow">
-															<span><strong>Damage: </strong></span>
-															<span></span>
-														</div>
-
-													</div>
 													<div class="wuxFeatureDescriptionBlock">
 														<div>
 															<div>
@@ -11142,7 +10992,7 @@
 															<span class="wuxHiddenInlineField">; </span>
 															<span name="attr_technique-resourceCost"></span>
 														</div>
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isArmament" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_technique-isWeapon" value="0">
 														<div class="wuxHiddenField wuxFeatureHeaderInfo">
 															<select class='wuxFeatureHeaderInfoType' name='attr_technique-equippedWeapon' value="@{equipment-main}">
 																<option value="@{equipment-main}">Main Weapon</option>
@@ -11435,6 +11285,8 @@
 							<fieldset class="repeating_gearequipment">
 								<input type="hidden" name="attr_item-onUse" value="">
 								<input type="hidden" class="wuxFeature-flag" name="attr_item-select">
+								<input type="hidden" name='attr_item-dieValue'>
+								<input type="hidden" name='attr_item-dieType'>
 								<div class="wuxFeature">
 									<input type="hidden" class="wuxFeatureHeader-flag" name="attr_item-type" value="Weapon">
 									<div class="wuxFeatureHeader">
@@ -11716,11 +11568,10 @@
 														</div>
 														<span class='wuxHeader2'>Damage Dice</span>
 														<div class="wuxRow">
-															<input type="hidden" name='attr_item-damage'>
 															<input type="number" class='wuxInput wuxWidth50' name='attr_item-dieValue' value="0">
-															<select class='wuxInput wuxWidth50' name='attr_item-dieType' value="">
-																<option value="d6">d6</option>
-																<option value="d3">d3</option>
+															<select class='wuxInput wuxWidth50' name='attr_item-dieType' value="3">
+																<option value="3">d3</option>
+																<option value="6">d6</option>
 															</select>
 														</div>
 														<div>
@@ -15021,118 +14872,117 @@
 			</div>
 		</div>
 		{{/type-DescBlock}}
-
-	</rolltemplate>
-
-    <rolltemplate class="sheet-rolltemplate-techniqueResolver">
-		{{#wpnName}}
+		{{#WpnName}}
 		<div class="wuxFeatureHeader wuxFeatureHeader-Equipment">
 
-			<div class="wuxFeatureHeaderDisplayBlock">
-				<span class="wuxFeatureHeaderName">{{wpnName}}</span>
+            <span class="wuxFeatureHeaderName">{{WpnName}}</span>
+            <div class="wuxFeatureHeaderInfo">
+                <span><strong>Skill: </strong></span>
+                {{WpnSkill}}
+                <span>&nbsp;</span>
+
                 {{#WpnTrait0}}
-                <div class="wuxFeatureHeaderInfo">
-                    <span><strong>Traits: </strong></span>
-                    
-                    {{#WpnTrait0}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnTrait0}}</span>
-                        <span class="wuxTooltiptext">{{WpnTrait0Desc}}</span>
-                    </div>
-                    {{/WpnTrait0}}
-                    {{#WpnTrait1}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnTrait1}}</span>
-                        <span class="wuxTooltiptext">{{WpnTrait1Desc}}</span>
-                    </div>
-                    {{/WpnTrait1}}
-                    {{#WpnTrait2}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnTrait2}}</span>
-                        <span class="wuxTooltiptext">{{WpnTrait2Desc}}</span>
-                    </div>
-                    {{/WpnTrait2}}
-                    {{#WpnTrait3}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnTrait3}}</span>
-                        <span class="wuxTooltiptext">{{WpnTrait3Desc}}</span>
-                    </div>
-                    {{/WpnTrait3}}
-                    {{#WpnTrait4}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnTrait4}}</span>
-                        <span class="wuxTooltiptext">{{WpnTrait4Desc}}</span>
-                    </div>
-                    {{/WpnTrait4}}
-                    {{#WpnTrait5}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnTrait5}}</span>
-                        <span class="wuxTooltiptext">{{WpnTrait5Desc}}</span>
-                    </div>
-                    {{/WpnTrait5}}
+                <span><strong>Traits: </strong></span>
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnTrait0}}</span>
+                    <span class="wuxTooltiptext">{{WpnTrait0Desc}}</span>
                 </div>
                 {{/WpnTrait0}}
+                {{#WpnTrait1}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnTrait1}}</span>
+                    <span class="wuxTooltiptext">{{WpnTrait1Desc}}</span>
+                </div>
+                {{/WpnTrait1}}
+                {{#WpnTrait2}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnTrait2}}</span>
+                    <span class="wuxTooltiptext">{{WpnTrait2Desc}}</span>
+                </div>
+                {{/WpnTrait2}}
+                {{#WpnTrait3}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnTrait3}}</span>
+                    <span class="wuxTooltiptext">{{WpnTrait3Desc}}</span>
+                </div>
+                {{/WpnTrait3}}
+                {{#WpnTrait4}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnTrait4}}</span>
+                    <span class="wuxTooltiptext">{{WpnTrait4Desc}}</span>
+                </div>
+                {{/WpnTrait4}}
+                {{#WpnTrait5}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnTrait5}}</span>
+                    <span class="wuxTooltiptext">{{WpnTrait5Desc}}</span>
+                </div>
+                {{/WpnTrait5}}
+            </div>
+            {{#WpnAbility0}}
+            <div class="wuxFeatureHeaderInfo">
+                <span><strong>Abilities: </strong></span>
+                
                 {{#WpnAbility0}}
-                <div class="wuxFeatureHeaderInfo">
-                    <span><strong>Abilities: </strong></span>
-                    
-                    {{#WpnAbility0}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnAbility0}}</span>
-                        <span class="wuxTooltiptext">{{WpnAbility0Desc}}</span>
-                    </div>
-                    {{/WpnAbility0}}
-                    {{#WpnAbility1}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnAbility1}}</span>
-                        <span class="wuxTooltiptext">{{WpnAbility1Desc}}</span>
-                    </div>
-                    {{/WpnAbility1}}
-                    {{#WpnAbility2}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnAbility2}}</span>
-                        <span class="wuxTooltiptext">{{WpnAbility2Desc}}</span>
-                    </div>
-                    {{/WpnAbility2}}
-                    {{#WpnAbility3}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnAbility3}}</span>
-                        <span class="wuxTooltiptext">{{WpnAbility3Desc}}</span>
-                    </div>
-                    {{/WpnAbility3}}
-                    {{#WpnAbility4}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnAbility4}}</span>
-                        <span class="wuxTooltiptext">{{WpnAbility4Desc}}</span>
-                    </div>
-                    {{/WpnAbility4}}
-                    {{#WpnAbility5}}
-                    <div class="wuxTrait">
-                        <span class="wuxTraitText">{{WpnAbility5}}</span>
-                        <span class="wuxTooltiptext">{{WpnAbility5Desc}}</span>
-                    </div>
-                    {{/WpnAbility5}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnAbility0}}</span>
+                    <span class="wuxTooltiptext">{{WpnAbility0Desc}}</span>
                 </div>
                 {{/WpnAbility0}}
-				<div class="wuxFeatureHeaderInfo">
-                    <div class="wuxFeatureFunctionBlockRow">
-                        {{#WpnThreat}}
-                        <span><strong>Threat: </strong></span>
-                        <span>{{WpnThreat}}</span>
-                        <span>&nbsp;</span>
-                        {{/WpnThreat}}
-                        {{#WpnRange}}
-                        <span><strong>Range: </strong></span>
-                        <span>{{WpnRange}}</span>
-                        <span>&nbsp;</span>
-                        {{/WpnRange}}
-                        <span><strong>Damage: </strong></span>
-                        <span>{{WpnDamage}}</span>
-                    </div>
-				</div>
-			</div>
+                {{#WpnAbility1}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnAbility1}}</span>
+                    <span class="wuxTooltiptext">{{WpnAbility1Desc}}</span>
+                </div>
+                {{/WpnAbility1}}
+                {{#WpnAbility2}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnAbility2}}</span>
+                    <span class="wuxTooltiptext">{{WpnAbility2Desc}}</span>
+                </div>
+                {{/WpnAbility2}}
+                {{#WpnAbility3}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnAbility3}}</span>
+                    <span class="wuxTooltiptext">{{WpnAbility3Desc}}</span>
+                </div>
+                {{/WpnAbility3}}
+                {{#WpnAbility4}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnAbility4}}</span>
+                    <span class="wuxTooltiptext">{{WpnAbility4Desc}}</span>
+                </div>
+                {{/WpnAbility4}}
+                {{#WpnAbility5}}
+                <div class="wuxTrait">
+                    <span class="wuxTraitText">{{WpnAbility5}}</span>
+                    <span class="wuxTooltiptext">{{WpnAbility5Desc}}</span>
+                </div>
+                {{/WpnAbility5}}
+            </div>
+            {{/WpnAbility0}}
+            <div class="wuxFeatureHeaderInfo">
+                {{#WpnThreat}}
+                <span><strong>Threat: </strong></span>
+                <span>{{WpnThreat}}</span>
+                <span>&nbsp;</span>
+                {{/WpnThreat}}
+                {{#WpnRange}}
+                <span><strong>Range: </strong></span>
+                <span>{{WpnRange}}</span>
+                <span>&nbsp;</span>
+                {{/WpnRange}}
+                <span><strong>Damage: </strong></span>
+                <span>{{WpnDamage}}</span>
+            </div>
         </div>
-		{{/wpnName}}
+		{{/WpnName}}
+		{{#targetData}}
+        <div>
+            [Choose Targets]({{targetData}})
+        </div>
+        {{/targetData}}
+
 
 	</rolltemplate>
 
@@ -16321,42 +16171,6 @@ function ModulusGrowths(array1, val) {
 
 // ======== Techniques
 
-function GetTraitsDictionary(traits, traitType) {
-
-	let output = [];
-	if (traits != undefined) {
-		let keywordsSplit = traits.split(";");
-
-		let name = "";
-		let lookup = "";
-		let traitInfo;
-
-		for (let i = 0; i < keywordsSplit.length; i++) {
-			name = "" + keywordsSplit[i].trim();
-
-			if (name.includes("Impact") || name.includes("Explosive")) {
-				name = ReplaceDamageDice(name);
-			}
-
-			lookup = name;
-			if (lookup.indexOf("(") >= 0) {
-				lookup = lookup.replace(/\([^)]*\)/g, "(X)");
-			}
-
-			switch (traitType.toLowerCase()) {
-				case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
-				case "item": traitInfo = GetItemTraitsInfo(lookup); break;
-				case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
-				case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
-			}
-			traitInfo.name = name;
-			output.push(traitInfo);
-		}
-	}
-
-	return output;
-}
-
 function GetTechniqueDataArray(type, techniques) {
 	let output = [];
 	let techniqueList = techniques.split(";");
@@ -16687,11 +16501,10 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 			update = SetItemDataAbilities(update, repeatingSection, id, item.abilities);
 			update[GetSectionIdName(repeatingSection, id, "item-skill")] = item.skill;
 			update[GetSectionIdName(repeatingSection, id, "item-damage")] = item.dmg;
-			update[GetSectionIdName(repeatingSection, id, "item-damageType")] = item.dmgType;
-			update = SetDamageValuesFromDamageData(update, repeatingSection, id, item.dmg);
-			update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = damageData.dVal;
-			update[GetSectionIdName(repeatingSection, id, "item-dieType")] = damageData.dType;
-			update[GetSectionIdName(repeatingSection, id, "item-addPower")] = damageData.dBonus.indexOf("Power") >= 0 ? "on" : "0";
+			update[GetSectionIdName(repeatingSection, id, "item-damageType")] = item.damageType;
+			update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = item.dVal;
+			update[GetSectionIdName(repeatingSection, id, "item-dieType")] = item.dType;
+			update[GetSectionIdName(repeatingSection, id, "item-addPower")] = item.dBonus.indexOf("Power") >= 0 ? "on" : "0";
 			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = FormatDamageString(item);
 			update[GetSectionIdName(repeatingSection, id, "item-range")] = item.range;
 			update[GetSectionIdName(repeatingSection, id, "item-threat")] = item.threat;
@@ -16772,15 +16585,17 @@ function CreateEquipmentItemDataFromRepeatingSection(attrArray, repeatingSection
 	let itemData = CreateItemDataFromRepeatingSection(attrArray, repeatingSection, id);
 	itemData.abilities = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-abilities"));
 	itemData.skill = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-skill"));
-	itemData.dmg = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damage"));
-	itemData.dmgType = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damageType"));
-	itemData.damageString = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damageString"));
+	itemData.dVal = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-dieValue"));
+	itemData.dType = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-dieType"));
+	itemData.dBonus = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-addPower")) == "on" ? "Power" : "";
+	itemData.damageType = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damageType"));
 	itemData.range = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-range"));
 	itemData.threat = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-threat"));
 	itemData.block = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-block"));
 	itemData.armor = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-armor"));
 	itemData.reflexPen = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-reflexPen"));
 	itemData.speedPen = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-speedPen"));
+	log (JSON.stringify(itemData));
 	return itemData;
 }
 
@@ -16791,10 +16606,14 @@ function ConvertEquipmentDataToWeaponData(itemData) {
 	weaponData.traits = itemData.traits;
 	weaponData.abilities = itemData.abilities;
 	weaponData.skill = itemData.skill;
-	weaponData.dmg = itemData.dmg;
-	weaponData.dmgType = itemData.dmgType;
+	weaponData.damageString = FormatDamageString(itemData);
+	weaponData.dType = itemData.dType;
+	weaponData.dVal = itemData.dVal;
+	weaponData.dBonus = itemData.dBonus;
+	weaponData.damageType = itemData.damageType;
 	weaponData.range = itemData.range;
 	weaponData.threat = itemData.threat;
+	log ("post: " + JSON.stringify(itemData));
 	return weaponData;
 }
 
@@ -19871,7 +19690,7 @@ function UpdateCharacterGearEquipItem(eventinfo) {
 
 	getSectionIDs(repeatingSection, function (idArray) {
 		mod_attrs = mod_attrs.concat(GetSectionIdValues(idArray, repeatingSection, ["item-name", "item-traits", "item-abilities", "item-equipState",
-			"item-skill", "item-damage", "item-range", "item-threat", "item-block", "item-armor", "item-reflexPen", "item-speedPen"
+			"item-skill", "item-dieValue", "item-dieType", "item-addPower", "item-damageType", "item-range", "item-threat", "item-block", "item-armor", "item-reflexPen", "item-speedPen"
 		]));
 		mod_attrs = mod_attrs.concat(GetSectionIdValues(idArray, repeatingSection, ["item-equipState"]));
 		getAttrs(mod_attrs, function (v) {
@@ -19953,28 +19772,6 @@ function UpdateCharacterGearEquipItem(eventinfo) {
 }
 
 function SetCharacterEquippedWeapon(update, itemData, gearSlot) {
-
-	// let output = "";
-	// output += `{{WpnName=${itemData.name}}} `;
-
-	// var traitsDb = GetTraitsDictionary(itemData.traits, "item");
-	// for (var i = 0; i < traitsDb.length; i++) {
-	// 	output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
-	// }
-
-	// traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
-	// for (var i = 0; i < traitsDb.length; i++) {
-	// 	output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
-	// }
-
-	// if (itemData.range != "") {
-	// 	output += `{{WpnRange=${itemData.range}}} `;
-	// }
-	// if (itemData.threat != "") {
-	// 	output += `{{WpnThreat=${itemData.threat}}} `;
-	// }
-	// output += `{{WpnDamage=${itemData.damageString}}} `;
-	// output += `{{WpnSkill=${itemData.skill}}} `;
 
 	let weaponData = ConvertEquipmentDataToWeaponData(itemData);
 	update[gearSlot] = JSON.stringify(weaponData);
@@ -20585,7 +20382,7 @@ var TechniqueHandler = TechniqueHandler || (function () {
                 output += "{{type-FunctionBlock=1}} ";
         
                 if (technique.traits != "") {
-                    var traitsDb = getTraitsDictionary(technique.traits, "technique");
+                    var traitsDb = GetTraitsDictionary(technique.traits, "technique");
                     for (var i = 0; i < traitsDb.length; i++) {
                         output += `{{Trait${i}=${traitsDb[i].name}}} {{Trait${i}Desc=${traitsDb[i].description}}} `;
                     }
@@ -20661,42 +20458,6 @@ var TechniqueHandler = TechniqueHandler || (function () {
             }
         
             return `!ctech ${usedTechData}`;
-        },
-
-        getTraitsDictionary = function(traits, traitType) {
-
-            let output = [];
-            if (traits != undefined) {
-                let keywordsSplit = traits.split(";");
-        
-                let name = "";
-                let lookup = "";
-                let traitInfo;
-        
-                for (let i = 0; i < keywordsSplit.length; i++) {
-                    name = "" + keywordsSplit[i].trim();
-        
-                    if (name.includes("Impact") || name.includes("Explosive")) {
-                        name = ReplaceDamageDice(name);
-                    }
-        
-                    lookup = name;
-                    if (lookup.indexOf("(") >= 0) {
-                        lookup = lookup.replace(/\([^)]*\)/g, "(X)");
-                    }
-        
-                    switch (traitType.toLowerCase()) {
-                        case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
-                        case "item": traitInfo = GetItemTraitsInfo(lookup); break;
-                        case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
-                        case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
-                    }
-                    traitInfo.name = name;
-                    output.push(traitInfo);
-                }
-            }
-        
-            return output;
         }
 
     ;
@@ -20707,6 +20468,78 @@ var TechniqueHandler = TechniqueHandler || (function () {
 
 }());
 
+var ItemHandler = ItemHandler || (function() {
+    'use strict';
+
+    var 
+        getTechniqueWeaponRollTemplate = function(itemData) {
+            let output = "";
+            output += `{{WpnName=${itemData.name}}} `;
+
+            var traitsDb = GetTraitsDictionary(itemData.traits, "item");
+            for (var i = 0; i < traitsDb.length; i++) {
+                output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
+            }
+
+            traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
+            for (var i = 0; i < traitsDb.length; i++) {
+                output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
+            }
+
+            if (itemData.range != "") {
+                output += `{{WpnRange=${itemData.range}}} `;
+            }
+            if (itemData.threat != "") {
+                output += `{{WpnThreat=${itemData.threat}}} `;
+            }
+            output += `{{WpnDamage=${itemData.damageString}}} `;
+            output += `{{WpnSkill=${itemData.skill}}} `;
+
+            return output;
+        }
+
+    ;
+    return {
+        GetTechniqueWeaponRollTemplate: getTechniqueWeaponRollTemplate
+    };
+}());
+
+
+function GetTraitsDictionary (traits, traitType) {
+
+    let output = [];
+    if (traits != undefined) {
+        let keywordsSplit = traits.split(";");
+
+        let name = "";
+        let lookup = "";
+        let traitInfo;
+
+        for (let i = 0; i < keywordsSplit.length; i++) {
+            name = "" + keywordsSplit[i].trim();
+
+            if (name.includes("Impact") || name.includes("Explosive")) {
+                name = ReplaceDamageDice(name);
+            }
+
+            lookup = name;
+            if (lookup.indexOf("(") >= 0) {
+                lookup = lookup.replace(/\([^)]*\)/g, "(X)");
+            }
+
+            switch (traitType.toLowerCase()) {
+                case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
+                case "item": traitInfo = GetItemTraitsInfo(lookup); break;
+                case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
+                case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
+            }
+            traitInfo.name = name;
+            output.push(traitInfo);
+        }
+    }
+
+    return output;
+}
 
 
 // ====== Section Ids
@@ -22547,67 +22380,67 @@ function GetTechniquesInfo(name) {
 function GetEquipmentInfo(name) {
 	switch (name.toLowerCase()) {
 		case "battleaxe":
-			return { "name": "Battleaxe", "type": "Weapon", "group": "Axe", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 6, "value": 2, "abilities": "AP (2)", "skill": "AP (2)", "dVal": "Brawling", "dType": "1", "dBonus": "6", "damageType": "Power", "range": "Piercing", "threat": "", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Battleaxe", "type": "Weapon", "group": "Axe", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 6, "value": 2, "abilities": "AP (2)", "skill": "Brawling", "dVal": "1", "dType": "6", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "club":
-			return { "name": "Club", "type": "Weapon", "group": "Hammer", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 4, "value": 2, "abilities": "", "skill": "", "dVal": "Brawling", "dType": "2", "dBonus": "3", "damageType": "Power", "range": "Force", "threat": "", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Club", "type": "Weapon", "group": "Hammer", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 4, "value": 2, "abilities": "", "skill": "Brawling", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Force", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "handaxe":
-			return { "name": "Handaxe", "type": "Weapon", "group": "Axe", "traits": "Arcing; Thrown", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 4, "value": 2, "abilities": "", "skill": "", "dVal": "Brawling", "dType": "2", "dBonus": "3", "damageType": "Power", "range": "Piercing", "threat": "3", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Handaxe", "type": "Weapon", "group": "Axe", "traits": "Arcing; Thrown", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 4, "value": 2, "abilities": "", "skill": "Brawling", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "3", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "longsword":
-			return { "name": "Longsword", "type": "Weapon", "group": "Blade", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "", "dVal": "Brawling", "dType": "2", "dBonus": "6", "damageType": "Power", "range": "Piercing", "threat": "", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Longsword", "type": "Weapon", "group": "Blade", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "Brawling", "dVal": "2", "dType": "6", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "shield":
-			return { "name": "Shield", "type": "Weapon", "group": "Shield", "traits": "Shield", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 6, "value": 2, "abilities": "", "skill": "", "dVal": "Brawling", "dType": "1", "dBonus": "3", "damageType": "Power", "range": "Force", "threat": "", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Shield", "type": "Weapon", "group": "Shield", "traits": "Shield", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 6, "value": 2, "abilities": "", "skill": "Brawling", "dVal": "1", "dType": "3", "dBonus": "Power", "damageType": "Force", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "dagger":
-			return { "name": "Dagger", "type": "Weapon", "group": "Blade", "traits": "Thrown", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 2, "value": 2, "abilities": "Quick", "skill": "Quick", "dVal": "Finesse", "dType": "2", "dBonus": "3", "damageType": "Power", "range": "Piercing", "threat": "3", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Dagger", "type": "Weapon", "group": "Blade", "traits": "Thrown", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 2, "value": 2, "abilities": "Quick", "skill": "Finesse", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "3", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "shortsword":
-			return { "name": "Shortsword", "type": "Weapon", "group": "Blade", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 3, "value": 2, "abilities": "Quick", "skill": "Quick", "dVal": "Finesse", "dType": "3", "dBonus": "3", "damageType": "Power", "range": "Piercing", "threat": "", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Shortsword", "type": "Weapon", "group": "Blade", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 3, "value": 2, "abilities": "Quick", "skill": "Finesse", "dVal": "3", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "warhammer":
-			return { "name": "Warhammer", "type": "Weapon", "group": "Hammer", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "Crushing", "skill": "Crushing", "dVal": "Might", "dType": "2", "dBonus": "3", "damageType": "Power", "range": "Force", "threat": "", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Warhammer", "type": "Weapon", "group": "Hammer", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "Crushing", "skill": "Might", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Force", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "whip":
-			return { "name": "Whip", "type": "Weapon", "group": "Whip", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 3, "value": 3, "abilities": "", "skill": "", "dVal": "Finesse", "dType": "2", "dBonus": "3", "damageType": "Power", "range": "Piercing", "threat": "", "block": "2", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Whip", "type": "Weapon", "group": "Whip", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 3, "value": 3, "abilities": "", "skill": "Finesse", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "2", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "longbow":
-			return { "name": "Longbow", "type": "Weapon", "group": "Bow", "traits": "Arcing; Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "", "skill": "", "dVal": "Marksmanship", "dType": "3", "dBonus": "3", "damageType": "Power", "range": "Piercing", "threat": "4", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Longbow", "type": "Weapon", "group": "Bow", "traits": "Arcing; Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "", "skill": "Marksmanship", "dVal": "3", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "4", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "pistol":
-			return { "name": "Pistol", "type": "Weapon", "group": "Handgun", "traits": "Loud", "description": "", "complexity": "15:Mechanical", "time": "1", "components": "Component", "bulk": 3, "value": 4, "abilities": "", "skill": "", "dVal": "Marksmanship", "dType": "2", "dBonus": "6", "damageType": "", "range": "Piercing", "threat": "4", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Pistol", "type": "Weapon", "group": "Handgun", "traits": "Loud", "description": "", "complexity": "15:Mechanical", "time": "1", "components": "Component", "bulk": 3, "value": 4, "abilities": "", "skill": "Marksmanship", "dVal": "2", "dType": "6", "dBonus": "", "damageType": "Piercing", "range": "4", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "revolver":
-			return { "name": "Revolver", "type": "Weapon", "group": "Handgun", "traits": "Loud", "description": "", "complexity": "15:Mechanical", "time": "2", "components": "Component", "bulk": 4, "value": 4, "abilities": "AP (2)", "skill": "AP (2)", "dVal": "Marksmanship", "dType": "2", "dBonus": "6", "damageType": "", "range": "Piercing", "threat": "3", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Revolver", "type": "Weapon", "group": "Handgun", "traits": "Loud", "description": "", "complexity": "15:Mechanical", "time": "2", "components": "Component", "bulk": 4, "value": 4, "abilities": "AP (2)", "skill": "Marksmanship", "dVal": "2", "dType": "6", "dBonus": "", "damageType": "Piercing", "range": "3", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "rifle":
-			return { "name": "Rifle", "type": "Weapon", "group": "Longarm", "traits": "Two-Handed; Loud", "description": "", "complexity": "15:Mechanical", "time": "1", "components": "Component", "bulk": 5, "value": 4, "abilities": "Impact (2d6)", "skill": "Impact (2d6)", "dVal": "Marksmanship", "dType": "1", "dBonus": "6", "damageType": "", "range": "Piercing", "threat": "5", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Rifle", "type": "Weapon", "group": "Longarm", "traits": "Two-Handed; Loud", "description": "", "complexity": "15:Mechanical", "time": "1", "components": "Component", "bulk": 5, "value": 4, "abilities": "Impact (2d6)", "skill": "Marksmanship", "dVal": "1", "dType": "6", "dBonus": "", "damageType": "Piercing", "range": "5", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "shortbow":
-			return { "name": "Shortbow", "type": "Weapon", "group": "Bow", "traits": "Arcing; Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "", "dVal": "Marksmanship", "dType": "2", "dBonus": "3", "damageType": "Power", "range": "Piercing", "threat": "4", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Shortbow", "type": "Weapon", "group": "Bow", "traits": "Arcing; Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "Marksmanship", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "4", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "shotgun":
-			return { "name": "Shotgun", "type": "Weapon", "group": "Longarm", "traits": "Two-Handed; Loud", "description": "", "complexity": "15:Mechanical", "time": "2", "components": "Component", "bulk": 1, "value": 5, "abilities": "Cone (2)", "skill": "Cone (2)", "dVal": "Marksmanship", "dType": "2", "dBonus": "6", "damageType": "", "range": "Piercing", "threat": "2", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Shotgun", "type": "Weapon", "group": "Longarm", "traits": "Two-Handed; Loud", "description": "", "complexity": "15:Mechanical", "time": "2", "components": "Component", "bulk": 1, "value": 5, "abilities": "Cone (2)", "skill": "Marksmanship", "dVal": "2", "dType": "6", "dBonus": "", "damageType": "Piercing", "range": "2", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "sniper rifle":
-			return { "name": "Sniper Rifle", "type": "Weapon", "group": "Longarm", "traits": "Two-Handed; Loud", "description": "", "complexity": "15:Mechanical", "time": "2", "components": "2 Component", "bulk": 8, "value": 5, "abilities": "Impact (5d3)", "skill": "Impact (5d3)", "dVal": "Marksmanship", "dType": "0", "dBonus": "", "damageType": "", "range": "Piercing", "threat": "8", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Sniper Rifle", "type": "Weapon", "group": "Longarm", "traits": "Two-Handed; Loud", "description": "", "complexity": "15:Mechanical", "time": "2", "components": "2 Component", "bulk": 8, "value": 5, "abilities": "Impact (5d3)", "skill": "Marksmanship", "dVal": "0", "dType": "", "dBonus": "", "damageType": "Piercing", "range": "8", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "great axe":
-			return { "name": "Great Axe", "type": "Weapon", "group": "Axe", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "AP (2)", "skill": "AP (2)", "dVal": "Might", "dType": "2", "dBonus": "6", "damageType": "Power", "range": "Piercing", "threat": "", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Great Axe", "type": "Weapon", "group": "Axe", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "AP (2)", "skill": "Might", "dVal": "2", "dType": "6", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "great sword":
-			return { "name": "Great Sword", "type": "Weapon", "group": "Blade", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "", "skill": "", "dVal": "Might", "dType": "4", "dBonus": "3", "damageType": "Power", "range": "Piercing", "threat": "", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Great Sword", "type": "Weapon", "group": "Blade", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "", "skill": "Might", "dVal": "4", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "maul":
-			return { "name": "Maul", "type": "Weapon", "group": "Hammer", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "Crushing", "skill": "Crushing", "dVal": "Might", "dType": "2", "dBonus": "6", "damageType": "Power", "range": "Force", "threat": "", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Maul", "type": "Weapon", "group": "Hammer", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "Crushing", "skill": "Might", "dVal": "2", "dType": "6", "dBonus": "Power", "damageType": "Force", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "javelin":
-			return { "name": "Javelin", "type": "Weapon", "group": "Spear", "traits": "Arcing; Thrown", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "", "dVal": "Lunge", "dType": "2", "dBonus": "3", "damageType": "Power", "range": "Piercing", "threat": "3", "block": "1", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Javelin", "type": "Weapon", "group": "Spear", "traits": "Arcing; Thrown", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "Lunge", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "3", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "lance":
-			return { "name": "Lance", "type": "Weapon", "group": "Spear", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "Line (2)", "skill": "Line (2)", "dVal": "Lunge", "dType": "2", "dBonus": "6", "damageType": "Power", "range": "Piercing", "threat": "", "block": "2", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Lance", "type": "Weapon", "group": "Spear", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "Line (2)", "skill": "Lunge", "dVal": "2", "dType": "6", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "2", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "spear":
-			return { "name": "Spear", "type": "Weapon", "group": "Spear", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "Line (2)", "skill": "Line (2)", "dVal": "Lunge", "dType": "3", "dBonus": "3", "damageType": "Power", "range": "Piercing", "threat": "", "block": "2", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Spear", "type": "Weapon", "group": "Spear", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "Line (2)", "skill": "Lunge", "dVal": "3", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "2", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "staff":
-			return { "name": "Staff", "type": "Weapon", "group": "Staff", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "Quick", "skill": "Quick", "dVal": "Lunge", "dType": "2", "dBonus": "3", "damageType": "Power", "range": "Force", "threat": "", "block": "2", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Staff", "type": "Weapon", "group": "Staff", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "Quick", "skill": "Lunge", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Force", "range": "", "threat": "2", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "blast bomb":
-			return { "name": "Blast Bomb", "type": "Weapon", "group": "Bomb", "traits": "Arcing", "description": "", "complexity": "0:Mechanical", "time": "1", "components": "Black Powder", "bulk": 2, "value": 3, "abilities": "Explosive (1/3d3)", "skill": "Explosive (1/3d3)", "dVal": "Throw", "dType": "1", "dBonus": "3", "damageType": "", "range": "Burn", "threat": "3", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Blast Bomb", "type": "Weapon", "group": "Bomb", "traits": "Arcing", "description": "", "complexity": "0:Mechanical", "time": "1", "components": "Black Powder", "bulk": 2, "value": 3, "abilities": "Explosive (1/3d3)", "skill": "Throw", "dVal": "1", "dType": "3", "dBonus": "", "damageType": "Burn", "range": "3", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "impact bomb":
-			return { "name": "Impact Bomb", "type": "Weapon", "group": "Bomb", "traits": "Arcing", "description": "", "complexity": "0:Mechanical", "time": "1", "components": "Black Powder", "bulk": 2, "value": 3, "abilities": "Impact (3d6)", "skill": "Impact (3d6)", "dVal": "Throw", "dType": "1", "dBonus": "3", "damageType": "", "range": "Force", "threat": "3", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
+			return { "name": "Impact Bomb", "type": "Weapon", "group": "Bomb", "traits": "Arcing", "description": "", "complexity": "0:Mechanical", "time": "1", "components": "Black Powder", "bulk": 2, "value": 3, "abilities": "Impact (3d6)", "skill": "Throw", "dVal": "1", "dType": "3", "dBonus": "", "damageType": "Force", "range": "3", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 		case "light breastplate":
-			return { "name": "Light Breastplate", "type": "Chest Armor", "group": "Basic", "traits": "", "description": "", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 15, "value": 3, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "", "armor": "2", "reflexPen": "1", "speedPen": "-2" }
+			return { "name": "Light Breastplate", "type": "Chest Armor", "group": "Basic", "traits": "", "description": "", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 15, "value": 3, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "2", "armor": "1", "reflexPen": "-2", "speedPen": "" }
 		case "heavy breastplate":
-			return { "name": "Heavy Breastplate", "type": "Chest Armor", "group": "Basic", "traits": "", "description": "", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 25, "value": 4, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "", "armor": "4", "reflexPen": "2", "speedPen": "-2" }
+			return { "name": "Heavy Breastplate", "type": "Chest Armor", "group": "Basic", "traits": "", "description": "", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 25, "value": 4, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "4", "armor": "2", "reflexPen": "-2", "speedPen": "-1" }
 		case "helmet":
-			return { "name": "Helmet", "type": "Head Armor", "group": "Basic", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "", "armor": "2", "reflexPen": "", "speedPen": "-1" }
+			return { "name": "Helmet", "type": "Head Armor", "group": "Basic", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "2", "armor": "", "reflexPen": "-1", "speedPen": "" }
 		case "vambraces":
-			return { "name": "Vambraces", "type": "Arms Armor", "group": "Basic", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "", "armor": "2", "reflexPen": "", "speedPen": "-1" }
+			return { "name": "Vambraces", "type": "Arms Armor", "group": "Basic", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "2", "armor": "", "reflexPen": "-1", "speedPen": "" }
 		case "light greaves":
-			return { "name": "Light Greaves", "type": "Legs Armor", "group": "Basic", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 10, "value": 2, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "", "armor": "2", "reflexPen": "", "speedPen": "-1" }
+			return { "name": "Light Greaves", "type": "Legs Armor", "group": "Basic", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 10, "value": 2, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "2", "armor": "", "reflexPen": "-1", "speedPen": "" }
 		case "heavy greaves":
-			return { "name": "Heavy Greaves", "type": "Legs Armor", "group": "Basic", "traits": "", "description": "", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 15, "value": 3, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "", "armor": "2", "reflexPen": "1", "speedPen": "-1" }
+			return { "name": "Heavy Greaves", "type": "Legs Armor", "group": "Basic", "traits": "", "description": "", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 15, "value": 3, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "2", "armor": "1", "reflexPen": "-1", "speedPen": "-1" }
 		default:
 			return { "name": "", "type": "", "group": "", "traits": "", "description": "", "complexity": "", "time": "", "components": "", "bulk": 0, "value": 0, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
 

@@ -822,7 +822,7 @@ function UpdateCharacterGearEquipItem(eventinfo) {
 
 	getSectionIDs(repeatingSection, function (idArray) {
 		mod_attrs = mod_attrs.concat(GetSectionIdValues(idArray, repeatingSection, ["item-name", "item-traits", "item-abilities", "item-equipState",
-			"item-skill", "item-damage", "item-range", "item-threat", "item-block", "item-armor", "item-reflexPen", "item-speedPen"
+			"item-skill", "item-dieValue", "item-dieType", "item-addPower", "item-damageType", "item-range", "item-threat", "item-block", "item-armor", "item-reflexPen", "item-speedPen"
 		]));
 		mod_attrs = mod_attrs.concat(GetSectionIdValues(idArray, repeatingSection, ["item-equipState"]));
 		getAttrs(mod_attrs, function (v) {
@@ -904,28 +904,6 @@ function UpdateCharacterGearEquipItem(eventinfo) {
 }
 
 function SetCharacterEquippedWeapon(update, itemData, gearSlot) {
-
-	// let output = "";
-	// output += `{{WpnName=${itemData.name}}} `;
-
-	// var traitsDb = GetTraitsDictionary(itemData.traits, "item");
-	// for (var i = 0; i < traitsDb.length; i++) {
-	// 	output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
-	// }
-
-	// traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
-	// for (var i = 0; i < traitsDb.length; i++) {
-	// 	output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
-	// }
-
-	// if (itemData.range != "") {
-	// 	output += `{{WpnRange=${itemData.range}}} `;
-	// }
-	// if (itemData.threat != "") {
-	// 	output += `{{WpnThreat=${itemData.threat}}} `;
-	// }
-	// output += `{{WpnDamage=${itemData.damageString}}} `;
-	// output += `{{WpnSkill=${itemData.skill}}} `;
 
 	let weaponData = ConvertEquipmentDataToWeaponData(itemData);
 	update[gearSlot] = JSON.stringify(weaponData);

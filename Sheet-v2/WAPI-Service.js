@@ -445,6 +445,7 @@ function SanitizeSheetRoll(roll) {
 
 function SanitizeSheetRollAction(roll) {
     var sheetRoll = roll;
+    sheetRoll = sheetRoll.replace(/"/g, "&#34;");
     sheetRoll = sheetRoll.replace(/%/g, "&#37;");
     sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
     sheetRoll = sheetRoll.replace(/\)/g, "&#41;");

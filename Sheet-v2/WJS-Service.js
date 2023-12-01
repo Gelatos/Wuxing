@@ -309,42 +309,6 @@ function ModulusGrowths(array1, val) {
 
 // ======== Techniques
 
-function GetTraitsDictionary(traits, traitType) {
-
-	let output = [];
-	if (traits != undefined) {
-		let keywordsSplit = traits.split(";");
-
-		let name = "";
-		let lookup = "";
-		let traitInfo;
-
-		for (let i = 0; i < keywordsSplit.length; i++) {
-			name = "" + keywordsSplit[i].trim();
-
-			if (name.includes("Impact") || name.includes("Explosive")) {
-				name = ReplaceDamageDice(name);
-			}
-
-			lookup = name;
-			if (lookup.indexOf("(") >= 0) {
-				lookup = lookup.replace(/\([^)]*\)/g, "(X)");
-			}
-
-			switch (traitType.toLowerCase()) {
-				case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
-				case "item": traitInfo = GetItemTraitsInfo(lookup); break;
-				case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
-				case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
-			}
-			traitInfo.name = name;
-			output.push(traitInfo);
-		}
-	}
-
-	return output;
-}
-
 function GetTechniqueDataArray(type, techniques) {
 	let output = [];
 	let techniqueList = techniques.split(";");
@@ -675,11 +639,10 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 			update = SetItemDataAbilities(update, repeatingSection, id, item.abilities);
 			update[GetSectionIdName(repeatingSection, id, "item-skill")] = item.skill;
 			update[GetSectionIdName(repeatingSection, id, "item-damage")] = item.dmg;
-			update[GetSectionIdName(repeatingSection, id, "item-damageType")] = item.dmgType;
-			update = SetDamageValuesFromDamageData(update, repeatingSection, id, item.dmg);
-			update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = damageData.dVal;
-			update[GetSectionIdName(repeatingSection, id, "item-dieType")] = damageData.dType;
-			update[GetSectionIdName(repeatingSection, id, "item-addPower")] = damageData.dBonus.indexOf("Power") >= 0 ? "on" : "0";
+			update[GetSectionIdName(repeatingSection, id, "item-damageType")] = item.damageType;
+			update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = item.dVal;
+			update[GetSectionIdName(repeatingSection, id, "item-dieType")] = item.dType;
+			update[GetSectionIdName(repeatingSection, id, "item-addPower")] = item.dBonus.indexOf("Power") >= 0 ? "on" : "0";
 			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = FormatDamageString(item);
 			update[GetSectionIdName(repeatingSection, id, "item-range")] = item.range;
 			update[GetSectionIdName(repeatingSection, id, "item-threat")] = item.threat;
@@ -760,15 +723,17 @@ function CreateEquipmentItemDataFromRepeatingSection(attrArray, repeatingSection
 	let itemData = CreateItemDataFromRepeatingSection(attrArray, repeatingSection, id);
 	itemData.abilities = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-abilities"));
 	itemData.skill = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-skill"));
-	itemData.dmg = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damage"));
-	itemData.dmgType = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damageType"));
-	itemData.damageString = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damageString"));
+	itemData.dVal = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-dieValue"));
+	itemData.dType = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-dieType"));
+	itemData.dBonus = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-addPower")) == "on" ? "Power" : "";
+	itemData.damageType = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damageType"));
 	itemData.range = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-range"));
 	itemData.threat = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-threat"));
 	itemData.block = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-block"));
 	itemData.armor = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-armor"));
 	itemData.reflexPen = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-reflexPen"));
 	itemData.speedPen = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-speedPen"));
+	log (JSON.stringify(itemData));
 	return itemData;
 }
 
@@ -779,10 +744,14 @@ function ConvertEquipmentDataToWeaponData(itemData) {
 	weaponData.traits = itemData.traits;
 	weaponData.abilities = itemData.abilities;
 	weaponData.skill = itemData.skill;
-	weaponData.dmg = itemData.dmg;
-	weaponData.dmgType = itemData.dmgType;
+	weaponData.damageString = FormatDamageString(itemData);
+	weaponData.dType = itemData.dType;
+	weaponData.dVal = itemData.dVal;
+	weaponData.dBonus = itemData.dBonus;
+	weaponData.damageType = itemData.damageType;
 	weaponData.range = itemData.range;
 	weaponData.threat = itemData.threat;
+	log ("post: " + JSON.stringify(itemData));
 	return weaponData;
 }
 

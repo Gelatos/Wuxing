@@ -253,51 +253,53 @@ input[type=hidden].wuxFeature-flag[value="on"] + .wuxFeature
 
 input.wuxFeatureHeader-flag[value="Quick"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Quick,
-.sheet-rolltemplate-technique .wuxFeatureHeader-Quick
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Quick
 {
     background-color: #fbe5e5;
 }
 
 input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Full,
-.sheet-rolltemplate-technique .wuxFeatureHeader-Full
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Full
 {
     background-color: #d7a0a0;
 }
 
 input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Reaction,
-.sheet-rolltemplate-technique .wuxFeatureHeader-Reaction
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction
 {
     background-color: #e5eafb;
 }
 
 input.wuxFeatureHeader-flag[value="Swift"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Swift,
-.sheet-rolltemplate-technique .wuxFeatureHeader-Swift
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Swift
 {
     background-color: #e5fbf1;
 }
 
 input.wuxFeatureHeader-flag[value="Free"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Free,
-.sheet-rolltemplate-technique .wuxFeatureHeader-Free
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Free
 {
     background-color: #f0e5fb;
 }
 
 input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Augment,
-.sheet-rolltemplate-technique .wuxFeatureHeader-Augment
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Augment
 {
     background-color: #acacac;
 }
 
 input.wuxFeatureHeader-flag[value="Equipment"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Equipment,
-.sheet-rolltemplate-technique .wuxFeatureHeader-Equipment
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Equipment
 {
-    background-color: #987da8;
+    background-color: #ad8ac2;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
 }
 
 .wuxFeatureType,
@@ -319,35 +321,35 @@ input.wuxFeatureHeader-flag[value="Equipment"] + .wuxFeatureHeader,
 
 input.wuxFeatureType-flag[value="Active"] + .wuxFeatureType,
 .wuxFeatureType-Active,
-.sheet-rolltemplate-technique .wuxFeatureType-Active
+.sheet-rolltemplate-technique .sheet-wuxFeatureType-Active
 {
     background-color: #b60003;
 }
 
 input.wuxFeatureType-flag[value="Passive"] + .wuxFeatureType,
 .wuxFeatureType-Passive,
-.sheet-rolltemplate-technique .wuxFeatureType-Passive
+.sheet-rolltemplate-technique .sheet-wuxFeatureType-Passive
 {
     background-color: #4db600;
 }
 
 input.wuxFeatureType-flag[value="Support"] + .wuxFeatureType,
 .wuxFeatureType-Support,
-.sheet-rolltemplate-technique .wuxFeatureType-Support
+.sheet-rolltemplate-technique .sheet-wuxFeatureType-Support
 {
     background-color: #00b0b6;
 }
 
 input.wuxFeatureType-flag[value="Job"] + .wuxFeatureType,
 .wuxFeatureType-Job,
-.sheet-rolltemplate-technique .wuxFeatureType-Job
+.sheet-rolltemplate-technique .sheet-wuxFeatureType-Job
 {
     background-color: #7800b6;
 }
 
 input.wuxFeatureType-flag[value="Standard"] + .wuxFeatureType,
 .wuxFeatureType-Standard,
-.sheet-rolltemplate-technique .wuxFeatureType-Standard
+.sheet-rolltemplate-technique .sheet-wuxFeatureType-Standard
 {
     background-color: #b66f00;
 }
@@ -667,8 +669,10 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 {
     font-size: 11px;
     color: #0000FF;
-    
-    border-bottom: 1px dotted #0000FF;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+
+    text-decoration: underline dotted;
 }
 
 .wuxTrait .wuxTooltiptext,
