@@ -25,6 +25,9 @@ var WuxingCombat = WuxingCombat || (function () {
                 case "!utech":
                     commandUseTechnique(msg, content);
                     break;
+                case "!rtech":
+                    commandResolveTechnique(msg, content);
+                    break;
                 case "!adv":
                     commandRollAdvantage(msg, content);
                     break;
@@ -53,11 +56,14 @@ var WuxingCombat = WuxingCombat || (function () {
 
         commandUseTechnique = function (msg, content) {
             let components = content.split("##");
-            let technique = JSON.parse(components[0]);
-            let weaponData = components.length > 1 ? JSON.parse(components[1]) : undefined;
+            let technique = JSON.parse(DesanitizeSheetRollAction(components[0]));
+            let weaponData = components.length > 1 ? JSON.parse(DesanitizeSheetRollAction(components[1])) : undefined;
             let userTargetData = getUserTargetDataFromTechnique(technique);
             let defenderTargetData = getDefenderTargetDataFromTechnique(technique);
             TechniqueUseResults.UseTechnique(msg, technique, weaponData, userTargetData, defenderTargetData);
+        },
+
+        commandResolveTechnique = function (msg, content) {
         },
 
         commandRollAdvantage = function (msg, content) {
@@ -83,7 +89,7 @@ var WuxingCombat = WuxingCombat || (function () {
         // Combat State
         // ---------------------------
 
-        startCombat = function(initiativeData) {
+        startCombat = function() {
 
             let initiativeData = [];
             WuxingTarget.IterateOverActiveTargetData(function (targetData) {
@@ -355,7 +361,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
                 defenderSkill: getTechniqueDefenderSkillRoll(technique, defenderTargetData, weaponData)
             }
 
-            output.compareResults = compareTechniqueSkillChecks(userSkill, defenderSkill);
+            output.compareResults = compareTechniqueSkillChecks(output.userSkill, output.defenderSkill);
             return output;
         },
 
@@ -368,7 +374,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
 
         getTechniqueDefenderSkillRoll = function(technique, defenderTargetData, weaponData) {
             
-            if (technique.defenderSkill == "") {
+            if (technique.defense == "") {
                 return getBasicCheckSkillData();
             }
             let skillData = getBasicTechniqueSkillRollTypeData(technique.defense, weaponData);
@@ -382,14 +388,24 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
             return skillData;
         },
 
-        getBasicCheckSkillData = function() {
+        getSkillRollData = function() {
             return {
-                isDC: true,
-                skillFull: "Basic",
-                roll: 15,
+                isDC: false,
+                skillFull: "",
+                attrSkill: "",
+                roll: 0,
                 skillValue: 0,
-                total: 15
+                total: 0
             };
+        }
+
+        getBasicCheckSkillData = function() {
+            let output = getSkillRollData();
+            output.isDC = true;
+            output.skillFull = "Basic";
+            output.roll = 15;
+            output.total = 15;
+            return output;
         }
 
         getTechniqueDefenderAttr = function(skillData, technique, targetData, weaponData) {
@@ -400,20 +416,20 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
                 skillData = getTechniqueDefenderAttrCombinedDefenseMods(skillData, targetData);
             }
             if (skillData.skillValue == -10) {
-                skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, skillData.attrSkill));
+                skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, `skill_${skillData.attrSkill}`));
             }
             return skillData;
         },
 
         getTechniqueDefenderAttrTraitMods = function(skillData, technique, targetData, weaponData) {
-            if (technique.traits.indexOf("Armament [F]") >= 0) {
-                if (skillData.skillFull == "BR DC") {
-                    if (weaponData.abilities.indexOf("Quick")) {
+            if (skillData.skillFull == "BR DC") {
+                if (technique.traits.indexOf("Armament [F]") >= 0) {
+                    if (weaponData.abilities.indexOf("Quick") >= 0) {
                         skillData.skillFull += "[Brace]";
                         skillData.attrSkill = "skill_brace";
                         skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, skillData.attrSkill));
                     }
-                    else if (weaponData.abilities.indexOf("Crushing")) {
+                    else if (weaponData.abilities.indexOf("Crushing") >= 0) {
                         skillData.skillFull += "[Reflex]";
                         skillData.attrSkill = "skill_reflex";
                         skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, skillData.attrSkill));
@@ -458,28 +474,36 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
         },
 
         getBasicTechniqueSkillRollTypeData = function(skill, weaponData) {
-            let output = {
-                isDC: false,
-                skillFull: skill,
-                attrSkill: ""
-            }
+            let skillData = getSkillRollData();
+
             if (skill == "Weapon") {
-                output.skillFull = weaponData.skill;
-                output.attrSkill = Format.ToCamelCase(weaponData.skill);
+                skillData = setSkillRollDataFromWeapon(skillData, weaponData);
             }
             else {
-                let splitIndex = skill.lastIndexOf(" ");
-                if (splitIndex > 0) {
-                    output.isDC = output.skillFull.substring(splitIndex).trim() == "DC" ? true : false;
-                    if (output.isDC) {
-                        output.attrSkill = Format.ToCamelCase(skill.substring(0, splitIndex));
-                    }
-                }
-                if (output.attrSkill == "") {
-                    output.attrSkill = Format.ToCamelCase(skill);
+                skillData = parseSkillRollDataFromTechnique(skillData, skill);
+            }
+            return skillData;
+        },
+
+        setSkillRollDataFromWeapon = function(skillData, weaponData) {
+            skillData.skillFull = weaponData.skill;
+            skillData.attrSkill = Format.ToCamelCase(weaponData.skill);
+            return skillData;
+        },
+
+        parseSkillRollDataFromTechnique = function(skillData, skill) {
+            skillData.skillFull = skill;
+            let splitIndex = skill.lastIndexOf(" ");
+            if (splitIndex > 0) {
+                skillData.isDC = skillData.skillFull.substring(splitIndex).trim() == "DC" ? true : false;
+                if (skillData.isDC) {
+                    skillData.attrSkill = Format.ToCamelCase(skill.substring(0, splitIndex));
                 }
             }
-            return output;
+            if (skillData.attrSkill == "") {
+                skillData.attrSkill = Format.ToCamelCase(skill);
+            }
+            return skillData;
         },
 
         compareTechniqueSkillChecks = function(userSkill, defenderSkill) {
@@ -497,25 +521,113 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
         },
 
         createTechniqueSkillCheckOutput = function(skillCheck, technique, weaponData, userTargetData, defenderTargetData) {
-            let message = "";
-
-            return message;
+            let techUseDisplayData = createTechUseDisplaytData();
+            techUseDisplayData = setTechUseDisplayTechniqueData(techUseDisplayData, technique);
+            techUseDisplayData = setTechUseDisplayWeaponData(techUseDisplayData, technique, weaponData);
+            techUseDisplayData = setTechUseDisplayUserTargetData(techUseDisplayData, userTargetData);
+            techUseDisplayData = setTechUseDisplayDefTargetData(techUseDisplayData, technique, defenderTargetData);
+            techUseDisplayData = setTechUseDisplaySkillCheckData(techUseDisplayData, skillCheck);
+            return displayUsedTechnique(techUseDisplayData);
         },
 
         createTechniqueResultsOutput = function(skillCheck, technique, weaponData, userTargetData, defenderTargetData) {
-            let message = "";
+            let message = "This would be a message with damages";
 
             return message;
         },
 
-        createResultData = function() {
+        createTechUseDisplaytData = function() {
             return {
+                name: "",
+                traits: "",
+                description: "",
+                onSuccess: "",
+                damage: "",
+                weaponTraits: "",
+                weaponAbilities: "",
                 userName: "",
                 defenderName: "",
-                name: "",
-                userSkillCheck,
-                defenderSkillCheck
+                defArmor: "",
+                userSkillName: "",
+                userSkillRollDetails: "",
+                defSkillName: "",
+                defSkillRollDetails: ""
             }
+        },
+
+        setTechUseDisplayTechniqueData = function(techUseDisplayData, technique) {
+            techUseDisplayData.name = technique.name;
+            techUseDisplayData.traits = technique.traits;
+            techUseDisplayData.description = technique.description;
+            techUseDisplayData.onSuccess = technique.onSuccess;
+            techUseDisplayData.damage = Format.DamageString(technique);
+            return techUseDisplayData;
+        },
+
+        setTechUseDisplayWeaponData = function(techUseDisplayData, technique, weaponData) {
+            if (technique.traits.indexOf("Armament") >= 0) {
+                techUseDisplayData.weaponTraits = weaponData.traits;
+                techUseDisplayData.damage = Format.DamageString(weaponData);
+                if (technique.traits.indexOf("Armament [F]") >= 0) {
+                    techUseDisplayData.weaponAbilities = weaponData.abilities;
+                }
+            }
+            return techUseDisplayData;
+        },
+
+        setTechUseDisplayUserTargetData = function(techUseDisplayData, userTargetData) {
+            techUseDisplayData.userName = userTargetData.displayName;
+            return techUseDisplayData;
+        },
+
+        setTechUseDisplayDefTargetData = function(techUseDisplayData, technique, defenderTargetData) {
+            if (technique.defense != "") {
+                techUseDisplayData.defenderName = defenderTargetData.displayName;
+                techUseDisplayData.defArmor = ParseIntValue(getAttrByName(defenderTargetData.charId, "armor"));
+            }
+            return techUseDisplayData;
+        },
+
+        setTechUseDisplaySkillCheckData = function(techUseDisplayData, skillCheck) {
+            let skillRoll = setTechUseDisplaySkillCheckMessage(skillCheck.userSkill);
+            techUseDisplayData.userSkillName = skillRoll.name;
+            techUseDisplayData.userSkillRollDetails = skillRoll.details;
+            skillRoll = setTechUseDisplaySkillCheckMessage(skillCheck.defenderSkill);
+            techUseDisplayData.defSkillName = skillRoll.name;
+            techUseDisplayData.defSkillRollDetails = skillRoll.details;
+            return techUseDisplayData;
+        },
+
+        setTechUseDisplaySkillCheckMessage = function(skillCheckRollData) {
+            return {
+                name: `${skillCheckRollData.total} [${skillCheckRollData.skillFull}]`,
+                details: `${skillCheckRollData.roll} (Roll) + ${skillCheckRollData.skillValue} (Mod)`
+            };
+        },
+
+        displayUsedTechnique = function(techData) {
+            let message = "";
+            message += `{{Name=${techData.name}}} `;
+            message += `{{Targets=${techData.userName}${techData.defenderName != "" ? ` vs. ${techData.defenderName}` : ""}}} `;
+            message += Format.RollTemplateTraits(techData.traits, "technique", "Trait");
+            message += Format.RollTemplateTraits(techData.weaponTraits, "item", "WpnTrait");
+            message += Format.RollTemplateTraits(techData.weaponAbilities, "ability", "WpnAbility");
+
+            if (techData.description != "" || techData.onSuccess != "") {
+                message += "{{type-DescBlock=1}} ";
+                message += techData.description != "" ? `{{Desc=${techData.description}}}` : "";
+                message += techData.onSuccess != "" ? `{{OnHit=${techData.onSuccess}}}` : "";
+            }
+            if (techData.damage != "" || techData.userSkillName != "") {
+                message += "{{type-AttackBlock=1}} ";
+                message += techData.damage != "" ? `{{DamageString=${techData.damage}}} ` : "";
+                message += techData.defArmor != "" ? `{{armor=${techData.defArmor}}} ` : "";
+                if (techData.userSkillName != "") {
+                    message += `{{skillRoll=${techData.userSkillName}}} {{skillDetails=${techData.userSkillRollDetails}}} `;
+                    message += `{{defSkillRoll=${techData.defSkillName}}} {{defSkillDetails=${techData.defSkillRollDetails}}} `;
+                }
+            }
+            return `&{template:usetechnique} ${message}`;
         }
     ;
     return {

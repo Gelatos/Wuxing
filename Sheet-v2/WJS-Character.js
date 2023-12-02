@@ -172,8 +172,8 @@ function UpdateCharacterTechniqueSelect() {
 	let repeatingQuick = "repeating_quicklearnedtechniques";
 	let repeatingFull = "repeating_fulllearnedtechniques";
 	let repeatingReaction = "repeating_reactionlearnedtechniques";
+	let repeatingSwift = "repeating_swiftlearnedtechniques";
 	let repeatingFree = "repeating_freelearnedtechniques";
-	let repeatingNone = "repeating_nonelearnedtechniques";
 
 	let mod_attrs = ["techslot-job_max", "techslot-active_max", "techslot-passive_max", "techslot-support_max"];
 	getSectionIDs(repeatingLearned, function (learnedArray) {
@@ -187,10 +187,10 @@ function UpdateCharacterTechniqueSelect() {
 				mod_attrs = mod_attrs.concat(GetSectionIdValues(quickArray, repeatingQuick, ["technique-name"]));
 				getSectionIDs(repeatingReaction, function (reactionArray) {
 					mod_attrs = mod_attrs.concat(GetSectionIdValues(reactionArray, repeatingReaction, ["technique-name"]));
-					getSectionIDs(repeatingFree, function (freeArray) {
-						mod_attrs = mod_attrs.concat(GetSectionIdValues(freeArray, repeatingFree, ["technique-name"]));
-						getSectionIDs(repeatingNone, function (noneArray) {
-							mod_attrs = mod_attrs.concat(GetSectionIdValues(noneArray, repeatingNone, ["technique-name"]));
+					getSectionIDs(repeatingSwift, function (swiftArray) {
+						mod_attrs = mod_attrs.concat(GetSectionIdValues(swiftArray, repeatingSwift, ["technique-name"]));
+						getSectionIDs(repeatingFree, function (freeArray) {
+							mod_attrs = mod_attrs.concat(GetSectionIdValues(freeArray, repeatingFree, ["technique-name"]));
 
 							getAttrs(mod_attrs, function (v) {
 								let selectedBaseActions = [];
@@ -199,8 +199,8 @@ function UpdateCharacterTechniqueSelect() {
 									full: CreateLearnedTechniquesDataObj(v, repeatingFull, fullArray),
 									quick: CreateLearnedTechniquesDataObj(v, repeatingQuick, quickArray),
 									reaction: CreateLearnedTechniquesDataObj(v, repeatingReaction, reactionArray),
-									free: CreateLearnedTechniquesDataObj(v, repeatingFree, freeArray),
-									none: CreateLearnedTechniquesDataObj(v, repeatingNone, noneArray)
+									swift: CreateLearnedTechniquesDataObj(v, repeatingSwift, swiftArray),
+									free: CreateLearnedTechniquesDataObj(v, repeatingFree, freeArray)
 								}
 								let slots = {
 									job: AttrParseInt(v, "techslot-job_max"),
@@ -241,15 +241,15 @@ function UpdateCharacterTechniqueSelect() {
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
 												break;
-											case "Free":
-												actions.free.addBaseTech(
+											case "Swift":
+												actions.swift.addBaseTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
 												break;
-											case "None":
-												actions.none.addBaseTech(
+											case "Free":
+												actions.free.addBaseTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
@@ -297,16 +297,16 @@ function UpdateCharacterTechniqueSelect() {
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
 												break;
-											case "Free":
-												actions.free.addAugmentTech(
+											case "Swift":
+												actions.swift.addAugmentTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-augmentBase")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
 												break;
-											case "None":
-												actions.none.addAugmentTech(
+											case "Free":
+												actions.free.addAugmentTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-augmentBase")),
 													learnedArray[i],
@@ -317,7 +317,7 @@ function UpdateCharacterTechniqueSelect() {
 									}
 								}
 
-								SetCharacterTechniqueSelect(v, actions, slots, customTechniquesList, fullArray, quickArray, reactionArray, freeArray, noneArray);
+								SetCharacterTechniqueSelect(v, actions, slots, customTechniquesList, fullArray, quickArray, reactionArray, swiftArray, freeArray);
 							});
 						});
 					});
@@ -430,13 +430,13 @@ function CreateLearnedTechniquesDataObj(attrArray, repeatingSection, idArray) {
 	return output;
 }
 
-function SetCharacterTechniqueSelect(attrArray, actions, slots, customTechniquesList, fullArray, quickArray, reactionArray, freeArray, noneArray) {
+function SetCharacterTechniqueSelect(attrArray, actions, slots, customTechniquesList, fullArray, quickArray, reactionArray, swiftArray, freeArray) {
 
 	let repeatingQuick = "repeating_quicklearnedtechniques";
 	let repeatingFull = "repeating_fulllearnedtechniques";
 	let repeatingReaction = "repeating_reactionlearnedtechniques";
+	let repeatingSwift = "repeating_swiftlearnedtechniques";
 	let repeatingFree = "repeating_freelearnedtechniques";
-	let repeatingNone = "repeating_nonelearnedtechniques";
 
 	let update = {};
 	update["techslot-job"] = slots.job;
@@ -450,10 +450,10 @@ function SetCharacterTechniqueSelect(attrArray, actions, slots, customTechniques
 	RemoveCharacterActionsLearnedTechniques(actions.full, quickArray, repeatingQuick);
 	update = SetCharacterActionsNewLearnedTechniques(update, attrArray, actions.reaction, repeatingReaction, customTechniquesList);
 	RemoveCharacterActionsLearnedTechniques(actions.full, reactionArray, repeatingReaction);
+	update = SetCharacterActionsNewLearnedTechniques(update, attrArray, actions.swift, repeatingSwift, customTechniquesList);
+	RemoveCharacterActionsLearnedTechniques(actions.full, swiftArray, repeatingSwift);
 	update = SetCharacterActionsNewLearnedTechniques(update, attrArray, actions.free, repeatingFree, customTechniquesList);
 	RemoveCharacterActionsLearnedTechniques(actions.full, freeArray, repeatingFree);
-	update = SetCharacterActionsNewLearnedTechniques(update, attrArray, actions.none, repeatingNone, customTechniquesList);
-	RemoveCharacterActionsLearnedTechniques(actions.full, noneArray, repeatingNone);
 
 	setAttrs(update, { silent: true });
 }

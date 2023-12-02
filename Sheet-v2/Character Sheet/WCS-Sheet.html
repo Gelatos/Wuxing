@@ -8241,7 +8241,7 @@
 				<div class="wuxDistinctField">
 					<span class="wuxDistinctSubtitle">Vitality</span>
 					<span class='wuxDistinctSubdata'>
-						<span name='attr_vitality_max' value="0">0</span>
+						<span name='attr_vitality' value="0">0</span>
 						<span class="wuxFontSize7">/ </span>
 						<span class="wuxFontSize7" name='attr_vitality_max' value="0">0</span>
 					</span>
@@ -14958,6 +14958,190 @@
 
 	</rolltemplate>
 
+	<rolltemplate class="sheet-rolltemplate-usetechnique">
+		<div class="wuxFeatureHeader">
+			<div class="wuxFeatureHeaderDisplayBlock">
+                <span class="wuxFeatureHeaderInfoType">{{Targets}}</span>
+				<span class="wuxFeatureHeaderName">{{Name}}</span>
+                {{#Trait0}}
+                <div class="wuxFeatureHeaderInfo">
+                    <span><strong>Traits: </strong></span>
+                    
+                    {{#Trait0}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{Trait0}}</span>
+                        <span class="wuxTooltiptext">{{Trait0Desc}}</span>
+                    </div>
+                    {{/Trait0}}
+                    {{#Trait1}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{Trait1}}</span>
+                        <span class="wuxTooltiptext">{{Trait1Desc}}</span>
+                    </div>
+                    {{/Trait1}}
+                    {{#Trait2}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{Trait2}}</span>
+                        <span class="wuxTooltiptext">{{Trait2Desc}}</span>
+                    </div>
+                    {{/Trait2}}
+                    {{#Trait3}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{Trait3}}</span>
+                        <span class="wuxTooltiptext">{{Trait3Desc}}</span>
+                    </div>
+                    {{/Trait3}}
+                    {{#Trait4}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{Trait4}}</span>
+                        <span class="wuxTooltiptext">{{Trait4Desc}}</span>
+                    </div>
+                    {{/Trait4}}
+                    {{#Trait5}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{Trait5}}</span>
+                        <span class="wuxTooltiptext">{{Trait5Desc}}</span>
+                    </div>
+                    {{/Trait5}}
+                </div>
+                {{/Trait0}}
+                {{#WpnTrait0}}
+                <div class="wuxFeatureHeaderInfo">
+                    {{#WpnTrait0}}
+                    <span><strong>Weapon Traits: </strong></span>
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait0}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait0Desc}}</span>
+                    </div>
+                    {{/WpnTrait0}}
+                    {{#WpnTrait1}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait1}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait1Desc}}</span>
+                    </div>
+                    {{/WpnTrait1}}
+                    {{#WpnTrait2}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait2}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait2Desc}}</span>
+                    </div>
+                    {{/WpnTrait2}}
+                    {{#WpnTrait3}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait3}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait3Desc}}</span>
+                    </div>
+                    {{/WpnTrait3}}
+                    {{#WpnTrait4}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait4}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait4Desc}}</span>
+                    </div>
+                    {{/WpnTrait4}}
+                    {{#WpnTrait5}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnTrait5}}</span>
+                        <span class="wuxTooltiptext">{{WpnTrait5Desc}}</span>
+                    </div>
+                    {{/WpnTrait5}}
+                </div>
+                {{/WpnTrait0}}
+                {{#WpnAbility0}}
+                <div class="wuxFeatureHeaderInfo">
+                    <span><strong>Abilities: </strong></span>
+                    
+                    {{#WpnAbility0}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility0}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility0Desc}}</span>
+                    </div>
+                    {{/WpnAbility0}}
+                    {{#WpnAbility1}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility1}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility1Desc}}</span>
+                    </div>
+                    {{/WpnAbility1}}
+                    {{#WpnAbility2}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility2}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility2Desc}}</span>
+                    </div>
+                    {{/WpnAbility2}}
+                    {{#WpnAbility3}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility3}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility3Desc}}</span>
+                    </div>
+                    {{/WpnAbility3}}
+                    {{#WpnAbility4}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility4}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility4Desc}}</span>
+                    </div>
+                    {{/WpnAbility4}}
+                    {{#WpnAbility5}}
+                    <div class="wuxTrait">
+                        <span class="wuxTraitText">{{WpnAbility5}}</span>
+                        <span class="wuxTooltiptext">{{WpnAbility5Desc}}</span>
+                    </div>
+                    {{/WpnAbility5}}
+                </div>
+                {{/WpnAbility0}}
+			</div>
+		</div>
+		
+		{{#type-AttackBlock}}
+		<div class="wuxFeatureAttackBlock">
+			{{#skillRoll}}
+			<div class="wuxFeatureAttackBlockRow">
+                <div class="wuxFeatureRollData">
+                    <span class="wuxFeatureRollValue">{{skillRoll}}</span>
+                    <span class="wuxFeatureRollDetails">{{skillDetails}}</span>
+                </div>
+                <span>vs. </span>
+                <div class="wuxFeatureRollData">
+                    <span class="wuxFeatureRollValue">{{defSkillRoll}}</span>
+                    <span class="wuxFeatureRollDetails">{{defSkillDetails}}</span>
+                </div>
+			</div>
+			{{/skillRoll}}
+			{{#DamageString}}
+			<div class="wuxFeatureAttackBlockRow">
+				<strong>Damage: </strong>
+				<span>{{DamageString}}</span>
+			</div>
+			{{/DamageString}}
+			{{#armor}}
+			<div class="wuxFeatureAttackBlockRow">
+				<strong>Defense Armor: </strong>
+				<span>{{armor}}</span>
+			</div>
+			{{/armor}}
+		</div>
+		{{/type-AttackBlock}}
+		
+		{{#type-DescBlock}}
+		<div class="wuxHiddenBlockField wuxFeatureDescriptionBlock">
+			<div>
+				{{#Desc}}
+				<div>
+					<span class="wuxFeatureDescriptionBlockDesc">{{Desc}}</span>
+				</div>
+				{{/Desc}}
+				{{#OnHit}}
+				<div>
+					<strong class="wuxFeatureDescriptionBlockDesc">On Hit: </strong>
+					<span class="wuxFeatureDescriptionBlockDesc">{{OnHit}}</span>
+				</div>
+				{{/OnHit}}
+			</div>
+		</div>
+		{{/type-DescBlock}}
+
+
+	</rolltemplate>
+
     <rolltemplate class="sheet-rolltemplate-action">
         <div>&nbsp;</div>
         <div class="formattedTextbox">
@@ -16253,9 +16437,9 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 
 	// set the attack block
 	update[GetSectionIdName(repeatingSection, id, "technique-attackBlock")] =
-		(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "") ? "1" : "0";
+		(technique.skill != "" || technique.defense != "" || technique.rType != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "") ? "1" : "0";
 
-	update[GetSectionIdName(repeatingSection, id, "technique-attackBlockTarget")] = (technique.range != "" || technique.target != "") ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-attackBlockTarget")] = (technique.rType != "" || technique.target != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-range")] = technique.range;
 	update[GetSectionIdName(repeatingSection, id, "technique-rType")] = technique.rType;
 	update[GetSectionIdName(repeatingSection, id, "technique-target")] = technique.target;
@@ -16272,7 +16456,7 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 	update[GetSectionIdName(repeatingSection, id, "technique-addPower")] = technique.dBonus.indexOf("Power") >= 0 ? "on" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-damageType")] = technique.damageType;
 	update[GetSectionIdName(repeatingSection, id, "technique-element")] = technique.element;
-	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = FormatDamageString(technique);
+	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = Format.DamageString(technique);
 	update[GetSectionIdName(repeatingSection, id, "technique-onInfo")] = TechniqueHandler.GetRollTemplate(technique);
 	update[GetSectionIdName(repeatingSection, id, "technique-onUse")] = TechniqueHandler.GetConsumeUsePost(technique);
 
@@ -16403,45 +16587,6 @@ function CreateTechniqueDataFromRepeatingSection(attrArray, repeatingSection, id
 
 
 
-// ======== Damage Values
-
-function FormatDamageString(feature) {
-
-	var output = "";
-  
-	if (feature.dVal != "" && feature.dVal > 0) {
-	  output += feature.dVal + "d" + feature.dType;
-	}
-	if (feature.dBonus != "") {
-	  var elements = feature.dBonus.split(";");
-	  for (var i = 0; i < elements.length; i++) {
-		output += `+${elements[i]}`;
-	  }
-	}
-	if (feature.damageType != "") {
-	  output += ` ${feature.damageType}`;
-	}
-	if (feature.element != undefined && feature.element != "") {
-	  output += ` [${feature.element}]`;
-	}
-	
-	return output;
-  }
-
-function ReplaceDamageDice(element) {
-	// Define a regular expression and the replacement string
-	var regexH = /(\d+)h/g;
-	var replacementH = '$1d3';
-	var regexD = /(\d+)d/g;
-	var replacementD = '$1d6';
-
-	// Use String.replace() with the regular expression
-	return element.replace(regexD, replacementD).replace(regexH, replacementH);
-}
-
-
-
-
 // ======== Items
 
 function SetItemData(update, repeatingSection, id, item, autoExpand) {
@@ -16477,7 +16622,7 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 			update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = item.dVal;
 			update[GetSectionIdName(repeatingSection, id, "item-dieType")] = item.dType;
 			update[GetSectionIdName(repeatingSection, id, "item-addPower")] = item.dBonus.indexOf("Power") >= 0 ? "on" : "0";
-			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = FormatDamageString(item);
+			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = Format.DamageString(item);
 			update[GetSectionIdName(repeatingSection, id, "item-range")] = item.range;
 			update[GetSectionIdName(repeatingSection, id, "item-threat")] = item.threat;
 			update[GetSectionIdName(repeatingSection, id, "item-block")] = item.block;
@@ -16578,7 +16723,7 @@ function ConvertEquipmentDataToWeaponData(itemData) {
 	weaponData.traits = itemData.traits;
 	weaponData.abilities = itemData.abilities;
 	weaponData.skill = itemData.skill;
-	weaponData.damageString = FormatDamageString(itemData);
+	weaponData.damageString = Format.DamageString(itemData);
 	weaponData.dType = itemData.dType;
 	weaponData.dVal = itemData.dVal;
 	weaponData.dBonus = itemData.dBonus;
@@ -16595,7 +16740,7 @@ function ConvertEquipmentDataToWeaponData(itemData) {
 // ======== General Sheetworker
 
 function GoToNextPage(update, nextPage, currentPage) {
-	update[`${ToCamelCase(nextPage)}-previousPage`] = currentPage;
+	update[`${Format.ToCamelCase(nextPage)}-previousPage`] = currentPage;
 	update["characterSheetDisplayStyle"] = nextPage;
 	return update;
 }
@@ -17610,7 +17755,7 @@ var update_advancement_submit = function () {
 				advancementUpdate = CreateClassTechniqueUpdate(advancementUpdate, classData, classLevel.current, classLevelTotal);
 
 				// update UI
-				classFieldName = ToCamelCase(levelData.keys[i]);
+				classFieldName = Format.ToCamelCase(levelData.keys[i]);
 				update[`advancement-level-${classFieldName}`] = classLevelTotal;
 				update[`advancement-level-${classFieldName}_max`] = classLevelTotal;
 				update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${classLevelTotal}`;
@@ -17838,7 +17983,7 @@ function ResetAdvancement (update, attrArray) {
 
 			// update UI
 			classData = GetClassesInfo(levelData.keys[i]);
-			classFieldName = ToCamelCase(levelData.keys[i]);
+			classFieldName = Format.ToCamelCase(levelData.keys[i]);
 			update[`advancement-level-${classFieldName}_max`] = classLevel.current;
 			update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${classLevel.current}`
 		}
@@ -17893,7 +18038,7 @@ var update_advancement_restart = function () {
 
 				// update UI
 				classData = GetClassesInfo(levelData.keys[i]);
-				classFieldName = ToCamelCase(levelData.keys[i]);
+				classFieldName = Format.ToCamelCase(levelData.keys[i]);
 				update[`advancement-level-${classFieldName}`] = "0";
 				update[`advancement-level-${classFieldName}_max`] = "0";
 				update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.0`
@@ -19012,8 +19157,8 @@ function UpdateCharacterTechniqueSelect() {
 	let repeatingQuick = "repeating_quicklearnedtechniques";
 	let repeatingFull = "repeating_fulllearnedtechniques";
 	let repeatingReaction = "repeating_reactionlearnedtechniques";
+	let repeatingSwift = "repeating_swiftlearnedtechniques";
 	let repeatingFree = "repeating_freelearnedtechniques";
-	let repeatingNone = "repeating_nonelearnedtechniques";
 
 	let mod_attrs = ["techslot-job_max", "techslot-active_max", "techslot-passive_max", "techslot-support_max"];
 	getSectionIDs(repeatingLearned, function (learnedArray) {
@@ -19027,10 +19172,10 @@ function UpdateCharacterTechniqueSelect() {
 				mod_attrs = mod_attrs.concat(GetSectionIdValues(quickArray, repeatingQuick, ["technique-name"]));
 				getSectionIDs(repeatingReaction, function (reactionArray) {
 					mod_attrs = mod_attrs.concat(GetSectionIdValues(reactionArray, repeatingReaction, ["technique-name"]));
-					getSectionIDs(repeatingFree, function (freeArray) {
-						mod_attrs = mod_attrs.concat(GetSectionIdValues(freeArray, repeatingFree, ["technique-name"]));
-						getSectionIDs(repeatingNone, function (noneArray) {
-							mod_attrs = mod_attrs.concat(GetSectionIdValues(noneArray, repeatingNone, ["technique-name"]));
+					getSectionIDs(repeatingSwift, function (swiftArray) {
+						mod_attrs = mod_attrs.concat(GetSectionIdValues(swiftArray, repeatingSwift, ["technique-name"]));
+						getSectionIDs(repeatingFree, function (freeArray) {
+							mod_attrs = mod_attrs.concat(GetSectionIdValues(freeArray, repeatingFree, ["technique-name"]));
 
 							getAttrs(mod_attrs, function (v) {
 								let selectedBaseActions = [];
@@ -19039,8 +19184,8 @@ function UpdateCharacterTechniqueSelect() {
 									full: CreateLearnedTechniquesDataObj(v, repeatingFull, fullArray),
 									quick: CreateLearnedTechniquesDataObj(v, repeatingQuick, quickArray),
 									reaction: CreateLearnedTechniquesDataObj(v, repeatingReaction, reactionArray),
-									free: CreateLearnedTechniquesDataObj(v, repeatingFree, freeArray),
-									none: CreateLearnedTechniquesDataObj(v, repeatingNone, noneArray)
+									swift: CreateLearnedTechniquesDataObj(v, repeatingSwift, swiftArray),
+									free: CreateLearnedTechniquesDataObj(v, repeatingFree, freeArray)
 								}
 								let slots = {
 									job: AttrParseInt(v, "techslot-job_max"),
@@ -19081,15 +19226,15 @@ function UpdateCharacterTechniqueSelect() {
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
 												break;
-											case "Free":
-												actions.free.addBaseTech(
+											case "Swift":
+												actions.swift.addBaseTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
 												break;
-											case "None":
-												actions.none.addBaseTech(
+											case "Free":
+												actions.free.addBaseTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
@@ -19137,16 +19282,16 @@ function UpdateCharacterTechniqueSelect() {
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
 												break;
-											case "Free":
-												actions.free.addAugmentTech(
+											case "Swift":
+												actions.swift.addAugmentTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-augmentBase")),
 													learnedArray[i],
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-isDatabase"))
 												);
 												break;
-											case "None":
-												actions.none.addAugmentTech(
+											case "Free":
+												actions.free.addAugmentTech(
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-name")),
 													AttrParseString(v, GetSectionIdName(repeatingLearned, learnedArray[i], "technique-augmentBase")),
 													learnedArray[i],
@@ -19157,7 +19302,7 @@ function UpdateCharacterTechniqueSelect() {
 									}
 								}
 
-								SetCharacterTechniqueSelect(v, actions, slots, customTechniquesList, fullArray, quickArray, reactionArray, freeArray, noneArray);
+								SetCharacterTechniqueSelect(v, actions, slots, customTechniquesList, fullArray, quickArray, reactionArray, swiftArray, freeArray);
 							});
 						});
 					});
@@ -19270,13 +19415,13 @@ function CreateLearnedTechniquesDataObj(attrArray, repeatingSection, idArray) {
 	return output;
 }
 
-function SetCharacterTechniqueSelect(attrArray, actions, slots, customTechniquesList, fullArray, quickArray, reactionArray, freeArray, noneArray) {
+function SetCharacterTechniqueSelect(attrArray, actions, slots, customTechniquesList, fullArray, quickArray, reactionArray, swiftArray, freeArray) {
 
 	let repeatingQuick = "repeating_quicklearnedtechniques";
 	let repeatingFull = "repeating_fulllearnedtechniques";
 	let repeatingReaction = "repeating_reactionlearnedtechniques";
+	let repeatingSwift = "repeating_swiftlearnedtechniques";
 	let repeatingFree = "repeating_freelearnedtechniques";
-	let repeatingNone = "repeating_nonelearnedtechniques";
 
 	let update = {};
 	update["techslot-job"] = slots.job;
@@ -19290,10 +19435,10 @@ function SetCharacterTechniqueSelect(attrArray, actions, slots, customTechniques
 	RemoveCharacterActionsLearnedTechniques(actions.full, quickArray, repeatingQuick);
 	update = SetCharacterActionsNewLearnedTechniques(update, attrArray, actions.reaction, repeatingReaction, customTechniquesList);
 	RemoveCharacterActionsLearnedTechniques(actions.full, reactionArray, repeatingReaction);
+	update = SetCharacterActionsNewLearnedTechniques(update, attrArray, actions.swift, repeatingSwift, customTechniquesList);
+	RemoveCharacterActionsLearnedTechniques(actions.full, swiftArray, repeatingSwift);
 	update = SetCharacterActionsNewLearnedTechniques(update, attrArray, actions.free, repeatingFree, customTechniquesList);
 	RemoveCharacterActionsLearnedTechniques(actions.full, freeArray, repeatingFree);
-	update = SetCharacterActionsNewLearnedTechniques(update, attrArray, actions.none, repeatingNone, customTechniquesList);
-	RemoveCharacterActionsLearnedTechniques(actions.full, noneArray, repeatingNone);
 
 	setAttrs(update, { silent: true });
 }
@@ -20206,7 +20351,7 @@ function SetCharacterSkills(update, skillData, coreData) {
 	for (let i = 0; i < skillData.length; i++) {
 		skill = skillData[i];
 		total = parseInt(coreData[skill.abilityScore]) + skill.bonus + (skill.isTrained ? coreData["pb"] : 0);
-		update[`skill_${ToCamelCase(skill.name)}`] = total;
+		update[`skill_${Format.ToCamelCase(skill.name)}`] = total;
 	}
 
 	return update;
@@ -20352,13 +20497,7 @@ var TechniqueHandler = TechniqueHandler || (function () {
             }
             if (technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "") {
                 output += "{{type-FunctionBlock=1}} ";
-        
-                if (technique.traits != "") {
-                    var traitsDb = GetTraitsDictionary(technique.traits, "technique");
-                    for (var i = 0; i < traitsDb.length; i++) {
-                        output += `{{Trait${i}=${traitsDb[i].name}}} {{Trait${i}Desc=${traitsDb[i].description}}} `;
-                    }
-                }
+                output += Format.RollTemplateTraits(technique.traits, "technique", "Trait");
                 if (technique.trigger != "") {
                     output += `{{Trigger=${technique.trigger}}} `;
                 }
@@ -20399,7 +20538,7 @@ var TechniqueHandler = TechniqueHandler || (function () {
                     output += `{{SkillString=${skill}}} `;
                 }
                 if ((technique.dVal != "" && technique.dVal > 0) || technique.damageType != "") {
-                    output += `{{DamageString=${FormatDamageString(technique)}}} `;
+                    output += `{{DamageString=${Format.DamageString(technique)}}} `;
                 }
             }
             if (technique.description != "" || technique.onSuccess != "") {
@@ -20448,15 +20587,8 @@ var ItemHandler = ItemHandler || (function() {
             let output = "";
             output += `{{WpnName=${itemData.name}}} `;
 
-            var traitsDb = GetTraitsDictionary(itemData.traits, "item");
-            for (var i = 0; i < traitsDb.length; i++) {
-                output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
-            }
-
-            traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
-            for (var i = 0; i < traitsDb.length; i++) {
-                output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
-            }
+            output += Format.RollTemplateTraits(itemData.traits, "item", "WpnTrait");
+            output += Format.RollTemplateTraits(itemData.abilities, "ability", "WpnAbility");
 
             if (itemData.range != "") {
                 output += `{{WpnRange=${itemData.range}}} `;
@@ -20480,6 +20612,25 @@ var Format = Format || (function() {
     'use strict';
 
     var 
+
+
+        toCamelCase = function(inputString) {
+
+            if (inputString == "") {
+                return inputString;
+            }
+
+            // Split the input string by spaces and iterate through the words
+            let words = inputString.split(' ');
+            words[0] = words[0][0].toLowerCase() + words[0].slice(1);
+            for (let i = 1; i < words.length; i++) {
+                // Capitalize the first letter of each word (except the first word)
+                words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+            }
+
+            return words.join('');
+        },
+
         // Array Formatting
         // ------------------------
 
@@ -20508,13 +20659,55 @@ var Format = Format || (function() {
 
         showTooltip = function(message, tooltip) {
             return `[${message}](#" class="showtip" title="${SanitizeSheetRoll(tooltip)})`;
+        },
+
+        // Damage Formatting
+        // ------------------------
+
+        damageString = function(feature) {
+
+            var output = "";
+          
+            if (feature.dVal != "" && feature.dVal > 0) {
+              output += feature.dVal + "d" + feature.dType;
+            }
+            if (feature.dBonus != "") {
+              var elements = feature.dBonus.split(";");
+              for (var i = 0; i < elements.length; i++) {
+                output += `+${elements[i]}`;
+              }
+            }
+            if (feature.damageType != "") {
+              output += ` ${feature.damageType}`;
+            }
+            if (feature.element != undefined && feature.element != "") {
+              output += ` [${feature.element}]`;
+            }
+            
+            return output;
+        },
+
+        // Rolltemplate Formatting
+        // ------------------------
+        rollTemplateTraits = function(traits, traitType, rtPrefix) {
+            let output = "";
+            if (traits != "") {
+                var traitsDb = GetTraitsDictionary(traits, traitType);
+                for (var i = 0; i < traitsDb.length; i++) {
+                    output += `{{${rtPrefix}${i}=${traitsDb[i].name}}} {{${rtPrefix}${i}Desc=${traitsDb[i].description}}} `;
+                }
+            }
+            return output;
         }
 
     ;
     return {
+        ToCamelCase: toCamelCase,
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,
-        ShowTooltip: showTooltip
+        ShowTooltip: showTooltip,
+        DamageString: damageString,
+        RollTemplateTraits: rollTemplateTraits
     };
 }());
 
@@ -20669,23 +20862,6 @@ function CreateDictionary() {
             return this.keys.includes(key);
         }
     }
-}
-
-function ToCamelCase(inputString) {
-
-    if (inputString == "") {
-        return inputString;
-    }
-
-    // Split the input string by spaces and iterate through the words
-    let words = inputString.split(' ');
-    words[0] = words[0][0].toLowerCase() + words[0].slice(1);
-    for (let i = 1; i < words.length; i++) {
-        // Capitalize the first letter of each word (except the first word)
-        words[i] = words[i][0].toUpperCase() + words[i].slice(1);
-    }
-
-    return words.join('');
 }
 
 // ====== Language
@@ -22055,11 +22231,11 @@ function GetTechniquesInfo(name) {
 		case "ki strike":
 			return { "name": "Ki Strike", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Quick", "traits": "", "limits": "", "resourceCost": "", "description": "You wrap your body with ki and strike. ", "onSuccess": "", "trigger": "", "requirement": "Must be channeling ki", "prerequisite": "", "skill": "Brawling", "defense": "BR DC", "range": "1", "rType": "Threat", "target": "One Target", "targetCode": "Single", "onHit": "", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Force", "element": "", "specBonus": "", "augments": [] }
 		case "crushing blade":
-			return { "name": "Crushing Blade", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Full", "traits": "Armament [F]", "limits": "", "resourceCost": "", "description": "You attempt to power through any defense the foe has. Make a melee attack.", "onSuccess": "", "trigger": "", "requirement": "Must be attacking with a Might weapon", "prerequisite": "Trained in Might", "skill": "Weapon", "defense": "Reflex DC", "range": "", "rType": "", "target": "One Target", "targetCode": "Single", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Staggering Blade"] }
+			return { "name": "Crushing Blade", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Full", "traits": "Armament [F]", "limits": "", "resourceCost": "", "description": "You attempt to power through any defense the foe has. Make a melee attack.", "onSuccess": "", "trigger": "", "requirement": "Must be attacking with a Might weapon", "prerequisite": "Trained in Might", "skill": "Weapon", "defense": "Reflex DC", "range": "Weapon", "rType": "Threat", "target": "One Target", "targetCode": "Single", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Staggering Blade"] }
 		case "staggering blade":
 			return { "name": "Staggering Blade", "augmentBase": "Crushing Blade", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Full", "traits": "", "limits": "", "resourceCost": "2 Mana", "description": "", "onSuccess": "The target gains the Staggered condition.", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "rType": "", "target": "", "targetCode": "", "onHit": "Condition:Staggered", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "piledriver":
-			return { "name": "Piledriver", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Full", "traits": "Armament [F]; Brutal", "limits": "", "resourceCost": "2 Mana", "description": "You swing with incredible force at your target, attempting to launch them into the air. Make a melee attack. ", "onSuccess": "The target gains the Launched status.", "trigger": "", "requirement": "Must be attacking with a Might weapon", "prerequisite": "Trained in Might", "skill": "Weapon", "defense": "BR DC", "range": "", "rType": "", "target": "One Target", "targetCode": "Single", "onHit": "Status:Launched", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Shredding Driver"] }
+			return { "name": "Piledriver", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Full", "traits": "Armament [F]; Brutal", "limits": "", "resourceCost": "2 Mana", "description": "You swing with incredible force at your target, attempting to launch them into the air. Make a melee attack. ", "onSuccess": "The target gains the Launched status.", "trigger": "", "requirement": "Must be attacking with a Might weapon", "prerequisite": "Trained in Might", "skill": "Weapon", "defense": "BR DC", "range": "Weapon", "rType": "Threat", "target": "One Target", "targetCode": "Single", "onHit": "Status:Launched", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Shredding Driver"] }
 		case "shredding driver":
 			return { "name": "Shredding Driver", "augmentBase": "Piledriver", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Full", "traits": "AP (4); Armament [F]; Brutal", "limits": "", "resourceCost": "3 Mana", "description": "", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "rType": "", "target": "", "targetCode": "", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "point blank shot":
@@ -22071,11 +22247,11 @@ function GetTechniquesInfo(name) {
 		case "quick draw":
 			return { "name": "Quick Draw", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Passive", "action": "Swift", "traits": "", "limits": "", "resourceCost": "", "description": "You may ignore the 1 / Turn limit of the Equip action when equipping a weapon that does not have the Two-handed trait.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "rType": "", "target": "", "targetCode": "", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "rapid volley":
-			return { "name": "Rapid Volley", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Full", "traits": "Armament; Brutal", "limits": "", "resourceCost": "", "description": "You strike fast to catch an evasive target. Make a melee attack.", "onSuccess": "", "trigger": "", "requirement": "Must be attacking with a Polearm weapon", "prerequisite": "Trained in Polearm", "skill": "Weapon", "defense": "Brace DC", "range": "", "rType": "", "target": "One target", "targetCode": "Single", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Rushing Volley"] }
+			return { "name": "Rapid Volley", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Full", "traits": "Armament; Brutal", "limits": "", "resourceCost": "", "description": "You strike fast to catch an evasive target. Make a melee attack.", "onSuccess": "", "trigger": "", "requirement": "Must be attacking with a Polearm weapon", "prerequisite": "Trained in Polearm", "skill": "Weapon", "defense": "Brace DC", "range": "Weapon", "rType": "Threat", "target": "One target", "targetCode": "Single", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Rushing Volley"] }
 		case "rushing volley":
 			return { "name": "Rushing Volley", "augmentBase": "Rapid Volley", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Full", "traits": "Armament [F]; Brutal", "limits": "", "resourceCost": "2 Mana", "description": "", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "rType": "", "target": "", "targetCode": "", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "uppercut":
-			return { "name": "Uppercut", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Quick", "traits": "Armament", "limits": "", "resourceCost": "2 Mana", "description": "You deal a blow to the target that knocks them off their feet. Make a melee attack. ", "onSuccess": "The target gains the Launched status.", "trigger": "", "requirement": "Must be attacking with a Brawling weapon", "prerequisite": "Trained in Brawling", "skill": "Weapon", "defense": "BR DC", "range": "", "rType": "", "target": "One target", "targetCode": "Single", "onHit": "Status:Launched", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Follow Up Launcher"] }
+			return { "name": "Uppercut", "augmentBase": "", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Quick", "traits": "Armament", "limits": "", "resourceCost": "2 Mana", "description": "You deal a blow to the target that knocks them off their feet. Make a melee attack. ", "onSuccess": "The target gains the Launched status.", "trigger": "", "requirement": "Must be attacking with a Brawling weapon", "prerequisite": "Trained in Brawling", "skill": "Weapon", "defense": "BR DC", "range": "Weapon", "rType": "Threat", "target": "One target", "targetCode": "Single", "onHit": "Status:Launched", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Follow Up Launcher"] }
 		case "follow up launcher":
 			return { "name": "Follow Up Launcher", "augmentBase": "Uppercut", "techniqueGroup": "Martial Skill", "techniqueSubGroup": "", "techniqueType": "Active", "action": "Quick", "traits": "", "limits": "", "resourceCost": "", "description": "", "onSuccess": "Before the end of your turn, if you attack the same character with a Brawling melee attack, they do not lose the Launched status.", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "rType": "", "target": "", "targetCode": "", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "learn spell":
@@ -22135,7 +22311,7 @@ function GetTechniquesInfo(name) {
 		case "blocking expert":
 			return { "name": "Blocking Expert", "augmentBase": "Always Armored", "techniqueGroup": "Class", "techniqueSubGroup": "Fighter", "techniqueType": "Passive", "action": "Free", "traits": "", "limits": "", "resourceCost": "", "description": "You have +5 Block.", "onSuccess": "", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "rType": "", "target": "", "targetCode": "", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "preemptive strike":
-			return { "name": "Preemptive Strike", "augmentBase": "", "techniqueGroup": "Class", "techniqueSubGroup": "Interceptor", "techniqueType": "Job", "action": "Reaction", "traits": "Armament", "limits": "1/Round", "resourceCost": "", "description": "You perform a melee attack against the triggering character.", "onSuccess": "The target stops moving immediately and loses any unused movement.", "trigger": "The target moves within your threat.", "requirement": "", "prerequisite": "", "skill": "Weapon", "defense": "BR DC", "range": "", "rType": "", "target": "One target", "targetCode": "Single", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Preemptive Stagger", "Critical Maim"] }
+			return { "name": "Preemptive Strike", "augmentBase": "", "techniqueGroup": "Class", "techniqueSubGroup": "Interceptor", "techniqueType": "Job", "action": "Reaction", "traits": "Armament", "limits": "1/Round", "resourceCost": "", "description": "You perform a melee attack against the triggering character.", "onSuccess": "The target stops moving immediately and loses any unused movement.", "trigger": "The target moves within your threat.", "requirement": "", "prerequisite": "", "skill": "Weapon", "defense": "BR DC", "range": "", "rType": "Threat", "target": "One target", "targetCode": "Single", "onHit": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": ["Preemptive Stagger", "Critical Maim"] }
 		case "preemptive stagger":
 			return { "name": "Preemptive Stagger", "augmentBase": "Preemptive Strike", "techniqueGroup": "Class", "techniqueSubGroup": "Interceptor", "techniqueType": "Job", "action": "Reaction", "traits": "", "limits": "", "resourceCost": "1 Mana", "description": "", "onSuccess": "The target gains the Staggered condition.", "trigger": "", "requirement": "", "prerequisite": "", "skill": "", "defense": "", "range": "", "rType": "", "target": "", "targetCode": "", "onHit": "Condition:Staggered", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "critical maim":
@@ -22167,7 +22343,7 @@ function GetTechniquesInfo(name) {
 		case "spellstrike":
 			return { "name": "Spellstrike", "augmentBase": "", "techniqueGroup": "Class", "techniqueSubGroup": "Spellblade", "techniqueType": "Job", "action": "Swift", "traits": "Affinity; AP (All)", "limits": "1/Round", "resourceCost": "1 Mana", "description": "You infuse your weapon with your elemental affinity. ", "onSuccess": "", "trigger": "", "requirement": "You hit an adjacent creature with a melee attack.", "prerequisite": "", "skill": "", "defense": "", "range": "", "rType": "", "target": "", "targetCode": "Mod", "onHit": "", "dVal": "3", "dType": "3", "dBonus": "", "damageType": "Energy", "element": "", "specBonus": "", "augments": [] }
 		case "power skirmish":
-			return { "name": "Power Skirmish", "augmentBase": "", "techniqueGroup": "Class", "techniqueSubGroup": "Warrior", "techniqueType": "Job", "action": "Full", "traits": "Armament [F]; Brutal", "limits": "", "resourceCost": "", "description": "Make a melee attack and add 2d3 to the damage.", "onSuccess": "", "trigger": "", "requirement": "The weapon must be Two-Handed.", "prerequisite": "", "skill": "", "defense": "BR DC", "range": "", "rType": "", "target": "One Target", "targetCode": "Single", "onHit": "", "dVal": "2", "dType": "3", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
+			return { "name": "Power Skirmish", "augmentBase": "", "techniqueGroup": "Class", "techniqueSubGroup": "Warrior", "techniqueType": "Job", "action": "Full", "traits": "Armament [F]; Brutal", "limits": "", "resourceCost": "", "description": "Make a melee attack and add 2d3 to the damage.", "onSuccess": "", "trigger": "", "requirement": "The weapon must be Two-Handed.", "prerequisite": "", "skill": "", "defense": "BR DC", "range": "", "rType": "Threat", "target": "One Target", "targetCode": "Single", "onHit": "", "dVal": "2", "dType": "3", "dBonus": "", "damageType": "", "element": "", "specBonus": "", "augments": [] }
 		case "sneak attack":
 			return { "name": "Sneak Attack", "augmentBase": "", "techniqueGroup": "Class", "techniqueSubGroup": "Rogue", "techniqueType": "Job", "action": "Swift", "traits": "AP (All)", "limits": "1/Turn", "resourceCost": "", "description": "You know how to strike subtly and exploit a foe’s distraction.", "onSuccess": "", "trigger": "", "requirement": "You hit an adjacent creature with a piercing weapon and an ally is engaged with the target or you were hidden before you attacked.", "prerequisite": "", "skill": "", "defense": "", "range": "", "rType": "", "target": "", "targetCode": "Mod", "onHit": "", "dVal": "2", "dType": "3", "dBonus": "", "damageType": "Piercing", "element": "", "specBonus": "", "augments": ["Sneaky Follow-Up", "Assassinate"] }
 		case "sneaky follow-up":

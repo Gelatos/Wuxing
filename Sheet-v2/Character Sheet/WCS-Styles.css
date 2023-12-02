@@ -1329,6 +1329,7 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 
 .wuxFeature,
 .sheet-rolltemplate-technique,
+.sheet-rolltemplate-usetechnique,
 .wuxFeatureTable
 {
     position: relative;
@@ -1340,13 +1341,15 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 
     flex: 1;
 }
-.sheet-rolltemplate-technique
+.sheet-rolltemplate-technique,
+.sheet-rolltemplate-usetechnique
 {
     line-height: 12px;
 }
 
 .wuxFeature,
-.sheet-rolltemplate-technique
+.sheet-rolltemplate-technique,
+.sheet-rolltemplate-usetechnique
 {
     font-size: 12px;
 
@@ -1354,7 +1357,8 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     background: #cacbcf;
 }
 
-.sheet-rolltemplate-technique
+.sheet-rolltemplate-technique,
+.sheet-rolltemplate-usetechnique
 {
     min-width: 200px; 
 }
@@ -1367,6 +1371,7 @@ input[type=hidden].wuxFeature-flag[value="on"] + .wuxFeature
 
 .wuxFeatureHeader,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeader,
 .wuxFeatureTableHeader
 {
     position: relative;
@@ -1376,7 +1381,8 @@ input[type=hidden].wuxFeature-flag[value="on"] + .wuxFeature
 }
 
 .wuxFeatureHeader,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeader
 {
     background: #c0e7d5;
     border-bottom: 1px solid #efefef; 
@@ -1431,6 +1437,12 @@ input.wuxFeatureHeader-flag[value="Equipment"] + .wuxFeatureHeader,
     background-color: #ad8ac2;
     border-top: 1px solid #000;
     border-bottom: 1px solid #000;
+}
+
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeader
+{
+    background: #1d1e1f;
+    color: #FFF;
 }
 
 .wuxFeatureType,
@@ -1597,7 +1609,8 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 }
 
 .wuxFeatureHeaderDisplayBlock,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayBlock
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayBlock,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderDisplayBlock
 {
     position: relative;
     display:inline-block; 
@@ -1605,7 +1618,8 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 }
 
 .wuxFeatureHeaderName,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderName
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderName,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderName
 {
     position: relative;
     display: block; 
@@ -1618,7 +1632,8 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 }
 
 .wuxFeatureHeaderInfo,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfo
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfo,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfo
 {
     position: relative;
     display: block; 
@@ -1627,14 +1642,16 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 }
 
 .wuxFeatureHeaderInfoType,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoType
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoType,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoType
 {
     position: relative;
     font-weight: bold;
 }
 
 .wuxFeatureExpandingContent,
-.sheet-rolltemplate-technique .sheet-wuxFeatureExpandingContent
+.sheet-rolltemplate-technique .sheet-wuxFeatureExpandingContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureExpandingContent
 {
     position: relative;
     display: none;
@@ -1710,7 +1727,8 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 }
 
 .wuxFeatureAttackBlock,
-.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock
+.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureAttackBlock
 {
     position: relative;
     width: calc(100% - 30px);
@@ -1728,14 +1746,21 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 .wuxFeatureAttackBlock .wuxFeatureAttackBlockRow .wuxFeatureAttackBlockTarget,
 .sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow,
 .sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockRange,
-.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockTarget
+.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockTarget,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow
 {
     position: relative;
     display: inline-block;
 }
 
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow
+{
+    line-height: normal;
+}
+
 .wuxFeatureAttackBlock .wuxFeatureAttackBlockRow,
-.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow
+.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow
 {
     width: calc(100% - 22px);
 }
@@ -1751,6 +1776,55 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 {
     width: calc(65% - 5px);
 }
+
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureRollData
+{
+    display: none;
+    padding: 0px 3px;
+}
+
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureRollData
+{
+    display: inline-block;
+}
+
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureRollValue
+{
+    display: inline-block;
+    font-size: 11px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    padding: 1px 3px;
+
+    color: #000;
+    font-weight: bold;
+
+    background: #959ca0;
+}
+
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureRollData .sheet-wuxFeatureRollDetails
+{
+    position: absolute;
+    top: 18px;
+    left: 0px;
+    width: 240px;
+    padding: 5px;
+    z-index: 1000;
+
+    color: #3e3e3e;
+    font-size: 11px;
+    text-align: center;
+
+    visibility: hidden;
+    background: #fff;
+    border-radius: 6px;
+   border: 2px solid black;
+  }
+  
+  .sheet-rolltemplate-usetechnique .sheet-wuxFeatureRollData:hover .sheet-wuxFeatureRollDetails
+  {
+    visibility: visible;
+  }
 
 .wuxFeatureDescriptionBlock,
 .sheet-rolltemplate-technique .sheet-wuxFeatureDescriptionBlock,
@@ -1782,7 +1856,8 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 ========================================*/
 
 .wuxTrait,
-.sheet-rolltemplate-technique .sheet-wuxTrait
+.sheet-rolltemplate-technique .sheet-wuxTrait,
+.sheet-rolltemplate-usetechnique .sheet-wuxTrait
 {
     display: none;
     padding: 0px 3px;
@@ -1790,13 +1865,15 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 
 input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .wuxShownTraits .wuxTrait,
-.sheet-rolltemplate-technique .sheet-wuxTrait
+.sheet-rolltemplate-technique .sheet-wuxTrait,
+.sheet-rolltemplate-usetechnique .sheet-wuxTrait
 {
     display: inline-block;
 }
 
 .wuxTraitText,
-.sheet-rolltemplate-technique .sheet-wuxTraitText
+.sheet-rolltemplate-technique .sheet-wuxTraitText,
+.sheet-rolltemplate-usetechnique .sheet-wuxTraitText
 {
     font-size: 11px;
     color: #0000FF;
@@ -1806,8 +1883,14 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     text-decoration: underline dotted;
 }
 
+.sheet-rolltemplate-usetechnique .sheet-wuxTraitText
+{
+    color: #5db8f8;
+}
+
 .wuxTrait .wuxTooltiptext,
-.sheet-rolltemplate-technique .sheet-wuxTrait .sheet-wuxTooltiptext
+.sheet-rolltemplate-technique .sheet-wuxTrait .sheet-wuxTooltiptext,
+.sheet-rolltemplate-usetechnique .sheet-wuxTrait .sheet-wuxTooltiptext
 {
     position: absolute;
     top: 18px;
@@ -1827,7 +1910,8 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
   }
   
   .wuxTrait:hover .wuxTooltiptext,
-  .sheet-rolltemplate-technique .sheet-wuxTrait:hover .sheet-wuxTooltiptext
+  .sheet-rolltemplate-technique .sheet-wuxTrait:hover .sheet-wuxTooltiptext,
+  .sheet-rolltemplate-usetechnique .sheet-wuxTrait:hover .sheet-wuxTooltiptext
   {
     visibility: visible;
   }

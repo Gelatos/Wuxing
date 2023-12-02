@@ -438,7 +438,7 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 	update[GetSectionIdName(repeatingSection, id, "technique-addPower")] = technique.dBonus.indexOf("Power") >= 0 ? "on" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-damageType")] = technique.damageType;
 	update[GetSectionIdName(repeatingSection, id, "technique-element")] = technique.element;
-	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = FormatDamageString(technique);
+	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = Format.DamageString(technique);
 	update[GetSectionIdName(repeatingSection, id, "technique-onInfo")] = TechniqueHandler.GetRollTemplate(technique);
 	update[GetSectionIdName(repeatingSection, id, "technique-onUse")] = TechniqueHandler.GetConsumeUsePost(technique);
 
@@ -569,45 +569,6 @@ function CreateTechniqueDataFromRepeatingSection(attrArray, repeatingSection, id
 
 
 
-// ======== Damage Values
-
-function FormatDamageString(feature) {
-
-	var output = "";
-  
-	if (feature.dVal != "" && feature.dVal > 0) {
-	  output += feature.dVal + "d" + feature.dType;
-	}
-	if (feature.dBonus != "") {
-	  var elements = feature.dBonus.split(";");
-	  for (var i = 0; i < elements.length; i++) {
-		output += `+${elements[i]}`;
-	  }
-	}
-	if (feature.damageType != "") {
-	  output += ` ${feature.damageType}`;
-	}
-	if (feature.element != undefined && feature.element != "") {
-	  output += ` [${feature.element}]`;
-	}
-	
-	return output;
-  }
-
-function ReplaceDamageDice(element) {
-	// Define a regular expression and the replacement string
-	var regexH = /(\d+)h/g;
-	var replacementH = '$1d3';
-	var regexD = /(\d+)d/g;
-	var replacementD = '$1d6';
-
-	// Use String.replace() with the regular expression
-	return element.replace(regexD, replacementD).replace(regexH, replacementH);
-}
-
-
-
-
 // ======== Items
 
 function SetItemData(update, repeatingSection, id, item, autoExpand) {
@@ -643,7 +604,7 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 			update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = item.dVal;
 			update[GetSectionIdName(repeatingSection, id, "item-dieType")] = item.dType;
 			update[GetSectionIdName(repeatingSection, id, "item-addPower")] = item.dBonus.indexOf("Power") >= 0 ? "on" : "0";
-			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = FormatDamageString(item);
+			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = Format.DamageString(item);
 			update[GetSectionIdName(repeatingSection, id, "item-range")] = item.range;
 			update[GetSectionIdName(repeatingSection, id, "item-threat")] = item.threat;
 			update[GetSectionIdName(repeatingSection, id, "item-block")] = item.block;
@@ -744,7 +705,7 @@ function ConvertEquipmentDataToWeaponData(itemData) {
 	weaponData.traits = itemData.traits;
 	weaponData.abilities = itemData.abilities;
 	weaponData.skill = itemData.skill;
-	weaponData.damageString = FormatDamageString(itemData);
+	weaponData.damageString = Format.DamageString(itemData);
 	weaponData.dType = itemData.dType;
 	weaponData.dVal = itemData.dVal;
 	weaponData.dBonus = itemData.dBonus;

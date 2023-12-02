@@ -446,17 +446,24 @@ function SanitizeSheetRoll(roll) {
 
 function SanitizeSheetRollAction(roll) {
     var sheetRoll = roll;
-    sheetRoll = sheetRoll.replace(/"/g, "&#34;");
+    sheetRoll = sheetRoll.replace(/\"/g, "&#34;");
     sheetRoll = sheetRoll.replace(/%/g, "&#37;");
     sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
     sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
     sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-    sheetRoll = sheetRoll.replace(/:/g, "");
+    sheetRoll = sheetRoll.replace(/:/g, "COLON");
     sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
     sheetRoll = sheetRoll.replace(/@/g, "&#64;");
     sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
     sheetRoll = sheetRoll.replace(/]/g, "&#93;");
     sheetRoll = sheetRoll.replace(/\n/g, "&&");
+    return sheetRoll;
+}
+
+function DesanitizeSheetRollAction(roll) {
+    var sheetRoll = roll;
+    sheetRoll = sheetRoll.replace(/COLON/g, ":");
+    sheetRoll = sheetRoll.replace(/&&/g, "\n");
     return sheetRoll;
 }
 

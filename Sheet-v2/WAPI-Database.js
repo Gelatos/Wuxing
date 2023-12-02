@@ -45,13 +45,7 @@ var TechniqueHandler = TechniqueHandler || (function () {
             }
             if (technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "") {
                 output += "{{type-FunctionBlock=1}} ";
-        
-                if (technique.traits != "") {
-                    var traitsDb = GetTraitsDictionary(technique.traits, "technique");
-                    for (var i = 0; i < traitsDb.length; i++) {
-                        output += `{{Trait${i}=${traitsDb[i].name}}} {{Trait${i}Desc=${traitsDb[i].description}}} `;
-                    }
-                }
+                output += Format.RollTemplateTraits(technique.traits, "technique", "Trait");
                 if (technique.trigger != "") {
                     output += `{{Trigger=${technique.trigger}}} `;
                 }
@@ -92,7 +86,7 @@ var TechniqueHandler = TechniqueHandler || (function () {
                     output += `{{SkillString=${skill}}} `;
                 }
                 if ((technique.dVal != "" && technique.dVal > 0) || technique.damageType != "") {
-                    output += `{{DamageString=${FormatDamageString(technique)}}} `;
+                    output += `{{DamageString=${Format.DamageString(technique)}}} `;
                 }
             }
             if (technique.description != "" || technique.onSuccess != "") {
@@ -141,15 +135,8 @@ var ItemHandler = ItemHandler || (function() {
             let output = "";
             output += `{{WpnName=${itemData.name}}} `;
 
-            var traitsDb = GetTraitsDictionary(itemData.traits, "item");
-            for (var i = 0; i < traitsDb.length; i++) {
-                output += `{{WpnTrait${i}=${traitsDb[i].name}}} {{WpnTrait${i}Desc=${traitsDb[i].description}}} `;
-            }
-
-            traitsDb = GetTraitsDictionary(itemData.abilities, "ability");
-            for (var i = 0; i < traitsDb.length; i++) {
-                output += `{{WpnAbil${i}=${traitsDb[i].name}}} {{WpnAbil${i}Desc=${traitsDb[i].description}}} `;
-            }
+            output += Format.RollTemplateTraits(itemData.traits, "item", "WpnTrait");
+            output += Format.RollTemplateTraits(itemData.abilities, "ability", "WpnAbility");
 
             if (itemData.range != "") {
                 output += `{{WpnRange=${itemData.range}}} `;
@@ -220,6 +207,45 @@ var Format = Format || (function() {
 
         showTooltip = function(message, tooltip) {
             return `[${message}](#" class="showtip" title="${SanitizeSheetRoll(tooltip)})`;
+        },
+
+        // Damage Formatting
+        // ------------------------
+
+        damageString = function(feature) {
+
+            var output = "";
+          
+            if (feature.dVal != "" && feature.dVal > 0) {
+              output += feature.dVal + "d" + feature.dType;
+            }
+            if (feature.dBonus != "") {
+              var elements = feature.dBonus.split(";");
+              for (var i = 0; i < elements.length; i++) {
+                output += `+${elements[i]}`;
+              }
+            }
+            if (feature.damageType != "") {
+              output += ` ${feature.damageType}`;
+            }
+            if (feature.element != undefined && feature.element != "") {
+              output += ` [${feature.element}]`;
+            }
+            
+            return output;
+        },
+
+        // Rolltemplate Formatting
+        // ------------------------
+        rollTemplateTraits = function(traits, traitType, rtPrefix) {
+            let output = "";
+            if (traits != "") {
+                var traitsDb = GetTraitsDictionary(traits, traitType);
+                for (var i = 0; i < traitsDb.length; i++) {
+                    output += `{{${rtPrefix}${i}=${traitsDb[i].name}}} {{${rtPrefix}${i}Desc=${traitsDb[i].description}}} `;
+                }
+            }
+            return output;
         }
 
     ;
@@ -227,7 +253,9 @@ var Format = Format || (function() {
         ToCamelCase: toCamelCase,
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,
-        ShowTooltip: showTooltip
+        ShowTooltip: showTooltip,
+        DamageString: damageString,
+        RollTemplateTraits: rollTemplateTraits
     };
 }());
 

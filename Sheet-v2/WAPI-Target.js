@@ -302,7 +302,9 @@ var WuxingToken = WuxingToken || (function () {
         },
 
         resetTempHp = function (targetData, token) {
-            let token = getTargetToken(targetData);
+            if (token == undefined) {
+                token = getTargetToken(targetData);
+            }
             token.set("bar2_value", getAttrByName(targetData.charId, "tempHpTotal"));
         },
 
