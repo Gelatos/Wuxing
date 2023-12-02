@@ -463,9 +463,23 @@ function SanitizeSheetRollAction(roll) {
 function DesanitizeSheetRollAction(roll) {
     var sheetRoll = roll;
     sheetRoll = sheetRoll.replace(/COLON/g, ":");
+    return sheetRoll;
+}
+
+function DesanitizeSheetRollActionNewLine(roll) {
+    var sheetRoll = roll;
     sheetRoll = sheetRoll.replace(/&&/g, "\n");
     return sheetRoll;
 }
+
+function ParseSheetRollTechniqueJSON(stringifiedJSON) {
+    stringifiedJSON = DesanitizeSheetRollAction(stringifiedJSON);
+    let technique = JSON.parse(stringifiedJSON);
+    technique.description = DesanitizeSheetRollActionNewLine(technique.description);
+    return technique;
+}
+
+
 
 
 

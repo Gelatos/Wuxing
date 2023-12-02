@@ -463,9 +463,23 @@ function SanitizeSheetRollAction(roll) {
 function DesanitizeSheetRollAction(roll) {
     var sheetRoll = roll;
     sheetRoll = sheetRoll.replace(/COLON/g, ":");
+    return sheetRoll;
+}
+
+function DesanitizeSheetRollActionNewLine(roll) {
+    var sheetRoll = roll;
     sheetRoll = sheetRoll.replace(/&&/g, "\n");
     return sheetRoll;
 }
+
+function ParseSheetRollTechniqueJSON(stringifiedJSON) {
+    stringifiedJSON = DesanitizeSheetRollAction(stringifiedJSON);
+    let technique = JSON.parse(stringifiedJSON);
+    technique.description = DesanitizeSheetRollActionNewLine(technique.description);
+    return technique;
+}
+
+
 
 
 
@@ -852,15 +866,16 @@ var WuxingCombat = WuxingCombat || (function () {
         
         commandConsumeTechnique = function (msg, content) {
             let components = content.split("##");
-            let technique = JSON.parse(components[0]);
-            let weaponData = components.length > 1 ? JSON.parse(components[1]) : undefined;
+            log (DesanitizeSheetRollAction(components[0]));
+            let technique = ParseSheetRollTechniqueJSON(components[0]);
+            let weaponData = components.length > 1 ? JSON.parse(DesanitizeSheetRollAction(components[1])) : undefined;
             let targetData = getUserTargetDataFromTechnique(technique);
             TechniqueConsume.ConsumeTechnique(msg, targetData, technique, weaponData);
         },
 
         commandUseTechnique = function (msg, content) {
             let components = content.split("##");
-            let technique = JSON.parse(DesanitizeSheetRollAction(components[0]));
+            let technique = ParseSheetRollTechniqueJSON(components[0]);
             let weaponData = components.length > 1 ? JSON.parse(DesanitizeSheetRollAction(components[1])) : undefined;
             let userTargetData = getUserTargetDataFromTechnique(technique);
             let defenderTargetData = getDefenderTargetDataFromTechnique(technique);
@@ -1171,7 +1186,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
 
         getTechniqueUserSkillRoll = function(technique, userTargetData, weaponData) {
             
-            let skillData = getBasicTechniqueSkillRollTypeData(technique.skill, weaponData);
+            let skillData = getBasicTechniqueSkillRollTypeData(technique.skill, technique, weaponData);
             skillData = getTechniqueSkillAttr(skillData, userTargetData);
             return getTechniqueSkillRoll(skillData);
         },
@@ -1181,7 +1196,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
             if (technique.defense == "") {
                 return getBasicCheckSkillData();
             }
-            let skillData = getBasicTechniqueSkillRollTypeData(technique.defense, weaponData);
+            let skillData = getBasicTechniqueSkillRollTypeData(technique.defense, technique, weaponData);
             skillData = getTechniqueDefenderAttr(skillData, technique, defenderTargetData, weaponData);
             return getTechniqueSkillRoll(skillData);
         },
@@ -1226,13 +1241,9 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
         },
 
         getTechniqueDefenderAttrTraitMods = function(skillData, technique, targetData, weaponData) {
-            log ("in here");
             if (skillData.skillFull == "BR DC") {
-                log ("this is a BR DC");
                 if (technique.traits.indexOf("Armament [F]") >= 0) {
-                log ("this is a full armament");
                     if (weaponData.abilities.indexOf("Quick") >= 0) {
-                        log ("we have a quick");
                         skillData.skillFull += "[Brace]";
                         skillData.attrSkill = "skill_brace";
                         skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, skillData.attrSkill));
@@ -1281,11 +1292,11 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
             return skillData;
         },
 
-        getBasicTechniqueSkillRollTypeData = function(skill, weaponData) {
+        getBasicTechniqueSkillRollTypeData = function(skill, technique, weaponData) {
             let skillData = getSkillRollData();
 
             if (skill == "Weapon") {
-                skillData = setSkillRollDataFromWeapon(skillData, weaponData);
+                skillData = setSkillRollDataFromWeapon(skillData, technique, weaponData);
             }
             else {
                 skillData = parseSkillRollDataFromTechnique(skillData, skill);
@@ -1293,9 +1304,15 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
             return skillData;
         },
 
-        setSkillRollDataFromWeapon = function(skillData, weaponData) {
-            skillData.skillFull = weaponData.skill;
-            skillData.attrSkill = Format.ToCamelCase(weaponData.skill);
+        setSkillRollDataFromWeapon = function(skillData, technique, weaponData) {
+            if (technique.rType == "Range" && weaponData.traits.indexOf("Thrown") >= 0) {
+                skillData.skillFull = "Throw";
+                skillData.attrSkill = "throw";
+            }
+            else {
+                skillData.skillFull = weaponData.skill;
+                skillData.attrSkill = Format.ToCamelCase(weaponData.skill);
+            }
             return skillData;
         },
 
