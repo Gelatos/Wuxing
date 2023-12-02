@@ -187,7 +187,7 @@ var update_advancement_submit = function () {
 				advancementUpdate = CreateClassTechniqueUpdate(advancementUpdate, classData, classLevel.current, classLevelTotal);
 
 				// update UI
-				classFieldName = ToCamelCase(levelData.keys[i]);
+				classFieldName = Format.ToCamelCase(levelData.keys[i]);
 				update[`advancement-level-${classFieldName}`] = classLevelTotal;
 				update[`advancement-level-${classFieldName}_max`] = classLevelTotal;
 				update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${classLevelTotal}`;
@@ -415,7 +415,7 @@ function ResetAdvancement (update, attrArray) {
 
 			// update UI
 			classData = GetClassesInfo(levelData.keys[i]);
-			classFieldName = ToCamelCase(levelData.keys[i]);
+			classFieldName = Format.ToCamelCase(levelData.keys[i]);
 			update[`advancement-level-${classFieldName}_max`] = classLevel.current;
 			update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${classLevel.current}`
 		}
@@ -470,7 +470,7 @@ var update_advancement_restart = function () {
 
 				// update UI
 				classData = GetClassesInfo(levelData.keys[i]);
-				classFieldName = ToCamelCase(levelData.keys[i]);
+				classFieldName = Format.ToCamelCase(levelData.keys[i]);
 				update[`advancement-level-${classFieldName}`] = "0";
 				update[`advancement-level-${classFieldName}_max`] = "0";
 				update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.0`

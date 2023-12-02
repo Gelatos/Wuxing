@@ -25,9 +25,6 @@ var WuxingCombat = WuxingCombat || (function () {
                 case "!utech":
                     commandUseTechnique(msg, content);
                     break;
-                case "!dmg":
-                    commandDealDamage(msg, content);
-                    break;
                 case "!adv":
                     commandRollAdvantage(msg, content);
                     break;
@@ -49,41 +46,46 @@ var WuxingCombat = WuxingCombat || (function () {
         commandConsumeTechnique = function (msg, content) {
             let components = content.split("##");
             let technique = JSON.parse(components[0]);
+            let weaponData = components.length > 1 ? JSON.parse(components[1]) : undefined;
             let targetData = getUserTargetDataFromTechnique(technique);
-
-            // consume resources
-            if (consumeTechniqueResources(targetData, technique)) {
-                displayTechnique(msg, technique, components.length > 1 ? JSON.parse(components[1]) : undefined);
-            }
-            else {
-                WuxingMessages.SendSystemMessage(`${targetData.displayName} does not have the resources to use ${technique.name}`);
-            }
+            TechniqueConsume.ConsumeTechnique(msg, targetData, technique, weaponData);
         },
 
         commandUseTechnique = function (msg, content) {
             let components = content.split("##");
             let technique = JSON.parse(components[0]);
-            let weaponData = JSON.parse(components[1]);
-
-            useTechnique(msg, technique, weaponData);
+            let weaponData = components.length > 1 ? JSON.parse(components[1]) : undefined;
+            let userTargetData = getUserTargetDataFromTechnique(technique);
+            let defenderTargetData = getDefenderTargetDataFromTechnique(technique);
+            TechniqueUseResults.UseTechnique(msg, technique, weaponData, userTargetData, defenderTargetData);
         },
-
-        commandDealDamage = function (msg, content) {
-            let tokenData;
-            WuxingToken.IterateOverSelectedTokens(msg, function (token) {
-                tokenData = WuxingTarget.FindActiveTargetDataByTokenId(token.get("_id"));
-                WuxingToken.AddDamage(tokenData, parseInt(content));
-            });
-        }, 
 
         commandRollAdvantage = function (msg, content) {
             rollAdvantage(msg, ParseIntValue(content));
         },
 
         commandStartBattle = function () {
+            startCombat();
+        },
+
+        commandStartRound = function () {
+            startRound();
+        },
+
+        commandEndTurn = function (msg) {
+            endTurn(msg);
+        },
+
+        commandEndCombat = function () {
+            endCombat();
+        },
+
+        // Combat State
+        // ---------------------------
+
+        startCombat = function(initiativeData) {
 
             let initiativeData = [];
-
             WuxingTarget.IterateOverActiveTargetData(function (targetData) {
                 initiativeData.push(createInitiativeData(targetData));
                 WuxingToken.SetTokenForBattle(targetData);
@@ -91,86 +93,94 @@ var WuxingCombat = WuxingCombat || (function () {
 
             // sort the initiative data
             initiativeData = Format.SortArrayDecrementing(initiativeData);
+            setCombatStartingPhase(initiativeData);
 
             // create the table data
             let tableData = [];
-            let targetData;
-            let obj;
-            let firstPlayer = "";
+            let data;
 
             for (let i = 0; i < initiativeData.length; i++) {
-                obj = initiativeData[i].split("@");
-                targetData = WuxingTarget.FindActiveTargetDataByCharName(obj[1]);
-                tableData.push([targetData.displayName, obj[0]]);
-
-                if (i == 0) {
-                    state.WuxingCombat.startSideIsAlly = targetData.isAlly;
-                }
-
-                if (firstPlayer == "" && targetData.owner != "") {
-                    firstPlayer = targetData.owner;
-                }
+                data = parseInitiativeData(initiativeData[i]);
+                tableData.push([data.targetData.displayName, data.obj[0]]);
+                setCombatStartLastActivePlayer(data);
             }
-            state.WuxingCombat.lastActivePlayer = firstPlayer;
             WuxingMessages.SendTableMessage(["Name", "Initiative"], tableData, ["GM"], undefined, true);
-            commandStartRound();
+            startRound();
         },
 
-        commandStartRound = function () {
+        setCombatStartingPhase = function(initiativeData) {
+            let obj = initiativeData[0].split("@");
+            let targetData = WuxingTarget.FindActiveTargetDataByCharName(obj[1]);
+            state.WuxingCombat.startSideIsAlly = targetData.isAlly;
+        },
 
+        setCombatStartLastActivePlayer = function(initiativeData) {
+            if (state.WuxingCombat.lastActivePlayer == "" && initiativeData.targetData.owner != "") {
+                state.WuxingCombat.lastActivePlayer = initiativeData.targetData.owner;
+            }
+        },
+
+        startRound = function() {
+            state.WuxingCombat.round++;
+            setStartRoundTokens();
+            sendStartRoundMessage();
+        },
+
+        setStartRoundTokens = function() {
             WuxingTarget.IterateOverActiveTargetData(function (tokenData) {
                 WuxingToken.ResetTempHp(tokenData);
                 WuxingToken.AddKi(tokenData, 10, true);
                 WuxingToken.SetTurnIcon(tokenData, true);
             });
+        },
 
-            state.WuxingCombat.round++;
+        sendStartRoundMessage = function() {
             let message = `Round ${state.WuxingCombat.round} Begins!\n`;
-            if (state.WuxingCombat.startSideIsAlly) {
-                message += `Ally Phase Start!\n${state.WuxingCombat.lastActivePlayer == "" ? "GM" : state.WuxingCombat.lastActivePlayer}, select the next character to have a turn`;
-            }
-            else {
-                message += "Enemy Phase Start!";
-            }
+            message += getPhaseStartMessage(state.WuxingCombat.startSideIsAlly);
             WuxingMessages.SendSystemMessage(message, ["GM"]);
         },
 
-        commandEndTurn = function (msg) {
-            let message;
+        endTurn = function(msg) {
+            let targetData;
             WuxingToken.IterateOverSelectedTokens(msg, function (token) {
-                WuxingToken.SetTurnIcon(tokenData, false);
-
-                message = `${tokenData.displayName} Ends Turn\n${token.isAlly ? "Enemy" : "Ally"} Phase Start`;
-                if (isAlly) {
-                    if (tokenData.owner != "") {
-                        state.WuxingCombat.lastActivePlayer = tokenData.owner;
-                    }
-                }
-                else if (state.WuxingCombat.lastActivePlayer != "") {
-                    message += `\n${state.WuxingCombat.lastActivePlayer}, select the next character to have a turn`;
-                }
-
-                WuxingMessages.SendSystemMessage(message);
+                targetData = WuxingTarget.findActiveTargetDataByTokenId(token.get("_id"));
+                WuxingToken.SetTurnIcon(targetData, false);
+                sendEndTurnMessage(targetData);
             });
         },
 
-        commandEndCombat = function () {
+        sendEndTurnMessage = function(targetData) {
+            let message = `${targetData.displayName} Ends Turn\n`;
+            message += getPhaseStartMessage(!targetData.isAlly);
+            WuxingMessages.SendSystemMessage(message);
+        },
+
+        getPhaseStartMessage = function(enteringAllyPhase) {
+
+            if (enteringAllyPhase) {
+                return `Ally Phase Start!\n${state.WuxingCombat.lastActivePlayer == "" ? "GM" : state.WuxingCombat.lastActivePlayer}, select the next character to have a turn`;
+            }
+            else {
+                return "Enemy Phase Start!";
+            }
+        },
+
+        endCombat = function() {
             WuxingTarget.IterateOverActiveTargetData(function(targetData) {
                 WuxingToken.SetTokenForNarative(targetData);
             });
+            resetCombatStateVariables();
+            WuxingMessages.SendSystemMessage("Combat Has Finished", ["GM"]);
+        },
+
+        resetCombatStateVariables = function() {
             WuxingTarget.ClearActiveTargetData();
             state.WuxingCombat.lastActivePlayer = "";
             state.WuxingCombat.round = 0;
-
-            WuxingMessages.SendSystemMessage("Combat Has Finished", ["GM"]);
         },
 
         // Initiative Handling
         // ---------------------------
-
-        rollInitiative = function() {
-
-        },
 
         createInitiativeData = function(targetData) {
             let value = parseInt(getAttrByName(targetData.charId, "initiative"));
@@ -178,8 +188,58 @@ var WuxingCombat = WuxingCombat || (function () {
             return `${roll < 10 ? "0" : ""}${roll}.${value < 10 ? "0" : ""}${value < 0 ? "0" : value}@${targetData.name}`;
         },
 
+        parseInitiativeData = function(initiativeData) {
+            obj = initiativeData.split("@");
+            return {
+                targetData: WuxingTarget.FindActiveTargetDataByCharName(obj[1]),
+                value: obj[0]
+            }
+        },
+
         // Technique Handling
         // ---------------------------
+        
+        getUserTargetDataFromTechnique = function (technique) {
+            return WuxingTarget.FindActiveTargetDataByCharName(technique.username);
+        },
+        
+        getDefenderTargetDataFromTechnique = function (technique) {
+            return WuxingTarget.FindActiveTargetDataByTokenId(technique.target);
+        },
+
+        // Math
+        // ---------------------------
+
+        rollAdvantage = function(msg, count) {
+
+            let highRolls = Dice.GetHighRolls(count, 6, 1);
+            let total = Dice.TotalDice(highRolls.keeps);
+            let message = `${Format.ShowTooltip(total, Format.ArrayToString(highRolls.rolls))} advantage roll`;
+            WuxingMessages.SendSystemMessage(message, "",  msg.who);
+        }
+    ;
+
+    return {
+        CheckInstall: checkInstall,
+        HandleInput: handleInput
+    };
+
+}());
+
+var TechniqueConsume = TechniqueConsume || (function () {
+    'use strict';
+
+    var
+        consumeTechnique = function(msg, targetData, technique, weaponData) {
+
+            // consume resources
+            if (consumeTechniqueResources(targetData, technique)) {
+                displayTechnique(msg, technique, weaponData);
+            }
+            else {
+                WuxingMessages.SendSystemMessage(`${targetData.displayName} does not have the resources to use ${technique.name}`);
+            }
+        },
         
         consumeTechniqueResources = function (targetData, technique) {
             
@@ -265,40 +325,201 @@ var WuxingCombat = WuxingCombat || (function () {
             output += `{{targetData=!utech ${useTech}}}`;
             WuxingMessages.SendMessage(output, "", msg.who);
             
-        },
-        
-        getUserTargetDataFromTechnique = function (technique) {
-            return WuxingTarget.FindActiveTargetDataByCharName(technique.username);
-        },
-        
-        getDefenderTargetDataFromTechnique = function (technique) {
-            return WuxingTarget.FindActiveTargetDataByTokenId(technique.target);
-        },
-
-        // Technique Handling
-        // ---------------------------
-
-        useTechnique = function(msg, technique, weaponData) {
-
-            let userTargetData = getUserTargetDataFromTechnique(technique);
-            let defenderTargetData = getDefenderTargetDataFromTechnique(technique);
-        },
-
-        // Math
-        // ---------------------------
-
-        rollAdvantage = function(msg, count) {
-
-            let highRolls = Dice.GetHighRolls(count, 6, 1);
-            let total = Dice.TotalDice(highRolls.keeps);
-            let message = `${Format.ShowTooltip(total, Format.ArrayToString(highRolls.rolls))} advantage roll`;
-            WuxingMessages.SendSystemMessage(message, "",  msg.who);
         }
     ;
-
     return {
-        CheckInstall: checkInstall,
-        HandleInput: handleInput
+        ConsumeTechnique: consumeTechnique
+    };
+
+}());
+
+var TechniqueUseResults = TechniqueUseResults || (function () {
+    'use strict';
+
+    var
+        useTechnique = function(msg, technique, weaponData, userTargetData, defenderTargetData) {
+
+            let skillCheck = makeTechniqueSkillCheck(technique, weaponData, userTargetData, defenderTargetData);
+            let skillCheckMessage = createTechniqueSkillCheckOutput(skillCheck, technique, weaponData, userTargetData, defenderTargetData);
+            let resultsMessage = createTechniqueResultsOutput(skillCheck, technique, weaponData, userTargetData, defenderTargetData);
+
+            WuxingMessages.SendMessage(skillCheckMessage, "", msg.who);
+            WuxingMessages.SendMessage(resultsMessage, ["GM"], msg.who);
+        },
+
+        makeTechniqueSkillCheck = function(technique, weaponData, userTargetData, defenderTargetData) {
+
+            let output = {
+                compareResults: {},
+                userSkill: getTechniqueUserSkillRoll(technique, userTargetData, weaponData),
+                defenderSkill: getTechniqueDefenderSkillRoll(technique, defenderTargetData, weaponData)
+            }
+
+            output.compareResults = compareTechniqueSkillChecks(userSkill, defenderSkill);
+            return output;
+        },
+
+        getTechniqueUserSkillRoll = function(technique, userTargetData, weaponData) {
+            
+            let skillData = getBasicTechniqueSkillRollTypeData(technique.skill, weaponData);
+            skillData = getTechniqueSkillAttr(skillData, userTargetData);
+            return getTechniqueSkillRoll(skillData);
+        },
+
+        getTechniqueDefenderSkillRoll = function(technique, defenderTargetData, weaponData) {
+            
+            if (technique.defenderSkill == "") {
+                return getBasicCheckSkillData();
+            }
+            let skillData = getBasicTechniqueSkillRollTypeData(technique.defense, weaponData);
+            skillData = getTechniqueDefenderAttr(skillData, technique, defenderTargetData, weaponData);
+            return getTechniqueSkillRoll(skillData);
+        },
+
+        getTechniqueSkillAttr = function(skillData, targetData) {
+            skillData.attrSkill = `skill_${skillData.attrSkill}`;
+            skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, skillData.attrSkill));
+            return skillData;
+        },
+
+        getBasicCheckSkillData = function() {
+            return {
+                isDC: true,
+                skillFull: "Basic",
+                roll: 15,
+                skillValue: 0,
+                total: 15
+            };
+        }
+
+        getTechniqueDefenderAttr = function(skillData, technique, targetData, weaponData) {
+            // determine if any traits change the defender's defense
+            skillData.skillValue = -10;
+            skillData = getTechniqueDefenderAttrTraitMods(skillData, technique, targetData, weaponData);
+            if (skillData.skillValue == -10) {
+                skillData = getTechniqueDefenderAttrCombinedDefenseMods(skillData, targetData);
+            }
+            if (skillData.skillValue == -10) {
+                skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, skillData.attrSkill));
+            }
+            return skillData;
+        },
+
+        getTechniqueDefenderAttrTraitMods = function(skillData, technique, targetData, weaponData) {
+            if (technique.traits.indexOf("Armament [F]") >= 0) {
+                if (skillData.skillFull == "BR DC") {
+                    if (weaponData.abilities.indexOf("Quick")) {
+                        skillData.skillFull += "[Brace]";
+                        skillData.attrSkill = "skill_brace";
+                        skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, skillData.attrSkill));
+                    }
+                    else if (weaponData.abilities.indexOf("Crushing")) {
+                        skillData.skillFull += "[Reflex]";
+                        skillData.attrSkill = "skill_reflex";
+                        skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, skillData.attrSkill));
+                    }
+                }
+            }
+            return skillData;
+        },
+
+        getTechniqueDefenderAttrCombinedDefenseMods = function(skillData, targetData) {
+
+            switch(skillData.skillFull) {
+                case "BR DC":
+                    skillData = getBetterCombinedDefense(skillData, targetData, "skill_brace", "Brace", "skill_reflex", "Reflex");
+                    break;
+                case "PR DC":
+                    skillData = getBetterCombinedDefense(skillData, targetData, "skill_presence", "Presence", "skill_reflex", "Reflex");
+                    break;
+                case "BP DC":
+                    skillData = getBetterCombinedDefense(skillData, targetData, "skill_brace", "Brace", "skill_presence", "Presence");
+                    break;
+            }
+            return skillData;
+        },
+
+        getBetterCombinedDefense = function(skillData, targetData, attr1, name1, attr2, name2) {
+
+            let mod1 = ParseIntValue(getAttrByName(targetData.charId, attr1));
+            let mod2 = ParseIntValue(getAttrByName(targetData.charId, attr2));
+            skillData.skillFull += mod1 >= mod2 ? `[${name1}]` : `[${name2}]`;
+            skillData.attrSkill = mod1 >= mod2 ? attr1 : attr2;
+            skillData.skillValue = mod1 >= mod2 ? mod1 : mod2;
+            return skillData;
+        },
+
+        getTechniqueSkillRoll = function(skillData) {
+            
+            skillData.roll = skillData.isDC ? 10 : randomInteger(20);
+            skillData.total = skillData.roll + skillData.skillValue;
+
+            return skillData;
+        },
+
+        getBasicTechniqueSkillRollTypeData = function(skill, weaponData) {
+            let output = {
+                isDC: false,
+                skillFull: skill,
+                attrSkill: ""
+            }
+            if (skill == "Weapon") {
+                output.skillFull = weaponData.skill;
+                output.attrSkill = Format.ToCamelCase(weaponData.skill);
+            }
+            else {
+                let splitIndex = skill.lastIndexOf(" ");
+                if (splitIndex > 0) {
+                    output.isDC = output.skillFull.substring(splitIndex).trim() == "DC" ? true : false;
+                    if (output.isDC) {
+                        output.attrSkill = Format.ToCamelCase(skill.substring(0, splitIndex));
+                    }
+                }
+                if (output.attrSkill == "") {
+                    output.attrSkill = Format.ToCamelCase(skill);
+                }
+            }
+            return output;
+        },
+
+        compareTechniqueSkillChecks = function(userSkill, defenderSkill) {
+            if (userSkill.total >= defenderSkill.total + 10) {
+                return "Critical Hit";
+            }
+            else if (userSkill.total >= defenderSkill.total) {
+                return "Hit";
+            }
+            else if (userSkill.total >= defenderSkill.total - 5) {
+                return "Glancing Hit";
+            }
+            
+            return "Miss";
+        },
+
+        createTechniqueSkillCheckOutput = function(skillCheck, technique, weaponData, userTargetData, defenderTargetData) {
+            let message = "";
+
+            return message;
+        },
+
+        createTechniqueResultsOutput = function(skillCheck, technique, weaponData, userTargetData, defenderTargetData) {
+            let message = "";
+
+            return message;
+        },
+
+        createResultData = function() {
+            return {
+                userName: "",
+                defenderName: "",
+                name: "",
+                userSkillCheck,
+                defenderSkillCheck
+            }
+        }
+    ;
+    return {
+        UseTechnique: useTechnique
     };
 
 }());

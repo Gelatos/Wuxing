@@ -1366,7 +1366,7 @@ function SetCharacterSkills(update, skillData, coreData) {
 	for (let i = 0; i < skillData.length; i++) {
 		skill = skillData[i];
 		total = parseInt(coreData[skill.abilityScore]) + skill.bonus + (skill.isTrained ? coreData["pb"] : 0);
-		update[`skill_${ToCamelCase(skill.name)}`] = total;
+		update[`skill_${Format.ToCamelCase(skill.name)}`] = total;
 	}
 
 	return update;

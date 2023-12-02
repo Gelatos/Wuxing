@@ -43,7 +43,7 @@ var WuxingTarget = WuxingTarget || (function () {
                     message += `${tokenData.displayName}`;
                 }
             });
-            message = `${message} added as ${isAlly ? "allies" : "enemies"}`;
+            message = `${message} added as ${isAlly ? "ally" : "enemy"} unit(s)`;
             WuxingMessages.SendSystemMessage(message, ["GM"]);
 
         },
@@ -78,8 +78,8 @@ var WuxingTarget = WuxingTarget || (function () {
         addToActiveCharacters = function (targetData) {
             if (targetData != undefined) {
                 if (state.WuxingTarget.activeCharacters.tokenIds.includes(targetData.tokenId)) {
-                    let index = tate.WuxingTarget.activeCharacters.tokenIds.indexOf(targetData.tokenId);
-                    state.WuxingTarget.activeCharacters.targetData = targetData;
+                    let index = state.WuxingTarget.activeCharacters.tokenIds.indexOf(targetData.tokenId);
+                    state.WuxingTarget.activeCharacters.targetData[index] = targetData;
                 }
                 else {
                     state.WuxingTarget.activeCharacters.charNames.push(targetData.name);
@@ -129,6 +129,16 @@ var WuxingTarget = WuxingTarget || (function () {
             return undefined;
         },
 
+        getTargetDataByToken = function (token) {
+            let index = state.WuxingTarget.activeCharacters.tokenIds.indexOf(token.get("_id"));
+            if (index >= 0) {
+                return state.WuxingTarget.activeCharacters.targetData[index];
+            }
+            else {
+                return createTargetData(token, false);
+            }
+        },
+
         // Target Data Creation
         // ---------------------------
 
@@ -159,19 +169,12 @@ var WuxingTarget = WuxingTarget || (function () {
         IterateOverActiveTargetData: iterateOverActiveTargetData,
         ClearActiveTargetData: clearActiveTargetData,
         FindActiveTargetDataByCharName: findActiveTargetDataByCharName,
-        FindActiveTargetDataByTokenId: findActiveTargetDataByTokenId
+        FindActiveTargetDataByTokenId: findActiveTargetDataByTokenId,
+        GetTargetDataByToken: getTargetDataByToken
 
     };
 
 }());
-
-
-on("ready", function () {
-    'use strict';
-
-    WuxingTarget.CheckInstall();
-    WuxingToken.CheckInstall();
-});
 
 var WuxingToken = WuxingToken || (function () {
     'use strict';
@@ -188,6 +191,28 @@ var WuxingToken = WuxingToken || (function () {
             state.WuxingToken.tokens = {};
         },
 
+        // Input Commands
+        // ---------------------------
+
+        handleInput = function (msg, tag, content) {
+            switch (tag) {
+                case "!dmg":
+                    commandDealDamage(msg, content);
+                    break;
+            };
+        },
+
+        commandDealDamage = function (msg, content) {
+            let targetData;
+            iterateOverSelectedTokens(msg, function (token) {
+                targetData = WuxingTarget.GetTargetDataByToken(token);
+                addDamage(targetData, token, parseInt(content));
+            });
+        }, 
+
+        // State Token Getters
+        // ---------------------------
+
         getTargetToken = function (targetData) {
             if (state.WuxingToken.tokens[targetData.tokenId] == undefined) {
                 let token = getObj('graphic', targetData.tokenId);
@@ -195,6 +220,13 @@ var WuxingToken = WuxingToken || (function () {
             }
             return state.WuxingToken.tokens[targetData.tokenId];
         },
+
+        addToken = function(token, targetData) {
+            state.WuxingToken.tokens[targetData.tokenId] = token;
+        },
+
+        // Data Helper
+        // ---------------------------
 
         iterateOverSelectedTokens = function (msg, callback) {
             let token;
@@ -209,12 +241,13 @@ var WuxingToken = WuxingToken || (function () {
             });
         },
 
-        addToken = function(token, targetData) {
-            state.WuxingToken.tokens[targetData.tokenId] = token;
-        },
+        // Token State
+        // ---------------------------
 
-        setTokenForBattle = function (tokenData) {
-            let token = getTargetToken(tokenData);
+        setTokenForBattle = function (tokenData, token) {
+            if (token == undefined) {
+                token = getTargetToken(targetData);
+            }
 
             // set vitals
             let hp = GetCharacterAttribute(tokenData.charId, "hp");
@@ -241,20 +274,24 @@ var WuxingToken = WuxingToken || (function () {
             //token.set("tooltip", getAttrByName(tokenData.charId, "scan-summary"));
         },
 
-        setTokenForNarative = function (tokenData) {
-            let token = getTargetToken(tokenData);
+        setTokenForNarative = function (targetData, token) {
+            if (token == undefined) {
+                token = getTargetToken(targetData);
+            }
             token.set("showplayers_bar1", false);
             token.set("showplayers_bar2", false);
             token.set("showname", false);
-            token.set(getAttrByName(tokenData.charId, "token_element"), false);
+            token.set(getAttrByName(targetData.charId, "token_element"), false);
             token.set("show_tooltip", false);
             token.set("status_yellow", false);
         },
 
-        addHp = function (tokenData, value) {
-            let token = getTargetToken(tokenData);
+        addHp = function (targetData, token, value) {
+            if (token == undefined) {
+                token = getTargetToken(targetData);
+            }
 
-            let total = parseInt(getAttrByName(tokenData.charId, "hp")) + value;
+            let total = parseInt(getAttrByName(targetData.charId, "hp")) + value;
             let remainder = 0;
             if (total < 0) {
                 remainder = total;
@@ -264,13 +301,15 @@ var WuxingToken = WuxingToken || (function () {
             return remainder;
         },
 
-        resetTempHp = function (tokenData) {
-            let token = getTargetToken(tokenData);
-            token.set("bar2_value", getAttrByName(tokenData.charId, "tempHpTotal"));
+        resetTempHp = function (targetData, token) {
+            let token = getTargetToken(targetData);
+            token.set("bar2_value", getAttrByName(targetData.charId, "tempHpTotal"));
         },
 
-        addTempHp = function (tokenData, value) {
-            let token = getTargetToken(tokenData);
+        addTempHp = function (targetData, value) {
+            if (token == undefined) {
+                token = getTargetToken(targetData);
+            }
             let total = parseInt(token.get("bar2_value")) + value;
             let remainder = 0;
             if (total < 0) {
@@ -281,20 +320,22 @@ var WuxingToken = WuxingToken || (function () {
             return remainder;
         },
 
-        addDamage = function (tokenData, value, stopAtTempHp) {
-            let token = getTargetToken(tokenData);
+        addDamage = function (targetData, token, value, stopAtTempHp) {
+            if (token == undefined) {
+                token = getTargetToken(targetData);
+            }
 
             // make the damage value negative
             value *= -1;
 
             // first deal any damage to tempHp
-            value = addTempHp(tokenData, value);
+            value = addTempHp(targetData, value);
 
             // if damage remains, go to health damage
             if (!stopAtTempHp && value < 0) {
                 let currentHp = parseInt(token.get("bar2_value"));
                 let maxHp = parseInt(token.get("bar2_max"));
-                let trauma = GetCharacterAttribute(tokenData.charId, "trauma");
+                let trauma = GetCharacterAttribute(targetData.charId, "trauma");
                 let woundDamage = 0;
 
                 while (value < 0) {
@@ -315,7 +356,7 @@ var WuxingToken = WuxingToken || (function () {
                 // set damage
                 token.set("bar2_value", currentHp);
                 if (woundDamage > 0) {
-                    let wounds = GetCharacterAttribute(tokenData.charId, "wounds");
+                    let wounds = GetCharacterAttribute(targetData.charId, "wounds");
                     wounds.set("current", parseInt(wounds.get("current")) + woundDamage);
                     trauma.set("current", parseInt(trauma.get("current")) + woundDamage);
                 }
@@ -343,6 +384,7 @@ var WuxingToken = WuxingToken || (function () {
         ;
     return {
         CheckInstall: checkInstall,
+        HandleInput: handleInput,
         IterateOverSelectedTokens: iterateOverSelectedTokens,
         AddToken: addToken,
         SetTokenForBattle: setTokenForBattle,
@@ -356,6 +398,27 @@ var WuxingToken = WuxingToken || (function () {
     };
 
 }());
+
+on("ready", function () {
+    'use strict';
+
+    WuxingTarget.CheckInstall();
+    WuxingToken.CheckInstall();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ======= Base
 // =================================================

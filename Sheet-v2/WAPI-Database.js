@@ -173,6 +173,25 @@ var Format = Format || (function() {
     'use strict';
 
     var 
+
+
+        toCamelCase = function(inputString) {
+
+            if (inputString == "") {
+                return inputString;
+            }
+
+            // Split the input string by spaces and iterate through the words
+            let words = inputString.split(' ');
+            words[0] = words[0][0].toLowerCase() + words[0].slice(1);
+            for (let i = 1; i < words.length; i++) {
+                // Capitalize the first letter of each word (except the first word)
+                words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+            }
+
+            return words.join('');
+        },
+
         // Array Formatting
         // ------------------------
 
@@ -205,6 +224,7 @@ var Format = Format || (function() {
 
     ;
     return {
+        ToCamelCase: toCamelCase,
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,
         ShowTooltip: showTooltip
@@ -362,23 +382,6 @@ function CreateDictionary() {
             return this.keys.includes(key);
         }
     }
-}
-
-function ToCamelCase(inputString) {
-
-    if (inputString == "") {
-        return inputString;
-    }
-
-    // Split the input string by spaces and iterate through the words
-    let words = inputString.split(' ');
-    words[0] = words[0][0].toLowerCase() + words[0].slice(1);
-    for (let i = 1; i < words.length; i++) {
-        // Capitalize the first letter of each word (except the first word)
-        words[i] = words[i][0].toUpperCase() + words[i].slice(1);
-    }
-
-    return words.join('');
 }
 
 // ====== Language

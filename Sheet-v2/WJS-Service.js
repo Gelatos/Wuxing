@@ -419,9 +419,9 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 
 	// set the attack block
 	update[GetSectionIdName(repeatingSection, id, "technique-attackBlock")] =
-		(technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "") ? "1" : "0";
+		(technique.skill != "" || technique.defense != "" || technique.rType != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "") ? "1" : "0";
 
-	update[GetSectionIdName(repeatingSection, id, "technique-attackBlockTarget")] = (technique.range != "" || technique.target != "") ? "1" : "0";
+	update[GetSectionIdName(repeatingSection, id, "technique-attackBlockTarget")] = (technique.rType != "" || technique.target != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-range")] = technique.range;
 	update[GetSectionIdName(repeatingSection, id, "technique-rType")] = technique.rType;
 	update[GetSectionIdName(repeatingSection, id, "technique-target")] = technique.target;
@@ -761,7 +761,7 @@ function ConvertEquipmentDataToWeaponData(itemData) {
 // ======== General Sheetworker
 
 function GoToNextPage(update, nextPage, currentPage) {
-	update[`${ToCamelCase(nextPage)}-previousPage`] = currentPage;
+	update[`${Format.ToCamelCase(nextPage)}-previousPage`] = currentPage;
 	update["characterSheetDisplayStyle"] = nextPage;
 	return update;
 }
