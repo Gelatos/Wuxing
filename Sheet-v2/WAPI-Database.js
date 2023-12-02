@@ -169,6 +169,92 @@ var ItemHandler = ItemHandler || (function() {
     };
 }());
 
+var Format = Format || (function() {
+    'use strict';
+
+    var 
+        // Array Formatting
+        // ------------------------
+
+        arrayToString = function(array, delimeter) {
+            if (delimeter == undefined) {
+                delimeter = ", ";
+            }
+            let output = "";
+            _.each(array, function (obj) {
+                if (output != "") {
+                    output += delimeter;
+                }
+                output += obj;
+            });
+            return output;
+        },
+        
+        sortArrayDecrementing = function(array) {
+            array.sort();
+            array.reverse();
+            return array;
+        },
+
+        // Chat Formatting
+        // ------------------------
+
+        showTooltip = function(message, tooltip) {
+            return `[${message}](#" class="showtip" title="${SanitizeSheetRoll(tooltip)})`;
+        }
+
+    ;
+    return {
+        ArrayToString: arrayToString,
+        SortArrayDecrementing: sortArrayDecrementing,
+        ShowTooltip: showTooltip
+    };
+}());
+
+var Dice = Dice || (function() {
+    'use strict';
+
+    var 
+        rollDice = function(dieValue, dieType) {
+            let rolls = [];
+            while (dieValue > 0) {
+                dieValue--;
+                rolls.push(randomInteger(dieType));
+            }
+            return rolls;
+        },
+
+        totalDice = function(rolls) {
+            let total = 0;
+            _.each(rolls, function (obj) {
+                total += obj;
+            });
+            return total;
+        },
+
+        getHighRolls = function(dieValue, dieType, keepCount) {
+            let output = {
+                rolls: [],
+                keeps: []
+            }
+            output.rolls = rollDice(dieValue, dieType);
+            output.rolls = Format.SortArrayDecrementing(output.rolls);
+            for (let i = 0; i < keepCount; i++) {
+                if (keepCount < output.rolls.length) {
+                    output.keeps.push(output.rolls[i]);
+                }
+            }
+            return output;
+        }
+
+    ;
+    return {
+        RollDice: rollDice,
+        TotalDice: totalDice,
+        GetHighRolls: getHighRolls
+    };
+}());
+
 
 function GetTraitsDictionary (traits, traitType) {
 

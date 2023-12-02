@@ -14,27 +14,7 @@ var WuxingMessages = WuxingMessages || (function() {
     // Commands
     // ---------------------------
     handleInput = function(msg, tag, content){
-        switch (tag) {
-            case "!m":
-            case "!w":
-            case "!y":
-            case "!t":
-            case "!d":
-            case "!de":
-                commandGetEmoteMessageOptions(msg, tag, content);
-            return;
-            case "!h":
-            case "!r":
-            case "!ry":
-            case "!i":
-            case "!a":
-            case "!l":
-            case "!s":
-                commandSendFormattedMessage(msg, tag, content);
-            return;
-            case "!emotemessage":
-                commandSendEmoteMessage(msg, content);
-        }
+        
     },
     
     // Send Targets
@@ -68,12 +48,43 @@ var WuxingMessages = WuxingMessages || (function() {
     },
     
 
+    // RollTemplates
+    // ---------------------------
+    formatRollTemplateOutput = function(rollTemplateStyle, data) {
+        let output = "";
+        for (let i = 0; i < data.length; i++) {
+            output += `{{${data[i][0]}=${data[i][1]}}}`;
+        }
+        return `&{template:${rollTemplateStyle}} ${output}`;
+    }
+
+    sanitizeRollTemplate = function (message) {
+        message = message.replace(/\n/g, "<br />");
+        return message;
+    },
+
+    formatSystemMessage = function (message) {
+        message = sanitizeRollTemplate(message);
+        return `<div class="sheet-rolltemplate-systemBox"><div>&nbsp;</div><div class="sheet-formattedTextbox">${message}</div></div>`;
+    },
+
+    formatInfoRollTemplateMessage = function (message) {
+        return formatRollTemplateOutput("infoBox", [
+            ["message", message]
+        ]);
+    },
+    
+
     // Public Send Messages
     // ---------------------------
     sendSystemMessage = function (message, targets, sendUser, noarchive) {
 
-        let output = `&{template:systemBox} {{message=${message}}}`;
-        sendChatToTargets(output, targets, sendUser, noarchive);
+        sendChatToTargets(formatSystemMessage(message), targets, sendUser, noarchive);
+    },
+
+    sendInfoMessage = function (message, targets, sendUser, noarchive) {
+
+        sendChatToTargets(formatInfoRollTemplateMessage(message), targets, sendUser, noarchive);
     },
 
     sendTableMessage = function (headers, tableData, targets, sendUser, noarchive) {
@@ -93,7 +104,7 @@ var WuxingMessages = WuxingMessages || (function() {
             tableRows += `<tr>${tableRow}</tr>`;
         }
 
-        let output = `<div class="sheet-rolltemplate-systemBox"><div>&nbsp;</div><div class="sheet-formattedTextbox"><table class="sheet-wuxTable"><tr>${tableHeader}</tr>${tableRows}</table></div></div>`;
+        let output = formatSystemMessage(`<table class="sheet-wuxTable"><tr>${tableHeader}</tr>${tableRows}</table>`);
 
         sendChatToTargets(output, targets, sendUser, noarchive);
     }
@@ -104,6 +115,7 @@ var WuxingMessages = WuxingMessages || (function() {
         HandleInput: handleInput,
         SendMessage: sendChatToTargets,
         SendSystemMessage: sendSystemMessage,
+        SendInfoMessage: sendInfoMessage,
         SendTableMessage: sendTableMessage
     };
 

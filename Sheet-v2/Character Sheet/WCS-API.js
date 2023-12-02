@@ -818,8 +818,14 @@ var WuxingCombat = WuxingCombat || (function () {
                 case "!ctech":
                     commandConsumeTechnique(msg, content);
                     break;
+                case "!utech":
+                    commandUseTechnique(msg, content);
+                    break;
                 case "!dmg":
                     commandDealDamage(msg, content);
+                    break;
+                case "!adv":
+                    commandRollAdvantage(msg, content);
                     break;
                 case "!cmbstartcombat":
                     commandStartBattle();
@@ -839,15 +845,23 @@ var WuxingCombat = WuxingCombat || (function () {
         commandConsumeTechnique = function (msg, content) {
             let components = content.split("##");
             let technique = JSON.parse(components[0]);
-            let tokenData = getTokenDataFromTechnique(technique);
+            let targetData = getUserTargetDataFromTechnique(technique);
 
             // consume resources
-            if (consumeTechniqueResources(tokenData, technique)) {
-                displayTechnique(msg, tokenData, technique, components.length > 1 ? JSON.parse(components[1]) : undefined);
+            if (consumeTechniqueResources(targetData, technique)) {
+                displayTechnique(msg, technique, components.length > 1 ? JSON.parse(components[1]) : undefined);
             }
             else {
-                WuxingMessages.SendSystemMessage(`${tokenData.displayName} does not have the resources to use ${technique.name}`);
+                WuxingMessages.SendSystemMessage(`${targetData.displayName} does not have the resources to use ${technique.name}`);
             }
+        },
+
+        commandUseTechnique = function (msg, content) {
+            let components = content.split("##");
+            let technique = JSON.parse(components[0]);
+            let weaponData = JSON.parse(components[1]);
+
+            useTechnique(msg, technique, weaponData);
         },
 
         commandDealDamage = function (msg, content) {
@@ -857,6 +871,10 @@ var WuxingCombat = WuxingCombat || (function () {
                 WuxingToken.AddDamage(tokenData, parseInt(content));
             });
         }, 
+
+        commandRollAdvantage = function (msg, content) {
+            rollAdvantage(msg, ParseIntValue(content));
+        },
 
         commandStartBattle = function () {
 
@@ -868,7 +886,7 @@ var WuxingCombat = WuxingCombat || (function () {
             });
 
             // sort the initiative data
-            sortInitiativeData(initiativeData);
+            initiativeData = Format.SortArrayDecrementing(initiativeData);
 
             // create the table data
             let tableData = [];
@@ -956,11 +974,6 @@ var WuxingCombat = WuxingCombat || (function () {
             return `${roll < 10 ? "0" : ""}${roll}.${value < 10 ? "0" : ""}${value < 0 ? "0" : value}@${targetData.name}`;
         },
 
-        sortInitiativeData = function(initiativeData) {
-            initiativeData.sort();
-            initiativeData.reverse();
-        },
-
         // Technique Handling
         // ---------------------------
         
@@ -1034,9 +1047,7 @@ var WuxingCombat = WuxingCombat || (function () {
             });
         }
 
-
-        displayTechnique = function (msg, tokenData, technique, weapon) {
-            technique.username = tokenData.displayName;
+        displayTechnique = function (msg, technique, weapon) {
 
             let output = TechniqueHandler.GetRollTemplate(technique);
 
@@ -1052,8 +1063,32 @@ var WuxingCombat = WuxingCombat || (function () {
             
         },
         
-        getTokenDataFromTechnique = function (technique) {
+        getUserTargetDataFromTechnique = function (technique) {
             return WuxingTarget.FindActiveTargetDataByCharName(technique.username);
+        },
+        
+        getDefenderTargetDataFromTechnique = function (technique) {
+            return WuxingTarget.FindActiveTargetDataByTokenId(technique.target);
+        },
+
+        // Technique Handling
+        // ---------------------------
+
+        useTechnique = function(msg, technique, weaponData) {
+
+            let userTargetData = getUserTargetDataFromTechnique(technique);
+            let defenderTargetData = getDefenderTargetDataFromTechnique(technique);
+        },
+
+        // Math
+        // ---------------------------
+
+        rollAdvantage = function(msg, count) {
+
+            let highRolls = Dice.GetHighRolls(count, 6, 1);
+            let total = Dice.TotalDice(highRolls.keeps);
+            let message = `${Format.ShowTooltip(total, Format.ArrayToString(highRolls.rolls))} advantage roll`;
+            WuxingMessages.SendInfoMessage(message, "",  msg.who);
         }
     ;
 
@@ -1087,27 +1122,7 @@ var WuxingMessages = WuxingMessages || (function() {
     // Commands
     // ---------------------------
     handleInput = function(msg, tag, content){
-        switch (tag) {
-            case "!m":
-            case "!w":
-            case "!y":
-            case "!t":
-            case "!d":
-            case "!de":
-                commandGetEmoteMessageOptions(msg, tag, content);
-            return;
-            case "!h":
-            case "!r":
-            case "!ry":
-            case "!i":
-            case "!a":
-            case "!l":
-            case "!s":
-                commandSendFormattedMessage(msg, tag, content);
-            return;
-            case "!emotemessage":
-                commandSendEmoteMessage(msg, content);
-        }
+        
     },
     
     // Send Targets
@@ -1141,12 +1156,43 @@ var WuxingMessages = WuxingMessages || (function() {
     },
     
 
+    // RollTemplates
+    // ---------------------------
+    formatRollTemplateOutput = function(rollTemplateStyle, data) {
+        let output = "";
+        for (let i = 0; i < data.length; i++) {
+            output += `{{${data[i][0]}=${data[i][1]}}}`;
+        }
+        return `&{template:${rollTemplateStyle}} ${output}`;
+    }
+
+    sanitizeRollTemplate = function (message) {
+        message = message.replace(/\n/g, "<br />");
+        return message;
+    },
+
+    formatSystemMessage = function (message) {
+        message = sanitizeRollTemplate(message);
+        return `<div class="sheet-rolltemplate-systemBox"><div>&nbsp;</div><div class="sheet-formattedTextbox">${message}</div></div>`;
+    },
+
+    formatInfoRollTemplateMessage = function (message) {
+        return formatRollTemplateOutput("infoBox", [
+            ["message", message]
+        ]);
+    },
+    
+
     // Public Send Messages
     // ---------------------------
     sendSystemMessage = function (message, targets, sendUser, noarchive) {
 
-        let output = `&{template:systemBox} {{message=${message}}}`;
-        sendChatToTargets(output, targets, sendUser, noarchive);
+        sendChatToTargets(formatSystemMessage(message), targets, sendUser, noarchive);
+    },
+
+    sendInfoMessage = function (message, targets, sendUser, noarchive) {
+
+        sendChatToTargets(formatInfoRollTemplateMessage(message), targets, sendUser, noarchive);
     },
 
     sendTableMessage = function (headers, tableData, targets, sendUser, noarchive) {
@@ -1166,7 +1212,7 @@ var WuxingMessages = WuxingMessages || (function() {
             tableRows += `<tr>${tableRow}</tr>`;
         }
 
-        let output = `<div class="sheet-rolltemplate-systemBox"><div>&nbsp;</div><div class="sheet-formattedTextbox"><table class="sheet-wuxTable"><tr>${tableHeader}</tr>${tableRows}</table></div></div>`;
+        let output = formatSystemMessage(`<table class="sheet-wuxTable"><tr>${tableHeader}</tr>${tableRows}</table>`);
 
         sendChatToTargets(output, targets, sendUser, noarchive);
     }
@@ -1177,6 +1223,7 @@ var WuxingMessages = WuxingMessages || (function() {
         HandleInput: handleInput,
         SendMessage: sendChatToTargets,
         SendSystemMessage: sendSystemMessage,
+        SendInfoMessage: sendInfoMessage,
         SendTableMessage: sendTableMessage
     };
 
@@ -4209,6 +4256,92 @@ var ItemHandler = ItemHandler || (function() {
     ;
     return {
         GetTechniqueWeaponRollTemplate: getTechniqueWeaponRollTemplate
+    };
+}());
+
+var Format = Format || (function() {
+    'use strict';
+
+    var 
+        // Array Formatting
+        // ------------------------
+
+        arrayToString = function(array, delimeter) {
+            if (delimeter == undefined) {
+                delimeter = ", ";
+            }
+            let output = "";
+            _.each(array, function (obj) {
+                if (output != "") {
+                    output += delimeter;
+                }
+                output += obj;
+            });
+            return output;
+        },
+        
+        sortArrayDecrementing = function(array) {
+            array.sort();
+            array.reverse();
+            return array;
+        },
+
+        // Chat Formatting
+        // ------------------------
+
+        showTooltip = function(message, tooltip) {
+            return `[${message}](#" class="showtip" title="${SanitizeSheetRoll(tooltip)})`;
+        }
+
+    ;
+    return {
+        ArrayToString: arrayToString,
+        SortArrayDecrementing: sortArrayDecrementing,
+        ShowTooltip: showTooltip
+    };
+}());
+
+var Dice = Dice || (function() {
+    'use strict';
+
+    var 
+        rollDice = function(dieValue, dieType) {
+            let rolls = [];
+            while (dieValue > 0) {
+                dieValue--;
+                rolls.push(randomInteger(dieType));
+            }
+            return rolls;
+        },
+
+        totalDice = function(rolls) {
+            let total = 0;
+            _.each(rolls, function (obj) {
+                total += obj;
+            });
+            return total;
+        },
+
+        getHighRolls = function(dieValue, dieType, keepCount) {
+            let output = {
+                rolls: [],
+                keeps: []
+            }
+            output.rolls = rollDice(dieValue, dieType);
+            output.rolls = Format.SortArrayDecrementing(output.rolls);
+            for (let i = 0; i < keepCount; i++) {
+                if (keepCount < output.rolls.length) {
+                    output.keeps.push(output.rolls[i]);
+                }
+            }
+            return output;
+        }
+
+    ;
+    return {
+        RollDice: rollDice,
+        TotalDice: totalDice,
+        GetHighRolls: getHighRolls
     };
 }());
 

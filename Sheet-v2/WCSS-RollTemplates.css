@@ -1141,7 +1141,6 @@ visibility: visible;
 .sheet-rolltemplate-dmAlert .sheet-formattedTextbox
 {
     position: relative; 
-    margin: 0px 10px 0px -40px; 
     display: inline-block; 
     font-size: 12px; 
     padding: 5px; 
@@ -1562,25 +1561,11 @@ visibility: visible;
     color: #33ff4d;
 
     display: inline-block;
-    border: 2px solid #33ff4d;
+    border: 1px solid #33ff4d;
     border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
     background: #313235;
     position: relative;
 } 
-
-.sheet-rolltemplate-systemBox .sheet-formattedTextbox::before 
-{
-    content: '';
-    border: 1px solid #000;
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0) scale(1.015) rotate(0.5deg);
-    border-radius: 1% 1% 2% 4% / 2% 6% 5% 4%;
-}
 
 .sheet-rolltemplate-dmAlert .sheet-formattedTextbox 
 {
@@ -1821,6 +1806,12 @@ Roll template modified roll button
 .sheet-rolltemplate-systemInfoAuxBox .sheet-formattedTextbox a[href^="!"]
 {
     color: yellow;
+}
+
+.sheet-rolltemplate-systemBox .sheet-formattedTextbox a[href^="!"]
+{
+    color: #FFF;
+    background: #444;
 }
 
 /* ============================

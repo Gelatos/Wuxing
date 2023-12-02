@@ -22,8 +22,14 @@ var WuxingCombat = WuxingCombat || (function () {
                 case "!ctech":
                     commandConsumeTechnique(msg, content);
                     break;
+                case "!utech":
+                    commandUseTechnique(msg, content);
+                    break;
                 case "!dmg":
                     commandDealDamage(msg, content);
+                    break;
+                case "!adv":
+                    commandRollAdvantage(msg, content);
                     break;
                 case "!cmbstartcombat":
                     commandStartBattle();
@@ -43,15 +49,23 @@ var WuxingCombat = WuxingCombat || (function () {
         commandConsumeTechnique = function (msg, content) {
             let components = content.split("##");
             let technique = JSON.parse(components[0]);
-            let tokenData = getTokenDataFromTechnique(technique);
+            let targetData = getUserTargetDataFromTechnique(technique);
 
             // consume resources
-            if (consumeTechniqueResources(tokenData, technique)) {
-                displayTechnique(msg, tokenData, technique, components.length > 1 ? JSON.parse(components[1]) : undefined);
+            if (consumeTechniqueResources(targetData, technique)) {
+                displayTechnique(msg, technique, components.length > 1 ? JSON.parse(components[1]) : undefined);
             }
             else {
-                WuxingMessages.SendSystemMessage(`${tokenData.displayName} does not have the resources to use ${technique.name}`);
+                WuxingMessages.SendSystemMessage(`${targetData.displayName} does not have the resources to use ${technique.name}`);
             }
+        },
+
+        commandUseTechnique = function (msg, content) {
+            let components = content.split("##");
+            let technique = JSON.parse(components[0]);
+            let weaponData = JSON.parse(components[1]);
+
+            useTechnique(msg, technique, weaponData);
         },
 
         commandDealDamage = function (msg, content) {
@@ -61,6 +75,10 @@ var WuxingCombat = WuxingCombat || (function () {
                 WuxingToken.AddDamage(tokenData, parseInt(content));
             });
         }, 
+
+        commandRollAdvantage = function (msg, content) {
+            rollAdvantage(msg, ParseIntValue(content));
+        },
 
         commandStartBattle = function () {
 
@@ -72,7 +90,7 @@ var WuxingCombat = WuxingCombat || (function () {
             });
 
             // sort the initiative data
-            sortInitiativeData(initiativeData);
+            initiativeData = Format.SortArrayDecrementing(initiativeData);
 
             // create the table data
             let tableData = [];
@@ -160,11 +178,6 @@ var WuxingCombat = WuxingCombat || (function () {
             return `${roll < 10 ? "0" : ""}${roll}.${value < 10 ? "0" : ""}${value < 0 ? "0" : value}@${targetData.name}`;
         },
 
-        sortInitiativeData = function(initiativeData) {
-            initiativeData.sort();
-            initiativeData.reverse();
-        },
-
         // Technique Handling
         // ---------------------------
         
@@ -238,9 +251,7 @@ var WuxingCombat = WuxingCombat || (function () {
             });
         }
 
-
-        displayTechnique = function (msg, tokenData, technique, weapon) {
-            technique.username = tokenData.displayName;
+        displayTechnique = function (msg, technique, weapon) {
 
             let output = TechniqueHandler.GetRollTemplate(technique);
 
@@ -256,8 +267,32 @@ var WuxingCombat = WuxingCombat || (function () {
             
         },
         
-        getTokenDataFromTechnique = function (technique) {
+        getUserTargetDataFromTechnique = function (technique) {
             return WuxingTarget.FindActiveTargetDataByCharName(technique.username);
+        },
+        
+        getDefenderTargetDataFromTechnique = function (technique) {
+            return WuxingTarget.FindActiveTargetDataByTokenId(technique.target);
+        },
+
+        // Technique Handling
+        // ---------------------------
+
+        useTechnique = function(msg, technique, weaponData) {
+
+            let userTargetData = getUserTargetDataFromTechnique(technique);
+            let defenderTargetData = getDefenderTargetDataFromTechnique(technique);
+        },
+
+        // Math
+        // ---------------------------
+
+        rollAdvantage = function(msg, count) {
+
+            let highRolls = Dice.GetHighRolls(count, 6, 1);
+            let total = Dice.TotalDice(highRolls.keeps);
+            let message = `${Format.ShowTooltip(total, Format.ArrayToString(highRolls.rolls))} advantage roll`;
+            WuxingMessages.SendSystemMessage(message, "",  msg.who);
         }
     ;
 
