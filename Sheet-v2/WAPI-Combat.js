@@ -150,7 +150,7 @@ var WuxingCombat = WuxingCombat || (function () {
         endTurn = function(msg) {
             let targetData;
             WuxingToken.IterateOverSelectedTokens(msg, function (token) {
-                targetData = WuxingTarget.findActiveTargetDataByTokenId(token.get("_id"));
+                targetData = WuxingTarget.FindActiveTargetDataByTokenId(token.get("_id"));
                 WuxingToken.SetTurnIcon(targetData, false);
                 sendEndTurnMessage(targetData);
             });
@@ -196,7 +196,7 @@ var WuxingCombat = WuxingCombat || (function () {
         },
 
         parseInitiativeData = function(initiativeData) {
-            obj = initiativeData.split("@");
+            let obj = initiativeData.split("@");
             return {
                 targetData: WuxingTarget.FindActiveTargetDataByCharName(obj[1]),
                 value: obj[0]

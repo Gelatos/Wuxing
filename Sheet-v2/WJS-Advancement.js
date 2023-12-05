@@ -16,7 +16,7 @@ function SetAdvancementLevelData(levelData, className, currentLevel, increaseVal
 	if (!levelData.keys.includes(className)) {
 		levelData.keys.push(className);
 	}
-	levelData.values[className] = {current: currentLevel, increase: increaseValue};
+	levelData.values[className] = { current: currentLevel, increase: increaseValue };
 
 	return levelData;
 }
@@ -26,7 +26,7 @@ function ResetAdvancementLevel(levelData, updateCurrent) {
 	let i = 0;
 	while (i < levelData.keys.length) {
 		if (updateCurrent) {
-			levelData.values[levelData.keys[i]].current = ParseIntValue(levelData.values[levelData.keys[i]].current) 
+			levelData.values[levelData.keys[i]].current = ParseIntValue(levelData.values[levelData.keys[i]].current)
 				+ ParseIntValue(levelData.values[levelData.keys[i]].increase);
 		}
 		levelData.values[levelData.keys[i]].increase = 0;
@@ -84,9 +84,9 @@ var update_advancement_submit = function () {
 	let growthArray = GetGrowthList(true);
 	let skillsList = GetAllSkillsList(true);
 
-	let mod_attrs = ["base_level", "statbonus_pb", "branchpoints_bonus", 
-		"builder-ancestry", "builder-baseAbilityScores", "builder-baseGrowths", "builder-baseGrowthsTotal", 
-		"advancement-level-total", "advancement-advancementGrowthsTotal", 
+	let mod_attrs = ["base_level", "statbonus_pb", "branchpoints_bonus",
+		"builder-ancestry", "builder-baseAbilityScores", "builder-baseGrowths", "builder-baseGrowthsTotal",
+		"advancement-level-total", "advancement-advancementGrowthsTotal",
 		"techniques-techpoints", "techniques-jobTech", "techniques-learnedNewTech"
 	];
 	mod_attrs = mod_attrs.concat(growthArray);
@@ -142,14 +142,14 @@ var update_advancement_submit = function () {
 			currentLevelIndex: 0,
 			techniques: CreateDictionary(),
 
-			addDesc: function(desc) {
+			addDesc: function (desc) {
 				if (this.levelUp[this.currentLevelIndex].desc != "") {
 					this.levelUp[this.currentLevelIndex].desc += "\n";
 				}
 				this.levelUp[this.currentLevelIndex].desc += desc;
 			},
 
-			addLevel: function(baseHeader) {
+			addLevel: function (baseHeader) {
 				this.currentLevelIndex = this.levelUp.length;
 				this.levelUp.push({
 					header: `${baseHeader}`,
@@ -157,7 +157,7 @@ var update_advancement_submit = function () {
 				});
 			},
 
-			addMainDesc: function(desc) {
+			addMainDesc: function (desc) {
 				if (this.mainLevel.desc != "") {
 					this.mainLevel.desc += "\n";
 				}
@@ -207,7 +207,7 @@ var update_advancement_submit = function () {
 		v = SetAbilityScoreUpdate(v, "", update);
 		coreData = SetAbilityScoreUpdate(v, "", update);
 		update = SetDerivedStats(update, v, ancestryData, growthArray);
-		update = SetLevelUpData(update, 
+		update = SetLevelUpData(update,
 			GetCharacterStatGrowths(startingStatistics, bonusGrowths, ancestryData),
 			GetCharacterStatGrowths(endingStatistics, bonusGrowths, ancestryData),
 			advancementUpdate.levelUp, advancementUpdate.mainLevel
@@ -224,7 +224,7 @@ var update_advancement_submit = function () {
 		update = GoToNextPage(update, "LevelUp", "Advancement");
 		update["advancement-button-reset-everything"] = "on";
 
-		setAttrs(update, { silent: true }, function() {
+		setAttrs(update, { silent: true }, function () {
 			UpdateLearnedTechniques();
 		});
 
@@ -399,7 +399,7 @@ var update_advancement_reset = function () {
 	});
 }
 
-function ResetAdvancement (update, attrArray) {
+function ResetAdvancement(update, attrArray) {
 
 	let levelData = GetAdvancementLevelData(attrArray["advancement-level-total"]);
 
@@ -498,9 +498,8 @@ var update_advancement_restart = function () {
 
 
 
-// Advancement Listeners
 // ======== Advancement Listeners
-on("change:advancement-level-fighter_max change:advancement-level-interceptor_max change:advancement-level-marksman_max change:advancement-level-rogue_max change:advancement-level-physician_max change:advancement-level-pugilist_max change:advancement-level-scholar_max ", function (eventinfo) {
+on("change:advancement-level-fighter_max change:advancement-level-interceptor_max change:advancement-level-marksman_max change:advancement-level-guardian_max change:advancement-level-rogue_max change:advancement-level-athlete_max change:advancement-level-physician_max change:advancement-level-scholar_max ", function (eventinfo) {
 
 	var className = eventinfo.sourceAttribute.match(/[^-]*$/)[0];
 	if (className.indexOf("_max") >= 0) {
@@ -508,6 +507,7 @@ on("change:advancement-level-fighter_max change:advancement-level-interceptor_ma
 	}
 	update_advancement_class_level(className);
 });
+//-- end	
 
 
 var update_advancement_class_level = function (classFieldName) {

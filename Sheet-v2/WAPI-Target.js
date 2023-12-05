@@ -244,30 +244,30 @@ var WuxingToken = WuxingToken || (function () {
         // Token State
         // ---------------------------
 
-        setTokenForBattle = function (tokenData, token) {
+        setTokenForBattle = function (targetData, token) {
             if (token == undefined) {
                 token = getTargetToken(targetData);
             }
 
             // set vitals
-            let hp = GetCharacterAttribute(tokenData.charId, "hp");
+            let hp = GetCharacterAttribute(targetData.charId, "hp");
             token.set("bar1_link", hp.get("_id"));
             token.set("bar1_value", hp.get("max"));
             token.set("showplayers_bar1", true);
             token.set("showplayers_bar1text", "2");
-            let tempHp = GetCharacterAttribute(tokenData.charId, "tempHp");
+            let tempHp = GetCharacterAttribute(targetData.charId, "tempHp");
             token.set("bar2_link", tempHp.get("_id"));
             token.set("showplayers_bar2", true);
             token.set("showplayers_bar2text", "2");
 
             // set token name
-            token.set("name", getAttrByName(tokenData.charId, "nickname"));
+            token.set("name", getAttrByName(targetData.charId, "nickname"));
             token.set("showname", true);
             token.set("showplayers_name", true);
             token.set("bar_location", "overlap_bottom");
 
             // set the token element
-            token.set(getAttrByName(tokenData.charId, "token_element"), true);
+            token.set(getAttrByName(targetData.charId, "token_element"), true);
 
             // set tooltip
             token.set("show_tooltip", true);

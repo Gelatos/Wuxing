@@ -687,7 +687,7 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
     visibility: hidden;
     background: #fff;
     border-radius: 6px;
-   border: 2px solid black;
+    border: 2px solid black;
   }
   
   .sheet-rolltemplate-usetechnique .sheet-wuxFeatureRollData:hover .sheet-wuxFeatureRollDetails
@@ -697,6 +697,7 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 
 .wuxFeatureDescriptionBlock,
 .sheet-rolltemplate-technique .sheet-wuxFeatureDescriptionBlock,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureDescriptionBlock,
 .wuxFeatureEditBlock
 {
     position: relative;
@@ -708,7 +709,8 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 }
 
 .wuxFeatureDescriptionBlock .wuxFeatureDescriptionBlockDesc,
-.sheet-rolltemplate-technique .sheet-wuxFeatureDescriptionBlock .sheet-wuxFeatureDescriptionBlockDesc
+.sheet-rolltemplate-technique .sheet-wuxFeatureDescriptionBlock .sheet-wuxFeatureDescriptionBlockDesc,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureDescriptionBlock .sheet-wuxFeatureDescriptionBlockDesc
 {
     display: inline-block;
     white-space: pre-line;
