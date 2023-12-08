@@ -240,7 +240,7 @@ var Format = Format || (function() {
         rollTemplateTraits = function(traits, traitType, rtPrefix) {
             let output = "";
             if (traits != "") {
-                var traitsDb = GetTraitsDictionary(traits, traitType);
+                var traitsDb = WuxingTraits.GetDictionary(traits, traitType);
                 for (var i = 0; i < traitsDb.length; i++) {
                     output += `{{${rtPrefix}${i}=${traitsDb[i].name}}} {{${rtPrefix}${i}Desc=${traitsDb[i].description}}} `;
                 }
@@ -288,7 +288,7 @@ var Dice = Dice || (function() {
             output.rolls = rollDice(dieValue, dieType);
             output.rolls = Format.SortArrayDecrementing(output.rolls);
             for (let i = 0; i < keepCount; i++) {
-                if (keepCount < output.rolls.length) {
+                if (keepCount <= output.rolls.length) {
                     output.keeps.push(output.rolls[i]);
                 }
             }
@@ -302,43 +302,6 @@ var Dice = Dice || (function() {
         GetHighRolls: getHighRolls
     };
 }());
-
-
-function GetTraitsDictionary (traits, traitType) {
-
-    let output = [];
-    if (traits != undefined) {
-        let keywordsSplit = traits.split(";");
-
-        let name = "";
-        let lookup = "";
-        let traitInfo;
-
-        for (let i = 0; i < keywordsSplit.length; i++) {
-            name = "" + keywordsSplit[i].trim();
-
-            if (name.includes("Impact") || name.includes("Explosive")) {
-                name = ReplaceDamageDice(name);
-            }
-
-            lookup = name;
-            if (lookup.indexOf("(") >= 0) {
-                lookup = lookup.replace(/\([^)]*\)/g, "(X)");
-            }
-
-            switch (traitType.toLowerCase()) {
-                case "technique": traitInfo = GetTechniqueTraitsInfo(lookup); break;
-                case "item": traitInfo = GetItemTraitsInfo(lookup); break;
-                case "ability": traitInfo = GetAbilityTraitsInfo(lookup); break;
-                case "material": traitInfo = GetMaterialTraitsInfo(lookup); break;
-            }
-            traitInfo.name = name;
-            output.push(traitInfo);
-        }
-    }
-
-    return output;
-}
 
 
 // ====== Section Ids

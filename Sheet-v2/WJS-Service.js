@@ -549,7 +549,7 @@ function SetAugmentTechnique(technique, baseTechnique) {
 
 function SetTechniqueDataTraits(update, repeatingSection, id, traits) {
 
-	var traitsDb = GetTraitsDictionary(traits, "technique");
+	var traitsDb = WuxingTraits.GetDictionary(traits, "technique");
 	for (var i = 0; i < 6; i++) {
 		if (i < traitsDb.length) {
 			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i)] = traitsDb[i].name;
@@ -619,7 +619,7 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 
 function SetItemDataTraits(update, repeatingSection, id, traits) {
 
-	var traitsDb = GetTraitsDictionary(traits, "item");
+	var traitsDb = WuxingTraits.GetDictionary(traits, "item");
 	for (var i = 0; i < 6; i++) {
 		if (i < traitsDb.length) {
 			update[GetSectionIdName(repeatingSection, id, "item-traits" + i)] = traitsDb[i].name;
@@ -634,7 +634,7 @@ function SetItemDataTraits(update, repeatingSection, id, traits) {
 
 function SetItemDataAbilities(update, repeatingSection, id, abilities) {
 
-	var traitsDb = GetTraitsDictionary(abilities, "ability");
+	var traitsDb = WuxingTraits.GetDictionary(abilities, "ability");
 	for (var i = 0; i < 6; i++) {
 		if (i < traitsDb.length) {
 			update[GetSectionIdName(repeatingSection, id, "item-ability" + i)] = traitsDb[i].name;
