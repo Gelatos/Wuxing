@@ -926,7 +926,7 @@ var WuxingCombat = WuxingCombat || (function () {
 
             for (let i = 0; i < initiativeData.length; i++) {
                 data = parseInitiativeData(initiativeData[i]);
-                tableData.push([data.targetData.displayName, data.obj[0]]);
+                tableData.push([data.targetData.displayName, data.value]);
                 setCombatStartLastActivePlayer(data);
             }
             WuxingMessages.SendTableMessage(["Name", "Initiative"], tableData, ["GM"], undefined, true);
@@ -2446,12 +2446,17 @@ var WuxingTarget = WuxingTarget || (function () {
             let charId = token.get("represents");
             if (charId != "") {
                 let character = getObj('character', charId);
+                let ownerId = character.get("controlledby").split(",")[0];
+                let ownerName = "";
+                if (ownerId != "") {
+                    ownerName = getObj("player", ownerId).get("_displayname");
+                }
                 let targetData = {
                     name: character.get("name"),
                     charId: charId,
                     tokenId: token.get("id"),
                     displayName: getAttrByName(charId, "nickname"),
-                    owner: character.get("controlledby"),
+                    owner: ownerName,
                     elem: getAttrByName(charId, "token_element"),
                     isAlly: isAlly
                 };
@@ -2553,10 +2558,12 @@ var WuxingToken = WuxingToken || (function () {
             let hp = GetCharacterAttribute(targetData.charId, "hp");
             token.set("bar1_link", hp.get("_id"));
             token.set("bar1_value", hp.get("max"));
+            token.set("bar1_max", hp.get("max"));
             token.set("showplayers_bar1", true);
             token.set("showplayers_bar1text", "2");
             let tempHp = GetCharacterAttribute(targetData.charId, "tempHp");
             token.set("bar2_link", tempHp.get("_id"));
+            token.set("bar2_max", "0");
             token.set("showplayers_bar2", true);
             token.set("showplayers_bar2text", "2");
 
@@ -2577,8 +2584,17 @@ var WuxingToken = WuxingToken || (function () {
         setTokenForNarative = function (targetData, token) {
             if (token == undefined) {
                 token = getTargetToken(targetData);
+                if (token == undefined) {
+                    return;
+                }
             }
+            token.set("bar1_link", "");
+            token.set("bar1_value", "");
+            token.set("bar1_max", "");
             token.set("showplayers_bar1", false);
+            token.set("bar2_link", "");
+            token.set("bar2_value", "");
+            token.set("bar2_max", "");
             token.set("showplayers_bar2", false);
             token.set("showname", false);
             token.set(getAttrByName(targetData.charId, "token_element"), false);
@@ -2589,6 +2605,9 @@ var WuxingToken = WuxingToken || (function () {
         addHp = function (targetData, token, value) {
             if (token == undefined) {
                 token = getTargetToken(targetData);
+                if (token == undefined) {
+                    return;
+                }
             }
 
             let total = parseInt(getAttrByName(targetData.charId, "hp")) + value;
@@ -2604,6 +2623,9 @@ var WuxingToken = WuxingToken || (function () {
         resetTempHp = function (targetData, token) {
             if (token == undefined) {
                 token = getTargetToken(targetData);
+                if (token == undefined) {
+                    return;
+                }
             }
             token.set("bar2_value", getAttrByName(targetData.charId, "tempHpTotal"));
         },
@@ -2611,6 +2633,9 @@ var WuxingToken = WuxingToken || (function () {
         addTempHp = function (targetData, value) {
             if (token == undefined) {
                 token = getTargetToken(targetData);
+                if (token == undefined) {
+                    return;
+                }
             }
             let total = parseInt(token.get("bar2_value")) + value;
             let remainder = 0;
@@ -2625,6 +2650,9 @@ var WuxingToken = WuxingToken || (function () {
         addDamage = function (targetData, token, value, stopAtTempHp) {
             if (token == undefined) {
                 token = getTargetToken(targetData);
+                if (token == undefined) {
+                    return;
+                }
             }
 
             // make the damage value negative
@@ -2667,6 +2695,9 @@ var WuxingToken = WuxingToken || (function () {
 
         addKi = function (tokenData, value, cap) {
             let token = getTargetToken(tokenData);
+            if (token == undefined) {
+                return;
+            }
             let ki = GetCharacterAttribute(tokenData.charId, "ki");
             let newValue = parseInt(ki.get("current")) + value;
             if (cap && newValue > parseInt(ki.get("max"))) {
@@ -2679,6 +2710,9 @@ var WuxingToken = WuxingToken || (function () {
 
         setTurnIcon = function (tokenData, value) {
             let token = getTargetToken(tokenData);
+            if (token == undefined) {
+                return;
+            }
             token.set("status_yellow", value);
         }
 

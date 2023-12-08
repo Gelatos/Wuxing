@@ -108,7 +108,7 @@ var WuxingCombat = WuxingCombat || (function () {
 
             for (let i = 0; i < initiativeData.length; i++) {
                 data = parseInitiativeData(initiativeData[i]);
-                tableData.push([data.targetData.displayName, data.obj[0]]);
+                tableData.push([data.targetData.displayName, data.value]);
                 setCombatStartLastActivePlayer(data);
             }
             WuxingMessages.SendTableMessage(["Name", "Initiative"], tableData, ["GM"], undefined, true);
