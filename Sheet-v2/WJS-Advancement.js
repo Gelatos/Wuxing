@@ -280,10 +280,10 @@ function CreateCharacterAdvancementUpdate(advancementUpdate, currentLevel, maxLe
 		// set level bonuses
 		switch (levelCheck) {
 			case 1:
-				tech = { name: "Gain a Path Technique.", type: "PS" };
+				tech = { name: "Gain any Path Technique.", type: "PS" };
 				pathUpdate += `\n${tech.name}`;
 				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				tech = { name: "Gain 2 Spell Techniques.", type: "SPS" };
+				tech = { name: "Gain any 2 Discipline Techniques.", type: "GD" };
 				pathUpdate += `\n${tech.name}`;
 				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
@@ -324,22 +324,22 @@ function CreateCharacterAdvancementUpdate(advancementUpdate, currentLevel, maxLe
 		}
 
 		if ((levelCheck % 5) - 2 == 0) {
-			tech = { name: "Gain a Skill Technique.", type: "AS" };
+			tech = { name: "Gain any Discipline Technique.", type: "GD" };
 			pathUpdate += `\n${tech.name}`;
 			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 		}
 		else if ((levelCheck % 5) - 3 == 0) {
-			tech = { name: "Gain a Training Path Technique.", type: "TPS" };
+			tech = { name: "Gain any Skill Training Technique.", type: "TPS" };
 			pathUpdate += `\n${tech.name}`;
 			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 		}
 		else if ((levelCheck % 5) - 4 == 0) {
-			tech = { name: "Gain a Path Technique.", type: "PS" };
+			tech = { name: "Gain any Path Technique.", type: "PS" };
 			pathUpdate += `\n${tech.name}`;
 			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 		}
 		else if ((levelCheck % 5) == 0) {
-			tech = { name: "Gain a Spell Technique.", type: "SPS" };
+			tech = { name: "Gain any Discipline Technique.", type: "GD" };
 			pathUpdate += `\n${tech.name}`;
 			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 		}

@@ -68,8 +68,7 @@ var update_techniques_back = function () {
 function GetTechniqueFieldsList() {
 
 	return ["pathgeneral", "pathtraining",
-		"skillgeneral", "skilldefensive", "skillmartial", "skillmagic", "skillbody", "skillknowledge", "skillsocial", "skilltechnical",
-		"spellgeneral"];
+		"discgeneral", "discWarfare", "discTalent", "discAcumen", "discMagic"];
 }
 
 function GetTechniquePointFieldsList(isMax) {
@@ -109,49 +108,29 @@ function SetTechniqueAdvancementFields(update, attrArray, totalLevel, techniques
 				techPoints[pointField] += techniques.values[techniques.keys[i]];
 				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 				break;
-			case "SPS":
-				pointField = "spellgeneral";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
-			case "AS":
-				pointField = "skillgeneral";
+			case "GD":
+				pointField = "discgeneral";
 				techPoints[pointField] += techniques.values[techniques.keys[i]];
 				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 				break;
 
-			case "DS":
-				pointField = "skilldefensive";
+			case "WD":
+				pointField = "discWarfare";
 				techPoints[pointField] += techniques.values[techniques.keys[i]];
 				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 				break;
-			case "CS":
-				pointField = "skillmartial";
+			case "TD":
+				pointField = "discTalent";
 				techPoints[pointField] += techniques.values[techniques.keys[i]];
 				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 				break;
-			case "MS":
-				pointField = "skillmagic";
+			case "AD":
+				pointField = "discAcumen";
 				techPoints[pointField] += techniques.values[techniques.keys[i]];
 				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 				break;
-			case "BS":
-				pointField = "skillbody";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
-			case "KS":
-				pointField = "skillknowledge";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
-			case "SS":
-				pointField = "skillsocial";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
-			case "TS":
-				pointField = "skilltechnical";
+			case "MD":
+				pointField = "discMagic";
 				techPoints[pointField] += techniques.values[techniques.keys[i]];
 				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 				break;
@@ -172,15 +151,11 @@ function GetTechniquesTechPointObj() {
 	return {
 		"pathgeneral": 0,
 		"pathtraining": 0,
-		"skillgeneral": 0,
-		"skilldefensive": 0,
-		"skillmartial": 0,
-		"skillmagic": 0,
-		"skillbody": 0,
-		"skillknowledge": 0,
-		"skillsocial": 0,
-		"skilltechnical": 0,
-		"spellgeneral": 0
+		"discgeneral": 0,
+		"discWarfare": 0,
+		"discTalent": 0,
+		"discAcumen": 0,
+		"discMagic": 0
 	};
 }
 
@@ -200,18 +175,12 @@ function SetTechniquesPointCounts(update, techPointCaps, learnedTech) {
 			case "pathtraining": 
 				fallbackGroup = "pathgeneral"; 
 				break;
-			case "skillgeneral": 
-			case "skilldefensive":
-			case "skillmartial":
-			case "skillmagic":
-			case "skillbody":
-			case "skillknowledge":
-			case "skillsocial":
-			case "skilltechnical":
-				fallbackGroup = "skillgeneral";
-				break;
-			case "spellgeneral":
-				fallbackGroup = "spellgeneral";
+			case "discgeneral": 
+			case "discWarfare":
+			case "discTalent":
+			case "discAcumen":
+			case "discMagic":
+				fallbackGroup = "discgeneral";
 				break;
 		}
 
@@ -228,8 +197,7 @@ function SetTechniquesPointCounts(update, techPointCaps, learnedTech) {
 		update[`techpoints-${fields[i]}`] = parseInt(techPointCaps[fields[i]]) - parseInt(techPoints[fields[i]]);
 		switch(fields[i]) {
 			case "pathgeneral": 
-			case "skillgeneral": 
-			case "spellgeneral":
+			case "discgeneral": 
 				update[`techpoints-${fields[i]}-error`] = techPoints[fields[i]] > techPointCaps[fields[i]] ? "1" : "0";
 				break;
 		}
@@ -279,9 +247,8 @@ function GetTechniquesPathFilters() {
 	return ["techniques-filter-pathsTraining", "techniques-filter-pathsGeneral"];
 }
 
-function GetTechniquesSkillFilters() {
-	return ["techniques-filter-skillDefensive", "techniques-filter-skillMartial", "techniques-filter-skillMagic",
-		"techniques-filter-skillBody", "techniques-filter-skillKnowledge", "techniques-filter-skillSocial", "techniques-filter-skillTechnical"];
+function GetTechniquesDisciplineFilters() {
+	return ["techniques-filter-discWarfare", "techniques-filter-discTalent", "techniques-filter-discAcumen", "techniques-filter-discMagic"];
 }
 
 function GetTechniquesWoodFilters() {
@@ -339,12 +306,12 @@ on("change:techniques-filter-pathsAll", function (eventinfo) {
 	UpdateTechniquesFilterSelectionAllFilter(eventinfo.newValue, GetTechniquesPathFilters());
 });
 
-on("change:techniques-filter-skillAll", function (eventinfo) {
+on("change:techniques-filter-disciplineAll", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
 
-	UpdateTechniquesFilterSelectionAllFilter(eventinfo.newValue, GetTechniquesSkillFilters());
+	UpdateTechniquesFilterSelectionAllFilter(eventinfo.newValue, GetTechniquesDisciplineFilters());
 });
 
 on("change:techniques-filter-spellAll", function (eventinfo) {
@@ -412,12 +379,12 @@ on("change:techniques-filter-pathsTraining change:techniques-filter-pathsGeneral
 	UpdateTechniquesFilterSelectionSingleFilter(eventinfo.newValue, ["techniques-filter-pathsAll"]);
 });
 
-on("change:techniques-filter-skillDefensive change:techniques-filter-skillMartial change:techniques-filter-skillMagic techniques-filter-skillBody change:techniques-filter-skillKnowledge change:techniques-filter-skillSocial change:techniques-filter-skillTechnical", function (eventinfo) {
+on("change:techniques-filter-discWarfare change:techniques-filter-discTalent change:techniques-filter-discAcumen techniques-filter-discMagic", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
 
-	UpdateTechniquesFilterSelectionSingleFilter(eventinfo.newValue, ["techniques-filter-skillAll"]);
+	UpdateTechniquesFilterSelectionSingleFilter(eventinfo.newValue, ["techniques-filter-disciplineAll"]);
 });
 
 on("change:techniques-filter-spellWoodBasic change:techniques-filter-spellWoodWind", function (eventinfo) {
@@ -482,12 +449,12 @@ on("change:techniques-button-loadfiltertech", function () {
 function UpdateTechniquesFilteredTechniques() {
 
 	let mod_attrs = ["techniques-learnedNewTech",
-		"techniques-filter-selectedtech", "techniques-filter-pathsAll", "techniques-filter-skillAll", "techniques-filter-spellAll",
+		"techniques-filter-selectedtech", "techniques-filter-pathsAll", "techniques-filter-disciplineAll", "techniques-filter-spellAll",
 		"techniques-filter-spellWoodAll", "techniques-filter-spellFireAll", "techniques-filter-spellEarthAll",
 		"techniques-filter-spellMetalAll", "techniques-filter-spellWaterAll"
 	];
 	mod_attrs = mod_attrs.concat(GetTechniquesPathFilters());
-	mod_attrs = mod_attrs.concat(GetTechniquesSkillFilters());
+	mod_attrs = mod_attrs.concat(GetTechniquesDisciplineFilters());
 	mod_attrs = mod_attrs.concat(GetTechniquesWoodFilters());
 	mod_attrs = mod_attrs.concat(GetTechniquesFireFilters());
 	mod_attrs = mod_attrs.concat(GetTechniquesEarthFilters());
@@ -547,30 +514,21 @@ function GetTechniquesPathTechNames(attrArray) {
 function GetTechniquesSkillTechNames(attrArray) {
 	let workingTechniqueNames = [];
 
-	if (AttrParseString(attrArray, "techniques-filter-skillAll") == "on") {
-		workingTechniqueNames = workingTechniqueNames.concat(GetAllSkillTechniquesList(false));
+	if (AttrParseString(attrArray, "techniques-filter-disciplineAll") == "on") {
+		workingTechniqueNames = workingTechniqueNames.concat(GetAllDisciplineTechniquesList(false));
 	}
 	else {
-		if (AttrParseString(attrArray, "techniques-filter-skillDefensive") == "on") {
-			workingTechniqueNames = workingTechniqueNames.concat(GetDefensiveSkillTechniquesList(false));
+		if (AttrParseString(attrArray, "techniques-filter-discWarfare") == "on") {
+			workingTechniqueNames = workingTechniqueNames.concat(GetWarfareTechniquesList(false));
 		}
-		if (AttrParseString(attrArray, "techniques-filter-skillMartial") == "on") {
-			workingTechniqueNames = workingTechniqueNames.concat(GetMartialSkillTechniquesList(false));
+		if (AttrParseString(attrArray, "techniques-filter-discTalent") == "on") {
+			workingTechniqueNames = workingTechniqueNames.concat(GetTalentTechniquesList(false));
 		}
-		if (AttrParseString(attrArray, "techniques-filter-skillMagic") == "on") {
-			workingTechniqueNames = workingTechniqueNames.concat(GetMagicSkillTechniquesList(false));
+		if (AttrParseString(attrArray, "techniques-filter-discAcumen") == "on") {
+			workingTechniqueNames = workingTechniqueNames.concat(GetAcumenTechniquesList(false));
 		}
-		if (AttrParseString(attrArray, "techniques-filter-skillBody") == "on") {
-			workingTechniqueNames = workingTechniqueNames.concat(GetBodySkillTechniquesList(false));
-		}
-		if (AttrParseString(attrArray, "techniques-filter-skillKnowledge") == "on") {
-			workingTechniqueNames = workingTechniqueNames.concat(GetKnowledgeSkillTechniquesList(false));
-		}
-		if (AttrParseString(attrArray, "techniques-filter-skillSocial") == "on") {
-			workingTechniqueNames = workingTechniqueNames.concat(GetSocialSkillTechniquesList(false));
-		}
-		if (AttrParseString(attrArray, "techniques-filter-skillTechnical") == "on") {
-			workingTechniqueNames = workingTechniqueNames.concat(GetTechnicalSkillTechniquesList(false));
+		if (AttrParseString(attrArray, "techniques-filter-discMagic") == "on") {
+			workingTechniqueNames = GetTechniquesSpellTechNames(attrArray);
 		}
 	}
 
@@ -732,28 +690,20 @@ function SetTechniquesTechGroup(techGroup) {
 		case "Training Path":
 			return "pathtraining";
 
-		case "Defensive Skill":
-			return "skilldefensive";
-		case "Martial Skill":
-			return "skillmartial";
-		case "Magic Skill":
-			return "skillmagic";
-		case "Body Skill":
-			return "skillbody";
-		case "Knowledge Skill":
-			return "skillknowledge";
-		case "Social Skill":
-			return "skillsocial";
-		case "Technical Skill":
-			return "skilltechnical";
-
+		case "Warfare":
+			return "discWarfare";
+		case "Talent":
+			return "discTalent";
+		case "Acumen":
+			return "discAcumen";
+		case "Magic":
 		case "Arcane":
 		case "Wood":
 		case "Fire":
 		case "Earth":
 		case "Metal":
 		case "Water":
-			return "spellgeneral";
+			return "discMagic";
 	}
 	return "";
 }
