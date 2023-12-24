@@ -384,6 +384,12 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
     cursor: pointer;
 }
 
+.wuxInteractiveBlock.wuxSizeSmall .wuxInteractiveIcon,
+.wuxInteractiveBlock.wuxSizeSmall .wuxInteractiveAuxIcon
+{
+    max-width: 10px;
+}
+
 .wuxInteractiveBlock .wuxInteractiveIcon,
 .wuxInteractiveBlock .wuxInteractiveExpandIcon
 {

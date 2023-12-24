@@ -297,19 +297,13 @@ var TechniqueConsume = TechniqueConsume || (function () {
         },
 
         setResourceDataObjResource = function(targetData, resourceData) {
-            if (resourceData.resourceName == "mana") {
-                resourceData.resource = GetCharacterAttribute(targetData.charId, "ki");
-                resourceData.cost *= 10;
-            }
-            else {
-                resourceData.resource = GetCharacterAttribute(targetData.charId, resourceData.resourceName);
-            }
+            resourceData.resource = GetCharacterAttribute(targetData.charId, resourceData.resourceName);
             return resourceData;
         },
 
         consumeResourceData = function(targetData, resourceDatas) {
             _.each(resourceDatas, function (obj) {
-                if (obj.resourceName == "mana") {
+                if (obj.resourceName == "ki") {
                     WuxingToken.AddKi(targetData, obj.cost * -1, false);
                 }
                 else {
