@@ -277,19 +277,30 @@ on("chat:message", function(msg) {
 
     if (msg.playerid.toLowerCase() != "api" && msg.rolltemplate) {
 
-        if (["action"].indexOf(msg.rolltemplate) > -1 && msg.content.indexOf("charname=") > -1) {
-            let cnamebase = msg.content.split("charname=")[1].split("}")[0];
-            let cname = cnamebase ? cnamebase.replace(/}/g, '').trim() : (msg.content.split("{{name=")[1] || '').split("}}")[0].trim();
-            let character = cname ? findObjs({
-                name: cname,
-                type: 'character'
-            })[0] : undefined;
-            let charId = character.get("_id");
-            let playerid = msg.content.indexOf("playerid=") > -1 ? msg.content.split("playerid=")[1].split("}")[0] : msg.playerid;
-            let player = getObj("player", playerid);
-            HandleAction(msg, charId, player);
-        }
-        else if (["hiddenaction"].indexOf(msg.rolltemplate) > -1) {
+        // if (["action"].indexOf(msg.rolltemplate) > -1 && msg.content.indexOf("charname=") > -1) {
+        //     let cnamebase = msg.content.split("charname=")[1].split("}")[0];
+        //     let cname = cnamebase ? cnamebase.replace(/}/g, '').trim() : (msg.content.split("{{name=")[1] || '').split("}}")[0].trim();
+        //     let character = cname ? findObjs({
+        //         name: cname,
+        //         type: 'character'
+        //     })[0] : undefined;
+        //     let charId = character.get("_id");
+        //     let playerid = msg.content.indexOf("playerid=") > -1 ? msg.content.split("playerid=")[1].split("}")[0] : msg.playerid;
+        //     let player = getObj("player", playerid);
+        //     HandleAction(msg, charId, player);
+        // }
+        // else if (["hiddenaction"].indexOf(msg.rolltemplate) > -1) {
+        //     let cnamebase = msg.content.split("charname=")[1].split("}")[0];
+        //     let cname = cnamebase ? cnamebase.replace(/}/g, '').trim() : (msg.content.split("{{name=")[1] || '').split("}}")[0].trim();
+        //     let character = cname ? findObjs({
+        //         name: cname,
+        //         type: 'character'
+        //     })[0] : undefined;
+        //     let charId = character.get("_id");
+        //     let playerid = msg.content.indexOf("playerid=") > -1 ? msg.content.split("playerid=")[1].split("}")[0] : msg.playerid;
+        //     HandleHiddenAction(msg, charId, playerid);
+        // }
+        if (["hiddenaction"].indexOf(msg.rolltemplate) > -1) {
             let cnamebase = msg.content.split("charname=")[1].split("}")[0];
             let cname = cnamebase ? cnamebase.replace(/}/g, '').trim() : (msg.content.split("{{name=")[1] || '').split("}}")[0].trim();
             let character = cname ? findObjs({
