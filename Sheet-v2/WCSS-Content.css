@@ -316,7 +316,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
     border-image: linear-gradient(to right, #A0A0A0FF 0%, #A0A0A000 80%, #A0A0A000 100%) 1;
 }
 
-.wuxInteractiveBlock.wuxSizeSmall
+.wuxInteractiveBlock.wuxSizeSmall,
+.wuxInteractiveBlock.wuxSizeTiny
 {
     min-width: 80px;
     padding: 0px;
@@ -384,8 +385,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
     cursor: pointer;
 }
 
-.wuxInteractiveBlock.wuxSizeSmall .wuxInteractiveIcon,
-.wuxInteractiveBlock.wuxSizeSmall .wuxInteractiveAuxIcon
+.wuxInteractiveBlock.wuxSizeTiny .wuxInteractiveIcon,
+.wuxInteractiveBlock.wuxSizeTiny .wuxInteractiveAuxIcon
 {
     max-width: 10px;
 }

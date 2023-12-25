@@ -987,29 +987,16 @@ function GetCharacterStatGrowths(currentGrowths, bonusGrowths, ancestryData) {
 
 	let defaultStats = GetStatisticsDefaults();
 	let finalGrowths = AddGrowths(currentGrowths, MultiplyGrowths(bonusGrowths, 100));
-	finalGrowths["vitality"] += (defaultStats["vitality"] * 100);
-	finalGrowths["kiCharge"] += defaultStats["kiCharge"] * 100;
 	finalGrowths["hp"] += (ancestryData["hp"] * 100) + finalGrowths["CON"];
-	finalGrowths["spellForce"] += ancestryData["spellForce"] * 100;
 
 	let output = {
 		scores: MultiplyGrowths(finalGrowths, 0.01),
 		modulus: ModulusGrowths(finalGrowths, 100)
 	};
 
-	// set caps
-	if (output.scores["spellForce"] > defaultStats.spellForceLimit) {
-		output.scores["spellForce"] = defaultStats.spellForceLimit;
-		output.modulus["spellForce"] = 0;
-	}
-	if (output.scores["kiCharge"] > defaultStats.kiChargeLimit) {
-		output.scores["kiCharge"] = defaultStats.kiChargeLimit;
-		output.modulus["kiCharge"] = 0;
-	}
-
 	// update more scores
 	output.scores["vitality"] += Math.max(GetAbilityScoreMod(output.scores["CON"]), 0);
-	output.scores["ki_max"] = defaultStats.kiLimit + (5 * output.scores["spellForce"]) + bonusGrowths["kiLimit"];
+	output.scores["ki_max"] = defaultStats.kiLimit + bonusGrowths["kiLimit"];
 	output.scores["branchpoints"] = Math.floor(output.scores["spellForce"] * 0.5) + bonusGrowths["branchpoints"];
 	return output;
 }

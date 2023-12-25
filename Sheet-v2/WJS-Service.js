@@ -79,11 +79,11 @@ function RemoveSectionId(repeatingSection, repeatingSectionId) {
 		capacity: 40,
 		vitality: 2,
 		traumaLimit: path == "Common" ? 1 : 3,
-		kiCharge: 5,
-		kiLimit: 25,
+		kiCharge: 1,
+		kiLimit: 3,
 		chakra: 1,
 		spellForceLimit: 9,
-		kiChargeLimit: 30,
+		kiChargeLimit: 3,
 		techSlotJob: 1,
 		techSlotActive: 1,
 		techSlotPassive: 1,
@@ -400,14 +400,15 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 	// set the function block
 	var isMultiple = technique.traits.toLowerCase().indexOf("multiple") >= 0;
 	var isWeapon = technique.traits.toLowerCase().indexOf("armament") >= 0 || technique.traits.toLowerCase().indexOf("arsenal") >= 0;
+	var prerequisite = FeatureService.GetPrerequisiteString(technique);
 	update[GetSectionIdName(repeatingSection, id, "technique-functionBlock")] =
-		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.prerequisite != "") ? "1" : "0";
+		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || prerequisite != "") ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-traits")] = technique.traits;
 	update = SetTechniqueDataTraits(update, repeatingSection, id, technique.traits);
 
 	update[GetSectionIdName(repeatingSection, id, "technique-trigger")] = technique.trigger;
 	update[GetSectionIdName(repeatingSection, id, "technique-requirement")] = technique.requirement;
-	update[GetSectionIdName(repeatingSection, id, "technique-prerequisite")] = technique.prerequisite;
+	update[GetSectionIdName(repeatingSection, id, "technique-prerequisite")] = prerequisite;
 	update[GetSectionIdName(repeatingSection, id, "technique-resourceCost")] = technique.resourceCost;
 	update[GetSectionIdName(repeatingSection, id, "technique-isMultiple")] = isMultiple ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-isWeapon")] = isWeapon ? "1" : "0";
@@ -438,9 +439,9 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 	update[GetSectionIdName(repeatingSection, id, "technique-addPower")] = technique.dBonus.indexOf("Power") >= 0 ? "on" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-damageType")] = technique.damageType;
 	update[GetSectionIdName(repeatingSection, id, "technique-element")] = technique.element;
-	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = Format.DamageString(technique);
-	update[GetSectionIdName(repeatingSection, id, "technique-onInfo")] = TechniqueHandler.GetRollTemplate(technique);
-	update[GetSectionIdName(repeatingSection, id, "technique-onUse")] = TechniqueHandler.GetConsumeUsePost(technique);
+	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = FeatureService.GetDamageString(technique);
+	update[GetSectionIdName(repeatingSection, id, "technique-onInfo")] = FeatureService.GetRollTemplate(technique);
+	update[GetSectionIdName(repeatingSection, id, "technique-onUse")] = FeatureService.GetConsumeUsePost(technique);
 
 	return update;
 }
@@ -487,8 +488,26 @@ function SetAugmentTechnique(technique, baseTechnique) {
 	if (technique.requirement != "") {
 		baseTechnique.requirement = technique.requirement;
 	}
-	if (technique.prerequisite != "") {
-		baseTechnique.prerequisite = technique.prerequisite;
+	if (technique.prqLevel > 0) {
+		baseTechnique.prqLevel = technique.prqLevel;
+	}
+	if (technique.prqWarfare > 0) {
+		baseTechnique.prqWarfare = technique.prqWarfare;
+	}
+	if (technique.prqTalent > 0) {
+		baseTechnique.prqTalent = technique.prqTalent;
+	}
+	if (technique.prqAcumen > 0) {
+		baseTechnique.prqAcumen = technique.prqAcumen;
+	}
+	if (technique.prqMagic > 0) {
+		baseTechnique.prqMagic = technique.prqMagic;
+	}
+	if (technique.prqBranch != "") {
+		baseTechnique.prqBranch = technique.prqBranch;
+	}
+	if (technique.prqOther != "") {
+		baseTechnique.prqOther = technique.prqOther;
 	}
 	if (technique.skill != "") {
 		baseTechnique.skill = technique.skill;
@@ -529,19 +548,11 @@ function SetAugmentTechnique(technique, baseTechnique) {
 	if (technique.specBonus != "") {
 		baseTechnique.specBonus = technique.specBonus;
 	}
-
-	// additive statistics
 	if (technique.description != "") {
-		if (baseTechnique.description != "") {
-			baseTechnique.description += "\n";
-		}
-		baseTechnique.description += technique.description;
+		baseTechnique.description = technique.description;
 	}
 	if (technique.onSuccess != "") {
-		if (baseTechnique.onSuccess != "") {
-			baseTechnique.onSuccess += "\n";
-		}
-		baseTechnique.onSuccess += technique.onSuccess;
+		baseTechnique.onSuccess = technique.onSuccess;
 	}
 
 	return baseTechnique;
@@ -604,7 +615,7 @@ function SetItemData(update, repeatingSection, id, item, autoExpand) {
 			update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = item.dVal;
 			update[GetSectionIdName(repeatingSection, id, "item-dieType")] = item.dType;
 			update[GetSectionIdName(repeatingSection, id, "item-addPower")] = item.dBonus.indexOf("Power") >= 0 ? "on" : "0";
-			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = Format.DamageString(item);
+			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = FeatureService.GetDamageString(item);
 			update[GetSectionIdName(repeatingSection, id, "item-range")] = item.range;
 			update[GetSectionIdName(repeatingSection, id, "item-threat")] = item.threat;
 			update[GetSectionIdName(repeatingSection, id, "item-block")] = item.block;
@@ -705,7 +716,7 @@ function ConvertEquipmentDataToWeaponData(itemData) {
 	weaponData.traits = itemData.traits;
 	weaponData.abilities = itemData.abilities;
 	weaponData.skill = itemData.skill;
-	weaponData.damageString = Format.DamageString(itemData);
+	weaponData.damageString = FeatureService.GetDamageString(itemData);
 	weaponData.dType = itemData.dType;
 	weaponData.dVal = itemData.dVal;
 	weaponData.dBonus = itemData.dBonus;

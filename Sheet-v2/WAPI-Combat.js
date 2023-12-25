@@ -314,7 +314,7 @@ var TechniqueConsume = TechniqueConsume || (function () {
 
         displayTechnique = function (msg, technique, weapon) {
 
-            let output = TechniqueHandler.GetRollTemplate(technique);
+            let output = FeatureService.GetRollTemplate(technique);
 
             technique.target = "@{target||token_id}";
             let useTech = SanitizeSheetRollAction(JSON.stringify(technique));
@@ -561,14 +561,14 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
             techUseDisplayData.traits = technique.traits;
             techUseDisplayData.description = technique.description;
             techUseDisplayData.onSuccess = technique.onSuccess;
-            techUseDisplayData.damage = Format.DamageString(technique);
+            techUseDisplayData.damage = FeatureService.GetDamageString(technique);
             return techUseDisplayData;
         },
 
         setTechUseDisplayWeaponData = function(techUseDisplayData, technique, weaponData) {
             if (technique.traits.indexOf("Armament") >= 0) {
                 techUseDisplayData.weaponTraits = weaponData.traits;
-                techUseDisplayData.damage = Format.DamageString(weaponData);
+                techUseDisplayData.damage = FeatureService.GetDamageString(weaponData);
                 if (technique.traits.indexOf("Armament [F]") >= 0) {
                     techUseDisplayData.weaponAbilities = weaponData.abilities;
                 }

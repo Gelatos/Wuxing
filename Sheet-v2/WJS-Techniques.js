@@ -519,13 +519,13 @@ function GetTechniquesSkillTechNames(attrArray) {
 	}
 	else {
 		if (AttrParseString(attrArray, "techniques-filter-discWarfare") == "on") {
-			workingTechniqueNames = workingTechniqueNames.concat(GetWarfareTechniquesList(false));
+			workingTechniqueNames = workingTechniqueNames.concat(GetAllWarfareTechniquesList(false));
 		}
 		if (AttrParseString(attrArray, "techniques-filter-discTalent") == "on") {
-			workingTechniqueNames = workingTechniqueNames.concat(GetTalentTechniquesList(false));
+			workingTechniqueNames = workingTechniqueNames.concat(GetAllTalentTechniquesList(false));
 		}
 		if (AttrParseString(attrArray, "techniques-filter-discAcumen") == "on") {
-			workingTechniqueNames = workingTechniqueNames.concat(GetAcumenTechniquesList(false));
+			workingTechniqueNames = workingTechniqueNames.concat(GetAllAcumenTechniquesList(false));
 		}
 		if (AttrParseString(attrArray, "techniques-filter-discMagic") == "on") {
 			workingTechniqueNames = GetTechniquesSpellTechNames(attrArray);

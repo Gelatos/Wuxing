@@ -1,4 +1,4 @@
-var TechniqueHandler = TechniqueHandler || (function () {
+var FeatureService = FeatureService || (function () {
     'use strict';
 
     var 
@@ -7,7 +7,7 @@ var TechniqueHandler = TechniqueHandler || (function () {
             let output = "";
         
             // if this is an augment, incorporate the base into the rolltemplate
-            if (technique.augmentBase != "") {
+            if (technique.augmentBase != "" && technique.augmentBase != "Base") {
                 if (technique.augmentTech != undefined) {
                     technique = SetAugmentTechnique(technique, technique.augmentTech);
                 }
@@ -86,7 +86,7 @@ var TechniqueHandler = TechniqueHandler || (function () {
                     output += `{{SkillString=${skill}}} `;
                 }
                 if ((technique.dVal != "" && technique.dVal > 0) || technique.damageType != "") {
-                    output += `{{DamageString=${Format.DamageString(technique)}}} `;
+                    output += `{{DamageString=${FeatureService.GetDamageString(technique)}}} `;
                 }
             }
             if (technique.description != "" || technique.onSuccess != "") {
@@ -117,12 +117,99 @@ var TechniqueHandler = TechniqueHandler || (function () {
             }
         
             return `!ctech ${usedTechData}`;
+        },
+
+        // Formatting
+        // ------------------------
+
+        getDamageString = function(feature) {
+
+            var output = "";
+          
+            if (feature.dVal != "" && feature.dVal > 0) {
+              output += feature.dVal + "d" + feature.dType;
+            }
+            if (feature.dBonus != "") {
+              var elements = feature.dBonus.split(";");
+              for (var i = 0; i < elements.length; i++) {
+                output += `+${elements[i]}`;
+              }
+            }
+            if (feature.damageType != "") {
+              output += ` ${feature.damageType}`;
+            }
+            if (feature.element != undefined && feature.element != "") {
+              output += ` [${feature.element}]`;
+            }
+            
+            return output;
+        },
+
+        getPrerequisiteString = function(feature) {
+            var output = "";
+
+            if (feature.prqLevel > 0) {
+                output += `Character Level ${feature.prqLevel}`;
+            }
+            if (feature.prqWarfare > 0) {
+                if (output != "") {
+                    output += "; ";
+                }
+                output += `Warfare Aptitude ${feature.prqWarfare}`;
+            }
+            if (feature.prqTalent > 0) {
+                if (output != "") {
+                    output += "; ";
+                }
+                output += `Talent Aptitude ${feature.prqTalent}`;
+            }
+            if (feature.prqAcumen > 0) {
+                if (output != "") {
+                    output += "; ";
+                }
+                output += `Acumen Aptitude ${feature.prqAcumen}`;
+            }
+            if (feature.prqMagic > 0) {
+                if (output != "") {
+                    output += "; ";
+                }
+                output += `Magic Aptitude ${feature.prqMagic}`;
+            }
+            if (feature.prqBranch > 0) {
+                if (output != "") {
+                    output += "; ";
+                }
+                switch (feature.prqBranch) {
+                    case "Wood":
+                    case "Fire":
+                    case "Earth":
+                    case "Metal":
+                    case "Water":
+                        output += `${feature.prqBranch} Element`;
+                        break;
+                    default:
+                        output += `${feature.prqBranch} Branch`;
+                        break;
+                }
+            }
+            if (feature.prqOther > 0) {
+                if (output != "") {
+                    output += "; ";
+                }
+                output += feature.prqOther;
+            }
+
+            return output;
         }
+
+
 
     ;
     return {
         GetRollTemplate: getRollTemplate,
-        GetConsumeUsePost: getConsumeUsePost
+        GetConsumeUsePost: getConsumeUsePost,
+        GetDamageString: getDamageString,
+        GetPrerequisiteString: getPrerequisiteString
     };
 
 }());
@@ -164,7 +251,7 @@ var Format = Format || (function() {
 
         toCamelCase = function(inputString) {
 
-            if (inputString == "") {
+            if (inputString == "" || inputString == undefined) {
                 return inputString;
             }
 
@@ -176,6 +263,23 @@ var Format = Format || (function() {
                 words[i] = words[i][0].toUpperCase() + words[i].slice(1);
             }
 
+            return words.join('');
+        },
+
+        toUpperCamelCase = function(inputString) {
+
+            if (inputString == "" || inputString == undefined) {
+                return inputString;
+            }
+            
+            // Split the input string by spaces and iterate through the words
+            let words = inputString.split(" ");
+        
+            for (let i = 0; i < words.length; i++) {
+              // Capitalize the first letter of each word 
+              words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+            }
+          
             return words.join('');
         },
 
@@ -209,32 +313,6 @@ var Format = Format || (function() {
             return `[${message}](#" class="showtip" title="${SanitizeSheetRoll(tooltip)})`;
         },
 
-        // Damage Formatting
-        // ------------------------
-
-        damageString = function(feature) {
-
-            var output = "";
-          
-            if (feature.dVal != "" && feature.dVal > 0) {
-              output += feature.dVal + "d" + feature.dType;
-            }
-            if (feature.dBonus != "") {
-              var elements = feature.dBonus.split(";");
-              for (var i = 0; i < elements.length; i++) {
-                output += `+${elements[i]}`;
-              }
-            }
-            if (feature.damageType != "") {
-              output += ` ${feature.damageType}`;
-            }
-            if (feature.element != undefined && feature.element != "") {
-              output += ` [${feature.element}]`;
-            }
-            
-            return output;
-        },
-
         // Rolltemplate Formatting
         // ------------------------
         rollTemplateTraits = function(traits, traitType, rtPrefix) {
@@ -251,10 +329,10 @@ var Format = Format || (function() {
     ;
     return {
         ToCamelCase: toCamelCase,
+        ToUpperCamelCase: toUpperCamelCase,
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,
         ShowTooltip: showTooltip,
-        DamageString: damageString,
         RollTemplateTraits: rollTemplateTraits
     };
 }());

@@ -404,8 +404,7 @@ var WuxingToken = WuxingToken || (function () {
                 newValue = parseInt(ki.get("max"));
             }
             ki.set("current", newValue);
-            let mana = Math.floor(newValue / 10);
-            token.set(tokenData.elem, mana);
+            token.set(tokenData.elem, newValue);
         },
 
         setTurnIcon = function (tokenData, value) {
