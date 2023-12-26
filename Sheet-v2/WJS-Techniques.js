@@ -103,11 +103,6 @@ function SetTechniqueAdvancementFields(update, attrArray, totalLevel, techniques
 				techPoints[pointField] += techniques.values[techniques.keys[i]];
 				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 				break;
-			case "TPS":
-				pointField = "pathtraining";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
 			case "GD":
 				pointField = "discgeneral";
 				techPoints[pointField] += techniques.values[techniques.keys[i]];
@@ -150,7 +145,6 @@ function SetTechniqueAdvancementFields(update, attrArray, totalLevel, techniques
 function GetTechniquesTechPointObj() {
 	return {
 		"pathgeneral": 0,
-		"pathtraining": 0,
 		"discgeneral": 0,
 		"discWarfare": 0,
 		"discTalent": 0,
@@ -172,7 +166,6 @@ function SetTechniquesPointCounts(update, techPointCaps, learnedTech) {
 		}
 		switch (techData.group) {
 			case "pathgeneral": 
-			case "pathtraining": 
 				fallbackGroup = "pathgeneral"; 
 				break;
 			case "discgeneral": 

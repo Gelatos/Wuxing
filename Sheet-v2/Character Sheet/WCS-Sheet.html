@@ -7932,7 +7932,6 @@
 					</span>
 				</div>
 			</div>
-
 			<div class="wuxDistinctSection wuxSizeInverse">
 				<div class="wuxDistinctField">
 					<span class="wuxDistinctSubtitle">Vitality</span>
@@ -7940,6 +7939,16 @@
 						<span name='attr_vitality' value="0">0</span>
 						<span class="wuxFontSize7">/ </span>
 						<span class="wuxFontSize7" name='attr_vitality_max' value="0">0</span>
+					</span>
+				</div>
+			</div>
+			<div class="wuxDistinctSection wuxSizeInverse">
+				<div class="wuxDistinctField">
+					<span class="wuxDistinctSubtitle">Stress</span>
+					<span class='wuxDistinctSubdata'>
+						<span name='attr_stress' value="0">0</span>
+						<span class="wuxFontSize7">/ </span>
+						<span class="wuxFontSize7" name='attr_stress_max' value="0">0</span>
 					</span>
 				</div>
 			</div>
@@ -7963,128 +7972,194 @@
 				</div>
 			</div>
 
-			<div class="wuxHeader">Skills</div>
 			<div class="wuxInteractiveBlock wuxSizeTiny">
 
 				<div class="wuxInteractiveInnerBlock">
-					<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-defensive">
+					<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-quickAccess-expandButton-skills">
 					<div class="wuxInteractiveContent">
-						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-defensive">
+						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-skills">
 						<span class="wuxInteractiveIcon">&#9662;</span>
-						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-defensive">
+						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-skills">
 						<span class="wuxInteractiveAuxIcon">&#9656;</span>
 
-						<span class="wuxSubheader">Defensive</span>
+						<div class="wuxHeader">Skills</div>
 					</div>
 				</div>
 
-				<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-defensive">
+				<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-quickAccess-expandButton-skills">
 				<div class="wuxInteractiveExpandingContent">
-					<button class="wuxButton wuxSizePercent" type="roll" value="Brace Check"><span>Brace</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Insight Check"><span>Insight</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Notice Check"><span>Notice</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Presence Check"><span>Presence</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Reflex Check"><span>Reflex</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Resolve Check"><span>Resolve</span></button>
+					<div class="wuxInteractiveBlock wuxSizeTiny">
+		
+						<div class="wuxInteractiveInnerBlock">
+							<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-quickAccess-expandButton-defensive">
+							<div class="wuxInteractiveContent">
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-defensive">
+								<span class="wuxInteractiveIcon">&#9662;</span>
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-defensive">
+								<span class="wuxInteractiveAuxIcon">&#9656;</span>
+		
+								<span class="wuxSubheader">Defenses</span>
+							</div>
+						</div>
+		
+						<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-quickAccess-expandButton-defensive">
+						<div class="wuxInteractiveExpandingContent">
+							<button class="wuxButton wuxSizePercent" type="roll" value="Brace Check"><span>Brace</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Insight Check"><span>Insight</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Notice Check"><span>Notice</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Presence Check"><span>Presence</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Reflex Check"><span>Reflex</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Resolve Check"><span>Resolve</span></button>
+						</div>
+					</div>
+					<div class="wuxInteractiveBlock wuxSizeTiny">
+		
+						<div class="wuxInteractiveInnerBlock">
+							<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-quickAccess-expandButton-body">
+							<div class="wuxInteractiveContent">
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-body">
+								<span class="wuxInteractiveIcon">&#9662;</span>
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-body">
+								<span class="wuxInteractiveAuxIcon">&#9656;</span>
+		
+								<span class="wuxSubheader">Body</span>
+							</div>
+						</div>
+		
+						<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-quickAccess-expandButton-body">
+						<div class="wuxInteractiveExpandingContent">
+							<button class="wuxButton wuxSizePercent" type="roll" value="Acrobatics Check"><span>Acrobatics</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Athletics Check"><span>Athletics</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Fortitude Check"><span>Fortitude</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Physique Check"><span>Physique</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Palming Check"><span>Palming</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Stealth Check"><span>Stealth</span></button>
+						</div>
+					</div>
+					<div class="wuxInteractiveBlock wuxSizeTiny">
+		
+						<div class="wuxInteractiveInnerBlock">
+							<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-quickAccess-expandButton-technical">
+							<div class="wuxInteractiveContent">
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-technical">
+								<span class="wuxInteractiveIcon">&#9662;</span>
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-technical">
+								<span class="wuxInteractiveAuxIcon">&#9656;</span>
+		
+								<span class="wuxSubheader">Technical</span>
+							</div>
+						</div>
+		
+						<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-quickAccess-expandButton-technical">
+						<div class="wuxInteractiveExpandingContent">
+							<button class="wuxButton wuxSizePercent" type="roll" value="Artisan Check"><span>Artisan</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Cook Check"><span>Cook</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Herbalism Check"><span>Herbalism</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Mechanical Check"><span>Mechanical</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Medicine Check"><span>Medicine</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Pilot Check"><span>Pilot</span></button>
+						</div>
+					</div>
+					<div class="wuxInteractiveBlock wuxSizeTiny">
+		
+						<div class="wuxInteractiveInnerBlock">
+							<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-quickAccess-expandButton-knowledge">
+							<div class="wuxInteractiveContent">
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-knowledge">
+								<span class="wuxInteractiveIcon">&#9662;</span>
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-knowledge">
+								<span class="wuxInteractiveAuxIcon">&#9656;</span>
+		
+								<span class="wuxSubheader">Knowledge</span>
+							</div>
+						</div>
+		
+						<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-quickAccess-expandButton-knowledge">
+						<div class="wuxInteractiveExpandingContent">
+							<button class="wuxButton wuxSizePercent" type="roll" value="Arcana Check"><span>Arcana</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Culture Check"><span>Culture</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="History Check"><span>History</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Investigation Check"><span>Investigation</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Nature Check"><span>Nature</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Tracking Check"><span>Tracking</span></button>
+						</div>
+					</div>
+					<div class="wuxInteractiveBlock wuxSizeTiny">
+		
+						<div class="wuxInteractiveInnerBlock">
+							<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-quickAccess-expandButton-social">
+							<div class="wuxInteractiveContent">
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-social">
+								<span class="wuxInteractiveIcon">&#9662;</span>
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-social">
+								<span class="wuxInteractiveAuxIcon">&#9656;</span>
+		
+								<span class="wuxSubheader">Social</span>
+							</div>
+						</div>
+		
+						<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-quickAccess-expandButton-social">
+						<div class="wuxInteractiveExpandingContent">
+							<button class="wuxButton wuxSizePercent" type="roll" value="Deception Check"><span>Deception</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Etiquette Check"><span>Etiquette</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Intimidation Check"><span>Intimidation</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Leadership Check"><span>Leadership</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Negotiation Check"><span>Negotiation</span></button>
+							<button class="wuxButton wuxSizePercent" type="roll" value="Performance Check"><span>Performance</span></button>
+						</div>
+					</div>
 				</div>
 			</div>
+
 			<div class="wuxInteractiveBlock wuxSizeTiny">
 
 				<div class="wuxInteractiveInnerBlock">
-					<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-body">
+					<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-quickAccess-expandButton-tools">
 					<div class="wuxInteractiveContent">
-						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-body">
+						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-tools">
 						<span class="wuxInteractiveIcon">&#9662;</span>
-						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-body">
+						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-tools">
 						<span class="wuxInteractiveAuxIcon">&#9656;</span>
 
-						<span class="wuxSubheader">Body</span>
+						<span class="wuxHeader">Tools</span>
 					</div>
 				</div>
 
-				<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-body">
+				<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-quickAccess-expandButton-tools">
 				<div class="wuxInteractiveExpandingContent">
-					<button class="wuxButton wuxSizePercent" type="roll" value="Acrobatics Check"><span>Acrobatics</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Athletics Check"><span>Athletics</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Fortitude Check"><span>Fortitude</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Physique Check"><span>Physique</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Palming Check"><span>Palming</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Stealth Check"><span>Stealth</span></button>
-				</div>
-			</div>
-			<div class="wuxInteractiveBlock wuxSizeTiny">
 
-				<div class="wuxInteractiveInnerBlock">
-					<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-technical">
-					<div class="wuxInteractiveContent">
-						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-technical">
-						<span class="wuxInteractiveIcon">&#9662;</span>
-						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-technical">
-						<span class="wuxInteractiveAuxIcon">&#9656;</span>
+					<div class="wuxInteractiveBlock wuxSizeTiny">
 
-						<span class="wuxSubheader">Technical</span>
+						<div class="wuxInteractiveInnerBlock">
+							<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-quickAccess-expandButton-advancement">
+							<div class="wuxInteractiveContent">
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-advancement">
+								<span class="wuxInteractiveIcon">&#9662;</span>
+								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-quickAccess-expandButton-advancement">
+								<span class="wuxInteractiveAuxIcon">&#9656;</span>
+
+								<span class="wuxSubheader">Advancement</span>
+							</div>
+						</div>
+
+						<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-quickAccess-expandButton-advancement">
+						<div class="wuxInteractiveExpandingContent">
+							<div class="wuxButton wuxSizePercent">
+								<input type="checkbox" name="attr_character-button-advancement">
+								<span>Level Up</span>
+							</div>
+							<div class="wuxButton wuxSizePercent">
+								<input type="checkbox" name="attr_character-button-techniques">
+								<span>Techniques</span>
+							</div>
+							<div class="wuxButton wuxSizePercent">
+								<input type="checkbox" name="attr_character-button-skills">
+								<span>Skill Training</span>
+							</div>
+						</div>
 					</div>
 				</div>
-
-				<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-technical">
-				<div class="wuxInteractiveExpandingContent">
-					<button class="wuxButton wuxSizePercent" type="roll" value="Artisan Check"><span>Artisan</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Cook Check"><span>Cook</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Herbalism Check"><span>Herbalism</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Mechanical Check"><span>Mechanical</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Medicine Check"><span>Medicine</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Pilot Check"><span>Pilot</span></button>
-				</div>
 			</div>
-			<div class="wuxInteractiveBlock wuxSizeTiny">
-
-				<div class="wuxInteractiveInnerBlock">
-					<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-knowledge">
-					<div class="wuxInteractiveContent">
-						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-knowledge">
-						<span class="wuxInteractiveIcon">&#9662;</span>
-						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-knowledge">
-						<span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-						<span class="wuxSubheader">Knowledge</span>
-					</div>
-				</div>
-
-				<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-knowledge">
-				<div class="wuxInteractiveExpandingContent">
-					<button class="wuxButton wuxSizePercent" type="roll" value="Arcana Check"><span>Arcana</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Culture Check"><span>Culture</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="History Check"><span>History</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Investigation Check"><span>Investigation</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Nature Check"><span>Nature</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Tracking Check"><span>Tracking</span></button>
-				</div>
-			</div>
-			<div class="wuxInteractiveBlock wuxSizeTiny">
-
-				<div class="wuxInteractiveInnerBlock">
-					<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_character-skillsSidebar-expandButton-social">
-					<div class="wuxInteractiveContent">
-						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-social">
-						<span class="wuxInteractiveIcon">&#9662;</span>
-						<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_character-skillsSidebar-expandButton-social">
-						<span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-						<span class="wuxSubheader">Social</span>
-					</div>
-				</div>
-
-				<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_character-skillsSidebar-expandButton-social">
-				<div class="wuxInteractiveExpandingContent">
-					<button class="wuxButton wuxSizePercent" type="roll" value="Deception Check"><span>Deception</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Etiquette Check"><span>Etiquette</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Intimidation Check"><span>Intimidation</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Leadership Check"><span>Leadership</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Negotiation Check"><span>Negotiation</span></button>
-					<button class="wuxButton wuxSizePercent" type="roll" value="Performance Check"><span>Performance</span></button>
-				</div>
-			</div>
-
 
 		</div>
 	</div>
@@ -17457,10 +17532,12 @@ function CreateCharacterAdvancementUpdate(advancementUpdate, currentLevel, maxLe
 		// set level bonuses
 		switch (levelCheck) {
 			case 1:
-				tech = { name: "Gain any Path Technique.", type: "PS" };
+				tech = { name: "Gain any 3 Path Techniques.", type: "PS" };
 				pathUpdate += `\n${tech.name}`;
 				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				tech = { name: "Gain any 2 Discipline Techniques.", type: "GD" };
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
+				tech = { name: "Gain any 2 Techniques.", type: "GD" };
 				pathUpdate += `\n${tech.name}`;
 				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
@@ -17501,22 +17578,17 @@ function CreateCharacterAdvancementUpdate(advancementUpdate, currentLevel, maxLe
 		}
 
 		if ((levelCheck % 5) - 2 == 0) {
-			tech = { name: "Gain any Discipline Technique.", type: "GD" };
+			tech = { name: "Gain any Technique.", type: "GD" };
 			pathUpdate += `\n${tech.name}`;
 			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 		}
 		else if ((levelCheck % 5) - 3 == 0) {
-			tech = { name: "Gain any Skill Training Technique.", type: "TPS" };
-			pathUpdate += `\n${tech.name}`;
-			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-		}
-		else if ((levelCheck % 5) - 4 == 0) {
 			tech = { name: "Gain any Path Technique.", type: "PS" };
 			pathUpdate += `\n${tech.name}`;
 			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 		}
 		else if ((levelCheck % 5) == 0) {
-			tech = { name: "Gain any Discipline Technique.", type: "GD" };
+			tech = { name: "Gain any Technique.", type: "GD" };
 			pathUpdate += `\n${tech.name}`;
 			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 		}
@@ -17914,11 +17986,6 @@ function SetTechniqueAdvancementFields(update, attrArray, totalLevel, techniques
 				techPoints[pointField] += techniques.values[techniques.keys[i]];
 				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 				break;
-			case "TPS":
-				pointField = "pathtraining";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
 			case "GD":
 				pointField = "discgeneral";
 				techPoints[pointField] += techniques.values[techniques.keys[i]];
@@ -17961,7 +18028,6 @@ function SetTechniqueAdvancementFields(update, attrArray, totalLevel, techniques
 function GetTechniquesTechPointObj() {
 	return {
 		"pathgeneral": 0,
-		"pathtraining": 0,
 		"discgeneral": 0,
 		"discWarfare": 0,
 		"discTalent": 0,
@@ -17983,7 +18049,6 @@ function SetTechniquesPointCounts(update, techPointCaps, learnedTech) {
 		}
 		switch (techData.group) {
 			case "pathgeneral": 
-			case "pathtraining": 
 				fallbackGroup = "pathgeneral"; 
 				break;
 			case "discgeneral": 

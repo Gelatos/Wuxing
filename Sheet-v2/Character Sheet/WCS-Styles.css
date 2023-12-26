@@ -997,8 +997,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 	margin: 0px 0px 5px 0px;
 	padding: 0px 5px;
 
-    border-bottom: 1px solid #d0d0d0;
-    border-image: linear-gradient(to right, #A0A0A0FF 0%, #A0A0A000 80%, #A0A0A000 100%) 1;
+    /* border-bottom: 1px solid #d0d0d0; */
+    /* border-image: linear-gradient(to right, #A0A0A0FF 0%, #A0A0A000 80%, #A0A0A000 100%) 1; */
 }
 
 .wuxInteractiveBlock.wuxSizeSmall,
