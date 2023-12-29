@@ -65,154 +65,181 @@ var update_techniques_back = function () {
 
 // ======== Point Fields
 
-function GetTechniqueFieldsList() {
+var TechniquePoints = TechniquePoints || (function () {
+    'use strict';
 
-	return ["pathgeneral", "pathtraining",
-		"discgeneral", "discWarfare", "discTalent", "discAcumen", "discMagic"];
-}
+    var 
+		getTechniqueFieldsList = function() {
 
-function GetTechniquePointFieldsList(isMax) {
-	let output = GetTechniqueFieldsList();
-	for (let i = 0; i < output.length; i++) {
-		output = `techpoints-${output[i]}${isMax ? "_max" : ""}`;
-	}
-	return output;
-}
+			return ["pathgeneral", "discgeneral", "discWarfare", "discTalent", "discAcumen", "discMagic"];
+		},
 
-function GetTechniquePointBonusFieldsList() {
-	let output = GetTechniqueFieldsList();
-	for (let i = 0; i < output.length; i++) {
-		output = `techbonus-${output[i]}`;
-	}
-	return output;
-}
+		getTechniquePointFieldsList = function(isMax) {
 
-function SetTechniqueAdvancementFields(update, attrArray, totalLevel, techniques) {
+			let output = getTechniqueFieldsList();
+			for (let i = 0; i < output.length; i++) {
+				output = `techpoints-${output[i]}${isMax ? "_max" : ""}`;
+			}
+			return output;
+		},
 
-	let techPoints = AttrParseJSON(attrArray, "techniques-techpoints");
-	if (techPoints == "") {
-		techPoints = GetTechniquesTechPointObj();
-	}
-	let learnedTech = AttrParseJSONDictionary(attrArray, "techniques-learnedNewTech");
-	let pointField = "";
+		getTechniquePointBonusFieldsList = function() {
+			let output = getTechniqueFieldsList();
+			for (let i = 0; i < output.length; i++) {
+				output = `techbonus-${output[i]}`;
+			}
+			return output;
+		},
 
-	for (let i = 0; i < techniques.keys.length; i++) {
-		switch (techniques.keys[i]) {
-			case "PS":
-				pointField = "pathgeneral";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
-			case "GD":
-				pointField = "discgeneral";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
+		getTechniquePointFieldsList = function() {
+			let mod_attrs = [];
+			mod_attrs = mod_attrs.concat(getTechniquePointFieldsList(false));
+			mod_attrs = mod_attrs.concat(getTechniquePointFieldsList(true));
+			mod_attrs = mod_attrs.concat(getTechniquePointBonusFieldsList());
+			return mod_attrs;
+		},
 
-			case "WD":
-				pointField = "discWarfare";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
-			case "TD":
-				pointField = "discTalent";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
-			case "AD":
-				pointField = "discAcumen";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
-			case "MD":
-				pointField = "discMagic";
-				techPoints[pointField] += techniques.values[techniques.keys[i]];
-				update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
-				break;
+		getTechniquesTechPointObj = function() {
+			return {
+				"pathgeneral": 0,
+				"discgeneral": 0,
+				"discWarfare": 0,
+				"discTalent": 0,
+				"discAcumen": 0,
+				"discMagic": 0
+			}
+		},
 
-			case "T": update = SetTechniquesJobTechniques(update, attrArray, techniques.values[techniques.keys[i]]); break;
+		getTechniquePointsCurrentValues = function(attrArray) {
+			let techPoints = AttrParseJSON(attrArray, "techniques-techpoints");
+			if (techPoints == "") {
+				techPoints = getTechniquesTechPointObj();
+			}
+			return techPoints;
+		},
 
-			case "JTS": update = SetCharacterTechSlotCounts(update, attrArray, totalLevel, ["job"]); break;
-			case "ATS": update = SetCharacterTechSlotCounts(update, attrArray, totalLevel, ["active"]); break;
-			case "PTS": update = SetCharacterTechSlotCounts(update, attrArray, totalLevel, ["passive", "support"]); break;
+		setTechniqueAdvancementFields = function(update, attrArray, totalLevel, techniques) {
+
+			let techPoints = getTechniquePointsCurrentValues(attrArray);
+			let learnedTech = AttrParseJSONDictionary(attrArray, "techniques-learnedNewTech");
+			let pointField = "";
+
+			for (let i = 0; i < techniques.keys.length; i++) {
+				switch (techniques.keys[i]) {
+					case "PS":
+						pointField = "pathgeneral";
+						techPoints[pointField] += techniques.values[techniques.keys[i]];
+						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
+						break;
+					case "GD":
+						pointField = "discgeneral";
+						techPoints[pointField] += techniques.values[techniques.keys[i]];
+						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
+						break;
+
+					case "WD":
+						pointField = "discWarfare";
+						techPoints[pointField] += techniques.values[techniques.keys[i]];
+						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
+						break;
+					case "TD":
+						pointField = "discTalent";
+						techPoints[pointField] += techniques.values[techniques.keys[i]];
+						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
+						break;
+					case "AD":
+						pointField = "discAcumen";
+						techPoints[pointField] += techniques.values[techniques.keys[i]];
+						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
+						break;
+					case "MD":
+						pointField = "discMagic";
+						techPoints[pointField] += techniques.values[techniques.keys[i]];
+						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
+						break;
+
+					case "T": update = setTechniquesJobTechniques(update, attrArray, techniques.values[techniques.keys[i]]); break;
+
+					case "JTS": update = SetCharacterTechSlotCounts(update, attrArray, totalLevel, ["job"]); break;
+					case "ATS": update = SetCharacterTechSlotCounts(update, attrArray, totalLevel, ["active"]); break;
+					case "PTS": update = SetCharacterTechSlotCounts(update, attrArray, totalLevel, ["passive", "support"]); break;
+				}
+			}
+			update["techniques-techpoints"] = JSON.stringify(techPoints);
+			update = setTechniquesPointCounts(update, techPoints, learnedTech);
+			return update;
+		},
+
+		setTechniquesPointCounts = function(update, techPointCaps, learnedTech) {
+
+			let techPoints = getTechniquesTechPointObj();
+			let techData = {};
+			let fallbackGroup = "";
+			for (let i = 0; i < learnedTech.keys.length; i++) {
+				techData = learnedTech.values[learnedTech.keys[i]];
+		
+				if (techData == undefined) {
+					continue;
+				}
+				switch (techData.group) {
+					case "pathgeneral": 
+						fallbackGroup = "pathgeneral"; 
+						break;
+					case "discgeneral": 
+					case "discWarfare":
+					case "discTalent":
+					case "discAcumen":
+					case "discMagic":
+						fallbackGroup = "discgeneral";
+						break;
+				}
+		
+				if (parseInt(techPoints[techData.group]) < parseInt(techPointCaps[techData.group])) {
+					techPoints[techData.group] = parseInt(techPoints[techData.group]) + parseInt(techData.count);
+				}
+				else {
+					techPoints[fallbackGroup] = parseInt(techPoints[fallbackGroup]) + parseInt(techData.count);
+				}
+			}
+		
+			let fields = getTechniqueFieldsList();
+			for (let i = 0; i < fields.length; i++) {
+				update[`techpoints-${fields[i]}`] = parseInt(techPointCaps[fields[i]]) - parseInt(techPoints[fields[i]]);
+				switch(fields[i]) {
+					case "pathgeneral": 
+					case "discgeneral": 
+						update[`techpoints-${fields[i]}-error`] = techPoints[fields[i]] > techPointCaps[fields[i]] ? "1" : "0";
+						break;
+				}
+			}
+			return update;
+		},
+
+		setTechniquesJobTechniques = function(update, attrArray, techniques) {
+
+			if (techniques == undefined) {
+				return;
+			}
+			let jobs = AttrParseString(attrArray, "techniques-jobTech");
+		
+			if (jobs != "") {
+				jobs += ";";
+			}
+			jobs += techniques;
+			update["techniques-jobTech"] = jobs;
+		
+			return update;
 		}
-	}
-	update["techniques-techpoints"] = JSON.stringify(techPoints);
-	update = SetTechniquesPointCounts(update, techPoints, learnedTech);
-	return update;
-}
 
-function GetTechniquesTechPointObj() {
+	;
 	return {
-		"pathgeneral": 0,
-		"discgeneral": 0,
-		"discWarfare": 0,
-		"discTalent": 0,
-		"discAcumen": 0,
-		"discMagic": 0
+		GetTechniquePointFieldsList : getTechniquePointFieldsList,
+		GetTechniquePointsCurrentValues: getTechniquePointsCurrentValues,
+		SetTechniqueAdvancementFields : setTechniqueAdvancementFields,
+		SetTechniquesPointCounts : setTechniquesPointCounts
 	};
-}
 
-function SetTechniquesPointCounts(update, techPointCaps, learnedTech) {
-
-	let techPoints = GetTechniquesTechPointObj();
-	let techData = {};
-	let fallbackGroup = "";
-	for (let i = 0; i < learnedTech.keys.length; i++) {
-		techData = learnedTech.values[learnedTech.keys[i]];
-
-		if (techData == undefined) {
-			continue;
-		}
-		switch (techData.group) {
-			case "pathgeneral": 
-				fallbackGroup = "pathgeneral"; 
-				break;
-			case "discgeneral": 
-			case "discWarfare":
-			case "discTalent":
-			case "discAcumen":
-			case "discMagic":
-				fallbackGroup = "discgeneral";
-				break;
-		}
-
-		if (parseInt(techPoints[techData.group]) < parseInt(techPointCaps[techData.group])) {
-			techPoints[techData.group] = parseInt(techPoints[techData.group]) + parseInt(techData.count);
-		}
-		else {
-			techPoints[fallbackGroup] = parseInt(techPoints[fallbackGroup]) + parseInt(techData.count);
-		}
-	}
-
-	let fields = GetTechniqueFieldsList();
-	for (let i = 0; i < fields.length; i++) {
-		update[`techpoints-${fields[i]}`] = parseInt(techPointCaps[fields[i]]) - parseInt(techPoints[fields[i]]);
-		switch(fields[i]) {
-			case "pathgeneral": 
-			case "discgeneral": 
-				update[`techpoints-${fields[i]}-error`] = techPoints[fields[i]] > techPointCaps[fields[i]] ? "1" : "0";
-				break;
-		}
-	}
-	return update;
-}
-
-function SetTechniquesJobTechniques(update, attrArray, techniques) {
-
-	if (techniques == undefined) {
-		return;
-	}
-	let jobs = AttrParseString(attrArray, "techniques-jobTech");
-
-	if (jobs != "") {
-		jobs += ";";
-	}
-	jobs += techniques;
-	update["techniques-jobTech"] = jobs;
-
-	return update;
-}
+}());
 
 
 
@@ -644,9 +671,7 @@ function UpdateTechniquesSelectedTechniques(repeatingId, newValue) {
 
 	let mod_attrs = ["techniques-techpoints", "techniques-learnedNewTech"];
 	mod_attrs = mod_attrs.concat(GetSectionIdValues([repeatingId], repeatingSection, ["technique-name", "technique-group"]));
-	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(false));
-	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(true));
-	mod_attrs = mod_attrs.concat(GetTechniquePointBonusFieldsList());
+	mod_attrs = mod_attrs.concat(TechniquePoints.GetTechniquePointFieldsList());
 
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
@@ -656,11 +681,7 @@ function UpdateTechniquesSelectedTechniques(repeatingId, newValue) {
 			return;
 		}
 		let techGroup = SetTechniquesTechGroup(AttrParseString(v, GetSectionIdName(repeatingSection, repeatingId, "technique-group")));
-
-		let techPoints = AttrParseJSON(v, "techniques-techpoints");
-		if (techPoints == "") {
-			techPoints = GetTechniquesTechPointObj();
-		}
+		let techPoints = TechniquePoints.GetTechniquePointsCurrentValues();
 		let learnedTech = AttrParseJSON(v, "techniques-learnedNewTech");
 		if (learnedTech == "") {
 			learnedTech = CreateDictionary();
@@ -668,7 +689,7 @@ function UpdateTechniquesSelectedTechniques(repeatingId, newValue) {
 		learnedTech = SetTechniquesSelectedTechnique(learnedTech, techName, newValue, techGroup);
 		update["techniques-learnedNewTech"] = JSON.stringify(learnedTech);
 
-		update = SetTechniquesPointCounts(update, techPoints, learnedTech);
+		update = TechniquePoints.SetTechniquesPointCounts(update, techPoints, learnedTech);
 
 		setAttrs(update, { silent: true });
 	});

@@ -195,7 +195,7 @@ var update_advancement_submit = function () {
 		}
 
 		advancementUpdate = CreateCharacterAdvancementUpdate(advancementUpdate, baseLevel, totalLevel);
-		update = SetTechniqueAdvancementFields(update, v, totalLevel, advancementUpdate.techniques);
+		update = TechniquePoints.SetTechniqueAdvancementFields(update, v, totalLevel, advancementUpdate.techniques);
 
 		// calculate final growths
 		baseGrowthsTotal = AddGrowths(baseGrowthsTotal, MultiplyGrowths(baseGrowths, totalLevel - baseLevel));

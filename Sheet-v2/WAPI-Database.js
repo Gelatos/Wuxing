@@ -20,7 +20,7 @@ var FeatureService = FeatureService || (function () {
             output += `{{Name=${technique.name}}}`;
             output += `{{Type=${technique.techniqueType}}}`;
             output += `{{type-${technique.techniqueType}=1}} `;
-            output += `{{Group=${technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup}}}`;
+            output += `{{Group=${technique.techniqueSource}}}`;
         
             // create the action line
             let actionLine = "";
@@ -202,8 +202,6 @@ var FeatureService = FeatureService || (function () {
             return output;
         }
 
-
-
     ;
     return {
         GetRollTemplate: getRollTemplate,
@@ -247,8 +245,6 @@ var Format = Format || (function() {
     'use strict';
 
     var 
-
-
         toCamelCase = function(inputString) {
 
             if (inputString == "" || inputString == undefined) {

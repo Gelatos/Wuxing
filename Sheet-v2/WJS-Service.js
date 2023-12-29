@@ -390,9 +390,8 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 	update[GetSectionIdName(repeatingSection, id, "technique-name")] = technique.name;
 	update[GetSectionIdName(repeatingSection, id, "technique-isBase")] = isBase ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-augmentBase")] = technique.augmentBase;
-	update[GetSectionIdName(repeatingSection, id, "technique-displaygroup")] = technique.techniqueSubGroup == "" ? technique.techniqueGroup : technique.techniqueSubGroup;
+	update[GetSectionIdName(repeatingSection, id, "technique-displaygroup")] = technique.techniqueSource;
 	update[GetSectionIdName(repeatingSection, id, "technique-group")] = technique.techniqueGroup;
-	update[GetSectionIdName(repeatingSection, id, "technique-subgroup")] = technique.techniqueSubGroup;
 	update[GetSectionIdName(repeatingSection, id, "technique-type")] = technique.techniqueType;
 	update[GetSectionIdName(repeatingSection, id, "technique-action")] = technique.action;
 	update[GetSectionIdName(repeatingSection, id, "technique-limits")] = technique.limits;
@@ -463,9 +462,6 @@ function SetAugmentTechnique(technique, baseTechnique) {
 	baseTechnique.augmentBase = technique.augmentBase;
 	if (technique.techniqueGroup != "") {
 		baseTechnique.techniqueGroup = technique.techniqueGroup;
-	}
-	if (technique.techniqueSubGroup != "") {
-		baseTechnique.techniqueSubGroup = technique.techniqueSubGroup;
 	}
 	if (technique.techniqueType != "") {
 		baseTechnique.techniqueType = technique.techniqueType;
