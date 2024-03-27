@@ -1,4 +1,45 @@
 /*========================================
+  Character Sheet Display Style
+========================================*/
+
+.wuxCharacterSheetDisplayStyle-Builder,
+.wuxCharacterSheetDisplayStyle-Training,
+.wuxCharacterSheetDisplayStyle-Skills,
+.wuxCharacterSheetDisplayStyle-Knowledge,
+.wuxCharacterSheetDisplayStyle-Jobs,
+.wuxCharacterSheetDisplayStyle-Advancement,
+.wuxCharacterSheetDisplayStyle-LevelUp,
+.wuxCharacterSheetDisplayStyle-Techniques,
+.wuxCharacterSheetDisplayStyle-Character,
+.wuxCharacterSheetDisplayStyle-PartyManager,
+.wuxTechniqueDisplayStyle-Active,
+.wuxTechniqueDisplayStyle-Slot,
+.wuxTechniqueDisplayStyle-Learn,
+.wuxTrainingDisplayStyle-Skills
+{
+	display: none;
+}
+
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="0"] ~ .wuxCharacterSheetDisplayStyle-Builder,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Training"] ~ .wuxCharacterSheetDisplayStyle-Training,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Skills"] ~ .wuxCharacterSheetDisplayStyle-Skills,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Knowledge"] ~ .wuxCharacterSheetDisplayStyle-Knowledge,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Jobs"] ~ .wuxCharacterSheetDisplayStyle-Jobs,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Advancement"] ~ .wuxCharacterSheetDisplayStyle-Advancement,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="LevelUp"] ~ .wuxCharacterSheetDisplayStyle-LevelUp,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Techniques"] ~ .wuxCharacterSheetDisplayStyle-Techniques,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Character"] ~ .wuxCharacterSheetDisplayStyle-Character,
+input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .wuxCharacterSheetDisplayStyle-PartyManager,
+input[type=hidden].wuxTechniqueDisplayStyle-Flag[value="Active"] ~ .wuxTechniqueDisplayStyle-Active,
+input[type=hidden].wuxTechniqueDisplayStyle-Flag[value="Slot"] ~ .wuxTechniqueDisplayStyle-Slot,
+input[type=hidden].wuxTechniqueDisplayStyle-Flag[value="Learn"] ~ .wuxTechniqueDisplayStyle-Learn,
+input[type=hidden].wuxTrainingDisplayStyle-Flag[value="Skills"] ~ .wuxTrainingDisplayStyle-Skills
+{
+	display: block;
+}
+
+
+/*========================================
   Sidebar
 ========================================*/
 
@@ -45,7 +86,7 @@
     height: 10px;
 }
 
-.wuxStickyHeader .wuxStickyHeaderMain .wuxHeader2 span
+.wuxStickyHeader .wuxHeader2 span
 {
     font-family: "Candal";
     font-size: 10px;
@@ -56,24 +97,12 @@
 .wuxStickyHeader .wuxHeader
 {
     height: 18px;
-}
-
-.wuxStickyHeader .wuxHeader input
-{
     margin-bottom: 5px;
 
     color: #f4f6f8;
     font-size: 14px;
     text-transform: capitalize;
-    font-family: "Candal";
-    text-overflow: clip;
 
-    background: none;
-    border: none;
-}
-
-.wuxStickyHeader .wuxStickyHeaderMain .wuxHeader input
-{
     font-size: 16px;
     background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
     -webkit-background-clip: text;
@@ -81,7 +110,20 @@
     -webkit-text-fill-color: transparent;
 }
 
-.wuxStickyHeader .wuxStickyHeaderMain .wuxHeader input[type=text]::placeholder
+.wuxStickyHeader .wuxHeader input
+{
+    font-family: "Candal";
+    text-overflow: clip;
+    border: none;
+
+    font-size: 16px;
+    background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.wuxStickyHeader .wuxHeader input[type=text]::placeholder
 {
     color: #686868;
 }
@@ -89,6 +131,14 @@
 .wuxStickyHeader .wuxHeader input.wuxSizeSmall
 {
     width: 25px;
+}
+
+.wuxStickySideTab
+{
+    float: right;
+
+    margin-top: 10px;
+    width: auto;
 }
 
 /*========================================
@@ -238,6 +288,11 @@ input[type=hidden].wuxFeature-flag[value="on"] + .wuxFeature
     border: 3px solid #ba7417;
 }
 
+input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature 
+{
+    display: none;
+}
+
 .wuxFeatureHeader,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeader,
@@ -320,15 +375,22 @@ input.wuxFeatureHeader-flag[value="Equipment"] + .wuxFeatureHeader,
     position: absolute;
     display: inline-block;
     right: 0px;
-    width: 55px; 
-    padding: 5px; 
+    width: 65px; 
+    padding: 5px 0px; 
 
     vertical-align: top; 
     text-align: center; 
     
     color: #FFF; 
     
-    background: #000000;
+    background: #666;
+    border: 0px solid #000;
+    border-width: 0px 0px 3px 3px;
+}
+
+.wuxFeatureType.wuxFeatureType-IsPath
+{
+    width: 90px; 
 }
 
 input.wuxFeatureType-flag[value="Active"] + .wuxFeatureType,
@@ -372,7 +434,7 @@ input.wuxFeatureType-flag[value="Standard"] + .wuxFeatureType,
     position: relative;
     display: block;
 
-    font-size: 9px; 
+    font-size: 10px; 
     font-weight: bold;
 }
 
@@ -381,7 +443,7 @@ input.wuxFeatureType-flag[value="Standard"] + .wuxFeatureType,
 {
     position: relative;
     display: block;
-    font-size: 7px;
+    font-size: 6px;
 }
 
 .wuxFeatureHeaderInteractBlock,
@@ -518,6 +580,18 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
     font-weight: bold;
 }
 
+.wuxFeatureHeaderInfoPrereq,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoPrereq,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoPrereq
+{
+    position: relative;
+    display: block; 
+    padding: 5px 10px; 
+
+    font-size: 11px;
+    background: #e77a7a;
+}
+
 .wuxFeatureExpandingContent,
 .sheet-rolltemplate-technique .sheet-wuxFeatureExpandingContent,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureExpandingContent
@@ -595,9 +669,9 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
     display: block;
 }
 
-.wuxFeatureAttackBlock,
-.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureAttackBlock
+.wuxFeatureCheckBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock
 {
     position: relative;
     width: calc(100% - 30px);
@@ -610,38 +684,38 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
     background: #e8c5c5;
 }
 
-.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow,
-.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow .wuxFeatureAttackBlockRange,
-.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow .wuxFeatureAttackBlockTarget,
-.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow,
-.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockRange,
-.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockTarget,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow
+.wuxFeatureCheckBlock .wuxFeatureCheckBlockRow,
+.wuxFeatureCheckBlock .wuxFeatureCheckBlockRow .wuxFeatureCheckBlockRange,
+.wuxFeatureCheckBlock .wuxFeatureCheckBlockRow .wuxFeatureCheckBlockTarget,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow .sheet-wuxFeatureCheckBlockRange,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow .sheet-wuxFeatureCheckBlockTarget,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow
 {
     position: relative;
     display: inline-block;
 }
 
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow
 {
     line-height: normal;
 }
 
-.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow,
-.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow
+.wuxFeatureCheckBlock .wuxFeatureCheckBlockRow,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow
 {
     width: calc(100% - 22px);
 }
 
-.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow .wuxFeatureAttackBlockRange,
-.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockRange
+.wuxFeatureCheckBlock .wuxFeatureCheckBlockRow .wuxFeatureCheckBlockRange,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow .sheet-wuxFeatureCheckBlockRange
 {
     padding-right: 10px;
 }
 
-.wuxFeatureAttackBlock .wuxFeatureAttackBlockRow .wuxFeatureAttackBlockTarget,
-.sheet-rolltemplate-technique .sheet-wuxFeatureAttackBlock .sheet-wuxFeatureAttackBlockRow .sheet-wuxFeatureAttackBlockTarget
+.wuxFeatureCheckBlock .wuxFeatureCheckBlockRow .wuxFeatureCheckBlockTarget,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow .sheet-wuxFeatureCheckBlockTarget
 {
     width: calc(65% - 5px);
 }

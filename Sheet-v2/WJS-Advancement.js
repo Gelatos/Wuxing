@@ -325,18 +325,13 @@ function CreateCharacterAdvancementUpdate(advancementUpdate, currentLevel, maxLe
 				break;
 		}
 
-		if ((levelCheck % 5) - 2 == 0) {
+		if ((levelCheck % 4) - 2 == 0) {
 			tech = { name: "Gain any Technique.", type: "GD" };
 			pathUpdate += `\n${tech.name}`;
 			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 		}
 		else if ((levelCheck % 5) - 3 == 0) {
 			tech = { name: "Gain any Path Technique.", type: "PS" };
-			pathUpdate += `\n${tech.name}`;
-			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-		}
-		else if ((levelCheck % 5) == 0) {
-			tech = { name: "Gain any Technique.", type: "GD" };
 			pathUpdate += `\n${tech.name}`;
 			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
 		}

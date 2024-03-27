@@ -314,7 +314,7 @@ var TechniqueConsume = TechniqueConsume || (function () {
 
         displayTechnique = function (msg, technique, weapon) {
 
-            let output = FeatureService.GetRollTemplate(technique);
+            let output = FeatureService.GetRollTemplateFromTechnique(technique);
 
             technique.target = "@{target||token_id}";
             let useTech = SanitizeSheetRollAction(JSON.stringify(technique));
@@ -610,9 +610,9 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
             let message = "";
             message += `{{Name=${techData.name}}} `;
             message += `{{Targets=${techData.userName}${techData.defenderName != "" ? ` vs. ${techData.defenderName}` : ""}}} `;
-            message += Format.RollTemplateTraits(techData.traits, "technique", "Trait");
-            message += Format.RollTemplateTraits(techData.weaponTraits, "item", "WpnTrait");
-            message += Format.RollTemplateTraits(techData.weaponAbilities, "ability", "WpnAbility");
+            message += FeatureService.RollTemplateTraits(techData.traits, "technique", "Trait");
+            message += FeatureService.RollTemplateTraits(techData.weaponTraits, "item", "WpnTrait");
+            message += FeatureService.RollTemplateTraits(techData.weaponAbilities, "ability", "WpnAbility");
 
             if (techData.description != "" || techData.onSuccess != "") {
                 message += "{{type-DescBlock=1}} ";
@@ -620,7 +620,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
                 message += techData.onSuccess != "" ? `{{OnHit=${techData.onSuccess}}}` : "";
             }
             if (techData.damage != "" || techData.userSkillName != "") {
-                message += "{{type-AttackBlock=1}} ";
+                message += "{{type-CheckBlock=1}} ";
                 message += techData.damage != "" ? `{{DamageString=${techData.damage}}} ` : "";
                 message += techData.defArmor != "" ? `{{armor=${techData.defArmor}}} ` : "";
                 if (techData.userSkillName != "") {

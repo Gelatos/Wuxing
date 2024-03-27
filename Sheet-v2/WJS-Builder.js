@@ -1,3 +1,57 @@
+on("change:page-characterCreation", function (eventinfo) {
+
+	CharacterBuilderManager.SetCharacterBuilderPage(eventinfo.newValue);
+});
+
+var CharacterBuilderManager = CharacterBuilderManager || (function() {
+    'use strict';
+
+    var
+      setCharacterBuilderPage = function(page) {
+		let update = {};
+		switch (page) {
+			case "Origin":
+				update["characterSheetDisplayStyle"] = "0";
+			break;
+			case "Skills":
+				update["characterSheetDisplayStyle"] = "Skills";
+				update["tab-training"] = "Skills";
+			break;
+			case "Knowledge":
+				update["characterSheetDisplayStyle"] = "Knowledge";
+				update["tab-training"] = "Knowledge";
+			break;
+			case "Jobs":
+				update["characterSheetDisplayStyle"] = "Jobs";
+				update["tab-advancement"] = "Jobs";
+			break;
+			case "Attributes":
+				update["characterSheetDisplayStyle"] = "Attributes";
+				update["tab-advancement"] = "Attributes";
+			break;
+			case "Techniques":
+				update["characterSheetDisplayStyle"] = "Techniques";
+				update["tab-techniques"] = "Learn";
+			break;
+		}
+		setAttrs(update, { silent: true });
+      }
+    ;
+    return {
+		SetCharacterBuilderPage: setCharacterBuilderPage
+    };
+}()); 
+
+
+
+
+
+
+
+
+
+
+
 // ======= Helper Functions
 
 function SetAdvancementBaseGrowths(update, baseGrowths, ancestryGrowths) {

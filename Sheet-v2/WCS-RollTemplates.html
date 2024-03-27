@@ -39,8 +39,8 @@
 			{{#type-Standard}}
 			<div class="wuxFeatureType wuxFeatureType-Standard">
 			{{/type-Standard}}
-				<span class="wuxFeatureTypeHeader">{{Type}}</span>
-				<span class="wuxFeatureTypeFooter">{{Group}}</span>
+				<span class="wuxFeatureTypeHeader">{{Source}}</span>
+				<span class="wuxFeatureTypeFooter">{{SlotType}}</span>
 			</div>
 
 			<div class="wuxFeatureHeaderDisplayBlock">
@@ -54,9 +54,9 @@
 					{{^type-base}}
 					<span class="wuxFeatureHeaderInfoType">Augment </span>
 					{{/type-base}}
-					{{#ActionLine}}
-					<span>{{ActionLine}}</span>
-					{{/ActionLine}}
+					{{#UsageInfo}}
+					<span>{{UsageInfo}}</span>
+					{{/UsageInfo}}
 				</div>
 			</div>
 		</div>
@@ -125,38 +125,38 @@
 		</div>
 		{{/type-FunctionBlock}}
 		
-		{{#type-AttackBlock}}
-		<div class="wuxHiddenBlockField wuxFeatureAttackBlock">
-			{{#type-AttackBlockTarget}}
-			<div class="wuxFeatureAttackBlockRow">
+		{{#type-CheckBlock}}
+		<div class="wuxHiddenBlockField wuxFeatureCheckBlock">
+			{{#type-CheckBlockTarget}}
+			<div class="wuxFeatureCheckBlockRow">
 				{{#Range}}
-				<div class="wuxFeatureAttackBlockRange">
+				<div class="wuxFeatureCheckBlockRange">
 					<span><strong>{{RType}}: </strong></span>
 					<span>{{Range}}</span>
 				</div>
 				{{/Range}}
 				{{#Target}}
-				<div class="wuxFeatureAttackBlockRange">
+				<div class="wuxFeatureCheckBlockRange">
 					<span><strong>Target: </strong></span>
 					<span>{{Target}}</span>
 				</div>
 				{{/Target}}
 			</div>
-			{{/type-AttackBlockTarget}}
+			{{/type-CheckBlockTarget}}
 			{{#SkillString}}
-			<div class="wuxFeatureAttackBlockRow">
+			<div class="wuxFeatureCheckBlockRow">
 				<strong>Check: </strong>
 				<span>{{SkillString}}</span>
 			</div>
 			{{/SkillString}}
 			{{#DamageString}}
-			<div class="wuxFeatureAttackBlockRow">
+			<div class="wuxFeatureCheckBlockRow">
 				<strong>Damage: </strong>
 				<span>{{DamageString}}</span>
 			</div>
 			{{/DamageString}}
 		</div>
-		{{/type-AttackBlock}}
+		{{/type-CheckBlock}}
 		
 		{{#type-DescBlock}}
 		<div class="wuxFeatureDescriptionBlock">
@@ -172,6 +172,11 @@
 					<span class="wuxFeatureDescriptionBlockDesc">{{OnHit}}</span>
 				</div>
 				{{/OnHit}}
+				{{#Conditions}}
+				<div>
+					<span class="wuxFeatureDescriptionBlockDesc">{{Conditions}}</span>
+				</div>
+				{{/Conditions}}
 			</div>
 		</div>
 		{{/type-DescBlock}}
@@ -422,10 +427,10 @@
 			</div>
 		</div>
 		
-		{{#type-AttackBlock}}
-		<div class="wuxFeatureAttackBlock">
+		{{#type-CheckBlock}}
+		<div class="wuxFeatureCheckBlock">
 			{{#skillRoll}}
-			<div class="wuxFeatureAttackBlockRow">
+			<div class="wuxFeatureCheckBlockRow">
                 <div class="wuxFeatureRollData">
                     <span class="wuxFeatureRollValue">{{skillRoll}}</span>
                     <span class="wuxFeatureRollDetails">{{skillDetails}}</span>
@@ -438,19 +443,19 @@
 			</div>
 			{{/skillRoll}}
 			{{#DamageString}}
-			<div class="wuxFeatureAttackBlockRow">
+			<div class="wuxFeatureCheckBlockRow">
 				<strong>Damage: </strong>
 				<span>{{DamageString}}</span>
 			</div>
 			{{/DamageString}}
 			{{#armor}}
-			<div class="wuxFeatureAttackBlockRow">
+			<div class="wuxFeatureCheckBlockRow">
 				<strong>Defense Armor: </strong>
 				<span>{{armor}}</span>
 			</div>
 			{{/armor}}
 		</div>
-		{{/type-AttackBlock}}
+		{{/type-CheckBlock}}
 		
 		{{#type-DescBlock}}
 		<div class="wuxFeatureDescriptionBlock">

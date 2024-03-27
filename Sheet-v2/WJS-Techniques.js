@@ -71,7 +71,7 @@ var TechniquePoints = TechniquePoints || (function () {
     var 
 		getTechniqueFieldsList = function() {
 
-			return ["pathgeneral", "discgeneral", "discWarfare", "discTalent", "discAcumen", "discMagic"];
+			return ["path", "any", "warfare", "talent", "acumen", "magic"];
 		},
 
 		getTechniquePointFieldsList = function(isMax) {
@@ -101,12 +101,12 @@ var TechniquePoints = TechniquePoints || (function () {
 
 		getTechniquesTechPointObj = function() {
 			return {
-				"pathgeneral": 0,
-				"discgeneral": 0,
-				"discWarfare": 0,
-				"discTalent": 0,
-				"discAcumen": 0,
-				"discMagic": 0
+				"path": 0,
+				"any": 0,
+				"warfare": 0,
+				"talent": 0,
+				"acumen": 0,
+				"magic": 0
 			}
 		},
 
@@ -127,33 +127,33 @@ var TechniquePoints = TechniquePoints || (function () {
 			for (let i = 0; i < techniques.keys.length; i++) {
 				switch (techniques.keys[i]) {
 					case "PS":
-						pointField = "pathgeneral";
+						pointField = "path";
 						techPoints[pointField] += techniques.values[techniques.keys[i]];
 						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 						break;
 					case "GD":
-						pointField = "discgeneral";
+						pointField = "any";
 						techPoints[pointField] += techniques.values[techniques.keys[i]];
 						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 						break;
 
 					case "WD":
-						pointField = "discWarfare";
+						pointField = "warfare";
 						techPoints[pointField] += techniques.values[techniques.keys[i]];
 						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 						break;
 					case "TD":
-						pointField = "discTalent";
+						pointField = "talent";
 						techPoints[pointField] += techniques.values[techniques.keys[i]];
 						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 						break;
 					case "AD":
-						pointField = "discAcumen";
+						pointField = "acumen";
 						techPoints[pointField] += techniques.values[techniques.keys[i]];
 						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 						break;
 					case "MD":
-						pointField = "discMagic";
+						pointField = "magic";
 						techPoints[pointField] += techniques.values[techniques.keys[i]];
 						update[`techpoints-${pointField}_max`] = techPoints[pointField] + AttrParseInt(attrArray, `techbonus-${pointField}`);
 						break;
@@ -182,15 +182,15 @@ var TechniquePoints = TechniquePoints || (function () {
 					continue;
 				}
 				switch (techData.group) {
-					case "pathgeneral": 
-						fallbackGroup = "pathgeneral"; 
+					case "path": 
+						fallbackGroup = "path"; 
 						break;
-					case "discgeneral": 
-					case "discWarfare":
-					case "discTalent":
-					case "discAcumen":
-					case "discMagic":
-						fallbackGroup = "discgeneral";
+					case "any": 
+					case "warfare":
+					case "talent":
+					case "acumen":
+					case "magic":
+						fallbackGroup = "any";
 						break;
 				}
 		
@@ -206,8 +206,8 @@ var TechniquePoints = TechniquePoints || (function () {
 			for (let i = 0; i < fields.length; i++) {
 				update[`techpoints-${fields[i]}`] = parseInt(techPointCaps[fields[i]]) - parseInt(techPoints[fields[i]]);
 				switch(fields[i]) {
-					case "pathgeneral": 
-					case "discgeneral": 
+					case "path": 
+					case "any": 
 						update[`techpoints-${fields[i]}-error`] = techPoints[fields[i]] > techPointCaps[fields[i]] ? "1" : "0";
 						break;
 				}
@@ -268,7 +268,7 @@ function GetTechniquesPathFilters() {
 }
 
 function GetTechniquesDisciplineFilters() {
-	return ["techniques-filter-discWarfare", "techniques-filter-discTalent", "techniques-filter-discAcumen", "techniques-filter-discMagic"];
+	return ["techniques-filter-warfare", "techniques-filter-talent", "techniques-filter-acumen", "techniques-filter-magic"];
 }
 
 function GetTechniquesWoodFilters() {
@@ -399,7 +399,7 @@ on("change:techniques-filter-pathsTraining change:techniques-filter-pathsGeneral
 	UpdateTechniquesFilterSelectionSingleFilter(eventinfo.newValue, ["techniques-filter-pathsAll"]);
 });
 
-on("change:techniques-filter-discWarfare change:techniques-filter-discTalent change:techniques-filter-discAcumen techniques-filter-discMagic", function (eventinfo) {
+on("change:techniques-filter-warfare change:techniques-filter-talent change:techniques-filter-acumen techniques-filter-magic", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
@@ -538,16 +538,16 @@ function GetTechniquesSkillTechNames(attrArray) {
 		workingTechniqueNames = workingTechniqueNames.concat(GetAllDisciplineTechniquesList(false));
 	}
 	else {
-		if (AttrParseString(attrArray, "techniques-filter-discWarfare") == "on") {
+		if (AttrParseString(attrArray, "techniques-filter-warfare") == "on") {
 			workingTechniqueNames = workingTechniqueNames.concat(GetAllWarfareTechniquesList(false));
 		}
-		if (AttrParseString(attrArray, "techniques-filter-discTalent") == "on") {
+		if (AttrParseString(attrArray, "techniques-filter-talent") == "on") {
 			workingTechniqueNames = workingTechniqueNames.concat(GetAllTalentTechniquesList(false));
 		}
-		if (AttrParseString(attrArray, "techniques-filter-discAcumen") == "on") {
+		if (AttrParseString(attrArray, "techniques-filter-acumen") == "on") {
 			workingTechniqueNames = workingTechniqueNames.concat(GetAllAcumenTechniquesList(false));
 		}
-		if (AttrParseString(attrArray, "techniques-filter-discMagic") == "on") {
+		if (AttrParseString(attrArray, "techniques-filter-magic") == "on") {
 			workingTechniqueNames = GetTechniquesSpellTechNames(attrArray);
 		}
 	}
@@ -645,7 +645,7 @@ function SetTechniquesFilteredTechniques(update, filteredTech, learnedTech) {
 		
 	// iterate through the list of names
 	while (iterator < 10 && filteredTech.length > 0) {
-		technique = GetTechniquesInfo(filteredTech[0]);
+		technique = WuxingTechniques.Get(filteredTech[0]);
 		technique = SetTechniqueSelect(technique, learnedTech);
     	workingTechniques.push(technique);
     	filteredTech.splice(0, 1);
@@ -699,17 +699,13 @@ function SetTechniquesTechGroup(techGroup) {
 
 	switch (techGroup) {
 		case "General Path":
-			return "pathgeneral";
-
-		case "Training Path":
-			return "pathtraining";
-
+			return "path";
 		case "Warfare":
-			return "discWarfare";
+			return "warfare";
 		case "Talent":
-			return "discTalent";
+			return "talent";
 		case "Acumen":
-			return "discAcumen";
+			return "acumen";
 		case "Magic":
 		case "Arcane":
 		case "Wood":
@@ -717,7 +713,7 @@ function SetTechniquesTechGroup(techGroup) {
 		case "Earth":
 		case "Metal":
 		case "Water":
-			return "discMagic";
+			return "magic";
 	}
 	return "";
 }

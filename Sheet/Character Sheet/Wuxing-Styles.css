@@ -4410,6 +4410,7 @@ visibility: visible;
 {
     border: 0px solid black; 
     margin: 0px -40px 0px -40px;
+    max-width: 280px;
 }
 
 .sheet-rolltemplate-ctmsg .sheet-chatimage,

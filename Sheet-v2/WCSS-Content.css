@@ -326,7 +326,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
 .wuxInteractiveBlock .wuxInteractiveInnerExpandBlock,
-.wuxInteractiveBlock .wuxInteractiveExpandingContent
+.wuxInteractiveBlock .wuxInteractiveExpandingContent,
+.wuxInteractiveBlock .wuxInteractiveExpandingAuxContent
 {
     position: relative;
 	height: 100%;
@@ -334,7 +335,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
-.wuxInteractiveBlock .wuxInteractiveExpandingContent
+.wuxInteractiveBlock .wuxInteractiveExpandingContent,
+.wuxInteractiveBlock .wuxInteractiveExpandingAuxContent
 {
 	display: block;
 	width: 100%;
@@ -345,13 +347,15 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 	display: none;
 }
 
-.wuxInteractiveExpandingBlock .wuxInteractiveInnerBlock
+.wuxInteractiveExpandingBlock .wuxInteractiveInnerBlock,
+.wuxInteractiveExpandingContent .wuxInteractiveInnerBlock
 {
 	display: inline-block;
 	width: calc(100% - 30px);
 }
 
-.wuxInteractiveExpandingBlock .wuxInteractiveInnerExpandBlock
+.wuxInteractiveExpandingBlock .wuxInteractiveInnerExpandBlock,
+.wuxInteractiveExpandingContent .wuxInteractiveInnerExpandBlock
 {
 	display: inline-block;
 	width: 25px;
@@ -449,5 +453,10 @@ input[type="checkbox"].wuxInteractiveExpandingContent-flag
 input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInteractiveExpandingContent
 {
     display: block;
+}
+
+input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInteractiveExpandingAuxContent
+{
+    display: none;
 }
 

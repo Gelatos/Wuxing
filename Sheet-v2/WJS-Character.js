@@ -121,7 +121,7 @@ function UpdateLearnedTechniques() {
 			jobTech = jobTech.split(";");
 			for (let i = 0; i < jobTech.length; i++) {
 				if (!activeLearnedTech.includes(jobTech[i].trim())) {
-					technique = GetTechniquesInfo(jobTech[i]);
+					technique = WuxingTechniques.Get(jobTech[i]);
 					technique = SetTechniqueDataAugmentTechData(technique);
 					newTechniques.push(technique);
 				}
@@ -130,7 +130,7 @@ function UpdateLearnedTechniques() {
 			let learnedTech = AttrParseJSONDictionary(v, "techniques-learnedTech");
 			for (let i = 0; i < learnedTech.keys.length; i++) {
 				if (!activeLearnedTech.includes(learnedTech.keys[i])) {
-					technique = GetTechniquesInfo(learnedTech.keys[i]);
+					technique = WuxingTechniques.Get(learnedTech.keys[i]);
 					technique = SetTechniqueDataAugmentTechData(technique);
 					newTechniques.push(technique);
 				}
@@ -469,16 +469,14 @@ function SetCharacterActionsNewLearnedTechniques(update, attrArray, dataObj, rep
 
 	for (let i = 0; i < dataObj.new.keys.length; i++) {
 		techName = dataObj.new.keys[i];
-		technique = GetTechniquesInfo(techName);
+		technique = WuxingTechniques.Get(techName);
 		technique = SetTechniqueDataAugmentTechData(technique);
-		technique = SetAugmentTechnique(technique, technique.augmentTech);
 		newTechniques.push(technique);
 		if (!dataObj.new.values[techName].isAugment) {
 			for (let j = 0; j < dataObj.new.values[techName].auguments.keys.length; j++) {
 				augName = dataObj.new.values[techName].auguments.keys[j];
-				technique = GetTechniquesInfo(augName);
+				technique = WuxingTechniques.Get(augName);
 				technique = SetTechniqueDataAugmentTechData(technique);
-				technique = SetAugmentTechnique(technique, technique.augmentTech);
 				newTechniques.push(technique);
 			}
 			for (let j = 0; j < dataObj.new.values[techName].customAugments.keys.length; j++) {
@@ -486,7 +484,6 @@ function SetCharacterActionsNewLearnedTechniques(update, attrArray, dataObj, rep
 				augName = dataObj.new.values[techName].customAugments.keys[j];
 				technique = CreateTechniqueDataFromRepeatingSection(attrArray, repeatingLearned, dataObj.new.values[techName].customAugments.values[augName].id);
 				technique = SetTechniqueDataAugmentTechData(technique);
-				technique = SetAugmentTechnique(technique, technique.augmentTech);
 				newTechniques.push(technique);
 			}
 		}
@@ -499,7 +496,6 @@ function SetCharacterActionsNewLearnedTechniques(update, attrArray, dataObj, rep
 		if (customTechniquesList.keys.includes(technique.augmentBase)) {
 			baseCustomTechnique = CreateTechniqueDataFromRepeatingSection(attrArray, repeatingLearned, customTechniquesList.values[technique.augmentBase].id);
 			technique = SetTechniqueDataAugmentTechData(technique, baseCustomTechnique);
-			technique = SetAugmentTechnique(technique, technique.augmentTech);
 		}
 		newTechniques.push(technique);
 		if (!dataObj.new.values[techName].isAugment) {
@@ -510,7 +506,6 @@ function SetCharacterActionsNewLearnedTechniques(update, attrArray, dataObj, rep
 				if (customTechniquesList.keys.includes(technique.augmentBase)) {
 					baseCustomTechnique = CreateTechniqueDataFromRepeatingSection(attrArray, repeatingLearned, customTechniquesList.values[technique.augmentBase].id);
 					technique = SetTechniqueDataAugmentTechData(technique, baseCustomTechnique);
-					technique = SetAugmentTechnique(technique, technique.augmentTech);
 				}
 				newTechniques.push(technique);
 			}
@@ -679,24 +674,24 @@ function UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo) {
 	getAttrs(mod_attrs, function (v) {
 		let update = {};
 
-		let attackBlockTarget = "0";
+		let checkBlockTarget = "0";
 		if (v[GetSectionIdName(repeatingSection, id, "technique-range")] != ""
 			|| v[GetSectionIdName(repeatingSection, id, "technique-target")] != ""
 		) {
-			attackBlockTarget = "1";
+			checkBlockTarget = "1";
 		}
-		let attackBlockSkill = "0";
+		let checkBlockSkill = "0";
 		if (v[GetSectionIdName(repeatingSection, id, "technique-skill")] != ""
 			|| v[GetSectionIdName(repeatingSection, id, "technique-defense")] != ""
 		) {
-			attackBlockSkill = "1";
+			checkBlockSkill = "1";
 		}
-		let attackBlockDamage = "0";
+		let checkBlockDamage = "0";
 		let dieValue = AttrParseInt(v, GetSectionIdName(repeatingSection, id, "technique-dieValue"));
 		let powerOn = AttrParseString(v, GetSectionIdName(repeatingSection, id, "technique-addPower")) != "0" ? true : false;
 		let dieType = AttrParseString(v, GetSectionIdName(repeatingSection, id, "technique-dieType"));
 		if (dieValue > 0 || powerOn || dieType != "") {
-			attackBlockDamage = "1";
+			checkBlockDamage = "1";
 
 			let damageString = "";
 			let trueDamage = "";
@@ -718,15 +713,15 @@ function UpdateCharacterCustomTechniqueFunctionBlockDisplayState(eventinfo) {
 			update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = damageString;
 		}
 
-		update[GetSectionIdName(repeatingSection, id, "technique-attackBlockTarget")] = attackBlockTarget;
-		update[GetSectionIdName(repeatingSection, id, "technique-attackBlockSkill")] = attackBlockSkill;
-		update[GetSectionIdName(repeatingSection, id, "technique-attackBlockDamage")] = attackBlockDamage;
+		update[GetSectionIdName(repeatingSection, id, "technique-checkBlockTarget")] = checkBlockTarget;
+		update[GetSectionIdName(repeatingSection, id, "technique-checkBlockSkill")] = checkBlockSkill;
+		update[GetSectionIdName(repeatingSection, id, "technique-checkBlockDamage")] = checkBlockDamage;
 
-		if (attackBlockTarget == "1" || attackBlockSkill == "1" || attackBlockDamage == "1") {
-			update[GetSectionIdName(repeatingSection, id, "technique-attackBlock")] = "1";
+		if (checkBlockTarget == "1" || checkBlockSkill == "1" || checkBlockDamage == "1") {
+			update[GetSectionIdName(repeatingSection, id, "technique-checkBlock")] = "1";
 		}
 		else {
-			update[GetSectionIdName(repeatingSection, id, "technique-attackBlock")] = "0";
+			update[GetSectionIdName(repeatingSection, id, "technique-checkBlock")] = "0";
 		}
 		setAttrs(update, { silent: true });
 	});

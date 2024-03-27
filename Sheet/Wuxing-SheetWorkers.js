@@ -6941,7 +6941,7 @@ var update_skills = function (skillArray, callback) {
 
 			abilityScore = v["skillabilityscore-" + skill].toLowerCase();
 			prof += isNaN(parseInt(v[abilityScore + "_mod"])) ? 0 : parseInt(v[abilityScore + "_mod"]);
-			if (abilityScore == "strength" || abilityScore == "dexterity") {
+			if (abilityScore == "dexterity") {
 				prof += armorFlexibility;
 			}
 

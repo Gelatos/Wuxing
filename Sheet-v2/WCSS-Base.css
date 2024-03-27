@@ -129,33 +129,6 @@ input[type=number]::-webkit-inner-spin-button
 
 
 /*========================================
-  Character Sheet Display Style
-========================================*/
-
-.wuxCharacterSheetDisplayStyle-Builder,
-.wuxCharacterSheetDisplayStyle-Skills,
-.wuxCharacterSheetDisplayStyle-Advancement,
-.wuxCharacterSheetDisplayStyle-LevelUp,
-.wuxCharacterSheetDisplayStyle-Techniques,
-.wuxCharacterSheetDisplayStyle-Character,
-.wuxCharacterSheetDisplayStyle-PartyManager
-{
-	display: none;
-}
-
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="0"] ~ .wuxCharacterSheetDisplayStyle-Builder,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Skills"] ~ .wuxCharacterSheetDisplayStyle-Skills,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Advancement"] ~ .wuxCharacterSheetDisplayStyle-Advancement,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="LevelUp"] ~ .wuxCharacterSheetDisplayStyle-LevelUp,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Techniques"] ~ .wuxCharacterSheetDisplayStyle-Techniques,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Character"] ~ .wuxCharacterSheetDisplayStyle-Character,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .wuxCharacterSheetDisplayStyle-PartyManager
-{
-	display: block;
-}
-
-
-/*========================================
   Master Layout
 ========================================*/
 
@@ -196,14 +169,13 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
   Segments
 ========================================*/
 
-.wuxMainContent,
-.wuxMainCharacterContent
+.wuxMainContent
 {
     display: inline-block;
     flex: 5;
 }
 
-.wuxMainCharacterContent
+.wuxFloatSidebar + .wuxMainContent
 {
     width: calc(100% - 90px);
 }
@@ -281,15 +253,24 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 {
     float: left;
     flex: 1;
-    top: 50px;
+    top: 70px;
 
     min-width: 80px;
     max-width: 80px;
+    max-height: calc(100vh - 100px);
     margin-right: 10px;
 	padding: 0px;
 
     /* background: #FFF; */
     z-index: 9998;
+    overflow-x: hidden;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.wuxFloatSidebar::-webkit-scrollbar 
+{
+    display: none;
 }
 
 /*========================================
@@ -351,6 +332,127 @@ input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .w
 .wuxTab-flag:not(:checked) ~ .wuxTab
 {
     display: none;
+}
+
+/*========================================
+  Tab Buttons
+========================================*/
+
+.wuxTabButtonRow
+{
+    display: flex;
+    flex-flow: nowrap row-reverse;
+    align-content: flex-start;
+    
+    overflow-x: auto;
+    overflow-y: hidden;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.wuxTabButtonRow::-webkit-scrollbar 
+{
+    display: none;
+}
+
+.wuxTabButton,
+.wuxTabOptionButton
+{
+    position: relative;
+    min-height: 20px;
+    min-width: 60px;
+}
+
+.wuxTabButton
+{
+    flex: 2;
+}
+
+.wuxTabButtonSelected
+{
+    flex: 3;
+}
+
+.wuxTabButton input[type=radio],
+.wuxTabButton input[type=checkbox] 
+{
+    position: absolute;
+    top: 0px;
+	left: 0px;
+	right: 0px;
+    min-height: 20px;
+    min-width: 60px;
+
+    z-index: 9999;
+
+    opacity: 0;
+}
+
+.wuxTabButton span 
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    text-align: center;
+    color: #000;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+
+    background-color: #cacbcf;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.wuxTabButton input[type=radio]:checked + span,
+.wuxTabButton input[type=checkbox]:checked + span
+{
+    color: #FFFFFF;
+	background: #512800;
+}
+
+.wuxTabButton input[type=radio]:hover + span,
+.wuxTabButton input[type=checkbox]:hover + span
+{
+    color: #FFFFFF;
+    background: #86530f;
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+}
+
+.wuxTabButtonSelected span
+{
+    color: #FFFFFF;
+    font-size: 14px;
+
+	background: #512800;
+}
+
+.wuxTabOptionButton
+{
+    flex: 1;
+
+    text-align: center;
+    color: #000;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+
+    background-color: #cacbcf;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.wuxTabOptionButton input[type=checkbox]
+{
+    position: absolute;
+    display: block;
+    opacity: 0;    
+    left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+    z-index: 100;
 }
 
 /*========================================
@@ -658,7 +760,9 @@ input[type=hidden].wuxSectionExpandIcon-flag[value="on"] + .wuxSectionExpandAuxI
 span.wuxDescription,
 .wuxDescription p
 {
+	display: inline-block;
     white-space: pre-line;
+    text-align: left;
 }
 
 div.wuxDescription .wuxTitle
