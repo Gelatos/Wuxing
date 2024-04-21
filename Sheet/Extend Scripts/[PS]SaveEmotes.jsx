@@ -34,7 +34,7 @@ function SaveEmotes() {
       outfit: outfitName,
       emotes: []
     };
-    var emoteTextData = {};
+    var emoteNames = [];
 
     // save the document before we make changes
     app.activeDocument.save();
@@ -77,9 +77,7 @@ function SaveEmotes() {
                     SelectLayerByName(overlayEmotes, emotes.layers[k].name.toLowerCase(), false);
                   }
                   Save(docName, emotes.layers[k].name);
-                  emoteTextData = GetEmoteTextData();
-                  emoteTextData.name = emotes.layers[k].name;
-                  saveTextData.emotes.push(emoteTextData);
+                  emoteNames.push(emotes.layers[k].name);
                 }
               }
               Revert();
@@ -91,6 +89,16 @@ function SaveEmotes() {
       // revert changes
       Revert();
 
+    }
+
+    // add the emote names to the text doc
+    emoteNames.sort();
+    var emoteTextData = {};
+    for (var i = 0; i < emoteNames.length; i++) {
+
+        emoteTextData = GetEmoteTextData();
+        emoteTextData.name = emoteNames[i];
+        saveTextData.emotes.push(emoteTextData);
     }
 
     // create the emote data
