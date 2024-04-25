@@ -616,6 +616,8 @@
 			</div>
 			<div class="wuxSectionContentCollapsed"></div>
 		  </div>
+		  
+		  
 		`;
 		}
 	  ;
