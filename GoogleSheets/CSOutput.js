@@ -565,23 +565,14 @@
   
 		buildJob = function(job, techDictionary) {
 		  let fieldName = Format.ToCamelCase(job.name);
+		  let techSection = buildJobTechniques(fieldName, job, techDictionary);
+		  return FormatCharacterSheetMain.CollapsibleSection(
+			  `advancement-${fieldName}`, job.name, buildJobContents(job, techSection));
   
-		  return `<div class="advancement-${fieldName} wuxSectionBlock wuxLayoutItem wuxMinWidth350">
-			<input class="wuxSectionContent-flag" type="checkbox" name="attr_tabSection-advancement-${fieldName}" style="display: block">
-  
-			<div class="wuxSectionHeader">${job.name}</div>
-			<div class="wuxSectionHeaderFooter"></div>
-  
-			<div class="wuxSectionContent">
-			  <span class='wuxDescription'>${job.description}</span>
+		  return `
 			  
 			  <div class="wuxRow">&nbsp;</div>
-			  <div class="wuxDistinctSection">
-				<div class="wuxDistinctField">
-				  <span class="wuxDistinctTitle">Level</span>
-					<input type="text" class='wuxDistinctData' name='attr_advancement-level-${fieldName}'>
-				</div>
-			  </div>
+			  
   
 			  <div class="wuxRow">&nbsp;</div>
 			  ${FormatCharacterSheetMain.Header(`${job.name} Growths`)}
@@ -589,38 +580,33 @@
 			  
 			  <div class="wuxRow">&nbsp;</div>
 			  ${FormatCharacterSheetMain.Header(`${job.name} Techniques`)}
-			  <div class="wuxFlexTableNoWrap">
-				<div class="wuxFlexTableItemGroup">
-				  <span class="wuxFlexTableItemHeader">Lv.</span>
-				  <span class="wuxFlexTableItemData">1</span>
-				  <span class="wuxFlexTableItemData">2</span>
-				  <span class="wuxFlexTableItemData">4</span>
-				  <span class="wuxFlexTableItemData">6</span>
-				  <span class="wuxFlexTableItemData">8</span>
-				  <span class="wuxFlexTableItemData">10</span>
-				  <span class="wuxFlexTableItemData">12</span>
-				  <span class="wuxFlexTableItemData">14</span>
-				  <span class="wuxFlexTableItemData">16</span>
-				  <span class="wuxFlexTableItemData">18</span>
-				  <span class="wuxFlexTableItemData">20</span>
-				</div>
-				<div class="wuxFlexTableItemGroup8">
-				  <span class="wuxFlexTableItemHeader">Feature</span>
-				  ${advancement}
-				</div>
-			  </div>
+			  <div class="wuxDescription">Job and Role Techniques are learned automatically when achieving the techniques's prerequisites.</div>
 			  
-			  <div class="wuxRow">&nbsp;</div>
-			  <span class="wuxHeader">${className} Techniques</span>
-			  ${techniques}
-			</div>
-			<div class="wuxSectionContentCollapsed"></div>
-		  </div>
+			  ${techniques}`;
+		},
+		
+		buildJobContents = function(fieldName, job, techSection) {
+		  let output = "";
+		  output += FormatCharacterSheetMain.Desc(job.description);
+		  output += buildJobLevels(fieldName);
 		  
-		  
-		`;
+		  return output;
+		},
+		
+		buildJobLevels = function(fieldName){
+		  return `<div class="wuxDistinctSection">
+				<div class="wuxDistinctField">
+				  <span class="wuxDistinctTitle">Level</span>
+					<input type="text" class='wuxDistinctData' name='attr_advancement-level-${fieldName}'>
+				</div>
+			  </div>`;
+		},
+		
+		buildJobTechniques = function(job, techDictionary){
+		  return "";
 		}
 	  ;
+	  
 	  return {
 		Print: print
 	  };
