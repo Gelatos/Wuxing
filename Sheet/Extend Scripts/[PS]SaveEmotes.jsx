@@ -77,7 +77,9 @@ function SaveEmotes() {
                     SelectLayerByName(overlayEmotes, emotes.layers[k].name.toLowerCase(), false);
                   }
                   Save(docName, emotes.layers[k].name);
-                  emoteNames.push(emotes.layers[k].name);
+                  if (emotes.layers[k].name != "Serious") {
+                    emoteNames.push(emotes.layers[k].name);
+                  }
                 }
               }
               Revert();
@@ -93,6 +95,7 @@ function SaveEmotes() {
 
     // add the emote names to the text doc
     emoteNames.sort();
+    emoteNames = ["Serious"].concat(emoteNames);
     var emoteTextData = {};
     for (var i = 0; i < emoteNames.length; i++) {
 
