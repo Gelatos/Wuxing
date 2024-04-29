@@ -572,13 +572,6 @@
 		  return `
 			  
 			  <div class="wuxRow">&nbsp;</div>
-			  
-  
-			  <div class="wuxRow">&nbsp;</div>
-			  ${FormatCharacterSheetMain.Header(`${job.name} Growths`)}
-			  ${FormatCharacterSheetMain.Table(FormatStatBlock.GetAttributeAbrNames(), job.growthsArray)}
-			  
-			  <div class="wuxRow">&nbsp;</div>
 			  ${FormatCharacterSheetMain.Header(`${job.name} Techniques`)}
 			  <div class="wuxDescription">Job and Role Techniques are learned automatically when achieving the techniques's prerequisites.</div>
 			  
@@ -589,6 +582,7 @@
 		  let output = "";
 		  output += FormatCharacterSheetMain.Desc(job.description);
 		  output += buildJobLevels(fieldName);
+		  output += buildJobGrowths(job);
 		  
 		  return output;
 		},
@@ -600,6 +594,12 @@
 					<input type="text" class='wuxDistinctData' name='attr_advancement-level-${fieldName}'>
 				</div>
 			  </div>`;
+		},
+
+		buildJobGrowths = function(job){
+		  return `${FormatCharacterSheetMain.Header(`${job.name} Growths`)}
+		  ${FormatCharacterSheetMain.Table(FormatStatBlock.GetAttributeAbrNames(), job.growthsArray)}`;
+		
 		},
 		
 		buildJobTechniques = function(job, techDictionary){
