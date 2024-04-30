@@ -1135,6 +1135,7 @@ var FormatJobs = FormatJobs || (function() {
           group: "",
           description: "",
           attributes: {},
+          roles: {},
           aptitudes: {},
           prereq: "",
           techniques: []
@@ -1146,6 +1147,7 @@ var FormatJobs = FormatJobs || (function() {
           output.group = ""  + modArray[i]; i++;
           output.description = ""  + modArray[i]; i++;
           output.attributes = FormatStatBlock.CreateAttributesArray(modArray, i); i+=7;
+          output.roles = FormatStatBlock.CreateAttributesArray(modArray, i); i+=7;
           output.prereq = "" + modArray[i]; i++;
           output.techniques.push("" + modArray[i]); i++;
           output.techniques.push("" + modArray[i]); i++;
@@ -1202,12 +1204,29 @@ var FormatStatBlock = FormatStatBlock || (function() {
 
       getAttributeAbrNames = function() {
         return ["BOD", "PRC", "QCK", "AWR", "INT", "RSN"];
+      },
+      
+      createRolesArray = function(modArray, startingIndex) {
+
+        var output = {
+          athlete: 0,
+          defender: 0
+        };
+        
+        if (modArray != undefined) {
+          let i = startingIndex;
+          output.athlete = "" + modArray[i]; i++;
+          output.defender = "" + modArray[i]; i++;
+        };
+
+        return output;
       }
     ;
     return {
       CreateAttributesArray: createAttributesArray,
       GetAttributeNames: getAttributeNames,
-      GetAttributeAbrNames: getAttributeAbrNames
+      GetAttributeAbrNames: getAttributeAbrNames,
+      CreateRolesArray: createRolesArray
     };
 }());
 
