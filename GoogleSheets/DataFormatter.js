@@ -1147,15 +1147,27 @@ var FormatJobs = FormatJobs || (function() {
           output.group = ""  + modArray[i]; i++;
           output.description = ""  + modArray[i]; i++;
           output.attributes = FormatStatBlock.CreateAttributesArray(modArray, i); i+=7;
-          output.roles = FormatStatBlock.CreateAttributesArray(modArray, i); i+=7;
+          output.roles = FormatStatBlock.CreateRolesArray(modArray, i); i+=2;
           output.prereq = "" + modArray[i]; i++;
-          output.techniques.push("" + modArray[i]); i++;
-          output.techniques.push("" + modArray[i]); i++;
-          output.techniques.push("" + modArray[i]); i++;
-          output.techniques.push("" + modArray[i]); i++;
-          output.techniques.push("" + modArray[i]); i++;
+          output.techniques = createJobTechnique(modArray, i); i++;
         };
 
+        return output;
+      },
+      
+      createJobTechnique = function(modArray, startingIndex) {
+        var output = [];
+        let i = startingIndex;
+        let data = "";
+        let dataSplit = {};
+        while (true) {
+          data = "" + modArray[i];
+          if (data = "") {
+            break;
+          }
+          dataSplit = data.split(";");
+          output.push({name:dataSplit[0], level:dataSplit[1]});
+        }
         return output;
       },
 
