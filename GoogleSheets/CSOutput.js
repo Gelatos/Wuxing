@@ -536,13 +536,13 @@
 		},
   
 		createMainContent = function(jobsDictionary, techDictionary) {
-		  let languageContents = buildJobSection(jobsDictionary, techDictionary);
-		  languageContents = buildLanguageTab(languageContents);
+		  let jobContents = buildSection(jobsDictionary, techDictionary);
+		  jobContents = buildLanguageTab(jobContents);
   
-		  return FormatCharacterSheetMain.Build(languageContents);
+		  return FormatCharacterSheetMain.Build(jobContents);
 		},
   
-		buildJobSection = function(jobsDictionary, techDictionary) {
+		buildSection = function(jobsDictionary, techDictionary) {
 		  let categories = FormatJobs.GetGroupList();
 		  for(let i = 0; i < categories.length; i++) {
 			buildJobCategory(jobsDictionary, techDictionary, categories[i]);
@@ -558,36 +558,29 @@
 		buildJobsByCategory = function(jobsDictionary, techDictionary, category) {
 		  let output = "";
 		  for(let i = 0; i < jobsDictionary.get(category).length; i++) {
-			output += buildJob(jobsDictionary.get(category)[i], techDictionary.get(category));
+			output += buildJob(jobsDictionary.get(category)[i], techDictionary);
 		  }
 		  return output;
 		},
   
 		buildJob = function(job, techDictionary) {
 		  let fieldName = Format.ToCamelCase(job.name);
-		  let techSection = buildJobTechniques(fieldName, job, techDictionary);
 		  return FormatCharacterSheetMain.CollapsibleSection(
 			  `advancement-${fieldName}`, job.name, buildJobContents(job, techSection));
-  
-		  return `
-			  
-			  <div class="wuxRow">&nbsp;</div>
-			  ${FormatCharacterSheetMain.Header(`${job.name} Techniques`)}
-			  <div class="wuxDescription">Job and Role Techniques are learned automatically when achieving the techniques's prerequisites.</div>
-			  
-			  ${techniques}`;
 		},
 		
-		buildJobContents = function(fieldName, job, techSection) {
+		buildJobContents = function(fieldName, job, techDictionary) {
 		  let output = "";
 		  output += FormatCharacterSheetMain.Desc(job.description);
-		  output += buildJobLevels(fieldName);
-		  output += buildJobGrowths(job);
+		  output += buildJobContentsLevels(fieldName);
+		  output += buildJobContentsRole(job);
+		  output += buildJobContentsGrowths(job);
+		  output += buildJobContentsTechniques(job, techDictionary);
 		  
 		  return output;
 		},
 		
-		buildJobLevels = function(fieldName){
+		buildJobContentsLevels = function(fieldName){
 		  return `<div class="wuxDistinctSection">
 				<div class="wuxDistinctField">
 				  <span class="wuxDistinctTitle">Level</span>
@@ -596,14 +589,28 @@
 			  </div>`;
 		},
 
-		buildJobGrowths = function(job){
+		buildJobContentsRole = function(job){
+		  return `${FormatCharacterSheetMain.Header(`${job.name} Role`)}
+		  ${FormatCharacterSheetMain.Desc(`${job.name} is a ${job.group} and grants one level of ${job.group} whenever this job is taken.`)}`;
+		},
+
+		buildJobContentsGrowths = function(job){
 		  return `${FormatCharacterSheetMain.Header(`${job.name} Growths`)}
 		  ${FormatCharacterSheetMain.Table(FormatStatBlock.GetAttributeAbrNames(), job.growthsArray)}`;
-		
 		},
 		
-		buildJobTechniques = function(job, techDictionary){
-		  return "";
+		buildJobContentsTechniques = function(job, techDictionary){
+		  return `${FormatCharacterSheetMain.Header(`${job.name} Techniques`)}
+		  ${FormatCharacterSheetMain.Desc(`Job Techniques are learned when reaching the associated level.`)}
+		  ${buildJobContentsTechniquesData(job, techDictionary)}`;
+		},
+
+		buildJobContentsTechniquesData = function(job, techDictionary){
+		  let output = "";
+		  for(let i = 0; i < job.techniques.length; i++){
+			output += buildJobTechnique(job.techniques[i], techDictionary);
+		  }
+		  return output;
 		}
 	  ;
 	  
