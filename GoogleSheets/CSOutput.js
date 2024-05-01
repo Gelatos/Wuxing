@@ -501,31 +501,51 @@
 		  let jobsDictionary = FormatJobs.CreateDictionary(jobsArray);
 		  let jobTechDictionary = CreateDictionary();
 		  let roleTechDictionary = CreateDictionary();
-		  setTechniqueData(jobTechDictionary, roleTechDictionary, techniqueDatabaseData);
+		  TechniqueData.SetTechniqueData(jobTechDictionary, roleTechDictionary, techniqueDatabaseData);
 		  return createSideBar() + createMainContent(jobsDictionary, jobTechDictionary);
 		},
+		
+		TechniqueData = TechniqueData || (function() {
+		  'use strict';
   
-		// set technique data
-		setTechniqueData = function(jobTechDictionary, roleTechDictionary, techniqueDatabaseData) {
-		  let techniqueDatabase = FormatTechniques.ParseTechniquesDatabase(techniqueDatabaseData);
-		  FormatTechniques.IterateOverTechArrays(jobTechDictionary, createTechniqueDatabaseByJob, techniqueDatabase, 
-			["Job"]);
-			FormatTechniques.IterateOverTechArrays(roleTechDictionary, createTechniqueDatabaseByRole, techniqueDatabase, 
-			["Role"]);
-		},
-		
-		createTechniqueDatabaseByJob = function (jobTechDictionary, techData) {
-		  techData.iterate(function(technique) {
-			  jobTechDictionary.add(technique.name, technique);
-		  });
-		},
-		
-		createTechniqueDatabaseByRole = function (roleTechDictionary, techData) {
-		  techData.iterate(function(technique) {
-		    
-			  roleTechDictionary.add(technique.name, technique);
-		  });
-		},
+	    var
+  	    setTechniqueData = function(jobTechDictionary, roleTechDictionary, techniqueDatabaseData) {
+  		  let techniqueDatabase = FormatTechniques.ParseTechniquesDatabase(techniqueDatabaseData);
+  		  FormatTechniques.IterateOverTechArrays(jobTechDictionary, createTechniqueDatabaseByJob, techniqueDatabase, 
+  			["Job"]);
+  			FormatTechniques.IterateOverTechArrays(roleTechDictionary, createTechniqueDatabaseByRole, techniqueDatabase, 
+  			["Role"]);
+  		},
+  		
+  		createTechniqueDatabaseByJob = function (jobTechDictionary, techData) {
+  		  techData.iterate(function(technique) {
+  			  jobTechDictionary.add(technique.name, technique);
+  		  });
+  		},
+  		
+  		createTechniqueDatabaseByRole = function (techDictionary, techData) {
+  		  techData.iterate(function(technique) {
+  		    if (!techDictionary.has(technique.family)) {
+    			  techDictionary.add(technique.family, CreateDictionary());
+    			}
+    			techDictionary.get(technique.family).add(technique.name, technique);
+  		  });
+  		},
+  		
+  		getDisplayOptions = function() {
+  		  var displayOptions = DisplayTechniqueHtml.GetDisplayOptions();
+  			displayOptions.categoryName = "job";
+  			displayOptions.sectionName = `${displayOptions.categoryName}_techniques`;
+  			displayOptions.hasCSS = true;
+  			displayOptions.showSelect = false;
+  			return displayOptions;
+  		}
+  		
+  		return {
+  		  SetTechniqueData: setTechniqueData
+  		};
+	    
+		}()),
   
 		// side bar
 		createSideBar = function() {
@@ -616,7 +636,7 @@
 		buildJobContentsTechniquesData = function(job, techDictionary){
 		  let output = "";
 		  for(let i = 0; i < job.techniques.length; i++){
-			output += buildJobTechnique(job.techniques[i], techDictionary);
+			  //output += buildJobTechnique(job.techniques[i], techDictionary);
 		  }
 		  return output;
 		}
