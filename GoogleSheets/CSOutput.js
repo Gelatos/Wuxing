@@ -499,23 +499,31 @@
 	  var
 		print = function(jobsArray, techniqueDatabaseData) {
 		  let jobsDictionary = FormatJobs.CreateDictionary(jobsArray);
-		  let techDictionary = CreateDictionary();
-		  setTechniqueData(techDictionary, techniqueDatabaseData);
-		  return createSideBar() + createMainContent(jobsDictionary, techDictionary);
+		  let jobTechDictionary = CreateDictionary();
+		  let roleTechDictionary = CreateDictionary();
+		  setTechniqueData(jobTechDictionary, roleTechDictionary, techniqueDatabaseData);
+		  return createSideBar() + createMainContent(jobsDictionary, jobTechDictionary);
 		},
   
 		// set technique data
-		setTechniqueData = function(techDictionary, techniqueDatabaseData) {
+		setTechniqueData = function(jobTechDictionary, roleTechDictionary, techniqueDatabaseData) {
 		  let techniqueDatabase = FormatTechniques.ParseTechniquesDatabase(techniqueDatabaseData);
-		  FormatTechniques.IterateOverTechArrays(techDictionary, createTechniqueDatabaseByJob, techniqueDatabase, 
+		  FormatTechniques.IterateOverTechArrays(jobTechDictionary, createTechniqueDatabaseByJob, techniqueDatabase, 
 			["Job"]);
+			FormatTechniques.IterateOverTechArrays(roleTechDictionary, createTechniqueDatabaseByRole, techniqueDatabase, 
+			["Role"]);
 		},
-		createTechniqueDatabaseByJob = function (techDictionary, techData) {
+		
+		createTechniqueDatabaseByJob = function (jobTechDictionary, techData) {
 		  techData.iterate(function(technique) {
-			if (!techDictionary.has(technique.family)) {
-			  techDictionary.add(technique.family, CreateDictionary());
-			}
-			techDictionary.get(technique.family).add(technique.name, technique);
+			  jobTechDictionary.add(technique.name, technique);
+		  });
+		},
+		
+		createTechniqueDatabaseByRole = function (roleTechDictionary, techData) {
+		  techData.iterate(function(technique) {
+		    
+			  roleTechDictionary.add(technique.name, technique);
 		  });
 		},
   
