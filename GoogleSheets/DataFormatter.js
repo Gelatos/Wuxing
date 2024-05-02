@@ -1343,6 +1343,10 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
       header = function(contents) {
         return `<div class="wuxHeader">${contents}</div>`;
       },
+      
+      subheader = function(contents) {
+        return `<div class="wuxSubheader">${contents}</div>`;
+      },
 
       desc = function(contents) {
         return `<span class="wuxDescription">${contents}</span>`;
@@ -1367,6 +1371,7 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
         Tab: tab,
         CollapsibleSection: collapsibleSection,
         Header: header,
+        Subheader: subheader,
         Desc: desc,
         Table: table
     };
