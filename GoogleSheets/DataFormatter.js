@@ -1,7 +1,7 @@
-function SetTechniquesDatabase(standardArr, heroArr, creatureArr, combatArr, socialArr, talentArr, acumenArr, jobArr) {
+function SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, aptitudeArr) {
   return PrintLargeEntry(
     JSON.stringify(
-      FormatTechniques.SetTechniquesDatabase(standardArr, heroArr, creatureArr, combatArr, socialArr, talentArr, acumenArr, jobArr)
+      FormatTechniques.SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, aptitudeArr)
     ), "t"
   );
 }
@@ -10,16 +10,14 @@ var FormatTechniques = FormatTechniques || (function() {
     'use strict';
 
     var 
-        setTechniquesDatabase = function(standardArr, heroArr, creatureArr, combatArr, socialArr, talentArr, acumenArr, jobArr) {
+        setTechniquesDatabase = function(standardArr, heroArr, creatureArr, jobArr, roleArr, aptitudeArr) {
           var techDictionary = CreateDictionary();
           techDictionary.add("Standard", getTechniqueGroupData(standardArr, "Standard"));
           techDictionary.add("Hero", getTechniqueGroupData(heroArr, "Hero"));
           techDictionary.add("Creature", getTechniqueGroupData(creatureArr, "Creature"));
-          techDictionary.add("Combat", getTechniqueGroupData(combatArr, "Combat"));
-          techDictionary.add("Social", getTechniqueGroupData(socialArr, "Social"));
-          techDictionary.add("Talent", getTechniqueGroupData(talentArr, "Talent"));
-          techDictionary.add("Acumen", getTechniqueGroupData(acumenArr, "Acumen"));
           techDictionary.add("Job", getTechniqueGroupData(jobArr, "Job"));
+          techDictionary.add("Role", getTechniqueGroupData(roleArr, "Role"));
+          techDictionary.add("Aptitude", getTechniqueGroupData(aptitudeArr, "Aptitude"));
           return techDictionary;
         },
 
