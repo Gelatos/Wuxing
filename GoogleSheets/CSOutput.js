@@ -231,7 +231,7 @@ var DisplayTrainingSkillsSheet = DisplayTrainingSkillsSheet || (function () {
 		},
 
 		buildSkillTab = function (contents) {
-			let output = FormatCharacterSheetMain.CollapsibleSection("training_skills", "Skills", contents);
+			let output = FormatCharacterSheetMain.CollapsibleTab("training_skills", "Skills", contents);
 			return FormatCharacterSheetMain.Tab(output);
 		},
 
@@ -451,12 +451,12 @@ var DisplayTrainingKnowledgeSheet = DisplayTrainingKnowledgeSheet || (function (
 		},
 
 		buildLanguageTab = function (contents) {
-			let output = FormatCharacterSheetMain.CollapsibleSection("training_language", "Languages", contents);
+			let output = FormatCharacterSheetMain.CollapsibleTab("training_language", "Languages", contents);
 			return FormatCharacterSheetMain.Tab(output);
 		},
 
 		buildLoreTab = function (contents) {
-			let output = FormatCharacterSheetMain.CollapsibleSection("training_lore", "Lore", contents);
+			let output = FormatCharacterSheetMain.CollapsibleTab("training_lore", "Lore", contents);
 			return FormatCharacterSheetMain.Tab(output);
 		}
 		;
