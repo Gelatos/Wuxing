@@ -10,6 +10,106 @@ var FormatTechniques = FormatTechniques || (function() {
     'use strict';
 
     var 
+
+        get = function(featureArray, source) {
+          let feature = createFeatureData();
+
+          if (featureArray != undefined) {
+            feature = populateFeatureData(feature, featureArray);
+          }
+          if (source != undefined) {
+            feature.techniqueSource = source;
+          }
+        
+          return feature;
+        },
+
+        createFeatureData = function() {
+          return {
+            name: "",
+            augmentBase: "",
+            techniqueSource: "",
+            techniqueGroup: "",
+            family: "",
+            techniqueType: "",
+            action: "",
+            traits: "",
+            limits: "",
+            resourceCost: "",
+            flavorText: "",
+            description: "",
+            onSuccess: "",
+            dConditions: "",
+            tEffect: "",
+            ongDesc: "",
+            ongSave: "",
+            ongEft: "",
+            trigger: "",
+            requirement: "",
+            item: "",
+            prerequisite: {},
+            skill: "",
+            defense: "",
+            range: "",
+            rType: "",
+            target: "",
+            targetCode: "",
+            dVal: "",
+            dType: "",
+            dBonus: "",
+            damageType: "",
+            element: "",
+            augments: []
+          };
+        },
+
+        populateFeatureData = function(feature, featureArray) {
+          var i = 0;
+          feature.name = "" + featureArray[i]; i++;
+          feature.augmentBase = "" + featureArray[i]; i++;
+          feature.techniqueGroup = "" + featureArray[i]; i++;
+          feature.family = "" + featureArray[i]; i++;
+          feature.techniqueType = "" + featureArray[i]; i++;
+          feature.action = "" + featureArray[i]; i++;
+          feature.traits = "" + featureArray[i]; i++;
+          feature.limits = "" + featureArray[i]; i++;
+          feature.resourceCost = "" + featureArray[i]; i++;
+          feature.flavorText = "" + featureArray[i]; i++;
+          feature.description = "" + featureArray[i]; i++;
+          feature.onSuccess = "" + featureArray[i]; i++;
+          feature.dConditions = "" + featureArray[i]; i++;
+          feature.tEffect = "" + featureArray[i]; i++;
+          feature.ongDesc = "" + featureArray[i]; i++;
+          feature.ongSave = "" + featureArray[i]; i++;
+          feature.ongEft = "" + featureArray[i]; i++;
+          feature.trigger = "" + featureArray[i]; i++;
+          feature.requirement = "" + featureArray[i]; i++;
+          feature.item = "" + featureArray[i]; i++;
+          feature.prerequisite = createFeaturePrerequisite(featureArray, i); i += 4;
+          feature.skill = "" + featureArray[i]; i++;
+          feature.defense = "" + featureArray[i]; i++;
+          feature.range = "" + featureArray[i]; i++;
+          feature.rType = "" + featureArray[i]; i++;
+          feature.target = "" + featureArray[i]; i++;
+          feature.targetCode = "" + featureArray[i]; i++;
+          feature.dVal = "" + featureArray[i]; i++;
+          feature.dType = "" + featureArray[i]; i++;
+          feature.dBonus = "" + featureArray[i]; i++;
+          feature.damageType = "" + featureArray[i]; i++;
+          feature.element = "" + featureArray[i]; i++;
+
+          return feature;
+        },
+        
+        createFeaturePrerequisite = function(featureArray, incrementer) {
+          return {
+            lv: featureArray[incrementer],
+            ap: featureArray[incrementer + 1],
+            tr: featureArray[incrementer + 2],
+            ot: featureArray[incrementer + 3]
+          }
+        }, 
+
         setTechniquesDatabase = function(standardArr, heroArr, creatureArr, jobArr, roleArr, aptitudeArr) {
           var techDictionary = CreateDictionary();
           techDictionary.add("Standard", getTechniqueGroupData(standardArr, "Standard"));
@@ -48,11 +148,7 @@ var FormatTechniques = FormatTechniques || (function() {
             augmentTechnique.requirement = setAugmentTechValue(augmentTechnique.requirement, baseTechnique.requirement);
             augmentTechnique.item = setAugmentTechValue(augmentTechnique.item, baseTechnique.item);
             augmentTechnique.prerequisite.lv = setAugmentTechValue(augmentTechnique.prerequisite.lv, baseTechnique.prerequisite.lv);
-            augmentTechnique.prerequisite.wr = setAugmentTechValue(augmentTechnique.prerequisite.wr, baseTechnique.prerequisite.wr);
-            augmentTechnique.prerequisite.tl = setAugmentTechValue(augmentTechnique.prerequisite.tl, baseTechnique.prerequisite.tl);
-            augmentTechnique.prerequisite.ac = setAugmentTechValue(augmentTechnique.prerequisite.ac, baseTechnique.prerequisite.ac);
-            augmentTechnique.prerequisite.mg = setAugmentTechValue(augmentTechnique.prerequisite.mg, baseTechnique.prerequisite.mg);
-            augmentTechnique.prerequisite.br = setAugmentTechValue(augmentTechnique.prerequisite.br, baseTechnique.prerequisite.br);
+            augmentTechnique.prerequisite.ap = setAugmentTechValue(augmentTechnique.prerequisite.ap, baseTechnique.prerequisite.ap);
             augmentTechnique.prerequisite.tr = setAugmentTechValue(augmentTechnique.prerequisite.tr, baseTechnique.prerequisite.tr);
             augmentTechnique.prerequisite.ot = setAugmentTechValue(augmentTechnique.prerequisite.ot, baseTechnique.prerequisite.ot);
             augmentTechnique.skill = setAugmentTechValue(augmentTechnique.skill, baseTechnique.skill);
@@ -89,7 +185,7 @@ var FormatTechniques = FormatTechniques || (function() {
           var output = CreateDictionary();
           var technique = {};
           for (var i = 0; i < modArray.length; i++) {
-            technique = CreateFeatureData(modArray[i], source);
+            technique = get(modArray[i], source);
 
             if (technique.augmentBase != "" && output.has(technique.augmentBase)) {
               output.values[technique.augmentBase].augments.push(technique);
@@ -110,7 +206,7 @@ var FormatTechniques = FormatTechniques || (function() {
           var groupIndex = 0;
           var techniqueIndex = 0;
           for (var i = 0; i < modArray.length; i++) {
-            technique = CreateFeatureData(modArray[i], source);
+            technique = get(modArray[i], source);
             groupName = technique.action;
 
             // Get the group index
@@ -271,7 +367,7 @@ var FormatTechniques = FormatTechniques || (function() {
             },
 
             addbranch: function(technique) {
-              let items = technique.prerequisite.br.split(";");
+              let items = technique.prerequisite.ap.split(";");
               let item = "";
               for (let j = 0; j < items.length; j++) {
                   item = items[j].trim();
@@ -282,7 +378,7 @@ var FormatTechniques = FormatTechniques || (function() {
                 for (let i = 0; i < technique.augments.length; i++) {
 
                   if (technique.augments[i].prerequisite != undefined) {
-                    items = technique.augments[i].prerequisite.br.split(";");
+                    items = technique.augments[i].prerequisite.ap.split(";");
                     for (let j = 0; j < items.length; j++) {
                         item = items[j].trim();
                         this.augmentCheck(technique, technique.augments[i], this.uniqueBranch, this.includeBaseBranch, "", item);
@@ -431,6 +527,7 @@ var FormatTechniques = FormatTechniques || (function() {
 
     ;
     return {
+      Get: get,
       SetTechniquesDatabase: setTechniquesDatabase,
       ParseTechniquesDatabase: parseTechniquesDatabase,
       SetAugmentTechnique: setAugmentTechnique,
@@ -450,6 +547,7 @@ var DisplayTechniqueHtml = DisplayTechniqueHtml || (function() {
         getDisplayOptions = function() {
           return {
             sectionName: "",
+            autoExpand: false,
             hasCSS: false,
             hasUseInteraction: false,
             showSelect: false,
@@ -515,12 +613,15 @@ var DisplayTechniqueHtml = DisplayTechniqueHtml || (function() {
         setTechniqueDisplayHeaderExpandSection = function(techDisplayData, displayOptions) {
           if (displayOptions.hasCSS) {
             // add the collapsible field
+            let attributeName = `attr_${displayOptions.sectionName}-expand-${techDisplayData.fieldName}`;
+            let isChecked = displayOptions.autoExpand ? `checked value="on"` : "";
+
             return `<div class="wuxFeatureHeaderInteractBlock">
               <div class="wuxFeatureHeaderInteractInnerBlock">
-                <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_${displayOptions.sectionName}-expand-${techDisplayData.fieldName}">
-                <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_${displayOptions.sectionName}-expand-${techDisplayData.fieldName}">
+                <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${attributeName}" ${isChecked}>
+                <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
                 <span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-                <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_${displayOptions.sectionName}-expand-${techDisplayData.fieldName}">
+                <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
                 <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
               </div>
             </div>`;
@@ -602,7 +703,10 @@ var DisplayTechniqueHtml = DisplayTechniqueHtml || (function() {
           output += setTechniqueDisplayDescriptionBlock(techDisplayData, displayOptions);
 
           if (displayOptions.hasCSS) {
-            return `<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_${displayOptions.sectionName}-expand-${techDisplayData.fieldName}">
+            let attributeName = `attr_${displayOptions.sectionName}-expand-${techDisplayData.fieldName}`;
+            let isChecked = displayOptions.autoExpand ? `checked value="on"` : "";
+
+            return `<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="${attributeName}" ${isChecked}>
             <div class="wuxFeatureExpandingContent">
               ${output}
             </div>`;
@@ -1105,22 +1209,12 @@ var FormatJobs = FormatJobs || (function() {
     var
       createDictionary = function(modArray) {
         var output = CreateDictionary();
-        var job = {};
-        var data = [];
+        let job = {};
 
         // create the groups dictionary
-        let groups = getGroupList();
-        for (let i = 0; i < groups.length; i++) {
-
-          // populate the groups
-          data = [];
-          for (let j = 0; j < modArray.length; j++) {
-            job = get(modArray[j]);
-            if (job.group == groups[i] && job.name != "") {
-              data.push(job);
-            }
-          }
-          output.add(groups[i], data);
+        for (let i = 0; i < modArray.length; i++) {
+          job = get(modArray[i]);
+          output.add(job.name, job);
         }
         
         return output;
@@ -1134,7 +1228,6 @@ var FormatJobs = FormatJobs || (function() {
           description: "",
           attributes: {},
           roles: {},
-          aptitudes: {},
           prereq: "",
           techniques: []
         };
@@ -1158,13 +1251,14 @@ var FormatJobs = FormatJobs || (function() {
         let i = startingIndex;
         let data = "";
         let dataSplit = {};
-        while (true) {
-          data = "" + modArray[i];
-          if (data = "") {
+        while(true) {
+          if (modArray[i] == undefined || modArray[i] == "") {
             break;
           }
+          data = "" + modArray[i];
           dataSplit = data.split(";");
-          output.push({name:dataSplit[0], level:dataSplit[1]});
+          output.push({name:dataSplit[0], level:dataSplit.length > 1 ? dataSplit[1] : 0});
+          i++;
         }
         return output;
       },
@@ -1190,30 +1284,63 @@ var FormatStatBlock = FormatStatBlock || (function() {
           bod: 0,
           prc: 0,
           qck: 0,
-          awr: 0,
+          cnv: 0,
           int: 0,
           rsn: 0
         };
         
         if (modArray != undefined) {
           let i = startingIndex;
-          output.bod = "" + modArray[i]; i++;
-          output.prc = "" + modArray[i]; i++;
-          output.qck = "" + modArray[i]; i++;
-          output.awr = "" + modArray[i]; i++;
-          output.int = "" + modArray[i]; i++;
-          output.rsn = "" + modArray[i]; i++;
+          output.bod = parseInt(modArray[i]); i++;
+          output.prc = parseInt(modArray[i]); i++;
+          output.qck = parseInt(modArray[i]); i++;
+          output.cnv = parseInt(modArray[i]); i++;
+          output.int = parseInt(modArray[i]); i++;
+          output.rsn = parseInt(modArray[i]); i++;
+          removeAttributeNaN(output);
         };
 
         return output;
       },
 
+      removeAttributeNaN = function(attributeObj) {
+        if (isNaN(attributeObj.bod)) {
+          attributeObj.bod = 0;
+        }
+        if (isNaN(attributeObj.prc)) {
+          attributeObj.prc = 0;
+        }
+        if (isNaN(attributeObj.qck)) {
+          attributeObj.qck = 0;
+        }
+        if (isNaN(attributeObj.cnv)) {
+          attributeObj.cnv = 0;
+        }
+        if (isNaN(attributeObj.int)) {
+          attributeObj.int = 0;
+        }
+        if (isNaN(attributeObj.rsn)) {
+          attributeObj.rsn = 0;
+        }
+      },
+
       getAttributeNames = function() {
-        return ["Body", "Precision", "Quickness", "Awareness", "Intuition", "Reason"];
+        return ["Body", "Precision", "Quickness", "Conviction", "Intuition", "Reason"];
       },
 
       getAttributeAbrNames = function() {
-        return ["BOD", "PRC", "QCK", "AWR", "INT", "RSN"];
+        return ["BOD", "PRC", "QCK", "CNV", "INT", "RSN"];
+      },
+
+      convertAttributesToArr = function(attributeObj) {
+        let output = [];
+        output.push(attributeObj.bod);
+        output.push(attributeObj.prc);
+        output.push(attributeObj.qck);
+        output.push(attributeObj.cnv);
+        output.push(attributeObj.int);
+        output.push(attributeObj.rsn);
+        return output;
       },
       
       createRolesArray = function(modArray, startingIndex) {
@@ -1236,6 +1363,7 @@ var FormatStatBlock = FormatStatBlock || (function() {
       CreateAttributesArray: createAttributesArray,
       GetAttributeNames: getAttributeNames,
       GetAttributeAbrNames: getAttributeAbrNames,
+      ConvertAttributesToArr: convertAttributesToArr,
       CreateRolesArray: createRolesArray
     };
 }());
@@ -1295,6 +1423,16 @@ var FormatCharacterSheetSidebar = FormatCharacterSheetSidebar || (function() {
             <div class="${defaultOpen ? "wuxInteractiveExpandingAuxContent" : "wuxInteractiveExpandingContent"}">
             ${contents}
             </div>`;
+      },
+
+      buildPointsSection = function (attrName) {
+        let name = `Pts`;
+        let output = `<span name='${attrName}' value="0">0</span>
+        <span class="wuxFontSize7">/ </span>
+        <span class="wuxFontSize7" name='${attrName}_max' value="0">0</span>`;
+    
+        return `<div class="wuxHeader">&nbsp;Build</div>
+        ${FormatCharacterSheetSidebar.AttributeSection(name, output)}`;
       }
 
     ;
@@ -1302,7 +1440,8 @@ var FormatCharacterSheetSidebar = FormatCharacterSheetSidebar || (function() {
         Build: build,
         AttributeSection: attributeSection,
         CollapsibleHeader: collapsibleHeader,
-        CollapsibleSubheader: collapsibleSubheader
+        CollapsibleSubheader: collapsibleSubheader,
+        BuildPointsSection: buildPointsSection
     };
 }());
 
@@ -1320,6 +1459,25 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
         return `<div class="wuxTab">
             ${contents}
           </div>`;
+      },
+
+      collapsibleTab = function (sectionName, title, contents) {
+        return `<div class="wuxSegment">
+            <input class="wuxTab-flag" type="checkbox" name="attr_${sectionName}-expand" checked="checked">
+            <div class="wuxTabHeader">
+              <span class="wuxInnerHeader">
+                <input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_${sectionName}-expand">
+                <span class="wuxSectionExpandIcon">&#9662;</span>
+                <input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_${sectionName}-expand">
+                <span class="wuxSectionExpandAuxIcon">&#9656;</span>
+                ${title}
+              </span>
+            </div>
+      
+            <div class="wuxTab">
+                ${contents}
+            </div>
+        </div>`;
       },
 
       collapsibleSection = function (sectionName, title, contents) {
@@ -1343,6 +1501,10 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
       header = function(contents) {
         return `<div class="wuxHeader">${contents}</div>`;
       },
+
+      header2 = function(contents) {
+        return `<div class="wuxHeader2">${contents}</div>`;
+      },
       
       subheader = function(contents) {
         return `<div class="wuxSubheader">${contents}</div>`;
@@ -1364,16 +1526,39 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
         return `<div class="wuxFlexTable">
           ${tableData}
         </div>`;
+      },
+
+      distinctSection = function(contents) {
+        return `<div class="wuxDistinctSection">${contents}</div>`;
+      },
+
+      distinctSectionField = function(title, contents) {
+        return `<div class="wuxDistinctField">
+            <span class="wuxDistinctTitle">${title}</span>
+            <span class="wuxDistinctData">${contents}</span>
+          </div>`;
+      },
+
+      distinctSectionInputField = function(title, contentType, contentName) {
+        return `<div class="wuxDistinctField">
+            <span class="wuxDistinctTitle">${title}</span>
+            <input class="wuxDistinctData" type="${contentType}" name="${contentName}">
+          </div>`;
       }
     ;
     return {
         Build: build,
         Tab: tab,
+        CollapsibleTab: collapsibleTab,
         CollapsibleSection: collapsibleSection,
         Header: header,
+        Header2: header2,
         Subheader: subheader,
         Desc: desc,
-        Table: table
+        Table: table,
+        DistinctSection: distinctSection,
+        DistinctSectionField: distinctSectionField,
+        DistinctSectionInputField: distinctSectionInputField
     };
 }());
 

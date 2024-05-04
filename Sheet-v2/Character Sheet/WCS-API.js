@@ -4815,44 +4815,20 @@ var FeatureService = FeatureService || (function () {
                 }
                 output += `Character Level ${feature.prerequisite.lv}`;
             }
-            if (feature.prerequisite.wr > 0) {
+            if (feature.prerequisite.ap > 0) {
                 if (output != "") {
                     output += "; ";
                 }
-                output += `Warfare Aptitude ${feature.prerequisite.wr}`;
-            }
-            if (feature.prerequisite.tl > 0) {
-                if (output != "") {
-                    output += "; ";
-                }
-                output += `Talent Aptitude ${feature.prerequisite.tl}`;
-            }
-            if (feature.prerequisite.ac > 0) {
-                if (output != "") {
-                    output += "; ";
-                }
-                output += `Acumen Aptitude ${feature.prerequisite.ac}`;
-            }
-            if (feature.prerequisite.mg > 0) {
-                if (output != "") {
-                    output += "; ";
-                }
-                output += `Magic Aptitude ${feature.prerequisite.mg}`;
-            }
-            if (feature.prerequisite.br > 0) {
-                if (output != "") {
-                    output += "; ";
-                }
-                switch (feature.prerequisite.br) {
+                switch (feature.prerequisite.ap) {
                     case "Wood":
                     case "Fire":
                     case "Earth":
                     case "Metal":
                     case "Water":
-                        output += `${feature.prerequisite.br} Element`;
+                        output += `${feature.prerequisite.ap} Element`;
                         break;
                     default:
-                        output += `${feature.prerequisite.br} Branch`;
+                        output += `${feature.prerequisite.ap} Branch`;
                         break;
                 }
             }
