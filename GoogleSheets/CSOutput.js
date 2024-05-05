@@ -145,7 +145,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 }());
 
 
-// Character Training: Skills
+// Training: Skills
 // =================================================
 
 function CreateTrainingSheetSection(skillsArray) {
@@ -160,11 +160,36 @@ var DisplayTrainingSkillsSheet = DisplayTrainingSkillsSheet || (function () {
 	var
 		print = function (skillsArray) {
 			let skillDictionary = FormatSkills.CreateSkillsDictionary(skillsArray);
-			return createSkillSelectionSection(skillDictionary);
+			
+			let output = FormatCharacterSheetNavigation.BuildTrainingPageNavigation("Skills") + 
+				SideBarData.Print() + 
+				createMainContent(skillDictionary);
+			return FormatCharacterSheet.SetDisplayStyle("Skills", output);
 		},
 
-		createSkillSelectionSection = function (skillDictionary) {
-			return createSideBar() + createMainContent(skillDictionary);
+		SideBarData = SideBarData || (function () {
+			'use strict';
+
+			var
+				print = function () {
+					return FormatCharacterSheetSidebar.Build(buildTechPointsSection());
+				},
+
+				buildTechPointsSection = function () {
+					return FormatCharacterSheetSidebar.BuildPointsSection("attr_skillpoints");
+				}
+
+			return {
+				Print: print
+			};
+
+		}()),
+
+		createMainContent = function (skillDictionary) {
+			let contents = buildSkillGroupSections(skillDictionary);
+			contents = buildSkillTab(contents);
+
+			return FormatCharacterSheetMain.Build(contents);
 		},
 
 		buildSkillGroupSections = function (skillDictionary) {
@@ -179,7 +204,15 @@ var DisplayTrainingSkillsSheet = DisplayTrainingSkillsSheet || (function () {
 					output += `</div>\n`;
 				}
 			}
-			return output;
+			if (groups.length % 2 == 1) {
+				output += `</div>\n`;
+			}
+			
+			return `<div class="wuxSectionBlock">
+			<div class="wuxSectionContent">
+			  ${output}
+			  </div>
+			  </div>`;
 		},
 
 		buildSkillGroup = function (groupName, skillDictionary) {
@@ -231,23 +264,7 @@ var DisplayTrainingSkillsSheet = DisplayTrainingSkillsSheet || (function () {
 		},
 
 		buildSkillTab = function (contents) {
-			let output = FormatCharacterSheetMain.CollapsibleTab("training_skills", "Skills", contents);
-			return FormatCharacterSheetMain.Tab(output);
-		},
-
-		createMainContent = function (skillDictionary) {
-			let contents = buildSkillGroupSections(skillDictionary);
-			contents = buildSkillTab(contents);
-
-			return FormatCharacterSheetMain.Build(contents);
-		},
-
-		createSideBar = function () {
-			return FormatCharacterSheetSidebar.Build(buildTechPointsSection());
-		},
-
-		buildTechPointsSection = function () {
-			return FormatCharacterSheetSidebar.BuildPointsSection("attr_skillpoints");
+			return FormatCharacterSheetMain.CollapsibleTab("training_skills", "Skills", contents);
 		}
 		;
 	return {
@@ -256,7 +273,7 @@ var DisplayTrainingSkillsSheet = DisplayTrainingSkillsSheet || (function () {
 }());
 
 
-// Character Training: Knowledge
+// Training: Knowledge
 // =================================================
 
 function CreateTrainingKnowledgeSection(languageArray, loreArray) {
@@ -272,7 +289,11 @@ var DisplayTrainingKnowledgeSheet = DisplayTrainingKnowledgeSheet || (function (
 		print = function (languageArray, loreArray) {
 			let languageDictionary = FormatKnowledge.CreateLanguageDictionary(languageArray);
 			let loreDictionary = FormatKnowledge.CreateLoreDictionary(loreArray);
-			return createSideBar() + createMainContent(languageDictionary, loreDictionary);
+
+			let output = FormatCharacterSheetNavigation.BuildTrainingPageNavigation("Knowledge") + 
+				createSideBar() + 
+				createMainContent(languageDictionary, loreDictionary);
+			return FormatCharacterSheet.SetDisplayStyle("Knowledge", output);
 		},
 
 		createSideBar = function () {
@@ -285,10 +306,10 @@ var DisplayTrainingKnowledgeSheet = DisplayTrainingKnowledgeSheet || (function (
 
 		createMainContent = function (languageDictionary, loreDictionary) {
 			let languageContents = buildKnowledgeGroupSections(languageDictionary, FormatKnowledge.GetLanguageGroupList(), "Languages");
-			languageContents = buildLanguageTab(languageContents);
+			languageContents = FormatCharacterSheetMain.CollapsibleTab("training_language", "Languages", languageContents);
 
 			let loreContents = buildKnowledgeGroupSections(loreDictionary, FormatKnowledge.GetLoreGroupList(), "Lore");
-			loreContents = buildLoreTab(loreContents);
+			loreContents = FormatCharacterSheetMain.CollapsibleTab("training_lore", "Lore", loreContents);
 
 			return FormatCharacterSheetMain.Build(languageContents + loreContents);
 		},
@@ -307,7 +328,12 @@ var DisplayTrainingKnowledgeSheet = DisplayTrainingKnowledgeSheet || (function (
 			if (groupList.length % 2 == 1) {
 				output += `</div>\n`;
 			}
-			return output;
+			
+			return `<div class="wuxSectionBlock">
+			<div class="wuxSectionContent">
+			  ${output}
+			  </div>
+			  </div>`;
 		},
 
 		buildKnowledgeGroup = function (groupName, dictionary, knowledgeType) {
@@ -448,16 +474,6 @@ var DisplayTrainingKnowledgeSheet = DisplayTrainingKnowledgeSheet || (function (
 			<div class="wuxInteractiveExpandingContent">
 			  <div class="wuxInteractiveInnerBlock wuxDescription">${knowledge.description}</div>
 			</div>`;
-		},
-
-		buildLanguageTab = function (contents) {
-			let output = FormatCharacterSheetMain.CollapsibleTab("training_language", "Languages", contents);
-			return FormatCharacterSheetMain.Tab(output);
-		},
-
-		buildLoreTab = function (contents) {
-			let output = FormatCharacterSheetMain.CollapsibleTab("training_lore", "Lore", contents);
-			return FormatCharacterSheetMain.Tab(output);
 		}
 		;
 	return {
@@ -466,7 +482,7 @@ var DisplayTrainingKnowledgeSheet = DisplayTrainingKnowledgeSheet || (function (
 }());
 
 
-// Character Advancement: Job
+// Advancement: Job
 // =================================================
 
 function CreateAdvancementJobsSection(jobsArray, techniqueDatabaseData) {
@@ -484,7 +500,11 @@ var DisplayAdvancementJobSheet = DisplayAdvancementJobSheet || (function () {
 			let jobTechDictionary = CreateDictionary();
 			let roleTechDictionary = CreateDictionary();
 			TechniqueData.SetDictionaries(jobTechDictionary, roleTechDictionary, techniqueDatabaseData);
-			return SideBarData.Print() + MainContentData.Print(jobsDictionary, jobTechDictionary, roleTechDictionary);
+
+			let output = FormatCharacterSheetNavigation.BuildAdvancementPageNavigation("Jobs") + 
+				SideBarData.Print() + 
+				MainContentData.Print(jobsDictionary, jobTechDictionary, roleTechDictionary);
+			return FormatCharacterSheet.SetDisplayStyle("Jobs", output);
 		},
 
 		TechniqueData = TechniqueData || (function () {

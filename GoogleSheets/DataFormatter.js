@@ -1090,7 +1090,7 @@ var FormatSkills = FormatSkills || (function() {
       },
 
       getSkillGroupList = function() {
-        return ["Athletics", "Combat", "Focus", "Social", "Technical"];
+        return ["Athletics", "Creation", "Sensing", "Social", "Item"];
       }
     ;
     return {
@@ -1559,6 +1559,165 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
         DistinctSection: distinctSection,
         DistinctSectionField: distinctSectionField,
         DistinctSectionInputField: distinctSectionInputField
+    };
+}());
+
+var FormatCharacterSheetNavigation = FormatCharacterSheetNavigation || (function() {
+  'use strict';
+
+  var
+
+  buildSection = function(contents) {
+    return `<div class="wuxFloatHeader wuxStickyHeader">
+    <div class="wuxSectionBlock wuxLargeLayoutItem">
+    ${contents}
+    </div>
+    </div>`;
+  },
+
+  buildCharacterCreationSplit = function(mainContents, characterCreationContents) {
+    return `<input type="hidden" class="wuxHiddenField-flag" name="attr_finishedCharacterCreation" value="0">
+    <div class="wuxHiddenBlockField">
+      ${mainContents}
+    </div>
+    <input type="hidden" class="wuxHiddenField-flag" name="attr_finishedCharacterCreation" value="0">
+    <div class="wuxHiddenBlockAuxField">
+      ${characterCreationContents}
+    </div>`;
+  },
+
+  buildStickySideTab = function(contents) {
+    return `<div class="wuxStickySideTab">
+    ${contents}
+    </div>`;
+  },
+
+  buildTabButtonRow = function(contents) { 
+    return `<div class="wuxTabButtonRow">
+    ${contents}
+    </div>`;
+  },
+
+  buildTabButton = function(type, fieldName, value, name, isSelected, buttonClasses) {
+    return `<div class="wuxTabButton ${isSelected ? "wuxTabButtonSelected" : ""}">
+    <input type="${type}" class="wuxTabButton ${buttonClasses}" name="${fieldName}" value="${value}"><span>${name}</span>
+    </div>`;
+  },
+
+  buildTabs = function(sheetName, fieldName, tabNames) {  
+    let output = "";
+    for (let i = 0; i < tabNames.length; i++) {
+      output += buildTabButton("radio", fieldName, tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
+    }
+    output = buildTabButtonRow(output);
+
+    return output;
+  },
+
+  buildHeader = function(header, subheader) {
+    return `<div class="wuxHeader2">${subheader}</div>
+    <div class="wuxHeader">${header}</div>`;
+  },
+
+  buildTechniquesNavigation = function() {
+    let sideBarContents = buildTabs("Learn", "attr_tab-techniques", ["Active", "Slot", "Learn"]);
+    let mainContents = buildMainPageTabs("Techniques", sideBarContents);
+    let characterCreationContents = buildCharacterCreationNavigation("Techniques");
+    let output = buildCharacterCreationSplit(mainContents, characterCreationContents);
+
+    return buildSection(output);
+  },
+
+  buildMainPageTabs = function(sheetName, sideBarButtons) {
+    let mainContents = "";
+    mainContents += buildTabs(sheetName, "attr_tab-characterSheet", ["Gear", "Techniques", "Chat", "Character"]);
+    mainContents += sideBarButtons;
+    mainContents += buildMainSheetHeader();
+
+    return mainContents;
+  },
+
+  buildMainSheetHeader = function() {
+    let header = `<input type="text" name="attr_nickname" placeholder="Display Name" />`;
+    let subheader = `<span>Lv.</span>
+    <span name="attr_base_level">1</span>
+    <span style="width: 5px;">&nbsp;</span>
+    <span class="wuxFullName" name="attr_full_name" placeholder="Full Name"></span>`;
+    return buildHeader(header, subheader);
+  },
+
+  buildTrainingPageNavigation = function(sheetName) {
+    let mainContents = "";
+    mainContents += buildTabs(sheetName, "attr_tab-training", ["Knowledge", "Skills", "Training"]);
+    mainContents += buildExitStickyButtons("attr_tab-training");
+    mainContents += buildHeader("Training", sheetName);
+
+    let characterCreationContents = buildCharacterCreationNavigation(sheetName);
+    let output = buildCharacterCreationSplit(mainContents, characterCreationContents);
+    return buildSection(output);
+  },
+
+  buildAdvancementPageNavigation = function(sheetName) {
+    let mainContents = "";
+    mainContents += buildTabs(sheetName, "attr_tab-advancement", ["Attributes", "Jobs", "Advancement"]);
+    mainContents += buildExitStickyButtons("attr_tab-advancement");
+    mainContents += buildHeader("Advancement", sheetName);
+
+    let characterCreationContents = buildCharacterCreationNavigation(sheetName);
+    let output = buildCharacterCreationSplit(mainContents, characterCreationContents);
+    return buildSection(output);
+  },
+
+  buildCharacterCreationNavigation = function(sheetName) {
+    let output = "";
+    output += buildCharacterCreationTabs(sheetName);
+    output += buildExitStickyButtons("attr_tab-characterCreation");
+    output += buildHeader("Character Creation", sheetName);
+    return output;
+  },
+
+  buildCharacterCreationTabs = function(sheetName) {
+    let output = "";
+    let fieldName = "attr_page-characterCreation";
+    let tabNames = ["Techniques", "Attributes", "Jobs", "Knowledge", "Skills", "Origin"];
+    
+    for (let i = 0; i < tabNames.length; i++) {
+      output += buildTabButton("radio", fieldName, tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
+    }
+    output = buildTabButtonRow(output);
+
+    return output;
+  },
+
+  buildExitStickyButtons = function(fieldName) { 
+    let output = "";
+    output += buildTabButton("checkbox", `${fieldName}-exit`, "Exit", "Exit", false, "") + "\n";
+    output += buildTabButton("checkbox", `${fieldName}-finish`, "Finish", "Finish", false, "") + "\n";
+    output = buildTabButtonRow(output);
+
+    return buildStickySideTab(output);
+  }
+  ;
+  return {
+    BuildTechniquesNavigation: buildTechniquesNavigation,
+    BuildTrainingPageNavigation: buildTrainingPageNavigation,
+    BuildAdvancementPageNavigation: buildAdvancementPageNavigation
+  };
+
+}());
+
+var FormatCharacterSheet = FormatCharacterSheet || (function() {
+    'use strict';
+
+    var
+    setDisplayStyle = function(sectionName, contents) {
+      return `<div class="wuxCharacterSheetDisplayStyle-${sectionName}">
+        ${contents}
+      </div>`;
+    }
+    ;
+    return {
+      SetDisplayStyle: setDisplayStyle
     };
 }());
 
