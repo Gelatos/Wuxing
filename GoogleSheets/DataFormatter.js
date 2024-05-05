@@ -1553,14 +1553,20 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
 
         flexTableData = function(data) {
           return `<span class="wuxFlexTableItemData">${data}</span>`;
+        },
+
+        flexTableInput = function(type, fieldName, placeholder) {
+          return `<input type="${type}" class="wuxFlexTableItemData wuxSizeSmall" name="${fieldName}" placeholder="${placeholder}">`;
         }
+        
         return { 
           Build: build,
           FlexTable: flexTable,
           FlextTableGroup: flextTableGroup,
           FlexTableHeader: flexTableHeader,
           FlexTableSubheader: flexTableSubheader,
-          FlexTableData: flexTableData
+          FlexTableData: flexTableData,
+          FlexTableInput: flexTableInput
         };
       }()),
       

@@ -399,24 +399,39 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 function CreateAdvancementSection(jobsArray, techniqueDatabaseData) {
 	let output = "";
-	output += DisplayAdvancementJobSheet.Print(jobsArray, techniqueDatabaseData);
+	output += DisplayAdvancementSheet.Print(jobsArray, techniqueDatabaseData);
 	return PrintLargeEntry(output);
 }
 
-var DisplayAdvancementJobSheet = DisplayAdvancementJobSheet || (function () {
+var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 	'use strict';
 
 	var
 		print = function (jobsArray, techniqueDatabaseData) {
+			let output = "";
+			output += printJobs(jobsArray, techniqueDatabaseData);
+			output += printAttributes();
+			return output;
+		},
+
+		printJobs = function (jobsArray, techniqueDatabaseData) {
 			let jobsDictionary = FormatJobs.CreateDictionary(jobsArray);
 			let jobTechDictionary = CreateDictionary();
 			let roleTechDictionary = CreateDictionary();
 			TechniqueData.SetDictionaries(jobTechDictionary, roleTechDictionary, techniqueDatabaseData);
 
 			let output = FormatCharacterSheetNavigation.BuildAdvancementPageNavigation("Jobs") + 
-				SideBarData.Print() + 
-				MainContentData.Print(jobsDictionary, jobTechDictionary, roleTechDictionary);
+				SideBarData.PrintJobs() + 
+				MainContentData.PrintJobs(jobsDictionary, jobTechDictionary, roleTechDictionary);
 			return FormatCharacterSheet.SetDisplayStyle("Jobs", output);
+		},
+
+		printAttributes = function () {
+
+			let output = FormatCharacterSheetNavigation.BuildAdvancementPageNavigation("Attributes") + 
+				SideBarData.PrintAttributes() + 
+				MainContentData.PrintAttributes();
+			return FormatCharacterSheet.SetDisplayStyle("Attributes", output);
 		},
 
 		TechniqueData = TechniqueData || (function () {
@@ -474,16 +489,21 @@ var DisplayAdvancementJobSheet = DisplayAdvancementJobSheet || (function () {
 			'use strict';
 
 			var
-				print = function () {
-					return FormatCharacterSheetSidebar.Build(buildTechPointsSection());
-				},
+			printJobs = function () {
+				return FormatCharacterSheetSidebar.Build(buildTechPointsSection("attr_jobpoints"));
+			},
 
-				buildTechPointsSection = function () {
-					return FormatCharacterSheetSidebar.BuildPointsSection("attr_jobpoints");
-				}
+			printAttributes = function () {
+				return FormatCharacterSheetSidebar.Build(buildTechPointsSection("attr_attributepoints"));
+			},
+
+			buildTechPointsSection = function (fieldName) {
+				return FormatCharacterSheetSidebar.BuildPointsSection(fieldName);
+			}
 
 			return {
-				Print: print
+				PrintJobs: printJobs,
+				PrintAttributes: printAttributes
 			};
 
 		}()),
@@ -492,12 +512,17 @@ var DisplayAdvancementJobSheet = DisplayAdvancementJobSheet || (function () {
 			'use strict';
 
 			var
-				print = function (jobsDictionary, jobTechDictionary, roleTechDictionary) {
+				printJobs = function (jobsDictionary, jobTechDictionary, roleTechDictionary) {
 					let contents = "";
 
 					contents += buildJobLevels.Build(jobsDictionary);
 					contents += buildJobs.Build(jobsDictionary, jobTechDictionary);
 
+					return FormatCharacterSheetMain.Build(contents);
+				},
+
+				printAttributes = function () {
+					let contents = buildAttributes.Build();
 					return FormatCharacterSheetMain.Build(contents);
 				},
 				
@@ -602,10 +627,51 @@ var DisplayAdvancementJobSheet = DisplayAdvancementJobSheet || (function () {
 					return {
 						Build: build
 					}
+				}()),
+
+				buildAttributes = buildAttributes || (function () {
+					'use strict';
+
+					var
+					build = function () {
+						let output = "";
+						output = buildAttributes();
+						return FormatCharacterSheetMain.CollapsibleTab(
+							`advancement-attributes`, "Attributes", output);
+					},
+
+					buildAttributes = function () {
+						let attributeNames = FormatStatBlock.GetAttributeNames();
+						let attributes = FormatStatBlock.GetAttributeAbrNames();
+						let output = "";
+						for (let i = 0; i < attributeNames.length; i++) {
+							output += buildAttribute(attributeNames[i], attributes[i]);
+						}
+						return `<div class="wuxSectionContent wuxFlexTable">
+						  ${output}
+						</div>`;
+					},
+
+					buildAttribute = function (attributeName, attributeAbr) {
+						let fieldName = `attr_advancement-attributes-${attributeAbr}`;
+						let output = FormatCharacterSheetMain.Table.FlexTableHeader(attributeName);
+						output+= FormatCharacterSheetMain.Table.FlexTableSubheader("Ancestry Bonus");
+						output += FormatCharacterSheetMain.Table.FlexTableData(`<span name='${fieldName}-ancestry' value="0">0</span>`);
+						output+= FormatCharacterSheetMain.Table.FlexTableSubheader("Job Bonus");
+						output += FormatCharacterSheetMain.Table.FlexTableData(`<span name='${fieldName}-job' value="0">0</span>`);
+						output+= FormatCharacterSheetMain.Table.FlexTableSubheader("Advancement Bonus");
+						output += FormatCharacterSheetMain.Table.FlexTableInput("number", fieldName, "0");
+						return FormatCharacterSheetMain.Table.FlextTableGroup(output);
+					}
+					;
+					return {
+						Build: build
+					}
 				}());
 
 			return {
-				Print: print
+				PrintJobs: printJobs,
+				PrintAttributes: printAttributes
 			}
 		}())
 
