@@ -1,7 +1,7 @@
-function SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, aptitudeArr) {
+function SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr) {
   return PrintLargeEntry(
     JSON.stringify(
-      FormatTechniques.SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, aptitudeArr)
+      FormatTechniques.SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr)
     ), "t"
   );
 }
@@ -110,14 +110,16 @@ var FormatTechniques = FormatTechniques || (function() {
           }
         }, 
 
-        setTechniquesDatabase = function(standardArr, heroArr, creatureArr, jobArr, roleArr, aptitudeArr) {
+        setTechniquesDatabase = function(standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr) {
           var techDictionary = CreateDictionary();
           techDictionary.add("Standard", getTechniqueGroupData(standardArr, "Standard"));
           techDictionary.add("Hero", getTechniqueGroupData(heroArr, "Hero"));
           techDictionary.add("Creature", getTechniqueGroupData(creatureArr, "Creature"));
           techDictionary.add("Job", getTechniqueGroupData(jobArr, "Job"));
           techDictionary.add("Role", getTechniqueGroupData(roleArr, "Role"));
-          techDictionary.add("Aptitude", getTechniqueGroupData(aptitudeArr, "Aptitude"));
+          techDictionary.add("Item", getTechniqueGroupData(itemArr, "Item"));
+          techDictionary.add("Active", getTechniqueGroupData(activeArr, "Active"));
+          techDictionary.add("Support", getTechniqueGroupData(supportArr, "Support"));
           return techDictionary;
         },
 
@@ -1498,6 +1500,7 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
           </div>`;
       },
 
+      // string formatting
       header = function(contents) {
         return `<div class="wuxHeader">${contents}</div>`;
       },
@@ -1514,37 +1517,136 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
         return `<span class="wuxDescription">${contents}</span>`;
       },
 
-      table = function(headers, data) {
-        let tableData = ``;
-        for (let i = 0; i < headers.length; i++) {
-          tableData += `<div class="wuxFlexTableItemGroup">
-            <span class="wuxFlexTableItemHeader">${headers[i]}</span>
-            <span class="wuxFlexTableItemData">${data[i]}</span>
-          </div>
-          `;
+      table = table || (function() {
+        'use strict';
+    
+        var
+        build = function(headers, data) {
+          let output = ``;
+          for (let i = 0; i < headers.length; i++) {
+            output += flextTableGroup(`${flexTableHeader(headers[i])}
+            ${flexTableData(data[i])}
+            `);
+          }
+          return flexTable(output);
+        },
+
+        flexTable = function(contents) {
+          return `<div class="wuxFlexTable">
+          ${contents}
+          </div>`;
+        },
+
+        flextTableGroup = function(contents) {
+          return `<div class="wuxFlexTableItemGroup">
+          ${contents}
+          </div>`;
+        },
+
+        flexTableHeader = function(data) {
+          return `<span class="wuxFlexTableItemHeader">${data}</span>`;
+        },
+
+        flexTableSubheader = function(data) {
+          return `<span class="wuxFlexTableItemSubheader">${data}</span>`;
+        },
+
+        flexTableData = function(data) {
+          return `<span class="wuxFlexTableItemData">${data}</span>`;
         }
-        return `<div class="wuxFlexTable">
-          ${tableData}
-        </div>`;
-      },
+        return { 
+          Build: build,
+          FlexTable: flexTable,
+          FlextTableGroup: flextTableGroup,
+          FlexTableHeader: flexTableHeader,
+          FlexTableSubheader: flexTableSubheader,
+          FlexTableData: flexTableData
+        };
+      }()),
+      
+      distinctSection = distinctSection || (function() {
+        'use strict';
+        var 
+        build = function(contents) {
+          return `<div class="wuxDistinctSection">${contents}</div>`;
+        },
 
-      distinctSection = function(contents) {
-        return `<div class="wuxDistinctSection">${contents}</div>`;
-      },
+        field = function(title, contents) {
+          return `<div class="wuxDistinctField">
+              <span class="wuxDistinctTitle">${title}</span>
+              <span class="wuxDistinctData">${contents}</span>
+            </div>`;
+        },
 
-      distinctSectionField = function(title, contents) {
-        return `<div class="wuxDistinctField">
-            <span class="wuxDistinctTitle">${title}</span>
-            <span class="wuxDistinctData">${contents}</span>
+        inputField = function(title, contentType, contentName) {
+          return `<div class="wuxDistinctField">
+              <span class="wuxDistinctTitle">${title}</span>
+              <input class="wuxDistinctData" type="${contentType}" name="${contentName}">
+            </div>`;
+        }
+        return {
+          Build: build,
+          Field: field,
+          InputField: inputField
+        };
+      }()),
+
+      interactionElement = interactionElement || (function() {
+        'use strict';
+        var 
+        build = function(isInteractive, isExpanding, contents) {
+          return `<div class="${isInteractive ? "wuxInteractiveBlock" : ""} ${isExpanding ? "wuxInteractiveExpandingBlock" : ""}">
+            ${contents}
           </div>`;
-      },
-
-      distinctSectionInputField = function(title, contentType, contentName) {
-        return `<div class="wuxDistinctField">
-            <span class="wuxDistinctTitle">${title}</span>
-            <input class="wuxDistinctData" type="${contentType}" name="${contentName}">
+        },
+        
+        expandableBlockIcon = function(fieldName) {
+          return `<div class="wuxInteractiveInnerExpandBlock">
+            <input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="${fieldName}">
+            <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="${fieldName}">
+            <span class="wuxInteractiveExpandIcon">&#9662;</span>
+            <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="${fieldName}">
+            <span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
           </div>`;
-      }
+        },
+        
+        expandableBlockEmptyIcon = function() {
+          return `<div class="wuxInteractiveInnerExpandBlock">
+            <span class="wuxInteractiveExpandIcon">&nbsp;</span>
+          </div>`;
+        },
+
+        expandableBlockContents = function(fieldName, contents) {
+          return `<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="${fieldName}">
+					<div class="wuxInteractiveExpandingContent">
+						${contents}
+					</div>`;
+        },
+
+        checkboxBlockIcon = function(fieldName, contents) {
+          return `<div class="wuxInteractiveInnerBlock">
+            <input class="wuxInteractiveContent-flag" type="checkbox" name="${fieldName}">
+            <div class="wuxInteractiveContent">
+              <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
+              <span class="wuxInteractiveIcon">&#9635;</span>
+              <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
+              <span class="wuxInteractiveAuxIcon">&#9634;</span>
+              <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
+              ${contents}
+            </div>
+          </div>`;
+        }
+
+        return {
+          Build: build,
+          ExpandableBlockIcon: expandableBlockIcon,
+          ExpandableBlockEmptyIcon: expandableBlockEmptyIcon,
+          ExpandableBlockContents: expandableBlockContents,
+          CheckboxBlockIcon: checkboxBlockIcon
+        }
+      }())
+
+
     ;
     return {
         Build: build,
@@ -1557,8 +1659,7 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
         Desc: desc,
         Table: table,
         DistinctSection: distinctSection,
-        DistinctSectionField: distinctSectionField,
-        DistinctSectionInputField: distinctSectionInputField
+        InteractionElement: interactionElement
     };
 }());
 
