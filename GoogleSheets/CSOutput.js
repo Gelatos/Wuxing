@@ -549,7 +549,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
 					buildJobLevel = function (job) {
 						let fieldName = Format.ToCamelCase(job.name);
-						let output = FormatCharacterSheetMain.DistinctSection.InputField(job.name, "number", `attr_advancement-level-${fieldName}`);
+						let output = FormatCharacterSheetMain.DistinctSection.InputField(job.name, "number", `attr_advancement-level-${fieldName}`, "0");
 						output = FormatCharacterSheetMain.DistinctSection.Build(output);
 						output = `<div class="wuxFlexTableItemGroup wuxMinWidth200">${output}</div>`;
 						return output;

@@ -1558,7 +1558,7 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
         flexTableInput = function(type, fieldName, placeholder) {
           return `<input type="${type}" class="wuxFlexTableItemData wuxSizeSmall" name="${fieldName}" placeholder="${placeholder}">`;
         }
-        
+
         return { 
           Build: build,
           FlexTable: flexTable,
@@ -1584,10 +1584,10 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
             </div>`;
         },
 
-        inputField = function(title, contentType, contentName) {
+        inputField = function(title, contentType, contentName, placeholder) {
           return `<div class="wuxDistinctField">
               <span class="wuxDistinctTitle">${title}</span>
-              <input class="wuxDistinctData" type="${contentType}" name="${contentName}">
+              <input class="wuxDistinctData" type="${contentType}" name="${contentName}" ${placeholder ? `placeholder="${placeholder}"` : ""}>
             </div>`;
         }
         return {
