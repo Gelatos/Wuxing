@@ -12,117 +12,134 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 	var
 		print = function (techniqueDatabase) {
-			let dataObj = initializeTechniqueData();
-			setTechniqueData(dataObj, techniqueDatabase);
-
-			return createTechniqueSelectionSection(dataObj);
+			let dataObj = TechniqueData.Build(techniqueDatabase);
+			
+			let output = FormatCharacterSheetNavigation.BuildTechniquesNavigation() + 
+				SideBarData.Print() + 
+				MainContentData.Print(dataObj);
+			return FormatCharacterSheet.SetDisplayStyle("Techniques", output);
 		},
 
-		// initialization
-		initializeTechniqueData = function () {
-			let dataObj = getDataObj();
-			initializeDisplayOptions(dataObj);
-			return dataObj;
-		},
+		TechniqueData = TechniqueData || (function () {
+			'use strict';
 
-		getDataObj = function () {
+			var
+			// initialization
+			build = function (techniqueDatabase) {
+				let dataObj = getDataObj();
+				initializeDisplayOptions(dataObj);
+				setTechniqueData(dataObj, techniqueDatabase);
+				return dataObj;
+			},
+
+			getDataObj = function () {
+				return {
+					techniqueDisplayData: "",
+					techFilterData: FormatTechniques.CreateTechniqueFilterData(),
+					displayOptions: DisplayTechniqueHtml.GetDisplayOptions()
+				}
+			},
+
+			initializeDisplayOptions = function (dataObj) {
+				dataObj.displayOptions.categoryName = "techniques";
+				dataObj.displayOptions.sectionName = `${dataObj.displayOptions.categoryName}_filteredTechniques`;
+				dataObj.displayOptions.hasCSS = true;
+				dataObj.displayOptions.showSelect = true;
+			},
+
+			// set technique data
+			setTechniqueData = function (dataObj, techniqueDatabaseData) {
+				let techniqueDatabase = FormatTechniques.ParseTechniquesDatabase(techniqueDatabaseData);
+				dataObj = FormatTechniques.IterateOverTechArrays(dataObj, createTechniqueSelectionTechniqueList, techniqueDatabase,
+					["Role", "Job", "Item", "Active", "Support", "Standard", "Hero", "Creature"]);
+			},
+
+			// create technique display section
+			createTechniqueSelectionTechniqueList = function (dataObj, techData) {
+
+				techData.iterate(function (technique) {
+					dataObj.techFilterData.add(technique);
+					buildTechTreeDisplaySection(dataObj, technique);
+				});
+
+				return dataObj;
+			},
+
+			buildTechTreeDisplaySection = function (dataObj, technique) {
+				dataObj.techniqueDisplayData += `<div class="${technique.augments.length > 0 ? "wuxFeatureGroupWithAugments" : "wuxFeatureGroup"}">\n`;
+				buildTechniqueDisplay(dataObj, technique);
+				buildAugmentTechDisplayData(dataObj, technique);
+				dataObj.techniqueDisplayData += `</div>\n`;
+			},
+
+			buildTechniqueDisplay = function (dataObj, technique) {
+				let fieldName = `attr_${dataObj.displayOptions.sectionName}-filtered-${Format.ToCamelCase(technique.name)}`;
+				dataObj.techniqueDisplayData += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="">`;
+				dataObj.techniqueDisplayData += DisplayTechniqueHtml.Get(technique, dataObj.displayOptions);
+			},
+
+			buildAugmentTechDisplayData = function (dataObj, technique) {
+				let augmentTechnique = {};
+				for (var i = 0; i < technique.augments.length; i++) {
+					augmentTechnique = FormatTechniques.SetAugmentTechnique(technique.augments[i], technique);
+					buildTechniqueDisplay(dataObj, augmentTechnique);
+				}
+			}
+
 			return {
-				techniqueDisplayData: "",
-				techFilterData: FormatTechniques.CreateTechniqueFilterData(),
-				displayOptions: DisplayTechniqueHtml.GetDisplayOptions()
+				Build: build
 			}
-		},
+				
+		}()),
 
-		initializeDisplayOptions = function (dataObj) {
-			dataObj.displayOptions.categoryName = "techniques";
-			dataObj.displayOptions.sectionName = `${dataObj.displayOptions.categoryName}_filteredTechniques`;
-			dataObj.displayOptions.hasCSS = true;
-			dataObj.displayOptions.showSelect = true;
-		},
+		SideBarData = SideBarData || (function () {
+			'use strict';
 
-		// set technique data
-		setTechniqueData = function (dataObj, techniqueDatabaseData) {
-			let techniqueDatabase = FormatTechniques.ParseTechniquesDatabase(techniqueDatabaseData);
-			dataObj = FormatTechniques.IterateOverTechArrays(dataObj, createTechniqueSelectionTechniqueList, techniqueDatabase,
-				["Standard", "Hero", "Creature", "Job", "Role", "Item", "Active", "Support"]);
-		},
+			var
+			print = function () {
+				return FormatCharacterSheetSidebar.Build(buildTechPointsSection());
+			},
 
-		// create technique display section
-		createTechniqueSelectionTechniqueList = function (dataObj, techData) {
-
-			techData.iterate(function (technique) {
-				dataObj.techFilterData.add(technique);
-				buildTechTreeDisplaySection(dataObj, technique);
-			});
-
-			return dataObj;
-		},
-
-		buildTechTreeDisplaySection = function (dataObj, technique) {
-			buildTechniqueDisplay(dataObj, technique);
-			buildAugmentTechDisplayData(dataObj, technique);
-		},
-
-		buildTechniqueDisplay = function (dataObj, technique) {
-			dataObj.techniqueDisplayData += `<input type="hidden" class="wuxFilterFeature-flag" name="attr_${dataObj.displayOptions.sectionName}-filtered-${Format.ToCamelCase(technique.name)}" value="">`;
-			dataObj.techniqueDisplayData += DisplayTechniqueHtml.Get(technique, dataObj.displayOptions);
-		},
-
-		buildAugmentTechDisplayData = function (dataObj, technique) {
-			let augmentTechnique = {};
-			for (var i = 0; i < technique.augments.length; i++) {
-				augmentTechnique = FormatTechniques.SetAugmentTechnique(technique.augments[i], technique);
-				buildTechniqueDisplay(dataObj, augmentTechnique);
+			buildTechPointsSection = function () {
+				return FormatCharacterSheetSidebar.BuildPointsSection("attr_techpoints-Base", "Base") + 
+					FormatCharacterSheetSidebar.BuildPointsSection("attr_techpoints-Augment", "Augment");
 			}
-		},
 
-		// section creation
-		createTechniqueSelectionSection = function (dataObj) {
-			return createSideBar() + createMainContent(dataObj);
-		},
+			return {
+				Print: print
+			};
 
-		createSideBar = function () {
-			let output = "";
-			output += buildTechPointsSection();
+		}()),
 
-			return FormatCharacterSheetSidebar.Build(output);
-		},
+		MainContentData = MainContentData || (function () {
+			'use strict';
 
-		buildTechPointsSection = function () {
-			return `<div class="wuxHeader">&nbsp;Build</div>
-			  ${buildTechPointsSectionData("Base")}
-			  ${buildTechPointsSectionData("Augment")}`;
-		},
+			var
+			
+			print = function (dataObj) {
 
-		buildTechPointsSectionData = function (name) {
-			let id = Format.ToCamelCase(name);
-			let output = `<span name='attr_techpoints-${id}' value="0">0</span>
-			  <span>/ </span>
-			  <span name='attr_techpoints-${id}_max' value="0">0</span>`;
-			return FormatCharacterSheetSidebar.AttributeSection(name, output);
-		},
+				return FormatCharacterSheetMain.Build(buildTechniqueSelectionInformationSection()
+					+ buildTechniqueSelectionTechniquesSection(dataObj));
+			},
 
-		// main content creation
-		createMainContent = function (dataObj) {
+			buildTechniqueSelectionInformationSection = function () {
+				let output = "";
 
-			return FormatCharacterSheetMain.Build(buildTechniqueSelectionInformationSection()
-				+ buildTechniqueSelectionTechniquesSection(dataObj));
-		},
+				return output;
+			},
 
-		buildTechniqueSelectionInformationSection = function () {
-			let output = "";
+			buildTechniqueSelectionTechniquesSection = function (dataObj) {
+				dataObj.techniqueDisplayData = FormatCharacterSheetMain.CollapsibleTab(
+					dataObj.displayOptions.sectionName, "Techniques", dataObj.techniqueDisplayData);
+				dataObj.techniqueDisplayData = FormatCharacterSheetMain.Tab(dataObj.techniqueDisplayData);
 
-			return output;
-		},
+				return dataObj.techniqueDisplayData;
+			}
 
-		buildTechniqueSelectionTechniquesSection = function (dataObj) {
-			dataObj.techniqueDisplayData = FormatCharacterSheetMain.CollapsibleSection(
-				dataObj.displayOptions.sectionName, "Techniques", dataObj.techniqueDisplayData);
-			dataObj.techniqueDisplayData = FormatCharacterSheetMain.Tab(dataObj.techniqueDisplayData);
-
-			return dataObj.techniqueDisplayData;
-		}
-
+			return {
+				Print: print
+			};
+		}())
 		;
 	return {
 		Print: print

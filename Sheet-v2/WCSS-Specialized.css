@@ -248,6 +248,32 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     Techniques
 ========================================*/
 
+.wuxFeatureGroup,
+.wuxFeatureGroupWithAugments
+{
+    position: relative;
+    display: inline-block;
+    height: auto;
+    vertical-align: top;
+    min-width: 350px;
+    width: 375px;
+    flex: 1;
+    margin-bottom: 10px;
+}
+
+.wuxFeatureGroupWithAugments
+{
+    height: min-content;
+
+    background: #1d1e1f;
+    background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 30%, #3A3D3E 100%);
+    border-style: solid;
+    border-width: 0px 0px 3px 3px;
+    border-color: #a6a6a6 #a6a6a6 #a6a6a6 transparent;
+    border-image: linear-gradient(to left, #a6a6a600 0%, #a6a6a600 35%, #a6a6a6FF 40%) 1;
+    border-radius: 0px 0px 0px 5px;
+}
+
 .wuxFeature,
 .sheet-rolltemplate-technique,
 .sheet-rolltemplate-usetechnique,
@@ -255,12 +281,10 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 {
     position: relative;
     display: inline-block;
-    min-width: 300px; 
+    min-width: 350px; 
     max-width: 500px; 
     width: calc(100% - 10px);
     height: min-content;
-
-    flex: 1;
 }
 .sheet-rolltemplate-technique,
 .sheet-rolltemplate-usetechnique

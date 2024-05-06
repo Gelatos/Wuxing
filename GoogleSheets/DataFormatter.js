@@ -633,7 +633,8 @@ var DisplayTechniqueHtml = DisplayTechniqueHtml || (function() {
 
         setTechniqueDisplayHeaderSelectSection = function(techDisplayData, displayOptions) {
           if (displayOptions.showSelect) {
-            return `<div class="wuxTechniqueDisplayStyle-Learn>"
+            return `<input type="hidden" class="wuxTechniqueDisplayStyle-flag" name="attr_tab-techniques">
+              <div class="wuxTechniqueDisplayStyle-Learn">
                 <div class="wuxFeatureHeaderInteractBlock">
                   <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_${displayOptions.sectionName}-select-${techDisplayData.fieldName}">
                   <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_${displayOptions.sectionName}-select-${techDisplayData.fieldName}">
@@ -687,7 +688,8 @@ var DisplayTechniqueHtml = DisplayTechniqueHtml || (function() {
 
         setTechniqueDisplayHeaderExtentFeatures = function(techDisplayData, displayOptions) {
           if (displayOptions.showSelect && techDisplayData.prerequisite != "") {
-            return `<div class="wuxTechniqueDisplayStyle-Learn>
+            return `<input type="hidden" class="wuxTechniqueDisplayStyle-flag" name="attr_tab-techniques">
+              <div class="wuxTechniqueDisplayStyle-Learn">
                 <div class="wuxFeatureHeaderInfoPrereq">
                   <span><strong>Prerequisites: </strong></span>
                   <span>${techDisplayData.prerequisite}</span>
@@ -1427,13 +1429,16 @@ var FormatCharacterSheetSidebar = FormatCharacterSheetSidebar || (function() {
             </div>`;
       },
 
-      buildPointsSection = function (attrName) {
+      buildPointsSection = function (attrName, header) {
+        if (header == undefined) {
+          header = `Build`;
+        }
         let name = `Pts`;
         let output = `<span name='${attrName}' value="0">0</span>
         <span class="wuxFontSize7">/ </span>
         <span class="wuxFontSize7" name='${attrName}_max' value="0">0</span>`;
     
-        return `<div class="wuxHeader">&nbsp;Build</div>
+        return `<div class="wuxHeader">&nbsp;${header}</div>
         ${FormatCharacterSheetSidebar.AttributeSection(name, output)}`;
       }
 
