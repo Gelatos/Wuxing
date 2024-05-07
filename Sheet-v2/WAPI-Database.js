@@ -137,12 +137,7 @@ var FeatureService = FeatureService || (function () {
             if (technique.skill != "") {
                 techDisplayData.skill = "";
                 if (technique.defense != "" && technique.defense != undefined) {
-                    if (technique.defense.indexOf("DC") >= 0) {
-                        techDisplayData.skill = technique.defense;
-                    }
-                    else {
-                        techDisplayData.skill = `${technique.defense} Check`;
-                    }
+                    techDisplayData.skill = technique.defense;
                 }
                 else {
                     techDisplayData.skill = "DC 15";

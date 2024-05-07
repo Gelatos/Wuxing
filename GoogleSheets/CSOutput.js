@@ -35,6 +35,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			getDataObj = function () {
 				return {
 					techniqueDisplayData: "",
+					groups: ["Role", "Job", "Item", "Active", "Support", "Standard"],
 					techFilterData: FormatTechniques.CreateTechniqueFilterData(),
 					displayOptions: DisplayTechniqueHtml.GetDisplayOptions()
 				}
@@ -50,8 +51,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			// set technique data
 			setTechniqueData = function (dataObj, techniqueDatabaseData) {
 				let techniqueDatabase = FormatTechniques.ParseTechniquesDatabase(techniqueDatabaseData);
-				dataObj = FormatTechniques.IterateOverTechArrays(dataObj, createTechniqueSelectionTechniqueList, techniqueDatabase,
-					["Role", "Job", "Item", "Active", "Support", "Standard", "Hero", "Creature"]);
+				dataObj = FormatTechniques.IterateOverTechArrays(dataObj, createTechniqueSelectionTechniqueList, techniqueDatabase, dataObj.groups);
 			},
 
 			// create technique display section
@@ -118,8 +118,8 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			
 			print = function (dataObj) {
 
-				return FormatCharacterSheetMain.Build(buildTechniqueSelectionInformationSection()
-					+ buildTechniqueSelectionTechniquesSection(dataObj));
+				return FormatCharacterSheetMain.Build(buildTechniqueSelectionInformationSection() + 
+					buildTechniqueSelectionTechniquesSection(dataObj));
 			},
 
 			buildTechniqueSelectionInformationSection = function () {
