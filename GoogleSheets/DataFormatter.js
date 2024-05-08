@@ -1791,7 +1791,7 @@ var FormatCharacterSheetNavigation = FormatCharacterSheetNavigation || (function
   buildCharacterCreationTabs = function(sheetName) {
     let output = "";
     let fieldName = "attr_page-characterCreation";
-    let tabNames = ["Techniques", "Attributes", "Jobs", "Knowledge", "Skills", "Origin"];
+    let tabNames = ["Techniques", "Attributes", "Knowledge", "Skills", "Jobs", "Origin"];
     
     for (let i = 0; i < tabNames.length; i++) {
       output += buildTabButton("radio", fieldName, tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
