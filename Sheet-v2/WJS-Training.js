@@ -1,3 +1,17 @@
+var TrainingController = TrainingController || (function () {
+	'use strict';
+	
+	var
+	build = function () {
+	  
+	}
+	;
+	return {
+	  Build: build
+	};
+}());
+
+
 function GetSkillTrainingFieldList() {
 	return ["skills-baseSkills", "skills-baseChoiceSkills", "skills-baseExtraSkills"];
 }
