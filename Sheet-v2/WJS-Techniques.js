@@ -1,3 +1,16 @@
+var TechniquesController = TechniquesController || (function () {
+	'use strict';
+	
+	var
+	build = function () {
+	  
+	}
+	;
+	return {
+	  Build: build
+	};
+}());
+
 // ======== Submission
 
 on("change:techniques-button-submit", function () {
