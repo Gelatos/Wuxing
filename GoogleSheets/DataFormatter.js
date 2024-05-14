@@ -1062,7 +1062,7 @@ var FormatSkills = FormatSkills || (function() {
           // populate the groups
           data = [];
           for (let j = 0; j < modArray.length; j++) {
-            skill = createSkillsData(modArray[j]);
+            skill = get(modArray[j]);
             if (skill.group == groups[i]) {
               data.push(skill);
             }
@@ -1073,7 +1073,7 @@ var FormatSkills = FormatSkills || (function() {
         return output;
       },
 
-      createSkillsData = function(modArray) {
+      get = function(modArray) {
 
         var output = {
           name: "",
@@ -1099,6 +1099,7 @@ var FormatSkills = FormatSkills || (function() {
     ;
     return {
       CreateSkillsDictionary: createSkillsDictionary,
+      Get: get,
       GetSkillGroupList: getSkillGroupList
     };
 }());
