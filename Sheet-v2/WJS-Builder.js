@@ -1,3 +1,16 @@
+var BuilderController = BuilderController || (function () {
+	'use strict';
+	
+	var
+	build = function () {
+	  
+	}
+	;
+	return {
+	  Build: build
+	};
+}());
+
 on("change:page-characterCreation", function (eventinfo) {
 
 	CharacterBuilderManager.SetCharacterBuilderPage(eventinfo.newValue);
