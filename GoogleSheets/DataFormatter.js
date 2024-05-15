@@ -1373,7 +1373,7 @@ var FormatStatBlock = FormatStatBlock || (function() {
     };
 }());
 
-var FormatDefinitions =FormatDefinitions || function() {
+var FormatDefinitions = FormatDefinitions || (function() {
     'use strict';
 
     var
@@ -1403,7 +1403,7 @@ var FormatDefinitions =FormatDefinitions || function() {
         
         return output;
       }
-      
+      ;
       return {
         DisplayEntry : displayEntry
       }
