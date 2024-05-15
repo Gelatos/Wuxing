@@ -1,159 +1,244 @@
-// Character Technique: Page
-// =================================================
-
-function CreateTechniquesSheetSection(techniqueDatabase) {
+function CreateCharacterSheet(definitionsArray, skillsArray, languageArray, loreArray, jobsArray, techniqueDatabase) {
 	let output = "";
+	output += DisplayOriginSheet.Print(definitionsArray);
+	output += DisplayTrainingSheet.Print(skillsArray, languageArray, loreArray);
+	output += DisplayAdvancementSheet.Print(jobsArray, techniqueDatabase);
 	output += DisplayTechniquesSheet.Print(techniqueDatabase);
 	return PrintLargeEntry(output);
 }
 
-var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
+var DisplayOriginSheet = DisplayOriginSheet || (function () {
 	'use strict';
 
 	var
-		print = function (techniqueDatabase) {
-			let dataObj = TechniqueData.Build(techniqueDatabase);
-			
-			let output = FormatCharacterSheetNavigation.BuildTechniquesNavigation() + 
-				SideBarData.Print() + 
-				MainContentData.Print(dataObj);
-			return FormatCharacterSheet.SetDisplayStyle("Techniques", output);
+		print = function (definitionsArray) {
+			let output = FormatCharacterSheetNavigation.BuildOriginPageNavigation("Origin") + 
+				MainContentData.Print(definitionsArray);
+			return output;
 		},
 
-		TechniqueData = TechniqueData || (function () {
-			'use strict';
+		printSkills = function (skillsArray) {
+			let skillDictionary = FormatSkills.CreateSkillsDictionary(skillsArray);
+			
+			let output = FormatCharacterSheetNavigation.BuildTrainingPageNavigation("Skills") + 
+				SideBarData.PrintSkills() + 
+				MainContentData.PrintSkills(skillDictionary);
+			return FormatCharacterSheet.SetDisplayStyle("Skills", output);
+		},
 
-			var
-			// initialization
-			build = function (techniqueDatabase) {
-				let dataObj = getDataObj();
-				initializeDisplayOptions(dataObj);
-				setTechniqueData(dataObj, techniqueDatabase);
-				return dataObj;
-			},
+		printKnowledge = function (languageArray, loreArray) {
+			let languageDictionary = FormatKnowledge.CreateLanguageDictionary(languageArray);
+			let loreDictionary = FormatKnowledge.CreateLoreDictionary(loreArray);
 
-			getDataObj = function () {
-				return {
-					techniqueDisplayData: "",
-					groups: ["Role", "Job", "Item", "Active", "Support", "Standard"],
-					techFilterData: FormatTechniques.CreateTechniqueFilterData(),
-					displayOptions: DisplayTechniqueHtml.GetDisplayOptions()
-				}
-			},
-
-			initializeDisplayOptions = function (dataObj) {
-				dataObj.displayOptions.categoryName = "techniques";
-				dataObj.displayOptions.sectionName = `${dataObj.displayOptions.categoryName}_filteredTechniques`;
-				dataObj.displayOptions.hasCSS = true;
-				dataObj.displayOptions.showSelect = true;
-			},
-
-			// set technique data
-			setTechniqueData = function (dataObj, techniqueDatabaseData) {
-				let techniqueDatabase = FormatTechniques.ParseTechniquesDatabase(techniqueDatabaseData);
-				dataObj = FormatTechniques.IterateOverTechArrays(dataObj, createTechniqueSelectionTechniqueList, techniqueDatabase, dataObj.groups);
-			},
-
-			// create technique display section
-			createTechniqueSelectionTechniqueList = function (dataObj, techData) {
-
-				techData.iterate(function (technique) {
-					dataObj.techFilterData.add(technique);
-					buildTechTreeDisplaySection(dataObj, technique);
-				});
-
-				return dataObj;
-			},
-
-			buildTechTreeDisplaySection = function (dataObj, technique) {
-				dataObj.techniqueDisplayData += `<div class="${technique.augments.length > 0 ? "wuxFeatureGroupWithAugments" : "wuxFeatureGroup"}">\n`;
-				buildTechniqueDisplay(dataObj, technique);
-				buildAugmentTechDisplayData(dataObj, technique);
-				dataObj.techniqueDisplayData += `</div>\n`;
-			},
-
-			buildTechniqueDisplay = function (dataObj, technique) {
-				let fieldName = `attr_${dataObj.displayOptions.sectionName}-filtered-${Format.ToCamelCase(technique.name)}`;
-				dataObj.techniqueDisplayData += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="">`;
-				dataObj.techniqueDisplayData += DisplayTechniqueHtml.Get(technique, dataObj.displayOptions);
-			},
-
-			buildAugmentTechDisplayData = function (dataObj, technique) {
-				let augmentTechnique = {};
-				for (var i = 0; i < technique.augments.length; i++) {
-					augmentTechnique = FormatTechniques.SetAugmentTechnique(technique.augments[i], technique);
-					buildTechniqueDisplay(dataObj, augmentTechnique);
-				}
-			}
-
-			return {
-				Build: build
-			}
-				
-		}()),
-
-		SideBarData = SideBarData || (function () {
-			'use strict';
-
-			var
-			print = function () {
-				return FormatCharacterSheetSidebar.Build(buildTechPointsSection());
-			},
-
-			buildTechPointsSection = function () {
-				return FormatCharacterSheetSidebar.BuildPointsSection("attr_techpoints-Base", "Base") + 
-					FormatCharacterSheetSidebar.BuildPointsSection("attr_techpoints-Augment", "Augment");
-			}
-
-			return {
-				Print: print
-			};
-
-		}()),
+			let output = FormatCharacterSheetNavigation.BuildTrainingPageNavigation("Knowledge") + 
+				SideBarData.PrintKnowledge() + 
+				MainContentData.PrintKnowledge(languageDictionary, loreDictionary);
+			return FormatCharacterSheet.SetDisplayStyle("Knowledge", output);
+		},
 
 		MainContentData = MainContentData || (function () {
 			'use strict';
 
 			var
-			
-			print = function (dataObj) {
+			printSkills = function (skillDictionary) {
+				let contents = buildElementsTableData(FormatSkills.GetSkillGroupList(), skillDictionary, buildSkillsData.Build);
+				contents = FormatCharacterSheetMain.CollapsibleTab("training_skills", "Skills", contents);
 
-				return FormatCharacterSheetMain.Build(buildTechniqueSelectionInformationSection() + 
-					buildTechniqueSelectionTechniquesSection(dataObj));
+				return FormatCharacterSheetMain.Build(contents);
 			},
 
-			buildTechniqueSelectionInformationSection = function () {
+			printKnowledge = function (languageDictionary, loreDictionary) {
+				let languageContents = buildElementsTableData(FormatKnowledge.GetLanguageGroupList(), languageDictionary, buildLanguageData.Build);
+				languageContents = FormatCharacterSheetMain.CollapsibleTab("training_language", "Languages", languageContents);
+
+				let loreContents = buildElementsTableData(FormatKnowledge.GetLoreGroupList(), loreDictionary, buildLoreData.Build);
+				loreContents = FormatCharacterSheetMain.CollapsibleTab("training_lore", "Lore", loreContents);
+
+				return FormatCharacterSheetMain.Build(languageContents + loreContents);
+			},
+
+			buildElementsTableData = function (groups, dataDictionary, callback) {
 				let output = "";
-
-				return output;
+				for (let i = 0; i < groups.length; i++) {
+					if (i % 2 == 0) {
+						output += `<div class="wuxFlexTable">\n`;
+					}
+					output += callback(groups[i], dataDictionary);
+					if (i % 2 == 1) {
+						output += `</div>\n`;
+					}
+				}
+				if (groups.length % 2 == 1) {
+					output += `</div>\n`;
+				}
+				
+				return `<div class="wuxSectionBlock">
+					<div class="wuxSectionContent">
+						${output}
+					</div>
+				</div>`;
 			},
 
-			buildTechniqueSelectionTechniquesSection = function (dataObj) {
-				dataObj.techniqueDisplayData = FormatCharacterSheetMain.CollapsibleTab(
-					dataObj.displayOptions.sectionName, "Techniques", dataObj.techniqueDisplayData);
-				dataObj.techniqueDisplayData = FormatCharacterSheetMain.Tab(dataObj.techniqueDisplayData);
+			buildSkillsData = buildSkillsData || (function () {
+				'use strict';
 
-				return dataObj.techniqueDisplayData;
-			}
+				var
+				build = function (groupName, skillDictionary) {
+					return `<div class="wuxFlexTableItemGroup wuxMinWidth200">
+						<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName}</div>
+						<div class="wuxFlexTableItemData wuxTextLeft">
+							${buildSkillGroupSkills(skillDictionary.get(groupName))}
+						</div>
+					</div>`;
+				},
+
+				buildSkillGroupSkills = function (skillDataArray) {
+					let output = "";
+					for (let i = 0; i < skillDataArray.length; i++) {
+						output += buildSkill(skillDataArray[i]);
+					}
+					return output;
+				},
+
+				buildSkill = function (skill) {
+					let fieldName = `attr_skills-training-${Format.ToCamelCase(skill.name)}`;
+
+					let expandFieldName = `${fieldName}-expand`;
+					let expandContents = `<div class="wuxDescription">${skill.description}</div>`;
+					let interactHeader = `<span class="wuxHeader">${skill.name} (${skill.abilityScore})</span>`;
+
+					let output = `${FormatCharacterSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
+					${FormatCharacterSheetMain.InteractionElement.CheckboxBlockIcon(fieldName, interactHeader)}
+					${FormatCharacterSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
+
+					return FormatCharacterSheetMain.InteractionElement.Build(true, true, output);
+				}
+				return {
+					Build: build
+				}
+			}()),
+
+			buildLanguageData = buildLanguageData || (function () {
+				'use strict';
+
+				var
+				build = function (groupName, skillDictionary) {
+					return `<div class="wuxFlexTableItemGroup wuxMinWidth200">
+						<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName} Languages</div>
+						<div class="wuxFlexTableItemData wuxTextLeft">
+							${buildLanguageGroupSkills(skillDictionary.get(groupName))}
+						</div>
+					</div>`;
+				},
+
+				buildLanguageGroupSkills = function (skillDataArray) {
+					let output = "";
+					for (let i = 0; i < skillDataArray.length; i++) {
+						output += buildLanguage(skillDataArray[i]);
+					}
+					return output;
+				},
+
+				buildLanguage = function (knowledge) {
+					let fieldName = `attr_languages-training-${Format.ToCamelCase(knowledge.name)}`;
+
+					return `${buildMainLanguage(knowledge, fieldName)}
+					${buildSubLanguage(fieldName + "_speak", "Speak")}
+					${buildSubLanguage(fieldName + "_readwrite", "Read / Write")}`;
+				}, 
+
+				buildMainLanguage = function (knowledge, fieldName) {
+					let expandFieldName = `${fieldName}-expand`;
+					let expandContents = `<div class="wuxDescription">${knowledge.description}</div>`;
+
+					let output = `${FormatCharacterSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
+					${buildInteractionMainBlock(knowledge)}
+					${FormatCharacterSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
+
+					return FormatCharacterSheetMain.InteractionElement.Build(true, true, output);
+				},
+
+				buildInteractionMainBlock = function (knowledge) {
+					return `<div class="wuxInteractiveInnerBlock">
+						<span class="wuxHeader">${knowledge.name}</span>
+						- <span class="wuxSubheader">${knowledge.location}</span>
+					</div>`;
+				},
+		
+				buildSubLanguage = function (fieldName, subGroupName) {
+
+					let output = `${FormatCharacterSheetMain.InteractionElement.ExpandableBlockEmptyIcon()}
+					${FormatCharacterSheetMain.InteractionElement.CheckboxBlockIcon(fieldName, `<span class="wuxSubheader">${subGroupName}</span>`)}`;
+
+					return FormatCharacterSheetMain.InteractionElement.Build(true, true, output);
+				}
+
+				return {
+					Build: build
+				}
+			})(),
+
+			buildLoreData = buildLoreData || (function () {
+				'use strict';
+
+				var
+				build = function (groupName, skillDictionary) {
+					return `<div class="wuxFlexTableItemGroup wuxMinWidth200">
+						<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName} Lore</div>
+						<div class="wuxFlexTableItemData wuxTextLeft">
+							${buildLoreGroupSkills(skillDictionary.get(groupName))}
+						</div>
+					</div>`;
+				},
+
+				buildLoreGroupSkills = function (knowledgeDataArray) {
+					let output = "";
+					for (let i = 0; i < knowledgeDataArray.length; i++) {
+						if (knowledgeDataArray[i].name == knowledgeDataArray[i].group) {
+							output += buildMainLore(knowledgeDataArray[i]);
+						}
+						else {
+							output += buildSubLore(knowledgeDataArray[i]);
+						}
+					}
+					return output;
+				},
+
+				buildLore = function (knowledge, interactHeader) {
+					let fieldName = `attr_lore-training-${Format.ToCamelCase(knowledge.name)}`;
+					let expandFieldName = `${fieldName}-expand`;
+					let expandContents = `<div class="wuxDescription">${knowledge.description}</div>`;
+
+					let output = `${FormatCharacterSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
+					${FormatCharacterSheetMain.InteractionElement.CheckboxBlockIcon(fieldName, interactHeader)}
+					${FormatCharacterSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
+
+					return FormatCharacterSheetMain.InteractionElement.Build(true, true, output);
+				},
+
+				buildMainLore = function (knowledge) {
+					return buildLore(knowledge, `<span class="wuxHeader">General ${knowledge.name}</span>`);
+				},
+
+				buildSubLore = function (knowledge) {
+					return buildLore(knowledge, `<span class="wuxSubheader">${knowledge.name}</span>`);
+				}
+
+				return {
+					Build: build
+				}
+			})();
 
 			return {
-				Print: print
-			};
-		}())
+				PrintSkills: printSkills,
+				PrintKnowledge: printKnowledge
+			}
+		}());
 		;
 	return {
 		Print: print
 	};
 }());
-
-
-// Training
-// =================================================
-
-function CreateTrainingSheetSection(skillsArray, languageArray, loreArray) {
-	let output = DisplayTrainingSheet.Print(skillsArray, languageArray, loreArray);
-	return PrintLargeEntry(output);
-}
 
 var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 	'use strict';
@@ -409,16 +494,6 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 		Print: print
 	};
 }());
-
-
-// Advancement
-// =================================================
-
-function CreateAdvancementSection(jobsArray, techniqueDatabaseData) {
-	let output = "";
-	output += DisplayAdvancementSheet.Print(jobsArray, techniqueDatabaseData);
-	return PrintLargeEntry(output);
-}
 
 var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 	'use strict';
@@ -697,8 +772,144 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 	};
 }());
 
+var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
+	'use strict';
 
+	var
+		print = function (techniqueDatabase) {
+			let dataObj = TechniqueData.Build(techniqueDatabase);
+			
+			let output = FormatCharacterSheetNavigation.BuildTechniquesNavigation() + 
+				SideBarData.Print() + 
+				MainContentData.Print(dataObj);
+			return FormatCharacterSheet.SetDisplayStyle("Techniques", output);
+		},
 
+		TechniqueData = TechniqueData || (function () {
+			'use strict';
+
+			var
+			// initialization
+			build = function (techniqueDatabase) {
+				let dataObj = getDataObj();
+				initializeDisplayOptions(dataObj);
+				setTechniqueData(dataObj, techniqueDatabase);
+				return dataObj;
+			},
+
+			getDataObj = function () {
+				return {
+					techniqueDisplayData: "",
+					groups: ["Role", "Job", "Item", "Active", "Support", "Standard"],
+					techFilterData: FormatTechniques.CreateTechniqueFilterData(),
+					displayOptions: DisplayTechniqueHtml.GetDisplayOptions()
+				}
+			},
+
+			initializeDisplayOptions = function (dataObj) {
+				dataObj.displayOptions.categoryName = "techniques";
+				dataObj.displayOptions.sectionName = `${dataObj.displayOptions.categoryName}_filteredTechniques`;
+				dataObj.displayOptions.hasCSS = true;
+				dataObj.displayOptions.showSelect = true;
+			},
+
+			// set technique data
+			setTechniqueData = function (dataObj, techniqueDatabaseData) {
+				let techniqueDatabase = FormatTechniques.ParseTechniquesDatabase(techniqueDatabaseData);
+				dataObj = FormatTechniques.IterateOverTechArrays(dataObj, createTechniqueSelectionTechniqueList, techniqueDatabase, dataObj.groups);
+			},
+
+			// create technique display section
+			createTechniqueSelectionTechniqueList = function (dataObj, techData) {
+
+				techData.iterate(function (technique) {
+					dataObj.techFilterData.add(technique);
+					buildTechTreeDisplaySection(dataObj, technique);
+				});
+
+				return dataObj;
+			},
+
+			buildTechTreeDisplaySection = function (dataObj, technique) {
+				dataObj.techniqueDisplayData += `<div class="${technique.augments.length > 0 ? "wuxFeatureGroupWithAugments" : "wuxFeatureGroup"}">\n`;
+				buildTechniqueDisplay(dataObj, technique);
+				buildAugmentTechDisplayData(dataObj, technique);
+				dataObj.techniqueDisplayData += `</div>\n`;
+			},
+
+			buildTechniqueDisplay = function (dataObj, technique) {
+				let fieldName = `attr_${dataObj.displayOptions.sectionName}-filtered-${Format.ToCamelCase(technique.name)}`;
+				dataObj.techniqueDisplayData += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="">`;
+				dataObj.techniqueDisplayData += DisplayTechniqueHtml.Get(technique, dataObj.displayOptions);
+			},
+
+			buildAugmentTechDisplayData = function (dataObj, technique) {
+				let augmentTechnique = {};
+				for (var i = 0; i < technique.augments.length; i++) {
+					augmentTechnique = FormatTechniques.SetAugmentTechnique(technique.augments[i], technique);
+					buildTechniqueDisplay(dataObj, augmentTechnique);
+				}
+			}
+
+			return {
+				Build: build
+			}
+				
+		}()),
+
+		SideBarData = SideBarData || (function () {
+			'use strict';
+
+			var
+			print = function () {
+				return FormatCharacterSheetSidebar.Build(buildTechPointsSection());
+			},
+
+			buildTechPointsSection = function () {
+				return FormatCharacterSheetSidebar.BuildPointsSection("attr_techpoints-Base", "Base") + 
+					FormatCharacterSheetSidebar.BuildPointsSection("attr_techpoints-Augment", "Augment");
+			}
+
+			return {
+				Print: print
+			};
+
+		}()),
+
+		MainContentData = MainContentData || (function () {
+			'use strict';
+
+			var
+			
+			print = function (dataObj) {
+
+				return FormatCharacterSheetMain.Build(buildTechniqueSelectionInformationSection() + 
+					buildTechniqueSelectionTechniquesSection(dataObj));
+			},
+
+			buildTechniqueSelectionInformationSection = function () {
+				let output = "";
+
+				return output;
+			},
+
+			buildTechniqueSelectionTechniquesSection = function (dataObj) {
+				dataObj.techniqueDisplayData = FormatCharacterSheetMain.CollapsibleTab(
+					dataObj.displayOptions.sectionName, "Techniques", dataObj.techniqueDisplayData);
+				dataObj.techniqueDisplayData = FormatCharacterSheetMain.Tab(dataObj.techniqueDisplayData);
+
+				return dataObj.techniqueDisplayData;
+			}
+
+			return {
+				Print: print
+			};
+		}())
+		;
+	return {
+		Print: print
+	};
+}());
 
 
 

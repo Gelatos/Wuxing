@@ -1373,6 +1373,8 @@ var FormatStatBlock = FormatStatBlock || (function() {
     };
 }());
 
+
+
 var FormatCharacterSheetSidebar = FormatCharacterSheetSidebar || (function() {
     'use strict';
 
@@ -1759,6 +1761,10 @@ var FormatCharacterSheetNavigation = FormatCharacterSheetNavigation || (function
     return buildHeader(header, subheader);
   },
 
+  buildOriginPageNavigation = function(sheetName) {
+    return buildSection(buildCharacterCreationNavigation(sheetName));
+  },
+
   buildTrainingPageNavigation = function(sheetName) {
     let mainContents = "";
     mainContents += buildTabs(sheetName, "attr_tab-training", ["Knowledge", "Skills", "Training"]);
@@ -1812,6 +1818,7 @@ var FormatCharacterSheetNavigation = FormatCharacterSheetNavigation || (function
   }
   ;
   return {
+    BuildOriginPageNavigation: buildOriginPageNavigation,
     BuildTechniquesNavigation: buildTechniquesNavigation,
     BuildTrainingPageNavigation: buildTrainingPageNavigation,
     BuildAdvancementPageNavigation: buildAdvancementPageNavigation
