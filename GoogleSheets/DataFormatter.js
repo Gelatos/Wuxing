@@ -1373,7 +1373,41 @@ var FormatStatBlock = FormatStatBlock || (function() {
     };
 }());
 
+var FormatDefinitions =FormatDefinitions || function() {
+    'use strict';
 
+    var
+    createDictionary = function(modArray) {
+        var output = CreateDictionary();
+        let key = "";
+        // create the groups dictionary
+        for (let i = 0; i < modArray.length; i++) {
+          key = modArray[i];
+          if (!output.keys.includes(key)) {
+            output.add(key, []);
+          }
+          
+        }
+        
+        return output;
+      },
+      
+      displayEntry = function({dictionary, key) {
+        let output = "";
+        let enttyData = dictionary.get(key);
+        
+        output +=FormatCharacterSheetMain.Header(key);
+        for(let i = 0; i < enttyData.length; i++) {
+          output += "\n" + FormatCharacterSheetMain.Desc(enttyData[i]);
+        }
+        
+        return output;
+      }
+      
+      return {
+        DisplayEntry : displayEntry
+      }
+ }());
 
 var FormatCharacterSheetSidebar = FormatCharacterSheetSidebar || (function() {
     'use strict';
