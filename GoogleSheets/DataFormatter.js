@@ -1386,27 +1386,38 @@ var FormatDefinitions = FormatDefinitions || (function() {
           if (!output.keys.includes(key)) {
             output.add(key, []);
           }
-          
         }
         
         return output;
       },
       
-      displayEntry = function({dictionary, key) {
-        let output = "";
-        let enttyData = dictionary.get(key);
+    displayEntry = function(dictionary, key) {
+      let output = "";
+      let entryData = dictionary.get(key);
         
-        output +=FormatCharacterSheetMain.Header(key);
-        for(let i = 0; i < enttyData.length; i++) {
-          output += "\n" + FormatCharacterSheetMain.Desc(enttyData[i]);
-        }
+      output +=FormatCharacterSheetMain.Header(key);
+      for(let i = 0; i < entryData.length; i++) {
+        output += "\n" + FormatCharacterSheetMain.Desc(entryData[i]);
+      }
         
-        return output;
+      return output;
+    },
+    
+    displayCollapsibleTitle = function(dictionary, key, sectionName) {
+      let collapsibleSection = "";
+      let entryData = dictionary.get(key);
+      for(let i = 0; i < entryData.length; i++) {
+        collapsibleSection += "\n" + FormatCharacterSheetMain.Desc(entryData[i]);
       }
-      ;
-      return {
-        DisplayEntry : displayEntry
-      }
+      
+      let title += FormatCharacterSheetMain.Header(key);
+      return FormatCharacterSheetMain.CollapsibleSection(sectionName, title, collapsibleSection);
+    }
+    ;
+    return {
+      DisplayEntry : displayEntry,
+      DisplayCollapsibleTitle: displayCollapsibleTitle
+    }
  }());
 
 var FormatCharacterSheetSidebar = FormatCharacterSheetSidebar || (function() {
