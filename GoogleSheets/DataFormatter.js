@@ -1415,6 +1415,7 @@ var FormatDefinitions = FormatDefinitions || (function() {
     }
     ;
     return {
+      CreateDictionary: createDictionary,
       DisplayEntry : displayEntry,
       DisplayCollapsibleTitle: displayCollapsibleTitle
     }
@@ -1569,6 +1570,12 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
       desc = function(contents) {
         return `<span class="wuxDescription">${contents}</span>`;
       },
+      
+      input = function(contents, type, fieldName, value, placeholder) {
+        value = value == undefined ? "" : ` value="${value}"`;
+        placeholder = placeholder == undefined ? "" : ` placeholder="${placeholder}"`;
+        return `<input type="${type}" class="wuxInput" name="${fieldName}""${value}${placeholder}>`
+      },
 
       table = table || (function() {
         'use strict';
@@ -1716,6 +1723,7 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
         Header2: header2,
         Subheader: subheader,
         Desc: desc,
+        Input: input,
         Table: table,
         DistinctSection: distinctSection,
         InteractionElement: interactionElement
