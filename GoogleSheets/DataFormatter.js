@@ -19,6 +19,7 @@ var FormatTechniques = FormatTechniques || (function() {
           }
           if (source != undefined) {
             feature.techniqueSource = source;
+            feature.techniqueType = source;
           }
         
           return feature;
@@ -633,16 +634,14 @@ var DisplayTechniqueHtml = DisplayTechniqueHtml || (function() {
 
         setTechniqueDisplayHeaderSelectSection = function(techDisplayData, displayOptions) {
           if (displayOptions.showSelect) {
-            return `<input type="hidden" class="wuxTechniqueDisplayStyle-flag" name="attr_tab-techniques">
-              <div class="wuxTechniqueDisplayStyle-Learn">
+            return `
                 <div class="wuxFeatureHeaderInteractBlock">
                   <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_${displayOptions.sectionName}-select-${techDisplayData.fieldName}">
                   <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_${displayOptions.sectionName}-select-${techDisplayData.fieldName}">
                   <span class="wuxFeatureHeaderInteractiveIcon">&#9635;</span>
                   <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_${displayOptions.sectionName}-select-${techDisplayData.fieldName}">
                   <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9634;</span>
-                </div>
-              </div>`;
+                </div>`;
           }
           return "";
         },
@@ -688,13 +687,11 @@ var DisplayTechniqueHtml = DisplayTechniqueHtml || (function() {
 
         setTechniqueDisplayHeaderExtentFeatures = function(techDisplayData, displayOptions) {
           if (displayOptions.showSelect && techDisplayData.prerequisite != "") {
-            return `<input type="hidden" class="wuxTechniqueDisplayStyle-flag" name="attr_tab-techniques">
-              <div class="wuxTechniqueDisplayStyle-Learn">
+            return `
                 <div class="wuxFeatureHeaderInfoPrereq">
                   <span><strong>Prerequisites: </strong></span>
                   <span>${techDisplayData.prerequisite}</span>
-                </div>
-              </div>`;
+                </div>`;
           }
           return "";
         },
@@ -1243,7 +1240,7 @@ var FormatJobs = FormatJobs || (function() {
           output.group = ""  + modArray[i]; i++;
           output.description = ""  + modArray[i]; i++;
           output.attributes = FormatStatBlock.CreateAttributesArray(modArray, i); i+=7;
-          output.roles = FormatStatBlock.CreateRolesArray(modArray, i); i+=2;
+          output.roles = FormatStatBlock.CreateRolesArray(modArray, i); i+=5;
           output.prereq = "" + modArray[i]; i++;
           output.techniques = createJobTechnique(modArray, i); i++;
         };
@@ -1252,6 +1249,71 @@ var FormatJobs = FormatJobs || (function() {
       },
       
       createJobTechnique = function(modArray, startingIndex) {
+        var output = [];
+        let i = startingIndex;
+        let data = "";
+        let dataSplit = {};
+        while(true) {
+          if (modArray[i] == undefined || modArray[i] == "") {
+            break;
+          }
+          data = "" + modArray[i];
+          dataSplit = data.split(";");
+          output.push({name:dataSplit[0], level:dataSplit.length > 1 ? dataSplit[1] : 0});
+          i++;
+        }
+        return output;
+      },
+
+      getGroupList = function() {
+        return ["Athletics", "Combat", "Focus", "Social", "Technical"];
+      }
+    ;
+    return {
+      CreateDictionary: createDictionary,
+      Get: get,
+      GetGroupList: getGroupList
+    };
+}());
+
+var FormatRoles = FormatRoles || (function() {
+    'use strict';
+
+    var
+      createDictionary = function(modArray) {
+        var output = CreateDictionary();
+        let role = {};
+
+        // create the groups dictionary
+        for (let i = 0; i < modArray.length; i++) {
+          role = get(modArray[i]);
+          output.add(role.name, role);
+        }
+        
+        return output;
+      },
+
+      get = function(modArray) {
+
+        var output = {
+          name: "",
+          group: "",
+          description: "",
+          techniques: []
+        };
+        
+        if (modArray != undefined) {
+          let i = 0;
+          output.name = "" + modArray[i]; i++;
+          output.group = ""  + modArray[i]; i++;
+          output.description = ""  + modArray[i]; i++;
+          output.techniques = createTechnique(modArray, i); i++;
+        };
+
+        return output;
+      },
+      
+      createTechnique = function(modArray, startingIndex) {
         var output = [];
         let i = startingIndex;
         let data = "";
@@ -1351,14 +1413,20 @@ var FormatStatBlock = FormatStatBlock || (function() {
       createRolesArray = function(modArray, startingIndex) {
 
         var output = {
+          generalist: 0,
           athlete: 0,
-          defender: 0
+          defender: 0,
+          marksman: 0,
+          skirmisher: 0
         };
         
         if (modArray != undefined) {
           let i = startingIndex;
-          output.athlete = "" + modArray[i]; i++;
-          output.defender = "" + modArray[i]; i++;
+          output.generalist = parseInt(modArray[i]); i++;
+          output.athlete = parseInt(modArray[i]); i++;
+          output.defender = parseInt(modArray[i]); i++;
+          output.marksman = parseInt(modArray[i]); i++;
+          output.skirmisher = parseInt(modArray[i]); i++;
         };
 
         return output;
@@ -1379,21 +1447,48 @@ var FormatDefinitions = FormatDefinitions || (function() {
     var
     createDictionary = function(modArray) {
         var output = CreateDictionary();
-        let key = "";
+        let definition = {};
         // create the groups dictionary
         for (let i = 0; i < modArray.length; i++) {
-          key = modArray[i];
-          if (!output.keys.includes(key)) {
-            output.add(key, []);
+          if (output.has(modArray[i])) {
+            output[modArray[i]].descriptions.push(modArray[i]);
+          }
+          else {
+            definition = get(modArray[i]);
+            output.add(definition.name, definition);
           }
         }
         
         return output;
       },
-      
+
+      get = function(modArray) {
+
+        var output = {
+          name: "",
+          group: "",
+          descriptions: [],
+          abbreviation: "",
+          variable: "",
+          formula: ""
+        };
+        
+        if (modArray != undefined) {
+          let i = 0;
+          output.name = "" + modArray[i]; i++;
+          output.group = ""  + modArray[i]; i++;
+          output.descriptions.push(""  + modArray[i]); i++;
+          output.abbreviation = ""  + modArray[i]; i++;
+          output.variable = ""  + modArray[i]; i++;
+          output.formula = ""  + modArray[i]; i++;
+        };
+
+        return output;
+      },
+
     displayEntry = function(dictionary, key) {
       let output = "";
-      let entryData = dictionary.get(key);
+      let entryData = dictionary.get(key).descriptions;
         
       output +=FormatCharacterSheetMain.Header(key);
       for(let i = 0; i < entryData.length; i++) {
@@ -1403,15 +1498,20 @@ var FormatDefinitions = FormatDefinitions || (function() {
       return output;
     },
     
-    displayCollapsibleTitle = function(dictionary, key, sectionName) {
-      let collapsibleSection = "";
-      let entryData = dictionary.get(key);
+    displayCollapsibleTitle = function(dictionary, key, fieldName) {
+      let expandContents = "";
+      let entryData = dictionary.get(key).descriptions;
       for(let i = 0; i < entryData.length; i++) {
-        collapsibleSection += "\n" + FormatCharacterSheetMain.Desc(entryData[i]);
+        expandContents += "\n" + FormatCharacterSheetMain.Desc(entryData[i]);
       }
+
+      let expandFieldName = `${fieldName}-expand`;
+
+      let output = `${FormatCharacterSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
+      ${FormatCharacterSheetMain.Header(key, "span")}
+      ${FormatCharacterSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
       
-      let title += FormatCharacterSheetMain.Header(key);
-      return FormatCharacterSheetMain.CollapsibleSection(sectionName, title, collapsibleSection);
+      return FormatCharacterSheetMain.InteractionElement.Build(false, true, output);
     }
     ;
     return {
@@ -1555,26 +1655,35 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function() {
       },
 
       // string formatting
-      header = function(contents) {
-        return `<div class="wuxHeader">${contents}</div>`;
+      header = function(contents, htmlType) {
+        if (htmlType == undefined) {
+          htmlType = "div";
+        }
+        return `<${htmlType} class="wuxHeader">${contents}</${htmlType}>`;
       },
 
-      header2 = function(contents) {
-        return `<div class="wuxHeader2">${contents}</div>`;
+      header2 = function(contents, htmlType) {
+        if (htmlType == undefined) {
+          htmlType = "div";
+        }
+        return `<${htmlType} class="wuxHeader2">${contents}</${htmlType}>`;
       },
       
-      subheader = function(contents) {
-        return `<div class="wuxSubheader">${contents}</div>`;
+      subheader = function(contents, htmlType) {
+        if (htmlType == undefined) {
+          htmlType = "div";
+        }
+        return `<${htmlType} class="wuxSubheader">${contents}</${htmlType}>`;
       },
 
       desc = function(contents) {
         return `<span class="wuxDescription">${contents}</span>`;
       },
       
-      input = function(contents, type, fieldName, value, placeholder) {
+      input = function(type, fieldName, value, placeholder) {
         value = value == undefined ? "" : ` value="${value}"`;
         placeholder = placeholder == undefined ? "" : ` placeholder="${placeholder}"`;
-        return `<input type="${type}" class="wuxInput" name="${fieldName}""${value}${placeholder}>`
+        return `<input type="${type}" class="wuxInput" name="${fieldName}"${value}${placeholder} />`
       },
 
       table = table || (function() {
