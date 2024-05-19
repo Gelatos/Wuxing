@@ -1,13 +1,43 @@
 function CreateCharacterSheet(definitionsArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabase) {
-	let definitionsDatabase = FormatDefinitions.CreateDictionary(definitionsArray);
-
-	let output = "";
-	output += DisplayOriginSheet.Print(definitionsDatabase);
-	output += DisplayTrainingSheet.Print(skillsArray, languageArray, loreArray);
-	output += DisplayAdvancementSheet.Print(definitionsDatabase, jobsArray, rolesArray, techniqueDatabase);
-	output += DisplayTechniquesSheet.Print(techniqueDatabase);
-	return PrintLargeEntry(output);
+	return PrintLargeEntry(DisplayCharacterSheet.Print(definitionsArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabase));
 }
+
+var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
+	'use strict';
+	
+	var
+		print = function (definitionsArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabase) {
+
+			let definitionsDatabase = FormatDefinitions.CreateDictionary(definitionsArray);
+
+			let output = "";
+			output += DisplayOriginSheet.Print(definitionsDatabase);
+			output += DisplayTrainingSheet.Print(skillsArray, languageArray, loreArray);
+			output += DisplayAdvancementSheet.Print(definitionsDatabase, jobsArray, rolesArray, techniqueDatabase);
+			output += DisplayTechniquesSheet.Print(techniqueDatabase);
+			return buildSheetContainer(output);
+		},
+
+		buildSheetContainer = function (contents) {
+			return `<div class="wuxCharacterSheet">
+			<input class="wuxCharacterSheetDisplayStyle-Flag" name="attr_characterSheetDisplayStyle" type="hidden" value="0">
+			${contents}
+			</div>`;
+		},
+
+		buildSheetWorkerContainer = function (contents) {
+			return `<script type="text/worker">
+			on("sheet:opened", function(eventinfo) {
+				on_sheet_opened();
+			});
+			${contents}
+			</script>`;
+		}
+		;
+	return {
+		Print: print
+	};
+}());
 
 var DisplayOriginSheet = DisplayOriginSheet || (function () {
 	'use strict';
@@ -15,9 +45,24 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 	var
 		print = function (definitionsDatabase) {
 			let output = FormatCharacterSheetNavigation.BuildOriginPageNavigation("Origin") +
+				SideBarData.Print(definitionsDatabase) +
 				MainContentData.Print(definitionsDatabase);
 			return FormatCharacterSheet.SetDisplayStyle("Builder", output);
 		},
+
+		SideBarData = SideBarData || (function () {
+			'use strict';
+
+			var
+				print = function () {
+					return FormatCharacterSheetSidebar.Build("<div>&nbsp;</div>");
+				}
+
+			return {
+				Print: print
+			};
+
+		}()),
 
 		MainContentData = MainContentData || (function () {
 			'use strict';
@@ -46,17 +91,25 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 							output += buildTextInput(definitionsDatabase, "Full Name", "attr_full_name");
 							output += buildTextInput(definitionsDatabase, "Display Name", "attr_nickname");
 							output += buildNumberInput(definitionsDatabase, "Character Level", "attr_advancement_level");
+							output += buildAffinity(definitionsDatabase);
 							return FormatCharacterSheetMain.CollapsibleSection("origin_basics", "Basics", output);
 						},
 
 						buildTextInput = function (definitionsDatabase, key, fieldName) {
-							return FormatDefinitions.DisplayCollapsibleTitle(definitionsDatabase, key, `${fieldName}-expand`) + "\n" +
+							return FormatDefinitions.DisplayCollapsibleTitle(definitionsDatabase, key, fieldName) + "\n" +
 								FormatCharacterSheetMain.Input("text", fieldName);
 						},
 
 						buildNumberInput = function (definitionsDatabase, key, fieldName) {
-							return FormatDefinitions.DisplayCollapsibleTitle(definitionsDatabase, key, `${fieldName}-expand`) + "\n" +
+							return FormatDefinitions.DisplayCollapsibleTitle(definitionsDatabase, key, fieldName) + "\n" +
 								FormatCharacterSheetMain.Input("number", fieldName);
+						},
+
+						buildAffinity = function (definitionsDatabase) {
+							let output = "";
+							output += FormatDefinitions.DisplayCollapsibleTitle(definitionsDatabase, "Affinity", FormatDefinitions.GetVariable(definitionsDatabase, "Affinity"));
+							output += FormatCharacterSheetMain.Select(FormatDefinitions.GetVariable(definitionsDatabase, "Affinity"), FormatDefinitions.GetGroup(definitionsDatabase, "Affinity"));
+							return output;
 						}
 
 					return {
@@ -200,7 +253,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 								${FormatCharacterSheetMain.InteractionElement.CheckboxBlockIcon(fieldName, interactHeader)}
 								${FormatCharacterSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
 
-							return FormatCharacterSheetMain.InteractionElement.Build(true, true, output);
+							return FormatCharacterSheetMain.InteractionElement.Build(true, output);
 						}
 					return {
 						Build: build
@@ -244,7 +297,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 					${buildInteractionMainBlock(knowledge)}
 					${FormatCharacterSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
 
-							return FormatCharacterSheetMain.InteractionElement.Build(true, true, output);
+							return FormatCharacterSheetMain.InteractionElement.Build(true, output);
 						},
 
 						buildInteractionMainBlock = function (knowledge) {
@@ -259,7 +312,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 							let output = `${FormatCharacterSheetMain.InteractionElement.ExpandableBlockEmptyIcon()}
 					${FormatCharacterSheetMain.InteractionElement.CheckboxBlockIcon(fieldName, `<span class="wuxSubheader">${subGroupName}</span>`)}`;
 
-							return FormatCharacterSheetMain.InteractionElement.Build(true, true, output);
+							return FormatCharacterSheetMain.InteractionElement.Build(true, output);
 						}
 
 					return {
@@ -302,7 +355,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 					${FormatCharacterSheetMain.InteractionElement.CheckboxBlockIcon(fieldName, interactHeader)}
 					${FormatCharacterSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
 
-							return FormatCharacterSheetMain.InteractionElement.Build(true, true, output);
+							return FormatCharacterSheetMain.InteractionElement.Build(true, output);
 						},
 
 						buildMainLore = function (knowledge) {
