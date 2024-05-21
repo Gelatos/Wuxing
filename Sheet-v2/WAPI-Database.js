@@ -1,3 +1,110 @@
+// ====== Classes
+
+class Dictionary {
+
+    constructor() {
+        this.keys = [];
+        this.values = {};
+    }
+
+    importStringifiedJson(stringifiedJSON) {
+        let data = JSON.parse(stringifiedJSON);
+        this.keys = data.keys;
+        this.values = data.values;
+    }
+    importJson(json) {
+        this.keys = json.keys;
+        this.values = json.values;
+    }
+    add(key, value) {
+        if (!this.keys.includes(key)) {
+            this.keys.push(key);
+        }
+        this.values[key] = value;
+    }
+    get(key) {
+        return this.values[key];
+    }
+    has(key) {
+        return this.keys.includes(key);
+    }
+    iterate(callback) {
+        for (let i = 0; i < this.keys.length; i++) {
+        callback(this.values[this.keys[i]]);
+        }
+    }
+}
+
+class DatabaseFilterData {
+    constructor(property, value) {
+        this.property = property;
+        this.value = value;
+    }
+}
+
+class Database extends Dictionary {
+    constructor(sortingProperties) {
+      super();
+      this.sortingGroups = {};
+      for (let i = 0; i < sortingProperties.length; i++) {
+        this.sortingGroups[sortingProperties[i]] = {};
+      }
+    }
+    
+    importStringifiedJson(stringifiedJSON) {
+        super.importStringifiedJson(stringifiedJSON);
+        let data = JSON.parse(stringifiedJSON);
+        this.sortingGroups = data.sortingGroups;
+    }
+    importJson(json) {
+        super.importJson(json);
+        this.sortingGroups = json.sortingGroups;
+    }
+    importSheets(dataArray, dataCreationCallback) {
+      let data = {};
+      for (let i = 0; i < dataArray.length; i++) {
+        data = dataCreationCallback(dataArray[i]);
+        add(data.name, data);
+      }
+    }
+    
+    add(key, value) {
+        super.add(key, value);
+        let propertyValue = "";
+        for (let property in this.sortingGroups) {
+            propertyValue = value[property];
+            if (!this.sortingGroups[property].includes(propertyValue)) {
+                this.sortingGroups[property][propertyValue] = [];
+            }
+            this.sortingGroups[property][propertyValue].push(value.name);
+        }
+    }
+    
+    getSortedGroup(property, propertyValue) {
+        return this.sortingGroups[property][propertyValue];
+    }
+    
+    getFilteredData(filterData) {
+        let filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
+        let filters = [];
+        for (let i = 1; i < filterData.length; i++) {
+            filters = getSortedGroup(filterData[i].property, filterData[i].value);
+            filteredGroup.filter(item => item.includes(filters))
+        }
+        return getGroup(filteredGroup);
+    }
+    
+    getGroup(group) {
+        let output = [];
+        for (let i = 0; i < group.length; i++) {
+            output.push(this.get(group[i]));
+        }
+        return output;
+    }
+}
+
+// ====== Formatters
+
 var FeatureService = FeatureService || (function () {
     'use strict';
 
@@ -641,89 +748,6 @@ function GetRepeatingSectionFromFieldName(fieldName) {
 function GetRepeatingSectionIdFromId(id, repeatingSection) {
 	var len = repeatingSection.length + 1;
 	return id.substr(len, 20);
-}
-
-// ====== Formatters
-
-class Dictionary {
-
-    constructor() {
-        this.keys = [];
-        this.values = {};
-    }
-
-    importStringifiedJson(stringifiedJSON) {
-        let data = JSON.parse(stringifiedJSON);
-        this.keys = data.keys;
-        this.values = data.values;
-    }
-    importJson(json) {
-        this.keys = json.keys;
-        this.values = json.values;
-    }
-    add(key, value) {
-        if (!this.keys.includes(key)) {
-            this.keys.push(key);
-        }
-        this.values[key] = value;
-    }
-    get(key) {
-        return this.values[key];
-    }
-    has(key) {
-        return this.keys.includes(key);
-    }
-    iterate(callback) {
-        for (let i = 0; i < this.keys.length; i++) {
-        callback(this.values[this.keys[i]]);
-        }
-    }
-}
-
-class Database extends Dictionary {
-    constructor(sortingProperties) {
-      super();
-      this.sortingGroups = {};
-      for (let i = 0; i < sortingProperties.length; i++) {
-        this.sortingGroups[sortingProperties[i]] = [];
-      }
-    }
-
-    importStringifiedJson(stringifiedJSON) {
-        super.importStringifiedJson(stringifiedJSON);
-        let data = JSON.parse(stringifiedJSON);
-        this.sortingGroups = data.sortingGroups;
-    }
-
-    importJson(json) {
-        super.importJson(json);
-        this.sortingGroups = json.sortingGroups;
-    }
-
-    importSheets(dataArray, dataCreationCallback) {
-      let data = {};
-      for (let i = 0; i < dataArray.length; i++) {
-        data = dataCreationCallback(dataArray[i]);
-        add(data.name, data);
-      }
-    }
-    
-    add(key, value) {
-        super.add(key, value);
-        for (let property in this.sortingGroups) {
-            this.sortingGroups[property].push(value.name);
-        }
-    }
-
-    getSortedGroup(property) {
-        let group = this.sortingGroups[property];
-        let output = [];
-
-        for (let i = 0; i < group.length; i++) {
-            output.push(this.get(group[i]));
-        }
-        return output;
-    }
 }
 
 // ====== Language
