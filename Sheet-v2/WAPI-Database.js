@@ -645,46 +645,84 @@ function GetRepeatingSectionIdFromId(id, repeatingSection) {
 
 // ====== Formatters
 
-function CreateDictionary() {
-    return {
-        keys: [],
-        values: {},
+class Dictionary {
 
-        import: function(stringifiedJSON) {
-            let data = JSON.parse(stringifiedJSON);
-            this.keys = data.keys;
-            this.values = data.values;
-        },
-        importJson: function(json) {
-            this.keys = json.keys;
-            this.values = json.values;
-        },
-        add: function(key, value) {
-            if (!this.keys.includes(key)) {
-                this.keys.push(key);
-            }
-            this.values[key] = value;
-        },
-        get: function(key) {
-            return this.values[key];
-        },
-        has: function(key) {
-            return this.keys.includes(key);
-        },
-        iterate: function(callback) {
-          for (let i = 0; i < this.keys.length; i++) {
-            callback(this.values[this.keys[i]]);
-          }
+    constructor() {
+        this.keys = [];
+        this.values = {};
+    }
+
+    importStringifiedJson(stringifiedJSON) {
+        let data = JSON.parse(stringifiedJSON);
+        this.keys = data.keys;
+        this.values = data.values;
+    }
+    importJson(json) {
+        this.keys = json.keys;
+        this.values = json.values;
+    }
+    add(key, value) {
+        if (!this.keys.includes(key)) {
+            this.keys.push(key);
+        }
+        this.values[key] = value;
+    }
+    get(key) {
+        return this.values[key];
+    }
+    has(key) {
+        return this.keys.includes(key);
+    }
+    iterate(callback) {
+        for (let i = 0; i < this.keys.length; i++) {
+        callback(this.values[this.keys[i]]);
         }
     }
 }
 
-function IterateDataArray (data, callback) {
-    let items = data.split(";");
-    let item = "";
-    for (let i = 0; i < items.length; i++) {
-        item = items[i].trim();
-        callback(item);
+class Database extends Dictionary {
+    constructor(sortingProperties) {
+      super();
+      this.sortingGroups = {};
+      for (let i = 0; i < sortingProperties.length; i++) {
+        this.sortingGroups[sortingProperties[i]] = [];
+      }
+    }
+
+    importStringifiedJson(stringifiedJSON) {
+        super.importStringifiedJson(stringifiedJSON);
+        let data = JSON.parse(stringifiedJSON);
+        this.sortingGroups = data.sortingGroups;
+    }
+
+    importJson(json) {
+        super.importJson(json);
+        this.sortingGroups = json.sortingGroups;
+    }
+
+    importSheets(dataArray, dataCreationCallback) {
+      let data = {};
+      for (let i = 0; i < dataArray.length; i++) {
+        data = dataCreationCallback(dataArray[i]);
+        add(data.name, data);
+      }
+    }
+    
+    add(key, value) {
+        super.add(key, value);
+        for (let property in this.sortingGroups) {
+            this.sortingGroups[property].push(value.name);
+        }
+    }
+
+    getSortedGroup(property) {
+        let group = this.sortingGroups[property];
+        let output = [];
+
+        for (let i = 0; i < group.length; i++) {
+            output.push(this.get(group[i]));
+        }
+        return output;
     }
 }
 

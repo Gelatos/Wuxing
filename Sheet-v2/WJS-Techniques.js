@@ -697,7 +697,7 @@ function UpdateTechniquesSelectedTechniques(repeatingId, newValue) {
 		let techPoints = TechniquePoints.GetTechniquePointsCurrentValues();
 		let learnedTech = AttrParseJSON(v, "techniques-learnedNewTech");
 		if (learnedTech == "") {
-			learnedTech = CreateDictionary();
+			learnedTech = new Dictionary();
 		}
 		learnedTech = SetTechniquesSelectedTechnique(learnedTech, techName, newValue, techGroup);
 		update["techniques-learnedNewTech"] = JSON.stringify(learnedTech);

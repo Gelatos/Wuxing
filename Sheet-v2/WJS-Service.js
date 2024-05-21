@@ -38,7 +38,7 @@ function AttrParseJSON(attrArray, fieldName, defaultValue) {
 }
 
 function AttrParseJSONDictionary(attrArray, fieldName) {
-	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName] == "" ? CreateDictionary() : JSON.parse(attrArray[fieldName]);
+	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName] == "" ? new Dictionary() : JSON.parse(attrArray[fieldName]);
 }
 
 

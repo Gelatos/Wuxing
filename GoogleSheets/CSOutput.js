@@ -396,8 +396,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 		printJobs = function (definitionsDatabase, jobsArray, rolesArray, techniqueDatabaseData) {
 			let jobsDictionary = FormatJobs.CreateDictionary(jobsArray);
 			let rolesDictionary = FormatRoles.CreateDictionary(rolesArray);
-			let jobTechDictionary = CreateDictionary();
-			let roleTechDictionary = CreateDictionary();
+			let jobTechDictionary = new Dictionary();
+			let roleTechDictionary = new Dictionary();
 			TechniqueData.SetDictionaries(jobTechDictionary, roleTechDictionary, techniqueDatabaseData);
 
 			let output = FormatCharacterSheetNavigation.BuildAdvancementPageNavigation("Jobs") +

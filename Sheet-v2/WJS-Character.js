@@ -194,7 +194,7 @@ function UpdateCharacterTechniqueSelect() {
 
 							getAttrs(mod_attrs, function (v) {
 								let selectedBaseActions = [];
-								let customTechniquesList = CreateDictionary();
+								let customTechniquesList = new Dictionary();
 								let actions = {
 									full: CreateLearnedTechniquesDataObj(v, repeatingFull, fullArray),
 									quick: CreateLearnedTechniquesDataObj(v, repeatingQuick, quickArray),
@@ -332,8 +332,8 @@ function CreateLearnedTechniquesDataObj(attrArray, repeatingSection, idArray) {
 	let output = {
 		current: [],
 		found: [],
-		new: CreateDictionary(),
-		newCustom: CreateDictionary(),
+		new: new Dictionary(),
+		newCustom: new Dictionary(),
 
 		addBaseTech: function (techName, techId, isDatabase) {
 			if (this.current.includes(techName)) {
@@ -345,8 +345,8 @@ function CreateLearnedTechniquesDataObj(attrArray, repeatingSection, idArray) {
 					name: techName,
 					id: techId,
 					isAugment: false,
-					auguments: CreateDictionary(),
-					customAugments: CreateDictionary()
+					auguments: new Dictionary(),
+					customAugments: new Dictionary()
 				};
 			}
 			else {
@@ -355,7 +355,7 @@ function CreateLearnedTechniquesDataObj(attrArray, repeatingSection, idArray) {
 					name: techName,
 					id: techId,
 					isAugment: false,
-					customAugments: CreateDictionary()
+					customAugments: new Dictionary()
 				};
 				return true;
 			}

@@ -6,6 +6,19 @@ function SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleAr
   );
 }
 
+var CreateDatabase = CreateDatabase || (function () {
+  'use strict';
+
+  var
+  createTechniqueDatabase = function (standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr) {
+    return FormatTechniques.SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr);
+  }
+  ;
+  return {
+    CreateTechniqueDatabase: createTechniqueDatabase
+  }
+}());
+
 var FormatTechniques = FormatTechniques || (function () {
   'use strict';
 
@@ -112,7 +125,7 @@ var FormatTechniques = FormatTechniques || (function () {
     },
 
     setTechniquesDatabase = function (standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr) {
-      var techDictionary = CreateDictionary();
+      var techDictionary = new Dictionary();
       techDictionary.add("Standard", getTechniqueGroupData(standardArr, "Standard"));
       techDictionary.add("Hero", getTechniqueGroupData(heroArr, "Hero"));
       techDictionary.add("Creature", getTechniqueGroupData(creatureArr, "Creature"));
@@ -185,7 +198,7 @@ var FormatTechniques = FormatTechniques || (function () {
     },
 
     getTechniqueGroupData = function (modArray, source) {
-      var output = CreateDictionary();
+      var output = new Dictionary();
       var technique = {};
       for (var i = 0; i < modArray.length; i++) {
         technique = get(modArray[i], source);
@@ -238,26 +251,26 @@ var FormatTechniques = FormatTechniques || (function () {
 
     createTechniqueFilterData = function () {
       let filterData = {
-        uniqueSource: CreateDictionary(),
-        uniqueGroup: CreateDictionary(),
-        uniqueType: CreateDictionary(),
-        uniqueAction: CreateDictionary(),
-        uniqueTraits: CreateDictionary(),
-        uniqueReqWeapon: CreateDictionary(),
-        uniqueBranch: CreateDictionary(),
-        uniqueSkill: CreateDictionary(),
-        uniqueDefense: CreateDictionary(),
-        uniqueRange: CreateDictionary(),
-        includeBaseSource: CreateDictionary(),
-        includeBaseGroup: CreateDictionary(),
-        includeBaseType: CreateDictionary(),
-        includeBaseAction: CreateDictionary(),
-        includeBaseTraits: CreateDictionary(),
-        includeBaseReqWeapon: CreateDictionary(),
-        includeBaseBranch: CreateDictionary(),
-        includeBaseSkill: CreateDictionary(),
-        includeBaseDefense: CreateDictionary(),
-        includeBaseRange: CreateDictionary(),
+        uniqueSource: new Dictionary(),
+        uniqueGroup: new Dictionary(),
+        uniqueType: new Dictionary(),
+        uniqueAction: new Dictionary(),
+        uniqueTraits: new Dictionary(),
+        uniqueReqWeapon: new Dictionary(),
+        uniqueBranch: new Dictionary(),
+        uniqueSkill: new Dictionary(),
+        uniqueDefense: new Dictionary(),
+        uniqueRange: new Dictionary(),
+        includeBaseSource: new Dictionary(),
+        includeBaseGroup: new Dictionary(),
+        includeBaseType: new Dictionary(),
+        includeBaseAction: new Dictionary(),
+        includeBaseTraits: new Dictionary(),
+        includeBaseReqWeapon: new Dictionary(),
+        includeBaseBranch: new Dictionary(),
+        includeBaseSkill: new Dictionary(),
+        includeBaseDefense: new Dictionary(),
+        includeBaseRange: new Dictionary(),
 
         add: function (technique) {
 
@@ -458,7 +471,7 @@ var FormatTechniques = FormatTechniques || (function () {
     iterateOverTechArrays = function (data, callback, techniqueDatabase, sources) {
       let techData;
       for (let i = 0; i < sources.length; i++) {
-        techData = CreateDictionary();
+        techData = new Dictionary();
         techData.importJson(techniqueDatabase.values[sources[i]]);
         data = callback(data, techData);
       }
@@ -1049,7 +1062,7 @@ var FormatSkills = FormatSkills || (function () {
 
   var
     createSkillsDictionary = function (modArray) {
-      var output = CreateDictionary();
+      var output = new Dictionary();
       var skill = {};
       var data = [];
 
@@ -1107,7 +1120,7 @@ var FormatKnowledge = FormatKnowledge || (function () {
 
   var
     createLanguageDictionary = function (modArray) {
-      var output = CreateDictionary();
+      var output = new Dictionary();
       var skill = {};
       var data = [];
 
@@ -1150,7 +1163,7 @@ var FormatKnowledge = FormatKnowledge || (function () {
     },
 
     createLoreDictionary = function (modArray) {
-      var output = CreateDictionary();
+      var output = new Dictionary();
       var skill = {};
       var data = [];
 
@@ -1211,7 +1224,7 @@ var FormatJobs = FormatJobs || (function () {
 
   var
     createDictionary = function (modArray) {
-      var output = CreateDictionary();
+      var output = new Dictionary();
       let job = {};
 
       // create the groups dictionary
@@ -1282,7 +1295,7 @@ var FormatRoles = FormatRoles || (function () {
 
   var
     createDictionary = function (modArray) {
-      var output = CreateDictionary();
+      var output = new Dictionary();
       let role = {};
 
       // create the groups dictionary
@@ -1447,7 +1460,7 @@ var FormatDefinitions = FormatDefinitions || (function () {
 
   var
     createDictionary = function (modArray) {
-      var output = CreateDictionary();
+      var output = new Dictionary();
       let definition = {};
       // create the groups dictionary
       for (let i = 0; i < modArray.length; i++) {
