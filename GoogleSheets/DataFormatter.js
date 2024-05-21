@@ -1,4 +1,5 @@
-function SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr) {
+function SetTechniquesDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
+    
   return PrintLargeEntry(
     JSON.stringify(
       FormatTechniques.SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr)
