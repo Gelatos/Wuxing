@@ -101,44 +101,56 @@ class Database extends Dictionary {
     }
 }
 
-class TechniqueData {
-    constructor() {
-        this.name = "";
-        this.augmentBase = "";
-        this.techniqueSource = "";
-        this.techniqueGroup = "";
-        this.family = "";
-        this.techniqueType = "";
-        this.action = "";
-        this.traits = "";
-        this.limits = "";
-        this.resourceCost = "";
-        this.flavorText = "";
-        this.description = "";
-        this.onSuccess = "";
-        this.dConditions = "";
-        this.tEffect = "";
-        this.ongDesc = "";
-        this.ongSave = "";
-        this.ongEft = "";
-        this.trigger = "";
-        this.requirement = "";
-        this.item = "";
-        this.prerequisite = {};
-        this.skill = "";
-        this.defense = "";
-        this.range = "";
-        this.rType = "";
-        this.target = "";
-        this.targetCode = "";
-        this.dVal = "";
-        this.dType = "";
-        this.dBonus = "";
-        this.damageType = "";
-        this.element = "";
-        this.augments = [];
+class dbObj {
+    constructor(data) {
+        if (data != undefined) {
+            if (Array.isArray(data)) {
+                this.importSheets(data);
+            }
+            else if (typeof data == "string") {
+                this.importStringifiedJson(data);
+            }
+            else {
+                this.importJson(data);
+            }
+        }
+        else {
+            createEmpty();
+        }
     }
-
+    importStringifiedJson(stringifiedJSON) {
+        let json = JSON.parse(stringifiedJSON);
+        this.importJson(json);
+    }
+    importJson(json) {}
+    importSheets(dataArray) {}
+    createEmpty() {}
+} 
+class TechniqueData extends dbObj {
+    // constructor(data) {
+    //     this.importData(data);
+    // }
+    
+    // importData(data) {
+    //     if (data != undefined) {
+    //         if (Array.isArray(data)) {
+    //             this.importSheets(data);
+    //         }
+    //         else if (typeof data == "string") {
+    //             this.importStringifiedJson(data);
+    //         }
+    //         else {
+    //             this.importJson(data);
+    //         }
+    //     }
+    // }
+    // importStringifiedJson(stringifiedJSON) {
+    //     let json = JSON.parse(stringifiedJSON);
+    //     this.importJson(json);
+    // }
+    importJson(json) {
+        
+    }
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
@@ -174,7 +186,42 @@ class TechniqueData {
         this.damageType = "" + dataArray[i]; i++;
         this.element = "" + dataArray[i]; i++;
     }
-
+    createEmpty() {
+        this.name = "";
+        this.augmentBase = "";
+        this.techniqueSource = "";
+        this.techniqueGroup = "";
+        this.family = "";
+        this.techniqueType = "";
+        this.action = "";
+        this.traits = "";
+        this.limits = "";
+        this.resourceCost = "";
+        this.flavorText = "";
+        this.description = "";
+        this.onSuccess = "";
+        this.dConditions = "";
+        this.tEffect = "";
+        this.ongDesc = "";
+        this.ongSave = "";
+        this.ongEft = "";
+        this.trigger = "";
+        this.requirement = "";
+        this.item = "";
+        this.prerequisite = {};
+        this.skill = "";
+        this.defense = "";
+        this.range = "";
+        this.rType = "";
+        this.target = "";
+        this.targetCode = "";
+        this.dVal = "";
+        this.dType = "";
+        this.dBonus = "";
+        this.damageType = "";
+        this.element = "";
+        this.augments = [];
+    }
     createPrerequisiteData(dataArray, i) {
         return {
             lv: dataArray[i],
@@ -182,6 +229,134 @@ class TechniqueData {
             tr: dataArray[i + 2],
             ot: dataArray[i + 3]
         }
+    }
+}
+class Skill {
+    constructor(data) {
+        this.importData(data);
+    }
+    importStringifiedJson(stringifiedJSON) {
+        let json = JSON.parse(stringifiedJSON);
+        this.importJson(json);
+    }
+    importJson(json) {
+        
+    }
+    importSheets(dataArray) {
+        let i = 0;
+    
+}
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.abilityScore = "";
+        this.description = "";
+    }
+}
+class Language {
+    constructor(data) {
+        this.importData(data);
+    }
+    importData(data); {
+        if (data != undefined) {
+            if (Array.isArray(data)) {
+                this.importSheets(data);
+            }
+            else if (typeof data == "string") {
+                this.importStringifiedJson(data);
+            }
+            else {
+                this.importJson(data);
+            }
+        }
+    }
+    importStringifiedJson(stringifiedJSON) {
+        let json = JSON.parse(stringifiedJSON);
+        this.importJson(json);
+    }
+    importJson(json) {
+        
+    }
+    importSheets(dataArray) {
+        let i = 0;
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.location = "";
+        this.description = "";
+    }
+}
+class Lore {
+    constructor(data) {
+        this.importData(data);
+    }
+    importData(data); {
+        if (data != undefined) {
+            if (Array.isArray(data)) {
+                this.importSheets(data);
+            }
+            else if (typeof data == "string") {
+                this.importStringifiedJson(data);
+            }
+            else {
+                this.importJson(data);
+            }
+        }
+    }
+    importStringifiedJson(stringifiedJSON) {
+        let json = JSON.parse(stringifiedJSON);
+        this.importJson(json);
+    }
+    importJson(json) {
+        
+    }
+    importSheets(dataArray) {
+        let i = 0;
+    
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.location = "";
+        this.description = "";
+    }
+}
+class Job {
+    constructor(data) {
+        this.importData(data);
+    }
+    importData(data); {
+        if (data != undefined) {
+            if (Array.isArray(data)) {
+                this.importSheets(data);
+            }
+            else if (typeof data == "string") {
+                this.importStringifiedJson(data);
+            }
+            else {
+                this.importJson(data);
+            }
+        }
+    }
+    importStringifiedJson(stringifiedJSON) {
+        let json = JSON.parse(stringifiedJSON);
+        this.importJson(json);
+    }
+    importJson(json) {
+        
+    }
+    importSheets(dataArray) {
+        let i = 0;
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.description = "";
+        this.attributes = {};
+        this.roles = {};
+        this.prereq = "";
+        this.techniques = [];
     }
 }
 
