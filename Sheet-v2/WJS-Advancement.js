@@ -154,7 +154,7 @@ var update_advancement_submit = function () {
 			},
 			levelUp: [],
 			currentLevelIndex: 0,
-			techniques: CreateDictionary(),
+			techniques: new Dictionary(),
 
 			addDesc: function (desc) {
 				if (this.levelUp[this.currentLevelIndex].desc != "") {

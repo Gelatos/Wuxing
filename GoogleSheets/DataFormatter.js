@@ -1,22 +1,56 @@
 function SetTechniquesDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
-    
-  return PrintLargeEntry(
-    JSON.stringify(
-      FormatTechniques.SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr)
-    ), "t"
-  );
+  arr0 = ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9);
+  let techniqueDatabase = CreateSheetsDatabase.CreateTechniques(arr0);
+  return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
 }
 
-var CreateDatabase = CreateDatabase || (function () {
+function ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
+  if (arr1 != undefined) {
+    arr0 = arr0.concat(arr1);
+  }
+  if (arr2 != undefined) {
+    arr0 = arr0.concat(arr2);
+  }
+  if (arr3 != undefined) {
+    arr0 = arr0.concat(arr3);
+  }
+  if (arr4 != undefined) {
+    arr0 = arr0.concat(arr4);
+  }
+  if (arr5 != undefined) {
+    arr0 = arr0.concat(arr5);
+  }
+  if (arr6 != undefined) {
+    arr0 = arr0.concat(arr6);
+  }
+  if (arr7 != undefined) {
+    arr0 = arr0.concat(arr7);
+  }
+  if (arr8 != undefined) {
+    arr0 = arr0.concat(arr8);
+  }
+  if (arr9 != undefined) {
+    arr0 = arr0.concat(arr9);
+  }
+  return arr0;
+}
+
+var CreateSheetsDatabase = CreateSheetsDatabase || (function () {
   'use strict';
 
   var
-  createTechniqueDatabase = function (standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr) {
-    return FormatTechniques.SetTechniquesDatabase(standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr);
-  }
-  ;
+    createTechniques = function (arr) {
+      let database = new Database(["augmentBase", "techniqueGroup"]);
+      database.importSheets(arr, function (arr) {
+        let technique = new TechniqueData();
+        technique.importSheets(arr);
+        return technique;
+      });
+      return database;
+    }
+    ;
   return {
-    CreateTechniqueDatabase: createTechniqueDatabase
+    CreateTechniques: createTechniques
   }
 }());
 

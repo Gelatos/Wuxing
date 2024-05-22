@@ -8,9 +8,8 @@ class Dictionary {
     }
 
     importStringifiedJson(stringifiedJSON) {
-        let data = JSON.parse(stringifiedJSON);
-        this.keys = data.keys;
-        this.values = data.values;
+        let json = JSON.parse(stringifiedJSON);
+        this.importJson(json);
     }
     importJson(json) {
         this.keys = json.keys;
@@ -30,7 +29,7 @@ class Dictionary {
     }
     iterate(callback) {
         for (let i = 0; i < this.keys.length; i++) {
-        callback(this.values[this.keys[i]]);
+            callback(this.values[this.keys[i]]);
         }
     }
 }
@@ -44,56 +43,55 @@ class DatabaseFilterData {
 
 class Database extends Dictionary {
     constructor(sortingProperties) {
-      super();
-      this.sortingGroups = {};
-      for (let i = 0; i < sortingProperties.length; i++) {
-        this.sortingGroups[sortingProperties[i]] = {};
-      }
+        super();
+        this.sortingGroups = {};
+        for (let i = 0; i < sortingProperties.length; i++) {
+            this.sortingGroups[sortingProperties[i]] = {};
+        }
     }
-    
+
     importStringifiedJson(stringifiedJSON) {
-        super.importStringifiedJson(stringifiedJSON);
-        let data = JSON.parse(stringifiedJSON);
-        this.sortingGroups = data.sortingGroups;
+        let json = JSON.parse(stringifiedJSON);
+        this.importJson(json);
     }
     importJson(json) {
         super.importJson(json);
         this.sortingGroups = json.sortingGroups;
     }
     importSheets(dataArray, dataCreationCallback) {
-      let data = {};
-      for (let i = 0; i < dataArray.length; i++) {
-        data = dataCreationCallback(dataArray[i]);
-        add(data.name, data);
-      }
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = dataCreationCallback(dataArray[i]);
+            this.add(data.name, data);
+        }
     }
-    
+
     add(key, value) {
         super.add(key, value);
         let propertyValue = "";
         for (let property in this.sortingGroups) {
             propertyValue = value[property];
-            if (!this.sortingGroups[property].includes(propertyValue)) {
+            if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
                 this.sortingGroups[property][propertyValue] = [];
             }
             this.sortingGroups[property][propertyValue].push(value.name);
         }
     }
-    
+
+    getFilteredData(filterData) {
+        let filteredGroup = this.getSortedGroup(filterData[0].property, filterData[0].value);
+        let filters = [];
+        for (let i = 1; i < filterData.length; i++) {
+            filters = this.getSortedGroup(filterData[i].property, filterData[i].value);
+            filteredGroup.filter(item => item.includes(filters))
+        }
+        return this.getGroup(filteredGroup);
+    }
+
     getSortedGroup(property, propertyValue) {
         return this.sortingGroups[property][propertyValue];
     }
-    
-    getFilteredData(filterData) {
-        let filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
-        let filters = [];
-        for (let i = 1; i < filterData.length; i++) {
-            filters = getSortedGroup(filterData[i].property, filterData[i].value);
-            filteredGroup.filter(item => item.includes(filters))
-        }
-        return getGroup(filteredGroup);
-    }
-    
+
     getGroup(group) {
         let output = [];
         for (let i = 0; i < group.length; i++) {
@@ -103,17 +101,101 @@ class Database extends Dictionary {
     }
 }
 
+class TechniqueData {
+    constructor() {
+        this.name = "";
+        this.augmentBase = "";
+        this.techniqueSource = "";
+        this.techniqueGroup = "";
+        this.family = "";
+        this.techniqueType = "";
+        this.action = "";
+        this.traits = "";
+        this.limits = "";
+        this.resourceCost = "";
+        this.flavorText = "";
+        this.description = "";
+        this.onSuccess = "";
+        this.dConditions = "";
+        this.tEffect = "";
+        this.ongDesc = "";
+        this.ongSave = "";
+        this.ongEft = "";
+        this.trigger = "";
+        this.requirement = "";
+        this.item = "";
+        this.prerequisite = {};
+        this.skill = "";
+        this.defense = "";
+        this.range = "";
+        this.rType = "";
+        this.target = "";
+        this.targetCode = "";
+        this.dVal = "";
+        this.dType = "";
+        this.dBonus = "";
+        this.damageType = "";
+        this.element = "";
+        this.augments = [];
+    }
+
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.augmentBase = "" + dataArray[i]; i++;
+        this.techniqueGroup = "" + dataArray[i]; i++;
+        this.family = "" + dataArray[i]; i++;
+        this.techniqueType = "" + dataArray[i]; i++;
+        this.action = "" + dataArray[i]; i++;
+        this.traits = "" + dataArray[i]; i++;
+        this.limits = "" + dataArray[i]; i++;
+        this.resourceCost = "" + dataArray[i]; i++;
+        this.flavorText = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+        this.onSuccess = "" + dataArray[i]; i++;
+        this.dConditions = "" + dataArray[i]; i++;
+        this.tEffect = "" + dataArray[i]; i++;
+        this.ongDesc = "" + dataArray[i]; i++;
+        this.ongSave = "" + dataArray[i]; i++;
+        this.ongEft = "" + dataArray[i]; i++;
+        this.trigger = "" + dataArray[i]; i++;
+        this.requirement = "" + dataArray[i]; i++;
+        this.item = "" + dataArray[i]; i++;
+        this.prerequisite = this.createPrerequisiteData(dataArray, i); i += 4;
+        this.skill = "" + dataArray[i]; i++;
+        this.defense = "" + dataArray[i]; i++;
+        this.range = "" + dataArray[i]; i++;
+        this.rType = "" + dataArray[i]; i++;
+        this.target = "" + dataArray[i]; i++;
+        this.targetCode = "" + dataArray[i]; i++;
+        this.dVal = "" + dataArray[i]; i++;
+        this.dType = "" + dataArray[i]; i++;
+        this.dBonus = "" + dataArray[i]; i++;
+        this.damageType = "" + dataArray[i]; i++;
+        this.element = "" + dataArray[i]; i++;
+    }
+
+    createPrerequisiteData(dataArray, i) {
+        return {
+            lv: dataArray[i],
+            ap: dataArray[i + 1],
+            tr: dataArray[i + 2],
+            ot: dataArray[i + 3]
+        }
+    }
+}
+
 // ====== Formatters
 
 var FeatureService = FeatureService || (function () {
     'use strict';
 
-    var 
+    var
 
         // Display Technique (Private)
         // ------------------------,
 
-        getTechniqueDisplayDataObj = function() {
+        getTechniqueDisplayDataObj = function () {
             return {
                 name: "",
                 username: "",
@@ -129,7 +211,7 @@ var FeatureService = FeatureService || (function () {
 
                 prerequisite: "",
                 trigger: "",
-                
+
                 isFunctionBlock: false,
                 traits: [],
                 requirement: "",
@@ -153,7 +235,7 @@ var FeatureService = FeatureService || (function () {
 
         },
 
-        getTechniqueDisplayData = function(technique) {
+        getTechniqueDisplayData = function (technique) {
             let techDisplayData = getTechniqueDisplayDataObj();
             setTechniqueDisplayDataBase(techDisplayData, technique);
             setTechniqueDisplayDataName(techDisplayData, technique);
@@ -165,18 +247,18 @@ var FeatureService = FeatureService || (function () {
             return techDisplayData;
         },
 
-        setTechniqueDisplayDataBase = function(techDisplayData, technique) {
+        setTechniqueDisplayDataBase = function (techDisplayData, technique) {
             techDisplayData.technique = technique;
             techDisplayData.isArmament = technique.item != "";
         },
 
-        setTechniqueDisplayDataName = function(techDisplayData, technique) {
+        setTechniqueDisplayDataName = function (techDisplayData, technique) {
             techDisplayData.name = technique.name;
             techDisplayData.username = technique.username;
             techDisplayData.fieldName = Format.ToCamelCase(technique.name);
         },
 
-        setTechniqueDisplayDataUsageInfo = function(techDisplayData, technique) {
+        setTechniqueDisplayDataUsageInfo = function (techDisplayData, technique) {
             techDisplayData.actionType = technique.action;
 
             techDisplayData.usageInfo = "";
@@ -197,7 +279,7 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataSlotData = function(techDisplayData, technique) {
+        setTechniqueDisplayDataSlotData = function (techDisplayData, technique) {
             techDisplayData.slotType = technique.techniqueType;
             techDisplayData.slotIsPath = technique.techniqueGroup == "Path";
             techDisplayData.slotFooter = `${technique.techniqueType} - ${technique.techniqueGroup == "" ? "Augment" : technique.techniqueGroup}`;
@@ -205,7 +287,7 @@ var FeatureService = FeatureService || (function () {
 
         },
 
-        setTechniqueDisplayDataFunctionBlock = function(techDisplayData, technique) {
+        setTechniqueDisplayDataFunctionBlock = function (techDisplayData, technique) {
 
             techDisplayData.prerequisite = getPrerequisiteString(technique);
 
@@ -218,7 +300,7 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataCheckBlock = function(techDisplayData, technique) {
+        setTechniqueDisplayDataCheckBlock = function (techDisplayData, technique) {
             techDisplayData.isCheckBlock = technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "";
 
             if (techDisplayData.isCheckBlock) {
@@ -228,11 +310,11 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataCheckBlockRange = function(techDisplayData, technique) {
+        setTechniqueDisplayDataCheckBlockRange = function (techDisplayData, technique) {
             if (technique.range != "" || technique.target != "") {
                 techDisplayData.isCheckBlockTarget = true;
                 techDisplayData.target = technique.target;
-    
+
                 if (technique.range != "") {
                     techDisplayData.rType = technique.rType;
                     techDisplayData.range = technique.range;
@@ -240,7 +322,7 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataCheckBlockSkill = function(techDisplayData, technique) {
+        setTechniqueDisplayDataCheckBlockSkill = function (techDisplayData, technique) {
             if (technique.skill != "") {
                 techDisplayData.skill = "";
                 if (technique.defense != "" && technique.defense != undefined) {
@@ -253,13 +335,13 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataCheckBlockDamage = function(techDisplayData, technique) {
+        setTechniqueDisplayDataCheckBlockDamage = function (techDisplayData, technique) {
             if ((technique.dVal != "" && technique.dVal > 0) || technique.damageType != "") {
                 techDisplayData.damage = getDamageString(technique);
             }
         },
 
-        setTechniqueDisplayDataDescriptionBlock = function(techDisplayData, technique) {
+        setTechniqueDisplayDataDescriptionBlock = function (techDisplayData, technique) {
 
             techDisplayData.isDescBlock = technique.description != "" || technique.onSuccess != "";
             if (techDisplayData.isDescBlock) {
@@ -269,7 +351,7 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataDescriptionBlockConditions = function(techDisplayData, technique) {
+        setTechniqueDisplayDataDescriptionBlockConditions = function (techDisplayData, technique) {
 
             let actionEffects = getActionEffects(technique.dConditions);
             let output = "";
@@ -296,40 +378,40 @@ var FeatureService = FeatureService || (function () {
         // Display Technique (Variants)
         // ------------------------,
 
-        getRollTemplate = function(techDisplayData) {
-        
+        getRollTemplate = function (techDisplayData) {
+
             let output = "";
-            
-            output += `{{Username=${techDisplayData.username}}}{{Name=${techDisplayData.name}}}{{SlotType=${techDisplayData.slotFooter}}}{{Source=${techDisplayData.slotSource}}}{{UsageInfo=${techDisplayData.usageInfo}}}${techDisplayData.traits.length > 0 ? rollTemplateTraits(techDisplayData.traits, "Trait"): ""}${techDisplayData.trigger ? `{{Trigger=${techDisplayData.trigger}}}`: ""}${techDisplayData.requirement ? `{{Requirement=${techDisplayData.requirement}}}`: ""}${techDisplayData.item ? `{{Item=${techDisplayData.item}}}`: ""}${techDisplayData.range ? `{{Range=${techDisplayData.range}}}`: ""}${techDisplayData.target ? `{{Target=${techDisplayData.target}}}`: ""}${techDisplayData.skill ? `{{SkillString=${techDisplayData.skill}}}`: ""}${techDisplayData.damage ? `{{DamageString=${techDisplayData.damage}}}`: ""}${techDisplayData.description ? `{{Desc=${techDisplayData.description}}}`: ""}${techDisplayData.onHit ? `{{OnHit=${techDisplayData.onHit}}}`: ""}${techDisplayData.conditions ? `{{Conditions=${techDisplayData.conditions}}}`: ""}`;
+
+            output += `{{Username=${techDisplayData.username}}}{{Name=${techDisplayData.name}}}{{SlotType=${techDisplayData.slotFooter}}}{{Source=${techDisplayData.slotSource}}}{{UsageInfo=${techDisplayData.usageInfo}}}${techDisplayData.traits.length > 0 ? rollTemplateTraits(techDisplayData.traits, "Trait") : ""}${techDisplayData.trigger ? `{{Trigger=${techDisplayData.trigger}}}` : ""}${techDisplayData.requirement ? `{{Requirement=${techDisplayData.requirement}}}` : ""}${techDisplayData.item ? `{{Item=${techDisplayData.item}}}` : ""}${techDisplayData.range ? `{{Range=${techDisplayData.range}}}` : ""}${techDisplayData.target ? `{{Target=${techDisplayData.target}}}` : ""}${techDisplayData.skill ? `{{SkillString=${techDisplayData.skill}}}` : ""}${techDisplayData.damage ? `{{DamageString=${techDisplayData.damage}}}` : ""}${techDisplayData.description ? `{{Desc=${techDisplayData.description}}}` : ""}${techDisplayData.onHit ? `{{OnHit=${techDisplayData.onHit}}}` : ""}${techDisplayData.conditions ? `{{Conditions=${techDisplayData.conditions}}}` : ""}`;
 
             output += ` {{type-${techDisplayData.slotType}=1}} ${techDisplayData.slotIsPath ? "{{isPath=1}} " : ""}{{type-${techDisplayData.actionType}=1}} ${techDisplayData.isFunctionBlock ? "{{type-FunctionBlock=1}} " : ""}${techDisplayData.isCheckBlock ? "{{type-CheckBlock=1}} " : ""}${techDisplayData.isCheckBlock ? "{{type-CheckBlockTarget=1}} " : ""}${techDisplayData.isDescBlock ? "{{type-DescBlock=1}} " : ""}`;
-        
+
             return `&{template:technique} ${output.trim()}`;
         },
 
-        getRollTemplateFromTechnique = function(technique) {
+        getRollTemplateFromTechnique = function (technique) {
             let techDisplayData = getTechniqueDisplayData(technique);
             return getRollTemplate(techDisplayData);
         },
-        
-        getConsumeUsePost = function(technique) {
-        
+
+        getConsumeUsePost = function (technique) {
+
             // add technique data for the api
             technique.username = "@{character_name}";
             let usedTechData = JSON.stringify(technique);
-        
+
             // add the equopped action at the end
             if (technique.traits != "" && (technique.traits.indexOf("Armament") >= 0 || technique.traits.indexOf("Arsenal") >= 0)) {
                 usedTechData += "##@{technique-equippedWeapon}";
             }
-        
+
             return `!ctech ${usedTechData}`;
         },
 
         // Formatting
         // ------------------------,
 
-        rollTemplateTraits = function(traitsDb, rtPrefix) {
+        rollTemplateTraits = function (traitsDb, rtPrefix) {
             let output = "";
             for (var i = 0; i < traitsDb.length; i++) {
                 output += `{{${rtPrefix}${i}=${traitsDb[i].name}}} {{${rtPrefix}${i}Desc=${traitsDb[i].description}}} `;
@@ -337,30 +419,30 @@ var FeatureService = FeatureService || (function () {
             return output;
         },
 
-        getDamageString = function(feature) {
+        getDamageString = function (feature) {
 
             var output = "";
-          
+
             if (feature.dVal != "" && feature.dVal > 0) {
-              output += feature.dVal + "d" + feature.dType;
+                output += feature.dVal + "d" + feature.dType;
             }
             if (feature.dBonus != "" && feature.dBonus != undefined) {
-              var elements = feature.dBonus.split(";");
-              for (var i = 0; i < elements.length; i++) {
-                output += `+${elements[i]}`;
-              }
+                var elements = feature.dBonus.split(";");
+                for (var i = 0; i < elements.length; i++) {
+                    output += `+${elements[i]}`;
+                }
             }
             if (feature.damageType != "") {
-              output += ` ${feature.damageType}`;
+                output += ` ${feature.damageType}`;
             }
             if (feature.element != undefined && feature.element != "") {
-              output += ` [${feature.element}]`;
+                output += ` [${feature.element}]`;
             }
-            
+
             return output;
         },
 
-        getPrerequisiteString = function(feature) {
+        getPrerequisiteString = function (feature) {
             var output = "";
 
             if (feature.augmentBase != "") {
@@ -409,13 +491,13 @@ var FeatureService = FeatureService || (function () {
         // Technique Effects
         // ------------------------,
 
-        getActionEffects = function(effects) {
+        getActionEffects = function (effects) {
             let actionEffectsObj = getActionEffectObj();
 
-			if (effects != undefined && effects != "") {
-				let keywordsSplit = effects.split(";");
+            if (effects != undefined && effects != "") {
+                let keywordsSplit = effects.split(";");
 
-				for (let i = 0; i < keywordsSplit.length; i++) {
+                for (let i = 0; i < keywordsSplit.length; i++) {
                     parseActionEffect(actionEffectsObj, keywordsSplit[i]);
                 }
 
@@ -424,7 +506,7 @@ var FeatureService = FeatureService || (function () {
             return actionEffectsObj;
         },
 
-        parseActionEffect = function(actionEffectsObj, actionEffect) {
+        parseActionEffect = function (actionEffectsObj, actionEffect) {
             let data = actionEffect.split(":");
             let action = data[0];
             let effect = data[1];
@@ -438,8 +520,8 @@ var FeatureService = FeatureService || (function () {
             setActionEffectData(actionEffectsObj, action, effect, targetSelf);
         },
 
-        setActionEffectData = function(actionEffectsObj, action, effect, targetSelf) {
-            switch(action) {
+        setActionEffectData = function (actionEffectsObj, action, effect, targetSelf) {
+            switch (action) {
                 case "S": actionEffectsObj.addState(effect, targetSelf); break;
                 case "C": actionEffectsObj.addCondition(effect, targetSelf); break;
                 case "R": actionEffectsObj.addRemoval(effect, targetSelf); break;
@@ -450,7 +532,7 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        getActionEffectObj = function() {
+        getActionEffectObj = function () {
             return {
                 states: [],
                 conditions: [],
@@ -460,41 +542,41 @@ var FeatureService = FeatureService || (function () {
                 tempHeals: [],
                 kiRecoveries: [],
 
-                createTargetData: function(name, targetSelf) {
-                    return {name: name, targetSelf: targetSelf};
+                createTargetData: function (name, targetSelf) {
+                    return { name: name, targetSelf: targetSelf };
                 },
 
-                addState: function(name, targetSelf) {
+                addState: function (name, targetSelf) {
                     this.states.push(this.createTargetData(name, targetSelf));
                 },
 
-                addCondition: function(name, targetSelf) {
+                addCondition: function (name, targetSelf) {
                     this.conditions.push(this.createTargetData(name, targetSelf));
                 },
 
-                addRemoval: function(name, targetSelf) {
+                addRemoval: function (name, targetSelf) {
                     this.removals.push(this.createTargetData(name, targetSelf));
                 },
 
-                addStatusRemoval: function(name, targetSelf) {
+                addStatusRemoval: function (name, targetSelf) {
                     this.statusRemovals.push(this.createTargetData(name, targetSelf));
                 },
 
-                addHeal: function(name, targetSelf) {
+                addHeal: function (name, targetSelf) {
                     this.heals.push(this.createTargetData(name, targetSelf));
                 },
 
-                addTempHeal: function(name, targetSelf) {
+                addTempHeal: function (name, targetSelf) {
                     this.tempHeals.push(this.createTargetData(name, targetSelf));
                 },
 
-                addKiRecovery: function(name, targetSelf) {
+                addKiRecovery: function (name, targetSelf) {
                     this.kiRecoveries.push(this.createTargetData(name, targetSelf));
                 }
             };
         }
 
-    ;
+        ;
     return {
         GetTechniqueDisplayData: getTechniqueDisplayData,
         GetRollTemplate: getRollTemplate,
@@ -508,11 +590,11 @@ var FeatureService = FeatureService || (function () {
 
 }());
 
-var ItemHandler = ItemHandler || (function() {
+var ItemHandler = ItemHandler || (function () {
     'use strict';
 
-    var 
-        getTechniqueWeaponRollTemplate = function(itemData) {
+    var
+        getTechniqueWeaponRollTemplate = function (itemData) {
             let output = "";
             output += `{{WpnName=${itemData.name}}} `;
 
@@ -531,17 +613,17 @@ var ItemHandler = ItemHandler || (function() {
             return output;
         }
 
-    ;
+        ;
     return {
         GetTechniqueWeaponRollTemplate: getTechniqueWeaponRollTemplate
     };
 }());
 
-var Format = Format || (function() {
+var Format = Format || (function () {
     'use strict';
 
-    var 
-        toCamelCase = function(inputString) {
+    var
+        toCamelCase = function (inputString) {
 
             if (inputString == "" || inputString == undefined) {
                 return inputString;
@@ -560,27 +642,27 @@ var Format = Format || (function() {
             return words.join('');
         },
 
-        toUpperCamelCase = function(inputString) {
+        toUpperCamelCase = function (inputString) {
 
             if (inputString == "" || inputString == undefined) {
                 return inputString;
             }
-            
+
             // Split the input string by spaces and iterate through the words
             let words = inputString.split(" ");
-        
+
             for (let i = 0; i < words.length; i++) {
-              // Capitalize the first letter of each word 
-              words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+                // Capitalize the first letter of each word 
+                words[i] = words[i][0].toUpperCase() + words[i].slice(1);
             }
-          
+
             return words.join('');
         },
 
         // Array Formatting
         // ------------------------
 
-        arrayToString = function(array, delimeter) {
+        arrayToString = function (array, delimeter) {
             if (delimeter == undefined) {
                 delimeter = ", ";
             }
@@ -593,8 +675,8 @@ var Format = Format || (function() {
             });
             return output;
         },
-        
-        sortArrayDecrementing = function(array) {
+
+        sortArrayDecrementing = function (array) {
             array.sort();
             array.reverse();
             return array;
@@ -603,7 +685,7 @@ var Format = Format || (function() {
         // Chat Formatting
         // ------------------------
 
-        showTooltip = function(message, tooltip) {
+        showTooltip = function (message, tooltip) {
             return `[${message}](#" class="showtip" title="${SanitizeSheetRoll(tooltip)})`;
         },
 
@@ -611,7 +693,7 @@ var Format = Format || (function() {
         // Chat Formatting
         // ------------------------
 
-        sanitizeSheetRoll = function(roll) {
+        sanitizeSheetRoll = function (roll) {
             var sheetRoll = roll;
             sheetRoll = sheetRoll.replace(/%/g, "&#37;");
             sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -625,8 +707,8 @@ var Format = Format || (function() {
             sheetRoll = sheetRoll.replace(/\n/g, "<br />");
             return sheetRoll;
         },
-        
-        sanitizeSheetRollAction = function(roll) {
+
+        sanitizeSheetRollAction = function (roll) {
             var sheetRoll = roll;
             sheetRoll = sheetRoll.replace(/%/g, "&#37;");
             sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
@@ -641,7 +723,7 @@ var Format = Format || (function() {
             return sheetRoll;
         }
 
-    ;
+        ;
     return {
         ToCamelCase: toCamelCase,
         ToUpperCamelCase: toUpperCamelCase,
@@ -653,11 +735,11 @@ var Format = Format || (function() {
     };
 }());
 
-var Dice = Dice || (function() {
+var Dice = Dice || (function () {
     'use strict';
 
-    var 
-        rollDice = function(dieValue, dieType) {
+    var
+        rollDice = function (dieValue, dieType) {
             let rolls = [];
             while (dieValue > 0) {
                 dieValue--;
@@ -666,7 +748,7 @@ var Dice = Dice || (function() {
             return rolls;
         },
 
-        totalDice = function(rolls) {
+        totalDice = function (rolls) {
             let total = 0;
             _.each(rolls, function (obj) {
                 total += obj;
@@ -674,7 +756,7 @@ var Dice = Dice || (function() {
             return total;
         },
 
-        getHighRolls = function(dieValue, dieType, keepCount) {
+        getHighRolls = function (dieValue, dieType, keepCount) {
             let output = {
                 rolls: [],
                 keeps: []
@@ -689,7 +771,7 @@ var Dice = Dice || (function() {
             return output;
         }
 
-    ;
+        ;
     return {
         RollDice: rollDice,
         TotalDice: totalDice,
@@ -727,27 +809,27 @@ function GetSectionIdNameFromArray(sectionName, currentID, variableNames) {
 
 function GetFieldNameAttribute(fieldName) {
     if (fieldName.indexOf("_") >= 0) {
-		fieldName = fieldName.match(/_([^_]*)$/)[1];
-	}
+        fieldName = fieldName.match(/_([^_]*)$/)[1];
+    }
     if (fieldName.indexOf("-") >= 0) {
-		fieldName = fieldName.match(/-(?!.*-)(.*)$/)[1];
-	}
+        fieldName = fieldName.match(/-(?!.*-)(.*)$/)[1];
+    }
     return fieldName;
 }
 
 function GetRepeatingSectionFromFieldName(fieldName) {
     if (fieldName.indexOf("_") >= 0) {
-		fieldName = fieldName.substring(fieldName.indexOf("_") + 1);
+        fieldName = fieldName.substring(fieldName.indexOf("_") + 1);
         if (fieldName.indexOf("_") >= 0) {
             fieldName = "repeating_" + fieldName.substring(0, fieldName.indexOf("_"));
         }
-	}
+    }
     return fieldName;
 }
 
 function GetRepeatingSectionIdFromId(id, repeatingSection) {
-	var len = repeatingSection.length + 1;
-	return id.substr(len, 20);
+    var len = repeatingSection.length + 1;
+    return id.substr(len, 20);
 }
 
 // ====== Language
