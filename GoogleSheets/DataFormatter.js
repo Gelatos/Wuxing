@@ -47,7 +47,17 @@ var CreateSheetsDatabase = CreateSheetsDatabase || (function () {
         return technique;
       });
       return database;
-    }
+    },
+    
+    skills = function (arr) {
+      let database = new Database(["augmentBase", "techniqueGroup"]);
+      database.importSheets(arr, function (arr) {
+        let technique = new TechniqueData();
+        technique.importSheets(arr);
+        return technique;
+      });
+      return database;
+    },
     ;
   return {
     CreateTechniques: createTechniques
