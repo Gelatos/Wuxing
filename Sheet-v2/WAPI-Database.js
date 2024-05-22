@@ -99,6 +99,10 @@ class Database extends Dictionary {
         }
         return output;
     }
+    
+    getPropertyValues(property) {
+        
+    }
 }
 
 class dbObj {
@@ -127,27 +131,6 @@ class dbObj {
     createEmpty() {}
 } 
 class TechniqueData extends dbObj {
-    // constructor(data) {
-    //     this.importData(data);
-    // }
-    
-    // importData(data) {
-    //     if (data != undefined) {
-    //         if (Array.isArray(data)) {
-    //             this.importSheets(data);
-    //         }
-    //         else if (typeof data == "string") {
-    //             this.importStringifiedJson(data);
-    //         }
-    //         else {
-    //             this.importJson(data);
-    //         }
-    //     }
-    // }
-    // importStringifiedJson(stringifiedJSON) {
-    //     let json = JSON.parse(stringifiedJSON);
-    //     this.importJson(json);
-    // }
     importJson(json) {
         
     }
@@ -231,14 +214,7 @@ class TechniqueData extends dbObj {
         }
     }
 }
-class Skill {
-    constructor(data) {
-        this.importData(data);
-    }
-    importStringifiedJson(stringifiedJSON) {
-        let json = JSON.parse(stringifiedJSON);
-        this.importJson(json);
-    }
+class Skill extends dbObj {
     importJson(json) {
         
     }
@@ -253,27 +229,7 @@ class Skill {
         this.description = "";
     }
 }
-class Language {
-    constructor(data) {
-        this.importData(data);
-    }
-    importData(data); {
-        if (data != undefined) {
-            if (Array.isArray(data)) {
-                this.importSheets(data);
-            }
-            else if (typeof data == "string") {
-                this.importStringifiedJson(data);
-            }
-            else {
-                this.importJson(data);
-            }
-        }
-    }
-    importStringifiedJson(stringifiedJSON) {
-        let json = JSON.parse(stringifiedJSON);
-        this.importJson(json);
-    }
+class Language extends dbObj {
     importJson(json) {
         
     }
@@ -287,27 +243,7 @@ class Language {
         this.description = "";
     }
 }
-class Lore {
-    constructor(data) {
-        this.importData(data);
-    }
-    importData(data); {
-        if (data != undefined) {
-            if (Array.isArray(data)) {
-                this.importSheets(data);
-            }
-            else if (typeof data == "string") {
-                this.importStringifiedJson(data);
-            }
-            else {
-                this.importJson(data);
-            }
-        }
-    }
-    importStringifiedJson(stringifiedJSON) {
-        let json = JSON.parse(stringifiedJSON);
-        this.importJson(json);
-    }
+class Lore extends dbObj {
     importJson(json) {
         
     }
@@ -322,27 +258,7 @@ class Lore {
         this.description = "";
     }
 }
-class Job {
-    constructor(data) {
-        this.importData(data);
-    }
-    importData(data); {
-        if (data != undefined) {
-            if (Array.isArray(data)) {
-                this.importSheets(data);
-            }
-            else if (typeof data == "string") {
-                this.importStringifiedJson(data);
-            }
-            else {
-                this.importJson(data);
-            }
-        }
-    }
-    importStringifiedJson(stringifiedJSON) {
-        let json = JSON.parse(stringifiedJSON);
-        this.importJson(json);
-    }
+class Job extends dbObj {
     importJson(json) {
         
     }
@@ -357,6 +273,67 @@ class Job {
         this.roles = {};
         this.prereq = "";
         this.techniques = [];
+    }
+}
+class Role extends dbObj {
+    importJson(json) {
+        
+    }
+    importSheets(dataArray) {
+        let i = 0;
+    
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.description = "";
+        this.techniques = [];
+    }
+}
+class AttributeGroup extends dbObj {
+    importJson(json) {
+        
+    }
+    importSheets(dataArray) {
+        let i = 0;
+    
+    }
+    createEmpty() {
+        this.bod = 0;
+        this.prc = 0;
+        this.qck = 0;
+        this.cnv = 0;
+        this.int = 0;
+        this.rsn = 0;
+    }
+}
+class Definition extends dbObj {
+    importJson(json) {
+        
+    }
+    importSheets(dataArray) {
+        let i = 0;
+    
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.descriptions = [];
+        this.abbreviation = "";
+        this.variable = "";
+        this.formula = "";
+    }
+}
+class TemplateData extends dbObj {
+    importJson(json) {
+        
+    }
+    importSheets(dataArray) {
+        let i = 0;
+    
+    }
+    createEmpty() {
+        
     }
 }
 
