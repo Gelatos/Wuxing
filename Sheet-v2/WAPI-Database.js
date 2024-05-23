@@ -6,15 +6,6 @@ class Dictionary {
         this.keys = [];
         this.values = {};
     }
-
-    importStringifiedJson(stringifiedJSON) {
-        let json = JSON.parse(stringifiedJSON);
-        this.importJson(json);
-    }
-    importJson(json) {
-        this.keys = json.keys;
-        this.values = json.values;
-    }
     add(key, value) {
         if (!this.keys.includes(key)) {
             this.keys.push(key);
@@ -40,13 +31,24 @@ class DatabaseFilterData {
         this.value = value;
     }
 }
-
 class Database extends Dictionary {
-    constructor(sortingProperties) {
+    constructor(sortingProperties, data, dataCreationCallback) {
         super();
         this.sortingGroups = {};
         for (let i = 0; i < sortingProperties.length; i++) {
             this.sortingGroups[sortingProperties[i]] = {};
+        }
+
+        if (data != undefined) {
+            if (Array.isArray(data)) {
+                this.importSheets(data, dataCreationCallback);
+            }
+            else if (typeof data == "string") {
+                this.importStringifiedJson(data);
+            }
+            else {
+                this.importJson(data);
+            }
         }
     }
 
@@ -55,7 +57,8 @@ class Database extends Dictionary {
         this.importJson(json);
     }
     importJson(json) {
-        super.importJson(json);
+        this.keys = json.keys;
+        this.values = json.values;
         this.sortingGroups = json.sortingGroups;
     }
     importSheets(dataArray, dataCreationCallback) {
@@ -99,9 +102,27 @@ class Database extends Dictionary {
         }
         return output;
     }
-    
+
     getPropertyValues(property) {
-        
+        let output = [];
+        for (let key in this.sortingGroups[property]) {
+            output.push(key);
+        }
+        return output;
+    }
+}
+class DefinitionDatabase extends Database {
+    importSheets(dataArray, dataCreationCallback) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = dataCreationCallback(dataArray[i]);
+            if (this.has(data.name)) {
+                this.values[data.name].descriptions.push(data.descriptions[0]);
+            }
+            else {
+                this.add(data.name, data);
+            }
+        }
     }
 }
 
@@ -126,13 +147,13 @@ class dbObj {
         let json = JSON.parse(stringifiedJSON);
         this.importJson(json);
     }
-    importJson(json) {}
-    importSheets(dataArray) {}
-    createEmpty() {}
-} 
+    importJson(json) { }
+    importSheets(dataArray) { }
+    createEmpty() { }
+}
 class TechniqueData extends dbObj {
     importJson(json) {
-        
+
     }
     importSheets(dataArray) {
         let i = 0;
@@ -214,14 +235,18 @@ class TechniqueData extends dbObj {
         }
     }
 }
-class Skill extends dbObj {
+class SkillData extends dbObj {
     importJson(json) {
-        
+
     }
     importSheets(dataArray) {
         let i = 0;
-    
-}
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.abilityScore = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+
+    }
     createEmpty() {
         this.name = "";
         this.group = "";
@@ -229,9 +254,9 @@ class Skill extends dbObj {
         this.description = "";
     }
 }
-class Language extends dbObj {
+class LanguageData extends dbObj {
     importJson(json) {
-        
+
     }
     importSheets(dataArray) {
         let i = 0;
@@ -243,13 +268,13 @@ class Language extends dbObj {
         this.description = "";
     }
 }
-class Lore extends dbObj {
+class LoreData extends dbObj {
     importJson(json) {
-        
+
     }
     importSheets(dataArray) {
         let i = 0;
-    
+
     }
     createEmpty() {
         this.name = "";
@@ -258,9 +283,9 @@ class Lore extends dbObj {
         this.description = "";
     }
 }
-class Job extends dbObj {
+class JobData extends dbObj {
     importJson(json) {
-        
+
     }
     importSheets(dataArray) {
         let i = 0;
@@ -275,13 +300,13 @@ class Job extends dbObj {
         this.techniques = [];
     }
 }
-class Role extends dbObj {
+class RoleData extends dbObj {
     importJson(json) {
-        
+
     }
     importSheets(dataArray) {
         let i = 0;
-    
+
     }
     createEmpty() {
         this.name = "";
@@ -290,13 +315,13 @@ class Role extends dbObj {
         this.techniques = [];
     }
 }
-class AttributeGroup extends dbObj {
+class AttributeGroupData extends dbObj {
     importJson(json) {
-        
+
     }
     importSheets(dataArray) {
         let i = 0;
-    
+
     }
     createEmpty() {
         this.bod = 0;
@@ -307,13 +332,18 @@ class AttributeGroup extends dbObj {
         this.rsn = 0;
     }
 }
-class Definition extends dbObj {
+class DefinitionData extends dbObj {
     importJson(json) {
-        
+
     }
     importSheets(dataArray) {
         let i = 0;
-    
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.descriptions = [("" + dataArray[i])]; i++;
+        this.abbreviation = "" + dataArray[i]; i++;
+        this.variable = "" + dataArray[i]; i++;
+        this.formula = "" + dataArray[i]; i++;
     }
     createEmpty() {
         this.name = "";
@@ -326,14 +356,14 @@ class Definition extends dbObj {
 }
 class TemplateData extends dbObj {
     importJson(json) {
-        
+
     }
     importSheets(dataArray) {
         let i = 0;
-    
+
     }
     createEmpty() {
-        
+
     }
 }
 
