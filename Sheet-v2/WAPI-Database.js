@@ -353,6 +353,10 @@ class DefinitionData extends dbObj {
         this.variable = "";
         this.formula = "";
     }
+    
+    getVariable() {
+        return `attr_${this.variable}`;
+    }
 }
 class TemplateData extends dbObj {
     importJson(json) {
