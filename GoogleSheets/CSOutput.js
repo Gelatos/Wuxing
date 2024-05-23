@@ -1,17 +1,15 @@
-function CreateCharacterSheet(definitionsArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabase) {
-	return PrintLargeEntry(DisplayCharacterSheet.Print(definitionsArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabase));
+function CreateCharacterSheet(definitionsArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
+    let sheetsDb = CreateSheetsDatabase.CreateDatabaseCollection(skillsArray, languageArray, loreArray, jobsArray, rolesArray, definitionsArray, techniqueDatabaseString);
+	return PrintLargeEntry(DisplayCharacterSheet.Print(sheetsDb));
 }
 
 var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 	'use strict';
 	
 	var
-		print = function (definitionsArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabase) {
-
-			let definitionsDatabase = FormatDefinitions.CreateDictionary(definitionsArray);
-
+		print = function (sheetsDb) {
 			let output = "";
-			output += DisplayOriginSheet.Print(definitionsDatabase);
+			output += DisplayOriginSheet.Print(sheetsDb);
 			output += DisplayTrainingSheet.Print(skillsArray, languageArray, loreArray);
 			output += DisplayAdvancementSheet.Print(definitionsDatabase, jobsArray, rolesArray, techniqueDatabase);
 			output += DisplayTechniquesSheet.Print(techniqueDatabase);
@@ -43,10 +41,10 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 	'use strict';
 
 	var
-		print = function (definitionsDatabase) {
+		print = function (sheetsDb) {
 			let output = FormatCharacterSheetNavigation.BuildOriginPageNavigation("Origin") +
-				SideBarData.Print(definitionsDatabase) +
-				MainContentData.Print(definitionsDatabase);
+				SideBarData.Print() +
+				MainContentData.Print(sheetsDb.definitions);
 			return FormatCharacterSheet.SetDisplayStyle("Builder", output);
 		},
 
