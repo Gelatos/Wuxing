@@ -39,6 +39,18 @@ var CreateSheetsDatabase = CreateSheetsDatabase || (function () {
     'use strict';
 
     var
+        createDatabaseCollection = function(skillsArray, languageArray, loreArray, jobsArray, rolesArray, definitionsArray, techniqueDatabaseString) {
+            return {
+                techniques: new Database(techniqueDatabaseString),
+	            skills: createSkills(skillsArray),
+                language: createLanguages(languageArray),
+                lore: createLores(loreArray),
+		        job: createJobs(jobsArray),
+		        role: createRoles(rolesArray),
+			    definitions: createDefinitions(definitionsArray)
+            }
+        },
+        
         createTechniques = function (arr) {
             return new Database(["augmentBase", "techniqueGroup"], arr, function (arr) {
                 return new TechniqueData(arr);
@@ -82,6 +94,7 @@ var CreateSheetsDatabase = CreateSheetsDatabase || (function () {
         }
         ;
     return {
+        CreateDatabaseCollection: createDatabaseCollection,
         CreateTechniques: createTechniques,
         CreateSkills: createSkills,
         CreateLanguages: createLanguages,
