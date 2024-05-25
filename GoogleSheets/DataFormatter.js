@@ -1,6 +1,6 @@
 function SetTechniquesDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
     arr0 = ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9);
-    let techniqueDatabase = CreateSheetsDatabase.CreateTechniques(arr0);
+    let techniqueDatabase = SheetsDatabase.CreateTechniques(arr0);
     return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
 }
 
@@ -35,7 +35,7 @@ function ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, ar
     return arr0;
 }
 
-var CreateSheetsDatabase = CreateSheetsDatabase || (function () {
+var SheetsDatabase = SheetsDatabase || (function () {
     'use strict';
 
     var
@@ -55,7 +55,8 @@ var CreateSheetsDatabase = CreateSheetsDatabase || (function () {
         },
 
         createTechniques = function (arr) {
-            return new Database(["augment", "group"], arr, function (arr) {
+            let filters = ["augment", "group", "category", "family", "action", "skill", "defense", "range", "rType", "damageType"];
+            return new Database(filters, arr, function (arr) {
                 return new TechniqueData(arr);
             });
         },
@@ -108,103 +109,7 @@ var CreateSheetsDatabase = CreateSheetsDatabase || (function () {
     }
 }());
 
-var FormatTechniques = FormatTechniques || (function () {
-    'use strict';
-
-    var
-
-        parseTechniquesDatabase = function (techniqueDatabaseData) {
-            let output = "";
-            for (let i = 0; i < techniqueDatabaseData.length; i++) {
-                output += techniqueDatabaseData[i];
-            }
-            return JSON.parse(output);
-        },
-
-
-        iterateOverTechArrays = function (data, callback, techniqueDatabase, sources) {
-            let techData;
-            for (let i = 0; i < sources.length; i++) {
-                techData = new Dictionary();
-                techData.importJson(techniqueDatabase.values[sources[i]]);
-                data = callback(data, techData);
-            }
-            return data;
-        },
-
-        getTechFilterData = function (techniqueDatabaseData, sources) {
-            // create tech data
-            let data = createTechniqueFilterData();
-            let techniqueDatabase = parseTechniquesDatabase(techniqueDatabaseData);
-            data = iterateOverTechArrays(data, createTechFilterData, techniqueDatabase, sources);
-            return data;
-        },
-
-        createTechFilterData = function (techFilterData, techData) {
-
-            techData.iterate(function (technique) {
-                techFilterData.add(technique);
-            });
-
-            return techFilterData;
-        },
-
-        getTechDatabaseData = function (techniqueDatabaseData, sources) {
-            // create tech data
-            var data = {
-                databaseNameData: [],
-                databaseTechniqueData: [],
-                techFilterData: createTechniqueFilterData()
-            }
-            let techniqueDatabase = parseTechniquesDatabase(techniqueDatabaseData);
-            data = iterateOverTechArrays(data, createTechDatabaseData, techniqueDatabase, sources);
-            return data;
-        },
-
-        createTechDatabaseData = function (techniqueData, techData) {
-
-            var customDataListNames = [];
-            var customData = [];
-            var augmentData = [];
-            var augmentList = [];
-            var augmentTechnique = {};
-
-            techData.iterate(function (technique) {
-                techniqueData.techFilterData.add(technique);
-                augmentData = technique.augments;
-                augmentList = [];
-                for (var l = 0; l < augmentData.length; l++) {
-                    augmentList.push(augmentData[l].name);
-                }
-                technique.augments = augmentList;
-                customDataListNames.push(technique.name);
-                customData.push(technique);
-
-                for (var k = 0; k < augmentData.length; k++) {
-                    augmentTechnique = setAugmentTechnique(augmentData[k], technique);
-
-                    customDataListNames.push(augmentTechnique.name);
-                    customData.push(augmentTechnique);
-                }
-            });
-
-            // create the main database
-            techniqueData.databaseNameData = techniqueData.databaseNameData.concat(customDataListNames);
-            techniqueData.databaseTechniqueData = techniqueData.databaseTechniqueData.concat(customData);
-
-            return techniqueData;
-        }
-
-        ;
-    return {
-        ParseTechniquesDatabase: parseTechniquesDatabase,
-        IterateOverTechArrays: iterateOverTechArrays,
-        GetTechFilterData: getTechFilterData,
-        GetTechDatabaseData: getTechDatabaseData
-    };
-}());
-
-var DisplayTechniqueHtml = DisplayTechniqueHtml || (function () {
+var WuxTechnique = WuxTechnique || (function () {
     'use strict';
 
     var
@@ -705,470 +610,18 @@ var DisplayTechniqueHtml = DisplayTechniqueHtml || (function () {
     };
 }());
 
-var FormatSkills = FormatSkills || (function () {
+var WuxDefinition = WuxDefinition || (function () {
     'use strict';
 
     var
-        createSkillsDictionary = function (modArray) {
-            var output = new Dictionary();
-            var skill = {};
-            var data = [];
-
-            // create the groups dictionary
-            let groups = getSkillGroupList();
-            for (let i = 0; i < groups.length; i++) {
-
-                // populate the groups
-                data = [];
-                for (let j = 0; j < modArray.length; j++) {
-                    skill = get(modArray[j]);
-                    if (skill.group == groups[i]) {
-                        data.push(skill);
-                    }
-                }
-                output.add(groups[i], data);
-            }
-
-            return output;
-        },
-
-        get = function (modArray) {
-
-            var output = {
-                name: "",
-                group: "",
-                abilityScore: "",
-                description: "",
-            };
-
-            if (modArray != undefined) {
-                let i = 0;
-                output.name = "" + modArray[i]; i++;
-                output.group = "" + modArray[i]; i++;
-                output.abilityScore = "" + modArray[i]; i++;
-                output.description = "" + modArray[i]; i++;
-            };
-
-            return output;
-        },
-
-        getSkillGroupList = function () {
-            return ["Athletics", "Combat", "Creation", "Manipulate", "Sensing", "Social"];
-        }
-        ;
-    return {
-        CreateSkillsDictionary: createSkillsDictionary,
-        Get: get,
-        GetSkillGroupList: getSkillGroupList
-    };
-}());
-
-var FormatKnowledge = FormatKnowledge || (function () {
-    'use strict';
-
-    var
-        createLanguageDictionary = function (modArray) {
-            var output = new Dictionary();
-            var skill = {};
-            var data = [];
-
-            // create the groups dictionary
-            let groups = getLanguageGroupList();
-            for (let i = 0; i < groups.length; i++) {
-
-                // populate the groups
-                data = [];
-                for (let j = 0; j < modArray.length; j++) {
-                    skill = createLanguageData(modArray[j]);
-                    if (skill.group == groups[i]) {
-                        data.push(skill);
-                    }
-                }
-                output.add(groups[i], data);
-            }
-
-            return output;
-        },
-
-        createLanguageData = function (modArray) {
-
-            var output = {
-                name: "",
-                group: "",
-                location: "",
-                description: "",
-            };
-
-            if (modArray != undefined) {
-                let i = 0;
-                output.name = "" + modArray[i]; i++;
-                output.group = "" + modArray[i]; i++;
-                output.location = "" + modArray[i]; i++;
-                output.description = "" + modArray[i]; i++;
-            };
-
-            return output;
-        },
-
-        createLoreDictionary = function (modArray) {
-            var output = new Dictionary();
-            var skill = {};
-            var data = [];
-
-            // create the groups dictionary
-            let groups = getLoreGroupList();
-            for (let i = 0; i < groups.length; i++) {
-
-                // populate the groups
-                data = [];
-                for (let j = 0; j < modArray.length; j++) {
-                    skill = createLoreData(modArray[j]);
-                    if (skill.group == groups[i]) {
-                        data.push(skill);
-                    }
-                }
-                output.add(groups[i], data);
-            }
-
-            return output;
-        },
-
-        createLoreData = function (modArray) {
-
-            var output = {
-                name: "",
-                group: "",
-                description: "",
-            };
-
-            if (modArray != undefined) {
-                let i = 0;
-                output.name = "" + modArray[i]; i++;
-                output.group = "" + modArray[i]; i++;
-                output.description = "" + modArray[i]; i++;
-            };
-
-            return output;
-        },
-
-        getLanguageGroupList = function () {
-            return ["Walthair", "Aridsha", "Khem", "Colswei", "Ceres", "Special"];
-        },
-
-        getLoreGroupList = function () {
-            return ["Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion"];
-        }
-        ;
-    return {
-        CreateLanguageDictionary: createLanguageDictionary,
-        CreateLoreDictionary: createLoreDictionary,
-        GetLanguageGroupList: getLanguageGroupList,
-        GetLoreGroupList: getLoreGroupList
-    };
-}());
-
-var FormatJobs = FormatJobs || (function () {
-    'use strict';
-
-    var
-        createDictionary = function (modArray) {
-            var output = new Dictionary();
-            let job = {};
-
-            // create the groups dictionary
-            for (let i = 0; i < modArray.length; i++) {
-                job = get(modArray[i]);
-                output.add(job.name, job);
-            }
-
-            return output;
-        },
-
-        get = function (modArray) {
-
-            var output = {
-                name: "",
-                group: "",
-                description: "",
-                attributes: {},
-                roles: {},
-                prereq: "",
-                techniques: []
-            };
-
-            if (modArray != undefined) {
-                let i = 0;
-                output.name = "" + modArray[i]; i++;
-                output.group = "" + modArray[i]; i++;
-                output.description = "" + modArray[i]; i++;
-                output.attributes = FormatStatBlock.CreateAttributesArray(modArray, i); i += 7;
-                output.roles = FormatStatBlock.CreateRolesArray(modArray, i); i += 5;
-                output.prereq = "" + modArray[i]; i++;
-                output.techniques = createJobTechnique(modArray, i); i++;
-            };
-
-            return output;
-        },
-
-        createJobTechnique = function (modArray, startingIndex) {
-            var output = [];
-            let i = startingIndex;
-            let data = "";
-            let dataSplit = {};
-            while (true) {
-                if (modArray[i] == undefined || modArray[i] == "") {
-                    break;
-                }
-                data = "" + modArray[i];
-                dataSplit = data.split(";");
-                output.push({ name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0 });
-                i++;
-            }
-            return output;
-        },
-
-        getGroupList = function () {
-            return ["Athletics", "Combat", "Focus", "Social", "Technical"];
-        }
-        ;
-    return {
-        CreateDictionary: createDictionary,
-        Get: get,
-        GetGroupList: getGroupList
-    };
-}());
-
-var FormatRoles = FormatRoles || (function () {
-    'use strict';
-
-    var
-        createDictionary = function (modArray) {
-            var output = new Dictionary();
-            let role = {};
-
-            // create the groups dictionary
-            for (let i = 0; i < modArray.length; i++) {
-                role = get(modArray[i]);
-                output.add(role.name, role);
-            }
-
-            return output;
-        },
-
-        get = function (modArray) {
-
-            var output = {
-                name: "",
-                group: "",
-                description: "",
-                techniques: []
-            };
-
-            if (modArray != undefined) {
-                let i = 0;
-                output.name = "" + modArray[i]; i++;
-                output.group = "" + modArray[i]; i++;
-                output.description = "" + modArray[i]; i++;
-                output.techniques = createTechnique(modArray, i); i++;
-            };
-
-            return output;
-        },
-
-        createTechnique = function (modArray, startingIndex) {
-            var output = [];
-            let i = startingIndex;
-            let data = "";
-            let dataSplit = {};
-            while (true) {
-                if (modArray[i] == undefined || modArray[i] == "") {
-                    break;
-                }
-                data = "" + modArray[i];
-                dataSplit = data.split(";");
-                output.push({ name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0 });
-                i++;
-            }
-            return output;
-        },
-
-        getGroupList = function () {
-            return ["Athletics", "Combat", "Focus", "Social", "Technical"];
-        }
-        ;
-    return {
-        CreateDictionary: createDictionary,
-        Get: get,
-        GetGroupList: getGroupList
-    };
-}());
-
-var FormatStatBlock = FormatStatBlock || (function () {
-    'use strict';
-
-    var
-        createAttributesArray = function (modArray, startingIndex) {
-
-            var output = {
-                bod: 0,
-                prc: 0,
-                qck: 0,
-                cnv: 0,
-                int: 0,
-                rsn: 0
-            };
-
-            if (modArray != undefined) {
-                let i = startingIndex;
-                output.bod = parseInt(modArray[i]); i++;
-                output.prc = parseInt(modArray[i]); i++;
-                output.qck = parseInt(modArray[i]); i++;
-                output.cnv = parseInt(modArray[i]); i++;
-                output.int = parseInt(modArray[i]); i++;
-                output.rsn = parseInt(modArray[i]); i++;
-                removeAttributeNaN(output);
-            };
-
-            return output;
-        },
-
-        removeAttributeNaN = function (attributeObj) {
-            if (isNaN(attributeObj.bod)) {
-                attributeObj.bod = 0;
-            }
-            if (isNaN(attributeObj.prc)) {
-                attributeObj.prc = 0;
-            }
-            if (isNaN(attributeObj.qck)) {
-                attributeObj.qck = 0;
-            }
-            if (isNaN(attributeObj.cnv)) {
-                attributeObj.cnv = 0;
-            }
-            if (isNaN(attributeObj.int)) {
-                attributeObj.int = 0;
-            }
-            if (isNaN(attributeObj.rsn)) {
-                attributeObj.rsn = 0;
-            }
-        },
-
-        getAttributeNames = function () {
-            return ["Body", "Precision", "Quickness", "Conviction", "Intuition", "Reason"];
-        },
-
-        getAttributeAbrNames = function () {
-            return ["BOD", "PRC", "QCK", "CNV", "INT", "RSN"];
-        },
-
-        convertAttributesToArr = function (attributeObj) {
-            let output = [];
-            output.push(attributeObj.bod);
-            output.push(attributeObj.prc);
-            output.push(attributeObj.qck);
-            output.push(attributeObj.cnv);
-            output.push(attributeObj.int);
-            output.push(attributeObj.rsn);
-            return output;
-        },
-
-        createRolesArray = function (modArray, startingIndex) {
-
-            var output = {
-                generalist: 0,
-                athlete: 0,
-                defender: 0,
-                marksman: 0,
-                skirmisher: 0
-            };
-
-            if (modArray != undefined) {
-                let i = startingIndex;
-                output.generalist = parseInt(modArray[i]); i++;
-                output.athlete = parseInt(modArray[i]); i++;
-                output.defender = parseInt(modArray[i]); i++;
-                output.marksman = parseInt(modArray[i]); i++;
-                output.skirmisher = parseInt(modArray[i]); i++;
-            };
-
-            return output;
-        }
-        ;
-    return {
-        CreateAttributesArray: createAttributesArray,
-        GetAttributeNames: getAttributeNames,
-        GetAttributeAbrNames: getAttributeAbrNames,
-        ConvertAttributesToArr: convertAttributesToArr,
-        CreateRolesArray: createRolesArray
-    };
-}());
-
-var FormatDefinitions = FormatDefinitions || (function () {
-    'use strict';
-
-    var
-        createDictionary = function (modArray) {
-            var output = new Dictionary();
-            let definition = {};
-            // create the groups dictionary
-            for (let i = 0; i < modArray.length; i++) {
-                if (output.has(modArray[i])) {
-                    output[modArray[i]].descriptions.push(modArray[i]);
-                }
-                else {
-                    definition = get(modArray[i]);
-                    output.add(definition.name, definition);
-                }
-            }
-
-            return output;
-        },
-
-        get = function (modArray) {
-
-            var output = {
-                name: "",
-                group: "",
-                descriptions: [],
-                abbreviation: "",
-                variable: "",
-                formula: ""
-            };
-
-            if (modArray != undefined) {
-                let i = 0;
-                output.name = "" + modArray[i]; i++;
-                output.group = "" + modArray[i]; i++;
-                output.descriptions.push("" + modArray[i]); i++;
-                output.abbreviation = "" + modArray[i]; i++;
-                output.variable = "" + modArray[i]; i++;
-                output.formula = "" + modArray[i]; i++;
-            };
-
-            return output;
-        },
-
-        getGroup = function (dictionary, group) {
-            let output = [];
-            dictionary.iterate(function (definition) {
-                if (definition.group == group) {
-                    output.push(definition);
-                }
-            });
-            return output;
-        },
-
-        getVariable = function (dictionary, key) {
-            return `attr_${dictionary.get(key).variable}`;
-        },
 
         displayEntry = function (dictionary, key) {
             let output = "";
             let entryData = dictionary.get(key).descriptions;
 
-            output += FormatCharacterSheetMain.Header(key);
+            output += WuxSheetMain.Header(key);
             for (let i = 0; i < entryData.length; i++) {
-                output += "\n" + FormatCharacterSheetMain.Desc(entryData[i]);
+                output += "\n" + WuxSheetMain.Desc(entryData[i]);
             }
 
             return output;
@@ -1178,29 +631,25 @@ var FormatDefinitions = FormatDefinitions || (function () {
             let expandContents = "";
             let entryData = definitionData.descriptions;
             for (let i = 0; i < entryData.length; i++) {
-                expandContents += "\n" + FormatCharacterSheetMain.Desc(entryData[i]);
+                expandContents += "\n" + WuxSheetMain.Desc(entryData[i]);
             }
 
             let expandFieldName = `${fieldName}-expand`;
 
-            let output = `${FormatCharacterSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
-            ${FormatCharacterSheetMain.Header(definitionData.name, "span")}
-            ${FormatCharacterSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
+            let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
+            ${WuxSheetMain.Header(definitionData.name, "span")}
+            ${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
 
-            return FormatCharacterSheetMain.InteractionElement.Build(true, output);
+            return WuxSheetMain.InteractionElement.Build(true, output);
         }
         ;
     return {
-        CreateDictionary: createDictionary,
-        Get: get,
-        GetGroup: getGroup,
-        GetVariable: getVariable,
         DisplayEntry: displayEntry,
         DisplayCollapsibleTitle: displayCollapsibleTitle
     }
 }());
 
-var FormatCharacterSheetSidebar = FormatCharacterSheetSidebar || (function () {
+var WuxSheetSidebar = WuxSheetSidebar || (function () {
     'use strict';
 
     var
@@ -1267,7 +716,7 @@ var FormatCharacterSheetSidebar = FormatCharacterSheetSidebar || (function () {
   <span class="wuxFontSize7" name='${attrName}_max' value="0">0</span>`;
 
             return `<div class="wuxHeader">&nbsp;${header}</div>
-  ${FormatCharacterSheetSidebar.AttributeSection(name, output)}`;
+  ${WuxSheetSidebar.AttributeSection(name, output)}`;
         }
 
         ;
@@ -1280,7 +729,7 @@ var FormatCharacterSheetSidebar = FormatCharacterSheetSidebar || (function () {
     };
 }());
 
-var FormatCharacterSheetMain = FormatCharacterSheetMain || (function () {
+var WuxSheetMain = WuxSheetMain || (function () {
     'use strict';
 
     var
@@ -1528,7 +977,6 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function () {
             }
         }())
 
-
         ;
     return {
         Build: build,
@@ -1548,7 +996,7 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function () {
     };
 }());
 
-var FormatCharacterSheetNavigation = FormatCharacterSheetNavigation || (function () {
+var WuxSheetNavigation = WuxSheetNavigation || (function () {
     'use strict';
 
     var
@@ -1697,7 +1145,7 @@ var FormatCharacterSheetNavigation = FormatCharacterSheetNavigation || (function
 
 }());
 
-var FormatCharacterSheet = FormatCharacterSheet || (function () {
+var WuxSheet = WuxSheet || (function () {
     'use strict';
 
     var
@@ -1712,11 +1160,11 @@ var FormatCharacterSheet = FormatCharacterSheet || (function () {
     };
 }());
 
-var FormatCharacterSheetBackend = FormatCharacterSheetBackend || (function () {
+var WuxSheetBackend = WuxSheetBackend || (function () {
     'use strict';
 
     var
-        createSheetWorker = function (variables, contents, hasEvents) {
+        sheetWorker = function (variables, contents, hasEvents) {
             let output = "";
             for (let i = 0; i < variables.length; i++) {
                 if (output != "") {
@@ -1731,7 +1179,7 @@ var FormatCharacterSheetBackend = FormatCharacterSheetBackend || (function () {
         }
         ;
     return {
-        CreateSheetWorker: createSheetWorker
+        SheetWorker: sheetWorker
     };
 }());
 

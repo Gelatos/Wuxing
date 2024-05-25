@@ -86,7 +86,10 @@ class Database extends Dictionary {
         let filters = [];
         for (let i = 1; i < filterData.length; i++) {
             filters = this.getSortedGroup(filterData[i].property, filterData[i].value);
-            filteredGroup.filter(item => item.includes(filters))
+            filteredGroup = filteredGroup.filter(item => filters.includes(item))
+        }
+        if (filteredGroup == undefined || filteredGroup.length == 0) {
+            return [];
         }
         return this.getGroupData(filteredGroup);
     }
@@ -153,6 +156,38 @@ class dbObj {
 }
 class TechniqueData extends dbObj {
     importJson(json) {
+        this.name = json.name;
+        this.augment = json.augment;
+        this.group = json.group;
+        this.category = json.category;
+        this.family = json.family;
+        this.action = json.action;
+        this.traits = json.traits;
+        this.limits = json.limits;
+        this.resourceCost = json.resourceCost;
+        this.flavorText = json.flavorText;
+        this.description = json.description;
+        this.onSuccess = json.onSuccess;
+        this.dConditions = json.dConditions;
+        this.tEffect = json.tEffect;
+        this.ongDesc = json.ongDesc;
+        this.ongSave = json.ongSave;
+        this.ongEft = json.ongEft;
+        this.trigger = json.trigger;
+        this.requirement = json.requirement;
+        this.item = json.item;
+        this.prerequisite = json.prerequisite;
+        this.skill = json.skill;
+        this.defense = json.defense;
+        this.range = json.range;
+        this.rType = json.rType;
+        this.target = json.target;
+        this.targetCode = json.targetCode;
+        this.dVal = json.dVal;
+        this.dType = json.dType;
+        this.dBonus = json.dBonus;
+        this.damageType = json.damageType;
+        this.element = json.element;
 
     }
     importSheets(dataArray) {
@@ -177,7 +212,7 @@ class TechniqueData extends dbObj {
         this.trigger = "" + dataArray[i]; i++;
         this.requirement = "" + dataArray[i]; i++;
         this.item = "" + dataArray[i]; i++;
-        this.prerequisite = this.createPrerequisiteData(dataArray, i); i += 4;
+        this.prerequisite = this.createPrerequisiteData(dataArray.slice(i)); i += 4;
         this.skill = "" + dataArray[i]; i++;
         this.defense = "" + dataArray[i]; i++;
         this.range = "" + dataArray[i]; i++;
@@ -211,7 +246,7 @@ class TechniqueData extends dbObj {
         this.trigger = "";
         this.requirement = "";
         this.item = "";
-        this.prerequisite = {};
+        this.prerequisite = this.createPrerequisiteData();
         this.skill = "";
         this.defense = "";
         this.range = "";
@@ -225,13 +260,22 @@ class TechniqueData extends dbObj {
         this.element = "";
         this.augments = [];
     }
-    createPrerequisiteData(dataArray, i) {
-        return {
-            lv: dataArray[i],
-            ap: dataArray[i + 1],
-            tr: dataArray[i + 2],
-            ot: dataArray[i + 3]
+
+    createPrerequisiteData(dataArray) {
+        let output = {
+            lv: 0,
+            ap: "",
+            tr: 0,
+            ot: ""
+        };
+        if (dataArray != undefined) {
+            let i = 0;
+            output.lv = parseInt(dataArray[i]); i++;
+            output.ap = "" + dataArray[i]; i++;
+            output.tr = parseInt(dataArray[i]); i++;
+            output.ot = "" + dataArray[i]; i++;
         }
+        return output;
     }
     
     trySetAugmentTechValues(techDatabase) {
@@ -244,39 +288,36 @@ class TechniqueData extends dbObj {
         if (this.name == "") {
             return baseTechnique;
         }
-
-        if (this.group == "") {
-            this.group = "Augment";
-        }
-        this.family = setAugmentTechValue(this.family, baseTechnique.family);
-        this.action = setAugmentTechValue(this.action, baseTechnique.action);
-        this.traits = setAugmentTechValue(this.traits, baseTechnique.traits);
-        this.limits = setAugmentTechValue(this.limits, baseTechnique.limits);
-        this.resourceCost = setAugmentTechValue(this.resourceCost, baseTechnique.resourceCost);
-        this.trigger = setAugmentTechValue(this.trigger, baseTechnique.trigger);
-        this.requirement = setAugmentTechValue(this.requirement, baseTechnique.requirement);
-        this.item = setAugmentTechValue(this.item, baseTechnique.item);
-        this.prerequisite.lv = setAugmentTechValue(this.prerequisite.lv, baseTechnique.prerequisite.lv);
-        this.prerequisite.ap = setAugmentTechValue(this.prerequisite.ap, baseTechnique.prerequisite.ap);
-        this.prerequisite.tr = setAugmentTechValue(this.prerequisite.tr, baseTechnique.prerequisite.tr);
-        this.prerequisite.ot = setAugmentTechValue(this.prerequisite.ot, baseTechnique.prerequisite.ot);
-        this.skill = setAugmentTechValue(this.skill, baseTechnique.skill);
-        this.defense = setAugmentTechValue(this.defense, baseTechnique.defense);
-        this.range = setAugmentTechValue(this.range, baseTechnique.range);
-        this.rType = setAugmentTechValue(this.rType, baseTechnique.rType);
-        this.target = setAugmentTechValue(this.target, baseTechnique.target);
-        this.targetCode = setAugmentTechValue(this.targetCode, baseTechnique.targetCode);
-        this.dVal = setAugmentTechValue(this.dVal, baseTechnique.dVal);
-        this.dType = setAugmentTechValue(this.dType, baseTechnique.dType);
-        this.dBonus = setAugmentTechValue(this.dBonus, baseTechnique.dBonus);
-        this.damageType = setAugmentTechValue(this.damageType, baseTechnique.damageType);
-        this.element = setAugmentTechValue(this.element, baseTechnique.element);
-        this.description = setAugmentTechValue(this.description, baseTechnique.description);
-        this.onSuccess = setAugmentTechValue(this.onSuccess, baseTechnique.onSuccess);
-        this.tEffect = setAugmentTechValue(this.tEffect, baseTechnique.tEffect);
-        this.rEffect = setAugmentTechValue(this.rEffect, baseTechnique.rEffect);
-        this.dConditions = setAugmentTechValue(this.dConditions, baseTechnique.dConditions);
+        this.family = this.setAugmentTechValue(this.family, baseTechnique.family);
+        this.action = this.setAugmentTechValue(this.action, baseTechnique.action);
+        this.traits = this.setAugmentTechValue(this.traits, baseTechnique.traits);
+        this.limits = this.setAugmentTechValue(this.limits, baseTechnique.limits);
+        this.resourceCost = this.setAugmentTechValue(this.resourceCost, baseTechnique.resourceCost);
+        this.trigger = this.setAugmentTechValue(this.trigger, baseTechnique.trigger);
+        this.requirement = this.setAugmentTechValue(this.requirement, baseTechnique.requirement);
+        this.item = this.setAugmentTechValue(this.item, baseTechnique.item);
+        this.prerequisite.lv = this.setAugmentTechValue(this.prerequisite.lv, baseTechnique.prerequisite.lv);
+        this.prerequisite.ap = this.setAugmentTechValue(this.prerequisite.ap, baseTechnique.prerequisite.ap);
+        this.prerequisite.tr = this.setAugmentTechValue(this.prerequisite.tr, baseTechnique.prerequisite.tr);
+        this.prerequisite.ot = this.setAugmentTechValue(this.prerequisite.ot, baseTechnique.prerequisite.ot);
+        this.skill = this.setAugmentTechValue(this.skill, baseTechnique.skill);
+        this.defense = this.setAugmentTechValue(this.defense, baseTechnique.defense);
+        this.range = this.setAugmentTechValue(this.range, baseTechnique.range);
+        this.rType = this.setAugmentTechValue(this.rType, baseTechnique.rType);
+        this.target = this.setAugmentTechValue(this.target, baseTechnique.target);
+        this.targetCode = this.setAugmentTechValue(this.targetCode, baseTechnique.targetCode);
+        this.dVal = this.setAugmentTechValue(this.dVal, baseTechnique.dVal);
+        this.dType = this.setAugmentTechValue(this.dType, baseTechnique.dType);
+        this.dBonus = this.setAugmentTechValue(this.dBonus, baseTechnique.dBonus);
+        this.damageType = this.setAugmentTechValue(this.damageType, baseTechnique.damageType);
+        this.element = this.setAugmentTechValue(this.element, baseTechnique.element);
+        this.description = this.setAugmentTechValue(this.description, baseTechnique.description);
+        this.onSuccess = this.setAugmentTechValue(this.onSuccess, baseTechnique.onSuccess);
+        this.tEffect = this.setAugmentTechValue(this.tEffect, baseTechnique.tEffect);
+        this.rEffect = this.setAugmentTechValue(this.rEffect, baseTechnique.rEffect);
+        this.dConditions = this.setAugmentTechValue(this.dConditions, baseTechnique.dConditions);
     }
+
     setAugmentTechValue (augmentValue, baseValue) {
         if (augmentValue == "-") {
             return "";
@@ -491,6 +532,17 @@ class AttributeGroupData extends dbObj {
 
     getAttributeAbrNames() {
         return ["BOD", "PRC", "QCK", "CNV", "INT", "RSN"];
+    }
+
+    convertAttributesToArr() {
+        let output = [];
+        output.push(this.bod);
+        output.push(this.prc);
+        output.push(this.qck);
+        output.push(this.cnv);
+        output.push(this.int);
+        output.push(this.rsn);
+        return output;
     }
 }
 class DefinitionData extends dbObj {
@@ -796,40 +848,42 @@ var FeatureService = FeatureService || (function () {
                 output += `${feature.augment} Technique`;
             }
 
-            if (feature.prerequisite.lv > 0) {
-                if (output != "") {
-                    output += "; ";
+            if (feature.prerequisite != undefined) {
+                if (feature.prerequisite.lv > 0) {
+                    if (output != "") {
+                        output += "; ";
+                    }
+                    output += `Character Level ${feature.prerequisite.lv}`;
                 }
-                output += `Character Level ${feature.prerequisite.lv}`;
-            }
-            if (feature.prerequisite.ap > 0) {
-                if (output != "") {
-                    output += "; ";
+                if (feature.prerequisite.ap > 0) {
+                    if (output != "") {
+                        output += "; ";
+                    }
+                    switch (feature.prerequisite.ap) {
+                        case "Wood":
+                        case "Fire":
+                        case "Earth":
+                        case "Metal":
+                        case "Water":
+                            output += `${feature.prerequisite.ap} Element`;
+                            break;
+                        default:
+                            output += `${feature.prerequisite.ap} Branch`;
+                            break;
+                    }
                 }
-                switch (feature.prerequisite.ap) {
-                    case "Wood":
-                    case "Fire":
-                    case "Earth":
-                    case "Metal":
-                    case "Water":
-                        output += `${feature.prerequisite.ap} Element`;
-                        break;
-                    default:
-                        output += `${feature.prerequisite.ap} Branch`;
-                        break;
+                if (feature.prerequisite.tr > 0) {
+                    if (output != "") {
+                        output += "; ";
+                    }
+                    output += `Trained in ${feature.prerequisite.tr}`;
                 }
-            }
-            if (feature.prerequisite.tr > 0) {
-                if (output != "") {
-                    output += "; ";
+                if (feature.prerequisite.ot != "") {
+                    if (output != "") {
+                        output += "; ";
+                    }
+                    output += feature.prerequisite.ot;
                 }
-                output += `Trained in ${feature.prerequisite.tr}`;
-            }
-            if (feature.prerequisite.ot != "") {
-                if (output != "") {
-                    output += "; ";
-                }
-                output += feature.prerequisite.ot;
             }
 
             return output;
