@@ -23987,6 +23987,17 @@ class AttributeGroupData extends dbObj {
     getAttributeAbrNames() {
         return ["BOD", "PRC", "QCK", "CNV", "INT", "RSN"];
     }
+
+    convertAttributesToArr() {
+        let output = [];
+        output.push(this.bod);
+        output.push(this.prc);
+        output.push(this.qck);
+        output.push(this.cnv);
+        output.push(this.int);
+        output.push(this.rsn);
+        return output;
+    }
 }
 class DefinitionData extends dbObj {
     importJson(json) {

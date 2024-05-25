@@ -1624,6 +1624,13 @@ input.wuxFeatureHeader-flag[value="Free"] + .wuxFeatureHeader,
     background-color: #f0e5fb;
 }
 
+input.wuxFeatureHeader-flag[value="Passive"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Passive,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Passive
+{
+    background-color: #f1f1f1;
+}
+
 input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Augment,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Augment
