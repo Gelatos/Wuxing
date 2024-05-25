@@ -81,21 +81,21 @@ class Database extends Dictionary {
         }
     }
 
-    getFilteredData(filterData) {
+    filter(filterData) {
         let filteredGroup = this.getSortedGroup(filterData[0].property, filterData[0].value);
         let filters = [];
         for (let i = 1; i < filterData.length; i++) {
             filters = this.getSortedGroup(filterData[i].property, filterData[i].value);
             filteredGroup.filter(item => item.includes(filters))
         }
-        return this.getGroup(filteredGroup);
+        return this.getGroupData(filteredGroup);
     }
 
     getSortedGroup(property, propertyValue) {
         return this.sortingGroups[property][propertyValue];
     }
 
-    getGroup(group) {
+    getGroupData(group) {
         let output = [];
         for (let i = 0; i < group.length; i++) {
             output.push(this.get(group[i]));
@@ -158,10 +158,10 @@ class TechniqueData extends dbObj {
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.augmentBase = "" + dataArray[i]; i++;
-        this.techniqueGroup = "" + dataArray[i]; i++;
+        this.augment = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.category = "" + dataArray[i]; i++;
         this.family = "" + dataArray[i]; i++;
-        this.techniqueType = "" + dataArray[i]; i++;
         this.action = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
         this.limits = "" + dataArray[i]; i++;
@@ -192,11 +192,10 @@ class TechniqueData extends dbObj {
     }
     createEmpty() {
         this.name = "";
-        this.augmentBase = "";
-        this.techniqueSource = "";
-        this.techniqueGroup = "";
+        this.augment = "";
+        this.group = "";
+        this.category = "";
         this.family = "";
-        this.techniqueType = "";
         this.action = "";
         this.traits = "";
         this.limits = "";
@@ -234,6 +233,59 @@ class TechniqueData extends dbObj {
             ot: dataArray[i + 3]
         }
     }
+    
+    trySetAugmentTechValues(techDatabase) {
+        if (this.augment != "") {
+            this.setAugmentTechValues(techDatabase.get(this.augment));
+        }
+    }
+    setAugmentTechValues(baseTechnique) {
+
+        if (this.name == "") {
+            return baseTechnique;
+        }
+
+        if (this.group == "") {
+            this.group = "Augment";
+        }
+        this.family = setAugmentTechValue(this.family, baseTechnique.family);
+        this.action = setAugmentTechValue(this.action, baseTechnique.action);
+        this.traits = setAugmentTechValue(this.traits, baseTechnique.traits);
+        this.limits = setAugmentTechValue(this.limits, baseTechnique.limits);
+        this.resourceCost = setAugmentTechValue(this.resourceCost, baseTechnique.resourceCost);
+        this.trigger = setAugmentTechValue(this.trigger, baseTechnique.trigger);
+        this.requirement = setAugmentTechValue(this.requirement, baseTechnique.requirement);
+        this.item = setAugmentTechValue(this.item, baseTechnique.item);
+        this.prerequisite.lv = setAugmentTechValue(this.prerequisite.lv, baseTechnique.prerequisite.lv);
+        this.prerequisite.ap = setAugmentTechValue(this.prerequisite.ap, baseTechnique.prerequisite.ap);
+        this.prerequisite.tr = setAugmentTechValue(this.prerequisite.tr, baseTechnique.prerequisite.tr);
+        this.prerequisite.ot = setAugmentTechValue(this.prerequisite.ot, baseTechnique.prerequisite.ot);
+        this.skill = setAugmentTechValue(this.skill, baseTechnique.skill);
+        this.defense = setAugmentTechValue(this.defense, baseTechnique.defense);
+        this.range = setAugmentTechValue(this.range, baseTechnique.range);
+        this.rType = setAugmentTechValue(this.rType, baseTechnique.rType);
+        this.target = setAugmentTechValue(this.target, baseTechnique.target);
+        this.targetCode = setAugmentTechValue(this.targetCode, baseTechnique.targetCode);
+        this.dVal = setAugmentTechValue(this.dVal, baseTechnique.dVal);
+        this.dType = setAugmentTechValue(this.dType, baseTechnique.dType);
+        this.dBonus = setAugmentTechValue(this.dBonus, baseTechnique.dBonus);
+        this.damageType = setAugmentTechValue(this.damageType, baseTechnique.damageType);
+        this.element = setAugmentTechValue(this.element, baseTechnique.element);
+        this.description = setAugmentTechValue(this.description, baseTechnique.description);
+        this.onSuccess = setAugmentTechValue(this.onSuccess, baseTechnique.onSuccess);
+        this.tEffect = setAugmentTechValue(this.tEffect, baseTechnique.tEffect);
+        this.rEffect = setAugmentTechValue(this.rEffect, baseTechnique.rEffect);
+        this.dConditions = setAugmentTechValue(this.dConditions, baseTechnique.dConditions);
+    }
+    setAugmentTechValue (augmentValue, baseValue) {
+        if (augmentValue == "-") {
+            return "";
+        }
+        else if (augmentValue == "") {
+            return baseValue;
+        }
+        return augmentValue;
+    }
 }
 class SkillData extends dbObj {
     importJson(json) {
@@ -260,6 +312,10 @@ class LanguageData extends dbObj {
     }
     importSheets(dataArray) {
         let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.location = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
     }
     createEmpty() {
         this.name = "";
@@ -274,12 +330,14 @@ class LoreData extends dbObj {
     }
     importSheets(dataArray) {
         let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
 
     }
     createEmpty() {
         this.name = "";
         this.group = "";
-        this.location = "";
         this.description = "";
     }
 }
@@ -289,16 +347,62 @@ class JobData extends dbObj {
     }
     importSheets(dataArray) {
         let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+        this.attributes = new AttributeGroupData(dataArray.slice(i)); i += 7;
+        this.roles = this.createRolesArray(dataArray.slice(i)); i += 5;
+        this.prereq = "" + dataArray[i]; i++;
+        this.techniques = this.createJobTechnique(dataArray.slice(i)); i++;
     }
     createEmpty() {
         this.name = "";
         this.group = "";
         this.description = "";
-        this.attributes = {};
-        this.roles = {};
+        this.attributes = new AttributeGroupData();
+        this.roles = this.createRolesArray();
         this.prereq = "";
         this.techniques = [];
     }
+
+    createRolesArray(modArray) {
+
+        var output = {
+            generalist: 0,
+            athlete: 0,
+            defender: 0,
+            marksman: 0,
+            skirmisher: 0
+        };
+
+        if (modArray != undefined) {
+            let i = 0;
+            output.generalist = parseInt(modArray[i]); i++;
+            output.athlete = parseInt(modArray[i]); i++;
+            output.defender = parseInt(modArray[i]); i++;
+            output.marksman = parseInt(modArray[i]); i++;
+            output.skirmisher = parseInt(modArray[i]); i++;
+        };
+
+        return output;
+    }
+    createJobTechnique(modArray) {
+        var output = [];
+        let i = 0;
+        let data = "";
+        let dataSplit = {};
+        while (true) {
+            if (modArray[i] == undefined || modArray[i] == "") {
+                break;
+            }
+            data = "" + modArray[i];
+            dataSplit = data.split(";");
+            output.push({ name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0 });
+            i++;
+        }
+        return output;
+    }
+
 }
 class RoleData extends dbObj {
     importJson(json) {
@@ -306,6 +410,10 @@ class RoleData extends dbObj {
     }
     importSheets(dataArray) {
         let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+        this.techniques = this.createTechnique(dataArray.slice(i)); i++;
 
     }
     createEmpty() {
@@ -314,13 +422,37 @@ class RoleData extends dbObj {
         this.description = "";
         this.techniques = [];
     }
+
+    createTechnique(modArray) {
+        var output = [];
+        let i = 0;
+        let data = "";
+        let dataSplit = {};
+        while (true) {
+            if (modArray[i] == undefined || modArray[i] == "") {
+                break;
+            }
+            data = "" + modArray[i];
+            dataSplit = data.split(";");
+            output.push({ name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0 });
+            i++;
+        }
+        return output;
+    }
 }
 class AttributeGroupData extends dbObj {
     importJson(json) {
 
     }
-    importSheets(dataArray) {
+    importSheets(modArray) {
         let i = 0;
+        this.bod = parseInt(modArray[i]); i++;
+        this.prc = parseInt(modArray[i]); i++;
+        this.qck = parseInt(modArray[i]); i++;
+        this.cnv = parseInt(modArray[i]); i++;
+        this.int = parseInt(modArray[i]); i++;
+        this.rsn = parseInt(modArray[i]); i++;
+        this.removeAttributeNaN();
 
     }
     createEmpty() {
@@ -330,6 +462,35 @@ class AttributeGroupData extends dbObj {
         this.cnv = 0;
         this.int = 0;
         this.rsn = 0;
+    }
+
+    removeAttributeNaN() {
+        if (isNaN(this.bod)) {
+            this.bod = 0;
+        }
+        if (isNaN(this.prc)) {
+            this.prc = 0;
+        }
+        if (isNaN(this.qck)) {
+            this.qck = 0;
+        }
+        if (isNaN(this.cnv)) {
+            this.cnv = 0;
+        }
+        if (isNaN(this.int)) {
+            this.int = 0;
+        }
+        if (isNaN(this.rsn)) {
+            this.rsn = 0;
+        }
+    }
+
+    getAttributeNames() {
+        return ["Body", "Precision", "Quickness", "Conviction", "Intuition", "Reason"];
+    }
+
+    getAttributeAbrNames() {
+        return ["BOD", "PRC", "QCK", "CNV", "INT", "RSN"];
     }
 }
 class DefinitionData extends dbObj {
@@ -466,10 +627,10 @@ var FeatureService = FeatureService || (function () {
         },
 
         setTechniqueDisplayDataSlotData = function (techDisplayData, technique) {
-            techDisplayData.slotType = technique.techniqueType;
-            techDisplayData.slotIsPath = technique.techniqueGroup == "Path";
-            techDisplayData.slotFooter = `${technique.techniqueType} - ${technique.techniqueGroup == "" ? "Augment" : technique.techniqueGroup}`;
-            techDisplayData.slotSource = technique.techniqueSource;
+            techDisplayData.slotType = technique.group;
+            techDisplayData.slotIsPath = technique.family == "Free";
+            techDisplayData.slotFooter = `${technique.group}`;
+            techDisplayData.slotSource = technique.group;
 
         },
 
@@ -631,8 +792,8 @@ var FeatureService = FeatureService || (function () {
         getPrerequisiteString = function (feature) {
             var output = "";
 
-            if (feature.augmentBase != "") {
-                output += `${feature.augmentBase} Technique`;
+            if (feature.augment != "") {
+                output += `${feature.augment} Technique`;
             }
 
             if (feature.prerequisite.lv > 0) {

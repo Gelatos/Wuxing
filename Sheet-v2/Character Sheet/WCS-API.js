@@ -4542,15 +4542,551 @@ function TokenHasStatusMarker(token, condition) {
     return token.get("statusmarkers").indexOf(GetTokenStatusMarkerName(condition)) > -1;
 }
 
+// ====== Classes
+
+class Dictionary {
+
+    constructor() {
+        this.keys = [];
+        this.values = {};
+    }
+    add(key, value) {
+        if (!this.keys.includes(key)) {
+            this.keys.push(key);
+        }
+        this.values[key] = value;
+    }
+    get(key) {
+        return this.values[key];
+    }
+    has(key) {
+        return this.keys.includes(key);
+    }
+    iterate(callback) {
+        for (let i = 0; i < this.keys.length; i++) {
+            callback(this.values[this.keys[i]]);
+        }
+    }
+}
+
+class DatabaseFilterData {
+    constructor(property, value) {
+        this.property = property;
+        this.value = value;
+    }
+}
+class Database extends Dictionary {
+    constructor(sortingProperties, data, dataCreationCallback) {
+        super();
+        this.sortingGroups = {};
+        for (let i = 0; i < sortingProperties.length; i++) {
+            this.sortingGroups[sortingProperties[i]] = {};
+        }
+
+        if (data != undefined) {
+            if (Array.isArray(data)) {
+                this.importSheets(data, dataCreationCallback);
+            }
+            else if (typeof data == "string") {
+                this.importStringifiedJson(data);
+            }
+            else {
+                this.importJson(data);
+            }
+        }
+    }
+
+    importStringifiedJson(stringifiedJSON) {
+        let json = JSON.parse(stringifiedJSON);
+        this.importJson(json);
+    }
+    importJson(json) {
+        this.keys = json.keys;
+        this.values = json.values;
+        this.sortingGroups = json.sortingGroups;
+    }
+    importSheets(dataArray, dataCreationCallback) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = dataCreationCallback(dataArray[i]);
+            this.add(data.name, data);
+        }
+    }
+
+    add(key, value) {
+        super.add(key, value);
+        let propertyValue = "";
+        for (let property in this.sortingGroups) {
+            propertyValue = value[property];
+            if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
+                this.sortingGroups[property][propertyValue] = [];
+            }
+            this.sortingGroups[property][propertyValue].push(value.name);
+        }
+    }
+
+    filter(filterData) {
+        let filteredGroup = this.getSortedGroup(filterData[0].property, filterData[0].value);
+        let filters = [];
+        for (let i = 1; i < filterData.length; i++) {
+            filters = this.getSortedGroup(filterData[i].property, filterData[i].value);
+            filteredGroup.filter(item => item.includes(filters))
+        }
+        return this.getGroupData(filteredGroup);
+    }
+
+    getSortedGroup(property, propertyValue) {
+        return this.sortingGroups[property][propertyValue];
+    }
+
+    getGroupData(group) {
+        let output = [];
+        for (let i = 0; i < group.length; i++) {
+            output.push(this.get(group[i]));
+        }
+        return output;
+    }
+
+    getPropertyValues(property) {
+        let output = [];
+        for (let key in this.sortingGroups[property]) {
+            output.push(key);
+        }
+        return output;
+    }
+}
+class DefinitionDatabase extends Database {
+    importSheets(dataArray, dataCreationCallback) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = dataCreationCallback(dataArray[i]);
+            if (this.has(data.name)) {
+                this.values[data.name].descriptions.push(data.descriptions[0]);
+            }
+            else {
+                this.add(data.name, data);
+            }
+        }
+    }
+}
+
+class dbObj {
+    constructor(data) {
+        if (data != undefined) {
+            if (Array.isArray(data)) {
+                this.importSheets(data);
+            }
+            else if (typeof data == "string") {
+                this.importStringifiedJson(data);
+            }
+            else {
+                this.importJson(data);
+            }
+        }
+        else {
+            createEmpty();
+        }
+    }
+    importStringifiedJson(stringifiedJSON) {
+        let json = JSON.parse(stringifiedJSON);
+        this.importJson(json);
+    }
+    importJson(json) { }
+    importSheets(dataArray) { }
+    createEmpty() { }
+}
+class TechniqueData extends dbObj {
+    importJson(json) {
+
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.augment = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.category = "" + dataArray[i]; i++;
+        this.family = "" + dataArray[i]; i++;
+        this.action = "" + dataArray[i]; i++;
+        this.traits = "" + dataArray[i]; i++;
+        this.limits = "" + dataArray[i]; i++;
+        this.resourceCost = "" + dataArray[i]; i++;
+        this.flavorText = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+        this.onSuccess = "" + dataArray[i]; i++;
+        this.dConditions = "" + dataArray[i]; i++;
+        this.tEffect = "" + dataArray[i]; i++;
+        this.ongDesc = "" + dataArray[i]; i++;
+        this.ongSave = "" + dataArray[i]; i++;
+        this.ongEft = "" + dataArray[i]; i++;
+        this.trigger = "" + dataArray[i]; i++;
+        this.requirement = "" + dataArray[i]; i++;
+        this.item = "" + dataArray[i]; i++;
+        this.prerequisite = this.createPrerequisiteData(dataArray, i); i += 4;
+        this.skill = "" + dataArray[i]; i++;
+        this.defense = "" + dataArray[i]; i++;
+        this.range = "" + dataArray[i]; i++;
+        this.rType = "" + dataArray[i]; i++;
+        this.target = "" + dataArray[i]; i++;
+        this.targetCode = "" + dataArray[i]; i++;
+        this.dVal = "" + dataArray[i]; i++;
+        this.dType = "" + dataArray[i]; i++;
+        this.dBonus = "" + dataArray[i]; i++;
+        this.damageType = "" + dataArray[i]; i++;
+        this.element = "" + dataArray[i]; i++;
+    }
+    createEmpty() {
+        this.name = "";
+        this.augment = "";
+        this.group = "";
+        this.category = "";
+        this.family = "";
+        this.action = "";
+        this.traits = "";
+        this.limits = "";
+        this.resourceCost = "";
+        this.flavorText = "";
+        this.description = "";
+        this.onSuccess = "";
+        this.dConditions = "";
+        this.tEffect = "";
+        this.ongDesc = "";
+        this.ongSave = "";
+        this.ongEft = "";
+        this.trigger = "";
+        this.requirement = "";
+        this.item = "";
+        this.prerequisite = {};
+        this.skill = "";
+        this.defense = "";
+        this.range = "";
+        this.rType = "";
+        this.target = "";
+        this.targetCode = "";
+        this.dVal = "";
+        this.dType = "";
+        this.dBonus = "";
+        this.damageType = "";
+        this.element = "";
+        this.augments = [];
+    }
+    createPrerequisiteData(dataArray, i) {
+        return {
+            lv: dataArray[i],
+            ap: dataArray[i + 1],
+            tr: dataArray[i + 2],
+            ot: dataArray[i + 3]
+        }
+    }
+    
+    trySetAugmentTechValues(techDatabase) {
+        if (this.augment != "") {
+            this.setAugmentTechValues(techDatabase.get(this.augment));
+        }
+    }
+    setAugmentTechValues(baseTechnique) {
+
+        if (this.name == "") {
+            return baseTechnique;
+        }
+
+        if (this.group == "") {
+            this.group = "Augment";
+        }
+        this.family = setAugmentTechValue(this.family, baseTechnique.family);
+        this.action = setAugmentTechValue(this.action, baseTechnique.action);
+        this.traits = setAugmentTechValue(this.traits, baseTechnique.traits);
+        this.limits = setAugmentTechValue(this.limits, baseTechnique.limits);
+        this.resourceCost = setAugmentTechValue(this.resourceCost, baseTechnique.resourceCost);
+        this.trigger = setAugmentTechValue(this.trigger, baseTechnique.trigger);
+        this.requirement = setAugmentTechValue(this.requirement, baseTechnique.requirement);
+        this.item = setAugmentTechValue(this.item, baseTechnique.item);
+        this.prerequisite.lv = setAugmentTechValue(this.prerequisite.lv, baseTechnique.prerequisite.lv);
+        this.prerequisite.ap = setAugmentTechValue(this.prerequisite.ap, baseTechnique.prerequisite.ap);
+        this.prerequisite.tr = setAugmentTechValue(this.prerequisite.tr, baseTechnique.prerequisite.tr);
+        this.prerequisite.ot = setAugmentTechValue(this.prerequisite.ot, baseTechnique.prerequisite.ot);
+        this.skill = setAugmentTechValue(this.skill, baseTechnique.skill);
+        this.defense = setAugmentTechValue(this.defense, baseTechnique.defense);
+        this.range = setAugmentTechValue(this.range, baseTechnique.range);
+        this.rType = setAugmentTechValue(this.rType, baseTechnique.rType);
+        this.target = setAugmentTechValue(this.target, baseTechnique.target);
+        this.targetCode = setAugmentTechValue(this.targetCode, baseTechnique.targetCode);
+        this.dVal = setAugmentTechValue(this.dVal, baseTechnique.dVal);
+        this.dType = setAugmentTechValue(this.dType, baseTechnique.dType);
+        this.dBonus = setAugmentTechValue(this.dBonus, baseTechnique.dBonus);
+        this.damageType = setAugmentTechValue(this.damageType, baseTechnique.damageType);
+        this.element = setAugmentTechValue(this.element, baseTechnique.element);
+        this.description = setAugmentTechValue(this.description, baseTechnique.description);
+        this.onSuccess = setAugmentTechValue(this.onSuccess, baseTechnique.onSuccess);
+        this.tEffect = setAugmentTechValue(this.tEffect, baseTechnique.tEffect);
+        this.rEffect = setAugmentTechValue(this.rEffect, baseTechnique.rEffect);
+        this.dConditions = setAugmentTechValue(this.dConditions, baseTechnique.dConditions);
+    }
+    setAugmentTechValue (augmentValue, baseValue) {
+        if (augmentValue == "-") {
+            return "";
+        }
+        else if (augmentValue == "") {
+            return baseValue;
+        }
+        return augmentValue;
+    }
+}
+class SkillData extends dbObj {
+    importJson(json) {
+
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.abilityScore = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.abilityScore = "";
+        this.description = "";
+    }
+}
+class LanguageData extends dbObj {
+    importJson(json) {
+
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.location = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.location = "";
+        this.description = "";
+    }
+}
+class LoreData extends dbObj {
+    importJson(json) {
+
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.description = "";
+    }
+}
+class JobData extends dbObj {
+    importJson(json) {
+
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+        this.attributes = new AttributeGroupData(dataArray.slice(i)); i += 7;
+        this.roles = this.createRolesArray(dataArray.slice(i)); i += 5;
+        this.prereq = "" + dataArray[i]; i++;
+        this.techniques = this.createJobTechnique(dataArray.slice(i)); i++;
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.description = "";
+        this.attributes = new AttributeGroupData();
+        this.roles = this.createRolesArray();
+        this.prereq = "";
+        this.techniques = [];
+    }
+
+    createRolesArray(modArray) {
+
+        var output = {
+            generalist: 0,
+            athlete: 0,
+            defender: 0,
+            marksman: 0,
+            skirmisher: 0
+        };
+
+        if (modArray != undefined) {
+            let i = 0;
+            output.generalist = parseInt(modArray[i]); i++;
+            output.athlete = parseInt(modArray[i]); i++;
+            output.defender = parseInt(modArray[i]); i++;
+            output.marksman = parseInt(modArray[i]); i++;
+            output.skirmisher = parseInt(modArray[i]); i++;
+        };
+
+        return output;
+    }
+    createJobTechnique(modArray) {
+        var output = [];
+        let i = 0;
+        let data = "";
+        let dataSplit = {};
+        while (true) {
+            if (modArray[i] == undefined || modArray[i] == "") {
+                break;
+            }
+            data = "" + modArray[i];
+            dataSplit = data.split(";");
+            output.push({ name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0 });
+            i++;
+        }
+        return output;
+    }
+
+}
+class RoleData extends dbObj {
+    importJson(json) {
+
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+        this.techniques = this.createTechnique(dataArray.slice(i)); i++;
+
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.description = "";
+        this.techniques = [];
+    }
+
+    createTechnique(modArray) {
+        var output = [];
+        let i = 0;
+        let data = "";
+        let dataSplit = {};
+        while (true) {
+            if (modArray[i] == undefined || modArray[i] == "") {
+                break;
+            }
+            data = "" + modArray[i];
+            dataSplit = data.split(";");
+            output.push({ name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0 });
+            i++;
+        }
+        return output;
+    }
+}
+class AttributeGroupData extends dbObj {
+    importJson(json) {
+
+    }
+    importSheets(modArray) {
+        let i = 0;
+        this.bod = parseInt(modArray[i]); i++;
+        this.prc = parseInt(modArray[i]); i++;
+        this.qck = parseInt(modArray[i]); i++;
+        this.cnv = parseInt(modArray[i]); i++;
+        this.int = parseInt(modArray[i]); i++;
+        this.rsn = parseInt(modArray[i]); i++;
+        this.removeAttributeNaN();
+
+    }
+    createEmpty() {
+        this.bod = 0;
+        this.prc = 0;
+        this.qck = 0;
+        this.cnv = 0;
+        this.int = 0;
+        this.rsn = 0;
+    }
+
+    removeAttributeNaN() {
+        if (isNaN(this.bod)) {
+            this.bod = 0;
+        }
+        if (isNaN(this.prc)) {
+            this.prc = 0;
+        }
+        if (isNaN(this.qck)) {
+            this.qck = 0;
+        }
+        if (isNaN(this.cnv)) {
+            this.cnv = 0;
+        }
+        if (isNaN(this.int)) {
+            this.int = 0;
+        }
+        if (isNaN(this.rsn)) {
+            this.rsn = 0;
+        }
+    }
+
+    getAttributeNames() {
+        return ["Body", "Precision", "Quickness", "Conviction", "Intuition", "Reason"];
+    }
+
+    getAttributeAbrNames() {
+        return ["BOD", "PRC", "QCK", "CNV", "INT", "RSN"];
+    }
+}
+class DefinitionData extends dbObj {
+    importJson(json) {
+
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.descriptions = [("" + dataArray[i])]; i++;
+        this.abbreviation = "" + dataArray[i]; i++;
+        this.variable = "" + dataArray[i]; i++;
+        this.formula = "" + dataArray[i]; i++;
+    }
+    createEmpty() {
+        this.name = "";
+        this.group = "";
+        this.descriptions = [];
+        this.abbreviation = "";
+        this.variable = "";
+        this.formula = "";
+    }
+    
+    getVariable() {
+        return `attr_${this.variable}`;
+    }
+}
+class TemplateData extends dbObj {
+    importJson(json) {
+
+    }
+    importSheets(dataArray) {
+        let i = 0;
+
+    }
+    createEmpty() {
+
+    }
+}
+
+// ====== Formatters
+
 var FeatureService = FeatureService || (function () {
     'use strict';
 
-    var 
+    var
 
         // Display Technique (Private)
         // ------------------------,
 
-        getTechniqueDisplayDataObj = function() {
+        getTechniqueDisplayDataObj = function () {
             return {
                 name: "",
                 username: "",
@@ -4566,7 +5102,7 @@ var FeatureService = FeatureService || (function () {
 
                 prerequisite: "",
                 trigger: "",
-                
+
                 isFunctionBlock: false,
                 traits: [],
                 requirement: "",
@@ -4590,7 +5126,7 @@ var FeatureService = FeatureService || (function () {
 
         },
 
-        getTechniqueDisplayData = function(technique) {
+        getTechniqueDisplayData = function (technique) {
             let techDisplayData = getTechniqueDisplayDataObj();
             setTechniqueDisplayDataBase(techDisplayData, technique);
             setTechniqueDisplayDataName(techDisplayData, technique);
@@ -4602,18 +5138,18 @@ var FeatureService = FeatureService || (function () {
             return techDisplayData;
         },
 
-        setTechniqueDisplayDataBase = function(techDisplayData, technique) {
+        setTechniqueDisplayDataBase = function (techDisplayData, technique) {
             techDisplayData.technique = technique;
             techDisplayData.isArmament = technique.item != "";
         },
 
-        setTechniqueDisplayDataName = function(techDisplayData, technique) {
+        setTechniqueDisplayDataName = function (techDisplayData, technique) {
             techDisplayData.name = technique.name;
             techDisplayData.username = technique.username;
             techDisplayData.fieldName = Format.ToCamelCase(technique.name);
         },
 
-        setTechniqueDisplayDataUsageInfo = function(techDisplayData, technique) {
+        setTechniqueDisplayDataUsageInfo = function (techDisplayData, technique) {
             techDisplayData.actionType = technique.action;
 
             techDisplayData.usageInfo = "";
@@ -4634,15 +5170,15 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataSlotData = function(techDisplayData, technique) {
-            techDisplayData.slotType = technique.techniqueType;
-            techDisplayData.slotIsPath = technique.techniqueGroup == "Path";
-            techDisplayData.slotFooter = `${technique.techniqueType} - ${technique.techniqueGroup == "" ? "Augment" : technique.techniqueGroup}`;
-            techDisplayData.slotSource = technique.techniqueSource;
+        setTechniqueDisplayDataSlotData = function (techDisplayData, technique) {
+            techDisplayData.slotType = technique.group;
+            techDisplayData.slotIsPath = technique.family == "Free";
+            techDisplayData.slotFooter = `${technique.group}`;
+            techDisplayData.slotSource = technique.group;
 
         },
 
-        setTechniqueDisplayDataFunctionBlock = function(techDisplayData, technique) {
+        setTechniqueDisplayDataFunctionBlock = function (techDisplayData, technique) {
 
             techDisplayData.prerequisite = getPrerequisiteString(technique);
 
@@ -4655,7 +5191,7 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataCheckBlock = function(techDisplayData, technique) {
+        setTechniqueDisplayDataCheckBlock = function (techDisplayData, technique) {
             techDisplayData.isCheckBlock = technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "";
 
             if (techDisplayData.isCheckBlock) {
@@ -4665,11 +5201,11 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataCheckBlockRange = function(techDisplayData, technique) {
+        setTechniqueDisplayDataCheckBlockRange = function (techDisplayData, technique) {
             if (technique.range != "" || technique.target != "") {
                 techDisplayData.isCheckBlockTarget = true;
                 techDisplayData.target = technique.target;
-    
+
                 if (technique.range != "") {
                     techDisplayData.rType = technique.rType;
                     techDisplayData.range = technique.range;
@@ -4677,7 +5213,7 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataCheckBlockSkill = function(techDisplayData, technique) {
+        setTechniqueDisplayDataCheckBlockSkill = function (techDisplayData, technique) {
             if (technique.skill != "") {
                 techDisplayData.skill = "";
                 if (technique.defense != "" && technique.defense != undefined) {
@@ -4690,13 +5226,13 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataCheckBlockDamage = function(techDisplayData, technique) {
+        setTechniqueDisplayDataCheckBlockDamage = function (techDisplayData, technique) {
             if ((technique.dVal != "" && technique.dVal > 0) || technique.damageType != "") {
                 techDisplayData.damage = getDamageString(technique);
             }
         },
 
-        setTechniqueDisplayDataDescriptionBlock = function(techDisplayData, technique) {
+        setTechniqueDisplayDataDescriptionBlock = function (techDisplayData, technique) {
 
             techDisplayData.isDescBlock = technique.description != "" || technique.onSuccess != "";
             if (techDisplayData.isDescBlock) {
@@ -4706,7 +5242,7 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        setTechniqueDisplayDataDescriptionBlockConditions = function(techDisplayData, technique) {
+        setTechniqueDisplayDataDescriptionBlockConditions = function (techDisplayData, technique) {
 
             let actionEffects = getActionEffects(technique.dConditions);
             let output = "";
@@ -4733,40 +5269,40 @@ var FeatureService = FeatureService || (function () {
         // Display Technique (Variants)
         // ------------------------,
 
-        getRollTemplate = function(techDisplayData) {
-        
+        getRollTemplate = function (techDisplayData) {
+
             let output = "";
-            
-            output += `{{Username=${techDisplayData.username}}}{{Name=${techDisplayData.name}}}{{SlotType=${techDisplayData.slotFooter}}}{{Source=${techDisplayData.slotSource}}}{{UsageInfo=${techDisplayData.usageInfo}}}${techDisplayData.traits.length > 0 ? rollTemplateTraits(techDisplayData.traits, "Trait"): ""}${techDisplayData.trigger ? `{{Trigger=${techDisplayData.trigger}}}`: ""}${techDisplayData.requirement ? `{{Requirement=${techDisplayData.requirement}}}`: ""}${techDisplayData.item ? `{{Item=${techDisplayData.item}}}`: ""}${techDisplayData.range ? `{{Range=${techDisplayData.range}}}`: ""}${techDisplayData.target ? `{{Target=${techDisplayData.target}}}`: ""}${techDisplayData.skill ? `{{SkillString=${techDisplayData.skill}}}`: ""}${techDisplayData.damage ? `{{DamageString=${techDisplayData.damage}}}`: ""}${techDisplayData.description ? `{{Desc=${techDisplayData.description}}}`: ""}${techDisplayData.onHit ? `{{OnHit=${techDisplayData.onHit}}}`: ""}${techDisplayData.conditions ? `{{Conditions=${techDisplayData.conditions}}}`: ""}`;
+
+            output += `{{Username=${techDisplayData.username}}}{{Name=${techDisplayData.name}}}{{SlotType=${techDisplayData.slotFooter}}}{{Source=${techDisplayData.slotSource}}}{{UsageInfo=${techDisplayData.usageInfo}}}${techDisplayData.traits.length > 0 ? rollTemplateTraits(techDisplayData.traits, "Trait") : ""}${techDisplayData.trigger ? `{{Trigger=${techDisplayData.trigger}}}` : ""}${techDisplayData.requirement ? `{{Requirement=${techDisplayData.requirement}}}` : ""}${techDisplayData.item ? `{{Item=${techDisplayData.item}}}` : ""}${techDisplayData.range ? `{{Range=${techDisplayData.range}}}` : ""}${techDisplayData.target ? `{{Target=${techDisplayData.target}}}` : ""}${techDisplayData.skill ? `{{SkillString=${techDisplayData.skill}}}` : ""}${techDisplayData.damage ? `{{DamageString=${techDisplayData.damage}}}` : ""}${techDisplayData.description ? `{{Desc=${techDisplayData.description}}}` : ""}${techDisplayData.onHit ? `{{OnHit=${techDisplayData.onHit}}}` : ""}${techDisplayData.conditions ? `{{Conditions=${techDisplayData.conditions}}}` : ""}`;
 
             output += ` {{type-${techDisplayData.slotType}=1}} ${techDisplayData.slotIsPath ? "{{isPath=1}} " : ""}{{type-${techDisplayData.actionType}=1}} ${techDisplayData.isFunctionBlock ? "{{type-FunctionBlock=1}} " : ""}${techDisplayData.isCheckBlock ? "{{type-CheckBlock=1}} " : ""}${techDisplayData.isCheckBlock ? "{{type-CheckBlockTarget=1}} " : ""}${techDisplayData.isDescBlock ? "{{type-DescBlock=1}} " : ""}`;
-        
+
             return `&{template:technique} ${output.trim()}`;
         },
 
-        getRollTemplateFromTechnique = function(technique) {
+        getRollTemplateFromTechnique = function (technique) {
             let techDisplayData = getTechniqueDisplayData(technique);
             return getRollTemplate(techDisplayData);
         },
-        
-        getConsumeUsePost = function(technique) {
-        
+
+        getConsumeUsePost = function (technique) {
+
             // add technique data for the api
             technique.username = "@{character_name}";
             let usedTechData = JSON.stringify(technique);
-        
+
             // add the equopped action at the end
             if (technique.traits != "" && (technique.traits.indexOf("Armament") >= 0 || technique.traits.indexOf("Arsenal") >= 0)) {
                 usedTechData += "##@{technique-equippedWeapon}";
             }
-        
+
             return `!ctech ${usedTechData}`;
         },
 
         // Formatting
         // ------------------------,
 
-        rollTemplateTraits = function(traitsDb, rtPrefix) {
+        rollTemplateTraits = function (traitsDb, rtPrefix) {
             let output = "";
             for (var i = 0; i < traitsDb.length; i++) {
                 output += `{{${rtPrefix}${i}=${traitsDb[i].name}}} {{${rtPrefix}${i}Desc=${traitsDb[i].description}}} `;
@@ -4774,34 +5310,34 @@ var FeatureService = FeatureService || (function () {
             return output;
         },
 
-        getDamageString = function(feature) {
+        getDamageString = function (feature) {
 
             var output = "";
-          
+
             if (feature.dVal != "" && feature.dVal > 0) {
-              output += feature.dVal + "d" + feature.dType;
+                output += feature.dVal + "d" + feature.dType;
             }
             if (feature.dBonus != "" && feature.dBonus != undefined) {
-              var elements = feature.dBonus.split(";");
-              for (var i = 0; i < elements.length; i++) {
-                output += `+${elements[i]}`;
-              }
+                var elements = feature.dBonus.split(";");
+                for (var i = 0; i < elements.length; i++) {
+                    output += `+${elements[i]}`;
+                }
             }
             if (feature.damageType != "") {
-              output += ` ${feature.damageType}`;
+                output += ` ${feature.damageType}`;
             }
             if (feature.element != undefined && feature.element != "") {
-              output += ` [${feature.element}]`;
+                output += ` [${feature.element}]`;
             }
-            
+
             return output;
         },
 
-        getPrerequisiteString = function(feature) {
+        getPrerequisiteString = function (feature) {
             var output = "";
 
-            if (feature.augmentBase != "") {
-                output += `${feature.augmentBase} Technique`;
+            if (feature.augment != "") {
+                output += `${feature.augment} Technique`;
             }
 
             if (feature.prerequisite.lv > 0) {
@@ -4846,13 +5382,13 @@ var FeatureService = FeatureService || (function () {
         // Technique Effects
         // ------------------------,
 
-        getActionEffects = function(effects) {
+        getActionEffects = function (effects) {
             let actionEffectsObj = getActionEffectObj();
 
-			if (effects != undefined && effects != "") {
-				let keywordsSplit = effects.split(";");
+            if (effects != undefined && effects != "") {
+                let keywordsSplit = effects.split(";");
 
-				for (let i = 0; i < keywordsSplit.length; i++) {
+                for (let i = 0; i < keywordsSplit.length; i++) {
                     parseActionEffect(actionEffectsObj, keywordsSplit[i]);
                 }
 
@@ -4861,7 +5397,7 @@ var FeatureService = FeatureService || (function () {
             return actionEffectsObj;
         },
 
-        parseActionEffect = function(actionEffectsObj, actionEffect) {
+        parseActionEffect = function (actionEffectsObj, actionEffect) {
             let data = actionEffect.split(":");
             let action = data[0];
             let effect = data[1];
@@ -4875,8 +5411,8 @@ var FeatureService = FeatureService || (function () {
             setActionEffectData(actionEffectsObj, action, effect, targetSelf);
         },
 
-        setActionEffectData = function(actionEffectsObj, action, effect, targetSelf) {
-            switch(action) {
+        setActionEffectData = function (actionEffectsObj, action, effect, targetSelf) {
+            switch (action) {
                 case "S": actionEffectsObj.addState(effect, targetSelf); break;
                 case "C": actionEffectsObj.addCondition(effect, targetSelf); break;
                 case "R": actionEffectsObj.addRemoval(effect, targetSelf); break;
@@ -4887,7 +5423,7 @@ var FeatureService = FeatureService || (function () {
             }
         },
 
-        getActionEffectObj = function() {
+        getActionEffectObj = function () {
             return {
                 states: [],
                 conditions: [],
@@ -4897,41 +5433,41 @@ var FeatureService = FeatureService || (function () {
                 tempHeals: [],
                 kiRecoveries: [],
 
-                createTargetData: function(name, targetSelf) {
-                    return {name: name, targetSelf: targetSelf};
+                createTargetData: function (name, targetSelf) {
+                    return { name: name, targetSelf: targetSelf };
                 },
 
-                addState: function(name, targetSelf) {
+                addState: function (name, targetSelf) {
                     this.states.push(this.createTargetData(name, targetSelf));
                 },
 
-                addCondition: function(name, targetSelf) {
+                addCondition: function (name, targetSelf) {
                     this.conditions.push(this.createTargetData(name, targetSelf));
                 },
 
-                addRemoval: function(name, targetSelf) {
+                addRemoval: function (name, targetSelf) {
                     this.removals.push(this.createTargetData(name, targetSelf));
                 },
 
-                addStatusRemoval: function(name, targetSelf) {
+                addStatusRemoval: function (name, targetSelf) {
                     this.statusRemovals.push(this.createTargetData(name, targetSelf));
                 },
 
-                addHeal: function(name, targetSelf) {
+                addHeal: function (name, targetSelf) {
                     this.heals.push(this.createTargetData(name, targetSelf));
                 },
 
-                addTempHeal: function(name, targetSelf) {
+                addTempHeal: function (name, targetSelf) {
                     this.tempHeals.push(this.createTargetData(name, targetSelf));
                 },
 
-                addKiRecovery: function(name, targetSelf) {
+                addKiRecovery: function (name, targetSelf) {
                     this.kiRecoveries.push(this.createTargetData(name, targetSelf));
                 }
             };
         }
 
-    ;
+        ;
     return {
         GetTechniqueDisplayData: getTechniqueDisplayData,
         GetRollTemplate: getRollTemplate,
@@ -4945,11 +5481,11 @@ var FeatureService = FeatureService || (function () {
 
 }());
 
-var ItemHandler = ItemHandler || (function() {
+var ItemHandler = ItemHandler || (function () {
     'use strict';
 
-    var 
-        getTechniqueWeaponRollTemplate = function(itemData) {
+    var
+        getTechniqueWeaponRollTemplate = function (itemData) {
             let output = "";
             output += `{{WpnName=${itemData.name}}} `;
 
@@ -4968,17 +5504,17 @@ var ItemHandler = ItemHandler || (function() {
             return output;
         }
 
-    ;
+        ;
     return {
         GetTechniqueWeaponRollTemplate: getTechniqueWeaponRollTemplate
     };
 }());
 
-var Format = Format || (function() {
+var Format = Format || (function () {
     'use strict';
 
-    var 
-        toCamelCase = function(inputString) {
+    var
+        toCamelCase = function (inputString) {
 
             if (inputString == "" || inputString == undefined) {
                 return inputString;
@@ -4997,27 +5533,27 @@ var Format = Format || (function() {
             return words.join('');
         },
 
-        toUpperCamelCase = function(inputString) {
+        toUpperCamelCase = function (inputString) {
 
             if (inputString == "" || inputString == undefined) {
                 return inputString;
             }
-            
+
             // Split the input string by spaces and iterate through the words
             let words = inputString.split(" ");
-        
+
             for (let i = 0; i < words.length; i++) {
-              // Capitalize the first letter of each word 
-              words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+                // Capitalize the first letter of each word 
+                words[i] = words[i][0].toUpperCase() + words[i].slice(1);
             }
-          
+
             return words.join('');
         },
 
         // Array Formatting
         // ------------------------
 
-        arrayToString = function(array, delimeter) {
+        arrayToString = function (array, delimeter) {
             if (delimeter == undefined) {
                 delimeter = ", ";
             }
@@ -5030,8 +5566,8 @@ var Format = Format || (function() {
             });
             return output;
         },
-        
-        sortArrayDecrementing = function(array) {
+
+        sortArrayDecrementing = function (array) {
             array.sort();
             array.reverse();
             return array;
@@ -5040,7 +5576,7 @@ var Format = Format || (function() {
         // Chat Formatting
         // ------------------------
 
-        showTooltip = function(message, tooltip) {
+        showTooltip = function (message, tooltip) {
             return `[${message}](#" class="showtip" title="${SanitizeSheetRoll(tooltip)})`;
         },
 
@@ -5048,7 +5584,7 @@ var Format = Format || (function() {
         // Chat Formatting
         // ------------------------
 
-        sanitizeSheetRoll = function(roll) {
+        sanitizeSheetRoll = function (roll) {
             var sheetRoll = roll;
             sheetRoll = sheetRoll.replace(/%/g, "&#37;");
             sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -5062,8 +5598,8 @@ var Format = Format || (function() {
             sheetRoll = sheetRoll.replace(/\n/g, "<br />");
             return sheetRoll;
         },
-        
-        sanitizeSheetRollAction = function(roll) {
+
+        sanitizeSheetRollAction = function (roll) {
             var sheetRoll = roll;
             sheetRoll = sheetRoll.replace(/%/g, "&#37;");
             sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
@@ -5078,7 +5614,7 @@ var Format = Format || (function() {
             return sheetRoll;
         }
 
-    ;
+        ;
     return {
         ToCamelCase: toCamelCase,
         ToUpperCamelCase: toUpperCamelCase,
@@ -5090,11 +5626,11 @@ var Format = Format || (function() {
     };
 }());
 
-var Dice = Dice || (function() {
+var Dice = Dice || (function () {
     'use strict';
 
-    var 
-        rollDice = function(dieValue, dieType) {
+    var
+        rollDice = function (dieValue, dieType) {
             let rolls = [];
             while (dieValue > 0) {
                 dieValue--;
@@ -5103,7 +5639,7 @@ var Dice = Dice || (function() {
             return rolls;
         },
 
-        totalDice = function(rolls) {
+        totalDice = function (rolls) {
             let total = 0;
             _.each(rolls, function (obj) {
                 total += obj;
@@ -5111,7 +5647,7 @@ var Dice = Dice || (function() {
             return total;
         },
 
-        getHighRolls = function(dieValue, dieType, keepCount) {
+        getHighRolls = function (dieValue, dieType, keepCount) {
             let output = {
                 rolls: [],
                 keeps: []
@@ -5126,7 +5662,7 @@ var Dice = Dice || (function() {
             return output;
         }
 
-    ;
+        ;
     return {
         RollDice: rollDice,
         TotalDice: totalDice,
@@ -5164,72 +5700,27 @@ function GetSectionIdNameFromArray(sectionName, currentID, variableNames) {
 
 function GetFieldNameAttribute(fieldName) {
     if (fieldName.indexOf("_") >= 0) {
-		fieldName = fieldName.match(/_([^_]*)$/)[1];
-	}
+        fieldName = fieldName.match(/_([^_]*)$/)[1];
+    }
     if (fieldName.indexOf("-") >= 0) {
-		fieldName = fieldName.match(/-(?!.*-)(.*)$/)[1];
-	}
+        fieldName = fieldName.match(/-(?!.*-)(.*)$/)[1];
+    }
     return fieldName;
 }
 
 function GetRepeatingSectionFromFieldName(fieldName) {
     if (fieldName.indexOf("_") >= 0) {
-		fieldName = fieldName.substring(fieldName.indexOf("_") + 1);
+        fieldName = fieldName.substring(fieldName.indexOf("_") + 1);
         if (fieldName.indexOf("_") >= 0) {
             fieldName = "repeating_" + fieldName.substring(0, fieldName.indexOf("_"));
         }
-	}
+    }
     return fieldName;
 }
 
 function GetRepeatingSectionIdFromId(id, repeatingSection) {
-	var len = repeatingSection.length + 1;
-	return id.substr(len, 20);
-}
-
-// ====== Formatters
-
-function CreateDictionary() {
-    return {
-        keys: [],
-        values: {},
-
-        import: function(stringifiedJSON) {
-            let data = JSON.parse(stringifiedJSON);
-            this.keys = data.keys;
-            this.values = data.values;
-        },
-        importJson: function(json) {
-            this.keys = json.keys;
-            this.values = json.values;
-        },
-        add: function(key, value) {
-            if (!this.keys.includes(key)) {
-                this.keys.push(key);
-            }
-            this.values[key] = value;
-        },
-        get: function(key) {
-            return this.values[key];
-        },
-        has: function(key) {
-            return this.keys.includes(key);
-        },
-        iterate: function(callback) {
-          for (let i = 0; i < this.keys.length; i++) {
-            callback(this.values[this.keys[i]]);
-          }
-        }
-    }
-}
-
-function IterateDataArray (data, callback) {
-    let items = data.split(";");
-    let item = "";
-    for (let i = 0; i < items.length; i++) {
-        item = items[i].trim();
-        callback(item);
-    }
+    var len = repeatingSection.length + 1;
+    return id.substr(len, 20);
 }
 
 // ====== Language

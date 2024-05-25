@@ -39,20 +39,23 @@ var CreateSheetsDatabase = CreateSheetsDatabase || (function () {
     'use strict';
 
     var
-        createDatabaseCollection = function(skillsArray, languageArray, loreArray, jobsArray, rolesArray, definitionsArray, techniqueDatabaseString) {
+        createDatabaseCollection = function (skillsArray, languageArray, loreArray, jobsArray, rolesArray, definitionsArray, techniqueDatabaseString) {
+
+            let techDb = new Database([""]);
+            techDb.importStringifiedJson(techniqueDatabaseString);
             return {
-                techniques: new Database(techniqueDatabaseString),
-	            skills: createSkills(skillsArray),
+                techniques: techDb,
+                skills: createSkills(skillsArray),
                 language: createLanguages(languageArray),
                 lore: createLores(loreArray),
-		        job: createJobs(jobsArray),
-		        role: createRoles(rolesArray),
-			    definitions: createDefinitions(definitionsArray)
+                job: createJobs(jobsArray),
+                role: createRoles(rolesArray),
+                definitions: createDefinitions(definitionsArray)
             }
         },
-        
+
         createTechniques = function (arr) {
-            return new Database(["augmentBase", "techniqueGroup"], arr, function (arr) {
+            return new Database(["augment", "group"], arr, function (arr) {
                 return new TechniqueData(arr);
             });
         },
@@ -110,119 +113,6 @@ var FormatTechniques = FormatTechniques || (function () {
 
     var
 
-        get = function (featureArray, source) {
-            let feature = createFeatureData();
-
-            if (featureArray != undefined) {
-                feature = populateFeatureData(feature, featureArray);
-            }
-            if (source != undefined) {
-                feature.techniqueSource = source;
-                feature.techniqueType = source;
-            }
-
-            return feature;
-        },
-
-        createFeatureData = function () {
-            return {
-                name: "",
-                augmentBase: "",
-                techniqueSource: "",
-                techniqueGroup: "",
-                family: "",
-                techniqueType: "",
-                action: "",
-                traits: "",
-                limits: "",
-                resourceCost: "",
-                flavorText: "",
-                description: "",
-                onSuccess: "",
-                dConditions: "",
-                tEffect: "",
-                ongDesc: "",
-                ongSave: "",
-                ongEft: "",
-                trigger: "",
-                requirement: "",
-                item: "",
-                prerequisite: {},
-                skill: "",
-                defense: "",
-                range: "",
-                rType: "",
-                target: "",
-                targetCode: "",
-                dVal: "",
-                dType: "",
-                dBonus: "",
-                damageType: "",
-                element: "",
-                augments: []
-            };
-        },
-
-        populateFeatureData = function (feature, featureArray) {
-            var i = 0;
-            feature.name = "" + featureArray[i]; i++;
-            feature.augmentBase = "" + featureArray[i]; i++;
-            feature.techniqueGroup = "" + featureArray[i]; i++;
-            feature.family = "" + featureArray[i]; i++;
-            feature.techniqueType = "" + featureArray[i]; i++;
-            feature.action = "" + featureArray[i]; i++;
-            feature.traits = "" + featureArray[i]; i++;
-            feature.limits = "" + featureArray[i]; i++;
-            feature.resourceCost = "" + featureArray[i]; i++;
-            feature.flavorText = "" + featureArray[i]; i++;
-            feature.description = "" + featureArray[i]; i++;
-            feature.onSuccess = "" + featureArray[i]; i++;
-            feature.dConditions = "" + featureArray[i]; i++;
-            feature.tEffect = "" + featureArray[i]; i++;
-            feature.ongDesc = "" + featureArray[i]; i++;
-            feature.ongSave = "" + featureArray[i]; i++;
-            feature.ongEft = "" + featureArray[i]; i++;
-            feature.trigger = "" + featureArray[i]; i++;
-            feature.requirement = "" + featureArray[i]; i++;
-            feature.item = "" + featureArray[i]; i++;
-            feature.prerequisite = createFeaturePrerequisite(featureArray, i); i += 4;
-            feature.skill = "" + featureArray[i]; i++;
-            feature.defense = "" + featureArray[i]; i++;
-            feature.range = "" + featureArray[i]; i++;
-            feature.rType = "" + featureArray[i]; i++;
-            feature.target = "" + featureArray[i]; i++;
-            feature.targetCode = "" + featureArray[i]; i++;
-            feature.dVal = "" + featureArray[i]; i++;
-            feature.dType = "" + featureArray[i]; i++;
-            feature.dBonus = "" + featureArray[i]; i++;
-            feature.damageType = "" + featureArray[i]; i++;
-            feature.element = "" + featureArray[i]; i++;
-
-            return feature;
-        },
-
-        createFeaturePrerequisite = function (featureArray, incrementer) {
-            return {
-                lv: featureArray[incrementer],
-                ap: featureArray[incrementer + 1],
-                tr: featureArray[incrementer + 2],
-                ot: featureArray[incrementer + 3]
-            }
-        },
-
-        setTechniquesDatabase = function (standardArr, heroArr, creatureArr, jobArr, roleArr, itemArr, activeArr, supportArr) {
-            var techDictionary = new Dictionary();
-            techDictionary.add("Standard", getTechniqueGroupData(standardArr, "Standard"));
-            techDictionary.add("Hero", getTechniqueGroupData(heroArr, "Hero"));
-            techDictionary.add("Creature", getTechniqueGroupData(creatureArr, "Creature"));
-            techDictionary.add("Job", getTechniqueGroupData(jobArr, "Job"));
-            techDictionary.add("Role", getTechniqueGroupData(roleArr, "Role"));
-            techDictionary.add("Item", getTechniqueGroupData(itemArr, "Item"));
-            techDictionary.add("Active", getTechniqueGroupData(activeArr, "Active"));
-            techDictionary.add("Support", getTechniqueGroupData(supportArr, "Support"));
-            return techDictionary;
-        },
-
         parseTechniquesDatabase = function (techniqueDatabaseData) {
             let output = "";
             for (let i = 0; i < techniqueDatabaseData.length; i++) {
@@ -231,328 +121,6 @@ var FormatTechniques = FormatTechniques || (function () {
             return JSON.parse(output);
         },
 
-        setAugmentTechnique = function (augmentTechnique, baseTechnique) {
-
-            if (augmentTechnique == undefined) {
-                return baseTechnique;
-            }
-
-            if (augmentTechnique.techniqueGroup == "") {
-                augmentTechnique.techniqueGroup = "Augment";
-            }
-            augmentTechnique.family = setAugmentTechValue(augmentTechnique.family, baseTechnique.family);
-            augmentTechnique.techniqueType = setAugmentTechValue(augmentTechnique.techniqueType, baseTechnique.techniqueType);
-            augmentTechnique.action = setAugmentTechValue(augmentTechnique.action, baseTechnique.action);
-            augmentTechnique.traits = setAugmentTechValue(augmentTechnique.traits, baseTechnique.traits);
-            augmentTechnique.limits = setAugmentTechValue(augmentTechnique.limits, baseTechnique.limits);
-            augmentTechnique.resourceCost = setAugmentTechValue(augmentTechnique.resourceCost, baseTechnique.resourceCost);
-            augmentTechnique.trigger = setAugmentTechValue(augmentTechnique.trigger, baseTechnique.trigger);
-            augmentTechnique.requirement = setAugmentTechValue(augmentTechnique.requirement, baseTechnique.requirement);
-            augmentTechnique.item = setAugmentTechValue(augmentTechnique.item, baseTechnique.item);
-            augmentTechnique.prerequisite.lv = setAugmentTechValue(augmentTechnique.prerequisite.lv, baseTechnique.prerequisite.lv);
-            augmentTechnique.prerequisite.ap = setAugmentTechValue(augmentTechnique.prerequisite.ap, baseTechnique.prerequisite.ap);
-            augmentTechnique.prerequisite.tr = setAugmentTechValue(augmentTechnique.prerequisite.tr, baseTechnique.prerequisite.tr);
-            augmentTechnique.prerequisite.ot = setAugmentTechValue(augmentTechnique.prerequisite.ot, baseTechnique.prerequisite.ot);
-            augmentTechnique.skill = setAugmentTechValue(augmentTechnique.skill, baseTechnique.skill);
-            augmentTechnique.defense = setAugmentTechValue(augmentTechnique.defense, baseTechnique.defense);
-            augmentTechnique.range = setAugmentTechValue(augmentTechnique.range, baseTechnique.range);
-            augmentTechnique.rType = setAugmentTechValue(augmentTechnique.rType, baseTechnique.rType);
-            augmentTechnique.target = setAugmentTechValue(augmentTechnique.target, baseTechnique.target);
-            augmentTechnique.targetCode = setAugmentTechValue(augmentTechnique.targetCode, baseTechnique.targetCode);
-            augmentTechnique.dVal = setAugmentTechValue(augmentTechnique.dVal, baseTechnique.dVal);
-            augmentTechnique.dType = setAugmentTechValue(augmentTechnique.dType, baseTechnique.dType);
-            augmentTechnique.dBonus = setAugmentTechValue(augmentTechnique.dBonus, baseTechnique.dBonus);
-            augmentTechnique.damageType = setAugmentTechValue(augmentTechnique.damageType, baseTechnique.damageType);
-            augmentTechnique.element = setAugmentTechValue(augmentTechnique.element, baseTechnique.element);
-            augmentTechnique.description = setAugmentTechValue(augmentTechnique.description, baseTechnique.description);
-            augmentTechnique.onSuccess = setAugmentTechValue(augmentTechnique.onSuccess, baseTechnique.onSuccess);
-            augmentTechnique.tEffect = setAugmentTechValue(augmentTechnique.tEffect, baseTechnique.tEffect);
-            augmentTechnique.rEffect = setAugmentTechValue(augmentTechnique.rEffect, baseTechnique.rEffect);
-            augmentTechnique.dConditions = setAugmentTechValue(augmentTechnique.dConditions, baseTechnique.dConditions);
-
-            return augmentTechnique;
-        },
-
-        setAugmentTechValue = function (augmentValue, baseValue) {
-            if (augmentValue == "-") {
-                return "";
-            }
-            else if (augmentValue == "") {
-                return baseValue;
-            }
-            return augmentValue;
-        },
-
-        getTechniqueGroupData = function (modArray, source) {
-            var output = new Dictionary();
-            var technique = {};
-            for (var i = 0; i < modArray.length; i++) {
-                technique = get(modArray[i], source);
-
-                if (technique.augmentBase != "" && output.has(technique.augmentBase)) {
-                    output.values[technique.augmentBase].augments.push(technique);
-                }
-                else {
-                    output.add(technique.name, technique);
-                }
-            }
-
-            return output;
-        },
-
-        getTechniqueGroupDataByAction = function (modArray, source) {
-            var output = CreateArrayDataObject();
-
-            var technique = {};
-            var groupName = "";
-            var groupIndex = 0;
-            var techniqueIndex = 0;
-            for (var i = 0; i < modArray.length; i++) {
-                technique = get(modArray[i], source);
-                groupName = technique.action;
-
-                // Get the group index
-                if (output.createNewGroupEntry(groupName)) {
-                    groupIndex = output.getGroupIndex(groupName);
-                    output.groups[groupIndex] = CreateArrayDataObject();
-                }
-                else {
-                    groupIndex = output.getGroupIndex(groupName);
-                }
-
-                if (technique.augmentBase != "") {
-                    techniqueIndex = output.groups[groupIndex].getGroupIndex(technique.augmentBase);
-                    if (techniqueIndex >= 0) {
-                        output.groups[groupIndex].groups[techniqueIndex].augments.push(technique);
-                    }
-                }
-                else {
-                    output.groups[groupIndex].names.push(technique.name);
-                    output.groups[groupIndex].groups.push(technique);
-                }
-            }
-
-            return output;
-        },
-
-        createTechniqueFilterData = function () {
-            let filterData = {
-                uniqueSource: new Dictionary(),
-                uniqueGroup: new Dictionary(),
-                uniqueType: new Dictionary(),
-                uniqueAction: new Dictionary(),
-                uniqueTraits: new Dictionary(),
-                uniqueReqWeapon: new Dictionary(),
-                uniqueBranch: new Dictionary(),
-                uniqueSkill: new Dictionary(),
-                uniqueDefense: new Dictionary(),
-                uniqueRange: new Dictionary(),
-                includeBaseSource: new Dictionary(),
-                includeBaseGroup: new Dictionary(),
-                includeBaseType: new Dictionary(),
-                includeBaseAction: new Dictionary(),
-                includeBaseTraits: new Dictionary(),
-                includeBaseReqWeapon: new Dictionary(),
-                includeBaseBranch: new Dictionary(),
-                includeBaseSkill: new Dictionary(),
-                includeBaseDefense: new Dictionary(),
-                includeBaseRange: new Dictionary(),
-
-                add: function (technique) {
-
-                    this.addSource(technique);
-                    this.addGroup(technique);
-                    this.addType(technique);
-                    this.addAction(technique);
-                    this.addTrait(technique);
-                    this.addreqWeapon(technique);
-                    this.addbranch(technique);
-                    this.addSkill(technique);
-                    this.addDefense(technique);
-                    this.addRange(technique);
-                },
-
-                sort: function () {
-                    this.uniqueType.keys.sort();
-                    this.uniqueGroup.keys.sort();
-                    this.uniqueAction.keys.sort();
-                    this.uniqueTraits.keys.sort();
-                    this.uniqueReqWeapon.keys.sort();
-                    this.uniqueBranch.keys.sort();
-                    this.uniqueSkill.keys.sort();
-                    this.uniqueRange.keys.sort();
-                    this.includeBaseType.keys.sort();
-                    this.includeBaseGroup.keys.sort();
-                    this.includeBaseAction.keys.sort();
-                    this.includeBaseTraits.keys.sort();
-                    this.includeBaseReqWeapon.keys.sort();
-                    this.includeBaseBranch.keys.sort();
-                    this.includeBaseSkill.keys.sort();
-                    this.includeBaseRange.keys.sort();
-                },
-
-                addSource: function (technique) {
-                    let key = technique.techniqueSource;
-                    this.addTechnique([this.uniqueSource, this.includeBaseSource], key, technique);
-                    for (let i = 0; i < technique.augments.length; i++) {
-                        this.augmentCheck(technique, technique.augments[i], this.uniqueSource, this.includeBaseSource, key, technique.augments[i].techniqueSource);
-                    }
-                },
-
-                addGroup: function (technique) {
-                    let key = technique.techniqueGroup;
-                    this.addTechnique([this.uniqueGroup, this.includeBaseGroup], key, technique);
-                    for (let i = 0; i < technique.augments.length; i++) {
-                        this.augmentCheck(technique, technique.augments[i], this.uniqueGroup, this.includeBaseGroup, key, technique.augments[i].techniqueGroup);
-                    }
-                },
-
-                addType: function (technique) {
-                    let key = technique.techniqueType;
-                    this.addTechnique([this.uniqueType, this.includeBaseType], key, technique);
-                    for (let i = 0; i < technique.augments.length; i++) {
-                        this.augmentCheck(technique, technique.augments[i], this.uniqueType, this.includeBaseType, key, technique.augments[i].techniqueType);
-                    }
-                },
-
-                addAction: function (technique) {
-                    let key = technique.action;
-                    this.addTechnique([this.uniqueAction, this.includeBaseAction], key, technique);
-                    for (let i = 0; i < technique.augments.length; i++) {
-                        this.augmentCheck(technique, technique.augments[i], this.uniqueAction, this.includeBaseAction, key, technique.augments[i].action);
-                    }
-                },
-
-                addTrait: function (technique) {
-
-                    let traitsDictionary = GetTraitDataFromString(technique.traits);
-                    for (let j = 0; j < traitsDictionary.length; j++) {
-                        this.addTechnique([this.uniqueTraits, this.includeBaseTraits], traitsDictionary[j].keyword, technique);
-                    }
-
-                    if (Array.isArray(technique.augments)) {
-                        for (let i = 0; i < technique.augments.length; i++) {
-
-                            if (technique.augments[i].traits != undefined) {
-                                traitsDictionary = GetTraitDataFromString(technique.augments[i].traits);
-                                for (let j = 0; j < traitsDictionary.length; j++) {
-                                    this.augmentCheck(technique, technique.augments[i], this.uniqueTraits, this.includeBaseTraits, "", traitsDictionary[j].keyword);
-                                }
-                            }
-                        }
-                    }
-                },
-
-                addreqWeapon: function (technique) {
-                    if (technique.requirement == null) {
-                        return;
-                    }
-                    let items = technique.item.split(";");
-                    let item = "";
-                    for (let j = 0; j < items.length; j++) {
-                        item = items[j].trim();
-                        this.addTechnique([this.uniqueReqWeapon, this.includeBaseReqWeapon], item, technique);
-                    }
-
-                    if (Array.isArray(technique.augments)) {
-                        for (let i = 0; i < technique.augments.length; i++) {
-
-                            if (technique.augments[i].requirement != undefined) {
-                                items = technique.augments[i].item.split(";");
-                                for (let j = 0; j < items.length; j++) {
-                                    item = items[j].trim();
-                                    this.augmentCheck(technique, technique.augments[i], this.uniqueReqWeapon, this.includeBaseReqWeapon, "", item);
-                                }
-                            }
-                        }
-                    }
-                },
-
-                addbranch: function (technique) {
-                    let items = technique.prerequisite.ap.split(";");
-                    let item = "";
-                    for (let j = 0; j < items.length; j++) {
-                        item = items[j].trim();
-                        this.addTechnique([this.uniqueBranch, this.includeBaseBranch], item, technique);
-                    }
-
-                    if (Array.isArray(technique.augments)) {
-                        for (let i = 0; i < technique.augments.length; i++) {
-
-                            if (technique.augments[i].prerequisite != undefined) {
-                                items = technique.augments[i].prerequisite.ap.split(";");
-                                for (let j = 0; j < items.length; j++) {
-                                    item = items[j].trim();
-                                    this.augmentCheck(technique, technique.augments[i], this.uniqueBranch, this.includeBaseBranch, "", item);
-                                }
-                            }
-                        }
-                    }
-                },
-
-                addSkill: function (technique) {
-                    let key = technique.skill;
-                    this.addTechnique([this.uniqueSkill, this.includeBaseSkill], key, technique);
-                    for (let i = 0; i < technique.augments.length; i++) {
-                        this.augmentCheck(technique, technique.augments[i], this.uniqueSkill, this.includeBaseSkill, key, technique.augments[i].skill);
-                    }
-                },
-
-                addDefense: function (technique) {
-                    let key = technique.defense;
-                    this.addTechnique([this.uniqueDefense, this.includeBaseDefense], key, technique);
-                    for (let i = 0; i < technique.augments.length; i++) {
-                        this.augmentCheck(technique, technique.augments[i], this.uniqueDefense, this.includeBaseDefense, key, technique.augments[i].defense);
-                    }
-                },
-
-                addRange: function (technique) {
-                    let key = technique.rType;
-                    this.addTechnique([this.uniqueRange, this.includeBaseRange], key, technique);
-                    for (let i = 0; i < technique.augments.length; i++) {
-                        this.augmentCheck(technique, technique.augments[i], this.uniqueRange, this.includeBaseRange, key, technique.augments[i].rType);
-                    }
-                },
-
-                dictionaryCheck: function (dictionary, key) {
-                    if (!dictionary.has(key)) {
-                        dictionary.add(key, []);
-                    }
-                },
-
-                addTechnique: function (dictionaries, key, technique) {
-                    if (key != "") {
-                        for (let i = 0; i < dictionaries.length; i++) {
-                            this.dictionaryCheck(dictionaries[i], key);
-                            if (!dictionaries[i].get(key).includes(technique.name)) {
-                                dictionaries[i].get(key).push(technique.name);
-                            }
-                        }
-                    }
-                },
-
-                augmentCheck: function (baseTechnique, technique, branchDictionary, includeBaseDictionary, mainKey, compareKey) {
-                    if (compareKey == "") {
-                        compareKey == mainKey;
-                    }
-                    this.addTechnique([includeBaseDictionary], compareKey, baseTechnique);
-                    this.addTechnique([branchDictionary, includeBaseDictionary], compareKey, technique);
-                }
-            }
-
-            filterData.dictionaryCheck(filterData.uniqueDefense, "BP DC");
-            filterData.dictionaryCheck(filterData.uniqueDefense, "BR DC");
-            filterData.dictionaryCheck(filterData.uniqueDefense, "PR DC");
-            filterData.dictionaryCheck(filterData.uniqueDefense, "Presence DC");
-            filterData.dictionaryCheck(filterData.uniqueDefense, "Brace DC");
-            filterData.dictionaryCheck(filterData.uniqueDefense, "Presence DC");
-            filterData.dictionaryCheck(filterData.uniqueDefense, "Insight DC");
-            filterData.dictionaryCheck(filterData.uniqueDefense, "Notice DC");
-            filterData.dictionaryCheck(filterData.uniqueDefense, "Resolve DC");
-            filterData.dictionaryCheck(filterData.uniqueDefense, "Fortitude DC");
-
-            return filterData;
-        },
 
         iterateOverTechArrays = function (data, callback, techniqueDatabase, sources) {
             let techData;
@@ -629,13 +197,7 @@ var FormatTechniques = FormatTechniques || (function () {
 
         ;
     return {
-        Get: get,
-        SetTechniquesDatabase: setTechniquesDatabase,
         ParseTechniquesDatabase: parseTechniquesDatabase,
-        SetAugmentTechnique: setAugmentTechnique,
-        GetTechniqueGroupData: getTechniqueGroupData,
-        GetTechniqueGroupDataByAction: getTechniqueGroupDataByAction,
-        CreateTechniqueFilterData: createTechniqueFilterData,
         IterateOverTechArrays: iterateOverTechArrays,
         GetTechFilterData: getTechFilterData,
         GetTechDatabaseData: getTechDatabaseData
@@ -1612,9 +1174,9 @@ var FormatDefinitions = FormatDefinitions || (function () {
             return output;
         },
 
-        displayCollapsibleTitle = function (dictionary, key, fieldName) {
+        displayCollapsibleTitle = function (definitionData, fieldName) {
             let expandContents = "";
-            let entryData = dictionary.get(key).descriptions;
+            let entryData = definitionData.descriptions;
             for (let i = 0; i < entryData.length; i++) {
                 expandContents += "\n" + FormatCharacterSheetMain.Desc(entryData[i]);
             }
@@ -1622,8 +1184,8 @@ var FormatDefinitions = FormatDefinitions || (function () {
             let expandFieldName = `${fieldName}-expand`;
 
             let output = `${FormatCharacterSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
-  ${FormatCharacterSheetMain.Header(key, "span")}
-  ${FormatCharacterSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
+            ${FormatCharacterSheetMain.Header(definitionData.name, "span")}
+            ${FormatCharacterSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
 
             return FormatCharacterSheetMain.InteractionElement.Build(true, output);
         }
@@ -1814,6 +1376,23 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function () {
             return output;
         },
 
+        multiRowGroup = function (contents, containerCallback, rowSize) {
+            let output = "";
+            let rowContents = "";
+            for (let i = 0; i < contents.length; i++) {
+                rowContents += contents[i];
+                if (i % rowSize == rowSize - 1) {
+                    output += containerCallback(rowContents);
+                    rowContents = "";
+                }
+            }
+            if (rowContents != "") {
+                output += containerCallback(rowContents);
+            }
+
+            return output;
+        },
+
         table = table || (function () {
             'use strict';
 
@@ -1822,16 +1401,16 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function () {
                     let output = ``;
                     for (let i = 0; i < headers.length; i++) {
                         output += flextTableGroup(`${flexTableHeader(headers[i])}
-  ${flexTableData(data[i])}
-  `);
+                        ${flexTableData(data[i])}
+                        `);
                     }
                     return flexTable(output);
                 },
 
                 flexTable = function (contents) {
                     return `<div class="wuxFlexTable">
-  ${contents}
-  </div>`;
+                    ${contents}
+                    </div>`;
                 },
 
                 flextTableGroup = function (contents) {
@@ -1962,6 +1541,7 @@ var FormatCharacterSheetMain = FormatCharacterSheetMain || (function () {
         Desc: desc,
         Input: input,
         Select: select,
+        MultiRowGroup: multiRowGroup,
         Table: table,
         DistinctSection: distinctSection,
         InteractionElement: interactionElement
@@ -2058,7 +1638,7 @@ var FormatCharacterSheetNavigation = FormatCharacterSheetNavigation || (function
 
         buildTrainingPageNavigation = function (sheetName) {
             let mainContents = "";
-            mainContents += buildTabs(sheetName, "attr_tab-training", ["Knowledge", "Skills", "Training"]);
+            mainContents += buildTabs(sheetName, "attr_tab-training", ["Knowledge", "Training"]);
             mainContents += buildExitStickyButtons("attr_tab-training");
             mainContents += buildHeader("Training", sheetName);
 
@@ -2069,7 +1649,7 @@ var FormatCharacterSheetNavigation = FormatCharacterSheetNavigation || (function
 
         buildAdvancementPageNavigation = function (sheetName) {
             let mainContents = "";
-            mainContents += buildTabs(sheetName, "attr_tab-advancement", ["Attributes", "Jobs", "Advancement"]);
+            mainContents += buildTabs(sheetName, "attr_tab-advancement", ["Attributes", "Skills", "Jobs", "Advancement"]);
             mainContents += buildExitStickyButtons("attr_tab-advancement");
             mainContents += buildHeader("Advancement", sheetName);
 

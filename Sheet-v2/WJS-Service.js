@@ -330,7 +330,7 @@ function GetTechniqueDataArray(type, techniques) {
 }
 
 function SetTechniqueDataAugmentTechData(technique, baseTech) {
-	if (technique.augmentBase == "") {
+	if (technique.augment == "") {
 		return technique;
 	}
 
@@ -344,12 +344,12 @@ function SetTechniqueDataAugmentTechData(technique, baseTech) {
 function GetAugmentBaseDatabaseTechnique(technique) {
 	// grab the base technique
 	let newTechnique = {};
-	switch (technique.techniqueGroup) {
+	switch (technique.group) {
 		case "Ancestry":
-			newTechnique = GetAncestryTechniqueInfo(technique.augmentBase);
+			newTechnique = GetAncestryTechniqueInfo(technique.augment);
 			break;
 		default:
-			newTechnique = WuxingTechniques.Get(technique.augmentBase);
+			newTechnique = WuxingTechniques.Get(technique.augment);
 			break;
 	}
 	return newTechnique;
@@ -385,14 +385,14 @@ function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, i
 	update[GetSectionIdName(repeatingSection, id, "technique-isDatabase")] = isDatabase ? "1" : "0";
 	update[GetSectionIdName(repeatingSection, id, "technique-edit")] = "0";
 
-	let isBase = technique.augmentBase == "";
+	let isBase = technique.augment == "";
 	update[GetSectionIdName(repeatingSection, id, "technique-header")] = isBase || technique.isSpecAugment ? technique.action : "Augment";
 	update[GetSectionIdName(repeatingSection, id, "technique-name")] = technique.name;
 	update[GetSectionIdName(repeatingSection, id, "technique-isBase")] = isBase ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-augmentBase")] = technique.augmentBase;
-	update[GetSectionIdName(repeatingSection, id, "technique-displaygroup")] = technique.techniqueSource;
-	update[GetSectionIdName(repeatingSection, id, "technique-group")] = technique.techniqueGroup;
-	update[GetSectionIdName(repeatingSection, id, "technique-type")] = technique.techniqueType;
+	update[GetSectionIdName(repeatingSection, id, "technique-augment")] = technique.augment;
+	update[GetSectionIdName(repeatingSection, id, "technique-displaygroup")] = technique.group;
+	update[GetSectionIdName(repeatingSection, id, "technique-group")] = technique.group;
+	update[GetSectionIdName(repeatingSection, id, "technique-family")] = technique.family;
 	update[GetSectionIdName(repeatingSection, id, "technique-action")] = technique.action;
 	update[GetSectionIdName(repeatingSection, id, "technique-limits")] = technique.limits;
 
