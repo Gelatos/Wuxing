@@ -1,5 +1,7 @@
 function CreateCharacterSheet(definitionsArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
-    let sheetsDb = SheetsDatabase.CreateDatabaseCollection(skillsArray, languageArray, loreArray, jobsArray, rolesArray, definitionsArray, techniqueDatabaseString);
+    let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
+		skillsArray, languageArray, loreArray, jobsArray, rolesArray, definitionsArray, techniqueDatabaseString
+	);
 	return PrintLargeEntry(DisplayCharacterSheet.Print(sheetsDb));
 }
 
@@ -9,26 +11,40 @@ var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 	var
 		print = function (sheetsDb) {
 			let output = "";
+			output += buildCharacterSheetHtml(sheetsDb);
+			output += buildHiddenFields(sheetsDb);
+			output += buildSheetWorkerContainer(sheetsDb);
+			return output;
+		},
+
+		buildCharacterSheetHtml = function (sheetsDb) {
+			let output = "";
 			output += DisplayOriginSheet.Print(sheetsDb);
 			output += DisplayTrainingSheet.Print(sheetsDb);
 			output += DisplayAdvancementSheet.Print(sheetsDb);
 			output += DisplayTechniquesSheet.Print(sheetsDb);
-			return buildSheetContainer(output);
-		},
-
-		buildSheetContainer = function (contents) {
 			return `<div class="wuxCharacterSheet">
 			<input class="wuxCharacterSheetDisplayStyle-Flag" name="attr_characterSheetDisplayStyle" type="hidden" value="0">
-			${contents}
+			${output}
+			</div>`;
+		},
+		
+		buildHiddenFields = function (sheetsDb) {
+			let output = "";
+
+			return `<div class="wuxHiddenFields">
+			${output}
 			</div>`;
 		},
 
-		buildSheetWorkerContainer = function (contents) {
+		buildSheetWorkerContainer = function (sheetsDb) {
+			let output = "";
+
 			return `<script type="text/worker">
 			on("sheet:opened", function(eventinfo) {
 				on_sheet_opened();
 			});
-			${contents}
+			${output}
 			</script>`;
 		}
 		;

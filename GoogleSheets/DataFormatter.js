@@ -1184,6 +1184,94 @@ var WuxSheetBackend = WuxSheetBackend || (function () {
 }());
 
 
+class JavascriptDataClass {
+    constructor() {
+        this.variables = new Dictionary();
+        this.functions = new Dictionary();
+        this.publicData = new Dictionary();
+    }
+
+    addVariable(name, data) {
+        this.variables.add(name, data);
+    }
+
+    addFunction(name, data) {
+        this.functions.add(name, data);
+    }
+
+    addPublicData(name) {
+        this.publicData.add(Format.ToUpperCamelCase(name), name);
+    }
+
+    addDatabase(customDataNames, customData, defaultData) {
+        this.addVariable("database", FormatJsonForDatabase(this.createDatabase(customDataNames, customData)));
+
+        this.addFunction("get", `function(name) {
+            let data = database[name];
+            if (data == undefined) {
+                return ${defaultData};
+            }
+            return data;
+            }`
+        );
+        this.addPublicData("get");
+    }
+
+    createDatabase(customDataNames, customData) {
+        let database = {};
+        for(let i = 0; i < customData.length; i++) {
+            database[customDataNames[i]] = customData[i];
+        }
+        return database;
+    }
+
+    print (className) {
+        return `var ${className} = ${className} || (function() {
+            'use strict';
+
+            var 
+                ${this.printFormatVariables()}
+            ;
+            return {
+                ${this.printFormatPublicData()}
+            };
+        }());
+        `;
+    }
+
+    printFormatVariables() {
+        let variables = this.printFormatClassData(this.variables, " = ");
+        if (this.functions.keys.length > 0) {
+            if (variables != "") {
+                variables += `,
+                
+                `;
+            }
+            variables += this.printFormatClassData(this.functions, " = ");
+        }
+        return variables;
+    }
+
+    printFormatPublicData() {
+        return this.printFormatClassData(this.publicData, ": ");
+    }
+
+    printFormatClassData(dictionary, delimeter) {
+        let key = "";
+        let data = "";
+        for (let i = 0; i < dictionary.keys.length; i++) {
+          key = dictionary.keys[i];
+          if (data != "") {
+            data += `,
+            `;
+          }
+          data += `${key}${delimeter}${dictionary.get(key)}`;
+        }
+        return data;
+    }
+
+  }
+
 
 
 
