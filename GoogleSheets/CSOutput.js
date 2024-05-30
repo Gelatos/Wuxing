@@ -39,7 +39,9 @@ var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 
 		buildSheetWorkerContainer = function (sheetsDb) {
 			let output = "";
-
+			output += BuilderBackend.Print(sheetsDb);
+			output += TrainingBackend.Print(sheetsDb); 
+			output += AdvancementBackend.Print(sheetsDb); 
 			return `<script type="text/worker">
 			on("sheet:opened", function(eventinfo) {
 				on_sheet_opened();
@@ -122,8 +124,8 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 						buildAffinity = function (definitionsDatabase) {
 							let output = "";
 							let definition = definitionsDatabase.get("Affinity");
-							output += WuxDefinition.DisplayCollapsibleTitle(definition, definition.getVariable());
-							output += WuxSheetMain.Select(definition.getVariable(), definitionsDatabase.filter([new DatabaseFilterData("group", "Affinity")]));
+							output += WuxDefinition.DisplayCollapsibleTitle(definition, definition.getAttribute());
+							output += WuxSheetMain.Select(definition.getAttribute(), definitionsDatabase.filter([new DatabaseFilterData("group", "Affinity")]));
 							return output;
 						}
 
@@ -852,7 +854,86 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 	};
 }());
 
+var BuilderBackend = BuilderBackend || (function () {
+    'use strict';
 
+	var
+	    print = function (sheetsDb) {
+	        let output = "";
+	        return output;
+			
+		},
+		
+		buildCharacterCreation = buildCharacterCreation || (function () {
+		    'use strict';
+		    
+		    var
+		    build = function(sheetsDb) {
+		        let jsClassData = new JavascriptDataClass();
+		    }
+		    ;
+		    return {
+		        Build: build
+		    }
+	    }());
+	return {
+	    Print: print
+	}
+}())
+
+var TrainingBackend = TrainingBackend || (function () {
+    'use strict';
+
+	var
+	    print = function (sheetsDb) {
+	        let output = "";
+	        return output;
+			
+		},
+		
+		buildCharacterCreation = buildCharacterCreation || (function () {
+		    'use strict';
+		    
+		    var
+		    build = function(sheetsDb) {
+		        let jsClassData = new JavascriptDataClass();
+		    }
+		    ;
+		    return {
+		        Build: build
+		    }
+	    }());
+	return {
+	    Print: print
+	}
+}())
+
+var AdvancementBackend = AdvancementBackend || (function () {
+    'use strict';
+
+	var
+	    print = function (sheetsDb) {
+	        let output = "";
+	        return output;
+			
+		},
+		
+		buildJobs = buildJobs || (function () {
+		    'use strict';
+		    
+		    var
+		    build = function(sheetsDb) {
+		        let jsClassData = new JavascriptDataClass();
+		    }
+		    ;
+		    return {
+		        Build: build
+		    }
+	    }());
+	return {
+	    Print: print
+	}
+}())
 
 
 
