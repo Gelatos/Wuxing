@@ -567,8 +567,21 @@ class DefinitionData extends dbObj {
         this.formula = "";
     }
     
-    getVariable() {
-        return `attr_${this.variable}`;
+    getVariable(mod) {
+        if (mod == undefined) {
+            return this.variable
+        }
+        else if (Array.isArray(mod)) {
+            return this.variable.replace(/{(\d+)}/g, function(_,m) {
+                return mod[--m];
+            });
+        }
+        return this.variable.replace(/{(\d+)}/g, function(_,m) {
+            return mod;
+        });
+    }
+    getAttribute(mod) {
+        return `attr_${this.getVariable(mod)}`;
     }
 }
 class TemplateData extends dbObj {
