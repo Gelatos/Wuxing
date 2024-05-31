@@ -116,6 +116,7 @@ var WuxTechnique = WuxTechnique || (function () {
         getDisplayOptions = function () {
             return {
                 sectionName: "",
+                techniqueDefinition: {},
                 autoExpand: false,
                 hasCSS: false,
                 hasUseInteraction: false,
