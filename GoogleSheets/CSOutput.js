@@ -375,7 +375,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 		printJobs = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildAdvancementPageNavigation("Jobs") +
 				SideBarData.PrintJobs() +
-				MainContentData.PrintJobs(sheetsDb.job, sheetsDb.role, sheetsDb.techniques);
+				MainContentData.PrintJobs(sheetsDb.definitions, sheetsDb.job, sheetsDb.role, sheetsDb.techniques);
 			return WuxSheet.SetDisplayStyle("Jobs", output);
 		},
 
@@ -426,11 +426,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 			'use strict';
 
 			var
-				printJobs = function (jobsDictionary, rolesDictionary, techDictionary) {
+				printJobs = function (definitionDatabase, jobsDictionary, rolesDictionary, techDictionary) {
 					let contents = "";
 
 					contents += buildJobLevels.Build(jobsDictionary);
-					contents += buildJobs.Build(jobsDictionary, techDictionary);
+					contents += buildJobs.Build(definitionDatabase, jobsDictionary, techDictionary);
 					contents += buildRoles.Build(rolesDictionary, techDictionary);
 
 					return WuxSheetMain.Build(contents);
@@ -486,27 +486,28 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 					'use strict';
 
 					var
-						build = function (jobsDictionary, techDictionary) {
+						build = function (definitionDatabase, jobsDictionary, techDictionary) {
 							let output = "";
 							jobsDictionary.iterate(function (job) {
-								output += buildJob(job, techDictionary);
+								output += buildJob(job, techDictionary, definitionDatabase);
 							});
 							return WuxSheetMain.CollapsibleTab("advancement-JobInfo", "Jobs", output);
 						},
 
-						buildJob = function (job, techDictionary) {
+						buildJob = function (job, techDictionary, definitionDatabase) {
 							let fieldName = Format.ToCamelCase(job.name);
 							return WuxSheetMain.CollapsibleSection(
-								`advancement-${fieldName}`, job.name, buildJobContents(fieldName, job, techDictionary));
+								`advancement-${fieldName}`, job.name, buildJobContents(fieldName, job, techDictionary, definitionDatabase));
 						},
 
-						buildJobContents = function (fieldName, job, techDictionary) {
+						buildJobContents = function (fieldName, job, techDictionary, definitionDatabase) {
 							let output = "";
+							
 							output += WuxSheetMain.Desc(job.description);
 							output += buildJobContentsLevels(fieldName);
 							output += buildJobContentsRole(job);
 							output += buildJobContentsGrowths(job);
-							output += buildJobContentsTechniques(job, techDictionary);
+							output += buildJobContentsTechniques(job, techDictionary, definitionDatabase.get("Technique"));
 
 							return output;
 						},
@@ -533,13 +534,13 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						buildJobContentsTechniques = function (job, techDictionary) {
 							return `${WuxSheetMain.Header(`${job.name} Techniques`)}
 							${WuxSheetMain.Desc(`Job Techniques are learned when reaching the associated level.`)}
-							${buildJobContentsTechniquesData(job, techDictionary)}`;
+							${buildJobContentsTechniquesData(job, techDictionary, techniqueDefinition)}`;
 						},
 
-						buildJobContentsTechniquesData = function (job, techDictionary) {
+						buildJobContentsTechniquesData = function (job, techDictionary, techniqueDefinition) {
 							let output = "";
 							let technique = {};
-							let displayOptions = getDisplayOptions();
+							let displayOptions = getDisplayOptions(techniqueDefinition);
 							for (let i = 0; i < job.techniques.length; i++) {
 								technique = techDictionary.get(job.techniques[i].name);
 								if (technique != undefined) {
@@ -551,10 +552,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							return output;
 						},
 		
-						getDisplayOptions = function () {
+						getDisplayOptions = function (techniqueDefinition) {
 							var displayOptions = WuxTechnique.GetDisplayOptions();
 							displayOptions.categoryName = "job";
 							displayOptions.sectionName = `${displayOptions.categoryName}_techniques`;
+							displayOptions.techniqueDefinition = techniqueDefinition;
 							displayOptions.autoExpand = true;
 							displayOptions.hasCSS = true;
 							return displayOptions;
@@ -612,10 +614,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							return output;
 						},
 		
-						getDisplayOptions = function () {
+						getDisplayOptions = function (techniqueDefinition) {
 							var displayOptions = WuxTechnique.GetDisplayOptions();
 							displayOptions.categoryName = "job";
 							displayOptions.sectionName = `${displayOptions.categoryName}_techniques`;
+							displayOptions.techniqueDefinition = techniqueDefinition;
 							displayOptions.autoExpand = true;
 							displayOptions.hasCSS = true;
 							return displayOptions;
@@ -792,10 +795,11 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					return output;
 				},
 
-				getDisplayOptions = function () {
+				getDisplayOptions = function (techniqueDefinition) {
 					let displayOptions = WuxTechnique.GetDisplayOptions();
 					displayOptions.categoryName = "techniques";
 					displayOptions.sectionName = `${displayOptions.categoryName}_filteredTechniques`;
+					displayOptions.techniqueDefinition = techniqueDefinition;
 					displayOptions.hasCSS = true;
 					displayOptions.showSelect = true;
 					return displayOptions;
