@@ -147,7 +147,7 @@ var WuxTechnique = WuxTechnique || (function () {
 
             let prequel = "";
             if (displayOptions.showSelect) {
-                prequel = `<input type="hidden" class="wuxFeature-flag"name="attr_${displayOptions.sectionName}-select-${techDisplayData.fieldName}">`;
+                prequel = `<input type="hidden" class="wuxFeature-flag" name="${displayOptions.techniqueDefinition.getAttribute(techDisplayData.fieldName)}">`;
             }
 
             return `${prequel}<div ${setFeatureStyle("wuxFeature", displayOptions)}>${contents}</div>\n`;
@@ -203,10 +203,10 @@ var WuxTechnique = WuxTechnique || (function () {
             if (displayOptions.showSelect) {
                 return `
   <div class="wuxFeatureHeaderInteractBlock">
-  <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_${displayOptions.sectionName}-select-${techDisplayData.fieldName}">
-  <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_${displayOptions.sectionName}-select-${techDisplayData.fieldName}">
+  <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${displayOptions.techniqueDefinition.getAttribute(techDisplayData.fieldName)}">
+  <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${displayOptions.techniqueDefinition.getAttribute(techDisplayData.fieldName)}">
   <span class="wuxFeatureHeaderInteractiveIcon">&#9635;</span>
-  <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_${displayOptions.sectionName}-select-${techDisplayData.fieldName}">
+  <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${displayOptions.techniqueDefinition.getAttribute(techDisplayData.fieldName)}">
   <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9634;</span>
   </div>`;
             }

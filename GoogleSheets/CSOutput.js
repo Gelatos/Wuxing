@@ -157,7 +157,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 		printKnowledge = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildTrainingPageNavigation("Knowledge") +
 				SideBarData.PrintKnowledge() +
-				MainContentData.PrintKnowledge(sheetsDb.language, sheetsDb.lore);
+				MainContentData.PrintKnowledge(sheetsDb.definitions, sheetsDb.language, sheetsDb.lore);
 			return WuxSheet.SetDisplayStyle("Knowledge", output);
 		},
 
@@ -183,11 +183,11 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 			'use strict';
 
 			var
-				printKnowledge = function (languageDictionary, loreDictionary) {
-					let languageContents = buildLanguageData.Build(languageDictionary);
+				printKnowledge = function (definitionDatabase, languageDictionary, loreDictionary) {
+					let languageContents = buildLanguageData.Build(definitionDatabase, languageDictionary);
 					languageContents = WuxSheetMain.CollapsibleTab("training_language", "Languages", languageContents);
 
-					let loreContents = buildLoreData.Build(loreDictionary);
+					let loreContents = buildLoreData.Build(definitionDatabase, loreDictionary);
 					loreContents = WuxSheetMain.CollapsibleTab("training_lore", "Lore", loreContents);
 
 					return WuxSheetMain.Build(languageContents + loreContents);
@@ -197,15 +197,15 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 					'use strict';
 
 					var
-						build = function (database) {
+						build = function (definitionDatabase, database) {
 							return `<div class="wuxSectionBlock">
 								<div class="wuxSectionContent">
-									${WuxSheetMain.MultiRowGroup(buildGroups(database), WuxSheetMain.Table.FlexTable, 2)}
+									${WuxSheetMain.MultiRowGroup(buildGroups(definitionDatabase, database), WuxSheetMain.Table.FlexTable, 2)}
 								</div>
 							</div>`;
 						},
 
-						buildGroups = function (database) {
+						buildGroups = function (definitionDatabase, database) {
 							let output = [];
 							let groupName = "";
 							let filterSettings = [new DatabaseFilterData("group", "")];
@@ -215,34 +215,34 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 								groupName = languageGroups[i];
 								filterSettings[0].value = groupName;
 								filteredData = database.filter(filterSettings);
-								output.push(buildGroup(groupName, filteredData));
+								output.push(buildGroup(definitionDatabase, groupName, filteredData));
 							}
 							return output;
 						},
 
-						buildGroup = function (groupName, filteredData) {
+						buildGroup = function (definitionDatabase, groupName, filteredData) {
 							return `<div class="wuxFlexTableItemGroup wuxMinWidth200">
 								<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName} Languages</div>
 								<div class="wuxFlexTableItemData wuxTextLeft">
-									${buildLanguageGroupSkills(filteredData)}
+									${buildLanguageGroupSkills(definitionDatabase, filteredData)}
 								</div>
 							</div>`;
 						},
 
-						buildLanguageGroupSkills = function (filteredData) {
+						buildLanguageGroupSkills = function (definitionDatabase, filteredData) {
 							let output = "";
 							for (let i = 0; i < filteredData.length; i++) {
-								output += buildLanguage(filteredData[i]);
+								output += buildLanguage(definitionDatabase, filteredData[i]);
 							}
 							return output;
 						},
 
-						buildLanguage = function (knowledge) {
-							let fieldName = `attr_languages-training-${Format.ToCamelCase(knowledge.name)}`;
+						buildLanguage = function (definitionDatabase, knowledge) {
+							let fieldName = Format.ToCamelCase(knowledge.name);
 
-							return `${buildMainLanguage(knowledge, fieldName)}
-							${buildSubLanguage(fieldName + "_speak", "Speak")}
-							${buildSubLanguage(fieldName + "_readwrite", "Read / Write")}`;
+							return `${buildMainLanguage(knowledge, `attr_languages-training-${fieldName}`)}
+							${buildSubLanguage(definitionDatabase.get("Language").getAttribute(fieldName), "Speak")}
+							${buildSubLanguage(definitionDatabase.get("Read Language").getAttribute(fieldName), "Read / Write")}`;
 						},
 
 						buildMainLanguage = function (knowledge, fieldName) {
@@ -280,15 +280,15 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 					'use strict';
 
 					var
-						build = function (database) {
+						build = function (definitionDatabase, database) {
 							return `<div class="wuxSectionBlock">
 								<div class="wuxSectionContent">
-									${WuxSheetMain.MultiRowGroup(buildGroups(database), WuxSheetMain.Table.FlexTable, 2)}
+									${WuxSheetMain.MultiRowGroup(buildGroups(definitionDatabase, database), WuxSheetMain.Table.FlexTable, 2)}
 								</div>
 							</div>`;
 						},
 
-						buildGroups = function (database) {
+						buildGroups = function (definitionDatabase, database) {
 							let output = [];
 							let groupName = "";
 							let filterSettings = [new DatabaseFilterData("group", "")];
@@ -298,51 +298,51 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 								groupName = languageGroups[i];
 								filterSettings[0].value = groupName;
 								filteredData = database.filter(filterSettings);
-								output.push(buildGroup(groupName, filteredData));
+								output.push(buildGroup(definitionDatabase, groupName, filteredData));
 							}
 							return output;
 						},
 
-						buildGroup = function (groupName, filteredData) {
+						buildGroup = function (definitionDatabase, groupName, filteredData) {
 							return `<div class="wuxFlexTableItemGroup wuxMinWidth200">
 						<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName} Lore</div>
 						<div class="wuxFlexTableItemData wuxTextLeft">
-							${buildLoreGroupSkills(filteredData)}
+							${buildLoreGroupSkills(definitionDatabase, filteredData)}
 						</div>
 					</div>`;
 						},
 
-						buildLoreGroupSkills = function (knowledgeDataArray) {
+						buildLoreGroupSkills = function (definitionDatabase, knowledgeDataArray) {
 							let output = "";
 							for (let i = 0; i < knowledgeDataArray.length; i++) {
 								if (knowledgeDataArray[i].name == knowledgeDataArray[i].group) {
-									output += buildMainLore(knowledgeDataArray[i]);
+									output += buildMainLore(definitionDatabase, knowledgeDataArray[i]);
 								}
 								else {
-									output += buildSubLore(knowledgeDataArray[i]);
+									output += buildSubLore(definitionDatabase, knowledgeDataArray[i]);
 								}
 							}
 							return output;
 						},
 
-						buildLore = function (knowledge, interactHeader) {
-							let fieldName = `attr_lore-training-${Format.ToCamelCase(knowledge.name)}`;
-							let expandFieldName = `${fieldName}-expand`;
+						buildLore = function (knowledge, interactHeader, knowledgeDefinition) {
+							let fieldName = Format.ToCamelCase(knowledge.name);
+							let expandFieldName = `attr_lore-training-${fieldName}-expand`;
 							let expandContents = `<div class="wuxDescription">${knowledge.description}</div>`;
 
 							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
-					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(fieldName, interactHeader)}
+					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(knowledgeDefinition.getAttribute(fieldName), interactHeader)}
 					${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
 
 							return WuxSheetMain.InteractionElement.Build(true, output);
 						},
 
-						buildMainLore = function (knowledge) {
-							return buildLore(knowledge, `<span class="wuxHeader">General ${knowledge.name}</span>`);
+						buildMainLore = function (definitionDatabase, knowledge) {
+							return buildLore(knowledge, `<span class="wuxHeader">General ${knowledge.name}</span>`, definitionDatabase.get("Lore Rank"));
 						},
 
-						buildSubLore = function (knowledge) {
-							return buildLore(knowledge, `<span class="wuxSubheader">${knowledge.name}</span>`);
+						buildSubLore = function (definitionDatabase, knowledge) {
+							return buildLore(knowledge, `<span class="wuxSubheader">${knowledge.name}</span>`, definitionDatabase.get("Lore Rank"));
 						}
 
 					return {
@@ -429,9 +429,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 				printJobs = function (definitionDatabase, jobsDictionary, rolesDictionary, techDictionary) {
 					let contents = "";
 
-					contents += buildJobLevels.Build(jobsDictionary);
+					contents += buildJobLevels.Build(definitionDatabase, jobsDictionary);
 					contents += buildJobs.Build(definitionDatabase, jobsDictionary, techDictionary);
-					contents += buildRoles.Build(rolesDictionary, techDictionary);
+					contents += buildRoles.Build(definitionDatabase, rolesDictionary, techDictionary);
 
 					return WuxSheetMain.Build(contents);
 				},
@@ -452,26 +452,26 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 					'use strict';
 
 					var
-						build = function (jobsDictionary) {
+						build = function (definitionDatabase, jobsDictionary) {
 							let output = "";
-							output = buildJobLevels(jobsDictionary);
+							output = buildJobLevels(jobsDictionary, definitionDatabase.get("Job"));
 							return WuxSheetMain.CollapsibleTab(
 								`advancement-jobLevels`, "Job Levels", output);
 						},
 
-						buildJobLevels = function (jobsDictionary) {
+						buildJobLevels = function (jobsDictionary, jobDefinition) {
 							let output = "";
 							jobsDictionary.iterate(function (job) {
-								output += buildJobLevel(job);
+								output += buildJobLevel(job, jobDefinition);
 							});
 							return `<div class="wuxSectionContent wuxFlexTable">
 						  ${output}
 						</div>`;
 						},
 
-						buildJobLevel = function (job) {
+						buildJobLevel = function (job, jobDefinition) {
 							let fieldName = Format.ToCamelCase(job.name);
-							let output = WuxSheetMain.DistinctSection.InputField(job.name, "number", `attr_advancement-level-${fieldName}`, "0");
+							let output = WuxSheetMain.DistinctSection.InputField(job.name, "number", jobDefinition.getAttribute(fieldName), "0");
 							output = WuxSheetMain.DistinctSection.Build(output);
 							output = `<div class="wuxFlexTableItemGroup wuxMinWidth200">${output}</div>`;
 							return output;
@@ -571,38 +571,38 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 					'use strict';
 
 					var
-						build = function (rolesDictionary, techDictionary) {
+						build = function (definitionDatabase, rolesDictionary, techDictionary) {
 							let output = "";
 							rolesDictionary.iterate(function (role) {
-								output += buildRole(role, techDictionary);
+								output += buildRole(role, techDictionary, definitionDatabase);
 							});
 							return WuxSheetMain.CollapsibleTab("advancement-RoleInfo", "Roles", output);
 						},
 
-						buildRole = function (role, techDictionary) {
+						buildRole = function (role, techDictionary, definitionDatabase) {
 							let fieldName = Format.ToCamelCase(role.name);
 							return WuxSheetMain.CollapsibleSection(
-								`advancement-${fieldName}`, role.name, buildRoleContents(role, techDictionary));
+								`advancement-${fieldName}`, role.name, buildRoleContents(role, techDictionary, definitionDatabase.get("Technique")));
 						},
 
-						buildRoleContents = function (role, techDictionary) {
+						buildRoleContents = function (role, techDictionary, techniqueDefinition) {
 							let output = "";
 							output += WuxSheetMain.Desc(role.description);
-							output += buildRoleContentsTechniques(role, techDictionary);
+							output += buildRoleContentsTechniques(role, techDictionary, techniqueDefinition);
 
 							return output;
 						},
 
-						buildRoleContentsTechniques = function (role, techDictionary) {
+						buildRoleContentsTechniques = function (role, techDictionary, techniqueDefinition) {
 							return `${WuxSheetMain.Header(`${role.name} Techniques`)}
 							${WuxSheetMain.Desc(`Role Techniques are learned when reaching the associated level in the role.`)}
-							${buildRoleContentsTechniquesData(role, techDictionary)}`;
+							${buildRoleContentsTechniquesData(role, techDictionary, techniqueDefinition)}`;
 						},
 
-						buildRoleContentsTechniquesData = function (role, techDictionary) {
+						buildRoleContentsTechniquesData = function (role, techDictionary, techniqueDefinition) {
 							let output = "";
 							let technique = {};
-							let displayOptions = getDisplayOptions();
+							let displayOptions = getDisplayOptions(techniqueDefinition);
 							for (let i = 0; i < role.techniques.length; i++) {
 								technique = techDictionary.get(role.techniques[i].name);
 								if (technique != undefined) {
@@ -753,7 +753,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 		print = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildTechniquesNavigation() +
 				SideBarData.Print() +
-				MainContentData.Print(sheetsDb.techniques);
+				MainContentData.Print(sheetsDb.definitions, sheetsDb.techniques);
 			return WuxSheet.SetDisplayStyle("Techniques", output);
 		},
 
@@ -780,13 +780,13 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 			var
 
-				print = function (techniqueDatabase) {
+				print = function (definitionDatabase, techniqueDatabase) {
 
-					return WuxSheetMain.Build(buildTechniquesByGroup(techniqueDatabase));
+					return WuxSheetMain.Build(buildTechniquesByGroup(techniqueDatabase, definitionDatabase.get("Technique")));
 				},
 
-				buildTechniquesByGroup = function (techniqueDatabase) {
-					let displayOptions = getDisplayOptions();
+				buildTechniquesByGroup = function (techniqueDatabase, techniqueDefinition) {
+					let displayOptions = getDisplayOptions(techniqueDefinition);
 					let output = "";
 					output += buildStandardTechniqueGroup(techniqueDatabase, "Item", displayOptions);
 					output += buildStandardTechniqueGroup(techniqueDatabase, "Active", displayOptions);
