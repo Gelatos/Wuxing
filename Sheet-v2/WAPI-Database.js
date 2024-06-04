@@ -705,7 +705,7 @@ var FeatureService = FeatureService || (function () {
 
             techDisplayData.isFunctionBlock = technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.item != "";
             if (techDisplayData.isFunctionBlock) {
-                techDisplayData.traits = DefinitionDatabase.GetValues(technique.traits);
+                techDisplayData.traits = WuxDef.GetValues(technique.traits);
                 techDisplayData.requirement = techDisplayData.requirement;
                 techDisplayData.item = techDisplayData.item;
                 techDisplayData.trigger = technique.trigger;
@@ -771,7 +771,7 @@ var FeatureService = FeatureService || (function () {
             let status = {};
             let description = "";
             for (let i = 0; i < actionEffects.states.length; i++) {
-                status = DefinitionDatabase.GetValues(actionEffects.states[i].name);
+                status = WuxDef.GetValues(actionEffects.states[i].name);
                 description = "";
                 for (let j = 0; j < status.description.length; j++) {
                     description += `${status.description[j]}\n`;
@@ -782,7 +782,7 @@ var FeatureService = FeatureService || (function () {
                 output += `[State: ${status.name}] ${description}`;
             }
             for (let i = 0; i < actionEffects.conditions.length; i++) {
-                status = DefinitionDatabase.GetValues(actionEffects.conditions[i].name);
+                status = WuxDef.GetValues(actionEffects.conditions[i].name);
                 description = "";
                 for (let j = 0; j < status.description.length; j++) {
                     description += `${status.description[j]}\n`;
@@ -1021,8 +1021,8 @@ var ItemHandler = ItemHandler || (function () {
             let output = "";
             output += `{{WpnName=${itemData.name}}} `;
 
-            output += FeatureService.RollTemplateTraits(DefinitionDatabase.Get(itemData.traits), "WpnTrait");
-            output += FeatureService.RollTemplateTraits(DefinitionDatabase.Get(itemData.abilities), "WpnAbility");
+            output += FeatureService.RollTemplateTraits(WuxDef.Get(itemData.traits), "WpnTrait");
+            output += FeatureService.RollTemplateTraits(WuxDef.Get(itemData.abilities), "WpnAbility");
 
             if (itemData.range != "") {
                 output += `{{WpnRange=${itemData.range}}} `;
