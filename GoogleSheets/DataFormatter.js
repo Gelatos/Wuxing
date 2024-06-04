@@ -4,6 +4,17 @@ function SetTechniquesDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, a
     return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
 }
 
+function SetDefinitionsDatabase(arr0) {
+    let definitionDatabase = SheetsDatabase.CreateDefinitions(arr0);
+    let jsClassData = JavascriptDatabase.Create(definitionDatabase);
+    return PrintLargeEntry(jsClassData.print("DefinitionDatabase"), "d");
+}
+
+function Test() {
+    var data = DefinitionDatabase.GetValues("Accurate");
+    return JSON.stringify(data);
+}
+
 function ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
     if (arr1 != undefined) {
         arr0 = arr0.concat(arr1);
@@ -92,7 +103,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createDefinitions = function (arr) {
-            return new DefinitionDatabase(["group"], arr, function (arr) {
+            return new ExtendedDescriptionDatabase(["group"], arr, function (arr) {
                 return new DefinitionData(arr);
             });
         }
@@ -314,15 +325,20 @@ var WuxTechnique = WuxTechnique || (function () {
         setTechniqueDisplayFunctionBlockTraits = function (techDisplayData, displayOptions) {
             if (techDisplayData.traits.length > 0) {
                 let traitsData = "";
+                let description = "";
                 for (var i = 0; i < techDisplayData.traits.length; i++) {
+                    description = "";
+                    for (let j = 0; j < techDisplayData.traits[i].description.length; j++) {
+                        description += techDisplayData.traits[i].description[j] + " ";
+                    }
                     if (displayOptions.hasCSS) {
                         traitsData += `<div class="wuxTrait">
   <span class="wuxTraitText">${techDisplayData.traits[i].name}</span>
-  <span class="wuxTooltiptext">${techDisplayData.traits[i].description}</span>
+  <span class="wuxTooltiptext">${description}</span>
   </div>`;
                     }
                     else {
-                        traitsData += `<a style="margin-right: 10px; text-decoration: underline dotted;" title="${techDisplayData.traits[i].description}">${techDisplayData.traits[i].name}</a>`;
+                        traitsData += `<a style="margin-right: 10px; text-decoration: underline dotted;" title="${description}">${techDisplayData.traits[i].name}</a>`;
                     }
                 }
                 return `<div ${setFeatureStyle("wuxFeatureFunctionBlockRow", displayOptions)}>
@@ -1226,6 +1242,13 @@ class JavascriptDataClass {
         return database;
     }
 
+    formatJsonForDatabase(data) {
+        let json = JSON.stringify(data);
+        json = json.replace(/(},|],)/g, '$1\n');
+        return json;
+    }
+      
+
     print (className) {
         return `var ${className} = ${className} || (function() {
             'use strict';
@@ -1270,9 +1293,112 @@ class JavascriptDataClass {
         }
         return data;
     }
+}
 
-  }
+var JavascriptDatabase = JavascriptDatabase || (function () {
+    'use strict';
 
+    var
+        create = function(database) {
+            var jsClassData = new JavascriptDataClass();
+            jsClassData.addVariable("keys", JSON.stringify(database.keys));
+            jsClassData.addVariable("values", jsClassData.formatJsonForDatabase(database.values));
+            jsClassData.addVariable("sortingGroups", JSON.stringify(database.sortingGroups));
+            jsClassData.addFunction("get", get);
+            jsClassData.addFunction("getValues", getValues);
+            jsClassData.addFunction("has", has);
+            jsClassData.addFunction("iterate", iterate);
+            jsClassData.addFunction("filter", filter);
+            jsClassData.addFunction("getSortedGroup", getSortedGroup);
+            jsClassData.addFunction("getGroupData", getGroupData);
+            jsClassData.addFunction("getPropertyValues", getPropertyValues);
+            jsClassData.addPublicData("get");
+            jsClassData.addPublicData("getValues");
+            jsClassData.addPublicData("has");
+            jsClassData.addPublicData("iterate");
+            jsClassData.addPublicData("filter");
+            jsClassData.addPublicData("getSortedGroup");
+            return jsClassData;
+        },
+
+        get = function(key) {
+            return values[key];
+        },
+        getValues = function (keyArray, delimeter) {
+			if (keyArray == undefined || keyArray == "") {
+				return [];
+			}
+			if (typeof keyArray == "string") {
+				keyArray = keyArray.split(delimeter);
+			}
+
+			let output = [];
+            let name = "";
+            let lookup = "";
+            let dataInfo;
+
+            for (let i = 0; i < keyArray.length; i++) {
+                name = "" + keyArray[i].trim();
+
+                lookup = name;
+                if (lookup.indexOf("(") >= 0) {
+                    lookup = lookup.replace(/\([^)]*\)/g, "(X)");
+                }
+
+                dataInfo = get(lookup);
+				if (dataInfo != undefined) {
+					dataInfo.name = name;
+					output.push(dataInfo);
+				}
+            }
+            
+			return output;
+		},
+        has = function(key) {
+            return keys.includes(key);
+        },
+        iterate = function(callback) {
+            for (let i = 0; i < keys.length; i++) {
+                callback(values[keys[i]]);
+            }
+        },
+        filter = function(filterData) {
+            let filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
+            let filters = [];
+            for (let i = 1; i < filterData.length; i++) {
+                filters = getSortedGroup(filterData[i].property, filterData[i].value);
+                filteredGroup = filteredGroup.filter(item => filters.includes(item))
+            }
+            if (filteredGroup == undefined || filteredGroup.length == 0) {
+                return [];
+            }
+            return getGroupData(filteredGroup);
+        },
+
+        getSortedGroup = function(property, propertyValue) {
+            return sortingGroups[property][propertyValue];
+        },
+
+        getGroupData = function(group) {
+            let output = [];
+            for (let i = 0; i < group.length; i++) {
+                output.push(get(group[i]));
+            }
+            return output;
+        },
+
+        getPropertyValues = function(property) {
+            let output = [];
+            for (let key in sortingGroups[property]) {
+                output.push(key);
+            }
+            return output;
+        }
+        ;
+    return {
+        Create: create
+    };
+}());
 
 
 

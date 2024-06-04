@@ -114,7 +114,7 @@ class Database extends Dictionary {
         return output;
     }
 }
-class DefinitionDatabase extends Database {
+class ExtendedDescriptionDatabase extends Database {
     importSheets(dataArray, dataCreationCallback) {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
@@ -160,7 +160,7 @@ class TechniqueData extends dbObj {
         this.augment = json.augment;
         this.group = json.group;
         this.category = json.category;
-        this.family = json.family;
+        this.tier = json.tier;
         this.action = json.action;
         this.traits = json.traits;
         this.limits = json.limits;
@@ -196,7 +196,7 @@ class TechniqueData extends dbObj {
         this.augment = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
         this.category = "" + dataArray[i]; i++;
-        this.family = "" + dataArray[i]; i++;
+        this.tier = "" + dataArray[i]; i++;
         this.action = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
         this.limits = "" + dataArray[i]; i++;
@@ -230,7 +230,7 @@ class TechniqueData extends dbObj {
         this.augment = "";
         this.group = "";
         this.category = "";
-        this.family = "";
+        this.tier = "";
         this.action = "";
         this.traits = "";
         this.limits = "";
@@ -288,7 +288,7 @@ class TechniqueData extends dbObj {
         if (this.name == "") {
             return baseTechnique;
         }
-        this.family = this.setAugmentTechValue(this.family, baseTechnique.family);
+        this.tier = this.setAugmentTechValue(this.tier, baseTechnique.tier);
         this.action = this.setAugmentTechValue(this.action, baseTechnique.action);
         this.traits = this.setAugmentTechValue(this.traits, baseTechnique.traits);
         this.limits = this.setAugmentTechValue(this.limits, baseTechnique.limits);
@@ -693,7 +693,7 @@ var FeatureService = FeatureService || (function () {
 
         setTechniqueDisplayDataSlotData = function (techDisplayData, technique) {
             techDisplayData.slotType = technique.group;
-            techDisplayData.slotIsPath = technique.family == "Free";
+            techDisplayData.slotIsPath = technique.tier == "Free";
             techDisplayData.slotFooter = `${technique.group}`;
             techDisplayData.slotSource = technique.group;
 
@@ -705,7 +705,7 @@ var FeatureService = FeatureService || (function () {
 
             techDisplayData.isFunctionBlock = technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.item != "";
             if (techDisplayData.isFunctionBlock) {
-                techDisplayData.traits = WuxingTraits.GetData(technique.traits);
+                techDisplayData.traits = DefinitionDatabase.GetValues(technique.traits);
                 techDisplayData.requirement = techDisplayData.requirement;
                 techDisplayData.item = techDisplayData.item;
                 techDisplayData.trigger = technique.trigger;
@@ -769,19 +769,28 @@ var FeatureService = FeatureService || (function () {
             let output = "";
 
             let status = {};
+            let description = "";
             for (let i = 0; i < actionEffects.states.length; i++) {
-                status = WuxingStatus.Get(actionEffects.states[i].name);
+                status = DefinitionDatabase.GetValues(actionEffects.states[i].name);
+                description = "";
+                for (let j = 0; j < status.description.length; j++) {
+                    description += `${status.description[j]}\n`;
+                }
                 if (output != "") {
                     output += "\n";
                 }
-                output += `[State: ${status.name}] ${status.description}`;
+                output += `[State: ${status.name}] ${description}`;
             }
             for (let i = 0; i < actionEffects.conditions.length; i++) {
-                status = WuxingStatus.Get(actionEffects.conditions[i].name);
+                status = DefinitionDatabase.GetValues(actionEffects.conditions[i].name);
+                description = "";
+                for (let j = 0; j < status.description.length; j++) {
+                    description += `${status.description[j]}\n`;
+                }
                 if (output != "") {
                     output += "\n";
                 }
-                output += `[Condition: ${status.name}] ${status.description}`;
+                output += `[Condition: ${status.name}] ${description}`;
             }
 
             techDisplayData.conditions = output;
@@ -1012,8 +1021,8 @@ var ItemHandler = ItemHandler || (function () {
             let output = "";
             output += `{{WpnName=${itemData.name}}} `;
 
-            output += FeatureService.RollTemplateTraits(WuxingTraits.GetData(itemData.traits), "WpnTrait");
-            output += FeatureService.RollTemplateTraits(WuxingTraits.GetData(itemData.abilities), "WpnAbility");
+            output += FeatureService.RollTemplateTraits(DefinitionDatabase.Get(itemData.traits), "WpnTrait");
+            output += FeatureService.RollTemplateTraits(DefinitionDatabase.Get(itemData.abilities), "WpnAbility");
 
             if (itemData.range != "") {
                 output += `{{WpnRange=${itemData.range}}} `;

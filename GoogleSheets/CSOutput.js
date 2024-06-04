@@ -531,7 +531,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							${WuxSheetMain.Table.Build(job.attributes.getAttributeAbrNames(), job.attributes.convertAttributesToArr())}`;
 						},
 
-						buildJobContentsTechniques = function (job, techDictionary) {
+						buildJobContentsTechniques = function (job, techDictionary, techniqueDefinition) {
 							return `${WuxSheetMain.Header(`${job.name} Techniques`)}
 							${WuxSheetMain.Desc(`Job Techniques are learned when reaching the associated level.`)}
 							${buildJobContentsTechniquesData(job, techDictionary, techniqueDefinition)}`;
