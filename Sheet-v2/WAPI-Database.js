@@ -160,7 +160,7 @@ class TechniqueData extends dbObj {
         this.augment = json.augment;
         this.group = json.group;
         this.category = json.category;
-        this.tier = json.tier;
+        this.acquisition = json.acquisition;
         this.action = json.action;
         this.traits = json.traits;
         this.limits = json.limits;
@@ -196,7 +196,7 @@ class TechniqueData extends dbObj {
         this.augment = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
         this.category = "" + dataArray[i]; i++;
-        this.tier = "" + dataArray[i]; i++;
+        this.acquisition = "" + dataArray[i]; i++;
         this.action = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
         this.limits = "" + dataArray[i]; i++;
@@ -230,7 +230,7 @@ class TechniqueData extends dbObj {
         this.augment = "";
         this.group = "";
         this.category = "";
-        this.tier = "";
+        this.acquisition = "";
         this.action = "";
         this.traits = "";
         this.limits = "";
@@ -288,7 +288,7 @@ class TechniqueData extends dbObj {
         if (this.name == "") {
             return baseTechnique;
         }
-        this.tier = this.setAugmentTechValue(this.tier, baseTechnique.tier);
+        this.acquisition = this.setAugmentTechValue(this.acquisition, baseTechnique.acquisition);
         this.action = this.setAugmentTechValue(this.action, baseTechnique.action);
         this.traits = this.setAugmentTechValue(this.traits, baseTechnique.traits);
         this.limits = this.setAugmentTechValue(this.limits, baseTechnique.limits);
@@ -693,7 +693,7 @@ var FeatureService = FeatureService || (function () {
 
         setTechniqueDisplayDataSlotData = function (techDisplayData, technique) {
             techDisplayData.slotType = technique.group;
-            techDisplayData.slotIsPath = technique.tier == "Free";
+            techDisplayData.slotIsPath = technique.acquisition == "Free";
             techDisplayData.slotFooter = `${technique.group}`;
             techDisplayData.slotSource = technique.group;
 
