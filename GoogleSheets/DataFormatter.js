@@ -7,7 +7,7 @@ function SetTechniquesDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, a
 function SetDefinitionsDatabase(arr0) {
     let definitionDatabase = SheetsDatabase.CreateDefinitions(arr0);
     let jsClassData = JavascriptDatabase.Create(definitionDatabase);
-    return PrintLargeEntry(jsClassData.print("DefinitionDatabase"), "d");
+    return PrintLargeEntry(jsClassData.print("WuxDef"), "d");
 }
 
 function Test() {
@@ -50,7 +50,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
     'use strict';
 
     var
-        createDatabaseCollection = function (skillsArray, languageArray, loreArray, jobsArray, rolesArray, definitionsArray, techniqueDatabaseString) {
+        createDatabaseCollection = function (skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
 
             let techDb = new Database([""]);
             techDb.importStringifiedJson(techniqueDatabaseString);
@@ -60,8 +60,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
                 language: createLanguages(languageArray),
                 lore: createLores(loreArray),
                 job: createJobs(jobsArray),
-                role: createRoles(rolesArray),
-                definitions: createDefinitions(definitionsArray)
+                role: createRoles(rolesArray)
             }
         },
 
