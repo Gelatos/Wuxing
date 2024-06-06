@@ -6,7 +6,11 @@ function SetTechniquesDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, a
 
 function SetDefinitionsDatabase(arr0) {
     let definitionDatabase = SheetsDatabase.CreateDefinitions(arr0);
-    let jsClassData = JavascriptDatabase.Create(definitionDatabase);
+    let jsClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.Get);
+    jsClassData.addFunction("getAttribute", WuxDefinition.GetAttribute);
+    jsClassData.addFunction("getVariable", WuxDefinition.GetVariable);
+    jsClassData.addPublicData("getAttribute");
+    jsClassData.addPublicData("getVariable");
     return PrintLargeEntry(jsClassData.print("WuxDef"), "d");
 }
 
@@ -327,8 +331,8 @@ var WuxTechnique = WuxTechnique || (function () {
                 let description = "";
                 for (var i = 0; i < techDisplayData.traits.length; i++) {
                     description = "";
-                    for (let j = 0; j < techDisplayData.traits[i].description.length; j++) {
-                        description += techDisplayData.traits[i].description[j] + " ";
+                    for (let j = 0; j < techDisplayData.traits[i].descriptions.length; j++) {
+                        description += techDisplayData.traits[i].descriptions[j] + " ";
                     }
                     if (displayOptions.hasCSS) {
                         traitsData += `<div class="wuxTrait">
@@ -630,6 +634,17 @@ var WuxDefinition = WuxDefinition || (function () {
     'use strict';
 
     var
+        get = function (key) {
+            return new DefinitionData(values[key]);
+        },
+        getAttribute = function (key, mod) {
+            let data = get(key);
+            return data.getAttribute(mod);
+        },
+        getVariable = function (key, mod) {
+            let data = get(key);
+            return data.getVariable(mod);
+        },
 
         displayEntry = function (dictionary, key) {
             let output = "";
@@ -644,10 +659,15 @@ var WuxDefinition = WuxDefinition || (function () {
         },
 
         displayCollapsibleTitle = function (definitionData, fieldName) {
+            if (definitionData == undefined) {
+                return "";
+            }
             let expandContents = "";
             let entryData = definitionData.descriptions;
-            for (let i = 0; i < entryData.length; i++) {
-                expandContents += "\n" + WuxSheetMain.Desc(entryData[i]);
+            if (Array.isArray(entryData)) {
+                for (let i = 0; i < entryData.length; i++) {
+                    expandContents += "\n" + WuxSheetMain.Desc(entryData[i]);
+                }
             }
 
             let expandFieldName = `${fieldName}-expand`;
@@ -660,6 +680,9 @@ var WuxDefinition = WuxDefinition || (function () {
         }
         ;
     return {
+        Get: get,
+        GetAttribute: getAttribute,
+        GetVariable: getVariable,
         DisplayEntry: displayEntry,
         DisplayCollapsibleTitle: displayCollapsibleTitle
     }
@@ -1298,12 +1321,12 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
     'use strict';
 
     var
-        create = function(database) {
+        create = function(database, getFunction) {
             var jsClassData = new JavascriptDataClass();
             jsClassData.addVariable("keys", JSON.stringify(database.keys));
             jsClassData.addVariable("values", jsClassData.formatJsonForDatabase(database.values));
             jsClassData.addVariable("sortingGroups", JSON.stringify(database.sortingGroups));
-            jsClassData.addFunction("get", get);
+            jsClassData.addFunction("get", getFunction);
             jsClassData.addFunction("getValues", getValues);
             jsClassData.addFunction("has", has);
             jsClassData.addFunction("iterate", iterate);
@@ -1318,10 +1341,6 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             jsClassData.addPublicData("filter");
             jsClassData.addPublicData("getSortedGroup");
             return jsClassData;
-        },
-
-        get = function(key) {
-            return values[key];
         },
         getValues = function (keyArray, delimeter) {
 			if (keyArray == undefined || keyArray == "") {

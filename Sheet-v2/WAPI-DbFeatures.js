@@ -1,9 +1,8 @@
-// ======== Shared Features
-var DefinitionDatabase = DefinitionDatabase || (function () {
+var WuxDef = WuxDef || (function () {
 	'use strict';
 
 	var
-		keys = ["Attribute", "Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason", "Body Tier", "Precision Tier", "Quickness Tier", "Conviction Tier", "Intuition Tier", "Reason Tier", "Skill", "Skill Rank", "Job", "Language", "Read Language", "Lore", "Lore Rank", "Technique", "Defense", "Brace", "Fortitude", "Evasion", "BR", "DR", "DB", "Sense", "Insight", "Perception", "Resolve", "General", "Character Level", "Proficiency", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed", "Affinity", "Wood", "Fire", "Earth", "Metal", "Water", "Gear", "Carrying Capacity", "Reflex Penalty", "Speed Penalty", "Combat", "Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce", "Social", "Scrutiny", "Willpower", "Approval", "Patience", "Tech Slot", "Job Slots", "Item Slots", "Active Slots", "Support Slots", "Character Creator", "Origin", "Full Name", "Display Name", "Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall", "Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)", "Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent", "Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious", "Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"],
+		keys = ["Attribute", "Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason", "Skill", "Job", "Language", "Lore", "Technique", "Defense", "Brace", "Evasion", "Fortitude", "Guard", "Reflex", "Sense", "Insight", "Perception", "Resolve", "General", "Character Level", "Proficiency", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed", "Affinity", "Wood", "Fire", "Earth", "Metal", "Water", "Gear", "Carrying Capacity", "Reflex Penalty", "Speed Penalty", "Combat", "Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce", "Social", "Scrutiny", "Willpower", "Approval", "Patience", "Tech Slot", "Job Slots", "Item Slots", "Active Slots", "Support Slots", "Character Creator", "Origin", "Full Name", "Display Name", "Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall", "Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)", "Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent", "Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious", "Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"],
 		values = {
 			"Attribute": {
 				"name": "Attribute", "group": "Type", "descriptions": ["Attributes are the inherent characteristics of your character. Characters have a numerical rating for each attribute, which determines the modifier they grant to skills and helps affect their derived stats. "],
@@ -11,79 +10,43 @@ var DefinitionDatabase = DefinitionDatabase || (function () {
 			},
 			"Body": {
 				"name": "Body", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "BOD", "variable": "bod", "formula": ""
+				"abbreviation": "BOD", "variable": "bod{0}", "formula": ""
 			},
 			"Precision": {
 				"name": "Precision", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "PRC", "variable": "prc", "formula": ""
+				"abbreviation": "PRC", "variable": "prc{0}", "formula": ""
 			},
 			"Quickness": {
 				"name": "Quickness", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "QCK", "variable": "qck", "formula": ""
+				"abbreviation": "QCK", "variable": "qck{0}", "formula": ""
 			},
 			"Conviction": {
 				"name": "Conviction", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "CNV", "variable": "cnv", "formula": ""
+				"abbreviation": "CNV", "variable": "cnv{0}", "formula": ""
 			},
 			"Intuition ": {
 				"name": "Intuition ", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "INT", "variable": "int", "formula": ""
+				"abbreviation": "INT", "variable": "int{0}", "formula": ""
 			},
 			"Reason": {
 				"name": "Reason", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "RSN", "variable": "rsn", "formula": ""
-			},
-			"Body Tier": {
-				"name": "Body Tier", "group": "AttributeMod", "descriptions": [""],
-				"abbreviation": "", "variable": "bodTier", "formula": ""
-			},
-			"Precision Tier": {
-				"name": "Precision Tier", "group": "AttributeMod", "descriptions": [""],
-				"abbreviation": "", "variable": "prcTier", "formula": ""
-			},
-			"Quickness Tier": {
-				"name": "Quickness Tier", "group": "AttributeMod", "descriptions": [""],
-				"abbreviation": "", "variable": "qckTier", "formula": ""
-			},
-			"Conviction Tier": {
-				"name": "Conviction Tier", "group": "AttributeMod", "descriptions": [""],
-				"abbreviation": "", "variable": "cnvTier", "formula": ""
-			},
-			"Intuition Tier": {
-				"name": "Intuition Tier", "group": "AttributeMod", "descriptions": [""],
-				"abbreviation": "", "variable": "intTier", "formula": ""
-			},
-			"Reason Tier": {
-				"name": "Reason Tier", "group": "AttributeMod", "descriptions": [""],
-				"abbreviation": "", "variable": "rsnTier", "formula": ""
+				"abbreviation": "RSN", "variable": "rsn{0}", "formula": ""
 			},
 			"Skill": {
 				"name": "Skill", "group": "Stat", "descriptions": [""],
-				"abbreviation": "", "variable": "skill_{0}", "formula": ""
-			},
-			"Skill Rank": {
-				"name": "Skill Rank", "group": "Stat", "descriptions": [""],
-				"abbreviation": "", "variable": "skill_{0}_rank", "formula": ""
+				"abbreviation": "", "variable": "skill_{0}{1}", "formula": ""
 			},
 			"Job": {
 				"name": "Job", "group": "Stat", "descriptions": [""],
-				"abbreviation": "", "variable": "job_{0}", "formula": ""
+				"abbreviation": "", "variable": "job_{0}{1}", "formula": ""
 			},
 			"Language": {
 				"name": "Language", "group": "Stat", "descriptions": [""],
-				"abbreviation": "", "variable": "language_{0}", "formula": ""
-			},
-			"Read Language": {
-				"name": "Read Language", "group": "Stat", "descriptions": [""],
-				"abbreviation": "", "variable": "language_{0}_read", "formula": ""
+				"abbreviation": "", "variable": "language_{0}{1}", "formula": ""
 			},
 			"Lore": {
 				"name": "Lore", "group": "Stat", "descriptions": [""],
-				"abbreviation": "", "variable": "lore_{0}", "formula": ""
-			},
-			"Lore Rank": {
-				"name": "Lore Rank", "group": "Stat", "descriptions": [""],
-				"abbreviation": "", "variable": "lore_{0}_rank", "formula": ""
+				"abbreviation": "", "variable": "lore_{0}{1}", "formula": ""
 			},
 			"Technique": {
 				"name": "Technique", "group": "Stat", "descriptions": [""],
@@ -95,27 +58,23 @@ var DefinitionDatabase = DefinitionDatabase || (function () {
 			},
 			"Brace": {
 				"name": "Brace", "group": "Defense", "descriptions": ["Brace represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects."],
-				"abbreviation": "", "variable": "brace", "formula": "bodTier"
+				"abbreviation": "", "variable": "brace", "formula": "5;prcTier"
+			},
+			"Evasion": {
+				"name": "Evasion", "group": "Defense", "descriptions": ["Evasion is your dodging ability. When defending against any kind of attack against your defense, you will always check against your evasion. If the check fails to be higher than the defense, the attack misses and has no effect. When making an attack roll, evasion will never be considered higher than the targetted defense."],
+				"abbreviation": "", "variable": "evasion", "formula": "qckTier;evasion_penalty"
 			},
 			"Fortitude": {
 				"name": "Fortitude", "group": "Defense", "descriptions": ["Fortitude is a character's ability to resist internal harm such as from poisons or sickness."],
-				"abbreviation": "", "variable": "fortitude", "formula": "prcTier"
+				"abbreviation": "", "variable": "fortitude", "formula": "5;bodTier"
 			},
-			"Evasion": {
-				"name": "Evasion", "group": "Defense", "descriptions": ["Evasion is used when a character could quickly react to a situation with movement. It is usually used to avoid powerful attacks or to get out of the way of harmful effects that only need to touch the character like a fireball."],
-				"abbreviation": "", "variable": "evasion", "formula": "qckTier;evasion_penalty"
+			"Guard": {
+				"name": "Guard", "group": "Defense", "descriptions": ["Guard represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects."],
+				"abbreviation": "", "variable": "guard", "formula": "5;bodTier"
 			},
-			"BR": {
-				"name": "BR", "group": "Combo Defense", "descriptions": ["This defense is used to resist physical attacks through a combination of blocking and dodging."],
-				"abbreviation": "", "variable": "", "formula": ""
-			},
-			"DR": {
-				"name": "DR", "group": "Combo Defense", "descriptions": ["This defense is used to avoid many fast ether attacks by either breaking the ether or ensuring you are not where it lands."],
-				"abbreviation": "", "variable": "", "formula": ""
-			},
-			"DB": {
-				"name": "DB", "group": "Combo Defense", "descriptions": ["Used when a magical effect can either be resisted through physical endurance and forcing the ether to weaken as it strikes."],
-				"abbreviation": "", "variable": "", "formula": ""
+			"Reflex": {
+				"name": "Reflex", "group": "Defense", "descriptions": ["Reflex is used when a character could quickly react to a situation with movement. It is usually used to avoid powerful attacks or to get out of the way of harmful effects that only need to touch the character like a fireball."],
+				"abbreviation": "", "variable": "reflex", "formula": "5;qckTier"
 			},
 			"Sense": {
 				"name": "Sense", "group": "Type", "descriptions": [""],
@@ -139,7 +98,7 @@ var DefinitionDatabase = DefinitionDatabase || (function () {
 			},
 			"Character Level": {
 				"name": "Character Level", "group": "General", "descriptions": ["A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP)."],
-				"abbreviation": "Lv", "variable": "base_level", "formula": ""
+				"abbreviation": "Lv", "variable": "base_level{0}", "formula": ""
 			},
 			"Proficiency": {
 				"name": "Proficiency", "group": "General", "descriptions": ["Your proficiency applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level."],
@@ -311,11 +270,11 @@ var DefinitionDatabase = DefinitionDatabase || (function () {
 			},
 			"Full Name": {
 				"name": "Full Name", "group": "Definition", "descriptions": ["A character's full name. This is for self referential use and is not used anywhere except on this character sheet page."],
-				"abbreviation": "", "variable": "", "formula": ""
+				"abbreviation": "", "variable": "full_name", "formula": ""
 			},
 			"Display Name": {
 				"name": "Display Name", "group": "Definition", "descriptions": ["This is the name that is displayed when your character speaks."],
-				"abbreviation": "", "variable": "", "formula": ""
+				"abbreviation": "", "variable": "display_name", "formula": ""
 			},
 			"Accurate": {
 				"name": "Accurate", "group": "Technique Trait", "descriptions": ["This technique always targets a combined defense and automatically targets the weaker defense instead of the stronger one. "],
@@ -534,10 +493,10 @@ var DefinitionDatabase = DefinitionDatabase || (function () {
 				"abbreviation": "", "variable": "", "formula": ""
 			}
 		},
-		sortingGroups = { "group": { "Type": ["Attribute", "Defense", "Sense", "General", "Affinity", "Gear", "Combat", "Social", "Tech Slot"], "Attribute": ["Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason"], "AttributeMod": ["Body Tier", "Precision Tier", "Quickness Tier", "Conviction Tier", "Intuition Tier", "Reason Tier"], "Stat": ["Skill", "Skill Rank", "Job", "Language", "Read Language", "Lore", "Lore Rank", "Technique"], "Defense": ["Brace", "Fortitude", "Evasion"], "Combo Defense": ["BR", "DR", "DB"], "Sense": ["Insight", "Perception", "Resolve"], "General": ["Character Level", "Proficiency", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "Gear": ["Carrying Capacity", "Reflex Penalty", "Speed Penalty"], "Combat": ["Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce"], "Social": ["Scrutiny", "Willpower", "Approval", "Patience"], "Tech Slot": ["Job Slots", "Item Slots", "Active Slots", "Support Slots"], "Definition": ["Character Creator", "Origin", "Full Name", "Display Name"], "Technique Trait": ["Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall"], "Item Trait": ["Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)"], "Material Trait": ["Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent"], "State": ["Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious"], "Condition": ["Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"] } },
+		sortingGroups = { "group": { "Type": ["Attribute", "Defense", "Sense", "General", "Affinity", "Gear", "Combat", "Social", "Tech Slot"], "Attribute": ["Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason"], "Stat": ["Skill", "Job", "Language", "Lore", "Technique"], "Defense": ["Brace", "Evasion", "Fortitude", "Guard", "Reflex"], "Sense": ["Insight", "Perception", "Resolve"], "General": ["Character Level", "Proficiency", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "Gear": ["Carrying Capacity", "Reflex Penalty", "Speed Penalty"], "Combat": ["Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce"], "Social": ["Scrutiny", "Willpower", "Approval", "Patience"], "Tech Slot": ["Job Slots", "Item Slots", "Active Slots", "Support Slots"], "Definition": ["Character Creator", "Origin", "Full Name", "Display Name"], "Technique Trait": ["Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall"], "Item Trait": ["Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)"], "Material Trait": ["Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent"], "State": ["Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious"], "Condition": ["Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"] } },
 
 		get = function (key) {
-			return values[key];
+			return new DefinitionData(values[key]);
 		},
 		getValues = function (keyArray, delimeter) {
 			if (keyArray == undefined || keyArray == "") {
@@ -605,6 +564,14 @@ var DefinitionDatabase = DefinitionDatabase || (function () {
 				output.push(key);
 			}
 			return output;
+		},
+		getAttribute = function (key, mod) {
+			let data = get(key);
+			return data.getAttribute(mod);
+		},
+		getVariable = function (key, mod) {
+			let data = get(key);
+			return data.getVariable(mod);
 		}
 		;
 	return {
@@ -613,6 +580,8 @@ var DefinitionDatabase = DefinitionDatabase || (function () {
 		Has: has,
 		Iterate: iterate,
 		Filter: filter,
-		GetSortedGroup: getSortedGroup
+		GetSortedGroup: getSortedGroup,
+		GetAttribute: getAttribute,
+		GetVariable: getVariable
 	};
 }());

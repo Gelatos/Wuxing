@@ -143,7 +143,7 @@ class dbObj {
             }
         }
         else {
-            createEmpty();
+            this.createEmpty();
         }
     }
     importStringifiedJson(stringifiedJSON) {
@@ -156,126 +156,54 @@ class dbObj {
 }
 class TechniqueData extends dbObj {
     importJson(json) {
-        this.name = json.name;
-        this.augment = json.augment;
-        this.group = json.group;
-        this.category = json.category;
-        this.acquisition = json.acquisition;
-        this.action = json.action;
-        this.traits = json.traits;
-        this.limits = json.limits;
-        this.resourceCost = json.resourceCost;
-        this.flavorText = json.flavorText;
-        this.description = json.description;
-        this.onSuccess = json.onSuccess;
-        this.dConditions = json.dConditions;
-        this.tEffect = json.tEffect;
-        this.ongDesc = json.ongDesc;
-        this.ongSave = json.ongSave;
-        this.ongEft = json.ongEft;
-        this.trigger = json.trigger;
-        this.requirement = json.requirement;
-        this.item = json.item;
-        this.prerequisite = json.prerequisite;
-        this.skill = json.skill;
-        this.defense = json.defense;
-        this.range = json.range;
-        this.rType = json.rType;
-        this.target = json.target;
-        this.targetCode = json.targetCode;
-        this.dVal = json.dVal;
-        this.dType = json.dType;
-        this.dBonus = json.dBonus;
-        this.damageType = json.damageType;
-        this.element = json.element;
-
     }
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
+        this.acquisition = "" + dataArray[i]; i++;
         this.augment = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
         this.category = "" + dataArray[i]; i++;
-        this.acquisition = "" + dataArray[i]; i++;
         this.action = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
-        this.limits = "" + dataArray[i]; i++;
         this.resourceCost = "" + dataArray[i]; i++;
-        this.flavorText = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
-        this.onSuccess = "" + dataArray[i]; i++;
-        this.dConditions = "" + dataArray[i]; i++;
-        this.tEffect = "" + dataArray[i]; i++;
-        this.ongDesc = "" + dataArray[i]; i++;
-        this.ongSave = "" + dataArray[i]; i++;
-        this.ongEft = "" + dataArray[i]; i++;
-        this.trigger = "" + dataArray[i]; i++;
+        this.limits = "" + dataArray[i]; i++;
         this.requirement = "" + dataArray[i]; i++;
-        this.item = "" + dataArray[i]; i++;
-        this.prerequisite = this.createPrerequisiteData(dataArray.slice(i)); i += 4;
-        this.skill = "" + dataArray[i]; i++;
-        this.defense = "" + dataArray[i]; i++;
-        this.range = "" + dataArray[i]; i++;
-        this.rType = "" + dataArray[i]; i++;
-        this.target = "" + dataArray[i]; i++;
-        this.targetCode = "" + dataArray[i]; i++;
-        this.dVal = "" + dataArray[i]; i++;
-        this.dType = "" + dataArray[i]; i++;
-        this.dBonus = "" + dataArray[i]; i++;
-        this.damageType = "" + dataArray[i]; i++;
-        this.element = "" + dataArray[i]; i++;
+        this.itemTraits = "" + dataArray[i]; i++;
+        this.trigger = "" + dataArray[i]; i++;
+
     }
     createEmpty() {
         this.name = "";
+        this.acquisition = "";
         this.augment = "";
         this.group = "";
         this.category = "";
-        this.acquisition = "";
         this.action = "";
         this.traits = "";
-        this.limits = "";
         this.resourceCost = "";
-        this.flavorText = "";
-        this.description = "";
-        this.onSuccess = "";
-        this.dConditions = "";
-        this.tEffect = "";
-        this.ongDesc = "";
-        this.ongSave = "";
-        this.ongEft = "";
-        this.trigger = "";
+        this.limits = "";
         this.requirement = "";
-        this.item = "";
-        this.prerequisite = this.createPrerequisiteData();
+        this.itemTraits = "";
+        this.trigger = "";
+        this.flavorText = "";
+        this.range = "";
+        this.target = "";
         this.skill = "";
         this.defense = "";
-        this.range = "";
-        this.rType = "";
-        this.target = "";
-        this.targetCode = "";
+        this.onPass = "";
+        this.description = "";
         this.dVal = "";
         this.dType = "";
         this.dBonus = "";
+        this.tEffect = "";
+        this.onSuccess = "";
+        this.dConditions = "";
+        this.rType = "";
+        this.targetCode = "";
         this.damageType = "";
         this.element = "";
         this.augments = [];
-    }
-
-    createPrerequisiteData(dataArray) {
-        let output = {
-            lv: 0,
-            ap: "",
-            tr: 0,
-            ot: ""
-        };
-        if (dataArray != undefined) {
-            let i = 0;
-            output.lv = parseInt(dataArray[i]); i++;
-            output.ap = "" + dataArray[i]; i++;
-            output.tr = parseInt(dataArray[i]); i++;
-            output.ot = "" + dataArray[i]; i++;
-        }
-        return output;
     }
     
     trySetAugmentTechValues(techDatabase) {
@@ -296,10 +224,6 @@ class TechniqueData extends dbObj {
         this.trigger = this.setAugmentTechValue(this.trigger, baseTechnique.trigger);
         this.requirement = this.setAugmentTechValue(this.requirement, baseTechnique.requirement);
         this.item = this.setAugmentTechValue(this.item, baseTechnique.item);
-        this.prerequisite.lv = this.setAugmentTechValue(this.prerequisite.lv, baseTechnique.prerequisite.lv);
-        this.prerequisite.ap = this.setAugmentTechValue(this.prerequisite.ap, baseTechnique.prerequisite.ap);
-        this.prerequisite.tr = this.setAugmentTechValue(this.prerequisite.tr, baseTechnique.prerequisite.tr);
-        this.prerequisite.ot = this.setAugmentTechValue(this.prerequisite.ot, baseTechnique.prerequisite.ot);
         this.skill = this.setAugmentTechValue(this.skill, baseTechnique.skill);
         this.defense = this.setAugmentTechValue(this.defense, baseTechnique.defense);
         this.range = this.setAugmentTechValue(this.range, baseTechnique.range);
@@ -547,7 +471,12 @@ class AttributeGroupData extends dbObj {
 }
 class DefinitionData extends dbObj {
     importJson(json) {
-
+        this.name = json.name;
+        this.group = json.group;
+        this.descriptions = json.descriptions;
+        this.abbreviation = json.abbreviation;
+        this.variable = json.variable;
+        this.formula = json.formula;
     }
     importSheets(dataArray) {
         let i = 0;
@@ -573,11 +502,17 @@ class DefinitionData extends dbObj {
         }
         else if (Array.isArray(mod)) {
             return this.variable.replace(/{(\d+)}/g, function(_,m) {
-                return mod[--m];
+                if (parseInt(m) < mod.length) {
+                    return mod[m];
+                }
+                return "";
             });
         }
         return this.variable.replace(/{(\d+)}/g, function(_,m) {
-            return mod;
+            if (parseInt(m) == 0) {
+                return mod;
+            }
+            return "";
         });
     }
     getAttribute(mod) {
@@ -771,22 +706,16 @@ var FeatureService = FeatureService || (function () {
             let status = {};
             let description = "";
             for (let i = 0; i < actionEffects.states.length; i++) {
-                status = WuxDef.GetValues(actionEffects.states[i].name);
-                description = "";
-                for (let j = 0; j < status.description.length; j++) {
-                    description += `${status.description[j]}\n`;
-                }
+                status = WuxDef.Get(actionEffects.states[i].name);
+                description = status.descriptions.join("\n");
                 if (output != "") {
                     output += "\n";
                 }
                 output += `[State: ${status.name}] ${description}`;
             }
             for (let i = 0; i < actionEffects.conditions.length; i++) {
-                status = WuxDef.GetValues(actionEffects.conditions[i].name);
-                description = "";
-                for (let j = 0; j < status.description.length; j++) {
-                    description += `${status.description[j]}\n`;
-                }
+                status = WuxDef.Get(actionEffects.conditions[i].name);
+                description = status.descriptions.join("\n");
                 if (output != "") {
                     output += "\n";
                 }
@@ -865,48 +794,6 @@ var FeatureService = FeatureService || (function () {
 
         getPrerequisiteString = function (feature) {
             var output = "";
-
-            if (feature.augment != "") {
-                output += `${feature.augment} Technique`;
-            }
-
-            if (feature.prerequisite != undefined) {
-                if (feature.prerequisite.lv > 0) {
-                    if (output != "") {
-                        output += "; ";
-                    }
-                    output += `Character Level ${feature.prerequisite.lv}`;
-                }
-                if (feature.prerequisite.ap > 0) {
-                    if (output != "") {
-                        output += "; ";
-                    }
-                    switch (feature.prerequisite.ap) {
-                        case "Wood":
-                        case "Fire":
-                        case "Earth":
-                        case "Metal":
-                        case "Water":
-                            output += `${feature.prerequisite.ap} Element`;
-                            break;
-                        default:
-                            output += `${feature.prerequisite.ap} Branch`;
-                            break;
-                    }
-                }
-                if (feature.prerequisite.tr > 0) {
-                    if (output != "") {
-                        output += "; ";
-                    }
-                    output += `Trained in ${feature.prerequisite.tr}`;
-                }
-                if (feature.prerequisite.ot != "") {
-                    if (output != "") {
-                        output += "; ";
-                    }
-                    output += feature.prerequisite.ot;
-                }
-            }
 
             return output;
         },

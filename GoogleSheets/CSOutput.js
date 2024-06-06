@@ -84,15 +84,15 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 			'use strict';
 
 			var
-				print = function (definitionsDatabase) {
+				print = function () {
 					let output = "";
-					output += printBasics(definitionsDatabase);
+					output += printBasics();
 
 					return output;
 				},
 
-				printBasics = function (definitionsDatabase) {
-					let contents = buildBasicsData.Build(definitionsDatabase);
+				printBasics = function () {
+					let contents = buildBasicsData.Build();
 					contents = WuxSheetMain.CollapsibleTab("origin_origin", "Origin", contents);
 
 					return WuxSheetMain.Build(contents);
@@ -102,12 +102,12 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 					'use strict';
 
 					var
-						build = function (definitionsDatabase) {
+						build = function () {
 							let output = "";
-							output += buildTextInput(definitionsDatabase.get("Full Name"), "attr_full_name");
-							output += buildTextInput(definitionsDatabase.get("Display Name"), "attr_nickname");
-							output += buildNumberInput(definitionsDatabase.get("Character Level"), "attr_advancement_level");
-							output += buildAffinity(definitionsDatabase);
+							output += buildTextInput(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
+							output += buildTextInput(WuxDef.Get("Display Name"), WuxDef.GetAttribute("Display Name"));
+							output += buildNumberInput(WuxDef.Get("Character Level"), WuxDef.GetAttribute("Character Level"));
+							output += buildAffinity();
 							return WuxSheetMain.CollapsibleSection("origin_basics", "Basics", output);
 						},
 
@@ -121,11 +121,11 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 								WuxSheetMain.Input("number", fieldName);
 						},
 
-						buildAffinity = function (definitionsDatabase) {
+						buildAffinity = function () {
 							let output = "";
-							let definition = definitionsDatabase.get("Affinity");
+							let definition = WuxDef.Get("Affinity");
 							output += WuxDefinition.DisplayCollapsibleTitle(definition, definition.getAttribute());
-							output += WuxSheetMain.Select(definition.getAttribute(), definitionsDatabase.filter([new DatabaseFilterData("group", "Affinity")]));
+							output += WuxSheetMain.Select(definition.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "Affinity")]));
 							return output;
 						}
 
@@ -242,7 +242,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 							return `${buildMainLanguage(knowledge, `attr_languages-training-${fieldName}`)}
 							${buildSubLanguage(WuxDef.Get("Language").getAttribute(fieldName), "Speak")}
-							${buildSubLanguage(WuxDef.Get("Read Language").getAttribute(fieldName), "Read / Write")}`;
+							${buildSubLanguage(WuxDef.Get("Language").getAttribute([fieldName, "Read"]), "Read / Write")}`;
 						},
 
 						buildMainLanguage = function (knowledge, fieldName) {
@@ -331,18 +331,18 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 							let expandContents = `<div class="wuxDescription">${knowledge.description}</div>`;
 
 							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
-					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(knowledgeDefinition.getAttribute(fieldName), interactHeader)}
+					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(knowledgeDefinition.getAttribute([fieldName, "Rank"]), interactHeader)}
 					${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
 
 							return WuxSheetMain.InteractionElement.Build(true, output);
 						},
 
 						buildMainLore = function (knowledge) {
-							return buildLore(knowledge, `<span class="wuxHeader">General ${knowledge.name}</span>`, WuxDef.Get("Lore Rank"));
+							return buildLore(knowledge, `<span class="wuxHeader">General ${knowledge.name}</span>`, WuxDef.Get("Lore"));
 						},
 
 						buildSubLore = function (knowledge) {
-							return buildLore(knowledge, `<span class="wuxSubheader">${knowledge.name}</span>`, WuxDef.Get("Lore Rank"));
+							return buildLore(knowledge, `<span class="wuxSubheader">${knowledge.name}</span>`, WuxDef.Get("Lore"));
 						}
 
 					return {
@@ -678,14 +678,15 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						},
 
 						buildSkill = function (skill) {
-							let fieldName = `attr_skills-training-${Format.ToCamelCase(skill.name)}`;
+							let fieldName = Format.ToCamelCase(skill.name);
+							let definition = WuxDef.Get("Skill");
 
-							let expandFieldName = `${fieldName}-expand`;
+							let expandFieldName = `${definition.getAttribute([fieldName])}-expand`;
 							let expandContents = `<div class="wuxDescription">${skill.description}</div>`;
 							let interactHeader = `<span class="wuxHeader">${skill.name} (${skill.abilityScore})</span>`;
 
 							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
-								${WuxSheetMain.InteractionElement.CheckboxBlockIcon(fieldName, interactHeader)}
+								${WuxSheetMain.InteractionElement.CheckboxBlockIcon(definition.getAttribute([fieldName, "Rank"]), interactHeader)}
 								${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
 
 							return WuxSheetMain.InteractionElement.Build(true, output);
@@ -892,7 +893,7 @@ var BuilderBackend = BuilderBackend || (function () {
 		    build = function(sheetsDb) {
 		        let jsClassData = new JavascriptDataClass();
 		        return jsClassData.print("BackendTools");
-		    },
+		    }
 		    
 		    
 		    ;
@@ -933,7 +934,7 @@ var TrainingBackend = TrainingBackend || (function () {
 		    return {
 		        Build: build
 		    }
-	    }());
+	    }()),
 	    
 	    buildKnowledge = buildKnowledge || (function () {
 		    'use strict';
@@ -942,7 +943,7 @@ var TrainingBackend = TrainingBackend || (function () {
 		    build = function(sheetsDb) {
 		        let jsClassData = new JavascriptDataClass();
 		        return jsClassData.print("TrainingKnowledgeManager");
-		    },
+		    }
 		    ;
 		    return {
 		        Build: build
