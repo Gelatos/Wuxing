@@ -69,8 +69,8 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createTechniques = function (arr) {
-            let filters = ["augment", "group", "category", "family", "action", "skill", "defense", "range", "rType", "damageType"];
-            return new Database(filters, arr, function (arr) {
+            let filters = ["category", "linkedTech", "group", "aptitude", "action", "skill", "range"];
+            return new ExtendedTechniqueDatabase(filters, arr, function (arr) {
                 return new TechniqueData(arr);
             });
         },

@@ -24,7 +24,6 @@ class Dictionary {
         }
     }
 }
-
 class DatabaseFilterData {
     constructor(property, value) {
         this.property = property;
@@ -114,6 +113,25 @@ class Database extends Dictionary {
         return output;
     }
 }
+class ExtendedTechniqueDatabase extends Database {
+    importSheets(dataArray, dataCreationCallback) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = dataCreationCallback(dataArray[i]);
+            switch (data.category) {
+                case "Component":
+                    this.get(data.linkedTech).importSheetEffect(dataArray);
+                    break;
+                case "OnGoing":
+                    this.get(data.linkedTech).importSheetOngoing(dataArray);
+                    break;
+                default:
+                    this.add(data.name, data);
+                    break;
+            }
+        }
+    }
+}
 class ExtendedDescriptionDatabase extends Database {
     importSheets(dataArray, dataCreationCallback) {
         let data = {};
@@ -156,92 +174,94 @@ class dbObj {
 }
 class TechniqueData extends dbObj {
     importJson(json) {
+        this.name = json.name;
+        this.category = json.category;
+        this.linkedTech = json.linkedTech;
+        this.group = json.group;
+        this.aptitude = json.aptitude;
+        this.action = json.action;
+        this.traits = json.traits;
+        this.resourceCost = json.resourceCost;
+        this.limits = json.limits;
+        this.skill = json.skill;
+        this.range = json.range;
+        this.target = json.target;
+        this.requirement = json.requirement;
+        this.itemTraits = json.itemTraits;
+        this.trigger = json.trigger;
+        this.flavorText = json.flavorText;
+        this.conditions = json.conditions;
+        this.autoEffects = json.autoEffects;
+        this.effects = json.effects;
     }
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.acquisition = "" + dataArray[i]; i++;
-        this.augment = "" + dataArray[i]; i++;
-        this.group = "" + dataArray[i]; i++;
         this.category = "" + dataArray[i]; i++;
+        this.linkedTech = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i]; i++;
+        this.aptitude = "" + dataArray[i]; i++;
         this.action = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
         this.resourceCost = "" + dataArray[i]; i++;
         this.limits = "" + dataArray[i]; i++;
+        this.skill = "" + dataArray[i]; i++;
+        this.range = "" + dataArray[i]; i++;
+        this.target = "" + dataArray[i]; i++;
         this.requirement = "" + dataArray[i]; i++;
         this.itemTraits = "" + dataArray[i]; i++;
         this.trigger = "" + dataArray[i]; i++;
-
+        this.flavorText = "" + dataArray[i]; i++;
+        this.conditions = [];
+        this.autoEffects = [];
+        this.effects = new Dictionary();
+        this.onGoingTech = undefined;
+        importSheetEffect(this.category, dataArray);
     }
     createEmpty() {
         this.name = "";
-        this.acquisition = "";
-        this.augment = "";
-        this.group = "";
         this.category = "";
+        this.linkedTech = "";
+        this.group = "";
+        this.aptitude = "";
         this.action = "";
         this.traits = "";
         this.resourceCost = "";
         this.limits = "";
+        this.skill = "";
+        this.range = "";
+        this.target = "";
         this.requirement = "";
         this.itemTraits = "";
         this.trigger = "";
         this.flavorText = "";
-        this.range = "";
-        this.target = "";
-        this.skill = "";
-        this.defense = "";
-        this.onPass = "";
-        this.description = "";
-        this.dVal = "";
-        this.dType = "";
-        this.dBonus = "";
-        this.tEffect = "";
-        this.onSuccess = "";
-        this.dConditions = "";
-        this.rType = "";
-        this.targetCode = "";
-        this.damageType = "";
-        this.element = "";
-        this.augments = [];
+        this.conditions = [];
+        this.autoEffects = [];
+        this.effects = new Dictionary();
+        this.onGoingTech = undefined;
     }
-    
-    trySetAugmentTechValues(techDatabase) {
-        if (this.augment != "") {
-            this.setAugmentTechValues(techDatabase.get(this.augment));
-        }
-    }
+
     setAugmentTechValues(baseTechnique) {
 
         if (this.name == "") {
             return baseTechnique;
         }
-        this.acquisition = this.setAugmentTechValue(this.acquisition, baseTechnique.acquisition);
+        this.category = this.setAugmentTechValue(this.category, baseTechnique.category);
+        this.linkedTech = this.setAugmentTechValue(this.linkedTech, baseTechnique.linkedTech);
+        this.group = this.setAugmentTechValue(this.group, baseTechnique.group);
+        this.aptitude = this.setAugmentTechValue(this.aptitude, baseTechnique.aptitude);
         this.action = this.setAugmentTechValue(this.action, baseTechnique.action);
         this.traits = this.setAugmentTechValue(this.traits, baseTechnique.traits);
-        this.limits = this.setAugmentTechValue(this.limits, baseTechnique.limits);
         this.resourceCost = this.setAugmentTechValue(this.resourceCost, baseTechnique.resourceCost);
-        this.trigger = this.setAugmentTechValue(this.trigger, baseTechnique.trigger);
-        this.requirement = this.setAugmentTechValue(this.requirement, baseTechnique.requirement);
-        this.item = this.setAugmentTechValue(this.item, baseTechnique.item);
+        this.limits = this.setAugmentTechValue(this.limits, baseTechnique.limits);
         this.skill = this.setAugmentTechValue(this.skill, baseTechnique.skill);
-        this.defense = this.setAugmentTechValue(this.defense, baseTechnique.defense);
         this.range = this.setAugmentTechValue(this.range, baseTechnique.range);
-        this.rType = this.setAugmentTechValue(this.rType, baseTechnique.rType);
         this.target = this.setAugmentTechValue(this.target, baseTechnique.target);
-        this.targetCode = this.setAugmentTechValue(this.targetCode, baseTechnique.targetCode);
-        this.dVal = this.setAugmentTechValue(this.dVal, baseTechnique.dVal);
-        this.dType = this.setAugmentTechValue(this.dType, baseTechnique.dType);
-        this.dBonus = this.setAugmentTechValue(this.dBonus, baseTechnique.dBonus);
-        this.damageType = this.setAugmentTechValue(this.damageType, baseTechnique.damageType);
-        this.element = this.setAugmentTechValue(this.element, baseTechnique.element);
-        this.description = this.setAugmentTechValue(this.description, baseTechnique.description);
-        this.onSuccess = this.setAugmentTechValue(this.onSuccess, baseTechnique.onSuccess);
-        this.tEffect = this.setAugmentTechValue(this.tEffect, baseTechnique.tEffect);
-        this.rEffect = this.setAugmentTechValue(this.rEffect, baseTechnique.rEffect);
-        this.dConditions = this.setAugmentTechValue(this.dConditions, baseTechnique.dConditions);
+        this.requirement = this.setAugmentTechValue(this.requirement, baseTechnique.requirement);
+        this.itemTraits = this.setAugmentTechValue(this.itemTraits, baseTechnique.itemTraits);
+        this.trigger = this.setAugmentTechValue(this.trigger, baseTechnique.trigger);
+        this.flavorText = this.setAugmentTechValue(this.flavorText, baseTechnique.flavorText);
     }
-
     setAugmentTechValue (augmentValue, baseValue) {
         if (augmentValue == "-") {
             return "";
@@ -251,10 +271,92 @@ class TechniqueData extends dbObj {
         }
         return augmentValue;
     }
+
+    importSheetEffect(dataArray) {
+        let i = 16;
+        let defense = "" + dataArray[i]; i++;
+        let onPass = "" + dataArray[i]; i++;
+        let effect = new TechniqueEffect(dataArray);
+
+        if (defense == "") {
+            this.autoEffects.push(effect);
+        }
+        else {
+            this.addEffect(defense, onPass, effect);
+        }
+
+        if (effect.type == "Condition") {
+            addCondition(effect.effect);
+        }
+    }
+    addEffect(defense, onPass, effect) {
+        if (!this.effects.has(defense)) {
+            this.effects.add(defense, {onPass: [], onFail: []});
+        }
+        if (onPass) {
+            this.effects.get(defense).onPass.push(effect);
+        }
+        else {
+            this.effects.get(defense).onFail.push(effect);
+        }
+    }
+
+    importSheetOngoing(dataArray) {
+        if (this.onGoingTech == undefined) {
+            this.onGoingTech = new TechniqueData(dataArray);
+        }
+        else {
+            this.onGoingTech.importSheetEffect(dataArray);
+        }
+    }
+
+    addCondition(condition) {
+        if (!this.conditions.includes(condition)) {
+            this.conditions.push(condition);
+        }
+    }
+}
+class TechniqueEffect extends dbObj {
+    importJson(json) {
+        this.target = json.target;
+        this.type = json.type;
+        this.dVal = json.dVal;
+        this.dType = json.dType;
+        this.dBonus = json.dBonus;
+        this.effect = json.effect;
+        this.traits = json.traits;
+        this.description = json.description;
+    }
+    importSheets(dataArray) {
+        
+        let i = 18;
+        this.target = "" + dataArray[i]; i++;
+        this.type = "" + dataArray[i]; i++;
+        this.dVal = "" + dataArray[i]; i++;
+        this.dType = "" + dataArray[i]; i++;
+        this.dBonus = "" + dataArray[i]; i++;
+        this.effect = "" + dataArray[i]; i++;
+        this.traits = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+
+    }
+    createEmpty() {
+        this.target = "";
+        this.type = "";
+        this.dVal = "";
+        this.dType = "";
+        this.dBonus = "";
+        this.effect = "";
+        this.traits = "";
+        this.description = "";
+    }
 }
 class SkillData extends dbObj {
     importJson(json) {
-
+        this.name = json.name;
+        this.group = json.group;
+        this.abilityScore = json.abilityScore;
+        this.description = json.description;
     }
     importSheets(dataArray) {
         let i = 0;
@@ -530,6 +632,64 @@ class TemplateData extends dbObj {
     createEmpty() {
 
     }
+}
+class TechniqueDisplayData {
+
+    constructor(technique) {
+        if (technique != undefined) {
+            this.importTechnique(technique);
+        }
+        else {
+            this.createEmpty();
+        }
+    }
+
+    importTechnique(technique) {
+    }
+
+    createEmpty() {
+        this.technique = {};
+        this.name = "";
+        this.actionType = "";
+        this.username = "";
+        this.fieldName = "";
+
+        this.rangeData = "";
+        this.targetData = "";
+
+        this.actionData = "";
+
+        this.prerequisites = "";
+        this.requirements = "";
+        this.trigger = "";
+        
+        this.flavorText = "";
+        this.conditionsText = "";
+
+        this.autoEffects = [];
+        this.effects = [];
+        this.ongoingEffects = undefined;
+    }
+}
+class TechniqueEffectDisplayData {
+    constructor(techniqueEffect) {
+        if (techniqueEffect != undefined) {
+            this.importTechniqueEffect(techniqueEffect);
+        }
+        else {
+            this.createEmpty();
+        }
+    }
+
+    importTechniqueEffect(techniqueEffect) {
+    }
+
+    createEmpty() {
+        this.targetDefense = "";
+        this.onPass = "";
+        this.onFail = "";
+    }
+
 }
 
 // ====== Formatters
