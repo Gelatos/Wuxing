@@ -645,6 +645,42 @@ class TechniqueDisplayData {
     }
 
     importTechnique(technique) {
+        setTechBasics(technique);
+        setTechActionData(technique);
+        setTechTargetData(technique);
+    }
+    
+    setTechBasics(technique) {
+        this.technique = technique;
+        this.name = technique.name;
+        this.username = technique.username;
+        this.fieldName = Format.ToCamelCase(technique.name);
+        this.actionType = technique.action;
+        this.skill = technique.skill;
+    }
+    setTechActionData(technique) {
+        this.actionData = "";
+        if (technique.action != "") {
+            this.actionData += technique.action;
+        }
+        if (technique.limits != "") {
+            if (this.actionData != "") {
+                this.actionData += "; ";
+            }
+            this.actionData += technique.limits;
+        }
+        if (technique.resourceCost != "") {
+            if (this.actionData != "") {
+                this.actionData += "; ";
+            }
+            this.actionData += technique.resourceCost;
+        }
+    }
+    setTechTargetData(technique) {
+        this.targetData = technique.range;
+        if (technique.target != "") {
+            this.targetData += `; ${technique.target}`;
+        }
     }
 
     createEmpty() {
@@ -653,13 +689,17 @@ class TechniqueDisplayData {
         this.actionType = "";
         this.username = "";
         this.fieldName = "";
+        this.skill = "";
 
-        this.rangeData = "";
+        this.element = "";
+        this.techSet = "";
+        this.tier = "";
+        this.group = "";
+        this.category = "";
+        
         this.targetData = "";
-
         this.actionData = "";
 
-        this.prerequisites = "";
         this.requirements = "";
         this.trigger = "";
         
