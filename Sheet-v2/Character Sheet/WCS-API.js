@@ -4550,6 +4550,44 @@ class Dictionary {
         this.keys = [];
         this.values = {};
     }
+    import(data, dataCreationCallback) {
+        if (data != undefined) {
+            if (Array.isArray(data)) {
+                this.importSheets(data, dataCreationCallback);
+            }
+            else if (typeof data == "string") {
+                this.importStringifiedJson(data, dataCreationCallback);
+            }
+            else {
+                this.importJson(data, dataCreationCallback);
+            }
+        }
+    }
+    importStringifiedJson(stringifiedJSON, dataCreationCallback) {
+        this.importJson(JSON.parse(stringifiedJSON), dataCreationCallback);
+    }
+    importJson(json, dataCreationCallback) {
+        if (json == undefined) {
+            return;
+        }
+        this.keys = json.keys;
+        if (dataCreationCallback != undefined) {
+            this.values = {};
+            for(let i = 0; i < json.keys.length; i++) {
+                this.values[json.keys[i]] = dataCreationCallback(json.values[json.keys[i]]);
+            }
+        }
+        else {
+            this.values = json.values;
+        }
+    }
+    importSheets(dataArray, dataCreationCallback) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = dataCreationCallback(dataArray[i]);
+            this.add(data.name, data);
+        }
+    }
     add(key, value) {
         if (!this.keys.includes(key)) {
             this.keys.push(key);
@@ -4559,16 +4597,24 @@ class Dictionary {
     get(key) {
         return this.values[key];
     }
+    getkey(index) {
+        return this.keys[index];
+    }
+    getByIndex(index) {
+        return this.get(this.getkey(index));
+    }
+    set(key, value) {
+        this.values[key] = value;
+    }
     has(key) {
         return this.keys.includes(key);
     }
     iterate(callback) {
         for (let i = 0; i < this.keys.length; i++) {
-            callback(this.values[this.keys[i]]);
+            callback(this.values[this.keys[i]], this.keys[i]);
         }
     }
 }
-
 class DatabaseFilterData {
     constructor(property, value) {
         this.property = property;
@@ -4583,34 +4629,11 @@ class Database extends Dictionary {
             this.sortingGroups[sortingProperties[i]] = {};
         }
 
-        if (data != undefined) {
-            if (Array.isArray(data)) {
-                this.importSheets(data, dataCreationCallback);
-            }
-            else if (typeof data == "string") {
-                this.importStringifiedJson(data);
-            }
-            else {
-                this.importJson(data);
-            }
-        }
+        this.import(data, dataCreationCallback);
     }
-
-    importStringifiedJson(stringifiedJSON) {
-        let json = JSON.parse(stringifiedJSON);
-        this.importJson(json);
-    }
-    importJson(json) {
-        this.keys = json.keys;
-        this.values = json.values;
+    importJson(json, dataCreationCallback) {
+        super.importJson(json, dataCreationCallback);
         this.sortingGroups = json.sortingGroups;
-    }
-    importSheets(dataArray, dataCreationCallback) {
-        let data = {};
-        for (let i = 0; i < dataArray.length; i++) {
-            data = dataCreationCallback(dataArray[i]);
-            this.add(data.name, data);
-        }
     }
 
     add(key, value) {
@@ -4627,10 +4650,13 @@ class Database extends Dictionary {
 
     filter(filterData) {
         let filteredGroup = this.getSortedGroup(filterData[0].property, filterData[0].value);
-        let filters = [];
+        let nextFilter = [];
         for (let i = 1; i < filterData.length; i++) {
-            filters = this.getSortedGroup(filterData[i].property, filterData[i].value);
-            filteredGroup = filteredGroup.filter(item => filters.includes(item))
+            if (filteredGroup == undefined || filteredGroup.length == 0) {
+                return [];
+            }
+            nextFilter = this.getSortedGroup(filterData[i].property, filterData[i].value);
+            filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
         }
         if (filteredGroup == undefined || filteredGroup.length == 0) {
             return [];
@@ -4656,6 +4682,25 @@ class Database extends Dictionary {
             output.push(key);
         }
         return output;
+    }
+}
+class ExtendedTechniqueDatabase extends Database {
+    importSheets(dataArray, dataCreationCallback) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = dataCreationCallback(dataArray[i]);
+            switch (data.name) {
+                case "-":
+                    this.get(data.linkedTech).importEffectTechnique(data);
+                    break;
+                case "!":
+                    this.get(data.linkedTech).importOngoingTechnique(data);
+                    break;
+                default:
+                    this.add(data.name, data);
+                    break;
+            }
+        }
     }
 }
 class ExtendedDescriptionDatabase extends Database {
@@ -4701,167 +4746,98 @@ class dbObj {
 class TechniqueData extends dbObj {
     importJson(json) {
         this.name = json.name;
-        this.augment = json.augment;
+        this.techSet = json.techSet;
+        this.linkedTech = json.linkedTech;
         this.group = json.group;
-        this.category = json.category;
-        this.acquisition = json.acquisition;
+        this.affinity = json.affinity;
+        this.tier = json.tier;
         this.action = json.action;
         this.traits = json.traits;
-        this.limits = json.limits;
         this.resourceCost = json.resourceCost;
-        this.flavorText = json.flavorText;
-        this.description = json.description;
-        this.onSuccess = json.onSuccess;
-        this.dConditions = json.dConditions;
-        this.tEffect = json.tEffect;
-        this.ongDesc = json.ongDesc;
-        this.ongSave = json.ongSave;
-        this.ongEft = json.ongEft;
-        this.trigger = json.trigger;
-        this.requirement = json.requirement;
-        this.item = json.item;
-        this.prerequisite = json.prerequisite;
+        this.limits = json.limits;
         this.skill = json.skill;
-        this.defense = json.defense;
         this.range = json.range;
-        this.rType = json.rType;
         this.target = json.target;
-        this.targetCode = json.targetCode;
-        this.dVal = json.dVal;
-        this.dType = json.dType;
-        this.dBonus = json.dBonus;
-        this.damageType = json.damageType;
-        this.element = json.element;
-
+        this.requirement = json.requirement;
+        this.itemTraits = json.itemTraits;
+        this.trigger = json.trigger;
+        this.flavorText = json.flavorText;
+        this.definitions = Array.isArray(json.definitions) ? json.definitions : [];
+        this.autoEffects = json.autoEffects;
+        this.effects = new Dictionary();
+        this.effects.importJson(json.effects);
+        this.onGoingTech = new TechniqueData(json.onGoingTech);
     }
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.acquisition = "" + dataArray[i]; i++;
-        this.augment = "" + dataArray[i]; i++;
+        this.techSet = "" + dataArray[i]; i++;
+        this.linkedTech = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
-        this.category = "" + dataArray[i]; i++;
+        this.affinity = "" + dataArray[i]; i++;
+        this.tier = parseInt(dataArray[i]) == NaN ? 1 : parseInt(dataArray[i]); i++;
         this.action = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
-        this.limits = "" + dataArray[i]; i++;
         this.resourceCost = "" + dataArray[i]; i++;
-        this.flavorText = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
-        this.onSuccess = "" + dataArray[i]; i++;
-        this.dConditions = "" + dataArray[i]; i++;
-        this.tEffect = "" + dataArray[i]; i++;
-        this.ongDesc = "" + dataArray[i]; i++;
-        this.ongSave = "" + dataArray[i]; i++;
-        this.ongEft = "" + dataArray[i]; i++;
-        this.trigger = "" + dataArray[i]; i++;
-        this.requirement = "" + dataArray[i]; i++;
-        this.item = "" + dataArray[i]; i++;
-        this.prerequisite = this.createPrerequisiteData(dataArray.slice(i)); i += 4;
+        this.limits = "" + dataArray[i]; i++;
         this.skill = "" + dataArray[i]; i++;
-        this.defense = "" + dataArray[i]; i++;
         this.range = "" + dataArray[i]; i++;
-        this.rType = "" + dataArray[i]; i++;
         this.target = "" + dataArray[i]; i++;
-        this.targetCode = "" + dataArray[i]; i++;
-        this.dVal = "" + dataArray[i]; i++;
-        this.dType = "" + dataArray[i]; i++;
-        this.dBonus = "" + dataArray[i]; i++;
-        this.damageType = "" + dataArray[i]; i++;
-        this.element = "" + dataArray[i]; i++;
+        this.requirement = "" + dataArray[i]; i++;
+        this.itemTraits = "" + dataArray[i]; i++;
+        this.trigger = "" + dataArray[i]; i++;
+        this.flavorText = "" + dataArray[i]; i++;
+        this.definitions = [];
+        this.autoEffects = [];
+        this.effects = new Dictionary();
+        this.onGoingTech = undefined;
+        this.importEffectSheet(dataArray.slice(i));
     }
     createEmpty() {
         this.name = "";
-        this.augment = "";
+        this.techSet = "";
+        this.linkedTech = "";
         this.group = "";
-        this.category = "";
-        this.acquisition = "";
+        this.affinity = "";
+        this.tier = 0;
         this.action = "";
         this.traits = "";
-        this.limits = "";
         this.resourceCost = "";
-        this.flavorText = "";
-        this.description = "";
-        this.onSuccess = "";
-        this.dConditions = "";
-        this.tEffect = "";
-        this.ongDesc = "";
-        this.ongSave = "";
-        this.ongEft = "";
-        this.trigger = "";
-        this.requirement = "";
-        this.item = "";
-        this.prerequisite = this.createPrerequisiteData();
+        this.limits = "";
         this.skill = "";
-        this.defense = "";
         this.range = "";
-        this.rType = "";
         this.target = "";
-        this.targetCode = "";
-        this.dVal = "";
-        this.dType = "";
-        this.dBonus = "";
-        this.damageType = "";
-        this.element = "";
-        this.augments = [];
+        this.requirement = "";
+        this.itemTraits = "";
+        this.trigger = "";
+        this.flavorText = "";
+        this.definitions = [];
+        this.autoEffects = [];
+        this.effects = new Dictionary();
+        this.onGoingTech = undefined;
     }
 
-    createPrerequisiteData(dataArray) {
-        let output = {
-            lv: 0,
-            ap: "",
-            tr: 0,
-            ot: ""
-        };
-        if (dataArray != undefined) {
-            let i = 0;
-            output.lv = parseInt(dataArray[i]); i++;
-            output.ap = "" + dataArray[i]; i++;
-            output.tr = parseInt(dataArray[i]); i++;
-            output.ot = "" + dataArray[i]; i++;
-        }
-        return output;
-    }
-    
-    trySetAugmentTechValues(techDatabase) {
-        if (this.augment != "") {
-            this.setAugmentTechValues(techDatabase.get(this.augment));
-        }
-    }
     setAugmentTechValues(baseTechnique) {
 
         if (this.name == "") {
             return baseTechnique;
         }
-        this.acquisition = this.setAugmentTechValue(this.acquisition, baseTechnique.acquisition);
+        this.techSet = this.setAugmentTechValue(this.techSet, baseTechnique.techSet);
+        this.linkedTech = this.setAugmentTechValue(this.linkedTech, baseTechnique.linkedTech);
+        this.group = this.setAugmentTechValue(this.group, baseTechnique.group);
+        this.tier = this.setAugmentTechValue(this.tier, baseTechnique.tier);
         this.action = this.setAugmentTechValue(this.action, baseTechnique.action);
         this.traits = this.setAugmentTechValue(this.traits, baseTechnique.traits);
-        this.limits = this.setAugmentTechValue(this.limits, baseTechnique.limits);
         this.resourceCost = this.setAugmentTechValue(this.resourceCost, baseTechnique.resourceCost);
-        this.trigger = this.setAugmentTechValue(this.trigger, baseTechnique.trigger);
-        this.requirement = this.setAugmentTechValue(this.requirement, baseTechnique.requirement);
-        this.item = this.setAugmentTechValue(this.item, baseTechnique.item);
-        this.prerequisite.lv = this.setAugmentTechValue(this.prerequisite.lv, baseTechnique.prerequisite.lv);
-        this.prerequisite.ap = this.setAugmentTechValue(this.prerequisite.ap, baseTechnique.prerequisite.ap);
-        this.prerequisite.tr = this.setAugmentTechValue(this.prerequisite.tr, baseTechnique.prerequisite.tr);
-        this.prerequisite.ot = this.setAugmentTechValue(this.prerequisite.ot, baseTechnique.prerequisite.ot);
+        this.limits = this.setAugmentTechValue(this.limits, baseTechnique.limits);
         this.skill = this.setAugmentTechValue(this.skill, baseTechnique.skill);
-        this.defense = this.setAugmentTechValue(this.defense, baseTechnique.defense);
         this.range = this.setAugmentTechValue(this.range, baseTechnique.range);
-        this.rType = this.setAugmentTechValue(this.rType, baseTechnique.rType);
         this.target = this.setAugmentTechValue(this.target, baseTechnique.target);
-        this.targetCode = this.setAugmentTechValue(this.targetCode, baseTechnique.targetCode);
-        this.dVal = this.setAugmentTechValue(this.dVal, baseTechnique.dVal);
-        this.dType = this.setAugmentTechValue(this.dType, baseTechnique.dType);
-        this.dBonus = this.setAugmentTechValue(this.dBonus, baseTechnique.dBonus);
-        this.damageType = this.setAugmentTechValue(this.damageType, baseTechnique.damageType);
-        this.element = this.setAugmentTechValue(this.element, baseTechnique.element);
-        this.description = this.setAugmentTechValue(this.description, baseTechnique.description);
-        this.onSuccess = this.setAugmentTechValue(this.onSuccess, baseTechnique.onSuccess);
-        this.tEffect = this.setAugmentTechValue(this.tEffect, baseTechnique.tEffect);
-        this.rEffect = this.setAugmentTechValue(this.rEffect, baseTechnique.rEffect);
-        this.dConditions = this.setAugmentTechValue(this.dConditions, baseTechnique.dConditions);
+        this.requirement = this.setAugmentTechValue(this.requirement, baseTechnique.requirement);
+        this.itemTraits = this.setAugmentTechValue(this.itemTraits, baseTechnique.itemTraits);
+        this.trigger = this.setAugmentTechValue(this.trigger, baseTechnique.trigger);
+        this.flavorText = this.setAugmentTechValue(this.flavorText, baseTechnique.flavorText);
     }
-
     setAugmentTechValue (augmentValue, baseValue) {
         if (augmentValue == "-") {
             return "";
@@ -4871,10 +4847,104 @@ class TechniqueData extends dbObj {
         }
         return augmentValue;
     }
+
+    importEffectSheet(dataArray) {
+        let i = 0;
+        let defense = "" + dataArray[i]; i++;
+        let onPass = "" + dataArray[i]; i++;
+        let effect = new TechniqueEffect(dataArray.slice(i)); i++;
+
+        if (defense == "") {
+            this.autoEffects.push(effect);
+        }
+        else {
+            this.addEffect(defense, onPass, effect);
+        }
+
+        if (effect.type == "Condition" || effect.type == "Definition") {
+            this.addDefinition(effect.effect);
+        }
+    }
+    importEffectTechnique(technique) {
+        if (technique.autoEffects.length > 0) {
+            this.autoEffects = this.autoEffects.concat(technique.autoEffects);
+        }
+        else {
+            let effect = technique.effects.getByIndex(0);
+            let isOnPass = effect.onPass.length > 0;
+            this.addEffect(technique.effects.getkey(0), isOnPass, isOnPass ? effect.onPass[0] : effect.auto[0]);
+        }
+
+        if (technique.definitions.length > 0) {
+            this.addDefinition(technique.definitions[0]);
+        }
+    }
+    addEffect(defense, onPass, effect) {
+        if (!this.effects.has(defense)) {
+            this.effects.add(defense, {onPass: [], auto: []});
+        }
+        if (onPass == "1") {
+            this.effects.get(defense).onPass.push(effect);
+        }
+        else {
+            this.effects.get(defense).auto.push(effect);
+        }
+    }
+
+    importOngoingTechnique(technique) {
+        if (this.onGoingTech == undefined) {
+            this.onGoingTech = technique;
+        }
+        else {
+            this.onGoingTech.importEffectTechnique(technique);
+        }
+    }
+
+    addDefinition(definition) {
+        if (!this.definitions.includes(definition)) {
+            this.definitions.push(definition);
+        }
+    }
+}
+class TechniqueEffect extends dbObj {
+    importJson(json) {
+        this.target = json.target;
+        this.type = json.type;
+        this.subType = json.subType;
+        this.dVal = json.dVal;
+        this.dType = json.dType;
+        this.dBonus = json.dBonus;
+        this.effect = json.effect;
+        this.traits = json.traits;
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.target = "" + dataArray[i]; i++;
+        this.type = "" + dataArray[i]; i++;
+        this.subType = "" + dataArray[i]; i++;
+        this.dVal = "" + dataArray[i]; i++;
+        this.dType = "" + dataArray[i]; i++;
+        this.dBonus = "" + dataArray[i]; i++;
+        this.effect = "" + dataArray[i]; i++;
+        this.traits = "" + dataArray[i]; i++;
+    }
+    createEmpty() {
+        this.target = "";
+        this.type = "";
+        this.subType = "";
+        this.dVal = "";
+        this.dType = "";
+        this.dBonus = "";
+        this.effect = "";
+        this.traits = "";
+    }
 }
 class SkillData extends dbObj {
     importJson(json) {
-
+        this.name = json.name;
+        this.group = json.group;
+        this.abilityScore = json.abilityScore;
+        this.description = json.description;
     }
     importSheets(dataArray) {
         let i = 0;
@@ -5151,6 +5221,245 @@ class TemplateData extends dbObj {
 
     }
 }
+class TechniqueDisplayData {
+
+    constructor(technique) {
+        if (technique != undefined) {
+            this.importTechnique(technique);
+        }
+        else {
+            this.createEmpty();
+        }
+    }
+
+    importTechnique(technique) {
+        this.createEmpty();
+        this.setTechBasics(technique);
+        this.setTechSetData(technique);
+        this.setTechActionData(technique);
+        this.setTechTargetData(technique);
+        this.setExtentionEffects(technique);
+        this.setTraits(technique);
+        this.setFlavorText(technique);
+        this.setDefinitions(technique);
+        this.setAutoEffects(technique);
+        this.setEffects(technique);
+        this.setOngoingEffects(technique);
+    }
+    
+    setTechBasics(technique) {
+        this.technique = technique;
+        this.name = technique.name;
+        this.username = technique.username;
+        this.fieldName = Format.ToCamelCase(technique.name);
+        this.actionType = technique.action;
+    }
+    setTechSetData(technique) {
+        this.techSetDisplay = technique.affinity;
+        this.techSetTitle = technique.skill == "" ? "No Check" : technique.skill;
+        this.techSetSub = technique.techSet == "" ? "No Style" : technique.techSet;
+        if (technique.affinity == "" && technique.tier <= 1) {
+            this.techSetSub2 = `No Restrictions`;
+        }
+        else if (technique.affinity == "" && technique.tier > 1) {
+            this.techSetSub2 = `Tier ${Format.Romanize(technique.tier)}`;
+        }
+        else if (technique.tier <= 1) {
+            this.techSetSub2 = `${technique.affinity}`;
+        }
+        else {
+            this.techSetSub2 = `${technique.affinity} | Tier ${Format.Romanize(technique.tier)}`;
+        }
+    }
+    setTechActionData(technique) {
+        this.actionData = "";
+        if (technique.action != "") {
+            this.actionData += technique.action;
+        }
+        if (technique.limits != "") {
+            if (this.actionData != "") {
+                this.actionData += "; ";
+            }
+            this.actionData += technique.limits;
+        }
+        if (technique.resourceCost != "") {
+            if (this.actionData != "") {
+                this.actionData += "; ";
+            }
+            this.actionData += technique.resourceCost;
+        }
+    }
+    setTechTargetData(technique) {
+        if (technique.range != "") {
+            this.targetData = `Range: ${technique.range}`;
+        }
+        if (technique.target != "") {
+            this.targetData += `; ${technique.target}`;
+        }
+    }
+    setExtentionEffects(technique) {
+        this.requirements = technique.requirement;
+        this.itemTraits = WuxDef.GetValues(technique.itemTraits, ";");
+        this.trigger = technique.trigger;
+    }
+    setTraits(technique) {
+        this.traits = WuxDef.GetValues(technique.traits, ";");
+    }
+    setFlavorText(technique) {
+        this.flavorText = technique.flavorText;
+    }
+    setDefinitions(technique) {
+        this.definitions = WuxDef.GetValues(technique.definitions, ";");
+        // if (technique.definitions.length > 0) {
+        //     let conditionDefinition = "";
+        //     let description = "";
+        //     for (let i = 0; i < technique.definitions.length; i++) {
+        //         conditionDefinition = WuxDef.Get(technique.definitions[i]);
+        //         description = conditionDefinition.descriptions.join("\n");
+        //         this.definitions.push(`[${conditionDefinition.group}: ${conditionDefinition.name}] ${description}`);
+        //     }
+        // }
+    }
+
+    setAutoEffects(technique) {
+        this.autoEffects = new TechniqueEffectDisplayData(technique.autoEffects);
+    }
+    setEffects(technique) {
+        this.effects = new Dictionary();
+        technique.effects.iterate((effect, defense) => {
+            this.effects.add(defense, new TechniqueEffectDisplayData(effect));
+        });
+    }
+    setOngoingEffects(technique) {
+    }
+
+    createEmpty() {
+        this.technique = {};
+        this.name = "";
+        this.actionType = "";
+        this.username = "";
+        this.fieldName = "";
+
+        this.techSetDisplay = "";
+        this.techSetTitle = "";
+        this.techSetSub = "";
+        this.techSetSub2 = "";
+        
+        this.actionData = "";
+        this.targetData = "";
+
+        this.trigger = "";
+        this.requirements = "";
+        this.itemTraits = [];
+
+        this.traits = [];
+        this.flavorText = "";
+        this.definitions = [];
+
+        this.autoEffects = [];
+        this.effects = new Dictionary();
+        this.ongoingEffects = undefined;
+    }
+}
+class TechniqueEffectDisplayData {
+    constructor(techniqueEffect) {
+        this.createEmptyDefense();
+        if (Array.isArray(techniqueEffect)) {
+            this.auto = this.importEffectData(techniqueEffect);
+        }
+        else if (techniqueEffect != undefined) {
+            this.importTechniqueEffect(techniqueEffect);
+        }
+    }
+
+    createEmptyDefense() {
+        this.auto = [];
+        this.onPass = [];
+    }
+
+    importTechniqueEffect(techniqueEffect) {
+        if (techniqueEffect.auto.length > 0) {
+            this.auto = this.importEffectData(techniqueEffect.auto);
+        }
+        if (techniqueEffect.onPass.length > 0) {
+            this.onPass = this.importEffectData(techniqueEffect.onPass);
+        }
+    }
+
+    importEffectData(effectData) {
+        let output = [];
+        for (let i = 0; i < effectData.length; i++) {
+            output.push(this.formatEffect(effectData[i]));
+        }
+
+        return output;
+    }
+
+    formatEffect(effect) {
+        let output = "";
+        switch (effect.type) {
+            case "Damage":
+                output = this.formatDamageEffect(effect);
+            break;
+            case "Condition":
+                output = this.formatConditionEffect(effect);
+            break;
+            case "Definition":
+            break;
+            case "":
+                output = this.formatDescriptionEffect(effect);
+            break;
+        }
+        
+        return output;
+    }
+
+    formatDamageEffect(effect) {
+        return `[${this.formatCalcBonus(effect)}] ${effect.effect} damage`;
+    }
+
+    formatConditionEffect(effect) {
+        let condition = WuxDef.Get(effect.effect);
+        let target = effect.target == "Self" ? "You" : "Target";
+        let ranks = this.formatCalcBonus(effect);
+        switch (effect.subType) {
+            case "Add": return `${target} gains the ${condition.name} ${condition.group}`;
+            case "Remove": return `${target} loses the ${condition.name} ${condition.group}`;
+            case "Rank Up": return `${target} gains [${ranks}] rank in the ${condition.name} ${condition.group}`;
+            case "Rank Down": return `${target} loses [${ranks}] rank in the ${condition.name} ${condition.group}`;
+            default: return `${target} gains the ${condition.name} ${condition.group}`;
+        }
+    }
+    
+    formatDescriptionEffect(effect) {
+        return effect.effect;
+    }
+
+    formatCalcBonus(effect) {
+        let output = this.formatEffectDice(effect);
+        let bonusEffects = effect.dBonus.split(";");
+        for(let i = 0; i < bonusEffects.length; i++) {
+            bonusEffects[i] = bonusEffects[i].trim();
+            if (output != "") {
+                output += "; ";
+            }
+            if (isNaN(parseInt(bonusEffects[i]))) {
+                output += `${WuxDef.GetAbbreviation(bonusEffects[i])}`;
+            }
+            else {
+                output += `${bonusEffects[i]}`;
+            }
+        }
+        return output;
+    }
+
+    formatEffectDice(effect) {
+        if (effect.dVal != "" && effect.dVal > 0) {
+            return `${effect.dVal}d${effect.dType}`;
+        }
+        return "";
+    }
+}
 
 // ====== Formatters
 
@@ -5158,192 +5467,6 @@ var FeatureService = FeatureService || (function () {
     'use strict';
 
     var
-
-        // Display Technique (Private)
-        // ------------------------,
-
-        getTechniqueDisplayDataObj = function () {
-            return {
-                name: "",
-                username: "",
-                fieldName: "",
-                actionType: "",
-                usageInfo: "",
-                isArmament: false,
-
-                slotType: "",
-                slotIsPath: false,
-                slotSource: "",
-                slotFooter: "",
-
-                prerequisite: "",
-                trigger: "",
-
-                isFunctionBlock: false,
-                traits: [],
-                requirement: "",
-                item: "",
-
-                isCheckBlock: false,
-                isCheckBlockTarget: false,
-                target: "",
-                rType: "",
-                range: "",
-                skill: "",
-                damage: "",
-
-                isDescBlock: false,
-                description: "",
-                onHit: "",
-                conditions: "",
-
-                technique: {}
-            };
-
-        },
-
-        getTechniqueDisplayData = function (technique) {
-            let techDisplayData = getTechniqueDisplayDataObj();
-            setTechniqueDisplayDataBase(techDisplayData, technique);
-            setTechniqueDisplayDataName(techDisplayData, technique);
-            setTechniqueDisplayDataUsageInfo(techDisplayData, technique);
-            setTechniqueDisplayDataSlotData(techDisplayData, technique);
-            setTechniqueDisplayDataFunctionBlock(techDisplayData, technique);
-            setTechniqueDisplayDataCheckBlock(techDisplayData, technique);
-            setTechniqueDisplayDataDescriptionBlock(techDisplayData, technique);
-            return techDisplayData;
-        },
-
-        setTechniqueDisplayDataBase = function (techDisplayData, technique) {
-            techDisplayData.technique = technique;
-            techDisplayData.isArmament = technique.item != "";
-        },
-
-        setTechniqueDisplayDataName = function (techDisplayData, technique) {
-            techDisplayData.name = technique.name;
-            techDisplayData.username = technique.username;
-            techDisplayData.fieldName = Format.ToCamelCase(technique.name);
-        },
-
-        setTechniqueDisplayDataUsageInfo = function (techDisplayData, technique) {
-            techDisplayData.actionType = technique.action;
-
-            techDisplayData.usageInfo = "";
-            if (technique.action != "") {
-                techDisplayData.usageInfo += technique.action;
-            }
-            if (technique.limits != "") {
-                if (techDisplayData.usageInfo != "") {
-                    techDisplayData.usageInfo += "; ";
-                }
-                techDisplayData.usageInfo += technique.limits;
-            }
-            if (technique.resourceCost != "") {
-                if (techDisplayData.usageInfo != "") {
-                    techDisplayData.usageInfo += "; ";
-                }
-                techDisplayData.usageInfo += technique.resourceCost;
-            }
-        },
-
-        setTechniqueDisplayDataSlotData = function (techDisplayData, technique) {
-            techDisplayData.slotType = technique.group;
-            techDisplayData.slotIsPath = technique.acquisition == "Free";
-            techDisplayData.slotFooter = `${technique.group}`;
-            techDisplayData.slotSource = technique.group;
-
-        },
-
-        setTechniqueDisplayDataFunctionBlock = function (techDisplayData, technique) {
-
-            techDisplayData.prerequisite = getPrerequisiteString(technique);
-
-            techDisplayData.isFunctionBlock = technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.item != "";
-            if (techDisplayData.isFunctionBlock) {
-                techDisplayData.traits = WuxDef.GetValues(technique.traits);
-                techDisplayData.requirement = techDisplayData.requirement;
-                techDisplayData.item = techDisplayData.item;
-                techDisplayData.trigger = technique.trigger;
-            }
-        },
-
-        setTechniqueDisplayDataCheckBlock = function (techDisplayData, technique) {
-            techDisplayData.isCheckBlock = technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "";
-
-            if (techDisplayData.isCheckBlock) {
-                setTechniqueDisplayDataCheckBlockRange(techDisplayData, technique);
-                setTechniqueDisplayDataCheckBlockSkill(techDisplayData, technique);
-                setTechniqueDisplayDataCheckBlockDamage(techDisplayData, technique);
-            }
-        },
-
-        setTechniqueDisplayDataCheckBlockRange = function (techDisplayData, technique) {
-            if (technique.range != "" || technique.target != "") {
-                techDisplayData.isCheckBlockTarget = true;
-                techDisplayData.target = technique.target;
-
-                if (technique.range != "") {
-                    techDisplayData.rType = technique.rType;
-                    techDisplayData.range = technique.range;
-                }
-            }
-        },
-
-        setTechniqueDisplayDataCheckBlockSkill = function (techDisplayData, technique) {
-            if (technique.skill != "") {
-                techDisplayData.skill = "";
-                if (technique.defense != "" && technique.defense != undefined) {
-                    techDisplayData.skill = technique.defense;
-                }
-                else {
-                    techDisplayData.skill = "DC 15";
-                }
-                techDisplayData.skill = `${technique.skill} vs. ${techDisplayData.skill}`;
-            }
-        },
-
-        setTechniqueDisplayDataCheckBlockDamage = function (techDisplayData, technique) {
-            if ((technique.dVal != "" && technique.dVal > 0) || technique.damageType != "") {
-                techDisplayData.damage = getDamageString(technique);
-            }
-        },
-
-        setTechniqueDisplayDataDescriptionBlock = function (techDisplayData, technique) {
-
-            techDisplayData.isDescBlock = technique.description != "" || technique.onSuccess != "";
-            if (techDisplayData.isDescBlock) {
-                techDisplayData.description = technique.description;
-                techDisplayData.onHit = technique.onSuccess;
-                setTechniqueDisplayDataDescriptionBlockConditions(techDisplayData, technique);
-            }
-        },
-
-        setTechniqueDisplayDataDescriptionBlockConditions = function (techDisplayData, technique) {
-
-            let actionEffects = getActionEffects(technique.dConditions);
-            let output = "";
-
-            let status = {};
-            let description = "";
-            for (let i = 0; i < actionEffects.states.length; i++) {
-                status = WuxDef.Get(actionEffects.states[i].name);
-                description = status.descriptions.join("\n");
-                if (output != "") {
-                    output += "\n";
-                }
-                output += `[State: ${status.name}] ${description}`;
-            }
-            for (let i = 0; i < actionEffects.conditions.length; i++) {
-                status = WuxDef.Get(actionEffects.conditions[i].name);
-                description = status.descriptions.join("\n");
-                if (output != "") {
-                    output += "\n";
-                }
-                output += `[Condition: ${status.name}] ${description}`;
-            }
-
-            techDisplayData.conditions = output;
-        },
 
         // Display Technique (Variants)
         // ------------------------,
@@ -5360,8 +5483,7 @@ var FeatureService = FeatureService || (function () {
         },
 
         getRollTemplateFromTechnique = function (technique) {
-            let techDisplayData = getTechniqueDisplayData(technique);
-            return getRollTemplate(techDisplayData);
+            return getRollTemplate(new TechniqueDisplayData(technique));
         },
 
         getConsumeUsePost = function (technique) {
@@ -5414,48 +5536,6 @@ var FeatureService = FeatureService || (function () {
 
         getPrerequisiteString = function (feature) {
             var output = "";
-
-            if (feature.augment != "") {
-                output += `${feature.augment} Technique`;
-            }
-
-            if (feature.prerequisite != undefined) {
-                if (feature.prerequisite.lv > 0) {
-                    if (output != "") {
-                        output += "; ";
-                    }
-                    output += `Character Level ${feature.prerequisite.lv}`;
-                }
-                if (feature.prerequisite.ap > 0) {
-                    if (output != "") {
-                        output += "; ";
-                    }
-                    switch (feature.prerequisite.ap) {
-                        case "Wood":
-                        case "Fire":
-                        case "Earth":
-                        case "Metal":
-                        case "Water":
-                            output += `${feature.prerequisite.ap} Element`;
-                            break;
-                        default:
-                            output += `${feature.prerequisite.ap} Branch`;
-                            break;
-                    }
-                }
-                if (feature.prerequisite.tr > 0) {
-                    if (output != "") {
-                        output += "; ";
-                    }
-                    output += `Trained in ${feature.prerequisite.tr}`;
-                }
-                if (feature.prerequisite.ot != "") {
-                    if (output != "") {
-                        output += "; ";
-                    }
-                    output += feature.prerequisite.ot;
-                }
-            }
 
             return output;
         },
@@ -5550,7 +5630,6 @@ var FeatureService = FeatureService || (function () {
 
         ;
     return {
-        GetTechniqueDisplayData: getTechniqueDisplayData,
         GetRollTemplate: getRollTemplate,
         GetRollTemplateFromTechnique: getRollTemplateFromTechnique,
         GetConsumeUsePost: getConsumeUsePost,
@@ -5631,6 +5710,20 @@ var Format = Format || (function () {
             return words.join('');
         },
 
+        romanize = function (num) {
+            if (isNaN(num))
+                return NaN;
+            var digits = String(+num).split(""),
+                key = ["","C","CC","CCC","CD","D","DC","DCC","DCCC","CM",
+                       "","X","XX","XXX","XL","L","LX","LXX","LXXX","XC",
+                       "","I","II","III","IV","V","VI","VII","VIII","IX"],
+                roman = "",
+                i = 3;
+            while (i--)
+                roman = (key[+digits.pop() + (i * 10)] || "") + roman;
+            return Array(+digits.join("") + 1).join("M") + roman;
+        },
+
         // Array Formatting
         // ------------------------
 
@@ -5699,6 +5792,7 @@ var Format = Format || (function () {
     return {
         ToCamelCase: toCamelCase,
         ToUpperCamelCase: toUpperCamelCase,
+        Romanize: romanize,
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,
         ShowTooltip: showTooltip,
@@ -6173,7 +6267,7 @@ var WuxDef = WuxDef || (function () {
 	'use strict';
 
 	var
-		keys = ["Attribute", "Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason", "Skill", "Job", "Language", "Lore", "Technique", "Defense", "Brace", "Evasion", "Fortitude", "Guard", "Reflex", "Sense", "Insight", "Perception", "Resolve", "General", "Character Level", "Proficiency", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed", "Affinity", "Wood", "Fire", "Earth", "Metal", "Water", "Gear", "Carrying Capacity", "Reflex Penalty", "Speed Penalty", "Combat", "Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce", "Social", "Scrutiny", "Willpower", "Approval", "Patience", "Tech Slot", "Job Slots", "Item Slots", "Active Slots", "Support Slots", "Character Creator", "Origin", "Full Name", "Display Name", "Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall", "Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)", "Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent", "Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious", "Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"],
+		keys = ["Attribute", "Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason", "Skill", "Job", "Language", "Lore", "Technique", "Defense", "Brace", "Disruption", "Evasion", "Reflex", "Sense", "Insight", "Resolve", "Perception", "Notice", "Hide", "General", "Character Level", "Character Rank", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed", "Affinity", "Wood", "Fire", "Earth", "Metal", "Water", "Gear", "Carrying Capacity", "Reflex Penalty", "Speed Penalty", "Combat", "Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce", "Social", "Scrutiny", "Willpower", "Approval", "Patience", "Tech Slot", "Job Slots", "Item Slots", "Active Slots", "Support Slots", "Character Creator", "Origin", "Full Name", "Display Name", "Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall", "Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)", "Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent", "Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious", "Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"],
 		values = {
 			"Attribute": {
 				"name": "Attribute", "group": "Type", "descriptions": ["Attributes are the inherent characteristics of your character. Characters have a numerical rating for each attribute, which determines the modifier they grant to skills and helps affect their derived stats. "],
@@ -6229,23 +6323,19 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Brace": {
 				"name": "Brace", "group": "Defense", "descriptions": ["Brace represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects."],
-				"abbreviation": "", "variable": "brace", "formula": "5;prcTier"
+				"abbreviation": "", "variable": "brace", "formula": "7;bod"
+			},
+			"Disruption": {
+				"name": "Disruption", "group": "Defense", "descriptions": ["Guard represents a character's ability to resist an attack by disrupting its impact via parrying with a weapon or reducing its effectiveness. "],
+				"abbreviation": "", "variable": "disruption", "formula": "7;prc"
 			},
 			"Evasion": {
-				"name": "Evasion", "group": "Defense", "descriptions": ["Evasion is your dodging ability. When defending against any kind of attack against your defense, you will always check against your evasion. If the check fails to be higher than the defense, the attack misses and has no effect. When making an attack roll, evasion will never be considered higher than the targetted defense."],
-				"abbreviation": "", "variable": "evasion", "formula": "qckTier;evasion_penalty"
-			},
-			"Fortitude": {
-				"name": "Fortitude", "group": "Defense", "descriptions": ["Fortitude is a character's ability to resist internal harm such as from poisons or sickness."],
-				"abbreviation": "", "variable": "fortitude", "formula": "5;bodTier"
-			},
-			"Guard": {
-				"name": "Guard", "group": "Defense", "descriptions": ["Guard represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects."],
-				"abbreviation": "", "variable": "guard", "formula": "5;bodTier"
+				"name": "Evasion", "group": "Defense", "descriptions": ["Evasion is your dodging ability. When an attack checks against any defense and fails, it will always then check against evasion. On failure, the attack does not connect and no aspect of its effects occur."],
+				"abbreviation": "", "variable": "evasion", "formula": "qck"
 			},
 			"Reflex": {
 				"name": "Reflex", "group": "Defense", "descriptions": ["Reflex is used when a character could quickly react to a situation with movement. It is usually used to avoid powerful attacks or to get out of the way of harmful effects that only need to touch the character like a fireball."],
-				"abbreviation": "", "variable": "reflex", "formula": "5;qckTier"
+				"abbreviation": "", "variable": "reflex", "formula": "7;evasion"
 			},
 			"Sense": {
 				"name": "Sense", "group": "Type", "descriptions": [""],
@@ -6253,15 +6343,23 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Insight": {
 				"name": "Insight", "group": "Sense", "descriptions": ["Insight represents a character's ability to parse conversation and judge mental states. This defense is typically used when information is being hidden in text or speech or to detect when someone is concealing their true thoughts."],
-				"abbreviation": "", "variable": "insight", "formula": "rsnTier"
-			},
-			"Perception": {
-				"name": "Perception", "group": "Sense", "descriptions": ["Perception is the ability to see or hear sudden changes in your environment. It is typically used to counter a character's stealth attempts or to hear a distant or quiet noise."],
-				"abbreviation": "", "variable": "perception", "formula": "cnvTier"
+				"abbreviation": "", "variable": "insight", "formula": "7;rsn"
 			},
 			"Resolve": {
 				"name": "Resolve", "group": "Sense", "descriptions": ["Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in."],
-				"abbreviation": "", "variable": "resolve", "formula": "intTier"
+				"abbreviation": "", "variable": "resolve", "formula": "7;cnv"
+			},
+			"Perception": {
+				"name": "Perception", "group": "Type", "descriptions": [""],
+				"abbreviation": "", "variable": "", "formula": ""
+			},
+			"Notice": {
+				"name": "Notice", "group": "Perception", "descriptions": ["Notice is the ability to see or hear sudden changes in your environment. It is typically used to counter a character's sneak attempts or to hear a distant or quiet noise."],
+				"abbreviation": "", "variable": "notice", "formula": "7;int"
+			},
+			"Hide": {
+				"name": "Hide", "group": "Perception", "descriptions": [""],
+				"abbreviation": "", "variable": "hide", "formula": "7;qck"
 			},
 			"General": {
 				"name": "General", "group": "Type", "descriptions": [""],
@@ -6269,11 +6367,11 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Character Level": {
 				"name": "Character Level", "group": "General", "descriptions": ["A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP)."],
-				"abbreviation": "Lv", "variable": "base_level{0}", "formula": ""
+				"abbreviation": "Lv", "variable": "base_level", "formula": ""
 			},
-			"Proficiency": {
-				"name": "Proficiency", "group": "General", "descriptions": ["Your proficiency applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level."],
-				"abbreviation": "PB", "variable": "pb", "formula": ""
+			"Character Rank": {
+				"name": "Character Rank", "group": "General", "descriptions": ["Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level."],
+				"abbreviation": "CR", "variable": "cr", "formula": ""
 			},
 			"Hit Points": {
 				"name": "Hit Points", "group": "General", "descriptions": ["Hit Points (HP) are the number of hits a character can take in a conflict. This is the case no matter the type of encounter as HP changes based on the type of encounter one finds themselves in."],
@@ -6297,7 +6395,7 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Initiative": {
 				"name": "Initiative", "group": "General", "descriptions": ["The Initiative skill is used to determine whoever acts first in a conflict. "],
-				"abbreviation": "", "variable": "initiative", "formula": "qckTier"
+				"abbreviation": "", "variable": "initiative", "formula": "qck"
 			},
 			"Speed": {
 				"name": "Speed", "group": "General", "descriptions": ["Speed is how far a character is able to move on your turn, measured in spaces, when you make a standard move."],
@@ -6333,7 +6431,7 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Carrying Capacity": {
 				"name": "Carrying Capacity", "group": "Gear", "descriptions": ["Carrying capacity is the total amount of Bulk a character can carry without penalty. Going over this amount will force the character to gain the Encumbered condition. "],
-				"abbreviation": "", "variable": "carry_capacity", "formula": "40; bod"
+				"abbreviation": "", "variable": "carry_capacity", "formula": "40; bodRank"
 			},
 			"Reflex Penalty": {
 				"name": "Reflex Penalty", "group": "Gear", "descriptions": ["Reflex Penalty represents how restricted their movement is, usually from equipped gear. Each point in Reflex Penality reduces the total modifer of your Reflex score."],
@@ -6349,11 +6447,11 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Durability": {
 				"name": "Durability", "group": "Combat", "descriptions": ["During combat encounters, your hit points are equal to your durability score. Your character’s durability is a representation of your character maintaining their barrier to take hits, resisting harm with their toughness, and general ability to avoid harm. A character may be taking attacks from multiple sources that can be easily shrugged off, but once they run out of HP to do so is when the big hits make their way through. "],
-				"abbreviation": "", "variable": "durability", "formula": "pb*10;bodTier"
+				"abbreviation": "", "variable": "durability", "formula": "pb*10;bod"
 			},
 			"Barrier": {
 				"name": "Barrier", "group": "Combat", "descriptions": ["A character's barrier is a manifestation of their ki as a layer of protection around them. Barrier adds its value in Buffer to the character at the start of each round, as long as they are not Downed or Unconscious."],
-				"abbreviation": "", "variable": "barrier", "formula": "prcTier"
+				"abbreviation": "", "variable": "barrier", "formula": "prc"
 			},
 			"Block": {
 				"name": "Block", "group": "Combat", "descriptions": ["Various types of gear will grant Block as a bonus. Block adds its value in Buffer to the character at the start of each round."],
@@ -6397,19 +6495,19 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Scrutiny": {
 				"name": "Scrutiny", "group": "Social", "descriptions": ["Scrutiny represents your willingness to continue scrutinizing another's points. During social conflict it works similarly to HP providing resistance to charming and deceptive attempts before giving into another's arguments."],
-				"abbreviation": "", "variable": "scrutiny", "formula": "rsnTier"
+				"abbreviation": "", "variable": "scrutiny", "formula": "rsn"
 			},
 			"Willpower": {
 				"name": "Willpower", "group": "Social", "descriptions": ["Willpower represents a character's resilience towards those that would attempt to control or coerce them. In social conflict it acts similarly to HP, representing a character's threshold before allowing another to influence them. "],
-				"abbreviation": "", "variable": "willpower", "formula": "cnvTier"
+				"abbreviation": "", "variable": "willpower", "formula": "cnv"
 			},
 			"Approval": {
 				"name": "Approval", "group": "Social", "descriptions": ["Approval is a character's resistance to place their trust in another. In social conflict it acts similarly to HP, representing a character's threshold before allowing another to have their favor. "],
-				"abbreviation": "", "variable": "approval", "formula": "cnvTier"
+				"abbreviation": "", "variable": "approval", "formula": "cnv"
 			},
 			"Patience": {
 				"name": "Patience", "group": "Social", "descriptions": ["Patience is a measure of how long a character can last in social combat before they become frustrated and unable to participate meaningfully. "],
-				"abbreviation": "", "variable": "patience", "formula": "pb*10;intTier"
+				"abbreviation": "", "variable": "patience", "formula": "pb*10;int"
 			},
 			"Tech Slot": {
 				"name": "Tech Slot", "group": "Type", "descriptions": ["Characters are able to learn a variety of techniques. While many are permanent and therefore always active, some require a person to prepare before having access to them. These techniques always exist in a tech tree. When a tech tree is equipped to a tech slot of its type, the character has access to these techniques."],
@@ -6544,35 +6642,35 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Downed": {
-				"name": "Downed", "group": "State", "descriptions": ["A creature that is downed can only perform techniques with the Simple trait. This status ends when the creature's trauma is less than their Trauma Limit."],
+				"name": "Downed", "group": "Status", "descriptions": ["A creature that is downed can only perform techniques with the Simple trait. This status ends when the creature's trauma is less than their Trauma Limit."],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Engaged": {
-				"name": "Engaged", "group": "State", "descriptions": ["If a character moves adjacent to a hostile character, they both gain the Engaged status for as long as they remain adjacent to one another. Ranged attacks made by an Engaged character receive +1 Disadvantage. Additionally, characters that become Engaged by targets of equal or greater Size during the course of a movement stop moving immediately and lose any unused movement."],
+				"name": "Engaged", "group": "Status", "descriptions": ["If a character moves adjacent to a hostile character, they both gain the Engaged status for as long as they remain adjacent to one another. Ranged attacks made by an Engaged character receive +1 Disadvantage. Additionally, characters that become Engaged by targets of equal or greater Size during the course of a movement stop moving immediately and lose any unused movement."],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Ethereal": {
-				"name": "Ethereal", "group": "State", "descriptions": ["The character is in the spirit realm. If the character has a physical body it is treated as unconscious. "],
+				"name": "Ethereal", "group": "Status", "descriptions": ["The character is in the spirit realm. If the character has a physical body it is treated as unconscious. "],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Grappled": {
-				"name": "Grappled", "group": "State", "descriptions": ["While a character is grappled, both characters become Engaged, and can't Dash or take reactions for the duration of the grapple.\nThe character in control of the grapple is the larger creature while the smaller character becomes Immobilized but moves when the controlling party moves, mirroring their movement. If both parties are the same Size, the one that initiated the grapple is in control. Either can make contested Physique checks at the start of their turn: the winner counts as the character in control until this contest is repeated.\nA Grapple automatically ends when:\n• either character breaks adjacency, such as if they are knocked back by another effect;\n• the controller chooses to end the grapple as a free action"],
+				"name": "Grappled", "group": "Status", "descriptions": ["While a character is grappled, both characters become Engaged, and can't Dash or take reactions for the duration of the grapple.\nThe character in control of the grapple is the larger creature while the smaller character becomes Immobilized but moves when the controlling party moves, mirroring their movement. If both parties are the same Size, the one that initiated the grapple is in control. Either can make contested Physique checks at the start of their turn: the winner counts as the character in control until this contest is repeated.\nA Grapple automatically ends when:\n• either character breaks adjacency, such as if they are knocked back by another effect;\n• the controller chooses to end the grapple as a free action"],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Hidden": {
-				"name": "Hidden", "group": "State", "descriptions": ["Hidden characters can’t be targeted by hostile attacks or actions, don’t cause engagement, and enemies only know their approximate location. Attacking, forcing saves, taking reactions, using Dash, and losing cover all remove Hidden after they resolve. Characters can find Hidden characters with Search."],
+				"name": "Hidden", "group": "Status", "descriptions": ["Hidden characters can’t be targeted by hostile attacks or actions, don’t cause engagement, and enemies only know their approximate location. Attacking, forcing saves, taking reactions, using Dash, and losing cover all remove Hidden after they resolve. Characters can find Hidden characters with Search."],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Invisible": {
-				"name": "Invisible", "group": "State", "descriptions": ["All attacks against Invisible characters, regardless of type, have a 50 percent chance to miss outright, before an attack roll is made. Roll a die or flip a coin to determine if the attack misses. Additionally, Invisible characters can always Hide, even without cover."],
+				"name": "Invisible", "group": "Status", "descriptions": ["All attacks against Invisible characters, regardless of type, have a 50 percent chance to miss outright, before an attack roll is made. Roll a die or flip a coin to determine if the attack misses. Additionally, Invisible characters can always Hide, even without cover."],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Restrained": {
-				"name": "Restrained", "group": "State", "descriptions": ["Restrained characters cannot make any voluntary movements, although involuntary movements are unaffected. Attacks against this creature gain +1 Advantage. Unless it is otherwise stated, a creature can use the Break Free or Escape techniques against a standard DC to end the status on themselves or an adjacent character. "],
+				"name": "Restrained", "group": "Status", "descriptions": ["Restrained characters cannot make any voluntary movements, although involuntary movements are unaffected. Attacks against this creature gain +1 Advantage. Unless it is otherwise stated, a creature can use the Break Free or Escape techniques against a standard DC to end the status on themselves or an adjacent character. "],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Unconscious": {
-				"name": "Unconscious", "group": "State", "descriptions": ["An unconscious creature cannot take actions or reactions, can’t move or speak, and is unaware of its surroundings.\nThe creature drops whatever it’s holding and falls prone.\nThe creature automatically fails all saving throws.\nAttack rolls against the creature have +1 Advantage.\nAny attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature."],
+				"name": "Unconscious", "group": "Status", "descriptions": ["An unconscious creature cannot take actions or reactions, can’t move or speak, and is unaware of its surroundings.\nThe creature drops whatever it’s holding and falls prone.\nThe creature automatically fails all saving throws.\nAttack rolls against the creature have +1 Advantage.\nAny attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature."],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Aflame": {
@@ -6664,7 +6762,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "variable": "", "formula": ""
 			}
 		},
-		sortingGroups = { "group": { "Type": ["Attribute", "Defense", "Sense", "General", "Affinity", "Gear", "Combat", "Social", "Tech Slot"], "Attribute": ["Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason"], "Stat": ["Skill", "Job", "Language", "Lore", "Technique"], "Defense": ["Brace", "Evasion", "Fortitude", "Guard", "Reflex"], "Sense": ["Insight", "Perception", "Resolve"], "General": ["Character Level", "Proficiency", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "Gear": ["Carrying Capacity", "Reflex Penalty", "Speed Penalty"], "Combat": ["Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce"], "Social": ["Scrutiny", "Willpower", "Approval", "Patience"], "Tech Slot": ["Job Slots", "Item Slots", "Active Slots", "Support Slots"], "Definition": ["Character Creator", "Origin", "Full Name", "Display Name"], "Technique Trait": ["Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall"], "Item Trait": ["Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)"], "Material Trait": ["Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent"], "State": ["Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious"], "Condition": ["Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"] } },
+		sortingGroups = { "group": { "Type": ["Attribute", "Defense", "Sense", "Perception", "General", "Affinity", "Gear", "Combat", "Social", "Tech Slot"], "Attribute": ["Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason"], "Stat": ["Skill", "Job", "Language", "Lore", "Technique"], "Defense": ["Brace", "Disruption", "Evasion", "Reflex"], "Sense": ["Insight", "Resolve"], "Perception": ["Notice", "Hide"], "General": ["Character Level", "Character Rank", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "Gear": ["Carrying Capacity", "Reflex Penalty", "Speed Penalty"], "Combat": ["Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce"], "Social": ["Scrutiny", "Willpower", "Approval", "Patience"], "Tech Slot": ["Job Slots", "Item Slots", "Active Slots", "Support Slots"], "Definition": ["Character Creator", "Origin", "Full Name", "Display Name"], "Technique Trait": ["Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall"], "Item Trait": ["Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)"], "Material Trait": ["Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent"], "Status": ["Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious"], "Condition": ["Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"] } },
 
 		get = function (key) {
 			return new DefinitionData(values[key]);
@@ -6743,6 +6841,15 @@ var WuxDef = WuxDef || (function () {
 		getVariable = function (key, mod) {
 			let data = get(key);
 			return data.getVariable(mod);
+		},
+		getAbbreviation = function (key, mod) {
+			let data = get(key);
+			if (data.abbreviation == "") {
+				return data.name;
+			}
+			else {
+				return data.abbreviation;
+			}
 		}
 		;
 	return {
@@ -6753,6 +6860,7 @@ var WuxDef = WuxDef || (function () {
 		Filter: filter,
 		GetSortedGroup: getSortedGroup,
 		GetAttribute: getAttribute,
-		GetVariable: getVariable
+		GetVariable: getVariable,
+		GetAbbreviation: getAbbreviation
 	};
 }());

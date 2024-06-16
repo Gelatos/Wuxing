@@ -1659,7 +1659,7 @@ input.wuxFeatureHeader-flag[value="Equipment"] + .wuxFeatureHeader,
     position: absolute;
     display: inline-block;
     right: 0px;
-    width: 65px; 
+    width: 90px; 
     padding: 5px 0px; 
 
     vertical-align: top; 
@@ -1670,11 +1670,6 @@ input.wuxFeatureHeader-flag[value="Equipment"] + .wuxFeatureHeader,
     background: #666;
     border: 0px solid #000;
     border-width: 0px 0px 3px 3px;
-}
-
-.wuxFeatureType.wuxFeatureType-IsPath
-{
-    width: 90px; 
 }
 
 input.wuxFeatureType-flag[value="Active"] + .wuxFeatureType,
@@ -1864,16 +1859,32 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
     font-weight: bold;
 }
 
-.wuxFeatureHeaderInfoPrereq,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoPrereq,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoPrereq
+.wuxFeatureHeaderInfoReq,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoReq,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoReq,
+.wuxFeatureHeaderInfoTrigger,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger
 {
     position: relative;
     display: block; 
     padding: 5px 10px; 
 
     font-size: 11px;
+}
+
+.wuxFeatureHeaderInfoReq,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoReq,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoReq
+{
     background: #e77a7a;
+}
+
+.wuxFeatureHeaderInfoTrigger,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger
+{
+    background: #7aa9e7;
 }
 
 .wuxFeatureExpandingContent,
@@ -1931,7 +1942,9 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 }
 
 .wuxFeatureFunctionBlock,
-.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock
+.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock,
+.wuxFeatureEffectsBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureEffectsBlock
 {
     position: relative;
     display: block;
@@ -1943,45 +1956,87 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
     font-size: 11px; 
     
     border-bottom: 1px solid #c6c6c6; 
+}
+
+.wuxFeatureFunctionBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock
+{
     background: #fbf9e5;
 }
 
+.wuxFeatureEffectsBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureEffectsBlock
+{
+    background: #fdfbde;
+}
+
 .wuxFeatureFunctionBlock .wuxFeatureFunctionBlockRow,
-.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock .sheet-wuxFeatureFunctionBlockRow
+.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock .sheet-wuxFeatureFunctionBlockRow,
+.wuxFeatureFunctionBlock .wuxFeatureFunctionBlockFlavorText,
+.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock .sheet-wuxFeatureFunctionBlockFlavorText
 {
     position: relative;
     display: block;
+}
+
+.wuxFeatureFunctionBlock .wuxFeatureFunctionBlockFlavorText,
+.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock .sheet-wuxFeatureFunctionBlockFlavorText
+{
+    font-style: italic;
+}
+
+.wuxFeatureCheckHeader,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckHeader,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckHeader
+{
+    position: relative;
+    display: block; 
+    margin: 5px 0px;
+
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.wuxFeatureCheckBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock,
+.wuxFeatureAutoBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureAutoBlock,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureAutoBlock
+{
+    position: relative;
+    width: calc(100% - 30px);
+    padding: 5px 5px; 
+    margin: 0px 10px; 
+    
+    line-height: 14px; 
+    font-size: 11px; 
+    border: 1px solid black; 
 }
 
 .wuxFeatureCheckBlock,
 .sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock
 {
-    position: relative;
-    width: calc(100% - 30px);
-    padding: 5px 5px; 
-    margin: 5px 10px; 
-    
-    line-height: 14px; 
-    font-size: 11px; 
-    border: 1px solid black; 
     background: #e8c5c5;
 }
 
+.wuxFeatureAutoBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureAutoBlock,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureAutoBlock
+{
+    background: #e8e0c5;
+}
+
 .wuxFeatureCheckBlock .wuxFeatureCheckBlockRow,
-.wuxFeatureCheckBlock .wuxFeatureCheckBlockRow .wuxFeatureCheckBlockRange,
-.wuxFeatureCheckBlock .wuxFeatureCheckBlockRow .wuxFeatureCheckBlockTarget,
 .sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow,
-.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow .sheet-wuxFeatureCheckBlockRange,
-.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow .sheet-wuxFeatureCheckBlockTarget,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow,
+.wuxFeatureCheckBlock .wuxFeatureCheckBlockRowHeader,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRowHeader,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRowHeader
 {
     position: relative;
     display: inline-block;
-}
-
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow
-{
     line-height: normal;
 }
 
@@ -1990,18 +2045,15 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow
 {
     width: calc(100% - 22px);
+    white-space: pre-line;
+    word-break: break-word;
 }
 
-.wuxFeatureCheckBlock .wuxFeatureCheckBlockRow .wuxFeatureCheckBlockRange,
-.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow .sheet-wuxFeatureCheckBlockRange
+.wuxFeatureCheckBlock .wuxFeatureCheckBlockRowHeader,
+.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRowHeader,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRowHeader
 {
-    padding-right: 10px;
-}
-
-.wuxFeatureCheckBlock .wuxFeatureCheckBlockRow .wuxFeatureCheckBlockTarget,
-.sheet-rolltemplate-technique .sheet-wuxFeatureCheckBlock .sheet-wuxFeatureCheckBlockRow .sheet-wuxFeatureCheckBlockTarget
-{
-    width: calc(65% - 5px);
+    font-weight: bold;
 }
 
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureRollData

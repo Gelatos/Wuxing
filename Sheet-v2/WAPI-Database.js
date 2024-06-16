@@ -6,6 +6,44 @@ class Dictionary {
         this.keys = [];
         this.values = {};
     }
+    import(data, dataCreationCallback) {
+        if (data != undefined) {
+            if (Array.isArray(data)) {
+                this.importSheets(data, dataCreationCallback);
+            }
+            else if (typeof data == "string") {
+                this.importStringifiedJson(data, dataCreationCallback);
+            }
+            else {
+                this.importJson(data, dataCreationCallback);
+            }
+        }
+    }
+    importStringifiedJson(stringifiedJSON, dataCreationCallback) {
+        this.importJson(JSON.parse(stringifiedJSON), dataCreationCallback);
+    }
+    importJson(json, dataCreationCallback) {
+        if (json == undefined) {
+            return;
+        }
+        this.keys = json.keys;
+        if (dataCreationCallback != undefined) {
+            this.values = {};
+            for(let i = 0; i < json.keys.length; i++) {
+                this.values[json.keys[i]] = dataCreationCallback(json.values[json.keys[i]]);
+            }
+        }
+        else {
+            this.values = json.values;
+        }
+    }
+    importSheets(dataArray, dataCreationCallback) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = dataCreationCallback(dataArray[i]);
+            this.add(data.name, data);
+        }
+    }
     add(key, value) {
         if (!this.keys.includes(key)) {
             this.keys.push(key);
@@ -15,12 +53,21 @@ class Dictionary {
     get(key) {
         return this.values[key];
     }
+    getkey(index) {
+        return this.keys[index];
+    }
+    getByIndex(index) {
+        return this.get(this.getkey(index));
+    }
+    set(key, value) {
+        this.values[key] = value;
+    }
     has(key) {
         return this.keys.includes(key);
     }
     iterate(callback) {
         for (let i = 0; i < this.keys.length; i++) {
-            callback(this.values[this.keys[i]]);
+            callback(this.values[this.keys[i]], this.keys[i]);
         }
     }
 }
@@ -38,34 +85,11 @@ class Database extends Dictionary {
             this.sortingGroups[sortingProperties[i]] = {};
         }
 
-        if (data != undefined) {
-            if (Array.isArray(data)) {
-                this.importSheets(data, dataCreationCallback);
-            }
-            else if (typeof data == "string") {
-                this.importStringifiedJson(data);
-            }
-            else {
-                this.importJson(data);
-            }
-        }
+        this.import(data, dataCreationCallback);
     }
-
-    importStringifiedJson(stringifiedJSON) {
-        let json = JSON.parse(stringifiedJSON);
-        this.importJson(json);
-    }
-    importJson(json) {
-        this.keys = json.keys;
-        this.values = json.values;
+    importJson(json, dataCreationCallback) {
+        super.importJson(json, dataCreationCallback);
         this.sortingGroups = json.sortingGroups;
-    }
-    importSheets(dataArray, dataCreationCallback) {
-        let data = {};
-        for (let i = 0; i < dataArray.length; i++) {
-            data = dataCreationCallback(dataArray[i]);
-            this.add(data.name, data);
-        }
     }
 
     add(key, value) {
@@ -82,10 +106,13 @@ class Database extends Dictionary {
 
     filter(filterData) {
         let filteredGroup = this.getSortedGroup(filterData[0].property, filterData[0].value);
-        let filters = [];
+        let nextFilter = [];
         for (let i = 1; i < filterData.length; i++) {
-            filters = this.getSortedGroup(filterData[i].property, filterData[i].value);
-            filteredGroup = filteredGroup.filter(item => filters.includes(item))
+            if (filteredGroup == undefined || filteredGroup.length == 0) {
+                return [];
+            }
+            nextFilter = this.getSortedGroup(filterData[i].property, filterData[i].value);
+            filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
         }
         if (filteredGroup == undefined || filteredGroup.length == 0) {
             return [];
@@ -118,12 +145,12 @@ class ExtendedTechniqueDatabase extends Database {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
             data = dataCreationCallback(dataArray[i]);
-            switch (data.category) {
-                case "Component":
-                    this.get(data.linkedTech).importSheetEffect(dataArray);
+            switch (data.name) {
+                case "-":
+                    this.get(data.linkedTech).importEffectTechnique(data);
                     break;
-                case "OnGoing":
-                    this.get(data.linkedTech).importSheetOngoing(dataArray);
+                case "!":
+                    this.get(data.linkedTech).importOngoingTechnique(data);
                     break;
                 default:
                     this.add(data.name, data);
@@ -175,10 +202,11 @@ class dbObj {
 class TechniqueData extends dbObj {
     importJson(json) {
         this.name = json.name;
-        this.category = json.category;
+        this.techSet = json.techSet;
         this.linkedTech = json.linkedTech;
         this.group = json.group;
-        this.aptitude = json.aptitude;
+        this.affinity = json.affinity;
+        this.tier = json.tier;
         this.action = json.action;
         this.traits = json.traits;
         this.resourceCost = json.resourceCost;
@@ -190,17 +218,20 @@ class TechniqueData extends dbObj {
         this.itemTraits = json.itemTraits;
         this.trigger = json.trigger;
         this.flavorText = json.flavorText;
-        this.conditions = json.conditions;
+        this.definitions = Array.isArray(json.definitions) ? json.definitions : [];
         this.autoEffects = json.autoEffects;
-        this.effects = json.effects;
+        this.effects = new Dictionary();
+        this.effects.importJson(json.effects);
+        this.onGoingTech = new TechniqueData(json.onGoingTech);
     }
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.category = "" + dataArray[i]; i++;
+        this.techSet = "" + dataArray[i]; i++;
         this.linkedTech = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
-        this.aptitude = "" + dataArray[i]; i++;
+        this.affinity = "" + dataArray[i]; i++;
+        this.tier = parseInt(dataArray[i]) == NaN ? 1 : parseInt(dataArray[i]); i++;
         this.action = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
         this.resourceCost = "" + dataArray[i]; i++;
@@ -212,18 +243,19 @@ class TechniqueData extends dbObj {
         this.itemTraits = "" + dataArray[i]; i++;
         this.trigger = "" + dataArray[i]; i++;
         this.flavorText = "" + dataArray[i]; i++;
-        this.conditions = [];
+        this.definitions = [];
         this.autoEffects = [];
         this.effects = new Dictionary();
         this.onGoingTech = undefined;
-        importSheetEffect(this.category, dataArray);
+        this.importEffectSheet(dataArray.slice(i));
     }
     createEmpty() {
         this.name = "";
-        this.category = "";
+        this.techSet = "";
         this.linkedTech = "";
         this.group = "";
-        this.aptitude = "";
+        this.affinity = "";
+        this.tier = 0;
         this.action = "";
         this.traits = "";
         this.resourceCost = "";
@@ -235,7 +267,7 @@ class TechniqueData extends dbObj {
         this.itemTraits = "";
         this.trigger = "";
         this.flavorText = "";
-        this.conditions = [];
+        this.definitions = [];
         this.autoEffects = [];
         this.effects = new Dictionary();
         this.onGoingTech = undefined;
@@ -246,10 +278,10 @@ class TechniqueData extends dbObj {
         if (this.name == "") {
             return baseTechnique;
         }
-        this.category = this.setAugmentTechValue(this.category, baseTechnique.category);
+        this.techSet = this.setAugmentTechValue(this.techSet, baseTechnique.techSet);
         this.linkedTech = this.setAugmentTechValue(this.linkedTech, baseTechnique.linkedTech);
         this.group = this.setAugmentTechValue(this.group, baseTechnique.group);
-        this.aptitude = this.setAugmentTechValue(this.aptitude, baseTechnique.aptitude);
+        this.tier = this.setAugmentTechValue(this.tier, baseTechnique.tier);
         this.action = this.setAugmentTechValue(this.action, baseTechnique.action);
         this.traits = this.setAugmentTechValue(this.traits, baseTechnique.traits);
         this.resourceCost = this.setAugmentTechValue(this.resourceCost, baseTechnique.resourceCost);
@@ -272,12 +304,21 @@ class TechniqueData extends dbObj {
         return augmentValue;
     }
 
-    importSheetEffect(dataArray) {
-        let i = 16;
+    importEffectSheet(dataArray) {
+        let i = 0;
         let defense = "" + dataArray[i]; i++;
         let onPass = "" + dataArray[i]; i++;
-        let effect = new TechniqueEffect(dataArray);
+        let effect = new TechniqueEffect(dataArray.slice(i)); i++;
 
+        if (effect.type == "Definition") {
+            this.addDefinition(effect.effect);
+            return;
+        }
+
+        if (effect.type == "" && effect.effect == "") {
+            return;
+        }
+        
         if (defense == "") {
             this.autoEffects.push(effect);
         }
@@ -286,33 +327,47 @@ class TechniqueData extends dbObj {
         }
 
         if (effect.type == "Condition") {
-            addCondition(effect.effect);
+            this.addDefinition(effect.effect);
+        }
+    }
+    importEffectTechnique(technique) {
+        if (technique.autoEffects.length > 0) {
+            this.autoEffects = this.autoEffects.concat(technique.autoEffects);
+        }
+        else {
+            let effect = technique.effects.getByIndex(0);
+            let isOnPass = effect.onPass.length > 0;
+            this.addEffect(technique.effects.getkey(0), isOnPass, isOnPass ? effect.onPass[0] : effect.auto[0]);
+        }
+
+        if (technique.definitions.length > 0) {
+            this.addDefinition(technique.definitions[0]);
         }
     }
     addEffect(defense, onPass, effect) {
         if (!this.effects.has(defense)) {
-            this.effects.add(defense, {onPass: [], onFail: []});
+            this.effects.add(defense, {onPass: [], auto: []});
         }
-        if (onPass) {
+        if (onPass == "1") {
             this.effects.get(defense).onPass.push(effect);
         }
         else {
-            this.effects.get(defense).onFail.push(effect);
+            this.effects.get(defense).auto.push(effect);
         }
     }
 
-    importSheetOngoing(dataArray) {
+    importOngoingTechnique(technique) {
         if (this.onGoingTech == undefined) {
-            this.onGoingTech = new TechniqueData(dataArray);
+            this.onGoingTech = technique;
         }
         else {
-            this.onGoingTech.importSheetEffect(dataArray);
+            this.onGoingTech.importEffectTechnique(technique);
         }
     }
 
-    addCondition(condition) {
-        if (!this.conditions.includes(condition)) {
-            this.conditions.push(condition);
+    addDefinition(definition) {
+        if (!this.definitions.includes(definition)) {
+            this.definitions.push(definition);
         }
     }
 }
@@ -320,35 +375,33 @@ class TechniqueEffect extends dbObj {
     importJson(json) {
         this.target = json.target;
         this.type = json.type;
+        this.subType = json.subType;
         this.dVal = json.dVal;
         this.dType = json.dType;
         this.dBonus = json.dBonus;
         this.effect = json.effect;
         this.traits = json.traits;
-        this.description = json.description;
     }
     importSheets(dataArray) {
-        
-        let i = 18;
+        let i = 0;
         this.target = "" + dataArray[i]; i++;
         this.type = "" + dataArray[i]; i++;
+        this.subType = "" + dataArray[i]; i++;
         this.dVal = "" + dataArray[i]; i++;
         this.dType = "" + dataArray[i]; i++;
         this.dBonus = "" + dataArray[i]; i++;
         this.effect = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
-
     }
     createEmpty() {
         this.target = "";
         this.type = "";
+        this.subType = "";
         this.dVal = "";
         this.dType = "";
         this.dBonus = "";
         this.effect = "";
         this.traits = "";
-        this.description = "";
     }
 }
 class SkillData extends dbObj {
@@ -645,9 +698,18 @@ class TechniqueDisplayData {
     }
 
     importTechnique(technique) {
-        setTechBasics(technique);
-        setTechActionData(technique);
-        setTechTargetData(technique);
+        this.createEmpty();
+        this.setTechBasics(technique);
+        this.setTechSetData(technique);
+        this.setTechActionData(technique);
+        this.setTechTargetData(technique);
+        this.setExtentionEffects(technique);
+        this.setTraits(technique);
+        this.setFlavorText(technique);
+        this.setDefinitions(technique);
+        this.setAutoEffects(technique);
+        this.setEffects(technique);
+        this.setOngoingEffects(technique);
     }
     
     setTechBasics(technique) {
@@ -656,7 +718,23 @@ class TechniqueDisplayData {
         this.username = technique.username;
         this.fieldName = Format.ToCamelCase(technique.name);
         this.actionType = technique.action;
-        this.skill = technique.skill;
+    }
+    setTechSetData(technique) {
+        this.techSetDisplay = technique.affinity;
+        this.techSetTitle = technique.skill == "" ? "No Check" : technique.skill;
+        this.techSetSub = technique.techSet == "" ? "No Style" : technique.techSet;
+        if (technique.affinity == "" && technique.tier <= 1) {
+            this.techSetSub2 = `No Restrictions`;
+        }
+        else if (technique.affinity == "" && technique.tier > 1) {
+            this.techSetSub2 = `Tier ${Format.Romanize(technique.tier)}`;
+        }
+        else if (technique.tier <= 1) {
+            this.techSetSub2 = `${technique.affinity}`;
+        }
+        else {
+            this.techSetSub2 = `${technique.affinity} | Tier ${Format.Romanize(technique.tier)}`;
+        }
     }
     setTechActionData(technique) {
         this.actionData = "";
@@ -677,10 +755,47 @@ class TechniqueDisplayData {
         }
     }
     setTechTargetData(technique) {
-        this.targetData = technique.range;
+        if (technique.range != "") {
+            this.targetData = `Range: ${technique.range}`;
+        }
         if (technique.target != "") {
             this.targetData += `; ${technique.target}`;
         }
+    }
+    setExtentionEffects(technique) {
+        this.requirements = technique.requirement;
+        this.itemTraits = WuxDef.GetValues(technique.itemTraits, ";");
+        this.trigger = technique.trigger;
+    }
+    setTraits(technique) {
+        this.traits = WuxDef.GetValues(technique.traits, ";");
+    }
+    setFlavorText(technique) {
+        this.flavorText = technique.flavorText;
+    }
+    setDefinitions(technique) {
+        this.definitions = WuxDef.GetValues(technique.definitions, ";");
+        // if (technique.definitions.length > 0) {
+        //     let conditionDefinition = "";
+        //     let description = "";
+        //     for (let i = 0; i < technique.definitions.length; i++) {
+        //         conditionDefinition = WuxDef.Get(technique.definitions[i]);
+        //         description = conditionDefinition.descriptions.join("\n");
+        //         this.definitions.push(`[${conditionDefinition.group}: ${conditionDefinition.name}] ${description}`);
+        //     }
+        // }
+    }
+
+    setAutoEffects(technique) {
+        this.autoEffects = new TechniqueEffectDisplayData(technique.autoEffects);
+    }
+    setEffects(technique) {
+        this.effects = new Dictionary();
+        technique.effects.iterate((effect, defense) => {
+            this.effects.add(defense, new TechniqueEffectDisplayData(effect));
+        });
+    }
+    setOngoingEffects(technique) {
     }
 
     createEmpty() {
@@ -689,47 +804,127 @@ class TechniqueDisplayData {
         this.actionType = "";
         this.username = "";
         this.fieldName = "";
-        this.skill = "";
 
-        this.element = "";
-        this.techSet = "";
-        this.tier = "";
-        this.group = "";
-        this.category = "";
+        this.techSetDisplay = "";
+        this.techSetTitle = "";
+        this.techSetSub = "";
+        this.techSetSub2 = "";
         
-        this.targetData = "";
         this.actionData = "";
+        this.targetData = "";
 
-        this.requirements = "";
         this.trigger = "";
-        
+        this.requirements = "";
+        this.itemTraits = [];
+
+        this.traits = [];
         this.flavorText = "";
-        this.conditionsText = "";
+        this.definitions = [];
 
         this.autoEffects = [];
-        this.effects = [];
+        this.effects = new Dictionary();
         this.ongoingEffects = undefined;
     }
 }
 class TechniqueEffectDisplayData {
     constructor(techniqueEffect) {
-        if (techniqueEffect != undefined) {
+        this.createEmptyDefense();
+        if (Array.isArray(techniqueEffect)) {
+            this.auto = this.importEffectData(techniqueEffect);
+        }
+        else if (techniqueEffect != undefined) {
             this.importTechniqueEffect(techniqueEffect);
         }
-        else {
-            this.createEmpty();
-        }
+    }
+
+    createEmptyDefense() {
+        this.auto = [];
+        this.onPass = [];
     }
 
     importTechniqueEffect(techniqueEffect) {
+        if (techniqueEffect.auto.length > 0) {
+            this.auto = this.importEffectData(techniqueEffect.auto);
+        }
+        if (techniqueEffect.onPass.length > 0) {
+            this.onPass = this.importEffectData(techniqueEffect.onPass);
+        }
     }
 
-    createEmpty() {
-        this.targetDefense = "";
-        this.onPass = "";
-        this.onFail = "";
+    importEffectData(effectData) {
+        let output = [];
+        for (let i = 0; i < effectData.length; i++) {
+            output.push(this.formatEffect(effectData[i]));
+        }
+
+        return output;
     }
 
+    formatEffect(effect) {
+        let output = "";
+        switch (effect.type) {
+            case "Damage":
+                output = this.formatDamageEffect(effect);
+            break;
+            case "Condition":
+                output = this.formatConditionEffect(effect);
+            break;
+            case "Definition":
+            break;
+            case "":
+                output = this.formatDescriptionEffect(effect);
+            break;
+        }
+        
+        return output;
+    }
+
+    formatDamageEffect(effect) {
+        return `[${this.formatCalcBonus(effect)}] ${effect.effect} damage`;
+    }
+
+    formatConditionEffect(effect) {
+        let condition = WuxDef.Get(effect.effect);
+        let target = effect.target == "Self" ? "You" : "Target";
+        let ranks = this.formatCalcBonus(effect);
+        switch (effect.subType) {
+            case "Add": return `${target} gains the ${condition.name} ${condition.group}`;
+            case "Remove": return `${target} loses the ${condition.name} ${condition.group}`;
+            case "Remove Any": return `${target} loses any condition of your choice`;
+            case "Rank Up": return `${target} gains [${ranks}] rank in the ${condition.name} ${condition.group}`;
+            case "Rank Down": return `${target} loses [${ranks}] rank in the ${condition.name} ${condition.group}`;
+            default: return `${target} gains the ${condition.name} ${condition.group}`;
+        }
+    }
+    
+    formatDescriptionEffect(effect) {
+        return effect.effect;
+    }
+
+    formatCalcBonus(effect) {
+        let output = this.formatEffectDice(effect);
+        let bonusEffects = effect.dBonus.split(";");
+        for(let i = 0; i < bonusEffects.length; i++) {
+            bonusEffects[i] = bonusEffects[i].trim();
+            if (output != "") {
+                output += "; ";
+            }
+            if (isNaN(parseInt(bonusEffects[i]))) {
+                output += `${WuxDef.GetAbbreviation(bonusEffects[i])}`;
+            }
+            else {
+                output += `${bonusEffects[i]}`;
+            }
+        }
+        return output;
+    }
+
+    formatEffectDice(effect) {
+        if (effect.dVal != "" && effect.dVal > 0) {
+            return `${effect.dVal}d${effect.dType}`;
+        }
+        return "";
+    }
 }
 
 // ====== Formatters
@@ -738,192 +933,6 @@ var FeatureService = FeatureService || (function () {
     'use strict';
 
     var
-
-        // Display Technique (Private)
-        // ------------------------,
-
-        getTechniqueDisplayDataObj = function () {
-            return {
-                name: "",
-                username: "",
-                fieldName: "",
-                actionType: "",
-                usageInfo: "",
-                isArmament: false,
-
-                slotType: "",
-                slotIsPath: false,
-                slotSource: "",
-                slotFooter: "",
-
-                prerequisite: "",
-                trigger: "",
-
-                isFunctionBlock: false,
-                traits: [],
-                requirement: "",
-                item: "",
-
-                isCheckBlock: false,
-                isCheckBlockTarget: false,
-                target: "",
-                rType: "",
-                range: "",
-                skill: "",
-                damage: "",
-
-                isDescBlock: false,
-                description: "",
-                onHit: "",
-                conditions: "",
-
-                technique: {}
-            };
-
-        },
-
-        getTechniqueDisplayData = function (technique) {
-            let techDisplayData = getTechniqueDisplayDataObj();
-            setTechniqueDisplayDataBase(techDisplayData, technique);
-            setTechniqueDisplayDataName(techDisplayData, technique);
-            setTechniqueDisplayDataUsageInfo(techDisplayData, technique);
-            setTechniqueDisplayDataSlotData(techDisplayData, technique);
-            setTechniqueDisplayDataFunctionBlock(techDisplayData, technique);
-            setTechniqueDisplayDataCheckBlock(techDisplayData, technique);
-            setTechniqueDisplayDataDescriptionBlock(techDisplayData, technique);
-            return techDisplayData;
-        },
-
-        setTechniqueDisplayDataBase = function (techDisplayData, technique) {
-            techDisplayData.technique = technique;
-            techDisplayData.isArmament = technique.item != "";
-        },
-
-        setTechniqueDisplayDataName = function (techDisplayData, technique) {
-            techDisplayData.name = technique.name;
-            techDisplayData.username = technique.username;
-            techDisplayData.fieldName = Format.ToCamelCase(technique.name);
-        },
-
-        setTechniqueDisplayDataUsageInfo = function (techDisplayData, technique) {
-            techDisplayData.actionType = technique.action;
-
-            techDisplayData.usageInfo = "";
-            if (technique.action != "") {
-                techDisplayData.usageInfo += technique.action;
-            }
-            if (technique.limits != "") {
-                if (techDisplayData.usageInfo != "") {
-                    techDisplayData.usageInfo += "; ";
-                }
-                techDisplayData.usageInfo += technique.limits;
-            }
-            if (technique.resourceCost != "") {
-                if (techDisplayData.usageInfo != "") {
-                    techDisplayData.usageInfo += "; ";
-                }
-                techDisplayData.usageInfo += technique.resourceCost;
-            }
-        },
-
-        setTechniqueDisplayDataSlotData = function (techDisplayData, technique) {
-            techDisplayData.slotType = technique.group;
-            techDisplayData.slotIsPath = technique.acquisition == "Free";
-            techDisplayData.slotFooter = `${technique.group}`;
-            techDisplayData.slotSource = technique.group;
-
-        },
-
-        setTechniqueDisplayDataFunctionBlock = function (techDisplayData, technique) {
-
-            techDisplayData.prerequisite = getPrerequisiteString(technique);
-
-            techDisplayData.isFunctionBlock = technique.traits != "" || technique.trigger != "" || technique.requirement != "" || technique.item != "";
-            if (techDisplayData.isFunctionBlock) {
-                techDisplayData.traits = WuxDef.GetValues(technique.traits);
-                techDisplayData.requirement = techDisplayData.requirement;
-                techDisplayData.item = techDisplayData.item;
-                techDisplayData.trigger = technique.trigger;
-            }
-        },
-
-        setTechniqueDisplayDataCheckBlock = function (techDisplayData, technique) {
-            techDisplayData.isCheckBlock = technique.skill != "" || technique.defense != "" || technique.range != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "";
-
-            if (techDisplayData.isCheckBlock) {
-                setTechniqueDisplayDataCheckBlockRange(techDisplayData, technique);
-                setTechniqueDisplayDataCheckBlockSkill(techDisplayData, technique);
-                setTechniqueDisplayDataCheckBlockDamage(techDisplayData, technique);
-            }
-        },
-
-        setTechniqueDisplayDataCheckBlockRange = function (techDisplayData, technique) {
-            if (technique.range != "" || technique.target != "") {
-                techDisplayData.isCheckBlockTarget = true;
-                techDisplayData.target = technique.target;
-
-                if (technique.range != "") {
-                    techDisplayData.rType = technique.rType;
-                    techDisplayData.range = technique.range;
-                }
-            }
-        },
-
-        setTechniqueDisplayDataCheckBlockSkill = function (techDisplayData, technique) {
-            if (technique.skill != "") {
-                techDisplayData.skill = "";
-                if (technique.defense != "" && technique.defense != undefined) {
-                    techDisplayData.skill = technique.defense;
-                }
-                else {
-                    techDisplayData.skill = "DC 15";
-                }
-                techDisplayData.skill = `${technique.skill} vs. ${techDisplayData.skill}`;
-            }
-        },
-
-        setTechniqueDisplayDataCheckBlockDamage = function (techDisplayData, technique) {
-            if ((technique.dVal != "" && technique.dVal > 0) || technique.damageType != "") {
-                techDisplayData.damage = getDamageString(technique);
-            }
-        },
-
-        setTechniqueDisplayDataDescriptionBlock = function (techDisplayData, technique) {
-
-            techDisplayData.isDescBlock = technique.description != "" || technique.onSuccess != "";
-            if (techDisplayData.isDescBlock) {
-                techDisplayData.description = technique.description;
-                techDisplayData.onHit = technique.onSuccess;
-                setTechniqueDisplayDataDescriptionBlockConditions(techDisplayData, technique);
-            }
-        },
-
-        setTechniqueDisplayDataDescriptionBlockConditions = function (techDisplayData, technique) {
-
-            let actionEffects = getActionEffects(technique.dConditions);
-            let output = "";
-
-            let status = {};
-            let description = "";
-            for (let i = 0; i < actionEffects.states.length; i++) {
-                status = WuxDef.Get(actionEffects.states[i].name);
-                description = status.descriptions.join("\n");
-                if (output != "") {
-                    output += "\n";
-                }
-                output += `[State: ${status.name}] ${description}`;
-            }
-            for (let i = 0; i < actionEffects.conditions.length; i++) {
-                status = WuxDef.Get(actionEffects.conditions[i].name);
-                description = status.descriptions.join("\n");
-                if (output != "") {
-                    output += "\n";
-                }
-                output += `[Condition: ${status.name}] ${description}`;
-            }
-
-            techDisplayData.conditions = output;
-        },
 
         // Display Technique (Variants)
         // ------------------------,
@@ -940,8 +949,7 @@ var FeatureService = FeatureService || (function () {
         },
 
         getRollTemplateFromTechnique = function (technique) {
-            let techDisplayData = getTechniqueDisplayData(technique);
-            return getRollTemplate(techDisplayData);
+            return getRollTemplate(new TechniqueDisplayData(technique));
         },
 
         getConsumeUsePost = function (technique) {
@@ -1088,7 +1096,6 @@ var FeatureService = FeatureService || (function () {
 
         ;
     return {
-        GetTechniqueDisplayData: getTechniqueDisplayData,
         GetRollTemplate: getRollTemplate,
         GetRollTemplateFromTechnique: getRollTemplateFromTechnique,
         GetConsumeUsePost: getConsumeUsePost,
@@ -1169,6 +1176,20 @@ var Format = Format || (function () {
             return words.join('');
         },
 
+        romanize = function (num) {
+            if (isNaN(num))
+                return NaN;
+            var digits = String(+num).split(""),
+                key = ["","C","CC","CCC","CD","D","DC","DCC","DCCC","CM",
+                       "","X","XX","XXX","XL","L","LX","LXX","LXXX","XC",
+                       "","I","II","III","IV","V","VI","VII","VIII","IX"],
+                roman = "",
+                i = 3;
+            while (i--)
+                roman = (key[+digits.pop() + (i * 10)] || "") + roman;
+            return Array(+digits.join("") + 1).join("M") + roman;
+        },
+
         // Array Formatting
         // ------------------------
 
@@ -1237,6 +1258,7 @@ var Format = Format || (function () {
     return {
         ToCamelCase: toCamelCase,
         ToUpperCamelCase: toUpperCamelCase,
+        Romanize: romanize,
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,
         ShowTooltip: showTooltip,

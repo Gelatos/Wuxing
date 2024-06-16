@@ -2,7 +2,7 @@ var WuxDef = WuxDef || (function () {
 	'use strict';
 
 	var
-		keys = ["Attribute", "Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason", "Skill", "Job", "Language", "Lore", "Technique", "Defense", "Brace", "Evasion", "Fortitude", "Guard", "Reflex", "Sense", "Insight", "Perception", "Resolve", "General", "Character Level", "Proficiency", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed", "Affinity", "Wood", "Fire", "Earth", "Metal", "Water", "Gear", "Carrying Capacity", "Reflex Penalty", "Speed Penalty", "Combat", "Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce", "Social", "Scrutiny", "Willpower", "Approval", "Patience", "Tech Slot", "Job Slots", "Item Slots", "Active Slots", "Support Slots", "Character Creator", "Origin", "Full Name", "Display Name", "Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall", "Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)", "Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent", "Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious", "Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"],
+		keys = ["Attribute", "Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason", "Skill", "Job", "Language", "Lore", "Technique", "Defense", "Brace", "Disruption", "Evasion", "Reflex", "Sense", "Insight", "Resolve", "Perception", "Notice", "Hide", "General", "Character Level", "Character Rank", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed", "Affinity", "Wood", "Fire", "Earth", "Metal", "Water", "Gear", "Carrying Capacity", "Reflex Penalty", "Speed Penalty", "Combat", "Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce", "Social", "Scrutiny", "Willpower", "Approval", "Patience", "Tech Slot", "Job Slots", "Item Slots", "Active Slots", "Support Slots", "Character Creator", "Origin", "Full Name", "Display Name", "Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall", "Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)", "Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent", "Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious", "Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"],
 		values = {
 			"Attribute": {
 				"name": "Attribute", "group": "Type", "descriptions": ["Attributes are the inherent characteristics of your character. Characters have a numerical rating for each attribute, which determines the modifier they grant to skills and helps affect their derived stats. "],
@@ -58,23 +58,19 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Brace": {
 				"name": "Brace", "group": "Defense", "descriptions": ["Brace represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects."],
-				"abbreviation": "", "variable": "brace", "formula": "5;prcTier"
+				"abbreviation": "", "variable": "brace", "formula": "7;bod"
+			},
+			"Disruption": {
+				"name": "Disruption", "group": "Defense", "descriptions": ["Guard represents a character's ability to resist an attack by disrupting its impact via parrying with a weapon or reducing its effectiveness. "],
+				"abbreviation": "", "variable": "disruption", "formula": "7;prc"
 			},
 			"Evasion": {
-				"name": "Evasion", "group": "Defense", "descriptions": ["Evasion is your dodging ability. When defending against any kind of attack against your defense, you will always check against your evasion. If the check fails to be higher than the defense, the attack misses and has no effect. When making an attack roll, evasion will never be considered higher than the targetted defense."],
-				"abbreviation": "", "variable": "evasion", "formula": "qckTier;evasion_penalty"
-			},
-			"Fortitude": {
-				"name": "Fortitude", "group": "Defense", "descriptions": ["Fortitude is a character's ability to resist internal harm such as from poisons or sickness."],
-				"abbreviation": "", "variable": "fortitude", "formula": "5;bodTier"
-			},
-			"Guard": {
-				"name": "Guard", "group": "Defense", "descriptions": ["Guard represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects."],
-				"abbreviation": "", "variable": "guard", "formula": "5;bodTier"
+				"name": "Evasion", "group": "Defense", "descriptions": ["Evasion is your dodging ability. When an attack checks against any defense and fails, it will always then check against evasion. On failure, the attack does not connect and no aspect of its effects occur."],
+				"abbreviation": "", "variable": "evasion", "formula": "qck"
 			},
 			"Reflex": {
 				"name": "Reflex", "group": "Defense", "descriptions": ["Reflex is used when a character could quickly react to a situation with movement. It is usually used to avoid powerful attacks or to get out of the way of harmful effects that only need to touch the character like a fireball."],
-				"abbreviation": "", "variable": "reflex", "formula": "5;qckTier"
+				"abbreviation": "", "variable": "reflex", "formula": "7;evasion"
 			},
 			"Sense": {
 				"name": "Sense", "group": "Type", "descriptions": [""],
@@ -82,15 +78,23 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Insight": {
 				"name": "Insight", "group": "Sense", "descriptions": ["Insight represents a character's ability to parse conversation and judge mental states. This defense is typically used when information is being hidden in text or speech or to detect when someone is concealing their true thoughts."],
-				"abbreviation": "", "variable": "insight", "formula": "rsnTier"
-			},
-			"Perception": {
-				"name": "Perception", "group": "Sense", "descriptions": ["Perception is the ability to see or hear sudden changes in your environment. It is typically used to counter a character's stealth attempts or to hear a distant or quiet noise."],
-				"abbreviation": "", "variable": "perception", "formula": "cnvTier"
+				"abbreviation": "", "variable": "insight", "formula": "7;rsn"
 			},
 			"Resolve": {
 				"name": "Resolve", "group": "Sense", "descriptions": ["Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in."],
-				"abbreviation": "", "variable": "resolve", "formula": "intTier"
+				"abbreviation": "", "variable": "resolve", "formula": "7;cnv"
+			},
+			"Perception": {
+				"name": "Perception", "group": "Type", "descriptions": [""],
+				"abbreviation": "", "variable": "", "formula": ""
+			},
+			"Notice": {
+				"name": "Notice", "group": "Perception", "descriptions": ["Notice is the ability to see or hear sudden changes in your environment. It is typically used to counter a character's sneak attempts or to hear a distant or quiet noise."],
+				"abbreviation": "", "variable": "notice", "formula": "7;int"
+			},
+			"Hide": {
+				"name": "Hide", "group": "Perception", "descriptions": [""],
+				"abbreviation": "", "variable": "hide", "formula": "7;qck"
 			},
 			"General": {
 				"name": "General", "group": "Type", "descriptions": [""],
@@ -98,11 +102,11 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Character Level": {
 				"name": "Character Level", "group": "General", "descriptions": ["A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP)."],
-				"abbreviation": "Lv", "variable": "base_level{0}", "formula": ""
+				"abbreviation": "Lv", "variable": "base_level", "formula": ""
 			},
-			"Proficiency": {
-				"name": "Proficiency", "group": "General", "descriptions": ["Your proficiency applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level."],
-				"abbreviation": "PB", "variable": "pb", "formula": ""
+			"Character Rank": {
+				"name": "Character Rank", "group": "General", "descriptions": ["Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level."],
+				"abbreviation": "CR", "variable": "cr", "formula": ""
 			},
 			"Hit Points": {
 				"name": "Hit Points", "group": "General", "descriptions": ["Hit Points (HP) are the number of hits a character can take in a conflict. This is the case no matter the type of encounter as HP changes based on the type of encounter one finds themselves in."],
@@ -126,7 +130,7 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Initiative": {
 				"name": "Initiative", "group": "General", "descriptions": ["The Initiative skill is used to determine whoever acts first in a conflict. "],
-				"abbreviation": "", "variable": "initiative", "formula": "qckTier"
+				"abbreviation": "", "variable": "initiative", "formula": "qck"
 			},
 			"Speed": {
 				"name": "Speed", "group": "General", "descriptions": ["Speed is how far a character is able to move on your turn, measured in spaces, when you make a standard move."],
@@ -162,7 +166,7 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Carrying Capacity": {
 				"name": "Carrying Capacity", "group": "Gear", "descriptions": ["Carrying capacity is the total amount of Bulk a character can carry without penalty. Going over this amount will force the character to gain the Encumbered condition. "],
-				"abbreviation": "", "variable": "carry_capacity", "formula": "40; bod"
+				"abbreviation": "", "variable": "carry_capacity", "formula": "40; bodRank"
 			},
 			"Reflex Penalty": {
 				"name": "Reflex Penalty", "group": "Gear", "descriptions": ["Reflex Penalty represents how restricted their movement is, usually from equipped gear. Each point in Reflex Penality reduces the total modifer of your Reflex score."],
@@ -178,11 +182,11 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Durability": {
 				"name": "Durability", "group": "Combat", "descriptions": ["During combat encounters, your hit points are equal to your durability score. Your character’s durability is a representation of your character maintaining their barrier to take hits, resisting harm with their toughness, and general ability to avoid harm. A character may be taking attacks from multiple sources that can be easily shrugged off, but once they run out of HP to do so is when the big hits make their way through. "],
-				"abbreviation": "", "variable": "durability", "formula": "pb*10;bodTier"
+				"abbreviation": "", "variable": "durability", "formula": "pb*10;bod"
 			},
 			"Barrier": {
 				"name": "Barrier", "group": "Combat", "descriptions": ["A character's barrier is a manifestation of their ki as a layer of protection around them. Barrier adds its value in Buffer to the character at the start of each round, as long as they are not Downed or Unconscious."],
-				"abbreviation": "", "variable": "barrier", "formula": "prcTier"
+				"abbreviation": "", "variable": "barrier", "formula": "prc"
 			},
 			"Block": {
 				"name": "Block", "group": "Combat", "descriptions": ["Various types of gear will grant Block as a bonus. Block adds its value in Buffer to the character at the start of each round."],
@@ -226,19 +230,19 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Scrutiny": {
 				"name": "Scrutiny", "group": "Social", "descriptions": ["Scrutiny represents your willingness to continue scrutinizing another's points. During social conflict it works similarly to HP providing resistance to charming and deceptive attempts before giving into another's arguments."],
-				"abbreviation": "", "variable": "scrutiny", "formula": "rsnTier"
+				"abbreviation": "", "variable": "scrutiny", "formula": "rsn"
 			},
 			"Willpower": {
 				"name": "Willpower", "group": "Social", "descriptions": ["Willpower represents a character's resilience towards those that would attempt to control or coerce them. In social conflict it acts similarly to HP, representing a character's threshold before allowing another to influence them. "],
-				"abbreviation": "", "variable": "willpower", "formula": "cnvTier"
+				"abbreviation": "", "variable": "willpower", "formula": "cnv"
 			},
 			"Approval": {
 				"name": "Approval", "group": "Social", "descriptions": ["Approval is a character's resistance to place their trust in another. In social conflict it acts similarly to HP, representing a character's threshold before allowing another to have their favor. "],
-				"abbreviation": "", "variable": "approval", "formula": "cnvTier"
+				"abbreviation": "", "variable": "approval", "formula": "cnv"
 			},
 			"Patience": {
 				"name": "Patience", "group": "Social", "descriptions": ["Patience is a measure of how long a character can last in social combat before they become frustrated and unable to participate meaningfully. "],
-				"abbreviation": "", "variable": "patience", "formula": "pb*10;intTier"
+				"abbreviation": "", "variable": "patience", "formula": "pb*10;int"
 			},
 			"Tech Slot": {
 				"name": "Tech Slot", "group": "Type", "descriptions": ["Characters are able to learn a variety of techniques. While many are permanent and therefore always active, some require a person to prepare before having access to them. These techniques always exist in a tech tree. When a tech tree is equipped to a tech slot of its type, the character has access to these techniques."],
@@ -373,35 +377,35 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Downed": {
-				"name": "Downed", "group": "State", "descriptions": ["A creature that is downed can only perform techniques with the Simple trait. This status ends when the creature's trauma is less than their Trauma Limit."],
+				"name": "Downed", "group": "Status", "descriptions": ["A creature that is downed can only perform techniques with the Simple trait. This status ends when the creature's trauma is less than their Trauma Limit."],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Engaged": {
-				"name": "Engaged", "group": "State", "descriptions": ["If a character moves adjacent to a hostile character, they both gain the Engaged status for as long as they remain adjacent to one another. Ranged attacks made by an Engaged character receive +1 Disadvantage. Additionally, characters that become Engaged by targets of equal or greater Size during the course of a movement stop moving immediately and lose any unused movement."],
+				"name": "Engaged", "group": "Status", "descriptions": ["If a character moves adjacent to a hostile character, they both gain the Engaged status for as long as they remain adjacent to one another. Ranged attacks made by an Engaged character receive +1 Disadvantage. Additionally, characters that become Engaged by targets of equal or greater Size during the course of a movement stop moving immediately and lose any unused movement."],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Ethereal": {
-				"name": "Ethereal", "group": "State", "descriptions": ["The character is in the spirit realm. If the character has a physical body it is treated as unconscious. "],
+				"name": "Ethereal", "group": "Status", "descriptions": ["The character is in the spirit realm. If the character has a physical body it is treated as unconscious. "],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Grappled": {
-				"name": "Grappled", "group": "State", "descriptions": ["While a character is grappled, both characters become Engaged, and can't Dash or take reactions for the duration of the grapple.\nThe character in control of the grapple is the larger creature while the smaller character becomes Immobilized but moves when the controlling party moves, mirroring their movement. If both parties are the same Size, the one that initiated the grapple is in control. Either can make contested Physique checks at the start of their turn: the winner counts as the character in control until this contest is repeated.\nA Grapple automatically ends when:\n• either character breaks adjacency, such as if they are knocked back by another effect;\n• the controller chooses to end the grapple as a free action"],
+				"name": "Grappled", "group": "Status", "descriptions": ["While a character is grappled, both characters become Engaged, and can't Dash or take reactions for the duration of the grapple.\nThe character in control of the grapple is the larger creature while the smaller character becomes Immobilized but moves when the controlling party moves, mirroring their movement. If both parties are the same Size, the one that initiated the grapple is in control. Either can make contested Physique checks at the start of their turn: the winner counts as the character in control until this contest is repeated.\nA Grapple automatically ends when:\n• either character breaks adjacency, such as if they are knocked back by another effect;\n• the controller chooses to end the grapple as a free action"],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Hidden": {
-				"name": "Hidden", "group": "State", "descriptions": ["Hidden characters can’t be targeted by hostile attacks or actions, don’t cause engagement, and enemies only know their approximate location. Attacking, forcing saves, taking reactions, using Dash, and losing cover all remove Hidden after they resolve. Characters can find Hidden characters with Search."],
+				"name": "Hidden", "group": "Status", "descriptions": ["Hidden characters can’t be targeted by hostile attacks or actions, don’t cause engagement, and enemies only know their approximate location. Attacking, forcing saves, taking reactions, using Dash, and losing cover all remove Hidden after they resolve. Characters can find Hidden characters with Search."],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Invisible": {
-				"name": "Invisible", "group": "State", "descriptions": ["All attacks against Invisible characters, regardless of type, have a 50 percent chance to miss outright, before an attack roll is made. Roll a die or flip a coin to determine if the attack misses. Additionally, Invisible characters can always Hide, even without cover."],
+				"name": "Invisible", "group": "Status", "descriptions": ["All attacks against Invisible characters, regardless of type, have a 50 percent chance to miss outright, before an attack roll is made. Roll a die or flip a coin to determine if the attack misses. Additionally, Invisible characters can always Hide, even without cover."],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Restrained": {
-				"name": "Restrained", "group": "State", "descriptions": ["Restrained characters cannot make any voluntary movements, although involuntary movements are unaffected. Attacks against this creature gain +1 Advantage. Unless it is otherwise stated, a creature can use the Break Free or Escape techniques against a standard DC to end the status on themselves or an adjacent character. "],
+				"name": "Restrained", "group": "Status", "descriptions": ["Restrained characters cannot make any voluntary movements, although involuntary movements are unaffected. Attacks against this creature gain +1 Advantage. Unless it is otherwise stated, a creature can use the Break Free or Escape techniques against a standard DC to end the status on themselves or an adjacent character. "],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Unconscious": {
-				"name": "Unconscious", "group": "State", "descriptions": ["An unconscious creature cannot take actions or reactions, can’t move or speak, and is unaware of its surroundings.\nThe creature drops whatever it’s holding and falls prone.\nThe creature automatically fails all saving throws.\nAttack rolls against the creature have +1 Advantage.\nAny attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature."],
+				"name": "Unconscious", "group": "Status", "descriptions": ["An unconscious creature cannot take actions or reactions, can’t move or speak, and is unaware of its surroundings.\nThe creature drops whatever it’s holding and falls prone.\nThe creature automatically fails all saving throws.\nAttack rolls against the creature have +1 Advantage.\nAny attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature."],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Aflame": {
@@ -493,7 +497,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "variable": "", "formula": ""
 			}
 		},
-		sortingGroups = { "group": { "Type": ["Attribute", "Defense", "Sense", "General", "Affinity", "Gear", "Combat", "Social", "Tech Slot"], "Attribute": ["Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason"], "Stat": ["Skill", "Job", "Language", "Lore", "Technique"], "Defense": ["Brace", "Evasion", "Fortitude", "Guard", "Reflex"], "Sense": ["Insight", "Perception", "Resolve"], "General": ["Character Level", "Proficiency", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "Gear": ["Carrying Capacity", "Reflex Penalty", "Speed Penalty"], "Combat": ["Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce"], "Social": ["Scrutiny", "Willpower", "Approval", "Patience"], "Tech Slot": ["Job Slots", "Item Slots", "Active Slots", "Support Slots"], "Definition": ["Character Creator", "Origin", "Full Name", "Display Name"], "Technique Trait": ["Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall"], "Item Trait": ["Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)"], "Material Trait": ["Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent"], "State": ["Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious"], "Condition": ["Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"] } },
+		sortingGroups = { "group": { "Type": ["Attribute", "Defense", "Sense", "Perception", "General", "Affinity", "Gear", "Combat", "Social", "Tech Slot"], "Attribute": ["Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason"], "Stat": ["Skill", "Job", "Language", "Lore", "Technique"], "Defense": ["Brace", "Disruption", "Evasion", "Reflex"], "Sense": ["Insight", "Resolve"], "Perception": ["Notice", "Hide"], "General": ["Character Level", "Character Rank", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "Gear": ["Carrying Capacity", "Reflex Penalty", "Speed Penalty"], "Combat": ["Durability", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce"], "Social": ["Scrutiny", "Willpower", "Approval", "Patience"], "Tech Slot": ["Job Slots", "Item Slots", "Active Slots", "Support Slots"], "Definition": ["Character Creator", "Origin", "Full Name", "Display Name"], "Technique Trait": ["Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall"], "Item Trait": ["Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)"], "Material Trait": ["Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent"], "Status": ["Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious"], "Condition": ["Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"] } },
 
 		get = function (key) {
 			return new DefinitionData(values[key]);
@@ -572,6 +576,15 @@ var WuxDef = WuxDef || (function () {
 		getVariable = function (key, mod) {
 			let data = get(key);
 			return data.getVariable(mod);
+		},
+		getAbbreviation = function (key, mod) {
+			let data = get(key);
+			if (data.abbreviation == "") {
+				return data.name;
+			}
+			else {
+				return data.abbreviation;
+			}
 		}
 		;
 	return {
@@ -582,6 +595,7 @@ var WuxDef = WuxDef || (function () {
 		Filter: filter,
 		GetSortedGroup: getSortedGroup,
 		GetAttribute: getAttribute,
-		GetVariable: getVariable
+		GetVariable: getVariable,
+		GetAbbreviation: getAbbreviation
 	};
 }());

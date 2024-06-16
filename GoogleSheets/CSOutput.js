@@ -545,7 +545,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 								technique = techDictionary.get(job.techniques[i].name);
 								if (technique != undefined) {
 									output += `${WuxSheetMain.Header2(`Level ${job.techniques[i].level}`)}
-									${WuxTechnique.Get(technique, displayOptions)}
+									${WuxPrintTechnique.Get(technique, displayOptions)}
 									`;
 								}
 							}
@@ -553,7 +553,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						},
 		
 						getDisplayOptions = function (techniqueDefinition) {
-							var displayOptions = WuxTechnique.GetDisplayOptions();
+							var displayOptions = WuxPrintTechnique.GetDisplayOptions();
 							displayOptions.categoryName = "job";
 							displayOptions.sectionName = `${displayOptions.categoryName}_techniques`;
 							displayOptions.techniqueDefinition = techniqueDefinition;
@@ -607,7 +607,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 								technique = techDictionary.get(role.techniques[i].name);
 								if (technique != undefined) {
 									output += `${WuxSheetMain.Header2(`Level ${role.techniques[i].level}`)}
-									${WuxTechnique.Get(technique, displayOptions)}
+									${WuxPrintTechnique.Get(technique, displayOptions)}
 									`;
 								}
 							}
@@ -615,7 +615,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						},
 		
 						getDisplayOptions = function (techniqueDefinition) {
-							var displayOptions = WuxTechnique.GetDisplayOptions();
+							var displayOptions = WuxPrintTechnique.GetDisplayOptions();
 							displayOptions.categoryName = "job";
 							displayOptions.sectionName = `${displayOptions.categoryName}_techniques`;
 							displayOptions.techniqueDefinition = techniqueDefinition;
@@ -797,7 +797,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				},
 
 				getDisplayOptions = function (techniqueDefinition) {
-					let displayOptions = WuxTechnique.GetDisplayOptions();
+					let displayOptions = WuxPrintTechnique.GetDisplayOptions();
 					displayOptions.categoryName = "techniques";
 					displayOptions.sectionName = `${displayOptions.categoryName}_filteredTechniques`;
 					displayOptions.techniqueDefinition = techniqueDefinition;
@@ -807,7 +807,8 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				},
 
 				buildStandardTechniqueGroup = function (techniqueDatabase, groupName, displayOptions) {
-					let filters = [new DatabaseFilterData("group", groupName), new DatabaseFilterData("augment", "")];
+					let filters = [new DatabaseFilterData("group", groupName), new DatabaseFilterData("linkedTech", "")];
+
 					let filteredData = techniqueDatabase.filter(filters);
 
 					let output = "";
@@ -818,7 +819,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				},
 
 				buildTechTreeDisplaySection = function (technique, techniqueDatabase, displayOptions) {
-					let filters = [new DatabaseFilterData("augment", technique.name)];
+					let filters = [new DatabaseFilterData("linkedTech", technique.name)];
 					let augmentTechniques = techniqueDatabase.filter(filters);
 
 					let output = "";
@@ -834,7 +835,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 					let output = "";
 					output += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="">`;
-					output += WuxTechnique.Get(technique, displayOptions);
+					output += WuxPrintTechnique.Get(technique, displayOptions);
 					return output;
 				},
 
