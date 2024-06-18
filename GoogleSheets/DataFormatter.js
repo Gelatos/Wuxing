@@ -7,12 +7,10 @@ function SetTechniquesDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, a
 function SetDefinitionsDatabase(arr0) {
     let definitionDatabase = SheetsDatabase.CreateDefinitions(arr0);
     let jsClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.Get);
-    jsClassData.addFunction("getAttribute", WuxDefinition.GetAttribute);
-    jsClassData.addFunction("getVariable", WuxDefinition.GetVariable);
-    jsClassData.addFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
-    jsClassData.addPublicData("getAttribute");
-    jsClassData.addPublicData("getVariable");
-    jsClassData.addPublicData("getAbbreviation");
+    jsClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
+    jsClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
+    jsClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
+    jsClassData.addPublicVariable("k_filter", "_filter");
     return PrintLargeEntry(jsClassData.print("WuxDef"), "d");
 }
 
@@ -60,11 +58,12 @@ var SheetsDatabase = SheetsDatabase || (function () {
     'use strict';
 
     var
-        createDatabaseCollection = function (skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
+        createDatabaseCollection = function (stylesArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
 
             let techDb = createTechniques(JSON.parse(techniqueDatabaseString));
             return {
                 techniques: techDb,
+                styles: createStyles(stylesArray),
                 skills: createSkills(skillsArray),
                 language: createLanguages(languageArray),
                 lore: createLores(loreArray),
@@ -83,6 +82,12 @@ var SheetsDatabase = SheetsDatabase || (function () {
         createSkills = function (arr) {
             return new Database(["group"], arr, function (arr) {
                 return new SkillData(arr);
+            });
+        },
+        
+        createStyles = function (arr) {
+            return new Database(["group"], arr, function (arr) {
+                return new TechniqueStyle(arr);
             });
         },
 
@@ -616,15 +621,15 @@ var WuxDefinition = WuxDefinition || (function () {
         get = function (key) {
             return new DefinitionData(values[key]);
         },
-        getAttribute = function (key, mod) {
+        getAttribute = function (key, mod, mod1) {
             let data = get(key);
-            return data.getAttribute(mod);
+            return data.getAttribute(mod, mod1);
         },
-        getVariable = function (key, mod) {
+        getVariable = function (key, mod, mod1) {
             let data = get(key);
-            return data.getVariable(mod);
+            return data.getVariable(mod, mod1);
         },
-        getAbbreviation = function (key, mod) {
+        getAbbreviation = function (key) {
             let data = get(key);
             if (data.abbreviation == "") {
                 return data.name;
@@ -1229,6 +1234,14 @@ class JavascriptDataClass {
 
     addPublicData(name) {
         this.publicData.add(Format.ToUpperCamelCase(name), name);
+    }
+    addPublicVariable(name, data) {
+        this.addVariable(name, data);
+        this.addPublicData(name);
+    }
+    addPublicFunction(name, data) {
+        this.addFunction(name, data);
+        this.addPublicData(name);
     }
 
     addDatabase(customDataNames, customData, defaultData) {
