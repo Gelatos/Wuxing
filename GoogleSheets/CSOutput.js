@@ -1,6 +1,6 @@
-function CreateCharacterSheet(skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
+function CreateCharacterSheet(stylesArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
     let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
-		skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString
+		stylesArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString
 	);
 	return PrintLargeEntry(DisplayCharacterSheet.Print(sheetsDb));
 }
@@ -831,7 +831,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				},
 
 				buildTechnique = function (technique, displayOptions) {
-					let fieldName = `attr_${displayOptions.sectionName}-filtered-${Format.ToCamelCase(technique.name)}`;
+				    let fieldName = WuxDef.getAttribute("Technique", technique.fieldName, WuxDef.K_filter);
 
 					let output = "";
 					output += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="">`;
