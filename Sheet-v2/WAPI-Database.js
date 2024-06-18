@@ -202,6 +202,7 @@ class dbObj {
 class TechniqueData extends dbObj {
     importJson(json) {
         this.name = json.name;
+        this.fieldName = Format.ToCamelCase(this.name);
         this.techSet = json.techSet;
         this.linkedTech = json.linkedTech;
         this.group = json.group;
@@ -227,6 +228,7 @@ class TechniqueData extends dbObj {
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToCamelCase(this.name);
         this.techSet = "" + dataArray[i]; i++;
         this.linkedTech = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
@@ -251,6 +253,7 @@ class TechniqueData extends dbObj {
     }
     createEmpty() {
         this.name = "";
+        this.fieldName = "";
         this.techSet = "";
         this.linkedTech = "";
         this.group = "";
@@ -406,9 +409,27 @@ class TechniqueEffect extends dbObj {
         this.traits = "";
     }
 }
+class TechniqueStyle extends dbObj {
+    importJson(json) {
+        
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        
+    }
+    createEmpty() {
+        this.name = "";
+        this.fieldName = "";
+        this.group = "";
+        this.description = "";
+        this.affinity = "";
+        this.cr = 0;
+    }
+}
 class SkillData extends dbObj {
     importJson(json) {
         this.name = json.name;
+        this.fieldName = Format.ToCamelCase(this.name);
         this.group = json.group;
         this.abilityScore = json.abilityScore;
         this.description = json.description;
@@ -416,6 +437,7 @@ class SkillData extends dbObj {
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToCamelCase(this.name);
         this.group = "" + dataArray[i]; i++;
         this.abilityScore = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
@@ -423,6 +445,7 @@ class SkillData extends dbObj {
     }
     createEmpty() {
         this.name = "";
+        this.fieldName = "";
         this.group = "";
         this.abilityScore = "";
         this.description = "";
@@ -435,12 +458,14 @@ class LanguageData extends dbObj {
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToCamelCase(this.name);
         this.group = "" + dataArray[i]; i++;
         this.location = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
     }
     createEmpty() {
         this.name = "";
+        this.fieldName = "";
         this.group = "";
         this.location = "";
         this.description = "";
@@ -453,12 +478,13 @@ class LoreData extends dbObj {
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToCamelCase(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
-
     }
     createEmpty() {
         this.name = "";
+        this.fieldName = "";
         this.group = "";
         this.description = "";
     }
@@ -470,6 +496,7 @@ class JobData extends dbObj {
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToCamelCase(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
         this.attributes = new AttributeGroupData(dataArray.slice(i)); i += 7;
@@ -479,6 +506,7 @@ class JobData extends dbObj {
     }
     createEmpty() {
         this.name = "";
+        this.fieldName = "";
         this.group = "";
         this.description = "";
         this.attributes = new AttributeGroupData();
@@ -533,6 +561,7 @@ class RoleData extends dbObj {
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToCamelCase(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
         this.techniques = this.createTechnique(dataArray.slice(i)); i++;
@@ -540,6 +569,7 @@ class RoleData extends dbObj {
     }
     createEmpty() {
         this.name = "";
+        this.fieldName = "";
         this.group = "";
         this.description = "";
         this.techniques = [];
@@ -653,11 +683,16 @@ class DefinitionData extends dbObj {
         this.formula = "";
     }
     
-    getVariable(mod) {
+    getVariable(mod, mod1) {
         if (mod == undefined) {
             return this.variable
         }
-        else if (Array.isArray(mod)) {
+        
+        if (mod1 != undefined) {
+            mod = [mod, mod1];
+        }
+        
+        if (Array.isArray(mod)) {
             return this.variable.replace(/{(\d+)}/g, function(_,m) {
                 if (parseInt(m) < mod.length) {
                     return mod[m];
@@ -672,8 +707,8 @@ class DefinitionData extends dbObj {
             return "";
         });
     }
-    getAttribute(mod) {
-        return `attr_${this.getVariable(mod)}`;
+    getAttribute(mod, mod1) {
+        return `attr_${this.getVariable(mod, mod1)}`;
     }
 }
 class TemplateData extends dbObj {
@@ -732,13 +767,13 @@ class TechniqueDisplayData {
             this.techSetSub2 = `No Restrictions`;
         }
         else if (technique.affinity == "" && technique.tier > 1) {
-            this.techSetSub2 = `Tier ${Format.Romanize(technique.tier)}`;
+            this.techSetSub2 = `CR ${Format.Romanize(technique.tier)}`;
         }
         else if (technique.tier <= 1) {
             this.techSetSub2 = `${technique.affinity}`;
         }
         else {
-            this.techSetSub2 = `${technique.affinity} | Tier ${Format.Romanize(technique.tier)}`;
+            this.techSetSub2 = `${technique.affinity} | CR ${Format.Romanize(technique.tier)}`;
         }
     }
     setTechActionData(technique) {
