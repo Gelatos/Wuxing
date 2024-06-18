@@ -261,7 +261,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     output += setFeatureLineWithHeader("wuxFeatureHeaderInfoTrigger", "Trigger", techDisplayData.trigger, displayOptions);
                 }
                 if (techDisplayData.itemTraits.length > 0) {
-                    output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Item Traits", setTraits(techDisplayData.itemTraits, "<span>; or </span>", displayOptions), displayOptions);
+                    output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Item Traits", setTraits(techDisplayData.itemTraits, "<span> or </span>", displayOptions), displayOptions);
                 }
                 if (techDisplayData.requirements != "") {
                     output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Requirements", techDisplayData.requirements, displayOptions);

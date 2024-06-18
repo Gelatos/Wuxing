@@ -336,8 +336,10 @@ class TechniqueData extends dbObj {
         }
         else {
             let effect = technique.effects.getByIndex(0);
-            let isOnPass = effect.onPass.length > 0;
-            this.addEffect(technique.effects.getkey(0), isOnPass, isOnPass ? effect.onPass[0] : effect.auto[0]);
+            if (effect != undefined) {
+                let isOnPass = effect.onPass.length > 0;
+                this.addEffect(technique.effects.getkey(0), isOnPass, isOnPass ? effect.onPass[0] : effect.auto[0]);
+            }
         }
 
         if (technique.definitions.length > 0) {
@@ -723,7 +725,10 @@ class TechniqueDisplayData {
         this.techSetDisplay = technique.affinity;
         this.techSetTitle = technique.skill == "" ? "No Check" : technique.skill;
         this.techSetSub = technique.techSet == "" ? "No Style" : technique.techSet;
-        if (technique.affinity == "" && technique.tier <= 1) {
+        if (technique.linkedTech == "") {
+            this.techSetSub2 = "Free";
+        }
+        else if (technique.affinity == "" && technique.tier <= 1) {
             this.techSetSub2 = `No Restrictions`;
         }
         else if (technique.affinity == "" && technique.tier > 1) {
