@@ -554,8 +554,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 		
 						getDisplayOptions = function (techniqueDefinition) {
 							var displayOptions = WuxPrintTechnique.GetDisplayOptions();
-							displayOptions.categoryName = "job";
-							displayOptions.sectionName = `${displayOptions.categoryName}_techniques`;
+							
 							displayOptions.techniqueDefinition = techniqueDefinition;
 							displayOptions.autoExpand = true;
 							displayOptions.hasCSS = true;
@@ -616,8 +615,6 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 		
 						getDisplayOptions = function (techniqueDefinition) {
 							var displayOptions = WuxPrintTechnique.GetDisplayOptions();
-							displayOptions.categoryName = "job";
-							displayOptions.sectionName = `${displayOptions.categoryName}_techniques`;
 							displayOptions.techniqueDefinition = techniqueDefinition;
 							displayOptions.autoExpand = true;
 							displayOptions.hasCSS = true;
@@ -754,7 +751,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 		print = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildTechniquesNavigation() +
 				SideBarData.Print() +
-				MainContentData.Print(sheetsDb.techniques);
+				MainContentData.Print(sheetsDb.styles, sheetsDb.techniques);
 			return WuxSheet.SetDisplayStyle("Techniques", output);
 		},
 
@@ -780,33 +777,27 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			'use strict';
 
 			var
+				print = function (stylesDatabase, techniqueDatabase) {
 
-				print = function (techniqueDatabase) {
-
-					return WuxSheetMain.Build(buildTechniquesByGroup(techniqueDatabase, WuxDef.Get("Technique")));
+					return WuxSheetMain.Build(buildTechniquesByGroup(stylesDatabase, techniqueDatabase, WuxDef.Get("Technique")));
 				},
 
-				buildTechniquesByGroup = function (techniqueDatabase, techniqueDefinition) {
+				buildTechniquesByGroup = function (stylesDatabase, techniqueDatabase, techniqueDefinition) {
 					let displayOptions = getDisplayOptions(techniqueDefinition);
 					let output = "";
-					output += buildStandardTechniqueGroup(techniqueDatabase, "Item", displayOptions);
-					output += buildStandardTechniqueGroup(techniqueDatabase, "Active", displayOptions);
-					output += buildStandardTechniqueGroup(techniqueDatabase, "Support", displayOptions);
-					output += buildStandardTechniqueGroup(techniqueDatabase, "Standard", displayOptions);
+					output += buildStandardTechniqueGroup(stylesDatabase, techniqueDatabase, "Freestyle", displayOptions);
 					return output;
 				},
 
 				getDisplayOptions = function (techniqueDefinition) {
 					let displayOptions = WuxPrintTechnique.GetDisplayOptions();
-					displayOptions.categoryName = "techniques";
-					displayOptions.sectionName = `${displayOptions.categoryName}_filteredTechniques`;
 					displayOptions.techniqueDefinition = techniqueDefinition;
 					displayOptions.hasCSS = true;
 					displayOptions.showSelect = true;
 					return displayOptions;
 				},
 
-				buildStandardTechniqueGroup = function (techniqueDatabase, groupName, displayOptions) {
+				buildStandardTechniqueGroup = function (stylesDatabase, techniqueDatabase, groupName, displayOptions) {
 					let filters = [new DatabaseFilterData("group", groupName), new DatabaseFilterData("linkedTech", "")];
 
 					let filteredData = techniqueDatabase.filter(filters);
@@ -815,7 +806,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					for (let i = 0; i < filteredData.length; i++) {
 						output += buildTechTreeDisplaySection(filteredData[i], techniqueDatabase, displayOptions);
 					}
-					return WuxSheetMain.CollapsibleTab(`${displayOptions.sectionName}_${groupName}`, `${groupName} Techniques`, output);
+					return WuxSheetMain.CollapsibleTab(`attr_techniqueGroup_${groupName}`, `${groupName} Techniques`, output);
 				},
 
 				buildTechTreeDisplaySection = function (technique, techniqueDatabase, displayOptions) {
