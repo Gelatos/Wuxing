@@ -11,6 +11,7 @@ function SetDefinitionsDatabase(arr0) {
     jsClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
     jsClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
     jsClassData.addPublicVariable("k_filter", "_filter");
+    jsClassData.addPublicVariable("_expand", "_expand");
     return PrintLargeEntry(jsClassData.print("WuxDef"), "d");
 }
 
@@ -139,7 +140,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
     var
         getDisplayOptions = function () {
             return {
-                sectionName: "",
+                
                 techniqueDefinition: {},
                 autoExpand: false,
                 hasCSS: false,
@@ -206,7 +207,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             setTechniqueDisplayHeaderExpandSection = function (techDisplayData, displayOptions) {
                 if (displayOptions.hasCSS) {
                     // add the collapsible field
-                    let attributeName = `attr_${displayOptions.sectionName}-expand-${techDisplayData.fieldName}`;
+                    let attributeName = WuxDef.getAttribute("Technique", techDisplayData.fieldName, WuxDef._expand);
                     let isChecked = displayOptions.autoExpand ? `checked value="on"` : "";
 
                     return `<div class="wuxFeatureHeaderInteractBlock">
@@ -290,7 +291,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 output += techniqueDisplayContentEffects.PrintEffects(techDisplayData, displayOptions);
 
                 if (displayOptions.hasCSS) {
-                    let attributeName = `attr_${displayOptions.sectionName}-expand-${techDisplayData.fieldName}`;
+                    let attributeName = WuxDef.getAttribute("Technique", techDisplayData.fieldName, WuxDef._expand);
                     let isChecked = displayOptions.autoExpand ? ` checked value="on"` : "";
 
                     return `<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="${attributeName}"${isChecked}>\n<div class="wuxFeatureExpandingContent">\n${output}\n</div>\n`;
