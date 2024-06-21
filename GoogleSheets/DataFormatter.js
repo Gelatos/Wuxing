@@ -10,8 +10,10 @@ function SetDefinitionsDatabase(arr0) {
     jsClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
     jsClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
     jsClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
-    jsClassData.addPublicVariable("k_filter", "_filter");
-    jsClassData.addPublicVariable("_expand", "_expand");
+    jsClassData.addPublicVariable("_rank", `"_rank"`);
+    jsClassData.addPublicVariable("_filter", `"_filter"`);
+    jsClassData.addPublicVariable("_expand", `"_expand"`);
+    jsClassData.addPublicVariable("_read", `"_read"`);
     return PrintLargeEntry(jsClassData.print("WuxDef"), "d");
 }
 
@@ -207,7 +209,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             setTechniqueDisplayHeaderExpandSection = function (techDisplayData, displayOptions) {
                 if (displayOptions.hasCSS) {
                     // add the collapsible field
-                    let attributeName = WuxDef.getAttribute("Technique", techDisplayData.fieldName, WuxDef._expand);
+                    let attributeName = WuxDef.GetAttribute("Technique", techDisplayData.fieldName, WuxDef._expand);
                     let isChecked = displayOptions.autoExpand ? `checked value="on"` : "";
 
                     return `<div class="wuxFeatureHeaderInteractBlock">
@@ -291,7 +293,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 output += techniqueDisplayContentEffects.PrintEffects(techDisplayData, displayOptions);
 
                 if (displayOptions.hasCSS) {
-                    let attributeName = WuxDef.getAttribute("Technique", techDisplayData.fieldName, WuxDef._expand);
+                    let attributeName = WuxDef.GetAttribute("Technique", techDisplayData.fieldName, WuxDef._expand);
                     let isChecked = displayOptions.autoExpand ? ` checked value="on"` : "";
 
                     return `<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="${attributeName}"${isChecked}>\n<div class="wuxFeatureExpandingContent">\n${output}\n</div>\n`;
@@ -816,6 +818,25 @@ var WuxSheetMain = WuxSheetMain || (function () {
   </div>`;
         },
 
+        collapsibleStyleSection = function (sectionName, title, contents) {
+            return `<div class="wuxSectionBlock wuxLayoutItem">
+            <input class="wuxSectionContent-flag" type="checkbox" checked="checked" name="attr_${sectionName}-expand" style="display: block">
+  <div class="wuxStyleSectionHeader">
+  <input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_${sectionName}-expand">
+  <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_${sectionName}-expand">
+  <span class="wuxInteractiveExpandIcon">&#9662;</span>
+  <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_${sectionName}-expand">
+  <span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+  <span>${title}</span>
+  </div>
+  <div class="wuxSectionHeaderFooter"></div>
+  
+  <div class="wuxSectionContent">
+  ${contents}
+  </div>
+  </div>`;
+        },
+
         // string formatting
         header = function (contents, htmlType) {
             if (htmlType == undefined) {
@@ -1017,6 +1038,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Tab: tab,
         CollapsibleTab: collapsibleTab,
         CollapsibleSection: collapsibleSection,
+        CollapsibleStyleSection: collapsibleStyleSection,
         Header: header,
         Header2: header2,
         Subheader: subheader,

@@ -488,13 +488,13 @@ input[type=number]::-webkit-inner-spin-button
     margin-bottom: 10px;
 }
 
-.wuxSectionHeader
+.wuxSectionHeader,
+.wuxStyleSectionHeader
 {
     position: relative;
     display: inline-block;
     min-width: 100px;
     width: 100%;
-    max-width: 210px;
     height: 14px;
     padding: 3px;
     padding-left: 6px;
@@ -505,6 +505,11 @@ input[type=number]::-webkit-inner-spin-button
     font-size: 13px;
     line-height: 14px;
     text-transform: capitalize;
+}
+
+.wuxSectionHeader
+{
+    max-width: 210px;
 
 	background: #512800;
     background: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
@@ -512,6 +517,11 @@ input[type=number]::-webkit-inner-spin-button
     border-width: 3px;
     border-radius: 10px 10px 0px 0px;
     border-color: #000 #000 transparent #000;
+}
+
+.wuxStyleSectionHeader
+{
+    font-size: 15px;
 }
 
 input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader

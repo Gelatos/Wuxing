@@ -2,7 +2,7 @@ var WuxDef = WuxDef || (function () {
 	'use strict';
 
 	var
-		keys = ["Attribute", "Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason", "Skill", "Job", "Language", "Lore", "Technique", "Defense", "Brace", "Disruption", "Evasion", "Reflex", "Sense", "Insight", "Resolve", "Perception", "Notice", "Hide", "General", "Character Level", "Character Rank", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed", "Affinity", "Wood", "Fire", "Earth", "Metal", "Water", "Gear", "Carrying Capacity", "Reflex Penalty", "Speed Penalty", "Combat", "Durability", "Heal Value", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce", "Social", "Scrutiny", "Willpower", "Approval", "Patience", "Tech Slot", "Job Slots", "Item Slots", "Active Slots", "Support Slots", "Character Creator", "Origin", "Full Name", "Display Name", "Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall", "Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)", "Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent", "Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious", "Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"],
+		keys = ["Attribute", "Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason", "Skill", "Job", "Language", "Lore", "Technique", "Defense", "Brace", "Disruption", "Evasion", "Sense", "Insight", "Scrutiny", "Resolve", "Awareness", "Fortitude", "Notice", "Hide", "Reflex", "General", "Character Level", "Character Rank", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed", "Affinity", "Wood", "Fire", "Earth", "Metal", "Water", "Gear", "Carrying Capacity", "Reflex Penalty", "Speed Penalty", "Combat", "Durability", "Heal Value", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce", "Social", "Willpower", "Approval", "Patience", "Tech Slot", "Job Slots", "Item Slots", "Active Slots", "Support Slots", "Character Creator", "Origin", "Full Name", "Display Name", "Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall", "Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)", "Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent", "Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious", "Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"],
 		values = {
 			"Attribute": {
 				"name": "Attribute", "group": "Type", "descriptions": ["Attributes are the inherent characteristics of your character. Characters have a numerical rating for each attribute, which determines the modifier they grant to skills and helps affect their derived stats. "],
@@ -50,7 +50,7 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Technique": {
 				"name": "Technique", "group": "Stat", "descriptions": [""],
-				"abbreviation": "", "variable": "technique_{0}", "formula": ""
+				"abbreviation": "", "variable": "technique_{0}{1}", "formula": ""
 			},
 			"Defense": {
 				"name": "Defense", "group": "Type", "descriptions": ["A defense protects a character from physical harm"],
@@ -68,33 +68,41 @@ var WuxDef = WuxDef || (function () {
 				"name": "Evasion", "group": "Defense", "descriptions": ["Evasion is your dodging ability. When an attack checks against any defense and fails, it will always then check against evasion. On failure, the attack does not connect and no aspect of its effects occur."],
 				"abbreviation": "", "variable": "evasion", "formula": "qck"
 			},
-			"Reflex": {
-				"name": "Reflex", "group": "Defense", "descriptions": ["Reflex is used when a character could quickly react to a situation with movement. It is usually used to avoid powerful attacks or to get out of the way of harmful effects that only need to touch the character like a fireball."],
-				"abbreviation": "", "variable": "reflex", "formula": "7;evasion"
-			},
 			"Sense": {
 				"name": "Sense", "group": "Type", "descriptions": [""],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
 			"Insight": {
 				"name": "Insight", "group": "Sense", "descriptions": ["Insight represents a character's ability to parse conversation and judge mental states. This defense is typically used when information is being hidden in text or speech or to detect when someone is concealing their true thoughts."],
-				"abbreviation": "", "variable": "insight", "formula": "7;rsn"
+				"abbreviation": "", "variable": "insight", "formula": "7;int"
+			},
+			"Scrutiny": {
+				"name": "Scrutiny", "group": "Sense", "descriptions": ["Scrutiny represents your ability to find holes in another's logical reasoning."],
+				"abbreviation": "", "variable": "scrutiny", "formula": "7;rsn"
 			},
 			"Resolve": {
 				"name": "Resolve", "group": "Sense", "descriptions": ["Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in."],
 				"abbreviation": "", "variable": "resolve", "formula": "7;cnv"
 			},
-			"Perception": {
-				"name": "Perception", "group": "Type", "descriptions": [""],
+			"Awareness": {
+				"name": "Awareness", "group": "Type", "descriptions": [""],
 				"abbreviation": "", "variable": "", "formula": ""
 			},
+			"Fortitude": {
+				"name": "Fortitude", "group": "Awareness", "descriptions": [""],
+				"abbreviation": "", "variable": "fortitude", "formula": "7;bod"
+			},
 			"Notice": {
-				"name": "Notice", "group": "Perception", "descriptions": ["Notice is the ability to see or hear sudden changes in your environment. It is typically used to counter a character's sneak attempts or to hear a distant or quiet noise."],
+				"name": "Notice", "group": "Awareness", "descriptions": ["Notice is the ability to see or hear sudden changes in your environment. It is typically used to counter a character's sneak attempts or to hear a distant or quiet noise."],
 				"abbreviation": "", "variable": "notice", "formula": "7;int"
 			},
 			"Hide": {
-				"name": "Hide", "group": "Perception", "descriptions": [""],
-				"abbreviation": "", "variable": "hide", "formula": "7;qck"
+				"name": "Hide", "group": "Awareness", "descriptions": [""],
+				"abbreviation": "", "variable": "hide", "formula": "7;prc"
+			},
+			"Reflex": {
+				"name": "Reflex", "group": "Awareness", "descriptions": ["Reflex is used when a character could quickly react to a situation with movement. It is usually used to avoid powerful attacks or to get out of the way of harmful effects that only need to touch the character like a fireball."],
+				"abbreviation": "", "variable": "reflex", "formula": "7;qck"
 			},
 			"General": {
 				"name": "General", "group": "Type", "descriptions": [""],
@@ -231,10 +239,6 @@ var WuxDef = WuxDef || (function () {
 			"Social": {
 				"name": "Social", "group": "Type", "descriptions": [""],
 				"abbreviation": "", "variable": "", "formula": ""
-			},
-			"Scrutiny": {
-				"name": "Scrutiny", "group": "Social", "descriptions": ["Scrutiny represents your willingness to continue scrutinizing another's points. During social conflict it works similarly to HP providing resistance to charming and deceptive attempts before giving into another's arguments."],
-				"abbreviation": "", "variable": "scrutiny", "formula": "rsn"
 			},
 			"Willpower": {
 				"name": "Willpower", "group": "Social", "descriptions": ["Willpower represents a character's resilience towards those that would attempt to control or coerce them. In social conflict it acts similarly to HP, representing a character's threshold before allowing another to influence them. "],
@@ -501,7 +505,11 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "variable": "", "formula": ""
 			}
 		},
-		sortingGroups = { "group": { "Type": ["Attribute", "Defense", "Sense", "Perception", "General", "Affinity", "Gear", "Combat", "Social", "Tech Slot"], "Attribute": ["Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason"], "Stat": ["Skill", "Job", "Language", "Lore", "Technique"], "Defense": ["Brace", "Disruption", "Evasion", "Reflex"], "Sense": ["Insight", "Resolve"], "Perception": ["Notice", "Hide"], "General": ["Character Level", "Character Rank", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "Gear": ["Carrying Capacity", "Reflex Penalty", "Speed Penalty"], "Combat": ["Durability", "Heal Value", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce"], "Social": ["Scrutiny", "Willpower", "Approval", "Patience"], "Tech Slot": ["Job Slots", "Item Slots", "Active Slots", "Support Slots"], "Definition": ["Character Creator", "Origin", "Full Name", "Display Name"], "Technique Trait": ["Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall"], "Item Trait": ["Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)"], "Material Trait": ["Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent"], "Status": ["Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious"], "Condition": ["Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"] } },
+		sortingGroups = { "group": { "Type": ["Attribute", "Defense", "Sense", "Awareness", "General", "Affinity", "Gear", "Combat", "Social", "Tech Slot"], "Attribute": ["Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason"], "Stat": ["Skill", "Job", "Language", "Lore", "Technique"], "Defense": ["Brace", "Disruption", "Evasion"], "Sense": ["Insight", "Scrutiny", "Resolve"], "Awareness": ["Fortitude", "Notice", "Hide", "Reflex"], "General": ["Character Level", "Character Rank", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "Gear": ["Carrying Capacity", "Reflex Penalty", "Speed Penalty"], "Combat": ["Durability", "Heal Value", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce"], "Social": ["Willpower", "Approval", "Patience"], "Tech Slot": ["Job Slots", "Item Slots", "Active Slots", "Support Slots"], "Definition": ["Character Creator", "Origin", "Full Name", "Display Name"], "Technique Trait": ["Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall"], "Item Trait": ["Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)"], "Material Trait": ["Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent"], "Status": ["Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Invisible", "Restrained", "Unconscious"], "Condition": ["Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"] } },
+		_rank = _rank,
+		_filter = _filter,
+		_expand = _expand,
+		_read = _read,
 
 		get = function (key) {
 			return new DefinitionData(values[key]);
@@ -573,15 +581,15 @@ var WuxDef = WuxDef || (function () {
 			}
 			return output;
 		},
-		getAttribute = function (key, mod) {
+		getAttribute = function (key, mod, mod1) {
 			let data = get(key);
-			return data.getAttribute(mod);
+			return data.getAttribute(mod, mod1);
 		},
-		getVariable = function (key, mod) {
+		getVariable = function (key, mod, mod1) {
 			let data = get(key);
-			return data.getVariable(mod);
+			return data.getVariable(mod, mod1);
 		},
-		getAbbreviation = function (key, mod) {
+		getAbbreviation = function (key) {
 			let data = get(key);
 			if (data.abbreviation == "") {
 				return data.name;
@@ -600,6 +608,10 @@ var WuxDef = WuxDef || (function () {
 		GetSortedGroup: getSortedGroup,
 		GetAttribute: getAttribute,
 		GetVariable: getVariable,
-		GetAbbreviation: getAbbreviation
+		GetAbbreviation: getAbbreviation,
+		_rank: _rank,
+		_filter: _filter,
+		_expand: _expand,
+		_read: _read
 	};
 }());
