@@ -798,27 +798,29 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				},
 
 				buildStandardTechniqueGroup = function (stylesDatabase, techniqueDatabase, groupName, displayOptions) {
-					let filters = [new DatabaseFilterData("group", groupName), new DatabaseFilterData("linkedTech", "")];
+					let filters = [new DatabaseFilterData("group", groupName)];
 
-					let filteredData = techniqueDatabase.filter(filters);
+					let filteredData = stylesDatabase.filter(filters);
 
 					let output = "";
 					for (let i = 0; i < filteredData.length; i++) {
-						output += buildTechTreeDisplaySection(filteredData[i], techniqueDatabase, displayOptions);
+						output += buildTechStyleSection(filteredData[i], techniqueDatabase, displayOptions);
 					}
 					return WuxSheetMain.CollapsibleTab(`attr_techniqueGroup_${groupName}`, `${groupName} Techniques`, output);
 				},
 
-				buildTechTreeDisplaySection = function (technique, techniqueDatabase, displayOptions) {
-					let filters = [new DatabaseFilterData("linkedTech", technique.name)];
-					let augmentTechniques = techniqueDatabase.filter(filters);
+				buildTechStyleSection = function (style, techniqueDatabase, displayOptions) {
+					let filters = [new DatabaseFilterData("techSet", style.name)];
+					let techniques = techniqueDatabase.filter(filters);
 
+					let technique = {};
 					let output = "";
-					output += `<div class="${augmentTechniques.length > 0 ? "wuxFeatureGroupWithAugments" : "wuxFeatureGroup"}">\n`;
-					output += buildTechnique(technique, displayOptions);
-					output += buildAugmnentTechniques(technique, augmentTechniques, displayOptions);
-					output += `</div>\n`;
-					return output;
+					for (var i = 0; i < techniques.length; i++) {
+						technique = new TechniqueData(techniques[i]);
+						technique.setAugmentTechValues(technique);
+						output += buildTechnique(technique, displayOptions);
+					}
+					return WuxSheetMain.CollapsibleStyleSection(WuxDef.GetAttribute("Style", style.fieldName), style.name, output);
 				},
 
 				buildTechnique = function (technique, displayOptions) {
