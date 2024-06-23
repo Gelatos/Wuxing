@@ -482,6 +482,17 @@ function ShowChapterActiveQuests(chapterActors) {
     }
 }
 
+function CommandSendPmEmoteNote(options) {
+    options = options.trim().split("@@");
+    let emotePostType = options[0];
+    let target = options[1];
+    let emote = options[2];
+    let emotePostTarget = options[3];
+    let speaking_language = options[4];
+    let emotePostMessage = options[5];
+    CreatePmNoteData(emotePostType, GetEmoteURL(target, emote), emotePostTarget, speaking_language, emotePostMessage);
+}
+
 function CommandSendPmNote(options) {
     
     options = options.trim().split("@@");
@@ -490,12 +501,15 @@ function CommandSendPmNote(options) {
     let emotePostTarget = options[2];
     let speaking_language = options[3];
     let emotePostMessage = options[4];
+    CreatePmNoteData(emotePostType, url, emotePostTarget, speaking_language, emotePostMessage);
+}
+
+function CreatePmNoteData(emotePostType, url, emotePostTarget, speaking_language, emotePostMessage) {
 
     var partyManager = FindCharacter("PartyManager");
     newId = generateRowID();
     newRowRef = "repeating_preparednotes_" + newId + "_";
     let postText = GeneratePmNotesPostText("Character", emotePostTarget, url, emotePostMessage, emotePostType, speaking_language).postText;
-    log ("postText: " + postText);
 
     createObj("attribute", {"name": newRowRef + "type", "current": "Character", "_characterid": partyManager.id});
     createObj("attribute", {"name": newRowRef + "header", "current": emotePostTarget, "_characterid": partyManager.id});

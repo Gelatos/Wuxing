@@ -18,6 +18,12 @@ on("chat:message", function(msg) {
             case "!t":
             case "!d":
             case "!de":
+            case "!qm":
+            case "!qw":
+            case "!qy":
+            case "!qt":
+            case "!qd":
+            case "!qde":
                 CommandGetEmoteMessageOptions(msg);
             return;
             case "!h":
@@ -144,6 +150,10 @@ on("chat:message", function(msg) {
                 TokenEndRound(msg);
 
             return;
+            case "!pmemotenote":
+                CommandSendPmEmoteNote(content);
+                
+            return;
 
             // Token Triggered Events
             case "!tatk":
@@ -267,7 +277,6 @@ on("chat:message", function(msg) {
                     
                 return;
                 case "!sendpmnote":
-                    log ("sending note");
                     CommandSendPmNote(content);
                     
                 return;

@@ -4,6 +4,7 @@
 function GetChatData() {
     return {
         target: undefined,
+        sendType: "",
         message: "",
         chatType: "",
         sender: "",
@@ -25,30 +26,17 @@ function GetChatData() {
 
         setChatMessageFromMsgContent: function(msgContent) {
             this.chatType = "m";
-    
-            if (msgContent.indexOf("!m ") == 0) {
-                this.chatType = "m";
-                this.message = msgContent.replace("!m ", "");
+            let contentIndex = msgContent.indexOf(" ");
+            if (contentIndex == 0) {
+                this.message = msgContent;
             }
-            else if (msgContent.indexOf("!w ") == 0) {
-                this.chatType = "w";
-                this.message = msgContent.replace("!w ", "");
+            else {
+                this.chatType = msgContent.substring(1, contentIndex);
+                this.message = msgContent.replace("!" + this.chatType + " ", "");
             }
-            else if (msgContent.indexOf("!y ") == 0) {
-                this.chatType = "y";
-                this.message = msgContent.replace("!y ", "");
-            }
-            else if (msgContent.indexOf("!t ") == 0) {
-                this.chatType = "t";
-                this.message = msgContent.replace("!t ", "");
-            }
-            else if (msgContent.indexOf("!d ") == 0) {
-                this.chatType = "d";
-                this.message = msgContent.replace("!d ", "");
-            }
-            else if (msgContent.indexOf("!de ") == 0) {
-                this.chatType = "de";
-                this.message = msgContent.replace("!de ", "");
+            if (this.chatType.startsWith("q")) {
+                this.sendType = "q";
+                this.chatType = this.chatType.substring(1);
             }
             this.message = ReplaceSpecialCharactersHTML(this.message);
         },
@@ -76,20 +64,26 @@ function GetChatData() {
             
             // get effects
             let element = SetSpiritRealmEffect(this.target);
-            let languageButtons = GetLanguageButtons(this.target, this.chatType, this.message);
+            let languageButtons = GetLanguageButtons(this.target, this.sendType + this.chatType, this.message);
     
             // create the emote buttons
             let emoteButtons = "";
+            let emoteButtonData = "";
             emoteData.emotes.sort();
             for (var i = 0; i < emoteData.emotes.length; i++)
             {
                 var emoteSplit = emoteData.emotes[i].split("@");
-                emoteButtons += "[" + emoteSplit[0] + "]";
-                emoteButtons += "(!&#13;";
-                emoteButtons += GetEmoteMessage(this.target, this.chatType, this.message, emoteSplit[1], false, element) + " )";
-                emoteButtons += " ";
+                if (this.sendType == "") {
+                    emoteButtonData = "!&#13;" + GetEmoteMessage(this.target, this.chatType, this.message, emoteSplit[1], false, element);
+                }
+                else {
+                    emoteButtonData = "!pmemotenote " + GetPMNoteMessage(this.target, this.chatType, this.message, emoteSplit[0]);
+                }
+                emoteButtons += `[${emoteSplit[0]}](${emoteButtonData}) `;
             }
-            emoteButtons = ReplaceBraces(emoteButtons);
+            if (this.sendType == "") {
+                emoteButtons = ReplaceBraces(emoteButtons);
+            }
             
             // write the final message
             let sendMessage = `/w ${this.sender} ${GetEmoteMessage(this.target, this.chatType, this.message, emoteData.activeURL, true, element)} {{sub=<div style='font-weight: bold'>Emotes</div>${emoteButtons}`;
@@ -153,8 +147,10 @@ function CommandSetLanguage(msg) {
     var sendingPlayerName = sendingPlayer.get("_displayname").split(" ")[0];
 
     SetLanguage(sendingPlayerName, chatData.target, messageParts[0]);
-    chatData.setChatMessageFromMsgContent(messageParts[1]);
-    chatData.sendEmoteOption();
+    if (messageParts.length > 1) {
+        chatData.setChatMessageFromMsgContent(messageParts[1]);
+        chatData.sendEmoteOption();
+    }
 }
 
 // ======= Replace Functions
@@ -199,10 +195,13 @@ function GetEmoteURL(charId, emote) {
     var emoteURL = "";
     
     var emotesFromSheet = getAttrByName(charId, "emote_activesetemotes");
-    if (emotesFromSheet != "") {
+    if (emotesFromSheet != undefined && emotesFromSheet != "") {
         emoteList = emotesFromSheet.split(",");
         let emoteData = [];
         for (var i = 0; i < emoteList.length; i++) {
+            if (emoteList[i] == "") {
+                continue;
+            }
             emoteData = emoteList[i].split("@");
             if (emoteData[0].toLowerCase() == emote.toLowerCase()) {
                 emoteURL = emoteData[1];
@@ -265,6 +264,7 @@ function SetLanguage(sendingPlayerName, target, language) {
     let languageObj = GetCharacterAttribute(target.charId, "speaking_language");
     if (languageObj != null) {
         languageObj.set("current", language);
+        sendChat("Emote Manager", "/w " + sendingPlayerName + " Language set to " + language, null, {noarchive:true});
     }
     else {
         sendChat("Emote Manager", "/w " + sendingPlayerName + " There was an error in your message. This character doesn't have speaking_language set.", null, {noarchive:true});
@@ -395,9 +395,7 @@ function GetLanguageButtons(target, chatType, message) {
         languageList = languageList.split(",");
         for (let i = 0; i < languageList.length; i++) {
             if(languageList[i] != "") {
-                languageButtons += "[" + languageList[i] + "](!setlang ";
-                languageButtons += languageList[i] + "@@@" + "!" + chatType + " " + message + ")";
-                languageButtons += " ";
+                languageButtons += `[${languageList[i]}](!setlang ${languageList[i]}"@@@"!${chatType} ${message}) `;
             }
         }
     }
@@ -405,86 +403,86 @@ function GetLanguageButtons(target, chatType, message) {
     return languageButtons;
 }
 
-function GetEmoteMessage(target, chatType, message, imageUrl, useTemplate, element, chattemplateTitle) {
-
-    if (chattemplateTitle == undefined) {
-        chattemplateTitle = target.displayName;
-    }
-
-    // get the language
-    let language = GetSelectedLanguage(target.charId);
-    let languageTag = GetLanguageTag(language);
+function FormatChatMessageData(chatType, chatTitle, message) {
+    let chattemplate = "ctmsg";
+    let chattemplateTitle = " says";
 
     // see if there's a target for the message
-    var messageTarget = "";
-    var messageTargetCheck = message.indexOf("/");
+    let messageTarget = "";
+    let messageTargetCheck = message.indexOf(">");
     if (messageTargetCheck != -1) {
-        var messageTargetSubStr = message.substr(messageTargetCheck + 1);
-        var endOfMessage = messageTargetSubStr.indexOf("/");
-        messageTarget = messageTargetSubStr.substr(0, endOfMessage);
-        if (!messageTarget.startsWith(",") && messageTarget.toLowerCase().indexOf("to") != 0)
-        {
-            messageTarget = "to " + messageTarget;
-        }
-        // punctuation
-        if (!messageTarget.startsWith(",") && !messageTarget.startsWith(" ")) {
-            messageTarget = " " + messageTarget;
-        }
-        message = message.substr(messageTargetCheck + endOfMessage + 2).trim();
+        messageTarget = message.substr(0, messageTargetCheck - 1).trim();
+        message = message.substr(messageTargetCheck + 1).trim();
     }
-
-    // format the output
-    var chattemplate = "ctmsg";
     switch (chatType) {
         case "m":
             chattemplate = "ctmsg";
-            chattemplateTitle += " says";
+            chattemplateTitle = " says";
             break;
         case "w":
             chattemplate = "ctwsp";  
-            chattemplateTitle += " whispers"; 
+            chattemplateTitle = " whispers"; 
             break;
         case "y":
             chattemplate = "ctyell";
-            chattemplateTitle += " yells";
+            chattemplateTitle = " yells";
             break;
         case "t":
             chattemplate = "ctthk";
             break;
         case "d":
             chattemplate = "ctdesc";
-            message = chattemplateTitle + " " + message;
+            chattemplateTitle = " describes";
             break;
         case "de":
             chattemplate = "ctdesc";
             break;
         case "interact":
             chattemplate = "ctinteract";
-            chattemplateTitle += " says";
+            chattemplateTitle = " says";
             break;
         case "intro":
             chattemplate = "ctintro";
             break;
     }
-    chattemplateTitle += messageTarget;
+
+    return {
+        template: chattemplate,
+        title: chatTitle + chattemplateTitle + messageTarget,
+        message: message
+    };
+
+}
+
+function GetPMNoteMessage(target, chatType, message, imageName, chatTitle) {
+    // get the language
+    let messageData = FormatChatMessageData(chatType, chatTitle == undefined ? target.displayName : chatTitle, message);
+    messageData.target = target.charId;
+    messageData.imageName = imageName;
+    messageData.language = GetSelectedLanguage(target.charId);
+
+    let sendMessage = `${messageData.template}@@${target.charId}@@${imageName}@@${messageData.title}@@${messageData.language}@@${messageData.message}`;
+    return sendMessage;
+}
+
+function GetEmoteMessage(target, chatType, message, imageUrl, useTemplate, element, chatTitle) {
+
+    // get the language
+    let language = GetSelectedLanguage(target.charId);
+    let languageTag = GetLanguageTag(language);
+
+    // format the output
+    let messageData = FormatChatMessageData(chatType, chatTitle == undefined ? target.displayName : chatTitle, message);
     
     // create the output
     var sendMessage = "";
     if (useTemplate) {
-        sendMessage += "&{template:" + chattemplate + "} ";
+        sendMessage += "&{template:" + messageData.template + "} ";
     }
     else {
-        sendMessage += "#" + chattemplate + " ";
+        sendMessage += "#" + messageData.template + " ";
     }
-    sendMessage += "{{url=" + imageUrl + "}} ";
-    sendMessage += "{{title=" + chattemplateTitle + "}} ";
-    sendMessage += "{{message=" + message + "}} ";
-    sendMessage += "{{language=" + language + "}} ";
-    sendMessage += languageTag;
-    if (element != "") {
-        sendMessage += `{{spirit=1}}{{${element.toLowerCase()}=1}}`;
-    }
-    return sendMessage;
+    return sendMessage + `{{url=${imageUrl}}} {{title=${messageData.title}}} {{message=${messageData.message}}} {{language=${language}}} ${languageTag} ${element != "" ? `{{spirit=1}}{{${element.toLowerCase()}=1}}` : ""}`;
 }
 
 function SendFormattedMessage(sender, chatType, message, noarchive) {
