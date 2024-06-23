@@ -250,17 +250,14 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 							let expandContents = `<div class="wuxDescription">${knowledge.description}</div>`;
 
 							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
-							${buildInteractionMainBlock(knowledge)}
+							${WuxSheetMain.InteractionElement.InnerBlock(buildInteractionMainBlock(knowledge))}
 							${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
 
 							return WuxSheetMain.InteractionElement.Build(true, output);
 						},
 
 						buildInteractionMainBlock = function (knowledge) {
-							return `<div class="wuxInteractiveInnerBlock">
-								<span class="wuxHeader">${knowledge.name}</span>
-								- <span class="wuxSubheader">${knowledge.location}</span>
-							</div>`;
+							return `<span class="wuxHeader">${knowledge.name}</span>\n<span class="wuxSubheader">${knowledge.location}</span>`;
 						},
 
 						buildSubLanguage = function (fieldName, subGroupName) {

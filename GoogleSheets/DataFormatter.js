@@ -801,12 +801,13 @@ var WuxSheetMain = WuxSheetMain || (function () {
         },
 
         collapsibleSection = function (sectionName, title, contents) {
+            let fieldName = `attr_${sectionName}-expand`;
             return `<div class="wuxSectionBlock wuxLayoutItem">
-  <input class="wuxSectionContent-flag" type="checkbox" checked="checked" name="attr_${sectionName}-expand" style="display: block">
+  <input class="wuxSectionContent-flag" type="checkbox" checked="checked" name="${fieldName}" style="display: block">
   <div class="wuxSectionHeader">
-  <input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_${sectionName}-expand">
+  <input type="hidden" class="wuxSectionExpandIcon-flag" name="${fieldName}">
   <span class="wuxSectionExpandIcon">&#9662;</span>
-  <input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_${sectionName}-expand">
+  <input type="hidden" class="wuxSectionExpandIcon-flag" name="${fieldName}">
   <span class="wuxSectionExpandAuxIcon">&#9656;</span>
   <span>${title}</span>
   </div>
@@ -819,15 +820,16 @@ var WuxSheetMain = WuxSheetMain || (function () {
         },
 
         collapsibleStyleSection = function (sectionName, title, contents) {
+            let fieldName = `attr_${sectionName}-expand`;
             return `<div class="wuxSectionBlock wuxLayoutItem">
-            <input class="wuxSectionContent-flag" type="checkbox" checked="checked" name="attr_${sectionName}-expand" style="display: block">
+            <input class="wuxSectionContent-flag" type="checkbox" checked="checked" name="${fieldName}" style="display: block">
   <div class="wuxStyleSectionHeader">
-  <input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="attr_${sectionName}-expand">
-  <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_${sectionName}-expand">
+  <input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="${fieldName}">
+  <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="${fieldName}">
   <span class="wuxInteractiveExpandIcon">&#9662;</span>
-  <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_${sectionName}-expand">
+  <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="${fieldName}">
   <span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-  <span>${title}</span>
+  ${title}
   </div>
   <div class="wuxSectionHeaderFooter"></div>
   
@@ -1002,6 +1004,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
   </div>`;
                 },
 
+                innerBlock = function(contents) {
+                    return `<div class="wuxInteractiveInnerBlock">\n${contents}\n</div>`;
+                },
+
                 expandableBlockContents = function (fieldName, contents) {
                     return `<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="${fieldName}">
   <div class="wuxInteractiveExpandingContent">
@@ -1027,6 +1033,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 Build: build,
                 ExpandableBlockIcon: expandableBlockIcon,
                 ExpandableBlockEmptyIcon: expandableBlockEmptyIcon,
+                InnerBlock: innerBlock,
                 ExpandableBlockContents: expandableBlockContents,
                 CheckboxBlockIcon: checkboxBlockIcon
             }

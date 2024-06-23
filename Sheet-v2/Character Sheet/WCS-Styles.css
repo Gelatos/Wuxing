@@ -1194,8 +1194,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
     max-width: 10px;
 }
 
-.wuxInteractiveBlock .wuxInteractiveIcon,
-.wuxInteractiveBlock .wuxInteractiveExpandIcon
+.wuxInteractiveIcon,
+.wuxInteractiveExpandIcon
 {
 	display: none;
 }
