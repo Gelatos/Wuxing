@@ -433,6 +433,7 @@ function FormatChatMessageData(chatType, chatTitle, message) {
         case "d":
             chattemplate = "ctdesc";
             chattemplateTitle = " describes";
+            message = chatTitle + " " + message;
             break;
         case "de":
             chattemplate = "ctdesc";
