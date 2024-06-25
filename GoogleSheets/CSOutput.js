@@ -494,8 +494,12 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						buildJob = function (job, techDictionary) {
 							let fieldName = Format.ToCamelCase(job.name);
 							return WuxSheetMain.CollapsibleStyleSection(
-								`advancement-${fieldName}`, job.name, buildJobContents(fieldName, job, techDictionary));
+								`advancement-${fieldName}`, buildJobHeader(job), buildJobContents(fieldName, job, techDictionary));
 						},
+						
+						buildJobHeader = function (job) {
+        					return `${WuxSheetMain.InteractionElement.CheckboxBlockIcon(WuxDef.GetAttribute("Job", job.fieldName))}${job.name}`;
+        				},
 
 						buildJobContents = function (fieldName, job, techDictionary) {
 							let output = "";
@@ -819,15 +823,34 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 				buildTechStyleSection = function (style, techniqueDatabase, displayOptions) {
 
-					let contents = "";
+					let contents = ""
+					contents += buildStyleRequirements(style);
+					contents += WuxSheetMain.Desc(style.description);
 					contents += buildTechniques(techniqueDatabase, displayOptions);
 
 					let output = `<input type="hidden" class="wuxFilterSection-flag" name="${fieldName}" value="">\n`;
 					return output + WuxSheetMain.CollapsibleStyleSection(WuxDef.GetAttribute("Style", style.fieldName), buildStyleHeader(style), contents);
 				},
+				
+				buildStyleRequirements = function (style) {
+				    let contents = "";
+				    if (style.affinity != "") {
+				        contents += `You must have a ${style.affinity} affinity`;
+				    }
+				    if (style.cr != "") {
+				        if (contents != "") {
+				            contents += "<br />";
+				        }
+				        contents += `You must be at least Character Rank ${style.cr}`;
+				    }
+				    if (contents != "") {
+				        return WuxSheetMain.Header2("Requirements") + WuxSheetMain.Alert(`${contents}`);
+				    }
+				    return '';
+				},
 
 				buildStyleHeader = function (style) {
-					return `${WuxSheetMain.InteractionElement.CheckboxBlockIcon(WuxDef.GetAttribute("Style", style.fieldName), interactHeader)}${style.name}`;
+					return `${WuxSheetMain.InteractionElement.CheckboxBlockIcon(WuxDef.GetAttribute("Style", style.fieldName))}${style.name}`;
 				},
 
 				buildTechniques = function (techniqueDatabase, displayOptions) {
