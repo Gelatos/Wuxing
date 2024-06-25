@@ -809,7 +809,10 @@ class TechniqueDisplayData {
             this.targetData = `Range: ${technique.range}`;
         }
         if (technique.target != "") {
-            this.targetData += `; ${technique.target}`;
+            if (this.targetData != "") {
+                this.targetData += "; ";
+            }
+            this.targetData += `${technique.target}`;
         }
     }
     setExtentionEffects(technique) {

@@ -752,6 +752,17 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			return WuxSheet.SetDisplayStyle("Techniques", output);
 		},
 
+		printTest = function (stylesDatabase, techniqueDatabase) {
+			let filters = [new DatabaseFilterData("group", "Standard")];
+			let filteredData = stylesDatabase.filter(filters);
+
+			let output = "";
+			for (let i = 0; i < filteredData.length; i++) {
+				output += `${filteredData[i].name}, `;
+			}
+			return output;
+		},
+
 		SideBarData = SideBarData || (function () {
 			'use strict';
 
@@ -807,18 +818,30 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				},
 
 				buildTechStyleSection = function (style, techniqueDatabase, displayOptions) {
+
+					let contents = "";
+					contents += buildTechniques(techniqueDatabase, displayOptions);
+
+					let output = `<input type="hidden" class="wuxFilterSection-flag" name="${fieldName}" value="">\n`;
+					return output + WuxSheetMain.CollapsibleStyleSection(WuxDef.GetAttribute("Style", style.fieldName), buildStyleHeader(style), contents);
+				},
+
+				buildStyleHeader = function (style) {
+					return `${WuxSheetMain.InteractionElement.CheckboxBlockIcon(WuxDef.GetAttribute("Style", style.fieldName), interactHeader)}${style.name}`;
+				},
+
+				buildTechniques = function (techniqueDatabase, displayOptions) {
 					let filters = [new DatabaseFilterData("techSet", style.name)];
 					let techniques = techniqueDatabase.filter(filters);
-
 					let technique = {};
+
 					let output = "";
 					for (var i = 0; i < techniques.length; i++) {
 						technique = new TechniqueData(techniques[i]);
-						technique.setAugmentTechValues(technique);
 						output += buildTechnique(technique, displayOptions);
 					}
-					return WuxSheetMain.CollapsibleStyleSection(WuxDef.GetAttribute("Style", style.fieldName), style.name, output);
-				},
+					return output;
+				}
 
 				buildTechnique = function (technique, displayOptions) {
 				    let fieldName = WuxDef.GetAttribute("Technique", technique.fieldName, WuxDef._filter);
@@ -826,17 +849,6 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					let output = "";
 					output += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="">`;
 					output += WuxPrintTechnique.Get(technique, displayOptions);
-					return output;
-				},
-
-				buildAugmnentTechniques = function (technique, augmentTechniques, displayOptions) {
-					let augmentTechnique = {};
-					let output = "";
-					for (var i = 0; i < augmentTechniques.length; i++) {
-						augmentTechnique = new TechniqueData(augmentTechniques[i]);
-						augmentTechnique.setAugmentTechValues(technique);
-						output += buildTechnique(augmentTechnique, displayOptions);
-					}
 					return output;
 				}
 
@@ -846,7 +858,8 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 		}())
 		;
 	return {
-		Print: print
+		Print: print,
+		PrintTest: printTest
 	};
 }());
 

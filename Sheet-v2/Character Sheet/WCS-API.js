@@ -4955,11 +4955,21 @@ class TechniqueEffect extends dbObj {
 }
 class TechniqueStyle extends dbObj {
     importJson(json) {
-        
+        this.name = json.name;
+        this.fieldName = Format.ToCamelCase(this.name);
+        this.group = json.group;
+        this.description = json.description;
+        this.affinity = json.affinity;
+        this.cr = json.cr;
     }
     importSheets(dataArray) {
         let i = 0;
-        
+        this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToCamelCase(this.name);
+        this.group = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+        this.affinity = "" + dataArray[i]; i++;
+        this.cr = parseInt(dataArray[i]); i++;
     }
     createEmpty() {
         this.name = "";

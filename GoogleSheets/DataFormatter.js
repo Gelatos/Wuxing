@@ -17,13 +17,9 @@ function SetDefinitionsDatabase(arr0) {
     return PrintLargeEntry(jsClassData.print("WuxDef"), "d");
 }
 
-function Test(techniqueDatabaseString) {
-    let techDb = SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString));
-
-    let testEffect = techDb.get("Hide");
-    let testDisplay = new TechniqueDisplayData(testEffect);
-
-    return PrintLargeEntry(JSON.stringify(testDisplay), "t");
+function Test(stylesArray, techniqueDatabaseString) {
+    return JSON.stringify(SheetsDatabase.CreateStyles(stylesArray));
+	return PrintLargeEntry(DisplayTechniquesSheet.PrintTest(SheetsDatabase.CreateStyles(stylesArray), SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString))), "t");
 }
 
 function ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
@@ -89,7 +85,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
         
         createStyles = function (arr) {
-            return new Database(["group"], arr, function (arr) {
+            return new Database(["group", "cr"], arr, function (arr) {
                 return new TechniqueStyle(arr);
             });
         },
@@ -127,6 +123,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
     return {
         CreateDatabaseCollection: createDatabaseCollection,
         CreateTechniques: createTechniques,
+        CreateStyles: createStyles,
         CreateSkills: createSkills,
         CreateLanguages: createLanguages,
         CreateLores: createLores,
