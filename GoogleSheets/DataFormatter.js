@@ -861,6 +861,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
         desc = function (contents) {
             return `<span class="wuxDescription">${contents}</span>`;
         },
+        
+        alert = function (contents) {
+            return `<div class="wuxAlert">${contents}</div>`;
+        },
 
         input = function (type, fieldName, value, placeholder) {
             value = value == undefined ? "" : ` value="${value}"`;
@@ -1047,6 +1051,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Header2: header2,
         Subheader: subheader,
         Desc: desc,
+        Alert: alert,
         Input: input,
         Select: select,
         MultiRowGroup: multiRowGroup,
