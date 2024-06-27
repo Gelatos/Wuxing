@@ -325,7 +325,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
-.wuxInteractiveBlock .wuxInteractiveInnerExpandBlock,
+.wuxInteractiveInnerExpandBlock,
 .wuxInteractiveBlock .wuxInteractiveExpandingContent,
 .wuxInteractiveBlock .wuxInteractiveExpandingAuxContent
 {
@@ -354,8 +354,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 	width: calc(100% - 30px);
 }
 
-.wuxInteractiveExpandingBlock .wuxInteractiveInnerExpandBlock,
-.wuxInteractiveExpandingContent .wuxInteractiveInnerExpandBlock
+.wuxInteractiveInnerExpandBlock
 {
 	display: inline-block;
 	width: 25px;

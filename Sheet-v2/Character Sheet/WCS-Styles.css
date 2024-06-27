@@ -488,6 +488,11 @@ input[type=number]::-webkit-inner-spin-button
     margin-bottom: 10px;
 }
 
+input[type=hidden].wuxFilterSection-flag[value="1"] + .wuxSectionBlock 
+{
+    display: none;
+}
+
 .wuxSectionHeader,
 .wuxStyleSectionHeader
 {
@@ -534,22 +539,6 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 {
     background: #86530f;
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
-}
-
-.wuxSectionExpandIcon
-{
-	display: none;
-}
-
-input[type=hidden].wuxSectionExpandIcon-flag[value="on"] + .wuxSectionExpandIcon,
-.wuxSectionExpandAuxIcon
-{
-    display: inline-block;
-}
-
-input[type=hidden].wuxSectionExpandIcon-flag[value="on"] + .wuxSectionExpandAuxIcon
-{
-    display: none;
 }
 
 .wuxSectionHeaderFooter
@@ -1124,7 +1113,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
-.wuxInteractiveBlock .wuxInteractiveInnerExpandBlock,
+.wuxInteractiveInnerExpandBlock,
 .wuxInteractiveBlock .wuxInteractiveExpandingContent,
 .wuxInteractiveBlock .wuxInteractiveExpandingAuxContent
 {
@@ -1153,8 +1142,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 	width: calc(100% - 30px);
 }
 
-.wuxInteractiveExpandingBlock .wuxInteractiveInnerExpandBlock,
-.wuxInteractiveExpandingContent .wuxInteractiveInnerExpandBlock
+.wuxInteractiveInnerExpandBlock
 {
 	display: inline-block;
 	width: 25px;

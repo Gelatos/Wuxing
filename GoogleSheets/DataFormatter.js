@@ -1,4 +1,4 @@
-function SetTechniquesDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
+function SetTechniquesDatabaseJson(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
     arr0 = ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9);
     let techniqueDatabase = SheetsDatabase.CreateTechniques(arr0);
     return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
@@ -13,8 +13,17 @@ function SetDefinitionsDatabase(arr0) {
     jsClassData.addPublicVariable("_rank", `"_rank"`);
     jsClassData.addPublicVariable("_filter", `"_filter"`);
     jsClassData.addPublicVariable("_expand", `"_expand"`);
+    jsClassData.addPublicVariable("_tab", `"_tab"`);
+    jsClassData.addPublicVariable("_page", `"_page"`);
     jsClassData.addPublicVariable("_read", `"_read"`);
+    jsClassData.addPublicVariable("_learn", `"_learn"`);
     return PrintLargeEntry(jsClassData.print("WuxDef"), "d");
+}
+
+function SetTechniquesDatabase(techniqueDatabaseString) {
+    let techDb = SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString));
+    let jsClassData = JavascriptDatabase.Create(techDb, WuxDefinition.Get);
+    return PrintLargeEntry(jsClassData.print("WuxTechniqueDb"), "d");
 }
 
 function Test(stylesArray, techniqueDatabaseString) {
@@ -72,7 +81,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createTechniques = function (arr) {
-            let filters = ["techSet", "linkedTech", "group", "tier", "action", "skill", "range"];
+            let filters = ["techSet", "linkedTech", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
             return new ExtendedTechniqueDatabase(filters, arr, function (arr) {
                 return new TechniqueData(arr);
             });
@@ -146,7 +155,8 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 hasUseInteraction: false,
                 showSelect: false,
                 showTrigger: false,
-                showKiCharge: false
+                showKiCharge: false,
+                showSelectIfFree: false,
             }
         },
 
@@ -223,7 +233,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             },
 
             setTechniqueDisplayHeaderSelectSection = function (techDisplayData, displayOptions) {
-                if (displayOptions.showSelect) {
+                if (displayOptions.showSelect && (displayOptions.showSelectIfFree || !techDisplayData.isFree)) {
                     return `
     <div class="wuxFeatureHeaderInteractBlock">
     <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${displayOptions.techniqueDefinition.getAttribute(techDisplayData.fieldName)}">
@@ -773,67 +783,51 @@ var WuxSheetMain = WuxSheetMain || (function () {
         },
 
         tab = function (contents) {
-            return `<div class="wuxTab">
-  ${contents}
-  </div>`;
+            return `<div class="wuxTab">\n${contents}\n</div>`;
         },
 
-        collapsibleTab = function (sectionName, title, contents) {
+        tabHeader = function (contents) {
+            return `<div class="wuxTabHeader">\n${contents}\n</div>`;
+        },
+
+        collapsibleTab = function (fieldName, title, contents) {
             return `<div class="wuxSegment">
-  <input class="wuxTab-flag" type="checkbox" name="attr_${sectionName}-expand" checked="checked">
-  <div class="wuxTabHeader">
-  <span class="wuxInnerHeader">
-  <input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_${sectionName}-expand">
-  <span class="wuxSectionExpandIcon">&#9662;</span>
-  <input type="hidden" class="wuxSectionExpandIcon-flag" name="attr_${sectionName}-expand">
-  <span class="wuxSectionExpandAuxIcon">&#9656;</span>
-  ${title}
-  </span>
-  </div>
-  
-  <div class="wuxTab">
-  ${contents}
-  </div>
-  </div>`;
+            ${customInput("checkbox", fieldName, "wuxTab-flag", ` checked="checked"`)}
+            ${tabHeader(interactionElement.ExpandableBlockIcon(fieldName) + `<span>${title}</span>`)}
+            ${tab(contents)}
+            </div>`;
         },
 
-        collapsibleSection = function (sectionName, title, contents) {
-            let fieldName = `attr_${sectionName}-expand`;
-            return `<div class="wuxSectionBlock wuxLayoutItem">
-  <input class="wuxSectionContent-flag" type="checkbox" checked="checked" name="${fieldName}" style="display: block">
-  <div class="wuxSectionHeader">
-  <input type="hidden" class="wuxSectionExpandIcon-flag" name="${fieldName}">
-  <span class="wuxSectionExpandIcon">&#9662;</span>
-  <input type="hidden" class="wuxSectionExpandIcon-flag" name="${fieldName}">
-  <span class="wuxSectionExpandAuxIcon">&#9656;</span>
-  <span>${title}</span>
-  </div>
-  <div class="wuxSectionHeaderFooter"></div>
-  
-  <div class="wuxSectionContent">
-  ${contents}
-  </div>
-  </div>`;
+        sectionBlock = function (contents) {
+            return `<div class="wuxSectionBlock wuxLayoutItem">\n${contents}\n</div>`;
+        },
+
+        sectionBlockHeader = function (contents) {
+            return `<div class="wuxSectionHeader">\n${contents}\n</div>\n${sectionBlockHeaderFooter()}`;
+        },
+
+        sectionBlockHeaderFooter = function () {
+            return `<div class="wuxSectionHeaderFooter"></div>`;
+        },
+
+        sectionBlockContents = function (contents) {
+            return `<div class="wuxSectionContent">\n${contents}\n</div>`;
+        },
+
+        collapsibleSection = function (fieldName, title, contents) {
+            return sectionBlock(`${customInput("checkbox", fieldName, "wuxSectionContent-flag")}
+            ${sectionBlockHeader(interactionElement.ExpandableBlockIcon(fieldName) + `<span>${title}</span>`)}
+            ${sectionBlockContents(contents)}`);
         },
 
         collapsibleStyleSection = function (sectionName, title, contents) {
             let fieldName = `attr_${sectionName}-expand`;
             return `<div class="wuxSectionBlock wuxLayoutItem">
-            <input class="wuxSectionContent-flag" type="checkbox" checked="checked" name="${fieldName}" style="display: block">
-  <div class="wuxStyleSectionHeader">
-  <input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="${fieldName}">
-  <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="${fieldName}">
-  <span class="wuxInteractiveExpandIcon">&#9662;</span>
-  <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="${fieldName}">
-  <span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-  ${title}
-  </div>
-  <div class="wuxSectionHeaderFooter"></div>
-  
-  <div class="wuxSectionContent">
-  ${contents}
-  </div>
-  </div>`;
+                <input class="wuxSectionContent-flag" type="hidden" name="${fieldName}" style="display: block">
+                <div class="wuxStyleSectionHeader">\n${interactionElement.Build(true, `${interactionElement.ExpandableBlockIcon(fieldName)}${title}`)}\n</div>
+                <div class="wuxSectionHeaderFooter"></div>
+                <div class="wuxSectionContent">\n${contents}\n</div>
+            </div>`;
         },
 
         // string formatting
@@ -861,15 +855,18 @@ var WuxSheetMain = WuxSheetMain || (function () {
         desc = function (contents) {
             return `<span class="wuxDescription">${contents}</span>`;
         },
-        
-        alert = function (contents) {
-            return `<div class="wuxAlert">${contents}</div>`;
-        },
 
         input = function (type, fieldName, value, placeholder) {
             value = value == undefined ? "" : ` value="${value}"`;
             placeholder = placeholder == undefined ? "" : ` placeholder="${placeholder}"`;
-            return `<input type="${type}" class="wuxInput" name="${fieldName}"${value}${placeholder} />`
+            return customInput(type, fieldName, "wuxInput", value + placeholder);
+        },
+
+        customInput = function (type, fieldName, className, extras) {
+            if (extras == undefined) {
+                extras = "";
+            }
+            return `<input type="${type}" class="${className}" name="${fieldName}"${extras} />`
         },
 
         select = function (fieldName, definitionGroup) {
@@ -898,6 +895,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
             }
 
             return output;
+        },
+
+        hiddenField = function (fieldName, contents) {
+            return `<input type="hidden" class="wuxHiddenField-flag" name="${fieldName}" value="0">
+            <div class="wuxHiddenField">\n${contents}\n</div>\n`;
         },
 
         table = table || (function () {
@@ -984,25 +986,19 @@ var WuxSheetMain = WuxSheetMain || (function () {
             'use strict';
             var
                 build = function (isExpanding, contents) {
-                    return `<div class="wuxInteractiveBlock${isExpanding ? " wuxInteractiveExpandingBlock" : ""}">
-  ${contents}
-  </div>`;
+                    return `<div class="wuxInteractiveBlock${isExpanding ? " wuxInteractiveExpandingBlock" : ""}">\n${contents}\n</div>`;
                 },
 
                 expandableBlockIcon = function (fieldName) {
-                    return `<div class="wuxInteractiveInnerExpandBlock">
-  <input class="wuxInteractiveExpandingContent-flag" type="checkbox" name="${fieldName}">
-  <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="${fieldName}">
-  <span class="wuxInteractiveExpandIcon">&#9662;</span>
-  <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="${fieldName}">
-  <span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-  </div>`;
+                    let flagName = "wuxInteractiveExpandIcon-flag";
+                    return `<div class="wuxInteractiveInnerExpandBlock">\n${customInput("checkbox", fieldName, "wuxInteractiveExpandingContent-flag")}
+                    ${customInput("hidden", fieldName, flagName)}\n<span class="wuxInteractiveExpandIcon">&#9662;</span>
+                    ${customInput("hidden", fieldName, flagName)}\n<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+                    </div>`;
                 },
 
                 expandableBlockEmptyIcon = function () {
-                    return `<div class="wuxInteractiveInnerExpandBlock">
-  <span class="wuxInteractiveExpandIcon">&nbsp;</span>
-  </div>`;
+                    return `<div class="wuxInteractiveInnerExpandBlock">\n<span class="wuxInteractiveExpandIcon">&nbsp;</span>\n</div>`;
                 },
 
                 innerBlock = function(contents) {
@@ -1010,24 +1006,19 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 },
 
                 expandableBlockContents = function (fieldName, contents) {
-                    return `<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="${fieldName}">
-  <div class="wuxInteractiveExpandingContent">
-  ${contents}
-  </div>`;
+                    return `<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="${fieldName}">\n<div class="wuxInteractiveExpandingContent">\n${contents}\n</div>`;
                 },
 
                 checkboxBlockIcon = function (fieldName, contents) {
+                    let flagName = "wuxInteractiveIcon-flag";
                     return `<div class="wuxInteractiveInnerBlock">
-  <input class="wuxInteractiveContent-flag" type="checkbox" name="${fieldName}">
-  <div class="wuxInteractiveContent">
-  <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
-  <span class="wuxInteractiveIcon">&#9635;</span>
-  <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
-  <span class="wuxInteractiveAuxIcon">&#9634;</span>
-  <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
-  ${contents}
-  </div>
-  </div>`;
+                    ${customInput("checkbox", fieldName, "wuxInteractiveContent-flag")}
+                        <div class="wuxInteractiveContent">
+                        ${customInput("hidden", fieldName, flagName)}\n<span class="wuxInteractiveIcon">&#9635;</span>
+                        ${customInput("hidden", fieldName, flagName)}\n<span class="wuxInteractiveAuxIcon">&#9634;</span>
+                        ${customInput("hidden", fieldName, flagName)}\n${contents != undefined ? contents : ""}
+                        </div>
+                    </div>`;
                 }
 
             return {
@@ -1044,17 +1035,22 @@ var WuxSheetMain = WuxSheetMain || (function () {
     return {
         Build: build,
         Tab: tab,
+        TabHeader: tabHeader,
         CollapsibleTab: collapsibleTab,
+        SectionBlock: sectionBlock,
+        SectionBlockHeader: sectionBlockHeader,
+        SectionBlockHeaderFooter: sectionBlockHeaderFooter,
+        SectionBlockContents: sectionBlockContents,
         CollapsibleSection: collapsibleSection,
         CollapsibleStyleSection: collapsibleStyleSection,
         Header: header,
         Header2: header2,
         Subheader: subheader,
         Desc: desc,
-        Alert: alert,
         Input: input,
         Select: select,
         MultiRowGroup: multiRowGroup,
+        HiddenField: hiddenField,
         Table: table,
         DistinctSection: distinctSection,
         InteractionElement: interactionElement

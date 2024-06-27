@@ -541,22 +541,6 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
 }
 
-.wuxSectionExpandIcon
-{
-	display: none;
-}
-
-input[type=hidden].wuxSectionExpandIcon-flag[value="on"] + .wuxSectionExpandIcon,
-.wuxSectionExpandAuxIcon
-{
-    display: inline-block;
-}
-
-input[type=hidden].wuxSectionExpandIcon-flag[value="on"] + .wuxSectionExpandAuxIcon
-{
-    display: none;
-}
-
 .wuxSectionHeaderFooter
 {
     position: relative;

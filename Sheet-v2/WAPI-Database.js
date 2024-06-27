@@ -208,6 +208,7 @@ class TechniqueData extends dbObj {
         this.group = json.group;
         this.affinity = json.affinity;
         this.tier = json.tier;
+        this.isFree = this.affinity == "" && this.tier <= 1;
         this.action = json.action;
         this.traits = json.traits;
         this.resourceCost = json.resourceCost;
@@ -234,6 +235,7 @@ class TechniqueData extends dbObj {
         this.group = "" + dataArray[i]; i++;
         this.affinity = "" + dataArray[i]; i++;
         this.tier = parseInt(dataArray[i]) == NaN ? 1 : parseInt(dataArray[i]); i++;
+        this.isFree = this.affinity == "" && this.tier <= 1;
         this.action = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
         this.resourceCost = "" + dataArray[i]; i++;
@@ -259,6 +261,7 @@ class TechniqueData extends dbObj {
         this.group = "";
         this.affinity = "";
         this.tier = 0;
+        this.isFree = false;
         this.action = "";
         this.traits = "";
         this.resourceCost = "";
@@ -669,6 +672,7 @@ class AttributeGroupData extends dbObj {
 class DefinitionData extends dbObj {
     importJson(json) {
         this.name = json.name;
+        this.title = json.title;
         this.group = json.group;
         this.descriptions = json.descriptions;
         this.abbreviation = json.abbreviation;
@@ -678,6 +682,7 @@ class DefinitionData extends dbObj {
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
+        this.title = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
         this.descriptions = [("" + dataArray[i])]; i++;
         this.abbreviation = "" + dataArray[i]; i++;
@@ -686,6 +691,7 @@ class DefinitionData extends dbObj {
     }
     createEmpty() {
         this.name = "";
+        this.title = "";
         this.group = "";
         this.descriptions = [];
         this.abbreviation = "";
@@ -695,23 +701,20 @@ class DefinitionData extends dbObj {
     
     getVariable(mod, mod1) {
         if (mod == undefined) {
-            return this.variable
+            mod = "";
         }
         
         if (mod1 != undefined) {
             mod = [mod, mod1];
         }
         
-        if (Array.isArray(mod)) {
-            return this.variable.replace(/{(\d+)}/g, function(_,m) {
-                if (parseInt(m) < mod.length) {
-                    return mod[m];
-                }
-                return "";
-            });
-        }
+        let i = 0;
         return this.variable.replace(/{(\d+)}/g, function(_,m) {
-            if (parseInt(m) == 0) {
+            i = parseInt(m);
+            if (Array.isArray(mod) && i < mod.length && mod[i] != undefined) {
+                return mod[i];
+            }
+            else if (i == 0) {
                 return mod;
             }
             return "";
@@ -765,6 +768,7 @@ class TechniqueDisplayData {
         this.username = technique.username;
         this.fieldName = Format.ToCamelCase(technique.name);
         this.actionType = technique.action;
+        this.isFree = technique.isFree;
     }
     setTechSetData(technique) {
         this.techSetDisplay = technique.affinity;
@@ -773,7 +777,7 @@ class TechniqueDisplayData {
         if (technique.linkedTech == "") {
             this.techSetSub2 = "Free";
         }
-        else if (technique.affinity == "" && technique.tier <= 1) {
+        else if (technique.isFree) {
             this.techSetSub2 = `No Restrictions`;
         }
         else if (technique.affinity == "" && technique.tier > 1) {
@@ -857,6 +861,7 @@ class TechniqueDisplayData {
         this.actionType = "";
         this.username = "";
         this.fieldName = "";
+        this.isFree = false;
 
         this.techSetDisplay = "";
         this.techSetTitle = "";
