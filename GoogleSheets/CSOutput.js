@@ -31,7 +31,6 @@ var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 		
 		buildHiddenFields = function (sheetsDb) {
 			let output = "";
-			output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Technique", WuxDef._page, WuxDef._learn));
 
 			return `<div class="wuxHiddenFields">
 			${output}
@@ -94,8 +93,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
 				printBasics = function () {
 					let contents = buildBasicsData.Build();
-					let definition = WuxDef.Get("Origin");
-					contents = WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+					contents = WuxSheetMain.CollapsibleTab("origin_origin", "Origin", contents);
 
 					return WuxSheetMain.Build(contents);
 				},
@@ -110,8 +108,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 							output += buildTextInput(WuxDef.Get("Display Name"), WuxDef.GetAttribute("Display Name"));
 							output += buildNumberInput(WuxDef.Get("Character Level"), WuxDef.GetAttribute("Character Level"));
 							output += buildAffinity();
-							let definition = WuxDef.Get("Origin Basics");
-							return WuxSheetMain.CollapsibleSection(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, output);
+							return WuxSheetMain.CollapsibleSection("origin_basics", "Basics", output);
 						},
 
 						buildTextInput = function (definition, fieldName) {
@@ -187,15 +184,13 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 			var
 				printKnowledge = function (languageDictionary, loreDictionary) {
-					let loreDefinition = WuxDef.Get("Lore");
-					let loreContents = WuxSheetMain.CollapsibleTab(loreDefinition.getAttribute(WuxDef._tab, WuxDef._expand), 
-						loreDefinition.title, buildLoreData.Build(loreDictionary));
+					let languageContents = buildLanguageData.Build(languageDictionary);
+					languageContents = WuxSheetMain.CollapsibleTab("training_language", "Languages", languageContents);
 
-					let languageDefinition = WuxDef.Get("Language");
-					let languageContents = WuxSheetMain.CollapsibleTab(languageDefinition.getAttribute(WuxDef._tab, WuxDef._expand), 
-						languageDefinition.title, buildLanguageData.Build(languageDictionary));
+					let loreContents = buildLoreData.Build(loreDictionary);
+					loreContents = WuxSheetMain.CollapsibleTab("training_lore", "Lore", loreContents);
 
-					return WuxSheetMain.Build(loreContents + languageContents);
+					return WuxSheetMain.Build(languageContents + loreContents);
 				},
 
 				buildLanguageData = buildLanguageData || (function () {
@@ -433,13 +428,15 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
 					contents += buildJobLevels.Build(jobsDictionary);
 					contents += buildJobs.Build(jobsDictionary, techDictionary);
+					contents += buildRoles.Build(rolesDictionary, techDictionary);
 
 					return WuxSheetMain.Build(contents);
 				},
 
 				printSkills = function (skillDictionary) {
-					let definition = WuxDef.Get("Skill");
-					let contents = WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, buildSkills.Build(skillDictionary));
+					let contents = buildSkills.Build(skillDictionary);
+					contents = WuxSheetMain.CollapsibleTab("training_skills", "Skills", contents);
+
 					return WuxSheetMain.Build(contents);
 				},
 
@@ -454,9 +451,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 					var
 						build = function (jobsDictionary) {
 							let output = "";
-							let definition = WuxDef.Get("Job");
-							output = buildJobLevels(jobsDictionary, definition);
-							return WuxSheetMain.CollapsibleTab(definition.getAttribute("_level" + WuxDef._tab, WuxDef._expand), "Job Levels", output);
+							output = buildJobLevels(jobsDictionary, WuxDef.Get("Job"));
+							return WuxSheetMain.CollapsibleTab(
+								`advancement-jobLevels`, "Job Levels", output);
 						},
 
 						buildJobLevels = function (jobsDictionary, jobDefinition) {
@@ -491,27 +488,23 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							jobsDictionary.iterate(function (job) {
 								output += buildJob(job, techDictionary);
 							});
-							let definition = WuxDef.Get("Job");
-							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, output);
+							return WuxSheetMain.CollapsibleTab("advancement-JobInfo", "Jobs", output);
 						},
 
 						buildJob = function (job, techDictionary) {
 							let fieldName = Format.ToCamelCase(job.name);
-							let jobDefinition = WuxDef.Get("Job");
-
-							let contents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDefinition.getAttribute(job.fieldName, WuxDef._expand))}
-							${WuxSheetMain.InteractionElement.CheckboxBlockIcon(jobDefinition.getAttribute(job.fieldName), WuxSheetMain.Header(job.name))}
-							${WuxSheetMain.SectionBlockHeaderFooter()}
-							${WuxSheetMain.InteractionElement.ExpandableBlockContents(jobDefinition.getAttribute(job.fieldName, WuxDef._expand), 
-							WuxSheetMain.SectionBlockContents(buildJobContents(fieldName, job, techDictionary)))}`;
-
-							return WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents));
+							return WuxSheetMain.CollapsibleStyleSection(
+								`advancement-${fieldName}`, buildJobHeader(job), buildJobContents(fieldName, job, techDictionary));
 						},
+						
+						buildJobHeader = function (job) {
+        					return `${WuxSheetMain.InteractionElement.CheckboxBlockIcon(WuxDef.GetAttribute("Job", job.fieldName))}${job.name}`;
+        				},
 
 						buildJobContents = function (fieldName, job, techDictionary) {
 							let output = "";
 							
-							output += WuxSheetMain.Header2("Description") + WuxSheetMain.Desc(job.description);
+							output += WuxSheetMain.Desc(job.description);
 							output += buildJobContentsLevels(fieldName);
 							output += buildJobContentsRole(job);
 							output += buildJobContentsGrowths(job);
@@ -563,6 +556,66 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						getDisplayOptions = function (techniqueDefinition) {
 							var displayOptions = WuxPrintTechnique.GetDisplayOptions();
 							
+							displayOptions.techniqueDefinition = techniqueDefinition;
+							displayOptions.autoExpand = true;
+							displayOptions.hasCSS = true;
+							return displayOptions;
+						}
+						;
+					return {
+						Build: build
+					}
+				}()),
+
+				buildRoles = buildRoles || (function () {
+					'use strict';
+
+					var
+						build = function (rolesDictionary, techDictionary) {
+							let output = "";
+							rolesDictionary.iterate(function (role) {
+								output += buildRole(role, techDictionary);
+							});
+							return WuxSheetMain.CollapsibleTab("advancement-RoleInfo", "Roles", output);
+						},
+
+						buildRole = function (role, techDictionary) {
+							let fieldName = Format.ToCamelCase(role.name);
+							return WuxSheetMain.CollapsibleStyleSection(
+								`advancement-${fieldName}`, role.name, buildRoleContents(role, techDictionary, WuxDef.Get("Technique")));
+						},
+
+						buildRoleContents = function (role, techDictionary, techniqueDefinition) {
+							let output = "";
+							output += WuxSheetMain.Desc(role.description);
+							output += buildRoleContentsTechniques(role, techDictionary, techniqueDefinition);
+
+							return output;
+						},
+
+						buildRoleContentsTechniques = function (role, techDictionary, techniqueDefinition) {
+							return `${WuxSheetMain.Header(`${role.name} Techniques`)}
+							${WuxSheetMain.Desc(`Role Techniques are learned when reaching the associated level in the role.`)}
+							${buildRoleContentsTechniquesData(role, techDictionary, techniqueDefinition)}`;
+						},
+
+						buildRoleContentsTechniquesData = function (role, techDictionary, techniqueDefinition) {
+							let output = "";
+							let technique = {};
+							let displayOptions = getDisplayOptions(techniqueDefinition);
+							for (let i = 0; i < role.techniques.length; i++) {
+								technique = techDictionary.get(role.techniques[i].name);
+								if (technique != undefined) {
+									output += `${WuxSheetMain.Header2(`Level ${role.techniques[i].level}`)}
+									${WuxPrintTechnique.Get(technique, displayOptions)}
+									`;
+								}
+							}
+							return output;
+						},
+		
+						getDisplayOptions = function (techniqueDefinition) {
+							var displayOptions = WuxPrintTechnique.GetDisplayOptions();
 							displayOptions.techniqueDefinition = techniqueDefinition;
 							displayOptions.autoExpand = true;
 							displayOptions.hasCSS = true;
@@ -648,8 +701,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						build = function () {
 							let output = "";
 							output = buildAttributes();
-							let definition = WuxDef.Get("Attribute");
-							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, output);
+							return WuxSheetMain.CollapsibleTab(
+								`advancement-attributes`, "Attributes", output);
 						},
 
 						buildAttributes = function () {
@@ -765,73 +818,53 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					for (let i = 0; i < filteredData.length; i++) {
 						output += buildTechStyleSection(filteredData[i], techniqueDatabase, displayOptions);
 					}
-					let definition = WuxDef.Get("Technique");
-					return WuxSheetMain.CollapsibleTab(definition.getAttribute(`_${groupName}${WuxDef._tab}`, WuxDef._expand), `${groupName} ${definition.title}`, output);
+					return WuxSheetMain.CollapsibleTab(`attr_techniqueGroup_${groupName}`, `${groupName} Techniques`, output);
 				},
 
 				buildTechStyleSection = function (style, techniqueDatabase, displayOptions) {
 
-					let styleDefinition = WuxDef.Get("Style");
+					let contents = ""
+					contents += buildStyleRequirements(style);
+					contents += WuxSheetMain.Desc(style.description);
+					contents += buildTechniques(techniqueDatabase, displayOptions);
 
-					let contents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(styleDefinition(style.fieldName, WuxDef._expand))}
-					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDefinition(style.fieldName), WuxSheetMain.Header(style.name))}
-					${WuxSheetMain.SectionBlockHeaderFooter()}
-					${WuxSheetMain.InteractionElement.ExpandableBlockContents(styleDefinition(style.fieldName, WuxDef._expand), 
-					WuxSheetMain.SectionBlockContents(buildStyleContents(style, styleDefinition, techniqueDatabase, displayOptions)))}`;
-
-					return `<input type="hidden" class="wuxFilterSection-flag" name="${styleDefinition(style.fieldName)}" value="">
-					${WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents))}`;
-				},
-
-				buildStyleContents = function (style, styleDefinition, techniqueDatabase, displayOptions) {
-					let contents = "";
-					contents += buildStyleDescription(style);
-					contents += buildStyleLearn(style, styleDefinition);
-					contents += buildTechniques(style, techniqueDatabase, displayOptions);
-					return contents;
-				},
-
-				buildStyleDescription = function (style) {
-					return WuxSheetMain.Header2("Description") + WuxSheetMain.Desc(style.description);
+					let output = `<input type="hidden" class="wuxFilterSection-flag" name="${fieldName}" value="">\n`;
+					return output + WuxSheetMain.CollapsibleStyleSection(WuxDef.GetAttribute("Style", style.fieldName), buildStyleHeader(style), contents);
 				},
 				
-				buildStyleLearn = function (style, styleDefinition) {
-				    let requirements = "";
+				buildStyleRequirements = function (style) {
+				    let contents = "";
 				    if (style.affinity != "") {
-				        requirements += `You must have a ${style.affinity} affinity`;
+				        contents += `You must have a ${style.affinity} affinity`;
 				    }
-				    if (style.cr > 1) {
-				        if (requirements != "") {
-				            requirements += "\n";
+				    if (style.cr != "") {
+				        if (contents != "") {
+				            contents += "<br />";
 				        }
-				        requirements += `You must be at least Character Rank ${style.cr}`;
+				        contents += `You must be at least Character Rank ${style.cr}`;
 				    }
-				    if (requirements == "") {
-						requirements = "None";
+				    if (contents != "") {
+				        return WuxSheetMain.Header2("Requirements") + WuxSheetMain.Alert(`${contents}`);
 				    }
-					return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Technique", WuxDef._page, WuxDef._learn), 
-						WuxSheetMain.Header2(WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDefinition(style.fieldName), "Learn Style"))
-					 	+ WuxSheetMain.Desc(`<strong>Requirements</strong>\n${requirements}`));
+				    return '';
 				},
 
-				buildTechniques = function (style, techniqueDatabase, displayOptions) {
+				buildStyleHeader = function (style) {
+					return `${WuxSheetMain.InteractionElement.CheckboxBlockIcon(WuxDef.GetAttribute("Style", style.fieldName))}${style.name}`;
+				},
+
+				buildTechniques = function (techniqueDatabase, displayOptions) {
 					let filters = [new DatabaseFilterData("techSet", style.name)];
 					let techniques = techniqueDatabase.filter(filters);
 					let technique = {};
 
-					let learnedTechs = "";
-					let freeTechs = "";
+					let output = "";
 					for (var i = 0; i < techniques.length; i++) {
 						technique = new TechniqueData(techniques[i]);
-						if (technique.isFree) {
-							freeTechs += buildTechnique(technique, displayOptions);
-						}
-						else {
-							learnedTechs += buildTechnique(technique, displayOptions);
-						}
+						output += buildTechnique(technique, displayOptions);
 					}
-					return `${WuxSheetMain.Header2("Free Techniques")}\n${freeTechs == "" ? "None" : freeTechs}\n${WuxSheetMain.Header2("Learned Techniques")}\n${learnedTechs == "" ? "None" : learnedTechs}\n`;
-				},
+					return output;
+				}
 
 				buildTechnique = function (technique, displayOptions) {
 				    let fieldName = WuxDef.GetAttribute("Technique", technique.fieldName, WuxDef._filter);
@@ -954,8 +987,8 @@ var AdvancementBackend = AdvancementBackend || (function () {
 	var
 	    print = function (sheetsDb) {
 	        let output = "";
+	        output += buildJobs.Build(sheetsDb);
 	        return output;
-			
 		},
 		
 		buildJobs = buildJobs || (function () {
@@ -964,6 +997,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 		    var
 		    build = function(sheetsDb) {
 		        let jsClassData = new JavascriptDataClass();
+		        return jsClassData.print("WuxJobAdvancement");
 		    }
 		    ;
 		    return {
