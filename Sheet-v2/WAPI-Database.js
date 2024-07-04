@@ -463,6 +463,15 @@ class SkillData extends dbObj {
         this.abilityScore = "";
         this.description = "";
     }
+    createDefinition() {
+        let definition = new DefinitionData();
+        definition.name = this.name;
+        definition.variable = this.fieldName;
+        definition.title = this.name;
+        definition.group = "Skill";
+        definition.descriptions = [this.description];
+        return definition;
+    }
 }
 class LanguageData extends dbObj {
     importJson(json) {
@@ -483,6 +492,15 @@ class LanguageData extends dbObj {
         this.location = "";
         this.description = "";
     }
+    createDefinition() {
+        let definition = new DefinitionData();
+        definition.name = this.name;
+        definition.variable = this.fieldName;
+        definition.title = this.name;
+        definition.group = "Language";
+        definition.descriptions = [this.description];
+        return definition;
+    }
 }
 class LoreData extends dbObj {
     importJson(json) {
@@ -500,6 +518,15 @@ class LoreData extends dbObj {
         this.fieldName = "";
         this.group = "";
         this.description = "";
+    }
+    createDefinition() {
+        let definition = new DefinitionData();
+        definition.name = this.name;
+        definition.variable = this.fieldName;
+        definition.title = this.name;
+        definition.group = "Lore";
+        definition.descriptions = [this.description];
+        return definition;
     }
 }
 class JobData extends dbObj {
@@ -565,7 +592,16 @@ class JobData extends dbObj {
         }
         return output;
     }
-
+    
+    createDefinition() {
+        let definition = new DefinitionData();
+        definition.name = this.name;
+        definition.variable = this.fieldName;
+        definition.title = this.name;
+        definition.group = "Job";
+        definition.descriptions = [this.description];
+        return definition;
+    }
 }
 class RoleData extends dbObj {
     importJson(json) {
@@ -586,6 +622,15 @@ class RoleData extends dbObj {
         this.group = "";
         this.description = "";
         this.techniques = [];
+    }
+    createDefinition() {
+        let definition = new DefinitionData();
+        definition.name = this.name;
+        definition.variable = this.fieldName;
+        definition.title = this.name;
+        definition.group = "Skill";
+        definition.descriptions = [this.description];
+        return definition;
     }
 
     createTechnique(modArray) {
@@ -678,6 +723,7 @@ class DefinitionData extends dbObj {
         this.abbreviation = json.abbreviation;
         this.variable = json.variable;
         this.formula = json.formula;
+        this.modifiers = json.modifiers;
     }
     importSheets(dataArray) {
         let i = 0;
@@ -688,6 +734,7 @@ class DefinitionData extends dbObj {
         this.abbreviation = "" + dataArray[i]; i++;
         this.variable = "" + dataArray[i]; i++;
         this.formula = "" + dataArray[i]; i++;
+        this.modifiers = "" + dataArray[i]; i++;
     }
     createEmpty() {
         this.name = "";
@@ -697,8 +744,15 @@ class DefinitionData extends dbObj {
         this.abbreviation = "";
         this.variable = "";
         this.formula = "";
+        this.modifiers = "";
     }
-    
+    getVariables(array, mod1) {
+        let output = [];
+        for(let i = 0; i < array; i++) {
+            output.push(this.getVariable(array[i], mod1));
+        }
+        return output;
+    }
     getVariable(mod, mod1) {
         if (mod == undefined) {
             mod = "";
