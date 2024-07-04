@@ -396,7 +396,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
 			var
 				printJobs = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection("attr_jobpoints"));
+					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Job")));
 				},
 
 				printSkills = function () {
@@ -987,7 +987,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 	var
 	    print = function (sheetsDb) {
 	        let output = "";
-	        output += buildJobs.Build(sheetsDb);
+	        output += buildJobs.BuildClass(sheetsDb.job);
 	        return output;
 		},
 		
@@ -995,13 +995,33 @@ var AdvancementBackend = AdvancementBackend || (function () {
 		    'use strict';
 		    
 		    var
-		    build = function(sheetsDb) {
+		    className = "WuxWorkerJob",
+		    
+		    buildClass = function(jobData) {
 		        let jsClassData = new JavascriptDataClass();
-		        return jsClassData.print("WuxJobAdvancement");
+		        jsClassData.addPublicFunction("updateJob", updateJob);
+		        return jsClassData.print(className);
+		    },
+		    
+		    buildListeners = function() {
+		        
+		    },
+		    
+		    updateJob = function() {
+		        let jobs = WuxDef.getSortedGroup("group", "Job");
+		        let jobDefinition = WuxDef.get("Job");
+		        
+		        let mod_attrs = jobDefinition.getVariables(jobs);
+            	getAttrs(mod_attrs, function (v) {
+            		let update = {};
+            		update = SetCharacterTechSlotCounts(update, v, AttrParseInt(v, "base_level"), [slotType]);
+            		setAttrs(update, { silent: true });
+            	});
 		    }
 		    ;
 		    return {
-		        Build: build
+		        BuildClass: buildClass,
+		        BuildListeners: buildListeners
 		    }
 	    }());
 	return {
