@@ -4,8 +4,29 @@ function SetTechniquesDatabaseJson(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr
     return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
 }
 
-function SetDefinitionsDatabase(arr0) {
-    let definitionDatabase = SheetsDatabase.CreateDefinitions(arr0);
+function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray) {
+    let definitionDatabase = SheetsDatabase.CreateDefinitions(definitionArray);
+    definitionDatabase.importSheets(skillsArray, function (arr) {
+        let skill = new SkillData(arr);
+        return skill.createDefinition();
+    });
+    definitionDatabase.importSheets(languageArray, function (arr) {
+        let language = new LanguageData(arr);
+        return language.createDefinition();
+    });
+    definitionDatabase.importSheets(loreArray, function (arr) {
+        let lore = new LoreData(arr);
+        return lore.createDefinition();
+    });
+    definitionDatabase.importSheets(jobsArray, function (arr) {
+        let job = new LoreData(arr);
+        return job.createDefinition();
+    });
+    definitionDatabase.importSheets(rolesArray, function (arr) {
+        let role = new RoleData(arr);
+        return role.createDefinition();
+    });
+    
     let jsClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.Get);
     jsClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
     jsClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
@@ -17,6 +38,7 @@ function SetDefinitionsDatabase(arr0) {
     jsClassData.addPublicVariable("_page", `"_page"`);
     jsClassData.addPublicVariable("_read", `"_read"`);
     jsClassData.addPublicVariable("_learn", `"_learn"`);
+    jsClassData.addPublicVariable("_pts", `"_pts"`);
     return PrintLargeEntry(jsClassData.print("WuxDef"), "d");
 }
 
