@@ -1007,16 +1007,8 @@ var AdvancementBackend = AdvancementBackend || (function () {
 		        
 		    },
 		    
-		    updateJob = function() {
-		        let jobs = WuxDef.getSortedGroup("group", "Job");
-		        let jobDefinition = WuxDef.get("Job");
+		    updateBuildPoints = function() {
 		        
-		        let mod_attrs = jobDefinition.getVariables(jobs);
-            	getAttrs(mod_attrs, function (v) {
-            		let update = {};
-            		update = SetCharacterTechSlotCounts(update, v, AttrParseInt(v, "base_level"), [slotType]);
-            		setAttrs(update, { silent: true });
-            	});
 		    }
 		    ;
 		    return {
