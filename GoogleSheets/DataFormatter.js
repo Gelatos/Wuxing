@@ -31,11 +31,16 @@ function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, lor
     jsClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
     jsClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
     jsClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
+    jsClassData.addPublicVariable("_max", `"_max"`);
     jsClassData.addPublicVariable("_rank", `"_rank"`);
+    jsClassData.addPublicVariable("_build", "_build");
+    
     jsClassData.addPublicVariable("_filter", `"_filter"`);
     jsClassData.addPublicVariable("_expand", `"_expand"`);
+    
     jsClassData.addPublicVariable("_tab", `"_tab"`);
     jsClassData.addPublicVariable("_page", `"_page"`);
+    
     jsClassData.addPublicVariable("_read", `"_read"`);
     jsClassData.addPublicVariable("_learn", `"_learn"`);
     jsClassData.addPublicVariable("_pts", `"_pts"`);
