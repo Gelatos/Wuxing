@@ -972,7 +972,10 @@ var AdvancementBackend = AdvancementBackend || (function () {
 		    },
 		    
 		    buildListeners = function() {
-		        
+		        let output = "";
+				output += WuxSheetBackend.SheetWorker();
+
+				return output;
 		    },
 		    
 		    updateBuildPoints = function() {

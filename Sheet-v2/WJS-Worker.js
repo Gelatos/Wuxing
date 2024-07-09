@@ -108,7 +108,7 @@ class WuxWorkerBuild {
 		},
 
 		saveBuildStats = function(attributeHandler, v) {
-			
+
 		}
         ;
 		return {
@@ -130,7 +130,6 @@ class WuxWorkerBuild {
 		attributeHandler.get(function (v) {
 			service.SetBuildStats(attributeHandler, v);
 			service.UpdatePoints(attributeHandler, v);
-			service.UpdateBuildStats(attributeHandler, v, builderAttributes);
 			attributeHandler.set();
 		});
 	}
