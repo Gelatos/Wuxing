@@ -44,7 +44,9 @@ function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, lor
     jsClassData.addPublicVariable("_read", `"_read"`);
     jsClassData.addPublicVariable("_learn", `"_learn"`);
     jsClassData.addPublicVariable("_pts", `"_pts"`);
-    return PrintLargeEntry(jsClassData.print("WuxDef"), "d");
+    jsClassData.addPublicVariable("_error", `"_error"`);
+
+    return PrintLargeEntry(jsClassData.print("WuxDef"), "]");
 }
 
 function SetTechniquesDatabase(techniqueDatabaseString) {
@@ -728,14 +730,18 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         },
 
         attributeSection = function (name, contents) {
-            return `<div class="wuxDistinctSection wuxSizeInverse">
-  <div class="wuxDistinctField">
-  <span class="wuxDistinctSubtitle">${name}</span>
-  <span class='wuxDistinctSubdata'>
-  ${contents}
-  </span>
-  </div>
-  </div>`;
+            return `<div class="wuxDistinctSection wuxSizeInverse">\n<div class="wuxDistinctField">
+            <span class="wuxDistinctSubtitle">${name}</span>
+            <span class='wuxDistinctSubdata'>\n${contents}n</span>
+            </div>\n</div>`;
+        },
+
+        attributeSectionWithError = function (name, contents, errorFieldName) {
+            return `<div class="wuxDistinctSection wuxSizeInverse">\n<div class="wuxDistinctField">
+            <span class="wuxDistinctSubtitle">${name}</span>
+            <input type="hidden" class="wuxErrorField-flag" name="${errorFieldName}" value="0">
+            <span class='wuxDistinctSubdata'>\n${contents}n</span>
+            </div>\n</div>`;
         },
 
         collapsibleHeader = function (categoryName, sectionName, contents, defaultOpen) {
@@ -786,7 +792,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
   <span class="wuxFontSize7" name='${attrName}_max' value="0">0</span>`;
 
             return `<div class="wuxHeader">&nbsp;${header}</div>
-  ${WuxSheetSidebar.AttributeSection(name, output)}`;
+  ${attributeSectionWithError(name, output, `${attrName}_error`)}`;
         }
 
         ;
@@ -833,6 +839,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<div class="wuxSectionHeader">\n${contents}\n</div>\n${sectionBlockHeaderFooter()}`;
         },
 
+        sectionBlockStyleHeader = function (contents) {
+            return `<div class="wuxStyleSectionHeader">\n${contents}\n</div>\n${sectionBlockHeaderFooter()}`;
+        },
+
         sectionBlockHeaderFooter = function () {
             return `<div class="wuxSectionHeaderFooter"></div>`;
         },
@@ -847,8 +857,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
             ${sectionBlockContents(contents)}`);
         },
 
-        collapsibleStyleSection = function (sectionName, title, contents) {
-            let fieldName = `attr_${sectionName}-expand`;
+        collapsibleStyleSection = function (fieldName, title, contents) {
+            return sectionBlock(`${customInput("checkbox", fieldName, "wuxSectionContent-flag")}
+            ${sectionBlockStyleHeader(interactionElement.ExpandableBlockIcon(fieldName) + title)}
+            ${sectionBlockContents(contents)}`);
+
             return `<div class="wuxSectionBlock wuxLayoutItem">
                 <input class="wuxSectionContent-flag" type="hidden" name="${fieldName}" style="display: block">
                 <div class="wuxStyleSectionHeader">\n${interactionElement.Build(true, `${interactionElement.ExpandableBlockIcon(fieldName)}${title}`)}\n</div>
@@ -1252,7 +1265,7 @@ var WuxSheetBackend = WuxSheetBackend || (function () {
     'use strict';
 
     var
-        sheetWorker = function (variables, contents, hasEvents) {
+        onChange = function (variables, contents, hasEvents) {
             let output = "";
             for (let i = 0; i < variables.length; i++) {
                 if (output != "") {
@@ -1260,14 +1273,11 @@ var WuxSheetBackend = WuxSheetBackend || (function () {
                 }
                 output += `change:${variables[i]}`;
             }
-            return `on("${output}", function (${hasEvents != undefined ? "eventinfo" : ""}) {
-  ${contents}
-  });
-  `;
+            return `on("${output}", function (${hasEvents != undefined ? "eventinfo" : ""}) {\n${contents}\n});\n`;
         }
         ;
     return {
-        SheetWorker: sheetWorker
+        OnChange: onChange
     };
 }());
 

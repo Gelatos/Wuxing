@@ -292,7 +292,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
 }
 
-input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
+input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData,
+input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubdata
 {
     background: red;
 }

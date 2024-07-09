@@ -1080,7 +1080,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
 }
 
-input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
+input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData,
+input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubdata
 {
     background: red;
 }
@@ -1112,6 +1113,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 }
 
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
+.wuxSectionBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
 .wuxInteractiveInnerExpandBlock,
 .wuxInteractiveBlock .wuxInteractiveExpandingContent,
@@ -1122,6 +1124,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 }
 
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
+.wuxSectionBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
 .wuxInteractiveBlock .wuxInteractiveExpandingContent,
 .wuxInteractiveBlock .wuxInteractiveExpandingAuxContent
@@ -1136,7 +1139,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData
 }
 
 .wuxInteractiveExpandingBlock .wuxInteractiveInnerBlock,
-.wuxInteractiveExpandingContent .wuxInteractiveInnerBlock
+.wuxInteractiveExpandingContent .wuxInteractiveInnerBlock,
+.wuxSectionBlock .wuxInteractiveInnerBlock
 {
 	display: inline-block;
 	width: calc(100% - 30px);

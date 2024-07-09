@@ -504,7 +504,10 @@ class LanguageData extends dbObj {
 }
 class LoreData extends dbObj {
     importJson(json) {
-
+        this.name = json.name;
+        this.fieldName = json.fieldName;
+        this.group = json.group;
+        this.description = json.description;
     }
     importSheets(dataArray) {
         let i = 0;
@@ -530,8 +533,25 @@ class LoreData extends dbObj {
     }
 }
 class JobData extends dbObj {
+    createEmpty() {
+        this.name = "";
+        this.fieldName = "";
+        this.group = "";
+        this.description = "";
+        this.attributes = new AttributeGroupData();
+        this.roles = this.createRolesArray();
+        this.prereq = "";
+        this.techniques = [];
+    }
     importJson(json) {
-
+        this.name = json.name;
+        this.fieldName = Format.ToCamelCase(this.name);
+        this.group = json.group;
+        this.description = json.description;
+        this.attributes = json.attributes;
+        this.roles = json.roles;
+        this.prereq = json.prereq;
+        this.techniques = json.techniques;
     }
     importSheets(dataArray) {
         let i = 0;
@@ -543,16 +563,6 @@ class JobData extends dbObj {
         this.roles = this.createRolesArray(dataArray.slice(i)); i += 5;
         this.prereq = "" + dataArray[i]; i++;
         this.techniques = this.createJobTechnique(dataArray.slice(i)); i++;
-    }
-    createEmpty() {
-        this.name = "";
-        this.fieldName = "";
-        this.group = "";
-        this.description = "";
-        this.attributes = new AttributeGroupData();
-        this.roles = this.createRolesArray();
-        this.prereq = "";
-        this.techniques = [];
     }
 
     createRolesArray(modArray) {
@@ -1036,6 +1046,34 @@ class TechniqueEffectDisplayData {
             return `${effect.dVal}d${effect.dType}`;
         }
         return "";
+    }
+}
+class WorkerBuildStat extends dbObj {
+    importJson(json) {
+        this.name = json.name;
+        this.fieldName = Format.ToCamelCase(this.name);
+        this.points = json.points;
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToCamelCase(this.name);
+        this.points = parseInt(dataArray[i]) == NaN ? 0 : parseInt(dataArray[i]); i++;
+    }
+    createEmpty() {
+        this.name = "";
+        this.fieldName = Format.ToCamelCase(this.name);
+        this.points = 0;
+    }
+}
+class WorkerBuildStats extends Dictionary {
+
+    getPointsTotal() {
+        let points = 0;
+        for (let i = 0; i < this.values.length; i++) {
+            points += this.values[i].points;
+        }
+        return points;
     }
 }
 
