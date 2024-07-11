@@ -677,6 +677,9 @@ var WuxDefinition = WuxDefinition || (function () {
                 return data.abbreviation;
             }
         },
+        getGroupVariables function (filterData) {
+            
+        },
 
         displayEntry = function (dictionary, key) {
             let output = "";
