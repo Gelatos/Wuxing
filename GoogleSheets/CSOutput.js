@@ -973,7 +973,10 @@ var AdvancementBackend = AdvancementBackend || (function () {
 		    
 		    buildListeners = function() {
 		        let output = "";
-				output += WuxSheetBackend.OnChange();
+		        let jobArray = WuxDef.filter(new DatabaseFilterData("group", "Job"));
+		        let jobVarArray = [];
+		        
+				output += WuxSheetBackend.OnChange(WuxDef.);
 
 				return output;
 		    },
