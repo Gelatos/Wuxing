@@ -105,14 +105,21 @@ class Database extends Dictionary {
     }
 
     filter(filterData) {
-        let filteredGroup = this.getSortedGroup(filterData[0].property, filterData[0].value);
-        let nextFilter = [];
-        for (let i = 1; i < filterData.length; i++) {
-            if (filteredGroup == undefined || filteredGroup.length == 0) {
-                return [];
+        
+        let filteredGroup;
+        if(Array.isArray(filterData)) {
+            filteredGroup = this.getSortedGroup(filterData[0].property, filterData[0].value);
+            let nextFilter = [];
+            for (let i = 1; i < filterData.length; i++) {
+                if (filteredGroup == undefined || filteredGroup.length == 0) {
+                    return [];
+                }
+                nextFilter = this.getSortedGroup(filterData[i].property, filterData[i].value);
+                filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
             }
-            nextFilter = this.getSortedGroup(filterData[i].property, filterData[i].value);
-            filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
+        }
+        else {
+            filteredGroup = this.getSortedGroup(filterData.property, filterData.value);
         }
         if (filteredGroup == undefined || filteredGroup.length == 0) {
             return [];
