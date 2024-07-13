@@ -1,5 +1,5 @@
 function CreateCharacterSheet(stylesArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
-    let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
+	let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
 		stylesArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString
 	);
 	return PrintLargeEntry(DisplayCharacterSheet.Print(sheetsDb));
@@ -7,7 +7,7 @@ function CreateCharacterSheet(stylesArray, skillsArray, languageArray, loreArray
 
 var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 	'use strict';
-	
+
 	var
 		print = function (sheetsDb) {
 			let output = "";
@@ -28,7 +28,7 @@ var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 			${output}
 			</div>`;
 		},
-		
+
 		buildHiddenFields = function (sheetsDb) {
 			let output = "";
 			output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Technique", WuxDef._page, WuxDef._learn));
@@ -40,9 +40,9 @@ var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 
 		buildSheetWorkerContainer = function (sheetsDb) {
 			let output = "";
-			output += BuilderBackend.Print(sheetsDb);
-			output += TrainingBackend.Print(sheetsDb); 
-			output += AdvancementBackend.Print(sheetsDb); 
+			// output += BuilderBackend.Print(sheetsDb);
+			// output += TrainingBackend.Print(sheetsDb);
+			output += AdvancementBackend.Print(sheetsDb);
 			return `<script type="text/worker">
 			on("sheet:opened", function(eventinfo) {
 				on_sheet_opened();
@@ -188,11 +188,11 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 			var
 				printKnowledge = function (languageDictionary, loreDictionary) {
 					let loreDefinition = WuxDef.Get("Lore");
-					let loreContents = WuxSheetMain.CollapsibleTab(loreDefinition.getAttribute(WuxDef._tab, WuxDef._expand), 
+					let loreContents = WuxSheetMain.CollapsibleTab(loreDefinition.getAttribute(WuxDef._tab, WuxDef._expand),
 						loreDefinition.title, buildLoreData.Build(loreDictionary));
 
 					let languageDefinition = WuxDef.Get("Language");
-					let languageContents = WuxSheetMain.CollapsibleTab(languageDefinition.getAttribute(WuxDef._tab, WuxDef._expand), 
+					let languageContents = WuxSheetMain.CollapsibleTab(languageDefinition.getAttribute(WuxDef._tab, WuxDef._expand),
 						languageDefinition.title, buildLanguageData.Build(languageDictionary));
 
 					return WuxSheetMain.Build(loreContents + languageContents);
@@ -502,15 +502,15 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							let contents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDefinition.getAttribute(job.fieldName, WuxDef._expand))}
 							${WuxSheetMain.InteractionElement.CheckboxBlockIcon(jobDefinition.getAttribute(job.fieldName), WuxSheetMain.Header(job.name))}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
-							${WuxSheetMain.InteractionElement.ExpandableBlockContents(jobDefinition.getAttribute(job.fieldName, WuxDef._expand), 
-							WuxSheetMain.SectionBlockContents(buildJobContents(fieldName, job, techDictionary)))}`;
+							${WuxSheetMain.InteractionElement.ExpandableBlockContents(jobDefinition.getAttribute(job.fieldName, WuxDef._expand),
+								WuxSheetMain.SectionBlockContents(buildJobContents(fieldName, job, techDictionary)))}`;
 
 							return WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents));
 						},
 
 						buildJobContents = function (fieldName, job, techDictionary) {
 							let output = "";
-							
+
 							output += WuxSheetMain.Header2("Description") + WuxSheetMain.Desc(job.description);
 							output += buildJobContentsLevels(fieldName);
 							output += buildJobContentsRole(job);
@@ -559,10 +559,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							}
 							return output;
 						},
-		
+
 						getDisplayOptions = function (techniqueDefinition) {
 							var displayOptions = WuxPrintTechnique.GetDisplayOptions();
-							
+
 							displayOptions.techniqueDefinition = techniqueDefinition;
 							displayOptions.autoExpand = true;
 							displayOptions.hasCSS = true;
@@ -776,8 +776,8 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					let contents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(styleDefinition.getAttribute(style.fieldName, WuxDef._expand))}
 					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDefinition.getAttribute(style.fieldName), WuxSheetMain.Header(style.name))}
 					${WuxSheetMain.SectionBlockHeaderFooter()}
-					${WuxSheetMain.InteractionElement.ExpandableBlockContents(styleDefinition.getAttribute(style.fieldName, WuxDef._expand), 
-					WuxSheetMain.SectionBlockContents(buildStyleContents(style, styleDefinition, techniqueDatabase, displayOptions)))}`;
+					${WuxSheetMain.InteractionElement.ExpandableBlockContents(styleDefinition.getAttribute(style.fieldName, WuxDef._expand),
+						WuxSheetMain.SectionBlockContents(buildStyleContents(style, styleDefinition, techniqueDatabase, displayOptions)))}`;
 
 					return `<input type="hidden" class="wuxFilterSection-flag" name="${styleDefinition.getAttribute(style.fieldName)}" value="">
 					${WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents))}`;
@@ -794,24 +794,24 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				buildStyleDescription = function (style) {
 					return WuxSheetMain.Header2("Description") + WuxSheetMain.Desc(style.description);
 				},
-				
+
 				buildStyleLearn = function (style, styleDefinition) {
-				    let requirements = "";
-				    if (style.affinity != "") {
-				        requirements += `You must have a ${style.affinity} affinity`;
-				    }
-				    if (style.cr > 1) {
-				        if (requirements != "") {
-				            requirements += "\n";
-				        }
-				        requirements += `You must be at least Character Rank ${style.cr}`;
-				    }
-				    if (requirements == "") {
+					let requirements = "";
+					if (style.affinity != "") {
+						requirements += `You must have a ${style.affinity} affinity`;
+					}
+					if (style.cr > 1) {
+						if (requirements != "") {
+							requirements += "\n";
+						}
+						requirements += `You must be at least Character Rank ${style.cr}`;
+					}
+					if (requirements == "") {
 						requirements = "None";
-				    }
-					return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Technique", WuxDef._page, WuxDef._learn), 
+					}
+					return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Technique", WuxDef._page, WuxDef._learn),
 						WuxSheetMain.Header2(WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDefinition.getAttribute(style.fieldName), "Learn Style"))
-					 	+ WuxSheetMain.Desc(`<strong>Requirements</strong>\n${requirements}`));
+						+ WuxSheetMain.Desc(`<strong>Requirements</strong>\n${requirements}`));
 				},
 
 				buildTechniques = function (style, techniqueDatabase, displayOptions) {
@@ -835,7 +835,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				},
 
 				buildTechnique = function (technique, displayOptions) {
-				    let fieldName = WuxDef.GetAttribute("Technique", technique.fieldName, WuxDef._filter);
+					let fieldName = WuxDef.GetAttribute("Technique", technique.fieldName, WuxDef._filter);
 
 					let output = "";
 					output += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="">`;
@@ -856,142 +856,144 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 
 var BuilderBackend = BuilderBackend || (function () {
-    'use strict';
+	'use strict';
 
 	var
-	    print = function (sheetsDb) {
-	        let output = "";
-	        output += buildCharacterCreation.Build(sheetsDb);
-	        output += buildBackendTools.Build(sheetsDb);
-	        return output;
-			
+		print = function (sheetsDb) {
+			let output = "";
+			output += buildCharacterCreation.Build(sheetsDb);
+			output += buildBackendTools.Build(sheetsDb);
+			return output;
+
 		},
-		
+
 		buildCharacterCreation = buildCharacterCreation || (function () {
-		    'use strict';
-		    
-		    var
-		    build = function(sheetsDb) {
-		        let jsClassData = new JavascriptDataClass();
-		        return jsClassData.print("CharacterCreationManager");
-		    }
-		    ;
-		    return {
-		        Build: build
-		    }
-	    }()),
-	    
-	    buildBackendTools = buildBackendTools || (function () {
-		    'use strict';
-		    
-		    var
-		    build = function(sheetsDb) {
-		        let jsClassData = new JavascriptDataClass();
-		        return jsClassData.print("BackendTools");
-		    }
-		    
-		    
-		    ;
-		    return {
-		        Build: build
-		    }
-	    }());
-	    
+			'use strict';
+
+			var
+				build = function (sheetsDb) {
+					let jsClassData = new JavascriptDataClass();
+					return jsClassData.print("CharacterCreationManager");
+				}
+				;
+			return {
+				Build: build
+			}
+		}()),
+
+		buildBackendTools = buildBackendTools || (function () {
+			'use strict';
+
+			var
+				build = function (sheetsDb) {
+					let jsClassData = new JavascriptDataClass();
+					return jsClassData.print("BackendTools");
+				}
+
+
+				;
+			return {
+				Build: build
+			}
+		}());
+
 	return {
-	    Print: print
+		Print: print
 	}
 }())
 
 var TrainingBackend = TrainingBackend || (function () {
-    'use strict';
+	'use strict';
 
 	var
-	    print = function (sheetsDb) {
-	        let output = "";
-	        output += buildTraining.Build(sheetsDb);
-	        return output;
-			
+		print = function (sheetsDb) {
+			let output = "";
+			output += buildTraining.Build(sheetsDb);
+			return output;
+
 		},
-		
+
 		buildTraining = buildTraining || (function () {
-		    'use strict';
-		    
-		    var
-		    build = function(sheetsDb) {
-		        let jsClassData = new JavascriptDataClass();
-		        return jsClassData.print("TrainingManager");
-		    },
-		    
-		    saveChanges = function() {
-		        
-		    }
-		    ;
-		    return {
-		        Build: build
-		    }
-	    }()),
-	    
-	    buildKnowledge = buildKnowledge || (function () {
-		    'use strict';
-		    
-		    var
-		    build = function(sheetsDb) {
-		        let jsClassData = new JavascriptDataClass();
-		        return jsClassData.print("TrainingKnowledgeManager");
-		    }
-		    ;
-		    return {
-		        Build: build
-		    }
-	    }());
+			'use strict';
+
+			var
+				build = function (sheetsDb) {
+					let jsClassData = new JavascriptDataClass();
+					return jsClassData.print("TrainingManager");
+				},
+
+				saveChanges = function () {
+
+				}
+				;
+			return {
+				Build: build
+			}
+		}()),
+
+		buildKnowledge = buildKnowledge || (function () {
+			'use strict';
+
+			var
+				build = function (sheetsDb) {
+					let jsClassData = new JavascriptDataClass();
+					return jsClassData.print("TrainingKnowledgeManager");
+				}
+				;
+			return {
+				Build: build
+			}
+		}());
 	return {
-	    Print: print
+		Print: print
 	}
 }())
 
 var AdvancementBackend = AdvancementBackend || (function () {
-    'use strict';
+	'use strict';
 
 	var
-	    print = function (sheetsDb) {
-	        let output = "";
-	        output += buildJobs.BuildClass(sheetsDb.job);
-	        return output;
+		print = function (sheetsDb) {
+			let output = "";
+			output += buildJobs.BuildListeners(sheetsDb.job);
+			// output += buildJobs.BuildClass(sheetsDb.job);
+			return output;
 		},
-		
-		buildJobs = buildJobs || (function () {
-		    'use strict';
-		    
-		    var
-		    className = "WuxWorkerJob",
-		    
-		    buildClass = function(jobData) {
-		        let jsClassData = new JavascriptDataClass();
-		        jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
-		        return jsClassData.print(className);
-		    },
-		    
-		    buildListeners = function() {
-		        let output = "";
-		        let jobArray = WuxDef.filter(new DatabaseFilterData("group", "Job"));
-		        let jobVarArray = [];
-		        
-				output += WuxSheetBackend.OnChange(WuxDef.);
 
-				return output;
-		    },
-		    
-		    updateBuildPoints = function() {
-		        
-		    }
-		    ;
-		    return {
-		        BuildClass: buildClass,
-		        BuildListeners: buildListeners
-		    }
-	    }());
+		buildJobs = buildJobs || (function () {
+			'use strict';
+
+			var
+				className = "WuxWorkerJob",
+
+				buildClass = function (jobData) {
+					let jsClassData = new JavascriptDataClass();
+					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
+					return jsClassData.print(className);
+				},
+
+				buildListeners = function (jobData) {
+					let output = "";
+					let jobArray = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));
+					let jobs = WuxDef.GetVariables("Job", jobArray);
+					let createWorker = `let worker = new WuxWorkerBuild("Job", ${JSON.stringify(jobs)});\n`;
+
+					output += WuxSheetBackend.OnChange(jobs, `${createWorker}worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);`, true);
+
+					return output;
+				},
+
+				updateBuildPoints = function () {
+
+				}
+				;
+			return {
+				BuildClass: buildClass,
+				BuildListeners: buildListeners
+			}
+		}());
 	return {
-	    Print: print
+		Print: print
 	}
 }())
 

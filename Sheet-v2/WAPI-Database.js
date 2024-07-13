@@ -20,6 +20,9 @@ class Dictionary {
         }
     }
     importStringifiedJson(stringifiedJSON, dataCreationCallback) {
+        if (stringifiedJSON == undefined || stringifiedJSON == "") {
+            return;
+        }
         this.importJson(JSON.parse(stringifiedJSON), dataCreationCallback);
     }
     importJson(json, dataCreationCallback) {
@@ -146,6 +149,14 @@ class Database extends Dictionary {
         }
         return output;
     }
+
+    getValuesByProperty(property) {
+        let output = [];
+        for (let key in this.values) {
+            output.push(this.values[key][property]);
+        }
+        return output;
+    }
 }
 class ExtendedTechniqueDatabase extends Database {
     importSheets(dataArray, dataCreationCallback) {
@@ -199,6 +210,9 @@ class dbObj {
         }
     }
     importStringifiedJson(stringifiedJSON) {
+        if (stringifiedJSON == undefined || stringifiedJSON == "") {
+            return;
+        }
         let json = JSON.parse(stringifiedJSON);
         this.importJson(json);
     }
@@ -472,7 +486,7 @@ class SkillData extends dbObj {
     }
     createDefinition() {
         let definition = new DefinitionData();
-        definition.name = this.name;
+        definition.name = `Skill:${this.name}`;
         definition.variable = this.fieldName;
         definition.title = this.name;
         definition.group = "Skill";
@@ -501,7 +515,7 @@ class LanguageData extends dbObj {
     }
     createDefinition() {
         let definition = new DefinitionData();
-        definition.name = this.name;
+        definition.name = `Language:${this.name}`;
         definition.variable = this.fieldName;
         definition.title = this.name;
         definition.group = "Language";
@@ -531,7 +545,7 @@ class LoreData extends dbObj {
     }
     createDefinition() {
         let definition = new DefinitionData();
-        definition.name = this.name;
+        definition.name = `Lore:${this.name}`;
         definition.variable = this.fieldName;
         definition.title = this.name;
         definition.group = "Lore";
@@ -612,7 +626,7 @@ class JobData extends dbObj {
     
     createDefinition() {
         let definition = new DefinitionData();
-        definition.name = this.name;
+        definition.name = `Job:${this.name}`;
         definition.variable = this.fieldName;
         definition.title = this.name;
         definition.group = "Job";
@@ -642,10 +656,10 @@ class RoleData extends dbObj {
     }
     createDefinition() {
         let definition = new DefinitionData();
-        definition.name = this.name;
+        definition.name = `Role:${this.name}`;
         definition.variable = this.fieldName;
         definition.title = this.name;
-        definition.group = "Skill";
+        definition.group = "Role";
         definition.descriptions = [this.description];
         return definition;
     }
@@ -765,7 +779,7 @@ class DefinitionData extends dbObj {
     }
     getVariables(array, mod1) {
         let output = [];
-        for(let i = 0; i < array; i++) {
+        for(let i = 0; i < array.length; i++) {
             output.push(this.getVariable(array[i], mod1));
         }
         return output;

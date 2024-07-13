@@ -19,7 +19,7 @@ function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, lor
         return lore.createDefinition();
     });
     definitionDatabase.importSheets(jobsArray, function (arr) {
-        let job = new LoreData(arr);
+        let job = new JobData(arr);
         return job.createDefinition();
     });
     definitionDatabase.importSheets(rolesArray, function (arr) {
@@ -31,6 +31,8 @@ function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, lor
     jsClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
     jsClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
     jsClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
+    jsClassData.addPublicFunction("getVariables", WuxDefinition.GetVariables);
+    jsClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
     jsClassData.addPublicVariable("_max", `"_max"`);
     jsClassData.addPublicVariable("_rank", `"_rank"`);
     jsClassData.addPublicVariable("_build", "_build");
@@ -677,8 +679,21 @@ var WuxDefinition = WuxDefinition || (function () {
                 return data.abbreviation;
             }
         },
-        getGroupVariables function (filterData) {
-            
+        getVariables = function (key, array, mod1) {
+            let output = [];
+            let data = get(key);
+            for(let i = 0; i < array.length; i++) {
+                output.push(data.getVariable(array[i], mod1));
+            }
+            return output;
+        },
+        getGroupVariables = function (filterData) {
+            let data = filter(filterData);
+            let output = [];
+            for (let i = 0; i < data.length; i++) {
+                output.push(data[i].getVariable());
+            }
+            return output;
         },
 
         displayEntry = function (dictionary, key) {
@@ -719,6 +734,8 @@ var WuxDefinition = WuxDefinition || (function () {
         GetAttribute: getAttribute,
         GetVariable: getVariable,
         GetAbbreviation: getAbbreviation,
+        GetVariables: getVariables,
+        GetGroupVariables: getGroupVariables,
         DisplayEntry: displayEntry,
         DisplayCollapsibleTitle: displayCollapsibleTitle
     }
@@ -1451,11 +1468,20 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             }
         },
         filter = function(filterData) {
-            let filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
-            let filters = [];
-            for (let i = 1; i < filterData.length; i++) {
-                filters = getSortedGroup(filterData[i].property, filterData[i].value);
-                filteredGroup = filteredGroup.filter(item => filters.includes(item))
+            let filteredGroup;
+            if(Array.isArray(filterData)) {
+                filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
+                let nextFilter = [];
+                for (let i = 1; i < filterData.length; i++) {
+                    if (filteredGroup == undefined || filteredGroup.length == 0) {
+                        return [];
+                    }
+                    nextFilter = getSortedGroup(filterData[i].property, filterData[i].value);
+                    filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
+                }
+            }
+            else {
+                filteredGroup = getSortedGroup(filterData.property, filterData.value);
             }
             if (filteredGroup == undefined || filteredGroup.length == 0) {
                 return [];
