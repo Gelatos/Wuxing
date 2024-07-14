@@ -976,15 +976,18 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					let output = "";
 					let jobArray = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));
 					let jobs = WuxDef.GetVariables("Job", jobArray);
-					let createWorker = `let worker = new WuxWorkerBuild("Job", ${JSON.stringify(jobs)});\n`;
-
-					output += WuxSheetBackend.OnChange(jobs, `${createWorker}worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);`, true);
+					let createWorker = `let worker = new WuxWorkerBuildManager("Job", ${JSON.stringify(jobs)});\n`;
+					
+					output += listenerUpdateBuildPoints(jobs, createWorker);
 
 					return output;
 				},
+				listenerUpdateBuildPoints = function(jobs, createWorker) {
+				    let output = "";
+				    output += `console.log("Updating Job " + eventinfo.sourceAttribute);\n`;
+					output += WuxSheetBackend.OnChange(jobs, `${createWorker}worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);`, true);
 
-				updateBuildPoints = function () {
-
+					return output;
 				}
 				;
 			return {
