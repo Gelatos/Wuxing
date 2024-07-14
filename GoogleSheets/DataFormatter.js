@@ -35,7 +35,7 @@ function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, lor
     jsClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
     jsClassData.addPublicVariable("_max", `"_max"`);
     jsClassData.addPublicVariable("_rank", `"_rank"`);
-    jsClassData.addPublicVariable("_build", "_build");
+    jsClassData.addPublicVariable("_build", `"_build"`);
     
     jsClassData.addPublicVariable("_filter", `"_filter"`);
     jsClassData.addPublicVariable("_expand", `"_expand"`);
@@ -752,7 +752,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         attributeSection = function (name, contents) {
             return `<div class="wuxDistinctSection wuxSizeInverse">\n<div class="wuxDistinctField">
             <span class="wuxDistinctSubtitle">${name}</span>
-            <span class='wuxDistinctSubdata'>\n${contents}n</span>
+            <span class='wuxDistinctSubdata'>\n${contents}\n</span>
             </div>\n</div>`;
         },
 
@@ -760,7 +760,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return `<div class="wuxDistinctSection wuxSizeInverse">\n<div class="wuxDistinctField">
             <span class="wuxDistinctSubtitle">${name}</span>
             <input type="hidden" class="wuxErrorField-flag" name="${errorFieldName}" value="0">
-            <span class='wuxDistinctSubdata'>\n${contents}n</span>
+            <span class='wuxDistinctSubdata'>\n${contents}\n</span>
             </div>\n</div>`;
         },
 

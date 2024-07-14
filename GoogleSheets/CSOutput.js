@@ -24,7 +24,7 @@ var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 			output += DisplayAdvancementSheet.Print(sheetsDb);
 			output += DisplayTechniquesSheet.Print(sheetsDb);
 			return `<div class="wuxCharacterSheet">
-			<input class="wuxCharacterSheetDisplayStyle-Flag" name="attr_characterSheetDisplayStyle" type="hidden" value="0">
+			<input class="wuxCharacterSheetDisplayStyle-Flag" name="attr_page-characterCreation" type="hidden" value="0">
 			${output}
 			</div>`;
 		},
@@ -48,7 +48,7 @@ var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 				on_sheet_opened();
 			});
 			${output}
-			</script>`;
+			`;
 		}
 		;
 	return {
@@ -955,7 +955,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 	var
 		print = function (sheetsDb) {
 			let output = "";
-			output += buildJobs.BuildListeners(sheetsDb.job);
+			output += buildJobs.BuildListeners();
 			// output += buildJobs.BuildClass(sheetsDb.job);
 			return output;
 		},
@@ -972,11 +972,11 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					return jsClassData.print(className);
 				},
 
-				buildListeners = function (jobData) {
+				buildListeners = function () {
 					let output = "";
 					let jobArray = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));
 					let jobs = WuxDef.GetVariables("Job", jobArray);
-					let createWorker = `let worker = new WuxWorkerBuildManager("Job", ${JSON.stringify(jobs)});\n`;
+					let createWorker = `let worker = new WuxWorkerBuildManager("Job");\n`;
 					
 					output += listenerUpdateBuildPoints(jobs, createWorker);
 
@@ -985,9 +985,10 @@ var AdvancementBackend = AdvancementBackend || (function () {
 				listenerUpdateBuildPoints = function(jobs, createWorker) {
 				    let output = "";
 				    output += `console.log("Updating Job " + eventinfo.sourceAttribute);\n`;
-					output += WuxSheetBackend.OnChange(jobs, `${createWorker}worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);`, true);
+					output += createWorker;
+					output += `worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);\n`;
 
-					return output;
+					return WuxSheetBackend.OnChange(jobs, output, true);
 				}
 				;
 			return {

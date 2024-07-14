@@ -2,7 +2,6 @@ class WorkerAttributeHandler {
 	constructor(mods) {
 		if (Array.isArray(mods)) {
 			this.mods = mods;
-			this.update = {};
 		}
 		else {
 			this.mods = [];
@@ -10,8 +9,10 @@ class WorkerAttributeHandler {
 			    this.mods.push(mods);
 			}
 		}
+		this.current = {};
+		this.update = {};
 	}
-	addMods(mods) {
+	addMod(mods) {
 		if (Array.isArray(mods)) {
 			this.mods = this.mods.concat(mods);
 		}
@@ -19,156 +20,220 @@ class WorkerAttributeHandler {
 			this.mods.push(mods);
 		}
 	}
-	get(callback) {
+	addFormulaMods(definition) {
+		this.addMod(definition.modAttrs);
+	
+	}
+	get(attributeHandler, callback) {
 		getAttrs(this.mods, function (v) {
-			callback(v);
+			attributeHandler.current = v;
+			callback();
 		});
 	}
 	set() {
 		setAttrs(this.update, { silent: true });
 	}
 
-	parseString(attrArray, fieldName, defaultValue) {
+	addUpdate(attr, value) {
+		this.update[attr] = value;
+	}
+
+	parseString(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = "";
 		}
-		return attrArray[fieldName] == undefined || attrArray[fieldName] == "" ? defaultValue : attrArray[fieldName];
+		if (this.update[fieldName] != undefined) {
+			return this.update[fieldName] == undefined || this.update[fieldName] == "" ? defaultValue : this.update[fieldName];
+		}
+		else {
+			return this.current[fieldName] == undefined || this.current[fieldName] == "" ? defaultValue : this.current[fieldName];
+		}
 	}
 
-	parseInt(attrArray, fieldName, defaultValue) {
-
-		return this.parseIntValue(attrArray[fieldName], defaultValue);
-	}
-
-	parseIntValue(value, defaultValue) {
+	parseInt(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = 0;
 		}
-		return isNaN(parseInt(value)) ? defaultValue : parseInt(value);
+		if (this.update[fieldName] != undefined) {
+			return isNaN(parseInt(this.update[fieldName])) ? defaultValue : parseInt(this.update[fieldName]);
+		}
+		else {
+			return isNaN(parseInt(this.current[fieldName])) ? defaultValue : parseInt(this.current[fieldName]);
+		}
 	}
 
-	parseFloat(attrArray, fieldName, defaultValue) {
-
-		return this.parseFloatValue(attrArray[fieldName], defaultValue);
-	}
-
-	parseFloatValue(value, defaultValue) {
+	parseFloat(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = 0;
 		}
-		return isNaN(parseFloat(value)) ? defaultValue : parseFloat(value);
+		if (this.update[fieldName] != undefined) {
+			return isNaN(parseFloat(this.update[fieldName])) ? defaultValue : parseFloat(this.update[fieldName]);
+		}
+		else {
+			return isNaN(parseFloat(this.current[fieldName])) ? defaultValue : parseFloat(this.current[fieldName]);
+		}
 	}
 
-	parseJSON(attrArray, fieldName, defaultValue) {
+	parseJSON(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = "";
 		}
-		return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName] == "" ? defaultValue : JSON.parse(attrArray[fieldName]);
+		if (this.update[fieldName] != undefined) {
+			return this.update[fieldName] == undefined || this.update[fieldName] == "" ? defaultValue : JSON.parse(this.update[fieldName]);
+		}
+		else {
+			return this.current[fieldName] == undefined || this.current[fieldName] == "" ? defaultValue : JSON.parse(this.current[fieldName]);
+		}
 	}
 }
 
 class WuxWorkerBuild {
-	constructor(definitionId, builderAttributesArray) {
+	constructor(definitionId) {
 	    
 		this.definition = WuxDef.Get(definitionId);
-		this.builderAttributes = builderAttributesArray != undefined ? builderAttributesArray : [];
 		this.buildStats = {};
 
 		this.attrBuildDraft = this.definition.getVariable(WuxDef._build);
 		this.attrBuildFinal = this.definition.getVariable(WuxDef._build, WuxDef._max);
-		this.attributeHandler = new WorkerAttributeHandler(this.attrBuildDraft, this.attrBuildFinal);
-		this.attrBuilderAttributes = [];
-	}
-
-	setBuildStatsDraft(attributeHandler, v) {
-	    this.setBuildStats(this.attrBuildDraft, attributeHandler, v);
-	}
-	setBuildStatsFinal(attributeHandler, v) {
-	    this.setBuildStats(this.attrBuildFinal, attributeHandler, v);
-	}
-	setBuildStats(buildStatVersion, attributeHandler, v) {
-		this.buildStats = new WorkerBuildStats();
-		this.buildStats.import(attributeHandler.parseJSON(v, buildStatVersion));
-	}
-
-	setUpdatePointsAttr() {
 		this.attrMax = this.definition.getVariable(WuxDef._max);
+		this.attributeHandler = new WorkerAttributeHandler(this.attrBuildDraft, this.attrBuildFinal);
 	}
-	setBuilderAttributes() {
-		let output = [];
-		let definition = this.definition;
-		this.builderAttributes.forEach(function (attr) {
-			output.push(definition.getVariable(attr));
-		});
-		this.attrBuilderAttributes = output;
-	}
-	updatePoints(attributeHandler, v) {
-		let buildPoints = this.buildStats.getPointsTotal();
-		let buildPointsMax = isNaN(parseInt(v[this.attrMax])) ? 0 : parseInt(v[this.attrMax]);
 
-		attributeHandler.update[this.definition.getVariable()] = buildPointsMax - buildPoints;
-		attributeHandler.update[this.definition.getVariable(WuxDef._error)] = buildPoints >= buildPointsMax ? "1" : "0";
+	setBuildStatsDraft(attributeHandler) {
+	    this.setBuildStats(this.attrBuildDraft, attributeHandler);
 	}
-	updateBuild(attributeHandler, updatingAttr, newValue) {
-	    this.buildStats.add(updatingAttr) = newValue;
-	    attributeHandler.update[this.attrBuildDraft] = JSON.stringify(this.buildStats);
+	setBuildStatsFinal(attributeHandler) {
+	    this.setBuildStats(this.attrBuildFinal, attributeHandler);
+	}
+	setBuildStats(buildStatVersion, attributeHandler) {
+		this.buildStats = new WorkerBuildStats();
+		this.buildStats.import(attributeHandler.parseJSON(buildStatVersion));
+	}
+	setPointsMax(attributeHandler) {
+		attributeHandler.addUpdate(this.attrMax, this.definition.getFormulaValue(attributeHandler));
+	}
+	updatePoints(attributeHandler) {
+		let buildPoints = this.buildStats.getPointsTotal();
+		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
+
+		attributeHandler.addUpdate(this.definition.getVariable(), buildPointsMax - buildPoints);
+		attributeHandler.addUpdate(this.definition.getVariable(WuxDef._error), buildPoints == buildPointsMax ? "0" : buildPoints < buildPointsMax ? "1" : "-1");
+	}
+	updateBuildStats(attributeHandler, updatingAttr, newValue) {
+		let workerBuildStat = new WorkerBuildStat([updatingAttr, newValue]);
+	    this.buildStats.add(updatingAttr, workerBuildStat);
+	    attributeHandler.addUpdate(this.attrBuildDraft, JSON.stringify(this.buildStats));
+	}
+	cleanBuildStats() {
+		let validDataNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", this.definition.name));
+		let validKeys = WuxDef.GetVariables(this.definition.name, validDataNames);
+		this.buildStats.clean(validKeys);
 	}
 	
 	saveBuildStatsToFinal(attributeHandler) {
-	    attributeHandler.update[this.attrBuildFinal] = JSON.stringify(this.buildStats);
+	    attributeHandler.addUpdate(this.attrBuildFinal, JSON.stringify(this.buildStats));
 	}
-	revertBuildStatsDraft(attributeHandler, v) {
-	    attributeHandler.update[this.attrBuildDraft] = JSON.stringify(this.buildStats);
+	revertBuildStatsDraft(attributeHandler) {
+	    attributeHandler.addUpdate(this.attrBuildDraft, JSON.stringify(this.buildStats));
 	}
 	
 	
 }
 
 class WuxWorkerBuildManager {
-    constructor(definitionIds, builderAttributesArrays) {
-        this.attributeHandler  = new WorkerAttributeHandler();
+    constructor(definitionIds) {
         this.workers = [];
         if (Array.isArray(definitionIds)) {
             for (let i = 0; i < definitionIds.length; i++) {
-                this.workers.push(new WuxWorkerBuild(definitionIds[i], builderAttributesArrays[i]));
+                this.workers.push(new WuxWorkerBuild(definitionIds[i]));
             }
         }
         else {
-            this.workers.push(new WuxWorkerBuild(definitionIds, builderAttributesArrays));
+            this.workers.push(new WuxWorkerBuild(definitionIds));
         }
     }
+
+	iterate(callback) {
+		this.workers.forEach((worker) => {
+			callback(worker);
+		});
+	}
+
+	setupAttributeHandlerForPointUpdate(attributeHandler) {
+		let manager = this;
+		manager.iterate(function(worker) {
+			worker.definition.setFormulaData();
+			attributeHandler.addFormulaMods(worker.definition);
+    		attributeHandler.addMod(worker.attrBuildDraft);
+		});
+	}
+
+	setAttributeHandlerPoints(attributeHandler) {
+		let manager = this;
+		manager.iterate(function(worker) {
+			worker.setBuildStatsDraft(attributeHandler);
+			worker.setPointsMax(attributeHandler);
+			worker.updatePoints(attributeHandler);
+		});
+	}
+
+	onInit() {
+		let manager = this;
+        let attributeHandler  = new WorkerAttributeHandler();
+
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+		attributeHandler.get(attributeHandler, function () {
+			manager.setAttributeHandlerPoints(attributeHandler);
+		    attributeHandler.set();
+		});
+	}
     
     onChangeWorkerAttribute(updatingAttr, newValue) {
 		let manager = this;
-		manager.workers.forEach((worker) => {
-		    worker.setUpdatePointsAttr();
-    		worker.setBuilderAttributes();
-    		manager.attributeHandler.addMods([worker.attrMax, worker.attrBuildDraft, worker.attrBuilderAttributes]);
+        let attributeHandler  = new WorkerAttributeHandler();
+		manager.iterate(function(worker) {
+    		attributeHandler.addMod(worker.attrMax);
+			attributeHandler.addMod(worker.attrBuildDraft);
 		});
-		manager.attributeHandler.get(function (v) {
-		    manager.workers.forEach((worker) => {
-    			worker.setBuildStatsDraft(manager.attributeHandler, v);
-    			worker.updatePoints(manager.attributeHandler, v);
-    			worker.updateBuild(manager.attributeHandler, updatingAttr, newValue);
+		attributeHandler.get(attributeHandler, function () {
+		    manager.iterate(function(worker) {
+    			worker.setBuildStatsDraft(attributeHandler);
+    			worker.updateBuildStats(attributeHandler, updatingAttr, newValue);
+    			worker.updatePoints(attributeHandler);
 		    });
-		    manager.attributeHandler.set();
+		    attributeHandler.set();
+		});
+	}
+	
+	onCommit() {
+		let manager = this;
+        let attributeHandler  = new WorkerAttributeHandler();
+		manager.iterate(function(worker) {
+    		attributeHandler.addMod(worker.attrBuildDraft);
+		});
+		attributeHandler.get(attributeHandler, function () {
+		    manager.iterate(function(worker) {
+    			worker.setBuildStatsDraft(attributeHandler);
+				worker.cleanBuildStats();
+    			worker.saveBuildStatsToFinal(attributeHandler);
+		    });
+		    attributeHandler.set();
 		});
 	}
 	
 	onReset() {
 		let manager = this;
-		manager.workers.forEach((worker) => {
-		    worker.setUpdatePointsAttr();
-    		worker.setBuilderAttributes();
-    		manager.attributeHandler.addMods([worker.attrMax, worker.attrBuildDraft, worker.attrBuilderAttributes]);
+        let attributeHandler  = new WorkerAttributeHandler();
+		manager.iterate(function(worker) {
+    		attributeHandler.addMod(worker.attrBuildFinal);
 		});
-		manager.attributeHandler.get(function (v) {
-		    manager.workers.forEach((worker) => {
-    			worker.setBuildStatsDraft(manager.attributeHandler, v);
-    			worker.updatePoints(manager.attributeHandler, v);
-    			worker.updateBuild(manager.attributeHandler, updatingAttr, newValue);
+		attributeHandler.get(attributeHandler, function () {
+		    manager.iterate(function(worker) {
+    			worker.setBuildStatsFinal(attributeHandler);
+				worker.cleanBuildStats();
+    			worker.revertBuildStatsDraft(attributeHandler);
 		    });
-		    manager.attributeHandler.set();
+		    attributeHandler.set();
 		});
 	}
 }

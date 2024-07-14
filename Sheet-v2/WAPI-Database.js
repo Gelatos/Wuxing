@@ -73,6 +73,15 @@ class Dictionary {
             callback(this.values[this.keys[i]], this.keys[i]);
         }
     }
+    clean(validKeys) {
+        let keys = this.keys.filter(key => validKeys.includes(key));
+        let values = {};
+        for (let i = 0; i < keys.length; i++) {
+            values[keys[i]] = this.values[keys[i]];
+        }
+        this.keys = keys;
+        this.values = values;
+    }
 }
 class DatabaseFilterData {
     constructor(property, value) {
@@ -755,6 +764,8 @@ class DefinitionData extends dbObj {
         this.variable = json.variable;
         this.formula = json.formula;
         this.modifiers = json.modifiers;
+        this.modAttrs = [];
+        this.formulaCalculations = [];
     }
     importSheets(dataArray) {
         let i = 0;
@@ -766,6 +777,8 @@ class DefinitionData extends dbObj {
         this.variable = "" + dataArray[i]; i++;
         this.formula = "" + dataArray[i]; i++;
         this.modifiers = "" + dataArray[i]; i++;
+        this.modAttrs = [];
+        this.formulaCalculations = [];
     }
     createEmpty() {
         this.name = "";
@@ -776,6 +789,8 @@ class DefinitionData extends dbObj {
         this.variable = "";
         this.formula = "";
         this.modifiers = "";
+        this.modAttrs = [];
+        this.formulaCalculations = [];
     }
     getVariables(array, mod1) {
         let output = [];
@@ -807,6 +822,45 @@ class DefinitionData extends dbObj {
     }
     getAttribute(mod, mod1) {
         return `attr_${this.getVariable(mod, mod1)}`;
+    }
+    setFormulaData() {
+        this.modAttrs = [];
+        this.formulaCalculations = [];
+
+        let mod = "";
+        let multiplier = 1;
+
+        let formulaArray = this.formula.split(";");
+        formulaArray.forEach((formula) => {
+            mod = formula.trim();
+            multiplier = 1;
+            if (formula.indexOf("*") > -1) {
+                let split = mod.split("*");
+                mod = split[0];
+                multiplier = split[1];
+            }
+
+            if (isNaN(parseInt(mod))) {
+                this.formulaCalculations.push(new WorkerFormula(mod, 0, multiplier));
+                this.modArray.push(mod);
+            }
+            else {
+                this.formulaCalculations.push(new WorkerFormula("", parseInt(mod), multiplier));
+            }
+        });
+
+        let modArray = this.modifiers.split(";");
+        modArray.forEach((mod) => {
+            this.formulaCalculations.push(new WorkerFormula(mod, 0, multiplier));
+            this.modAttrs.push(this.getVariable(mod));
+        });
+    }
+    getFormulaValue(attributeHandler) {
+        let output = 0;
+        this.formulaCalculations.forEach((formula) => {
+            output += formula.getValue(attributeHandler);
+        });
+        return output;
     }
 }
 class TemplateData extends dbObj {
@@ -1073,28 +1127,47 @@ class WorkerBuildStat extends dbObj {
     importJson(json) {
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
-        this.points = json.points;
+        this.value = json.points;
     }
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToCamelCase(this.name);
-        this.points = parseInt(dataArray[i]) == NaN ? 0 : parseInt(dataArray[i]); i++;
+        this.value = "" + dataArray[i]; i++;
     }
     createEmpty() {
         this.name = "";
         this.fieldName = Format.ToCamelCase(this.name);
-        this.points = 0;
+        this.value = "0";
     }
 }
 class WorkerBuildStats extends Dictionary {
 
     getPointsTotal() {
         let points = 0;
-        for (let i = 0; i < this.values.length; i++) {
-            points += this.values[i].points;
+        for (let i = 0; i < this.keys.length; i++) {
+            if (this.values[this.keys[i]].value == "on") {
+                points++;
+            }
+            else {
+                points += isNaN(parseInt(this.values[this.keys[i]].value)) ? 0 : parseInt(this.values[this.keys[i]].value);
+            }
         }
         return points;
+    }
+}
+class WorkerFormula {
+    constructor(modName, value, multiplier) {
+        this.modName = modName == undefined ? "" : modName;
+        this.value = isNaN(parseInt(value)) ? 0 : parseInt(value);
+        this.multiplier = isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier);
+    }
+    getValue(attributeHandler) {
+        if (this.modName != "") {
+            this.value = attributeHandler.parseInt(this.modName);
+        }
+        
+        return this.value * this.multiplier;
     }
 }
 

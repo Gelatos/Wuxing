@@ -1,6 +1,14 @@
 var upgrade_to_1_0_0 = function (doneupdating) {
-	setAttrs({hp: "0", hp_max: "0", tempHp: "0", tempHp_max: "0", ki: "0", ki_max: "0", vitality: "0", trauma: "0", stress: "0", wounds: "0", chakra: "0"});
-	doneupdating();
+	let manager = new WuxWorkerBuildManager("Job");
+	let attributeHandler  = new WorkerAttributeHandler();
+	attributeHandler.addUpdate("version", "0");
+
+	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+	attributeHandler.get(attributeHandler, function () {
+		manager.setAttributeHandlerPoints(attributeHandler);
+		attributeHandler.set();
+		doneupdating();
+	});
 };
 
 var versioning = function () {
@@ -12,8 +20,8 @@ var versioning = function () {
 		}
 		else {
 			upgrade_to_1_0_0(function () {
-				setAttrs({version: "1.0.0"});
-				versioning();
+				// setAttrs({version: "1.0.0"});
+				// versioning();
 			});
 		}
 	});

@@ -101,15 +101,26 @@ input.wuxFlexTableItemData
     max-width: 25px;
 }
 
-input[type=hidden].wuxErrorField-flag[value="1"] + span.wuxFlexTableItemData,
-input[type=hidden].wuxErrorField-flag[value="1"] + span.wuxFlexTableItemData span
+input[type=hidden].wuxErrorField-flag[value="-1"] + span.wuxFlexTableItemData,
+input[type=hidden].wuxErrorField-flag[value="-1"] + span.wuxFlexTableItemData span
 {
     color: red;
 }
 
-input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
+input[type=hidden].wuxErrorField-flag[value="1"] + span.wuxFlexTableItemData,
+input[type=hidden].wuxErrorField-flag[value="1"] + span.wuxFlexTableItemData span
+{
+    color: green;
+}
+
+input[type=hidden].wuxErrorField-flag[value="-1"] + input.wuxFlexTableItemData
 {
     background: red;
+}
+
+input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
+{
+    background: green;
 }
 
 .wuxFlexTableItemSubheader
@@ -292,10 +303,16 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
 }
 
+input[type=hidden].wuxErrorField-flag[value="-1"] + .wuxDistinctData,
+input[type=hidden].wuxErrorField-flag[value="-1"] + .wuxDistinctSubdata
+{
+    background: red;
+}
+
 input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData,
 input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubdata
 {
-    background: red;
+    background: green;
 }
 
 /*========================================
