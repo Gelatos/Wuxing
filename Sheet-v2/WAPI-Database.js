@@ -764,6 +764,7 @@ class DefinitionData extends dbObj {
         this.variable = json.variable;
         this.formula = json.formula;
         this.modifiers = json.modifiers;
+        this.linkedGroups = json.linkedGroups;
         this.modAttrs = [];
         this.formulaCalculations = [];
     }
@@ -777,6 +778,7 @@ class DefinitionData extends dbObj {
         this.variable = "" + dataArray[i]; i++;
         this.formula = "" + dataArray[i]; i++;
         this.modifiers = "" + dataArray[i]; i++;
+        this.linkedGroups = Format.StringToArray("" + dataArray[i]).push(this.name); i++;
         this.modAttrs = [];
         this.formulaCalculations = [];
     }
@@ -789,6 +791,7 @@ class DefinitionData extends dbObj {
         this.variable = "";
         this.formula = "";
         this.modifiers = "";
+        this.linkedGroups = [];
         this.modAttrs = [];
         this.formulaCalculations = [];
     }
@@ -1127,7 +1130,7 @@ class WorkerBuildStat extends dbObj {
     importJson(json) {
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
-        this.value = json.points;
+        this.value = json.value;
     }
     importSheets(dataArray) {
         let i = 0;
@@ -1437,6 +1440,18 @@ var Format = Format || (function () {
         // Array Formatting
         // ------------------------
 
+        stringToArray = function (string, delimeter) {
+            if (string == "" || string == undefined) {
+                return [];
+            }
+
+            if (delimeter == undefined) {
+                delimeter = ";";
+            }
+            let arr = string.split(delimeter);
+            return arr.map(s => s.trim());
+        },
+
         arrayToString = function (array, delimeter) {
             if (delimeter == undefined) {
                 delimeter = ", ";
@@ -1503,6 +1518,7 @@ var Format = Format || (function () {
         ToCamelCase: toCamelCase,
         ToUpperCamelCase: toUpperCamelCase,
         Romanize: romanize,
+        StringToArray: stringToArray,
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,
         ShowTooltip: showTooltip,

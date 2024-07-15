@@ -89,7 +89,6 @@ class WorkerAttributeHandler {
 
 class WuxWorkerBuild {
 	constructor(definitionId) {
-	    
 		this.definition = WuxDef.Get(definitionId);
 		this.buildStats = {};
 
@@ -124,10 +123,24 @@ class WuxWorkerBuild {
 	    this.buildStats.add(updatingAttr, workerBuildStat);
 	    attributeHandler.addUpdate(this.attrBuildDraft, JSON.stringify(this.buildStats));
 	}
+	getBuildVariables() {
+		let buildVariableNames = []; 
+		let buildVariables = []; 
+		for (let i = 0; i < this.definition.linkedGroups.length; i++) {
+			if (this.definition.linkedGroups[i] != "") {
+				buildVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", this.definition.linkedGroups[i]));
+				buildVariables = buildVariables.concat(WuxDef.GetVariables(this.definition.linkedGroups[i], buildVariableNames));
+			}
+		}
+		return buildVariables;
+	}
 	cleanBuildStats() {
-		let validDataNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", this.definition.name));
-		let validKeys = WuxDef.GetVariables(this.definition.name, validDataNames);
-		this.buildStats.clean(validKeys);
+		this.buildStats.clean(this.getBuildVariables());
+	}
+	setVariablesToBuildStats(attributeHandler) {
+		this.buildStats.iterate(function (buildStat) {
+			attributeHandler.addUpdate(buildStat.fieldName, buildStat.value);
+		});
 	}
 	
 	saveBuildStatsToFinal(attributeHandler) {

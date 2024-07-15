@@ -1,5 +1,5 @@
 var upgrade_to_1_0_0 = function (doneupdating) {
-	let manager = new WuxWorkerBuildManager("Job");
+	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
 	let attributeHandler  = new WorkerAttributeHandler();
 	attributeHandler.addUpdate("version", "0");
 
