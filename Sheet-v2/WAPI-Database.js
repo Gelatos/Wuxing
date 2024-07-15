@@ -308,6 +308,15 @@ class TechniqueData extends dbObj {
         this.effects = new Dictionary();
         this.onGoingTech = undefined;
     }
+    createDefinition() {
+        let definition = new DefinitionData();
+        definition.name = `Technique:${this.name}`;
+        definition.variable = this.fieldName;
+        definition.title = this.name;
+        definition.group = "Technique";
+        definition.descriptions = [this.description];
+        return definition;
+    }
 
     setAugmentTechValues(baseTechnique) {
 
