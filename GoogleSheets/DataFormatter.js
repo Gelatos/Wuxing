@@ -27,9 +27,8 @@ function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, lor
         return role.createDefinition();
     });
     let techDb = createTechniques(JSON.parse(techniqueDatabaseString));
-    definitionDatabase.importSheets(rolesArray, function (arr) {
-        let role = new RoleData(arr);
-        return role.createDefinition();
+    techDb.iterate(function (technique) {
+        definitionDatabase.add(technique.createDefinition());
     });
     
     let jsClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.Get);
