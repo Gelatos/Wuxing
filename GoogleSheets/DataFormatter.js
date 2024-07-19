@@ -46,6 +46,8 @@ function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, lor
     
     jsClassData.addPublicVariable("_tab", `"_tab"`);
     jsClassData.addPublicVariable("_page", `"_page"`);
+    jsClassData.addPublicVariable("_exit", `"_exit"`);
+    jsClassData.addPublicVariable("_finish", `"_finish"`);
     
     jsClassData.addPublicVariable("_read", `"_read"`);
     jsClassData.addPublicVariable("_learn", `"_learn"`);
@@ -1135,11 +1137,11 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildCharacterCreationSplit = function (mainContents, characterCreationContents) {
-            return `<input type="hidden" class="wuxHiddenField-flag" name="attr_finishedCharacterCreation" value="0">
+            return `<input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Character Creator")}" value="0">
   <div class="wuxHiddenBlockField">
   ${mainContents}
   </div>
-  <input type="hidden" class="wuxHiddenField-flag" name="attr_finishedCharacterCreation" value="0">
+  <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Character Creator")}" value="0">
   <div class="wuxHiddenBlockAuxField">
   ${characterCreationContents}
   </div>`;
@@ -1234,7 +1236,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         buildCharacterCreationNavigation = function (sheetName) {
             let output = "";
             output += buildCharacterCreationTabs(sheetName);
-            output += buildExitStickyButtons("attr_tab-characterCreation");
+            output += buildExitStickyButtons(WuxDef.GetAttribute("Character Creator"));
             output += buildHeader("Character Creation", sheetName);
             return output;
         },
@@ -1254,8 +1256,8 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         buildExitStickyButtons = function (fieldName) {
             let output = "";
-            output += buildTabButton("checkbox", `${fieldName}-exit`, "Exit", "Exit", false, "") + "\n";
-            output += buildTabButton("checkbox", `${fieldName}-finish`, "Finish", "Finish", false, "") + "\n";
+            output += buildTabButton("checkbox", `${fieldName}${WuxDef._exit}`, "Exit", "Exit", false, "") + "\n";
+            output += buildTabButton("checkbox", `${fieldName}${WuxDef._finish}`, "Finish", "Finish", false, "") + "\n";
             output = buildTabButtonRow(output);
 
             return buildStickySideTab(output);
