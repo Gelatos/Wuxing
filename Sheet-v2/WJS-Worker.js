@@ -205,6 +205,7 @@ class WuxWorkerBuildManager {
 		let manager = this;
         let attributeHandler  = new WorkerAttributeHandler();
 		manager.iterate(function(worker) {
+		    console.log(`Updating ${worker.definition.name} variable ${updatingAttr} to ${newValue}`);
     		attributeHandler.addMod(worker.attrMax);
 			attributeHandler.addMod(worker.attrBuildDraft);
 		});
@@ -250,3 +251,4 @@ class WuxWorkerBuildManager {
 		});
 	}
 }
+
