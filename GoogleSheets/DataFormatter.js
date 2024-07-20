@@ -26,9 +26,10 @@ function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, lor
         let role = new RoleData(arr);
         return role.createDefinition();
     });
-    let techDb = createTechniques(JSON.parse(techniqueDatabaseString));
+    let techDb = SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString));
     techDb.iterate(function (technique) {
-        definitionDatabase.add(technique.createDefinition());
+        let techDef = technique.createDefinition();
+        definitionDatabase.add(techDef.name, techDef);
     });
     
     let jsClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.Get);
@@ -1190,8 +1191,9 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildMainPageTabs = function (sheetName, sideBarButtons) {
+            let fieldName = WuxDef.GetAttribute("Core");
             let mainContents = "";
-            mainContents += buildTabs(sheetName, "attr_tab-characterSheet", ["Gear", "Techniques", "Chat", "Character"]);
+            mainContents += buildTabs(sheetName, fieldName, ["Gear", "Techniques", "Chat", "Character"]);
             mainContents += sideBarButtons;
             mainContents += buildMainSheetHeader();
 
@@ -1212,9 +1214,10 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildTrainingPageNavigation = function (sheetName) {
+            let fieldName = WuxDef.GetAttribute("Training");
             let mainContents = "";
-            mainContents += buildTabs(sheetName, "attr_tab-training", ["Knowledge", "Training"]);
-            mainContents += buildExitStickyButtons("attr_tab-training");
+            mainContents += buildTabs(sheetName, fieldName, ["Knowledge", "Training"]);
+            mainContents += buildExitStickyButtons(fieldName, true);
             mainContents += buildHeader("Training", sheetName);
 
             let characterCreationContents = buildCharacterCreationNavigation(sheetName);
@@ -1223,9 +1226,10 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildAdvancementPageNavigation = function (sheetName) {
+            let fieldName = WuxDef.GetAttribute("Advancement");
             let mainContents = "";
-            mainContents += buildTabs(sheetName, "attr_tab-advancement", ["Attributes", "Skills", "Jobs", "Advancement"]);
-            mainContents += buildExitStickyButtons("attr_tab-advancement");
+            mainContents += buildTabs(sheetName, fieldName, ["Attributes", "Skills", "Jobs", "Advancement"]);
+            mainContents += buildExitStickyButtons(fieldName, true);
             mainContents += buildHeader("Advancement", sheetName);
 
             let characterCreationContents = buildCharacterCreationNavigation(sheetName);
@@ -1236,7 +1240,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         buildCharacterCreationNavigation = function (sheetName) {
             let output = "";
             output += buildCharacterCreationTabs(sheetName);
-            output += buildExitStickyButtons(WuxDef.GetAttribute("Character Creator"));
+            output += buildExitStickyButtons(WuxDef.GetAttribute("Character Creator"), false);
             output += buildHeader("Character Creation", sheetName);
             return output;
         },
@@ -1254,9 +1258,11 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             return output;
         },
 
-        buildExitStickyButtons = function (fieldName) {
+        buildExitStickyButtons = function (fieldName, showExit) {
             let output = "";
-            output += buildTabButton("checkbox", `${fieldName}${WuxDef._exit}`, "Exit", "Exit", false, "") + "\n";
+            if (showExit) {
+                output += buildTabButton("checkbox", `${fieldName}${WuxDef._exit}`, "Exit", "Exit", false, "") + "\n";
+            }
             output += buildTabButton("checkbox", `${fieldName}${WuxDef._finish}`, "Finish", "Finish", false, "") + "\n";
             output = buildTabButtonRow(output);
 

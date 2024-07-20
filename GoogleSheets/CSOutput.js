@@ -243,34 +243,18 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 						},
 
 						buildLanguage = function (knowledge) {
-							let fieldName = Format.ToCamelCase(knowledge.name);
-
-							return `${buildMainLanguage(knowledge, `attr_languages-training-${fieldName}`)}
-							${buildSubLanguage(WuxDef.Get("Language").getAttribute(fieldName), "Speak")}
-							${buildSubLanguage(WuxDef.Get("Language").getAttribute([fieldName, WuxDef._read]), "Read / Write")}`;
-						},
-
-						buildMainLanguage = function (knowledge, fieldName) {
-							let expandFieldName = `${fieldName}-expand`;
+							let knowledgeDefinition = WuxDef.Get("Language");
 							let expandContents = `<div class="wuxDescription">${knowledge.description}</div>`;
 
-							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
-							${WuxSheetMain.InteractionElement.InnerBlock(buildInteractionMainBlock(knowledge))}
-							${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
+							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(knowledgeDefinition.getAttribute(knowledge.fieldName, WuxDef._expand))}
+							${WuxSheetMain.InteractionElement.CheckboxBlockIcon(knowledgeDefinition.getAttribute([knowledge.fieldName, WuxDef._rank]), buildInteractionMainBlock(knowledge))}
+							${WuxSheetMain.InteractionElement.ExpandableBlockContents(knowledgeDefinition.getAttribute(knowledge.fieldName, WuxDef._expand), expandContents)}`;
 
 							return WuxSheetMain.InteractionElement.Build(true, output);
 						},
 
 						buildInteractionMainBlock = function (knowledge) {
-							return `<span class="wuxHeader">${knowledge.name}</span>\n<span class="wuxSubheader">${knowledge.location}</span>`;
-						},
-
-						buildSubLanguage = function (fieldName, subGroupName) {
-
-							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockEmptyIcon()}
-					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(fieldName, `<span class="wuxSubheader">${subGroupName}</span>`)}`;
-
-							return WuxSheetMain.InteractionElement.Build(true, output);
+							return `<span class="wuxHeader">${knowledge.name}</span>\n<span class="wuxSubheader"> - ${knowledge.location}</span>`;
 						}
 
 					return {
@@ -328,13 +312,11 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 						},
 
 						buildLore = function (knowledge, interactHeader, knowledgeDefinition) {
-							let fieldName = Format.ToCamelCase(knowledge.name);
-							let expandFieldName = `attr_lore-training-${fieldName}-expand`;
 							let expandContents = `<div class="wuxDescription">${knowledge.description}</div>`;
 
-							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
-					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(knowledgeDefinition.getAttribute([fieldName, WuxDef._rank]), interactHeader)}
-					${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
+							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(knowledgeDefinition.getAttribute(knowledge.fieldName, WuxDef._expand))}
+					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(knowledgeDefinition.getAttribute([knowledge.fieldName, WuxDef._rank]), interactHeader)}
+					${WuxSheetMain.InteractionElement.ExpandableBlockContents(knowledgeDefinition.getAttribute(knowledge.fieldName, WuxDef._expand), expandContents)}`;
 
 							return WuxSheetMain.InteractionElement.Build(true, output);
 						},
@@ -861,8 +843,8 @@ var BuilderBackend = BuilderBackend || (function () {
 	var
 		print = function (sheetsDb) {
 			let output = "";
-			output += buildCharacterCreation.Build(sheetsDb);
-			output += buildBackendTools.Build(sheetsDb);
+			output += buildCharacterCreation.BuildClass();
+			output += buildCharacterCreation.BuildListeners();
 			return output;
 
 		},
@@ -873,16 +855,22 @@ var BuilderBackend = BuilderBackend || (function () {
 			var
 				className = "WuxWorkerCharacterCreation",
 
-				buildClass = function (jobData) {
+				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
-					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
+					jsClassData.addPublicFunction("finishBuild", finishBuild);
 					return jsClassData.print(className);
+				},
+
+				buildListeners = function () {
+					let output = "";
+					output += listenerFinishButton();
+					return output;
 				},
 				finishBuild = function() {
 				    let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
                 	let attributeHandler  = new WorkerAttributeHandler();
-                	attributeHandler.addUpdate(${WuxDef.GetAttribute("Character Creator")}, "1");
-                	attributeHandler.addUpdate(${WuxDef.GetAttribute("Character Creator")}, "1");
+                	attributeHandler.addUpdate(WuxDef.GetAttribute("Character Creator"), "1");
+                	attributeHandler.addUpdate(WuxDef.GetAttribute("Core"), "Character");
                 
                 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
                 	attributeHandler.get(attributeHandler, function () {
@@ -890,21 +878,11 @@ var BuilderBackend = BuilderBackend || (function () {
                 		attributeHandler.set();
                 		
                 	});
-				}
-				;
-				buildListeners = function () {
-					let output = "";
-					
-					
-					
-					output += listenerFinishButton(createWorker);
-
-					return output;
 				},
-				listenerUpdateBuildPoints = function(createWorker) {
-				    let output = "";
-					output += createWorker;
-					output += `worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);\n`;
+				
+				listenerFinishButton = function() {
+					let groupVariableNames = WuxDef.GetVariable("Character Creator", WuxDef._finish);
+				    let output = `${className}.FinishBuild();\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
@@ -943,6 +921,9 @@ var TrainingBackend = TrainingBackend || (function () {
 		print = function (sheetsDb) {
 			let output = "";
 			
+			output += buildTraining.BuildClass();
+			output += buildTraining.BuildListeners();
+			output += buildKnowledge.BuildListeners();
 			return output;
 
 		},
@@ -951,17 +932,39 @@ var TrainingBackend = TrainingBackend || (function () {
 			'use strict';
 
 			var
-				build = function (sheetsDb) {
+				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
-					return jsClassData.print("TrainingManager");
+					jsClassData.addPublicFunction("finishBuild", finishBuild);
+					return jsClassData.print(className);
 				},
 
-				saveChanges = function () {
+				buildListeners = function () {
+					let output = "";
+					output += listenerFinishButton();
+					return output;
+				},
+				finishBuild = function() {
+				    let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+                	let attributeHandler  = new WorkerAttributeHandler();
+                
+                	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+                	attributeHandler.get(attributeHandler, function () {
+                		manager.setAttributeHandlerPoints(attributeHandler);
+                		attributeHandler.set();
+                		
+                	});
+				},
+				
+				listenerFinishButton = function() {
+					let groupVariableNames = WuxDef.GetVariable("Training", WuxDef._finish);
+				    let output = `${className}.FinishBuild();\n`;
 
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
 				;
 			return {
-				Build: build
+				BuildClass: buildClass,
+				BuildListeners: buildListeners
 			}
 		}()),
 
@@ -1038,33 +1041,33 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					let groupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName));
 					let createWorker = `let worker = new WuxWorkerBuildManager("${groupName}");\n`;
 					
-					output += listenerUpdateBuildPoints(groupVariables, createWorker);
+					output += listenerUpdateBuildPoints(groupName, groupVariables, createWorker);
 
 					return output;
 				},
-				listenerUpdateBuildPoints = function(groupVariables, createWorker) {
+				listenerUpdateBuildPoints = function(groupName, groupVariables, createWorker) {
 					let groupVariableNames = WuxDef.GetVariables(groupName, groupVariables);
 				    let output = "";
 					output += createWorker;
 					output += `worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);\n`;
 
-					return WuxSheetBackend.OnChange(groupVariables, output, true);
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
 				;
 			return {
 				BuildClass: buildClass,
 				BuildListeners: buildListeners
 			}
-		}());
+		}()),
+
 		buildSkills = buildSkills || (function () {
 			'use strict';
 
 			var
 				className = "WuxWorkerSkills",
 
-				buildClass = function (jobData) {
+				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
-					
 					return jsClassData.print(className);
 				},
 
@@ -1075,11 +1078,11 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					
 					let createWorker = `let worker = new WuxWorkerBuildManager("${groupName}");\n`;
 					
-					output += listenerUpdateBuildPoints(groupVariables, createWorker);
+					output += listenerUpdateBuildPoints(groupName, groupVariables, createWorker);
 
 					return output;
 				},
-				listenerUpdateBuildPoints = function(groupVariables, createWorker) {
+				listenerUpdateBuildPoints = function(groupName, groupVariables, createWorker) {
 				    let groupVariableNames = WuxDef.GetVariables(groupName, groupVariables);
 				    let output = "";
 					output += createWorker;
