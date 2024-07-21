@@ -1,14 +1,14 @@
-var upgrade_to_1_0_0 = function (doneupdating) {
+var upgrade_to_1_0_0 = function (doneUpdating) {
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
-	let attributeHandler  = new WorkerAttributeHandler();
+	let attributeHandler = new WorkerAttributeHandler();
 	attributeHandler.addUpdate("version", "0");
 
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-	attributeHandler.get(attributeHandler, function () {
-		manager.setAttributeHandlerPoints(attributeHandler);
-		attributeHandler.set();
-		doneupdating();
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+		manager.setAttributeHandlerPoints(attrHandler);
 	});
+	attributeHandler.addFinishCallback(doneUpdating);
+	attributeHandler.run();
 };
 
 var versioning = function () {
