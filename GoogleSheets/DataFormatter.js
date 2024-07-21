@@ -4,8 +4,12 @@ function SetTechniquesDatabaseJson(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr
     return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
 }
 
-function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
+function SetDefinitionsDatabase(definitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
     let definitionDatabase = SheetsDatabase.CreateDefinitions(definitionArray);
+    definitionDatabase.importSheets(styleArray, function (arr) {
+        let style = new TechniqueStyle(arr);
+        return style.createDefinition();
+    });
     definitionDatabase.importSheets(skillsArray, function (arr) {
         let skill = new SkillData(arr);
         return skill.createDefinition();
@@ -50,7 +54,7 @@ function SetDefinitionsDatabase(definitionArray, skillsArray, languageArray, lor
     jsClassData.addPublicVariable("_exit", `"_exit"`);
     jsClassData.addPublicVariable("_finish", `"_finish"`);
     
-    jsClassData.addPublicVariable("_read", `"_read"`);
+    jsClassData.addPublicVariable("_origin", `"_origin"`);
     jsClassData.addPublicVariable("_learn", `"_learn"`);
     jsClassData.addPublicVariable("_pts", `"_pts"`);
     jsClassData.addPublicVariable("_error", `"_error"`);
@@ -936,12 +940,14 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<input type="${type}" class="${className}" name="${fieldName}"${extras} />`
         },
 
-        select = function (fieldName, definitionGroup) {
+        select = function (fieldName, definitionGroup, showEmpty) {
             let output = `<select class="wuxInput" name="${fieldName}" value="0">`;
-            output += `\n<option value="0">-</option>`;
+            if (showEmpty == undefined || showEmpty) { 
+                output += `\n<option value="0">-</option>`;
+            }
 
             for (let i = 0; i < definitionGroup.length; i++) {
-                output += `\n<option value="${definitionGroup[i].variable}">${definitionGroup[i].name}</option>`;
+                output += `\n<option value="${definitionGroup[i].variable}">${definitionGroup[i].title}</option>`;
             }
             output += `\n</select>`;
             return output;

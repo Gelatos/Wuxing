@@ -11,6 +11,8 @@ class WorkerAttributeHandler {
 		}
 		this.current = {};
 		this.update = {};
+		this.getCallbacks = [];
+		this.finishCallbacks = [];
 	}
 	addMod(mods) {
 		if (Array.isArray(mods)) {
@@ -24,18 +26,28 @@ class WorkerAttributeHandler {
 		this.addMod(definition.modAttrs);
 	
 	}
-	get(attributeHandler, callback) {
-		getAttrs(this.mods, function (v) {
-			attributeHandler.current = v;
-			callback();
-		});
-	}
-	set() {
-		setAttrs(this.update, { silent: true });
-	}
-
 	addUpdate(attr, value) {
 		this.update[attr] = value;
+	}
+	addGetAttrCallback(callback) {
+		this.getCallbacks.push(callback);
+	}
+	addFinishCallback(callback) {
+		this.finishCallbacks.push(callback);
+	}
+	run() {
+		let attributeHandler = this;
+		getAttrs(attributeHandler.mods, function (v) {
+			attributeHandler.current = v;
+			attributeHandler.getCallbacks.forEach((callback) => {
+				callback(attributeHandler);
+			});
+			setAttrs(attributeHandler.update, { silent: true }, function () {
+				attributeHandler.finishCallbacks.forEach((callback) => {
+					callback(attributeHandler);
+				});
+			});
+		})
 	}
 
 	parseString(fieldName, defaultValue) {
@@ -95,7 +107,6 @@ class WuxWorkerBuild {
 		this.attrBuildDraft = this.definition.getVariable(WuxDef._build);
 		this.attrBuildFinal = this.definition.getVariable(WuxDef._build, WuxDef._max);
 		this.attrMax = this.definition.getVariable(WuxDef._max);
-		this.attributeHandler = new WorkerAttributeHandler(this.attrBuildDraft, this.attrBuildFinal);
 	}
 
 	setBuildStatsDraft(attributeHandler) {
@@ -182,22 +193,10 @@ class WuxWorkerBuildManager {
 	}
 
 	setAttributeHandlerPoints(attributeHandler) {
-		let manager = this;
-		manager.iterate(function(worker) {
+		this.iterate(function(worker) {
 			worker.setBuildStatsDraft(attributeHandler);
 			worker.setPointsMax(attributeHandler);
 			worker.updatePoints(attributeHandler);
-		});
-	}
-
-	onInit() {
-		let manager = this;
-        let attributeHandler  = new WorkerAttributeHandler();
-
-		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-		attributeHandler.get(attributeHandler, function () {
-			manager.setAttributeHandlerPoints(attributeHandler);
-		    attributeHandler.set();
 		});
 	}
     
@@ -209,14 +208,14 @@ class WuxWorkerBuildManager {
     		attributeHandler.addMod(worker.attrMax);
 			attributeHandler.addMod(worker.attrBuildDraft);
 		});
-		attributeHandler.get(attributeHandler, function () {
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
 		    manager.iterate(function(worker) {
-    			worker.setBuildStatsDraft(attributeHandler);
-    			worker.updateBuildStats(attributeHandler, updatingAttr, newValue);
-    			worker.updatePoints(attributeHandler);
+    			worker.setBuildStatsDraft(attrHandler);
+    			worker.updateBuildStats(attrHandler, updatingAttr, newValue);
+    			worker.updatePoints(attrHandler);
 		    });
-		    attributeHandler.set();
 		});
+		attributeHandler.run();
 	}
 	
 	onCommit() {

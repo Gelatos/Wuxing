@@ -40,8 +40,8 @@ var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 
 		buildSheetWorkerContainer = function (sheetsDb) {
 			let output = "";
-			// output += BuilderBackend.Print(sheetsDb);
-			// output += TrainingBackend.Print(sheetsDb);
+			output += BuilderBackend.Print(sheetsDb);
+			output += TrainingBackend.Print(sheetsDb);
 			output += AdvancementBackend.Print(sheetsDb);
 			return `<script type="text/worker">
 			on("sheet:opened", function(eventinfo) {
@@ -637,23 +637,18 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						buildAttributes = function () {
 							let attributes = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
 							let output = "";
+							let attributeValuesFilter = WuxDef.Filter([new DatabaseFilterData("group", "AttributeValue")]);
 							for (let i = 0; i < attributes.length; i++) {
-								output += buildAttribute(attributes[i].name, attributes[i].abbreviation);
+								output += buildAttribute(attributes[i], attributeValuesFilter);
 							}
-							return `<div class="wuxSectionContent wuxFlexTable">
-						  ${output}
-						</div>`;
+							return `<div class="wuxSectionContent wuxFlexTable">\n${output}\n</div>\n`;
 						},
 
-						buildAttribute = function (attributeName, attributeAbr) {
-							let fieldName = `attr_advancement-attributes-${attributeAbr}`;
-							let output = WuxSheetMain.Table.FlexTableHeader(attributeName);
-							output += WuxSheetMain.Table.FlexTableSubheader("Ancestry Bonus");
-							output += WuxSheetMain.Table.FlexTableData(`<span name='${fieldName}-ancestry' value="0">0</span>`);
-							output += WuxSheetMain.Table.FlexTableSubheader("Job Bonus");
-							output += WuxSheetMain.Table.FlexTableData(`<span name='${fieldName}-job' value="0">0</span>`);
-							output += WuxSheetMain.Table.FlexTableSubheader("Advancement Bonus");
-							output += WuxSheetMain.Table.FlexTableInput("number", fieldName, "0");
+						buildAttribute = function (attributeDefinition, attributeValuesFilter) {
+							let originSelection = WuxSheetMain.Select(WuxDef.GetAttribute("Attribute", attributeDefinition.variable), attributeValuesFilter, false);
+
+							let output = WuxSheetMain.Table.FlexTableHeader(attributeDefinition.title);
+							output += WuxSheetMain.Table.FlexTableData(originSelection);
 							return WuxSheetMain.Table.FlextTableGroup(output);
 						}
 						;
@@ -845,6 +840,8 @@ var BuilderBackend = BuilderBackend || (function () {
 			let output = "";
 			output += buildCharacterCreation.BuildClass();
 			output += buildCharacterCreation.BuildListeners();
+			output += buildTechniques.BuildClass();
+			output += buildTechniques.BuildListeners();
 			return output;
 
 		},
@@ -867,21 +864,21 @@ var BuilderBackend = BuilderBackend || (function () {
 					return output;
 				},
 				finishBuild = function() {
+					console.log("Finish Character Creation Build");
 				    let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
                 	let attributeHandler  = new WorkerAttributeHandler();
                 	attributeHandler.addUpdate(WuxDef.GetAttribute("Character Creator"), "1");
                 	attributeHandler.addUpdate(WuxDef.GetAttribute("Core"), "Character");
-                
                 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-                	attributeHandler.get(attributeHandler, function () {
-                		manager.setAttributeHandlerPoints(attributeHandler);
-                		attributeHandler.set();
-                		
-                	});
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						manager.setAttributeHandlerPoints(attrHandler);
+					});
+					attributeHandler.run();
 				},
 				
 				listenerFinishButton = function() {
-					let groupVariableNames = WuxDef.GetVariable("Character Creator", WuxDef._finish);
+					let groupVariableNames = [WuxDef.GetVariable("Character Creator", WuxDef._finish)];
 				    let output = `${className}.FinishBuild();\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -893,21 +890,45 @@ var BuilderBackend = BuilderBackend || (function () {
 			}
 		}()),
 
-		buildBackendTools = buildBackendTools || (function () {
+		buildTechniques = buildTechniques || (function () {
 			'use strict';
 
 			var
-				build = function (sheetsDb) {
+				className = "WuxWorkerTechniques",
+
+				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
-					return jsClassData.print("BackendTools");
+					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
+					return jsClassData.print(className);
+				},
+				updateBuildPoints = function(eventinfo) {
+					let worker = new WuxWorkerBuildManager("Technique");
+					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+				},
+
+				buildListeners = function () {
+					let output = "";
+					let styleGroupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"));
+					let techniqueGroupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Technique"));
+					
+					output += listenerUpdateBuildPoints(styleGroupVariables, techniqueGroupVariables);
+
+					return output;
+				},
+				listenerUpdateBuildPoints = function(styleGroupVariables, techniqueGroupVariables) {
+				    let groupVariableNames = WuxDef.GetVariables("Style", styleGroupVariables);
+					groupVariableNames = groupVariableNames.concat(WuxDef.GetVariables("Technique", techniqueGroupVariables));
+				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
-
-
 				;
 			return {
-				Build: build
+				BuildClass: buildClass,
+				BuildListeners: buildListeners
 			}
 		}());
+
 
 	return {
 		Print: print
@@ -921,8 +942,9 @@ var TrainingBackend = TrainingBackend || (function () {
 		print = function (sheetsDb) {
 			let output = "";
 			
-			output += buildTraining.BuildClass();
-			output += buildTraining.BuildListeners();
+			// output += buildTraining.BuildClass();
+			// output += buildTraining.BuildListeners();
+			output += buildKnowledge.BuildClass();
 			output += buildKnowledge.BuildListeners();
 			return output;
 
@@ -948,11 +970,10 @@ var TrainingBackend = TrainingBackend || (function () {
                 	let attributeHandler  = new WorkerAttributeHandler();
                 
                 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-                	attributeHandler.get(attributeHandler, function () {
-                		manager.setAttributeHandlerPoints(attributeHandler);
-                		attributeHandler.set();
-                		
-                	});
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						manager.setAttributeHandlerPoints(attrHandler);
+					});
+					attributeHandler.run();
 				},
 				
 				listenerFinishButton = function() {
@@ -972,31 +993,30 @@ var TrainingBackend = TrainingBackend || (function () {
 			'use strict';
 
 			var
-				className = "WuxWorkerKnowledge",
+				className = "WuxWorkerKnowledges",
 
-				buildClass = function (jobData) {
+				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
-					
+					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
 					return jsClassData.print(className);
+				},
+				updateBuildPoints = function(eventinfo) {
+					let worker = new WuxWorkerBuildManager("Knowledge");
+					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
 				},
 				buildListeners = function () {
 					let output = "";
-					let groupName = "Knowledge";
 					let languageGroupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Language"));
 					let loreGroupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Lore"));
-
-					let createWorker = `let worker = new WuxWorkerBuildManager("${groupName}");\n`;
 					
-					output += listenerUpdateBuildPoints(languageGroupVariables, loreGroupVariables, createWorker);
+					output += listenerUpdateBuildPoints(languageGroupVariables, loreGroupVariables);
 
 					return output;
 				},
-				listenerUpdateBuildPoints = function(languageGroupVariables, loreGroupVariables, createWorker) {
-				    let groupVariableNames = WuxDef.GetVariables("Language", languageGroupVariables);
-				    groupVariableNames = groupVariableNames.concat(WuxDef.GetVariables("Lore", loreGroupVariables));
-				    let output = "";
-					output += createWorker;
-					output += `worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);\n`;
+				listenerUpdateBuildPoints = function(languageGroupVariables, loreGroupVariables) {
+				    let groupVariableNames = WuxDef.GetVariables("Language", languageGroupVariables, WuxDef._rank);
+				    groupVariableNames = groupVariableNames.concat(WuxDef.GetVariables("Lore", loreGroupVariables, WuxDef._rank));
+				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
@@ -1017,9 +1037,12 @@ var AdvancementBackend = AdvancementBackend || (function () {
 	var
 		print = function (sheetsDb) {
 			let output = "";
+			output += buildJobs.BuildClass();
 			output += buildJobs.BuildListeners();
+			output += buildSkills.BuildClass();
 			output += buildSkills.BuildListeners();
-			// output += buildJobs.BuildClass(sheetsDb.job);
+			output += buildAttributes.BuildClass();
+			output += buildAttributes.BuildListeners();
 			return output;
 		},
 
@@ -1027,29 +1050,30 @@ var AdvancementBackend = AdvancementBackend || (function () {
 			'use strict';
 
 			var
-				className = "WuxWorkerJob",
+				className = "WuxWorkerJobs",
 
 				buildClass = function (jobData) {
 					let jsClassData = new JavascriptDataClass();
 					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
 					return jsClassData.print(className);
 				},
+				updateBuildPoints = function(eventinfo) {
+					let worker = new WuxWorkerBuildManager("Job");
+					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+				},
 
 				buildListeners = function () {
 					let output = "";
 					let groupName = "Job";
 					let groupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName));
-					let createWorker = `let worker = new WuxWorkerBuildManager("${groupName}");\n`;
 					
-					output += listenerUpdateBuildPoints(groupName, groupVariables, createWorker);
+					output += listenerUpdateBuildPoints(groupName, groupVariables);
 
 					return output;
 				},
-				listenerUpdateBuildPoints = function(groupName, groupVariables, createWorker) {
+				listenerUpdateBuildPoints = function(groupName, groupVariables) {
 					let groupVariableNames = WuxDef.GetVariables(groupName, groupVariables);
-				    let output = "";
-					output += createWorker;
-					output += `worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);\n`;
+				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
@@ -1068,7 +1092,12 @@ var AdvancementBackend = AdvancementBackend || (function () {
 
 				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
+					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
 					return jsClassData.print(className);
+				},
+				updateBuildPoints = function(eventinfo) {
+					let worker = new WuxWorkerBuildManager("Skill");
+					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
 				},
 
 				buildListeners = function () {
@@ -1076,17 +1105,51 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					let groupName = "Skill";
 					let groupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName));
 					
-					let createWorker = `let worker = new WuxWorkerBuildManager("${groupName}");\n`;
-					
-					output += listenerUpdateBuildPoints(groupName, groupVariables, createWorker);
+					output += listenerUpdateBuildPoints(groupName, groupVariables);
 
 					return output;
 				},
-				listenerUpdateBuildPoints = function(groupName, groupVariables, createWorker) {
+				listenerUpdateBuildPoints = function(groupName, groupVariables) {
+				    let groupVariableNames = WuxDef.GetVariables(groupName, groupVariables, WuxDef._rank);
+				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				}
+				;
+			return {
+				BuildClass: buildClass,
+				BuildListeners: buildListeners
+			}
+		}()),
+
+		buildAttributes = buildAttributes || (function () {
+			'use strict';
+
+			var
+				className = "WuxWorkerAttributes",
+
+				buildClass = function () {
+					let jsClassData = new JavascriptDataClass();
+					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
+					return jsClassData.print(className);
+				},
+				updateBuildPoints = function(eventinfo) {
+					let worker = new WuxWorkerBuildManager("Attribute");
+					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+				},
+
+				buildListeners = function () {
+					let output = "";
+					let groupName = "Attribute";
+					let groupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName));
+					
+					output += listenerUpdateBuildPoints(groupName, groupVariables);
+
+					return output;
+				},
+				listenerUpdateBuildPoints = function(groupName, groupVariables) {
 				    let groupVariableNames = WuxDef.GetVariables(groupName, groupVariables);
-				    let output = "";
-					output += createWorker;
-					output += `worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);\n`;
+				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}

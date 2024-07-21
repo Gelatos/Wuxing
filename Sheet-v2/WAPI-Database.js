@@ -477,6 +477,15 @@ class TechniqueStyle extends dbObj {
         this.affinity = "";
         this.cr = 0;
     }
+    createDefinition() {
+        let definition = new DefinitionData();
+        definition.name = `Style:${this.name}`;
+        definition.variable = this.fieldName;
+        definition.title = this.name;
+        definition.group = "Style";
+        definition.descriptions = [this.description];
+        return definition;
+    }
 }
 class SkillData extends dbObj {
     importJson(json) {
