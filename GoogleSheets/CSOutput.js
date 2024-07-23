@@ -645,11 +645,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						},
 
 						buildAttribute = function (attributeDefinition, attributeValuesFilter) {
-							let originSelection = WuxSheetMain.Select(WuxDef.GetAttribute("Attribute", attributeDefinition.variable), attributeValuesFilter, false);
+							let output = WuxSheetMain.Header(attributeDefinition.title);
+							output += WuxSheetMain.Select(WuxDef.GetAttribute("Attribute", attributeDefinition.variable), attributeValuesFilter, false);
+							output += WuxSheetMain.Header2("Affected Stats");
 
-							let output = WuxSheetMain.Table.FlexTableHeader(attributeDefinition.title);
-							output += WuxSheetMain.Table.FlexTableData(originSelection);
-							return WuxSheetMain.Table.FlextTableGroup(output);
+							return output;
 						}
 						;
 					return {
