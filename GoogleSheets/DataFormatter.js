@@ -8,31 +8,31 @@ function SetDefinitionsDatabase(definitionArray, styleArray, skillsArray, langua
     let definitionDatabase = SheetsDatabase.CreateDefinitions(definitionArray);
     definitionDatabase.importSheets(styleArray, function (arr) {
         let style = new TechniqueStyle(arr);
-        return style.createDefinition();
+        return style.createDefinition(definitionDatabase.Get("Style"));
     });
     definitionDatabase.importSheets(skillsArray, function (arr) {
         let skill = new SkillData(arr);
-        return skill.createDefinition();
+        return skill.createDefinition(definitionDatabase.Get("Skill"));
     });
     definitionDatabase.importSheets(languageArray, function (arr) {
         let language = new LanguageData(arr);
-        return language.createDefinition();
+        return language.createDefinition(definitionDatabase.Get("Language"));
     });
     definitionDatabase.importSheets(loreArray, function (arr) {
         let lore = new LoreData(arr);
-        return lore.createDefinition();
+        return lore.createDefinition(definitionDatabase.Get("Lore"));
     });
     definitionDatabase.importSheets(jobsArray, function (arr) {
         let job = new JobData(arr);
-        return job.createDefinition();
+        return job.createDefinition(definitionDatabase.Get("Job"));
     });
     definitionDatabase.importSheets(rolesArray, function (arr) {
         let role = new RoleData(arr);
-        return role.createDefinition();
+        return role.createDefinition(definitionDatabase.Get("Role"));
     });
     let techDb = SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString));
     techDb.iterate(function (technique) {
-        let techDef = technique.createDefinition();
+        let techDef = technique.createDefinition(definitionDatabase.Get("Technique"));
         definitionDatabase.add(techDef.name, techDef);
     });
     
@@ -42,22 +42,10 @@ function SetDefinitionsDatabase(definitionArray, styleArray, skillsArray, langua
     jsClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
     jsClassData.addPublicFunction("getVariables", WuxDefinition.GetVariables);
     jsClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
-    jsClassData.addPublicVariable("_max", `"_max"`);
-    jsClassData.addPublicVariable("_rank", `"_rank"`);
-    jsClassData.addPublicVariable("_build", `"_build"`);
-    
-    jsClassData.addPublicVariable("_filter", `"_filter"`);
-    jsClassData.addPublicVariable("_expand", `"_expand"`);
-    
-    jsClassData.addPublicVariable("_tab", `"_tab"`);
-    jsClassData.addPublicVariable("_page", `"_page"`);
-    jsClassData.addPublicVariable("_exit", `"_exit"`);
-    jsClassData.addPublicVariable("_finish", `"_finish"`);
-    
-    jsClassData.addPublicVariable("_origin", `"_origin"`);
-    jsClassData.addPublicVariable("_learn", `"_learn"`);
-    jsClassData.addPublicVariable("_pts", `"_pts"`);
-    jsClassData.addPublicVariable("_error", `"_error"`);
+    let variableMods = definitionDatabase.filter(new DatabaseFilterData("group", "VariableMod"));
+    for (let i = 0; i < variableMods.length; i++) {
+        jsClassData.addPublicVariable(variableMods[i].variable, variableMods[i].variable);
+    }
 
     return PrintLargeEntry(jsClassData.print("WuxDef"), "]");
 }
