@@ -308,12 +308,13 @@ class TechniqueData extends dbObj {
         this.effects = new Dictionary();
         this.onGoingTech = undefined;
     }
-    createDefinition() {
+    createDefinition(baseDefinition) {
         let definition = new DefinitionData();
-        definition.name = `Technique:${this.name}`;
-        definition.variable = this.fieldName;
+        definition.name = `${baseDefinition.name}_${this.name}`;
+        definition.fieldName = this.fieldName;
+        definition.variable = baseDefinition.getAttribute(this.fieldName);
         definition.title = this.name;
-        definition.group = "Technique";
+        definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
         return definition;
     }
@@ -477,12 +478,13 @@ class TechniqueStyle extends dbObj {
         this.affinity = "";
         this.cr = 0;
     }
-    createDefinition() {
+    createDefinition(baseDefinition) {
         let definition = new DefinitionData();
-        definition.name = `Style:${this.name}`;
-        definition.variable = this.fieldName;
+        definition.name = `${baseDefinition.name}_${this.name}`;
+        definition.fieldName = this.fieldName;
+        definition.variable = baseDefinition.getAttribute(this.fieldName);
         definition.title = this.name;
-        definition.group = "Style";
+        definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
         return definition;
     }
@@ -511,12 +513,13 @@ class SkillData extends dbObj {
         this.abilityScore = "";
         this.description = "";
     }
-    createDefinition() {
+    createDefinition(baseDefinition) {
         let definition = new DefinitionData();
-        definition.name = `Skill:${this.name}`;
-        definition.variable = this.fieldName;
+        definition.name = `${baseDefinition.name}_${this.name}`;
+        definition.fieldName = this.fieldName;
+        definition.variable = baseDefinition.getAttribute(this.fieldName);
         definition.title = this.name;
-        definition.group = "Skill";
+        definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
         return definition;
     }
@@ -540,12 +543,13 @@ class LanguageData extends dbObj {
         this.location = "";
         this.description = "";
     }
-    createDefinition() {
+    createDefinition(baseDefinition) {
         let definition = new DefinitionData();
-        definition.name = `Language:${this.name}`;
-        definition.variable = this.fieldName;
+        definition.name = `${baseDefinition.name}_${this.name}`;
+        definition.fieldName = this.fieldName;
+        definition.variable = baseDefinition.getAttribute(this.fieldName);
         definition.title = this.name;
-        definition.group = "Language";
+        definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
         return definition;
     }
@@ -570,12 +574,13 @@ class LoreData extends dbObj {
         this.group = "";
         this.description = "";
     }
-    createDefinition() {
+    createDefinition(baseDefinition) {
         let definition = new DefinitionData();
-        definition.name = `Lore:${this.name}`;
-        definition.variable = this.fieldName;
+        definition.name = `${baseDefinition.name}_${this.name}`;
+        definition.fieldName = this.fieldName;
+        definition.variable = baseDefinition.getAttribute(this.fieldName);
         definition.title = this.name;
-        definition.group = "Lore";
+        definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
         return definition;
     }
@@ -611,6 +616,16 @@ class JobData extends dbObj {
         this.roles = this.createRolesArray(dataArray.slice(i)); i += 5;
         this.prereq = "" + dataArray[i]; i++;
         this.techniques = this.createJobTechnique(dataArray.slice(i)); i++;
+    }
+    createDefinition(baseDefinition) {
+        let definition = new DefinitionData();
+        definition.name = `${baseDefinition.name}_${this.name}`;
+        definition.fieldName = this.fieldName;
+        definition.variable = baseDefinition.getAttribute(this.fieldName);
+        definition.title = this.name;
+        definition.group = baseDefinition.name;
+        definition.descriptions = [this.description];
+        return definition;
     }
 
     createRolesArray(modArray) {
@@ -650,16 +665,6 @@ class JobData extends dbObj {
         }
         return output;
     }
-    
-    createDefinition() {
-        let definition = new DefinitionData();
-        definition.name = `Job:${this.name}`;
-        definition.variable = this.fieldName;
-        definition.title = this.name;
-        definition.group = "Job";
-        definition.descriptions = [this.description];
-        return definition;
-    }
 }
 class RoleData extends dbObj {
     importJson(json) {
@@ -681,12 +686,13 @@ class RoleData extends dbObj {
         this.description = "";
         this.techniques = [];
     }
-    createDefinition() {
+    createDefinition(baseDefinition) {
         let definition = new DefinitionData();
-        definition.name = `Role:${this.name}`;
-        definition.variable = this.fieldName;
+        definition.name = `${baseDefinition.name}_${this.name}`;
+        definition.fieldName = this.fieldName;
+        definition.variable = baseDefinition.getAttribute(this.fieldName);
         definition.title = this.name;
-        definition.group = "Role";
+        definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
         return definition;
     }
@@ -775,6 +781,7 @@ class AttributeGroupData extends dbObj {
 class DefinitionData extends dbObj {
     importJson(json) {
         this.name = json.name;
+        this.fieldName = Format.ToCamelCase(this.name);
         this.title = json.title;
         this.group = json.group;
         this.descriptions = json.descriptions;
@@ -789,6 +796,7 @@ class DefinitionData extends dbObj {
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToCamelCase(this.name);
         this.title = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
         this.descriptions = [("" + dataArray[i])]; i++;
@@ -802,6 +810,7 @@ class DefinitionData extends dbObj {
     }
     createEmpty() {
         this.name = "";
+        this.fieldName = "";
         this.title = "";
         this.group = "";
         this.descriptions = [];
