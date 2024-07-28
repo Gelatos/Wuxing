@@ -650,12 +650,19 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						},
 
 						buildAttribute = function (attributeDefinition, attributeValuesFilter) {
-							let data = "";
-							data += WuxSheetMain.Select(WuxDef.GetAttribute("Attribute", attributeDefinition.variable), attributeValuesFilter, false);
-							data += WuxSheetMain.Header2("Affected Stats");
+							let contents = "";
+							contents += WuxSheetMain.Select(WuxDef.GetAttribute("Attribute", attributeDefinition.variable), attributeValuesFilter, false);
+							contents += WuxSheetMain.Header("Affected Stats");
+							let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formula", attributeDefinition.name));
+							for (let formula in formulaDefinitions) {
+							    contents += WuxSheetMain.Header2(formula.title);
+                                for (let description in formula.descriptions) {
+                                    contents += `\n${WuxSheetMain.Desc(description)}`;
+                                }
+							}
 							
 							let output = WuxSheetMain.Table.FlexTableHeader(attributeDefinition.title);
-							output += WuxSheetMain.Table.FlexTableData(data);
+							output += WuxSheetMain.Table.FlexTableData(contents);
 							return WuxSheetMain.Table.FlextTableGroup(output);
 						}
 						;
