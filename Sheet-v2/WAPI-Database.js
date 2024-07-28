@@ -108,12 +108,15 @@ class Database extends Dictionary {
         super.add(key, value);
         let propertyValue = "";
         for (let property in this.sortingGroups) {
-            propertyValue = value[property];
-            if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
-                this.sortingGroups[property][propertyValue] = [];
-            }
-            this.sortingGroups[property][propertyValue].push(value.name);
+            this.addSortingGroup(property, value[property], value.name);
         }
+    }
+    
+    addSortingGroup(property, propertyValue, valueName) {
+        if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
+            this.sortingGroups[property][propertyValue] = [];
+        }
+        this.sortingGroups[property][propertyValue].push(valueName);
     }
 
     filter(filterData) {
@@ -196,6 +199,10 @@ class ExtendedDescriptionDatabase extends Database {
             }
             else {
                 this.add(data.name, data);
+                data.setFormulaData();
+                for (let propertyValue in data.modAttrs) {
+                    this.addSortingGroup("formula", propertyValue, data.name);
+                }
             }
         }
     }
@@ -856,6 +863,10 @@ class DefinitionData extends dbObj {
     setFormulaData() {
         this.modAttrs = [];
         this.formulaCalculations = [];
+        
+        if(this.formula == "") {
+            return;
+        }
 
         let mod = "";
         let multiplier = 1;
