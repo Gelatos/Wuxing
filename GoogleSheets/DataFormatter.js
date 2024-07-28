@@ -8,31 +8,31 @@ function SetDefinitionsDatabase(definitionArray, styleArray, skillsArray, langua
     let definitionDatabase = SheetsDatabase.CreateDefinitions(definitionArray);
     definitionDatabase.importSheets(styleArray, function (arr) {
         let style = new TechniqueStyle(arr);
-        return style.createDefinition(definitionDatabase.Get("Style"));
+        return style.createDefinition(definitionDatabase.get("Style"));
     });
     definitionDatabase.importSheets(skillsArray, function (arr) {
         let skill = new SkillData(arr);
-        return skill.createDefinition(definitionDatabase.Get("Skill"));
+        return skill.createDefinition(definitionDatabase.get("Skill"));
     });
     definitionDatabase.importSheets(languageArray, function (arr) {
         let language = new LanguageData(arr);
-        return language.createDefinition(definitionDatabase.Get("Language"));
+        return language.createDefinition(definitionDatabase.get("Language"));
     });
     definitionDatabase.importSheets(loreArray, function (arr) {
         let lore = new LoreData(arr);
-        return lore.createDefinition(definitionDatabase.Get("Lore"));
+        return lore.createDefinition(definitionDatabase.get("Lore"));
     });
     definitionDatabase.importSheets(jobsArray, function (arr) {
         let job = new JobData(arr);
-        return job.createDefinition(definitionDatabase.Get("Job"));
+        return job.createDefinition(definitionDatabase.get("Job"));
     });
     definitionDatabase.importSheets(rolesArray, function (arr) {
         let role = new RoleData(arr);
-        return role.createDefinition(definitionDatabase.Get("Role"));
+        return role.createDefinition(definitionDatabase.get("Role"));
     });
     let techDb = SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString));
     techDb.iterate(function (technique) {
-        let techDef = technique.createDefinition(definitionDatabase.Get("Technique"));
+        let techDef = technique.createDefinition(definitionDatabase.get("Technique"));
         definitionDatabase.add(techDef.name, techDef);
     });
     
@@ -44,7 +44,7 @@ function SetDefinitionsDatabase(definitionArray, styleArray, skillsArray, langua
     jsClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
     let variableMods = definitionDatabase.filter(new DatabaseFilterData("group", "VariableMod"));
     for (let i = 0; i < variableMods.length; i++) {
-        jsClassData.addPublicVariable(variableMods[i].variable, variableMods[i].variable);
+        jsClassData.addPublicVariable(variableMods[i].variable, `"${variableMods[i].variable}"`);
     }
 
     return PrintLargeEntry(jsClassData.print("WuxDef"), "]");
