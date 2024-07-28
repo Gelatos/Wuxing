@@ -637,19 +637,26 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						buildAttributes = function () {
 							let attributes = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
 							let output = "";
+							let attrRow = "";
 							let attributeValuesFilter = WuxDef.Filter([new DatabaseFilterData("group", "AttributeValue")]);
 							for (let i = 0; i < attributes.length; i++) {
-								output += buildAttribute(attributes[i], attributeValuesFilter);
+								attrRow += buildAttribute(attributes[i], attributeValuesFilter);
+								if (i % 2 == 1) {
+									output += WuxSheetMain.Table.FlexTable(attrRow);
+									attrRow = "";
+								}
 							}
-							return `<div class="wuxSectionContent wuxFlexTable">\n${output}\n</div>\n`;
+							return WuxSheetMain.SectionBlockContents(WuxSheetMain.Table.FlexTable(output));
 						},
 
 						buildAttribute = function (attributeDefinition, attributeValuesFilter) {
-							let output = WuxSheetMain.Header(attributeDefinition.title);
-							output += WuxSheetMain.Select(WuxDef.GetAttribute("Attribute", attributeDefinition.variable), attributeValuesFilter, false);
-							output += WuxSheetMain.Header2("Affected Stats");
-
-							return output;
+							let data = "";
+							data += WuxSheetMain.Select(WuxDef.GetAttribute("Attribute", attributeDefinition.variable), attributeValuesFilter, false);
+							data += WuxSheetMain.Header2("Affected Stats");
+							
+							let output = WuxSheetMain.Table.FlexTableHeader(attributeDefinition.title);
+							output += WuxSheetMain.Table.FlexTableData(data);
+							return WuxSheetMain.Table.FlextTableGroup(output);
 						}
 						;
 					return {

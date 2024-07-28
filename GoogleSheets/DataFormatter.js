@@ -970,23 +970,17 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 build = function (headers, data) {
                     let output = ``;
                     for (let i = 0; i < headers.length; i++) {
-                        output += flextTableGroup(`${flexTableHeader(headers[i])}
-                        ${flexTableData(data[i])}
-                        `);
+                        output += flextTableGroup(`${flexTableHeader(headers[i])}\n${flexTableData(data[i])}\n`);
                     }
                     return flexTable(output);
                 },
 
                 flexTable = function (contents) {
-                    return `<div class="wuxFlexTable">
-                    ${contents}
-                    </div>`;
+                    return `<div class="wuxFlexTable">\n${contents}\n</div>`;
                 },
 
                 flextTableGroup = function (contents) {
-                    return `<div class="wuxFlexTableItemGroup">
-  ${contents}
-  </div>`;
+                    return `<div class="wuxFlexTableItemGroup">\n${contents}\n</div>`;
                 },
 
                 flexTableHeader = function (data) {
