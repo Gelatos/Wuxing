@@ -161,32 +161,32 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Body": {
 				"name": "Body", "fieldName": "body", "title": "Body", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "BOD", "variable": "bod", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
+				"abbreviation": "BOD", "variable": "attributebod{0}", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Precision": {
 				"name": "Precision", "fieldName": "precision", "title": "Precision", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "PRC", "variable": "prc", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
+				"abbreviation": "PRC", "variable": "attributeprc{0}", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Quickness": {
 				"name": "Quickness", "fieldName": "quickness", "title": "Quickness", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "QCK", "variable": "qck", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
+				"abbreviation": "QCK", "variable": "attributeqck{0}", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Conviction": {
 				"name": "Conviction", "fieldName": "conviction", "title": "Conviction", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "CNV", "variable": "cnv", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
+				"abbreviation": "CNV", "variable": "attributecnv{0}", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Intuition ": {
 				"name": "Intuition ", "fieldName": "intuition", "title": "Intuition ", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "INT", "variable": "int", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
+				"abbreviation": "INT", "variable": "attributeint{0}", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Reason": {
 				"name": "Reason", "fieldName": "reason", "title": "Reason", "group": "Attribute", "descriptions": [""],
-				"abbreviation": "RSN", "variable": "rsn", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
+				"abbreviation": "RSN", "variable": "attributersn{0}", "formula": "", "modifiers": "", "linkedGroups": 1, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"AttributeValueAverage": {
@@ -756,2479 +756,2479 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Style_Basic Set": {
 				"name": "Style_Basic Set", "fieldName": "basicSet", "title": "Basic Set", "group": "Style", "descriptions": ["A standard list of techniques. Anyone can perform these techniques. "],
-				"abbreviation": "", "variable": "attr_stylebasicSet", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "stylebasicSet{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Style_Swordplay": {
 				"name": "Style_Swordplay", "fieldName": "swordplay", "title": "Swordplay", "group": "Style", "descriptions": ["Swords go brrr"],
-				"abbreviation": "", "variable": "attr_styleswordplay", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "styleswordplay{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Style_Ki Extension": {
 				"name": "Style_Ki Extension", "fieldName": "kiExtension", "title": "Ki Extension", "group": "Style", "descriptions": ["Ki makes things longer"],
-				"abbreviation": "", "variable": "attr_stylekiExtension", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "stylekiExtension{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Acrobatics": {
 				"name": "Skill_Acrobatics", "fieldName": "acrobatics", "title": "Acrobatics", "group": "Skill", "descriptions": ["Your Acrobatics check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. "],
-				"abbreviation": "", "variable": "attr_skillacrobatics", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillacrobatics{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Agility": {
 				"name": "Skill_Agility", "fieldName": "agility", "title": "Agility", "group": "Skill", "descriptions": [""],
-				"abbreviation": "", "variable": "attr_skillagility", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillagility{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Analyze": {
 				"name": "Skill_Analyze", "fieldName": "analyze", "title": "Analyze", "group": "Skill", "descriptions": ["When attempting to find clues and make deductions based on those clues, you make an Analyze check. You might deduce the location of a hidden object, discern from the appearance of a wound what kind of weapon dealt it, or determine the weakest point in a tunnel that could cause it to collapse. Poring through books in search of a hidden fragment of knowledge might also call for an Analyze check."],
-				"abbreviation": "", "variable": "attr_skillanalyze", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillanalyze{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Build": {
 				"name": "Skill_Build", "fieldName": "build", "title": "Build", "group": "Skill", "descriptions": ["Build is the skill to create structures and objects. This skill includes several different forms of artistic impression such as through drawing, sculpting, handcrafting of fine objects, and conveying art and information through images and technique. "],
-				"abbreviation": "", "variable": "attr_skillbuild", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillbuild{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Channel": {
 				"name": "Skill_Channel", "fieldName": "channel", "title": "Channel", "group": "Skill", "descriptions": ["Channel is the skill to maintain concentration on ether you have manipulated in order to continue its effects. Magical effects that create a sustained area of effect typically use channel to determine their effectiveness."],
-				"abbreviation": "", "variable": "attr_skillchannel", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillchannel{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Charm": {
 				"name": "Skill_Charm", "fieldName": "charm", "title": "Charm", "group": "Skill", "descriptions": ["Enticing, fascinating, and endearing others to you on a personal basis. It can be used to win someone over emotionally through friendliness, joy, and an ability to read a situation. "],
-				"abbreviation": "", "variable": "attr_skillcharm", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillcharm{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Command": {
 				"name": "Skill_Command", "fieldName": "command", "title": "Command", "group": "Skill", "descriptions": ["Command is the ability to use perceived authority or intimidation to control another's perceptions and action. One may use command to inspire a companion, intimidate a foe into backing down, or when making demands of another. "],
-				"abbreviation": "", "variable": "attr_skillcommand", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillcommand{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Concoct": {
 				"name": "Skill_Concoct", "fieldName": "concoct", "title": "Concoct", "group": "Skill", "descriptions": ["Concoct is the skill of combining ingredients inorder to create a new product. If you are cooking a meal, making medicine, or otherwise blending items together to form a new item you would use the mix skill."],
-				"abbreviation": "", "variable": "attr_skillconcoct", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillconcoct{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Cook": {
 				"name": "Skill_Cook", "fieldName": "cook", "title": "Cook", "group": "Skill", "descriptions": ["Cook allows one to create food and drinks from ingredients. Food is an important fuel to sustain life but also well made food improves mood and allows one to push themselves."],
-				"abbreviation": "", "variable": "attr_skillcook", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillcook{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Deception": {
 				"name": "Skill_Deception", "fieldName": "deception", "title": "Deception", "group": "Skill", "descriptions": ["Deception is the skill of telling convincing lies, as well as feigning emotion, belief, or frame of mind. Deception can encompass everything from misleading others through ambiguity to telling outright lies. This skill is also used to convince others of a disguise. "],
-				"abbreviation": "", "variable": "attr_skilldeception", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skilldeception{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Disguise": {
 				"name": "Skill_Disguise", "fieldName": "disguise", "title": "Disguise", "group": "Skill", "descriptions": [""],
-				"abbreviation": "", "variable": "attr_skilldisguise", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skilldisguise{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Empathy": {
 				"name": "Skill_Empathy", "fieldName": "empathy", "title": "Empathy", "group": "Skill", "descriptions": ["Empathy is used to sense both feelings in other creatures and any existing mana or ether in the environment. "],
-				"abbreviation": "", "variable": "attr_skillempathy", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillempathy{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Enchant": {
 				"name": "Skill_Enchant", "fieldName": "enchant", "title": "Enchant", "group": "Skill", "descriptions": ["Enchant is the skill to control ones own ether and impart it into another person or object. This is the basis for techniques like healing and empowerment magic."],
-				"abbreviation": "", "variable": "attr_skillenchant", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillenchant{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Finesse": {
 				"name": "Skill_Finesse", "fieldName": "finesse", "title": "Finesse", "group": "Skill", "descriptions": ["Finesse is used to strike with light and nimble weapons such as daggers, shortswords, and rapiers. Those that use finesse weapons will often fight deftly, exploiting weaknesses in an enemy's defenses. Weapons in this group are typically easy to hide and allow their wielders to exploit a brace vulnerability. Techniques that support this skill will often grant more mobility options to a character."],
-				"abbreviation": "", "variable": "attr_skillfinesse", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillfinesse{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Flexibility": {
 				"name": "Skill_Flexibility", "fieldName": "flexibility", "title": "Flexibility", "group": "Skill", "descriptions": ["Your flexibility check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. "],
-				"abbreviation": "", "variable": "attr_skillflexibility", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillflexibility{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Grappling": {
 				"name": "Skill_Grappling", "fieldName": "grappling", "title": "Grappling", "group": "Skill", "descriptions": [""],
-				"abbreviation": "", "variable": "attr_skillgrappling", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillgrappling{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Heal": {
 				"name": "Skill_Heal", "fieldName": "heal", "title": "Heal", "group": "Skill", "descriptions": ["Heal is used to perform medical procedures such as administering drugs, performing first aid, and conducting surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character’s medical condition."],
-				"abbreviation": "", "variable": "attr_skillheal", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillheal{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Intimidation": {
 				"name": "Skill_Intimidation", "fieldName": "intimidation", "title": "Intimidation", "group": "Skill", "descriptions": ["When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision. When intimidating others you target their resolve."],
-				"abbreviation": "", "variable": "attr_skillintimidation", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillintimidation{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Leadership": {
 				"name": "Skill_Leadership", "fieldName": "leadership", "title": "Leadership", "group": "Skill", "descriptions": ["Leadership is the ability to direct and motivate others. This skill is especially helpful in situations where the will of a teammate is shaken or someone is being asked to do something uncomfortable."],
-				"abbreviation": "", "variable": "attr_skillleadership", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillleadership{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Maneuver": {
 				"name": "Skill_Maneuver", "fieldName": "maneuver", "title": "Maneuver", "group": "Skill", "descriptions": ["Maneuvers govern techniques that allow you to move or manipulate another creature into a new position or state."],
-				"abbreviation": "", "variable": "attr_skillmaneuver", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillmaneuver{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Medicine": {
 				"name": "Skill_Medicine", "fieldName": "medicine", "title": "Medicine", "group": "Skill", "descriptions": ["Medicine is the skill to create and administer drugs for yourself and others. Drugs are often used both to quickly provide a temporary boost to another and to administer long term care for another."],
-				"abbreviation": "", "variable": "attr_skillmedicine", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillmedicine{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Might": {
 				"name": "Skill_Might", "fieldName": "might", "title": "Might", "group": "Skill", "descriptions": ["This skill allows one to attack with brute strength while wielding heavy and cumbersome weapons. These weapons support large damage values allowing their wielders to smash through their enemies. Weapons in this group often will pierce through armor or exploit a reflex vulnerability. "],
-				"abbreviation": "", "variable": "attr_skillmight", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillmight{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Negotiation": {
 				"name": "Skill_Negotiation", "fieldName": "negotiation", "title": "Negotiation", "group": "Skill", "descriptions": ["Negotiation governs a character’s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals."],
-				"abbreviation": "", "variable": "attr_skillnegotiation", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillnegotiation{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Palming": {
 				"name": "Skill_Palming", "fieldName": "palming", "title": "Palming", "group": "Skill", "descriptions": [""],
-				"abbreviation": "", "variable": "attr_skillpalming", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillpalming{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Physique": {
 				"name": "Skill_Physique", "fieldName": "physique", "title": "Physique", "group": "Skill", "descriptions": ["The Physique skill represents a character’s raw strength and endurance. It is used when using physical strength to break through objects and restraints or when attempting to lift things beyond your carrying capacity."],
-				"abbreviation": "", "variable": "attr_skillphysique", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillphysique{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Pilot": {
 				"name": "Skill_Pilot", "fieldName": "pilot", "title": "Pilot", "group": "Skill", "descriptions": ["When attempting to drive a vehicle of any kind, the pilot skill often governs most checks. "],
-				"abbreviation": "", "variable": "attr_skillpilot", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillpilot{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Resonance": {
 				"name": "Skill_Resonance", "fieldName": "resonance", "title": "Resonance", "group": "Skill", "descriptions": ["Resonance is the ability to detect and release ether. It is most often used to detect magical structures and as communication with spirits. Less commonly, it can be used to destroy magical effects and structures made from ether that hasn't been permanently bound."],
-				"abbreviation": "", "variable": "attr_skillresonance", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillresonance{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Search": {
 				"name": "Skill_Search", "fieldName": "search", "title": "Search", "group": "Skill", "descriptions": ["This is used to actively search for for clues or anything out of sorts. You might deduce the location of a hidden object, discern from the appearance of a wound what kind of weapon dealt it, or determine the weakest point in a tunnel that could cause it to collapse. "],
-				"abbreviation": "", "variable": "attr_skillsearch", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillsearch{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Shoot": {
 				"name": "Skill_Shoot", "fieldName": "shoot", "title": "Shoot", "group": "Skill", "descriptions": ["The skill of using a bow or firearm. These weapons have the most variety in weapon ranges allowing one to reliably attack from a distance. "],
-				"abbreviation": "", "variable": "attr_skillshoot", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillshoot{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Skirmish": {
 				"name": "Skill_Skirmish", "fieldName": "skirmish", "title": "Skirmish", "group": "Skill", "descriptions": ["This skill governs most balanced, close range fighting styles such as with longswords, clubs, and polearms. Weapons in this category offer the most variety of technique options to manipulate the battlefield to their favor. Unique to this group are weapons that can exploit both reflex and brace vulnerabilities."],
-				"abbreviation": "", "variable": "attr_skillskirmish", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillskirmish{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Sneak": {
 				"name": "Skill_Sneak", "fieldName": "sneak", "title": "Sneak", "group": "Skill", "descriptions": ["Make a Sneak check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. "],
-				"abbreviation": "", "variable": "attr_skillsneak", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillsneak{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Survival": {
 				"name": "Skill_Survival", "fieldName": "survival", "title": "Survival", "group": "Skill", "descriptions": ["Survival is the ability to stay alive in ex- treme environmental conditions for extended periods of time. The skill governs a character’s ability to per- form vital outdoor tasks such as start a fire, build a shel- ter, scrounge for food, etc."],
-				"abbreviation": "", "variable": "attr_skillsurvival", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillsurvival{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Throw": {
 				"name": "Skill_Throw", "fieldName": "throw", "title": "Throw", "group": "Skill", "descriptions": ["When one strikes at a foe or aims for a location by throwing an object, it is typical to use the throw skill. Many melee weapons will have a range increment. In order to use this range the user will instead use the Throw skill to determine accuracy."],
-				"abbreviation": "", "variable": "attr_skillthrow", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skillthrow{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Tinker": {
 				"name": "Skill_Tinker", "fieldName": "tinker", "title": "Tinker", "group": "Skill", "descriptions": ["This skill covers building, repairing, and disabling mechanical devices such as locks, tools, and machinery."],
-				"abbreviation": "", "variable": "attr_skilltinker", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skilltinker{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Skill_Traversal": {
 				"name": "Skill_Traversal", "fieldName": "traversal", "title": "Traversal", "group": "Skill", "descriptions": ["Your traversal check covers movement through an environment such as when climbing, jumping, or swimming."],
-				"abbreviation": "", "variable": "attr_skilltraversal", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "skilltraversal{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Minere": {
 				"name": "Language_Minere", "fieldName": "minere", "title": "Minere", "group": "Language", "descriptions": ["The common language used in Minerva and the lands surrounding it. Minere is made up of three root languages that were once spoken commonly amongst the coastal civilizations of the area."],
-				"abbreviation": "", "variable": "attr_languageminere", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languageminere{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Junal": {
 				"name": "Language_Junal", "fieldName": "junal", "title": "Junal", "group": "Language", "descriptions": ["Juno's major language and the official language of the Guidance. Those who live within or below the city of Juno are expected to learn and speak this language to fully integrate into society."],
-				"abbreviation": "", "variable": "attr_languagejunal", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagejunal{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Apollen": {
 				"name": "Language_Apollen", "fieldName": "apollen", "title": "Apollen", "group": "Language", "descriptions": ["The common tongue of Apollo, this language uses a variety of symbols in written works. It is one of the oldest languages still in use in modern times. In the Blessed lands it is known as Mons, the language of the mountainous people, the Monsen."],
-				"abbreviation": "", "variable": "attr_languageapollen", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languageapollen{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Lib": {
 				"name": "Language_Lib", "fieldName": "lib", "title": "Lib", "group": "Language", "descriptions": ["This language is commonly used in Liber. Its roots seem entirely locked to the region, however the age of the language itself are unclear due to it not being used in written form until much later than its equivalents."],
-				"abbreviation": "", "variable": "attr_languagelib", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagelib{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Cert": {
 				"name": "Language_Cert", "fieldName": "cert", "title": "Cert", "group": "Language", "descriptions": ["The most commonly spoken language in all of Ceres, this language is the original tongue used by the Choi clan. To most in modern times, this connection to the Choi clan is lost but it can often be made clear in the company of those of the clan."],
-				"abbreviation": "", "variable": "attr_languagecert", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagecert{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Byric": {
 				"name": "Language_Byric", "fieldName": "byric", "title": "Byric", "group": "Language", "descriptions": ["The dialect of the tribes of people that live in the Baryan Ascent, north of the Aridsha Desert. It has many common traits with the neighboring dialect of Dustell."],
-				"abbreviation": "", "variable": "attr_languagebyric", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagebyric{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Dustell": {
 				"name": "Language_Dustell", "fieldName": "dustell", "title": "Dustell", "group": "Language", "descriptions": ["This language has many derrivatives across the tribes of the desert. However each version, while distinct in its pronunciations, share a common written form derrived from the Shira language. Due to its use throughout the desert, it is Juno's second most common language."],
-				"abbreviation": "", "variable": "attr_languagedustell", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagedustell{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Muralic": {
 				"name": "Language_Muralic", "fieldName": "muralic", "title": "Muralic", "group": "Language", "descriptions": ["The language of the Murali people in the deserts of Aridsha. Its roots in Shira are clear and may be even closer to the ancient language than Junal."],
-				"abbreviation": "", "variable": "attr_languagemuralic", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagemuralic{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Shira": {
 				"name": "Language_Shira", "fieldName": "shira", "title": "Shira", "group": "Language", "descriptions": ["An old language that evolved into both the Junal and Muralic languages. Usage can still be found in ancient Guidance relics."],
-				"abbreviation": "", "variable": "attr_languageshira", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languageshira{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Ciel": {
 				"name": "Language_Ciel", "fieldName": "ciel", "title": "Ciel", "group": "Language", "descriptions": ["This language is used almost exclusively by Clan Par, the historians of Ceres. Those who learn the language often do so to share in the clan's protection and love of the stories and values of Ceres."],
-				"abbreviation": "", "variable": "attr_languageciel", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languageciel{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Citeq": {
 				"name": "Language_Citeq", "fieldName": "citeq", "title": "Citeq", "group": "Language", "descriptions": ["A spoken language used mostly by the Ceresian tribes that roam the south western plains of Ceres. "],
-				"abbreviation": "", "variable": "attr_languageciteq", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languageciteq{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Manstan": {
 				"name": "Language_Manstan", "fieldName": "manstan", "title": "Manstan", "group": "Language", "descriptions": ["The spoken language used in Southern Ceresian tribes. It has mostly fallen out of favor due to many of the tribes in this location having settled into Sanctum life, however many who wish to remember older times still speak this language."],
-				"abbreviation": "", "variable": "attr_languagemanstan", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagemanstan{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Salkan": {
 				"name": "Language_Salkan", "fieldName": "salkan", "title": "Salkan", "group": "Language", "descriptions": ["An entirely spoken language used by the Ceresian tribes located in the North west Salkandu region. It is most commonly known as the language of Clan Han."],
-				"abbreviation": "", "variable": "attr_languagesalkan", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagesalkan{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Sansic": {
 				"name": "Language_Sansic", "fieldName": "sansic", "title": "Sansic", "group": "Language", "descriptions": ["The spoken language used in Eastern Ceresian tribes. It has mostly fallen out of favor due to many of the tribes in this location having settled into Sanctum life, however many who wish to remember older times still speak this language."],
-				"abbreviation": "", "variable": "attr_languagesansic", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagesansic{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Silq": {
 				"name": "Language_Silq", "fieldName": "silq", "title": "Silq", "group": "Language", "descriptions": ["The spoken language used in Western Ceresian forest tribes. This language is not often heard due to the forest peoples' exclusion from most of Ceres society in modern times."],
-				"abbreviation": "", "variable": "attr_languagesilq", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagesilq{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Kleikan": {
 				"name": "Language_Kleikan", "fieldName": "kleikan", "title": "Kleikan", "group": "Language", "descriptions": ["This spoken language was once the language of the Suntouched people that lived west of the Khembalung Mountain range. It's largely fallen out of favor but pockets of people still try to keep the language alive."],
-				"abbreviation": "", "variable": "attr_languagekleikan", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagekleikan{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Crinere": {
 				"name": "Language_Crinere", "fieldName": "crinere", "title": "Crinere", "group": "Language", "descriptions": ["The ancient language of the civilization of Metis. It has fallen out of favor for the modern Minere and is the basis for said language. Due to how similar the two languages are, many who speak Minere find themselves able to understand the scriptures of Crinere."],
-				"abbreviation": "", "variable": "attr_languagecrinere", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagecrinere{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Palmic": {
 				"name": "Language_Palmic", "fieldName": "palmic", "title": "Palmic", "group": "Language", "descriptions": ["This spoken language is used exclusively in tropical island nations. In modern times it only sees common use by tribes in the region, however its language is often used in the tourism industry to imbue a sense of exoticism."],
-				"abbreviation": "", "variable": "attr_languagepalmic", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagepalmic{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Shorespeak": {
 				"name": "Language_Shorespeak", "fieldName": "shorespeak", "title": "Shorespeak", "group": "Language", "descriptions": ["A spoken language used by those living along the east coast and in island nations across the sea. While it has no written language, its similarities to both Minere and ancient Vulca make it easy to communicate across cultures regardless."],
-				"abbreviation": "", "variable": "attr_languageshorespeak", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languageshorespeak{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Verdeni": {
 				"name": "Language_Verdeni", "fieldName": "verdeni", "title": "Verdeni", "group": "Language", "descriptions": ["The spoken language of the island of Verdant Key. Its peoples' isolation from most of modern society has kept this language in tact to ancient times."],
-				"abbreviation": "", "variable": "attr_languageverdeni", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languageverdeni{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Vulca": {
 				"name": "Language_Vulca", "fieldName": "vulca", "title": "Vulca", "group": "Language", "descriptions": ["The ancient language of the civilization of Vulcan. It shares a lot of common traits of Shorespeak and may be its root language. The language has fallen out of favor for both Minere and Shorespeak but can still be found on ancient, Ocean Court relics and Vulcan texts."],
-				"abbreviation": "", "variable": "attr_languagevulca", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagevulca{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Emotion": {
 				"name": "Language_Emotion", "fieldName": "emotion", "title": "Emotion", "group": "Language", "descriptions": ["The language of the spirits. This language is incredibly simplistic as it is communicated entirely through emotions."],
-				"abbreviation": "", "variable": "attr_languageemotion", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languageemotion{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Empathy": {
 				"name": "Language_Empathy", "fieldName": "empathy", "title": "Empathy", "group": "Language", "descriptions": ["A language of the spirits. This language is communicated through thought and ether, allowing creatures of any type to understand."],
-				"abbreviation": "", "variable": "attr_languageempathy", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languageempathy{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Wolfwarg": {
 				"name": "Language_Wolfwarg", "fieldName": "wolfwarg", "title": "Wolfwarg", "group": "Language", "descriptions": ["The spoken language of the bestial people, the Cesplangrah. Much of the language is spoken through grunts and growls."],
-				"abbreviation": "", "variable": "attr_languagewolfwarg", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagewolfwarg{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Jovean": {
 				"name": "Language_Jovean", "fieldName": "jovean", "title": "Jovean", "group": "Language", "descriptions": ["The common language of Novus, this language has been used across the blessed lands for as long as its people were aware. In the mainland, it is known as the language of the civilization of Jove and has largely fallen out of use."],
-				"abbreviation": "", "variable": "attr_languagejovean", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagejovean{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Language_Mytikan": {
 				"name": "Language_Mytikan", "fieldName": "mytikan", "title": "Mytikan", "group": "Language", "descriptions": ["The root language of both Novan and Apollen, Mytikan is a language lost to time in the mainland. Ancient relics still use the language in the Blessed Lands and as such isn't surprising to find it still learned by scholars in Novus society."],
-				"abbreviation": "", "variable": "attr_languagemytikan", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "languagemytikan{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Academics": {
 				"name": "Lore_Academics", "fieldName": "academics", "title": "Academics", "group": "Lore", "descriptions": ["This represents general education for academic study for the purposes of functioning in modern society."],
-				"abbreviation": "", "variable": "attr_loreacademics", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreacademics{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Health": {
 				"name": "Lore_Health", "fieldName": "health", "title": "Health", "group": "Lore", "descriptions": ["This covers the study of human physiology and health."],
-				"abbreviation": "", "variable": "attr_lorehealth", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorehealth{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Mana": {
 				"name": "Lore_Mana", "fieldName": "mana", "title": "Mana", "group": "Lore", "descriptions": ["The study of ki, ether, and magic. "],
-				"abbreviation": "", "variable": "attr_loremana", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loremana{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Mathematics": {
 				"name": "Lore_Mathematics", "fieldName": "mathematics", "title": "Mathematics", "group": "Lore", "descriptions": ["Mathematics knowledge represents an understanding of math and calculations."],
-				"abbreviation": "", "variable": "attr_loremathematics", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loremathematics{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Nature": {
 				"name": "Lore_Nature", "fieldName": "nature", "title": "Nature", "group": "Lore", "descriptions": ["Nature knowledge grants an understanding of various types of plant life and their uses."],
-				"abbreviation": "", "variable": "attr_lorenature", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorenature{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_School": {
 				"name": "Lore_School", "fieldName": "school", "title": "School", "group": "Lore", "descriptions": ["This knowledge represents information related to schools, famous educators, and forms of education used in the lands."],
-				"abbreviation": "", "variable": "attr_loreschool", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreschool{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Spirit": {
 				"name": "Lore_Spirit", "fieldName": "spirit", "title": "Spirit", "group": "Lore", "descriptions": ["Spirit knowledge represents an understanding of how spirits behave, their various forms, their interactions with magic and ether, and their abilities to manifest into the material plane."],
-				"abbreviation": "", "variable": "attr_lorespirit", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorespirit{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Warfare": {
 				"name": "Lore_Warfare", "fieldName": "warfare", "title": "Warfare", "group": "Lore", "descriptions": ["Warfare knowledge covers various tactics used in war and the management of an army."],
-				"abbreviation": "", "variable": "attr_lorewarfare", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorewarfare{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Zoology": {
 				"name": "Lore_Zoology", "fieldName": "zoology", "title": "Zoology", "group": "Lore", "descriptions": ["This knowledge represents physiological knowledge of living creatures of the world."],
-				"abbreviation": "", "variable": "attr_lorezoology", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorezoology{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Profession": {
 				"name": "Lore_Profession", "fieldName": "profession", "title": "Profession", "group": "Lore", "descriptions": ["Profession is the general knowledge of any kind of job, what they do, and how it is performed."],
-				"abbreviation": "", "variable": "attr_loreprofession", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreprofession{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Farming": {
 				"name": "Lore_Farming", "fieldName": "farming", "title": "Farming", "group": "Lore", "descriptions": ["Farming knowledge covers all aspects of growing and nurturing plantlife in order to provide food"],
-				"abbreviation": "", "variable": "attr_lorefarming", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorefarming{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Fishing": {
 				"name": "Lore_Fishing", "fieldName": "fishing", "title": "Fishing", "group": "Lore", "descriptions": ["Fishing knowledge covers all aspects of fishing."],
-				"abbreviation": "", "variable": "attr_lorefishing", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorefishing{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Hunting": {
 				"name": "Lore_Hunting", "fieldName": "hunting", "title": "Hunting", "group": "Lore", "descriptions": ["Hunting knowledge imparts wisdom related to tracking, catching, and killing various creatures."],
-				"abbreviation": "", "variable": "attr_lorehunting", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorehunting{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Legal": {
 				"name": "Lore_Legal", "fieldName": "legal", "title": "Legal", "group": "Lore", "descriptions": ["Legal knowledge imparts a knowledge of general laws common amongst civilizations and the penalties that may be gained from disobeying them."],
-				"abbreviation": "", "variable": "attr_lorelegal", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorelegal{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Mercantile": {
 				"name": "Lore_Mercantile", "fieldName": "mercantile", "title": "Mercantile", "group": "Lore", "descriptions": ["Mercantile knowledge grants wisdom related to the buying and selling of goods."],
-				"abbreviation": "", "variable": "attr_loremercantile", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loremercantile{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Mining": {
 				"name": "Lore_Mining", "fieldName": "mining", "title": "Mining", "group": "Lore", "descriptions": ["Mining knowledge represents information related to breaking apart rock for material."],
-				"abbreviation": "", "variable": "attr_loremining", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loremining{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Craftmanship": {
-				"name": "Lore_Craftmanship", "fieldName": "craftmanship", "title": "Craftmanship", "group": "Lore", "descriptions": ["The knowledge of creating items through manipulation of substances and materials. A knowledge check here will help one identify techniques used to create an object but not necessarily how to recreate it."],
-				"abbreviation": "", "variable": "attr_lorecraftmanship", "formula": "", "modifiers": "", "linkedGroups": [],
+				"name": "Lore_Craftmanship", "fieldName": "craftmanship", "title": "Craftmanship", "group": "Lore", "descriptions": ["The knowledge of creating items through manipulation of substances and materials. A knowledge check here will help one identify techniques used to create an object but not necessarily how to recreate it."]
+				,
+				"abbreviation": "", "variable": "lorecraftmanship{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Alchemy": {
 				"name": "Lore_Alchemy", "fieldName": "alchemy", "title": "Alchemy", "group": "Lore", "descriptions": ["Alchemy is the science of substances and how they can change. When working with chemicals and material that on their own should not be consumed, Alchemy will typically apply. Alchemy is typically used in the creation of drugs and substances."],
-				"abbreviation": "", "variable": "attr_lorealchemy", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorealchemy{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Architecture": {
 				"name": "Lore_Architecture", "fieldName": "architecture", "title": "Architecture", "group": "Lore", "descriptions": ["This knowledge represents a general knowledge about building design, general points of entry, and potential weaknesses."],
-				"abbreviation": "", "variable": "attr_lorearchitecture", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorearchitecture{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Brewing": {
 				"name": "Lore_Brewing", "fieldName": "brewing", "title": "Brewing", "group": "Lore", "descriptions": ["Brewing is the skill that governs any kind of skill the requires the mixing of ingredients into a drink or broth."],
-				"abbreviation": "", "variable": "attr_lorebrewing", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorebrewing{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Cooking": {
 				"name": "Lore_Cooking", "fieldName": "cooking", "title": "Cooking", "group": "Lore", "descriptions": ["Food is important for survival, so making it enjoyable is a craft of great appreciation. Cooking knowledge gives you the knowledge of different cooking techniques to create meals."],
-				"abbreviation": "", "variable": "attr_lorecooking", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorecooking{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Engineering": {
 				"name": "Lore_Engineering", "fieldName": "engineering", "title": "Engineering", "group": "Lore", "descriptions": ["Engineering knowledge represents an understanding of mechanisms and systems to build complex structures and items."],
-				"abbreviation": "", "variable": "attr_loreengineering", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreengineering{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Glassblowing": {
 				"name": "Lore_Glassblowing", "fieldName": "glassblowing", "title": "Glassblowing", "group": "Lore", "descriptions": ["When working with and shaping glass, the skill of glassblowing is required."],
-				"abbreviation": "", "variable": "attr_loreglassblowing", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreglassblowing{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Leatherworking": {
 				"name": "Lore_Leatherworking", "fieldName": "leatherworking", "title": "Leatherworking", "group": "Lore", "descriptions": ["Leatherworking entails any skills related to skinning and using animal skins for clothing, and items. "],
-				"abbreviation": "", "variable": "attr_loreleatherworking", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreleatherworking{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Sculpting": {
 				"name": "Lore_Sculpting", "fieldName": "sculpting", "title": "Sculpting", "group": "Lore", "descriptions": ["Sculpting allows one to use soft material like clay and shape it into a desired form."],
-				"abbreviation": "", "variable": "attr_loresculpting", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loresculpting{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Smithing": {
 				"name": "Lore_Smithing", "fieldName": "smithing", "title": "Smithing", "group": "Lore", "descriptions": ["Smithing is the skill that allows you to shape various materials, usually metal, into tools of combat or other larger metalic items. "],
-				"abbreviation": "", "variable": "attr_loresmithing", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loresmithing{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Weaving": {
 				"name": "Lore_Weaving", "fieldName": "weaving", "title": "Weaving", "group": "Lore", "descriptions": ["Weaving is the skill for putting together and shaping fabrics and cloths into useful material and objects."],
-				"abbreviation": "", "variable": "attr_loreweaving", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreweaving{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Geography": {
 				"name": "Lore_Geography", "fieldName": "geography", "title": "Geography", "group": "Lore", "descriptions": ["Geography represents general knowledge of terrains and locations within an area."],
-				"abbreviation": "", "variable": "attr_loregeography", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loregeography{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Aridsha": {
 				"name": "Lore_Aridsha", "fieldName": "aridsha", "title": "Aridsha", "group": "Lore", "descriptions": ["This check represents geographical knowledge of Juno and the Aridsha desert region to the west. "],
-				"abbreviation": "", "variable": "attr_lorearidsha", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorearidsha{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Ceres": {
 				"name": "Lore_Ceres", "fieldName": "ceres", "title": "Ceres", "group": "Lore", "descriptions": ["This check represents geographical knowledge of Capitol City and the Ceres plains to the north."],
-				"abbreviation": "", "variable": "attr_loreceres", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreceres{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Colswei": {
 				"name": "Lore_Colswei", "fieldName": "colswei", "title": "Colswei", "group": "Lore", "descriptions": ["This check represents geographical knowledge of Liber and the frozen lands of the Colswei in the south."],
-				"abbreviation": "", "variable": "attr_lorecolswei", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorecolswei{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Khem": {
 				"name": "Lore_Khem", "fieldName": "khem", "title": "Khem", "group": "Lore", "descriptions": ["This check represents geographical knowledge of the Kingdom of Apollo and its mountainous region of Khem to the north east."],
-				"abbreviation": "", "variable": "attr_lorekhem", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorekhem{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Novus": {
 				"name": "Lore_Novus", "fieldName": "novus", "title": "Novus", "group": "Lore", "descriptions": ["This check represents geographical knowledge of Novus and the Blessed Lands beyond the ocean."],
-				"abbreviation": "", "variable": "attr_lorenovus", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorenovus{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Walthair": {
 				"name": "Lore_Walthair", "fieldName": "walthair", "title": "Walthair", "group": "Lore", "descriptions": ["This check represents geographical knowledge of Minerva and the grasslands and eastern sea islands of Walthair to the east."],
-				"abbreviation": "", "variable": "attr_lorewalthair", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorewalthair{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Wayling": {
 				"name": "Lore_Wayling", "fieldName": "wayling", "title": "Wayling", "group": "Lore", "descriptions": ["This check represents geographical knowledge of the central grasslands and marsh of Wayling."],
-				"abbreviation": "", "variable": "attr_lorewayling", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorewayling{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Ethereal Plane": {
 				"name": "Lore_Ethereal Plane", "fieldName": "etherealPlane", "title": "Ethereal Plane", "group": "Lore", "descriptions": ["Ethereal Plane knowledge represents known methods of entering the plane, its dangers, qualities, and points of interest within the plane."],
-				"abbreviation": "", "variable": "attr_loreetherealPlane", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreetherealPlane{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_History": {
 				"name": "Lore_History", "fieldName": "history", "title": "History", "group": "Lore", "descriptions": ["History knowledges represent known history of civilizations and any legends that may exist."],
-				"abbreviation": "", "variable": "attr_lorehistory", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorehistory{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Aridsha History": {
 				"name": "Lore_Aridsha History", "fieldName": "aridshaHistory", "title": "Aridsha History", "group": "Lore", "descriptions": ["This check represents history of Juno and the Aridsha desert region to the west. "],
-				"abbreviation": "", "variable": "attr_lorearidshaHistory", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorearidshaHistory{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Ceres History": {
 				"name": "Lore_Ceres History", "fieldName": "ceresHistory", "title": "Ceres History", "group": "Lore", "descriptions": ["This check represents history of Capitol City and the Ceres plains to the north."],
-				"abbreviation": "", "variable": "attr_loreceresHistory", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreceresHistory{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Colswei History": {
 				"name": "Lore_Colswei History", "fieldName": "colsweiHistory", "title": "Colswei History", "group": "Lore", "descriptions": ["This check represents history of Liber and the frozen lands of the Colswei in the south."],
-				"abbreviation": "", "variable": "attr_lorecolsweiHistory", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorecolsweiHistory{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Khem History": {
 				"name": "Lore_Khem History", "fieldName": "khemHistory", "title": "Khem History", "group": "Lore", "descriptions": ["This check represents history of the Kingdom of Apollo and its mountainous region of Khem to the north east."],
-				"abbreviation": "", "variable": "attr_lorekhemHistory", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorekhemHistory{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Novus History": {
 				"name": "Lore_Novus History", "fieldName": "novusHistory", "title": "Novus History", "group": "Lore", "descriptions": ["This check represents history of Novus and the Blessed Lands beyond the ocean."],
-				"abbreviation": "", "variable": "attr_lorenovusHistory", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorenovusHistory{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Walthair History": {
 				"name": "Lore_Walthair History", "fieldName": "walthairHistory", "title": "Walthair History", "group": "Lore", "descriptions": ["This check represents history of Minerva and the grasslands and eastern sea islands of Walthair to the east."],
-				"abbreviation": "", "variable": "attr_lorewalthairHistory", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorewalthairHistory{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Wayling History": {
 				"name": "Lore_Wayling History", "fieldName": "waylingHistory", "title": "Wayling History", "group": "Lore", "descriptions": ["This check represents history of the central grasslands and marsh of Wayling."],
-				"abbreviation": "", "variable": "attr_lorewaylingHistory", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorewaylingHistory{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Culture": {
 				"name": "Lore_Culture", "fieldName": "culture", "title": "Culture", "group": "Lore", "descriptions": ["Culture knowledge represents information on societal customs, art, and entertainment options."],
-				"abbreviation": "", "variable": "attr_loreculture", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreculture{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Art": {
 				"name": "Lore_Art", "fieldName": "art", "title": "Art", "group": "Lore", "descriptions": ["Art knowledge details information on the world of art and the artists behind famous works of art."],
-				"abbreviation": "", "variable": "attr_loreart", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreart{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Etiquette": {
 				"name": "Lore_Etiquette", "fieldName": "etiquette", "title": "Etiquette", "group": "Lore", "descriptions": ["Etiquette knowledge represents your study of social customs within specific cultures and societies and will help you avoid embarrassing yourself or causing insult."],
-				"abbreviation": "", "variable": "attr_loreetiquette", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreetiquette{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Fashion": {
 				"name": "Lore_Fashion", "fieldName": "fashion", "title": "Fashion", "group": "Lore", "descriptions": ["Fashion knowledge focuses on keeping up with clothing and physical beatuy products."],
-				"abbreviation": "", "variable": "attr_lorefashion", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorefashion{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Games": {
 				"name": "Lore_Games", "fieldName": "games", "title": "Games", "group": "Lore", "descriptions": ["Games knowledge covers general understanding of how many games are played whether they are reliant on cards, dice, or other kinds of chance."],
-				"abbreviation": "", "variable": "attr_loregames", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loregames{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Music": {
 				"name": "Lore_Music", "fieldName": "music", "title": "Music", "group": "Lore", "descriptions": ["Music knowledge represents general understanding of sheet music, famous songs and the artists behind them, and an understanding of the industry."],
-				"abbreviation": "", "variable": "attr_loremusic", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loremusic{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Scribing": {
 				"name": "Lore_Scribing", "fieldName": "scribing", "title": "Scribing", "group": "Lore", "descriptions": ["Scribing knowledge represents an understanding of how to communicate with the written word and techniques used to write."],
-				"abbreviation": "", "variable": "attr_lorescribing", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorescribing{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Theater": {
 				"name": "Lore_Theater", "fieldName": "theater", "title": "Theater", "group": "Lore", "descriptions": ["Theater knowledge is the knowledge of the stage, techniques to tell a story, and famous plays."],
-				"abbreviation": "", "variable": "attr_loretheater", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loretheater{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Religion": {
 				"name": "Lore_Religion", "fieldName": "religion", "title": "Religion", "group": "Lore", "descriptions": ["Religion knowledge represent known tenets, famous people and creatures of the religion, and information about legends, beliefs, and organizations."],
-				"abbreviation": "", "variable": "attr_lorereligion", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorereligion{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Church of Kongkwei": {
 				"name": "Lore_Church of Kongkwei", "fieldName": "churchOfKongkwei", "title": "Church of Kongkwei", "group": "Lore", "descriptions": ["The Church of Kongkwei is tied to the creation of the Kingdom of Apollo. It follows the fire god Guong Kongkwei and attempts to follow their goals of expansion and control."],
-				"abbreviation": "", "variable": "attr_lorechurchOfKongkwei", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorechurchOfKongkwei{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Guidance": {
 				"name": "Lore_Guidance", "fieldName": "guidance", "title": "Guidance", "group": "Lore", "descriptions": ["The Guidance is one of the oldest religions in the world of Wuxing. They seek to give its people advice in times of hardship through the divinations of spirits."],
-				"abbreviation": "", "variable": "attr_loreguidance", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreguidance{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Life's Circle": {
 				"name": "Lore_Life's Circle", "fieldName": "life'sCircle", "title": "Life's Circle", "group": "Lore", "descriptions": ["The Life's Circle is the religion of the Novae. It follows the cycle of life and helps determine a person's role in society through reincarnation and destiny."],
-				"abbreviation": "", "variable": "attr_lorelife'sCircle", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorelife'sCircle{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Ocean Court": {
 				"name": "Lore_Ocean Court", "fieldName": "oceanCourt", "title": "Ocean Court", "group": "Lore", "descriptions": ["The Ocean Court follows the Ocean Queen, Minerra, and her court of gods that ensure her commandments are followed. Those that revere her and her court do so for her protection and luck whether its in her domain at sea or deep in the lands."],
-				"abbreviation": "", "variable": "attr_loreoceanCourt", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loreoceanCourt{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Sylvan": {
 				"name": "Lore_Sylvan", "fieldName": "sylvan", "title": "Sylvan", "group": "Lore", "descriptions": ["The Sylvans are a group of powerful spirits that hold dominion over territories across the world. They are creatures of whimsy and chaos, the cause of weather patterns and together, the changing of the seasons."],
-				"abbreviation": "", "variable": "attr_loresylvan", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "loresylvan{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Lore_Zushaon": {
 				"name": "Lore_Zushaon", "fieldName": "zushaon", "title": "Zushaon", "group": "Lore", "descriptions": ["Many Ceresians follow Zushaon, a tradition of ancestor worship. The religion seeks to offer reverence for those that came before and a desire to find ones own place in the world."],
-				"abbreviation": "", "variable": "attr_lorezushaon", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "lorezushaon{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Job_Trainee": {
 				"name": "Job_Trainee", "fieldName": "trainee", "title": "Trainee", "group": "Job", "descriptions": ["The trainee is representative of your character learning a skill. It delivers fewer growths at level up and no job techniques. Instead, every level grants points to spend on skills."],
-				"abbreviation": "", "variable": "attr_jobtrainee", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "jobtrainee{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Job_Interceptor": {
 				"name": "Job_Interceptor", "fieldName": "interceptor", "title": "Interceptor", "group": "Job", "descriptions": ["The interceptor is an expert in disrupting others. Prefering weapons with increased threat, interceptors protect their allies by stopping the movement of advancing enemies."],
-				"abbreviation": "", "variable": "attr_jobinterceptor", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "jobinterceptor{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Job_Guardian": {
 				"name": "Job_Guardian", "fieldName": "guardian", "title": "Guardian", "group": "Job", "descriptions": ["The guardian is always on the lookout for their allies. When danger approaches, guardians specialize at getting their allies out of the line of fire. "],
-				"abbreviation": "", "variable": "attr_jobguardian", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "jobguardian{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Job_Spellslinger": {
 				"name": "Job_Spellslinger", "fieldName": "spellslinger", "title": "Spellslinger", "group": "Job", "descriptions": ["The spellslinger is an expert longshot in both ranged weapons and spells. With their Spellshot technique, they use their ranged weapons to launch explosive spells from safety."],
-				"abbreviation": "", "variable": "attr_jobspellslinger", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "jobspellslinger{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Job_Warrior": {
 				"name": "Job_Warrior", "fieldName": "warrior", "title": "Warrior", "group": "Job", "descriptions": ["The fighter is about survival. This battle hardened warrior will keep himself from falling through many means to self-heal, aid, and even shrug off wounds. "],
-				"abbreviation": "", "variable": "attr_jobwarrior", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "jobwarrior{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Job_Rogue": {
 				"name": "Job_Rogue", "fieldName": "rogue", "title": "Rogue", "group": "Job", "descriptions": ["The rogue is an expert at exploiting distractions. They can exploit enemy weaknesses with their sneak attack, both on their turn and during follow-up attacks. "],
-				"abbreviation": "", "variable": "attr_jobrogue", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "jobrogue{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Job_Scholar": {
 				"name": "Job_Scholar", "fieldName": "scholar", "title": "Scholar", "group": "Job", "descriptions": ["The scholar is an expert in history and uses it to always be prepared. In addition to history, scholars are typically knowledgable in a broad array of subjects and will sometimes use it to educate others. In combat, a scholar will use their preparedness to avoid bad situations and help their allies avoid them too."],
-				"abbreviation": "", "variable": "attr_jobscholar", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "jobscholar{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Job_Physician": {
 				"name": "Job_Physician", "fieldName": "physician", "title": "Physician", "group": "Job", "descriptions": ["The physician is a medical practitioner and expert healer. Their Emergency Care allows them to heal allies and provide them with barrier, eventually allowing them to heal wounds. And if faster healing is necessary, their First aid allows them to perform healing as a Quick action."],
-				"abbreviation": "", "variable": "attr_jobphysician", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "jobphysician{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Role_Generalist": {
 				"name": "Role_Generalist", "fieldName": "generalist", "title": "Generalist", "group": "Role", "descriptions": ["Very general"],
-				"abbreviation": "", "variable": "attr_rolegeneralist", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "rolegeneralist{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Role_Defender": {
 				"name": "Role_Defender", "fieldName": "defender", "title": "Defender", "group": "Role", "descriptions": [""],
-				"abbreviation": "", "variable": "attr_roledefender", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "roledefender{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Role_Athlete": {
 				"name": "Role_Athlete", "fieldName": "athlete", "title": "Athlete", "group": "Role", "descriptions": [""],
-				"abbreviation": "", "variable": "attr_roleathlete", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "roleathlete{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Role_Skirmisher": {
 				"name": "Role_Skirmisher", "fieldName": "skirmisher", "title": "Skirmisher", "group": "Role", "descriptions": [""],
-				"abbreviation": "", "variable": "attr_roleskirmisher", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "roleskirmisher{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Role_Marksman": {
 				"name": "Role_Marksman", "fieldName": "marksman", "title": "Marksman", "group": "Role", "descriptions": [""],
-				"abbreviation": "", "variable": "attr_rolemarksman", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "rolemarksman{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Break Free": {
 				"name": "Technique_Break Free", "fieldName": "breakFree", "title": "Break Free", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquebreakFree", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquebreakFree{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Dash": {
 				"name": "Technique_Dash", "fieldName": "dash", "title": "Dash", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedash", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedash{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Escape": {
 				"name": "Technique_Escape", "fieldName": "escape", "title": "Escape", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueescape", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueescape{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Grapple": {
 				"name": "Technique_Grapple", "fieldName": "grapple", "title": "Grapple", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegrapple", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegrapple{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Hide": {
 				"name": "Technique_Hide", "fieldName": "hide", "title": "Hide", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquehide", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquehide{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Mount": {
 				"name": "Technique_Mount", "fieldName": "mount", "title": "Mount", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemount", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemount{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Prepare": {
 				"name": "Technique_Prepare", "fieldName": "prepare", "title": "Prepare", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueprepare", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueprepare{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Reposition": {
 				"name": "Technique_Reposition", "fieldName": "reposition", "title": "Reposition", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquereposition", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquereposition{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Seach": {
 				"name": "Technique_Seach", "fieldName": "seach", "title": "Seach", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueseach", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueseach{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Aid": {
 				"name": "Technique_Aid", "fieldName": "aid", "title": "Aid", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueaid", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueaid{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Encourage": {
 				"name": "Technique_Encourage", "fieldName": "encourage", "title": "Encourage", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueencourage", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueencourage{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Stabilize": {
 				"name": "Technique_Stabilize", "fieldName": "stabilize", "title": "Stabilize", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquestabilize", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquestabilize{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Skill Check": {
 				"name": "Technique_Skill Check", "fieldName": "skillCheck", "title": "Skill Check", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueskillCheck", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueskillCheck{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Build Rapport": {
 				"name": "Technique_Build Rapport", "fieldName": "buildRapport", "title": "Build Rapport", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquebuildRapport", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquebuildRapport{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Build Pressure": {
 				"name": "Technique_Build Pressure", "fieldName": "buildPressure", "title": "Build Pressure", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquebuildPressure", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquebuildPressure{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Captivate": {
 				"name": "Technique_Captivate", "fieldName": "captivate", "title": "Captivate", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecaptivate", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecaptivate{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Demand": {
 				"name": "Technique_Demand", "fieldName": "demand", "title": "Demand", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedemand", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedemand{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Grab an Edge": {
 				"name": "Technique_Grab an Edge", "fieldName": "grabAnEdge", "title": "Grab an Edge", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegrabAnEdge", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegrabAnEdge{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Interact": {
 				"name": "Technique_Interact", "fieldName": "interact", "title": "Interact", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueinteract", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueinteract{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Second Wind": {
 				"name": "Technique_Second Wind", "fieldName": "secondWind", "title": "Second Wind", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesecondWind", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesecondWind{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Second Breath": {
 				"name": "Technique_Second Breath", "fieldName": "secondBreath", "title": "Second Breath", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesecondBreath", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesecondBreath{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Undaunted": {
 				"name": "Technique_Undaunted", "fieldName": "undaunted", "title": "Undaunted", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueundaunted", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueundaunted{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Preemptive Strike": {
 				"name": "Technique_Preemptive Strike", "fieldName": "preemptiveStrike", "title": "Preemptive Strike", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquepreemptiveStrike", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquepreemptiveStrike{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Preemptive Stagger": {
 				"name": "Technique_Preemptive Stagger", "fieldName": "preemptiveStagger", "title": "Preemptive Stagger", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquepreemptiveStagger", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquepreemptiveStagger{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Critical Maim": {
 				"name": "Technique_Critical Maim", "fieldName": "criticalMaim", "title": "Critical Maim", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecriticalMaim", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecriticalMaim{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Spellshot": {
 				"name": "Technique_Spellshot", "fieldName": "spellshot", "title": "Spellshot", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquespellshot", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquespellshot{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Follow-Up Spellshot": {
 				"name": "Technique_Follow-Up Spellshot", "fieldName": "follow-UpSpellshot", "title": "Follow-Up Spellshot", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefollow-UpSpellshot", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefollow-UpSpellshot{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Bursting Spellshot": {
 				"name": "Technique_Bursting Spellshot", "fieldName": "burstingSpellshot", "title": "Bursting Spellshot", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueburstingSpellshot", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueburstingSpellshot{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Savior": {
 				"name": "Technique_Savior", "fieldName": "savior", "title": "Savior", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesavior", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesavior{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Knock Away Savior": {
 				"name": "Technique_Knock Away Savior", "fieldName": "knockAwaySavior", "title": "Knock Away Savior", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueknockAwaySavior", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueknockAwaySavior{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Savior's Retaliation": {
 				"name": "Technique_Savior's Retaliation", "fieldName": "savior'sRetaliation", "title": "Savior's Retaliation", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesavior'sRetaliation", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesavior'sRetaliation{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Spellstrike": {
 				"name": "Technique_Spellstrike", "fieldName": "spellstrike", "title": "Spellstrike", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquespellstrike", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquespellstrike{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Power Skirmish": {
 				"name": "Technique_Power Skirmish", "fieldName": "powerSkirmish", "title": "Power Skirmish", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquepowerSkirmish", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquepowerSkirmish{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sneak Attack": {
 				"name": "Technique_Sneak Attack", "fieldName": "sneakAttack", "title": "Sneak Attack", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesneakAttack", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesneakAttack{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sneaky Follow-Up": {
 				"name": "Technique_Sneaky Follow-Up", "fieldName": "sneakyFollow-Up", "title": "Sneaky Follow-Up", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesneakyFollow-Up", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesneakyFollow-Up{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Assassinate": {
 				"name": "Technique_Assassinate", "fieldName": "assassinate", "title": "Assassinate", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueassassinate", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueassassinate{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Emergency Care": {
 				"name": "Technique_Emergency Care", "fieldName": "emergencyCare", "title": "Emergency Care", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueemergencyCare", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueemergencyCare{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Nightingale": {
 				"name": "Technique_Nightingale", "fieldName": "nightingale", "title": "Nightingale", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquenightingale", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquenightingale{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Rhapsody": {
 				"name": "Technique_Rhapsody", "fieldName": "rhapsody", "title": "Rhapsody", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquerhapsody", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquerhapsody{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Metamagic": {
 				"name": "Technique_Metamagic", "fieldName": "metamagic", "title": "Metamagic", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemetamagic", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemetamagic{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Strategize": {
 				"name": "Technique_Strategize", "fieldName": "strategize", "title": "Strategize", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquestrategize", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquestrategize{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Foresight": {
 				"name": "Technique_Foresight", "fieldName": "foresight", "title": "Foresight", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueforesight", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueforesight{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Saw That Coming": {
 				"name": "Technique_Saw That Coming", "fieldName": "sawThatComing", "title": "Saw That Coming", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesawThatComing", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesawThatComing{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_As You May Recall": {
 				"name": "Technique_As You May Recall", "fieldName": "asYouMayRecall", "title": "As You May Recall", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueasYouMayRecall", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueasYouMayRecall{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Generalist": {
 				"name": "Technique_Generalist", "fieldName": "generalist", "title": "Generalist", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegeneralist", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegeneralist{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Defender": {
 				"name": "Technique_Defender", "fieldName": "defender", "title": "Defender", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedefender", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedefender{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Defender II": {
 				"name": "Technique_Defender II", "fieldName": "defenderII", "title": "Defender II", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedefenderII", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedefenderII{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Defender's Will": {
 				"name": "Technique_Defender's Will", "fieldName": "defender'sWill", "title": "Defender's Will", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedefender'sWill", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedefender'sWill{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Defender's Taunt": {
 				"name": "Technique_Defender's Taunt", "fieldName": "defender'sTaunt", "title": "Defender's Taunt", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedefender'sTaunt", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedefender'sTaunt{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Defender's Recovery": {
 				"name": "Technique_Defender's Recovery", "fieldName": "defender'sRecovery", "title": "Defender's Recovery", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedefender'sRecovery", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedefender'sRecovery{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Skirmisher": {
 				"name": "Technique_Skirmisher", "fieldName": "skirmisher", "title": "Skirmisher", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueskirmisher", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueskirmisher{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Skirmisher II": {
 				"name": "Technique_Skirmisher II", "fieldName": "skirmisherII", "title": "Skirmisher II", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueskirmisherII", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueskirmisherII{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Skirmisher's Step": {
 				"name": "Technique_Skirmisher's Step", "fieldName": "skirmisher'sStep", "title": "Skirmisher's Step", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueskirmisher'sStep", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueskirmisher'sStep{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Skirmisher's Strike": {
 				"name": "Technique_Skirmisher's Strike", "fieldName": "skirmisher'sStrike", "title": "Skirmisher's Strike", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueskirmisher'sStrike", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueskirmisher'sStrike{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Marksman": {
 				"name": "Technique_Marksman", "fieldName": "marksman", "title": "Marksman", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemarksman", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemarksman{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Marksman II": {
 				"name": "Technique_Marksman II", "fieldName": "marksmanII", "title": "Marksman II", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemarksmanII", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemarksmanII{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Marksman's Longshot": {
 				"name": "Technique_Marksman's Longshot", "fieldName": "marksman'sLongshot", "title": "Marksman's Longshot", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemarksman'sLongshot", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemarksman'sLongshot{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Marksman's Sight": {
 				"name": "Technique_Marksman's Sight", "fieldName": "marksman'sSight", "title": "Marksman's Sight", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemarksman'sSight", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemarksman'sSight{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Marksman's Strike": {
 				"name": "Technique_Marksman's Strike", "fieldName": "marksman'sStrike", "title": "Marksman's Strike", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemarksman'sStrike", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemarksman'sStrike{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Athlete": {
 				"name": "Technique_Athlete", "fieldName": "athlete", "title": "Athlete", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueathlete", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueathlete{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Athlete II": {
 				"name": "Technique_Athlete II", "fieldName": "athleteII", "title": "Athlete II", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueathleteII", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueathleteII{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Athlete's Sprint": {
 				"name": "Technique_Athlete's Sprint", "fieldName": "athlete'sSprint", "title": "Athlete's Sprint", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueathlete'sSprint", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueathlete'sSprint{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Athlete's Reach": {
 				"name": "Technique_Athlete's Reach", "fieldName": "athlete'sReach", "title": "Athlete's Reach", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueathlete'sReach", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueathlete'sReach{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Bounding Sprint": {
 				"name": "Technique_Bounding Sprint", "fieldName": "boundingSprint", "title": "Bounding Sprint", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueboundingSprint", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueboundingSprint{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Skulk Away": {
 				"name": "Technique_Skulk Away", "fieldName": "skulkAway", "title": "Skulk Away", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueskulkAway", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueskulkAway{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Skulk Then Hide": {
 				"name": "Technique_Skulk Then Hide", "fieldName": "skulkThenHide", "title": "Skulk Then Hide", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueskulkThenHide", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueskulkThenHide{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_First Aid": {
 				"name": "Technique_First Aid", "fieldName": "firstAid", "title": "First Aid", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefirstAid", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefirstAid{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Cleansing Aid": {
 				"name": "Technique_Cleansing Aid", "fieldName": "cleansingAid", "title": "Cleansing Aid", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecleansingAid", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecleansingAid{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Environmental Awareness": {
 				"name": "Technique_Environmental Awareness", "fieldName": "environmentalAwareness", "title": "Environmental Awareness", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueenvironmentalAwareness", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueenvironmentalAwareness{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Eclectic Knowledge": {
 				"name": "Technique_Eclectic Knowledge", "fieldName": "eclecticKnowledge", "title": "Eclectic Knowledge", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueeclecticKnowledge", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueeclecticKnowledge{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Point of Clarity": {
 				"name": "Technique_Point of Clarity", "fieldName": "pointOfClarity", "title": "Point of Clarity", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquepointOfClarity", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquepointOfClarity{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Pole Vault": {
 				"name": "Technique_Pole Vault", "fieldName": "poleVault", "title": "Pole Vault", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquepoleVault", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquepoleVault{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Quick Draw": {
 				"name": "Technique_Quick Draw", "fieldName": "quickDraw", "title": "Quick Draw", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquequickDraw", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquequickDraw{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Extension Strike": {
 				"name": "Technique_Extension Strike", "fieldName": "extensionStrike", "title": "Extension Strike", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueextensionStrike", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueextensionStrike{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Step Extension": {
 				"name": "Technique_Step Extension", "fieldName": "stepExtension", "title": "Step Extension", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquestepExtension", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquestepExtension{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Lasting Extension": {
 				"name": "Technique_Lasting Extension", "fieldName": "lastingExtension", "title": "Lasting Extension", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquelastingExtension", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquelastingExtension{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Far Strike": {
 				"name": "Technique_Far Strike", "fieldName": "farStrike", "title": "Far Strike", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefarStrike", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefarStrike{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Extension Strike +": {
 				"name": "Technique_Extension Strike +", "fieldName": "extensionStrike+", "title": "Extension Strike +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueextensionStrike+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueextensionStrike+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Defense Piercer ": {
 				"name": "Technique_Defense Piercer ", "fieldName": "defensePiercer", "title": "Defense Piercer ", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedefensePiercer", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedefensePiercer{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Quick Slash": {
 				"name": "Technique_Quick Slash", "fieldName": "quickSlash", "title": "Quick Slash", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquequickSlash", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquequickSlash{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Precision Blade": {
 				"name": "Technique_Precision Blade", "fieldName": "precisionBlade", "title": "Precision Blade", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueprecisionBlade", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueprecisionBlade{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Armor Piercer": {
 				"name": "Technique_Armor Piercer", "fieldName": "armorPiercer", "title": "Armor Piercer", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquearmorPiercer", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquearmorPiercer{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Quick Slash II": {
 				"name": "Technique_Quick Slash II", "fieldName": "quickSlashII", "title": "Quick Slash II", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquequickSlashII", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquequickSlashII{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Cleave": {
 				"name": "Technique_Cleave", "fieldName": "cleave", "title": "Cleave", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecleave", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecleave{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Crushing Blade": {
 				"name": "Technique_Crushing Blade", "fieldName": "crushingBlade", "title": "Crushing Blade", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecrushingBlade", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecrushingBlade{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Great Cleave": {
 				"name": "Technique_Great Cleave", "fieldName": "greatCleave", "title": "Great Cleave", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegreatCleave", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegreatCleave{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Cleave +": {
 				"name": "Technique_Cleave +", "fieldName": "cleave+", "title": "Cleave +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecleave+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecleave+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sudden Cleave": {
 				"name": "Technique_Sudden Cleave", "fieldName": "suddenCleave", "title": "Sudden Cleave", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesuddenCleave", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesuddenCleave{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Great Cleave II": {
 				"name": "Technique_Great Cleave II", "fieldName": "greatCleaveII", "title": "Great Cleave II", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegreatCleaveII", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegreatCleaveII{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Power Flex": {
 				"name": "Technique_Power Flex", "fieldName": "powerFlex", "title": "Power Flex", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquepowerFlex", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquepowerFlex{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Crush Knuckle": {
 				"name": "Technique_Crush Knuckle", "fieldName": "crushKnuckle", "title": "Crush Knuckle", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecrushKnuckle", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecrushKnuckle{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Impact Knuckle": {
 				"name": "Technique_Impact Knuckle", "fieldName": "impactKnuckle", "title": "Impact Knuckle", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueimpactKnuckle", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueimpactKnuckle{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Knuckle Flurry": {
 				"name": "Technique_Knuckle Flurry", "fieldName": "knuckleFlurry", "title": "Knuckle Flurry", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueknuckleFlurry", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueknuckleFlurry{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Water Blast": {
 				"name": "Technique_Water Blast", "fieldName": "waterBlast", "title": "Water Blast", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquewaterBlast", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquewaterBlast{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Geyser": {
 				"name": "Technique_Geyser", "fieldName": "geyser", "title": "Geyser", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegeyser", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegeyser{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Geyser Line": {
 				"name": "Technique_Geyser Line", "fieldName": "geyserLine", "title": "Geyser Line", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegeyserLine", "formula": "", "modifiers": "", "linkedGroups": []
-				,
+				"abbreviation": "", "variable": "techniquegeyserLine{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Surf": {
 				"name": "Technique_Surf", "fieldName": "surf", "title": "Surf", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesurf", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesurf{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Great Geyser Line": {
 				"name": "Technique_Great Geyser Line", "fieldName": "greatGeyserLine", "title": "Great Geyser Line", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegreatGeyserLine", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegreatGeyserLine{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Tidal Wave": {
 				"name": "Technique_Tidal Wave", "fieldName": "tidalWave", "title": "Tidal Wave", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquetidalWave", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquetidalWave{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sand Surge": {
 				"name": "Technique_Sand Surge", "fieldName": "sandSurge", "title": "Sand Surge", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesandSurge", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesandSurge{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sand Spout": {
 				"name": "Technique_Sand Spout", "fieldName": "sandSpout", "title": "Sand Spout", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesandSpout", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesandSpout{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sand Wave": {
 				"name": "Technique_Sand Wave", "fieldName": "sandWave", "title": "Sand Wave", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesandWave", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesandWave{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sand Launcher": {
 				"name": "Technique_Sand Launcher", "fieldName": "sandLauncher", "title": "Sand Launcher", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesandLauncher", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesandLauncher{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sicken": {
 				"name": "Technique_Sicken", "fieldName": "sicken", "title": "Sicken", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesicken", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesicken{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Spores": {
 				"name": "Technique_Spores", "fieldName": "spores", "title": "Spores", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquespores", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquespores{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sickening Cloud": {
 				"name": "Technique_Sickening Cloud", "fieldName": "sickeningCloud", "title": "Sickening Cloud", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesickeningCloud", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesickeningCloud{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Virulent Spores": {
 				"name": "Technique_Virulent Spores", "fieldName": "virulentSpores", "title": "Virulent Spores", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquevirulentSpores", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquevirulentSpores{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Firebolt": {
 				"name": "Technique_Firebolt", "fieldName": "firebolt", "title": "Firebolt", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefirebolt", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefirebolt{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Flame Arrow": {
 				"name": "Technique_Flame Arrow", "fieldName": "flameArrow", "title": "Flame Arrow", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueflameArrow", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueflameArrow{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Fireball": {
 				"name": "Technique_Fireball", "fieldName": "fireball", "title": "Fireball", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefireball", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefireball{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Fireblast": {
 				"name": "Technique_Fireblast", "fieldName": "fireblast", "title": "Fireblast", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefireblast", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefireblast{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Ragnarok": {
 				"name": "Technique_Ragnarok", "fieldName": "ragnarok", "title": "Ragnarok", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueragnarok", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueragnarok{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Bonfire": {
 				"name": "Technique_Bonfire", "fieldName": "bonfire", "title": "Bonfire", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquebonfire", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquebonfire{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Wall of Fire": {
 				"name": "Technique_Wall of Fire", "fieldName": "wallOfFire", "title": "Wall of Fire", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquewallOfFire", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquewallOfFire{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Field of Flame": {
 				"name": "Technique_Field of Flame", "fieldName": "fieldOfFlame", "title": "Field of Flame", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefieldOfFlame", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefieldOfFlame{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Lightning Shaft": {
 				"name": "Technique_Lightning Shaft", "fieldName": "lightningShaft", "title": "Lightning Shaft", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquelightningShaft", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquelightningShaft{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Shock": {
 				"name": "Technique_Shock", "fieldName": "shock", "title": "Shock", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueshock", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueshock{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Lightning Bolt": {
 				"name": "Technique_Lightning Bolt", "fieldName": "lightningBolt", "title": "Lightning Bolt", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquelightningBolt", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquelightningBolt{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Plasma Arc": {
 				"name": "Technique_Plasma Arc", "fieldName": "plasmaArc", "title": "Plasma Arc", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueplasmaArc", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueplasmaArc{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Fulgor": {
 				"name": "Technique_Fulgor", "fieldName": "fulgor", "title": "Fulgor", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefulgor", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefulgor{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Cold Snap": {
 				"name": "Technique_Cold Snap", "fieldName": "coldSnap", "title": "Cold Snap", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecoldSnap", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecoldSnap{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Frostbite": {
 				"name": "Technique_Frostbite", "fieldName": "frostbite", "title": "Frostbite", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefrostbite", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefrostbite{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Freezebind": {
 				"name": "Technique_Freezebind", "fieldName": "freezebind", "title": "Freezebind", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefreezebind", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefreezebind{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Cold Burst": {
 				"name": "Technique_Cold Burst", "fieldName": "coldBurst", "title": "Cold Burst", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecoldBurst", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecoldBurst{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Cold Front": {
 				"name": "Technique_Cold Front", "fieldName": "coldFront", "title": "Cold Front", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecoldFront", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecoldFront{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Diamond Dust": {
 				"name": "Technique_Diamond Dust", "fieldName": "diamondDust", "title": "Diamond Dust", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquediamondDust", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquediamondDust{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Wind Bullet": {
 				"name": "Technique_Wind Bullet", "fieldName": "windBullet", "title": "Wind Bullet", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquewindBullet", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquewindBullet{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Gust": {
 				"name": "Technique_Gust", "fieldName": "gust", "title": "Gust", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegust", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegust{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Windsweep": {
 				"name": "Technique_Windsweep", "fieldName": "windsweep", "title": "Windsweep", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquewindsweep", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquewindsweep{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Gale": {
 				"name": "Technique_Gale", "fieldName": "gale", "title": "Gale", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegale", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegale{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Darkness": {
 				"name": "Technique_Darkness", "fieldName": "darkness", "title": "Darkness", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedarkness", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedarkness{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Shadow Wall": {
 				"name": "Technique_Shadow Wall", "fieldName": "shadowWall", "title": "Shadow Wall", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueshadowWall", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueshadowWall{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Nightfall": {
 				"name": "Technique_Nightfall", "fieldName": "nightfall", "title": "Nightfall", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquenightfall", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquenightfall{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Fog Cloud": {
 				"name": "Technique_Fog Cloud", "fieldName": "fogCloud", "title": "Fog Cloud", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefogCloud", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefogCloud{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sleet": {
 				"name": "Technique_Sleet", "fieldName": "sleet", "title": "Sleet", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesleet", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesleet{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Freezing Sleet": {
 				"name": "Technique_Freezing Sleet", "fieldName": "freezingSleet", "title": "Freezing Sleet", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefreezingSleet", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefreezingSleet{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Hail": {
 				"name": "Technique_Hail", "fieldName": "hail", "title": "Hail", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquehail", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquehail{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Binding Sleet": {
 				"name": "Technique_Binding Sleet", "fieldName": "bindingSleet", "title": "Binding Sleet", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquebindingSleet", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquebindingSleet{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Ice Storm": {
 				"name": "Technique_Ice Storm", "fieldName": "iceStorm", "title": "Ice Storm", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueiceStorm", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueiceStorm{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Fimbulwinter": {
 				"name": "Technique_Fimbulwinter", "fieldName": "fimbulwinter", "title": "Fimbulwinter", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefimbulwinter", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefimbulwinter{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Smoke Cloud": {
 				"name": "Technique_Smoke Cloud", "fieldName": "smokeCloud", "title": "Smoke Cloud", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesmokeCloud", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesmokeCloud{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Burning Smoke": {
 				"name": "Technique_Burning Smoke", "fieldName": "burningSmoke", "title": "Burning Smoke", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueburningSmoke", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueburningSmoke{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Choking Smoke": {
 				"name": "Technique_Choking Smoke", "fieldName": "chokingSmoke", "title": "Choking Smoke", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquechokingSmoke", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquechokingSmoke{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Acceleration": {
 				"name": "Technique_Acceleration", "fieldName": "acceleration", "title": "Acceleration", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueacceleration", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueacceleration{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Power Vault": {
 				"name": "Technique_Power Vault", "fieldName": "powerVault", "title": "Power Vault", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquepowerVault", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquepowerVault{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Expeditious": {
 				"name": "Technique_Expeditious", "fieldName": "expeditious", "title": "Expeditious", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueexpeditious", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueexpeditious{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Quick Climb": {
 				"name": "Technique_Quick Climb", "fieldName": "quickClimb", "title": "Quick Climb", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquequickClimb", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquequickClimb{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Quick Swim": {
 				"name": "Technique_Quick Swim", "fieldName": "quickSwim", "title": "Quick Swim", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquequickSwim", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquequickSwim{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Poise": {
 				"name": "Technique_Poise", "fieldName": "poise", "title": "Poise", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquepoise", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquepoise{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Cat Fall": {
 				"name": "Technique_Cat Fall", "fieldName": "catFall", "title": "Cat Fall", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecatFall", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecatFall{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Kip Up": {
 				"name": "Technique_Kip Up", "fieldName": "kipUp", "title": "Kip Up", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquekipUp", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquekipUp{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Silent Stride": {
 				"name": "Technique_Silent Stride", "fieldName": "silentStride", "title": "Silent Stride", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesilentStride", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesilentStride{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Shove": {
 				"name": "Technique_Shove", "fieldName": "shove", "title": "Shove", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueshove", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueshove{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Knockdown": {
 				"name": "Technique_Knockdown", "fieldName": "knockdown", "title": "Knockdown", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueknockdown", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueknockdown{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Tumble": {
 				"name": "Technique_Tumble", "fieldName": "tumble", "title": "Tumble", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquetumble", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquetumble{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Field Medic": {
 				"name": "Technique_Field Medic", "fieldName": "fieldMedic", "title": "Field Medic", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefieldMedic", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefieldMedic{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Camoflauge": {
 				"name": "Technique_Camoflauge", "fieldName": "camoflauge", "title": "Camoflauge", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecamoflauge", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecamoflauge{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Blurred Light": {
 				"name": "Technique_Blurred Light", "fieldName": "blurredLight", "title": "Blurred Light", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueblurredLight", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueblurredLight{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Light Refraction": {
 				"name": "Technique_Light Refraction", "fieldName": "lightRefraction", "title": "Light Refraction", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquelightRefraction", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquelightRefraction{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Shadow Steps": {
 				"name": "Technique_Shadow Steps", "fieldName": "shadowSteps", "title": "Shadow Steps", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueshadowSteps", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueshadowSteps{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Shadow Walker": {
 				"name": "Technique_Shadow Walker", "fieldName": "shadowWalker", "title": "Shadow Walker", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueshadowWalker", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueshadowWalker{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Wind Step": {
 				"name": "Technique_Wind Step", "fieldName": "windStep", "title": "Wind Step", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquewindStep", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquewindStep{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Updraft": {
 				"name": "Technique_Updraft", "fieldName": "updraft", "title": "Updraft", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueupdraft", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueupdraft{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Clouded Updraft": {
 				"name": "Technique_Clouded Updraft", "fieldName": "cloudedUpdraft", "title": "Clouded Updraft", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecloudedUpdraft", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecloudedUpdraft{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Wind Fall": {
 				"name": "Technique_Wind Fall", "fieldName": "windFall", "title": "Wind Fall", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquewindFall", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquewindFall{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Walk on Air": {
 				"name": "Technique_Walk on Air", "fieldName": "walkOnAir", "title": "Walk on Air", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquewalkOnAir", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquewalkOnAir{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Fire Step": {
 				"name": "Technique_Fire Step", "fieldName": "fireStep", "title": "Fire Step", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefireStep", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefireStep{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Liftoff": {
 				"name": "Technique_Liftoff", "fieldName": "liftoff", "title": "Liftoff", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueliftoff", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueliftoff{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Jet": {
 				"name": "Technique_Jet", "fieldName": "jet", "title": "Jet", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquejet", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquejet{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Cunning Action": {
 				"name": "Technique_Cunning Action", "fieldName": "cunningAction", "title": "Cunning Action", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecunningAction", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecunningAction{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Demoralize": {
 				"name": "Technique_Demoralize", "fieldName": "demoralize", "title": "Demoralize", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedemoralize", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedemoralize{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Fascinate": {
 				"name": "Technique_Fascinate", "fieldName": "fascinate", "title": "Fascinate", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquefascinate", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquefascinate{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Impersonator": {
 				"name": "Technique_Impersonator", "fieldName": "impersonator", "title": "Impersonator", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueimpersonator", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueimpersonator{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Ether Sense": {
 				"name": "Technique_Ether Sense", "fieldName": "etherSense", "title": "Ether Sense", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueetherSense", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueetherSense{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Spirit Sense": {
 				"name": "Technique_Spirit Sense", "fieldName": "spiritSense", "title": "Spirit Sense", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquespiritSense", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquespiritSense{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Tremorsense": {
 				"name": "Technique_Tremorsense", "fieldName": "tremorsense", "title": "Tremorsense", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquetremorsense", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquetremorsense{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Dustcraft": {
 				"name": "Technique_Dustcraft", "fieldName": "dustcraft", "title": "Dustcraft", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedustcraft", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedustcraft{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Shape Material": {
 				"name": "Technique_Shape Material", "fieldName": "shapeMaterial", "title": "Shape Material", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueshapeMaterial", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueshapeMaterial{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Quickcraft": {
 				"name": "Technique_Quickcraft", "fieldName": "quickcraft", "title": "Quickcraft", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquequickcraft", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquequickcraft{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Improved Shaping": {
 				"name": "Technique_Improved Shaping", "fieldName": "improvedShaping", "title": "Improved Shaping", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueimprovedShaping", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueimprovedShaping{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Greater Shaping": {
 				"name": "Technique_Greater Shaping", "fieldName": "greaterShaping", "title": "Greater Shaping", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegreaterShaping", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegreaterShaping{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Legendary Shaping": {
 				"name": "Technique_Legendary Shaping", "fieldName": "legendaryShaping", "title": "Legendary Shaping", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquelegendaryShaping", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquelegendaryShaping{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Dust Material": {
 				"name": "Technique_Dust Material", "fieldName": "dustMaterial", "title": "Dust Material", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedustMaterial", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedustMaterial{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Dust Area": {
 				"name": "Technique_Dust Area", "fieldName": "dustArea", "title": "Dust Area", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedustArea", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedustArea{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Improved Dusting": {
 				"name": "Technique_Improved Dusting", "fieldName": "improvedDusting", "title": "Improved Dusting", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueimprovedDusting", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueimprovedDusting{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Greater Dusting": {
 				"name": "Technique_Greater Dusting", "fieldName": "greaterDusting", "title": "Greater Dusting", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegreaterDusting", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegreaterDusting{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Legendary Dusting": {
 				"name": "Technique_Legendary Dusting", "fieldName": "legendaryDusting", "title": "Legendary Dusting", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquelegendaryDusting", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquelegendaryDusting{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Form Path": {
 				"name": "Technique_Form Path", "fieldName": "formPath", "title": "Form Path", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueformPath", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueformPath{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Form Pillar": {
 				"name": "Technique_Form Pillar", "fieldName": "formPillar", "title": "Form Pillar", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueformPillar", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueformPillar{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Stepping Path": {
 				"name": "Technique_Stepping Path", "fieldName": "steppingPath", "title": "Stepping Path", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesteppingPath", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesteppingPath{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Form Wall": {
 				"name": "Technique_Form Wall", "fieldName": "formWall", "title": "Form Wall", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueformWall", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueformWall{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Scattered Pillars": {
 				"name": "Technique_Scattered Pillars", "fieldName": "scatteredPillars", "title": "Scattered Pillars", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquescatteredPillars", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquescatteredPillars{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Great Wall": {
 				"name": "Technique_Great Wall", "fieldName": "greatWall", "title": "Great Wall", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegreatWall", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegreatWall{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Cultivate": {
 				"name": "Technique_Cultivate", "fieldName": "cultivate", "title": "Cultivate", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecultivate", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecultivate{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Entangle": {
 				"name": "Technique_Entangle", "fieldName": "entangle", "title": "Entangle", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueentangle", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueentangle{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Wildwood": {
 				"name": "Technique_Wildwood", "fieldName": "wildwood", "title": "Wildwood", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquewildwood", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquewildwood{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Distortion": {
 				"name": "Technique_Distortion", "fieldName": "distortion", "title": "Distortion", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedistortion", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedistortion{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Lasting Distortion": {
 				"name": "Technique_Lasting Distortion", "fieldName": "lastingDistortion", "title": "Lasting Distortion", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquelastingDistortion", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquelastingDistortion{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Heat Field": {
 				"name": "Technique_Heat Field", "fieldName": "heatField", "title": "Heat Field", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueheatField", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueheatField{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Burn Guard": {
 				"name": "Technique_Burn Guard", "fieldName": "burnGuard", "title": "Burn Guard", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueburnGuard", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueburnGuard{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Cold Field": {
 				"name": "Technique_Cold Field", "fieldName": "coldField", "title": "Cold Field", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquecoldField", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquecoldField{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Chill Guard": {
 				"name": "Technique_Chill Guard", "fieldName": "chillGuard", "title": "Chill Guard", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquechillGuard", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquechillGuard{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Kinesis": {
 				"name": "Technique_Kinesis", "fieldName": "kinesis", "title": "Kinesis", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquekinesis", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquekinesis{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Distant Kinesis": {
 				"name": "Technique_Distant Kinesis", "fieldName": "distantKinesis", "title": "Distant Kinesis", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedistantKinesis", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedistantKinesis{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Kinetic Strike": {
 				"name": "Technique_Kinetic Strike", "fieldName": "kineticStrike", "title": "Kinetic Strike", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquekineticStrike", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquekineticStrike{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Kinetic Throw": {
 				"name": "Technique_Kinetic Throw", "fieldName": "kineticThrow", "title": "Kinetic Throw", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquekineticThrow", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquekineticThrow{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Heavy Kinesis": {
 				"name": "Technique_Heavy Kinesis", "fieldName": "heavyKinesis", "title": "Heavy Kinesis", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueheavyKinesis", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueheavyKinesis{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Burden": {
 				"name": "Technique_Burden", "fieldName": "burden", "title": "Burden", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueburden", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueburden{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Pressure": {
 				"name": "Technique_Pressure", "fieldName": "pressure", "title": "Pressure", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquepressure", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquepressure{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Restrain": {
 				"name": "Technique_Restrain", "fieldName": "restrain", "title": "Restrain", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquerestrain", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquerestrain{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Wide Pressure": {
 				"name": "Technique_Wide Pressure", "fieldName": "widePressure", "title": "Wide Pressure", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquewidePressure", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquewidePressure{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Prostration": {
 				"name": "Technique_Prostration", "fieldName": "prostration", "title": "Prostration", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueprostration", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueprostration{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Deep Pressure": {
 				"name": "Technique_Deep Pressure", "fieldName": "deepPressure", "title": "Deep Pressure", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedeepPressure", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedeepPressure{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Gravity Well": {
 				"name": "Technique_Gravity Well", "fieldName": "gravityWell", "title": "Gravity Well", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquegravityWell", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquegravityWell{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Shield Block": {
 				"name": "Technique_Shield Block", "fieldName": "shieldBlock", "title": "Shield Block", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueshieldBlock", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueshieldBlock{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Glancing Block": {
 				"name": "Technique_Glancing Block", "fieldName": "glancingBlock", "title": "Glancing Block", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueglancingBlock", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueglancingBlock{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Aegis": {
 				"name": "Technique_Aegis", "fieldName": "aegis", "title": "Aegis", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueaegis", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueaegis{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Light": {
 				"name": "Technique_Light", "fieldName": "light", "title": "Light", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquelight", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquelight{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Dancing Lights": {
 				"name": "Technique_Dancing Lights", "fieldName": "dancingLights", "title": "Dancing Lights", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquedancingLights", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquedancingLights{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Flash": {
 				"name": "Technique_Flash", "fieldName": "flash", "title": "Flash", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueflash", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueflash{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sunlight": {
 				"name": "Technique_Sunlight", "fieldName": "sunlight", "title": "Sunlight", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesunlight", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesunlight{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Stress Release": {
 				"name": "Technique_Stress Release", "fieldName": "stressRelease", "title": "Stress Release", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquestressRelease", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquestressRelease{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Stress Release +": {
 				"name": "Technique_Stress Release +", "fieldName": "stressRelease+", "title": "Stress Release +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquestressRelease+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquestressRelease+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Stress Release ++": {
 				"name": "Technique_Stress Release ++", "fieldName": "stressRelease++", "title": "Stress Release ++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquestressRelease++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquestressRelease++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sensory Training": {
 				"name": "Technique_Sensory Training", "fieldName": "sensoryTraining", "title": "Sensory Training", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesensoryTraining", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesensoryTraining{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sensory Training +": {
 				"name": "Technique_Sensory Training +", "fieldName": "sensoryTraining+", "title": "Sensory Training +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesensoryTraining+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesensoryTraining+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Broad Study": {
 				"name": "Technique_Broad Study", "fieldName": "broadStudy", "title": "Broad Study", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquebroadStudy", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquebroadStudy{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Experienced Tracker": {
 				"name": "Technique_Experienced Tracker", "fieldName": "experiencedTracker", "title": "Experienced Tracker", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueexperiencedTracker", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueexperiencedTracker{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Multilingual": {
 				"name": "Technique_Multilingual", "fieldName": "multilingual", "title": "Multilingual", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemultilingual", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemultilingual{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Multilingual +": {
 				"name": "Technique_Multilingual +", "fieldName": "multilingual+", "title": "Multilingual +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemultilingual+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemultilingual+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Specialized Lore": {
 				"name": "Technique_Specialized Lore", "fieldName": "specializedLore", "title": "Specialized Lore", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquespecializedLore", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquespecializedLore{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Specialized Lore +": {
 				"name": "Technique_Specialized Lore +", "fieldName": "specializedLore+", "title": "Specialized Lore +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquespecializedLore+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquespecializedLore+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Specialized Lore ++": {
 				"name": "Technique_Specialized Lore ++", "fieldName": "specializedLore++", "title": "Specialized Lore ++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquespecializedLore++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquespecializedLore++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Improved Initiative": {
 				"name": "Technique_Improved Initiative", "fieldName": "improvedInitiative", "title": "Improved Initiative", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueimprovedInitiative", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueimprovedInitiative{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Knowledge Training": {
 				"name": "Technique_Knowledge Training", "fieldName": "knowledgeTraining", "title": "Knowledge Training", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueknowledgeTraining", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueknowledgeTraining{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Knowledge Training +": {
 				"name": "Technique_Knowledge Training +", "fieldName": "knowledgeTraining+", "title": "Knowledge Training +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueknowledgeTraining+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueknowledgeTraining+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Knowledge Training ++": {
 				"name": "Technique_Knowledge Training ++", "fieldName": "knowledgeTraining++", "title": "Knowledge Training ++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueknowledgeTraining++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueknowledgeTraining++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Social Training": {
 				"name": "Technique_Social Training", "fieldName": "socialTraining", "title": "Social Training", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesocialTraining", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesocialTraining{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Social Training +": {
 				"name": "Technique_Social Training +", "fieldName": "socialTraining+", "title": "Social Training +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesocialTraining+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesocialTraining+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Social Training ++": {
 				"name": "Technique_Social Training ++", "fieldName": "socialTraining++", "title": "Social Training ++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesocialTraining++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesocialTraining++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Refocus": {
 				"name": "Technique_Refocus", "fieldName": "refocus", "title": "Refocus", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquerefocus", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquerefocus{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Refocus +": {
 				"name": "Technique_Refocus +", "fieldName": "refocus+", "title": "Refocus +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquerefocus+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquerefocus+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sustained Channel": {
 				"name": "Technique_Sustained Channel", "fieldName": "sustainedChannel", "title": "Sustained Channel", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesustainedChannel", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesustainedChannel{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Sustained Channel +": {
 				"name": "Technique_Sustained Channel +", "fieldName": "sustainedChannel+", "title": "Sustained Channel +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesustainedChannel+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesustainedChannel+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Ki Control": {
 				"name": "Technique_Ki Control", "fieldName": "kiControl", "title": "Ki Control", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquekiControl", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquekiControl{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Ki Control +": {
 				"name": "Technique_Ki Control +", "fieldName": "kiControl+", "title": "Ki Control +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquekiControl+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquekiControl+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Ki Control ++": {
 				"name": "Technique_Ki Control ++", "fieldName": "kiControl++", "title": "Ki Control ++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquekiControl++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquekiControl++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Surge Value": {
 				"name": "Technique_Surge Value", "fieldName": "surgeValue", "title": "Surge Value", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesurgeValue", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesurgeValue{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Surge Value +": {
 				"name": "Technique_Surge Value +", "fieldName": "surgeValue+", "title": "Surge Value +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquesurgeValue+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquesurgeValue+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Channel Training": {
 				"name": "Technique_Channel Training", "fieldName": "channelTraining", "title": "Channel Training", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquechannelTraining", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquechannelTraining{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Channel Training +": {
 				"name": "Technique_Channel Training +", "fieldName": "channelTraining+", "title": "Channel Training +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquechannelTraining+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquechannelTraining+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Channel Training ++": {
 				"name": "Technique_Channel Training ++", "fieldName": "channelTraining++", "title": "Channel Training ++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquechannelTraining++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquechannelTraining++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Physical Training": {
 				"name": "Technique_Physical Training", "fieldName": "physicalTraining", "title": "Physical Training", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquephysicalTraining", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquephysicalTraining{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Physical Training +": {
 				"name": "Technique_Physical Training +", "fieldName": "physicalTraining+", "title": "Physical Training +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquephysicalTraining+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquephysicalTraining+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Body Training": {
 				"name": "Technique_Body Training", "fieldName": "bodyTraining", "title": "Body Training", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquebodyTraining", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquebodyTraining{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Body Training +": {
 				"name": "Technique_Body Training +", "fieldName": "bodyTraining+", "title": "Body Training +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquebodyTraining+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquebodyTraining+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Body Training ++": {
 				"name": "Technique_Body Training ++", "fieldName": "bodyTraining++", "title": "Body Training ++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquebodyTraining++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquebodyTraining++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Technical Training": {
 				"name": "Technique_Technical Training", "fieldName": "technicalTraining", "title": "Technical Training", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquetechnicalTraining", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquetechnicalTraining{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Technical Training +": {
 				"name": "Technique_Technical Training +", "fieldName": "technicalTraining+", "title": "Technical Training +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquetechnicalTraining+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquetechnicalTraining+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Technical Training ++": {
 				"name": "Technique_Technical Training ++", "fieldName": "technicalTraining++", "title": "Technical Training ++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquetechnicalTraining++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquetechnicalTraining++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Martial Training": {
 				"name": "Technique_Martial Training", "fieldName": "martialTraining", "title": "Martial Training", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemartialTraining", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemartialTraining{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Martial Training +": {
 				"name": "Technique_Martial Training +", "fieldName": "martialTraining+", "title": "Martial Training +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemartialTraining+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemartialTraining+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Martial Training ++": {
 				"name": "Technique_Martial Training ++", "fieldName": "martialTraining++", "title": "Martial Training ++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquemartialTraining++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquemartialTraining++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_HP Up": {
 				"name": "Technique_HP Up", "fieldName": "hPUp", "title": "HP Up", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquehPUp", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquehPUp{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_HP Up+": {
 				"name": "Technique_HP Up+", "fieldName": "hPUp+", "title": "HP Up+", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquehPUp+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquehPUp+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_HP Up++": {
 				"name": "Technique_HP Up++", "fieldName": "hPUp++", "title": "HP Up++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquehPUp++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquehPUp++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Vitality Boost": {
 				"name": "Technique_Vitality Boost", "fieldName": "vitalityBoost", "title": "Vitality Boost", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquevitalityBoost", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquevitalityBoost{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Vitality Boost +": {
 				"name": "Technique_Vitality Boost +", "fieldName": "vitalityBoost+", "title": "Vitality Boost +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquevitalityBoost+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquevitalityBoost+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Vitality Boost ++": {
 				"name": "Technique_Vitality Boost ++", "fieldName": "vitalityBoost++", "title": "Vitality Boost ++", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquevitalityBoost++", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquevitalityBoost++{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Undying": {
 				"name": "Technique_Undying", "fieldName": "undying", "title": "Undying", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueundying", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueundying{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Undying +": {
 				"name": "Technique_Undying +", "fieldName": "undying+", "title": "Undying +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueundying+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueundying+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Extra Follow-Up Attack": {
 				"name": "Technique_Extra Follow-Up Attack", "fieldName": "extraFollow-UpAttack", "title": "Extra Follow-Up Attack", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueextraFollow-UpAttack", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueextraFollow-UpAttack{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Extra Follow-Up Attack +": {
 				"name": "Technique_Extra Follow-Up Attack +", "fieldName": "extraFollow-UpAttack+", "title": "Extra Follow-Up Attack +", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueextraFollow-UpAttack+", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueextraFollow-UpAttack+{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Change Tech Slots": {
 				"name": "Technique_Change Tech Slots", "fieldName": "changeTechSlots", "title": "Change Tech Slots", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniquechangeTechSlots", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniquechangeTechSlots{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Hold Out": {
 				"name": "Technique_Hold Out", "fieldName": "holdOut", "title": "Hold Out", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueholdOut", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueholdOut{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Technique_Overdrive": {
 				"name": "Technique_Overdrive", "fieldName": "overdrive", "title": "Overdrive", "group": "Technique", "descriptions": [null],
-				"abbreviation": "", "variable": "attr_techniqueoverdrive", "formula": "", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "variable": "techniqueoverdrive{0}", "formula": "", "modifiers": "", "linkedGroups": [],
 				"modAttrs": [],
 				"formulaCalculations": []
 			}
 		},
-		sortingGroups = { "group": { "Type": ["Attribute", "Defense", "Sense", "General", "Affinity", "Gear", "Combat", "Social", "Tech Slot"], "Stat": ["Skill", "Job", "Role", "Knowledge", "Language", "Lore", "Style", "Technique"], "Page": ["Character Creator", "Core", "Advancement", "Training"], "VariableMod": ["_max", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_exit", "_finish", "_origin", "_learn", "_pts", "_techBonus", "_error"], "Definition": ["Origin", "Origin Basics", "Full Name", "Display Name"], "Attribute": ["Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason"], "AttributeValue": ["AttributeValueAverage", "AttributeValueGreat", "AttributeValueGood", "AttributeValueBad"], "Physical Defense": ["Brace", "Disruption", "Evasion"], "Internal Defense": ["Fortitude"], "Awareness": ["Hide"], "Defense": ["Reflex"], "Sense": ["Insight", "Notice", "Scrutiny", "Resolve"], "General": ["Character Level", "Character Rank", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "Gear": ["Carrying Capacity", "Reflex Penalty", "Speed Penalty"], "Combat": ["Durability", "Heal Value", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce"], "Social": ["Willpower", "Approval", "Patience"], "Tech Slot": ["Job Slots", "Item Slots", "Active Slots", "Support Slots"], "Technique Trait": ["Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall"], "Item Trait": ["Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)"], "Material Trait": ["Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent"], "Status": ["Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Initiative Penalty", "Invisible", "Restrained", "Unconscious"], "Condition": ["Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"], "Style": ["Style_Basic Set", "Style_Swordplay", "Style_Ki Extension"], "Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "Language": ["Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan"], "Lore": ["Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "Role": ["Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "Technique": ["Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Defense Piercer ", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"] } },
+		sortingGroups = { "group": { "Type": ["Attribute", "Defense", "Sense", "General", "Affinity", "Gear", "Combat", "Social", "Tech Slot"], "Stat": ["Skill", "Job", "Role", "Knowledge", "Language", "Lore", "Style", "Technique"], "Page": ["Character Creator", "Core", "Advancement", "Training"], "VariableMod": ["_max", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_exit", "_finish", "_origin", "_learn", "_pts", "_techBonus", "_error"], "Definition": ["Origin", "Origin Basics", "Full Name", "Display Name"], "Attribute": ["Body", "Precision", "Quickness", "Conviction", "Intuition ", "Reason"], "AttributeValue": ["AttributeValueAverage", "AttributeValueGreat", "AttributeValueGood", "AttributeValueBad"], "Physical Defense": ["Brace", "Disruption", "Evasion"], "Internal Defense": ["Fortitude"], "Awareness": ["Hide"], "Defense": ["Reflex"], "Sense": ["Insight", "Notice", "Scrutiny", "Resolve"], "General": ["Character Level", "Character Rank", "Hit Points", "Buffer", "Energy", "Focus", "Chakra", "Initiative", "Speed"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "Gear": ["Carrying Capacity", "Reflex Penalty", "Speed Penalty"], "Combat": ["Durability", "Heal Value", "Barrier", "Block", "Armor", "Trauma Limit", "Stress Limit", "Vitality", "Ki", "Armsforce", "Spellforce", "Strikeforce"], "Social": ["Willpower", "Approval", "Patience"], "Tech Slot": ["Job Slots", "Item Slots", "Active Slots", "Support Slots"], "Technique Trait": ["Accurate", "Affinity+", "AP (X)", "Brutal", "Focus+", "Material", "Simple", "Volatile", "Vortex", "Weapon", "Wall"], "Item Trait": ["Arcing", "Shield", "Thrown", "Two-Handed", "Loud", "Impact (X)", "Explosive (X/Y)"], "Material Trait": ["Flammable", "Flexible", "Frozen", "Sharp", "Sturdy", "Transparent"], "Status": ["Downed", "Engaged", "Ethereal", "Grappled", "Hidden", "Initiative Penalty", "Invisible", "Restrained", "Unconscious"], "Condition": ["Aflame", "Angered", "Chilled", "Delayed", "Disgusted", "Dying", "Empowered", "Encouraged", "Encumbered", "Frightened", "Hasted", "Immobilized", "Impaired", "Joyful", "Launched", "Paralyzed", "Prone", "Saddened", "Sickened", "Staggered", "Stunned", "Surprised"], "Style": ["Style_Basic Set", "Style_Swordplay", "Style_Ki Extension"], "Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "Language": ["Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan"], "Lore": ["Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "Role": ["Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "Technique": ["Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Defense Piercer ", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"] }, "formula": { "1": ["Job", "Focus", "Chakra", "Trauma Limit", "Job Slots", "Active Slots", "Support Slots"], "2": ["Vitality"], "3": ["Speed", "Stress Limit", "Ki"], "6": ["Technique"], "7": ["Attribute"], "8": ["Skill"], "10": ["Knowledge"], "": ["Role", "Role", "Language", "Language", "Lore", "Lore", "Style", "Style", "Character Creator", "Character Creator", "Core", "Core", "Advancement", "Advancement", "Training", "Training", "_max", "_max", "_rank", "_rank", "_build", "_build", "_filter", "_filter", "_expand", "_expand", "_tab", "_tab", "_page", "_page", "_exit", "_exit", "_finish", "_finish", "_origin", "_origin", "_learn", "_learn", "_pts", "_pts", "_techBonus", "_techBonus", "_error", "_error", "Origin", "Origin", "Origin Basics", "Origin Basics", "Full Name", "Full Name", "Display Name", "Display Name", "Body", "Body", "Precision", "Precision", "Quickness", "Quickness", "Conviction", "Conviction", "Intuition ", "Intuition ", "Reason", "Reason", "AttributeValueAverage", "AttributeValueAverage", "AttributeValueGreat", "AttributeValueGreat", "AttributeValueGood", "AttributeValueGood", "AttributeValueBad", "AttributeValueBad", "Defense", "Defense", "Sense", "Sense", "General", "General", "Character Level", "Character Level", "Character Rank", "Character Rank", "Hit Points", "Hit Points", "Buffer", "Buffer", "Energy", "Energy", "Affinity", "Affinity", "Wood", "Wood", "Fire", "Fire", "Earth", "Earth", "Metal", "Metal", "Water", "Water", "Gear", "Gear", "Combat", "Combat", "Armsforce", "Armsforce", "Spellforce", "Spellforce", "Strikeforce", "Strikeforce", "Social", "Social", "Tech Slot", "Tech Slot", "Item Slots", "Item Slots", "Accurate", "Accurate", "Affinity+", "Affinity+", "AP (X)", "AP (X)", "Brutal", "Brutal", "Focus+", "Focus+", "Material", "Material", "Simple", "Simple", "Volatile", "Volatile", "Vortex", "Vortex", "Weapon", "Weapon", "Wall", "Wall", "Arcing", "Arcing", "Shield", "Shield", "Thrown", "Thrown", "Two-Handed", "Two-Handed", "Loud", "Loud", "Impact (X)", "Impact (X)", "Explosive (X/Y)", "Explosive (X/Y)", "Flammable", "Flammable", "Flexible", "Flexible", "Frozen", "Frozen", "Sharp", "Sharp", "Sturdy", "Sturdy", "Transparent", "Transparent", "Downed", "Downed", "Engaged", "Engaged", "Ethereal", "Ethereal", "Grappled", "Grappled", "Hidden", "Hidden", "Initiative Penalty", "Initiative Penalty", "Invisible", "Invisible", "Restrained", "Restrained", "Unconscious", "Unconscious", "Aflame", "Aflame", "Angered", "Angered", "Chilled", "Chilled", "Delayed", "Delayed", "Disgusted", "Disgusted", "Dying", "Dying", "Empowered", "Empowered", "Encouraged", "Encouraged", "Encumbered", "Encumbered", "Frightened", "Frightened", "Hasted", "Hasted", "Immobilized", "Immobilized", "Impaired", "Impaired", "Joyful", "Joyful", "Launched", "Launched", "Paralyzed", "Paralyzed", "Prone", "Prone", "Saddened", "Saddened", "Sickened", "Sickened", "Staggered", "Staggered", "Stunned", "Stunned", "Surprised", "Surprised", "Style_Basic Set", "Style_Basic Set", "Style_Swordplay", "Style_Swordplay", "Style_Ki Extension", "Style_Ki Extension", "Skill_Acrobatics", "Skill_Acrobatics", "Skill_Agility", "Skill_Agility", "Skill_Analyze", "Skill_Analyze", "Skill_Build", "Skill_Build", "Skill_Channel", "Skill_Channel", "Skill_Charm", "Skill_Charm", "Skill_Command", "Skill_Command", "Skill_Concoct", "Skill_Concoct", "Skill_Cook", "Skill_Cook", "Skill_Deception", "Skill_Deception", "Skill_Disguise", "Skill_Disguise", "Skill_Empathy", "Skill_Empathy", "Skill_Enchant", "Skill_Enchant", "Skill_Finesse", "Skill_Finesse", "Skill_Flexibility", "Skill_Flexibility", "Skill_Grappling", "Skill_Grappling", "Skill_Heal", "Skill_Heal", "Skill_Intimidation", "Skill_Intimidation", "Skill_Leadership", "Skill_Leadership", "Skill_Maneuver", "Skill_Maneuver", "Skill_Medicine", "Skill_Medicine", "Skill_Might", "Skill_Might", "Skill_Negotiation", "Skill_Negotiation", "Skill_Palming", "Skill_Palming", "Skill_Physique", "Skill_Physique", "Skill_Pilot", "Skill_Pilot", "Skill_Resonance", "Skill_Resonance", "Skill_Search", "Skill_Search", "Skill_Shoot", "Skill_Shoot", "Skill_Skirmish", "Skill_Skirmish", "Skill_Sneak", "Skill_Sneak", "Skill_Survival", "Skill_Survival", "Skill_Throw", "Skill_Throw", "Skill_Tinker", "Skill_Tinker", "Skill_Traversal", "Skill_Traversal", "Language_Minere", "Language_Minere", "Language_Junal", "Language_Junal", "Language_Apollen", "Language_Apollen", "Language_Lib", "Language_Lib", "Language_Cert", "Language_Cert", "Language_Byric", "Language_Byric", "Language_Dustell", "Language_Dustell", "Language_Muralic", "Language_Muralic", "Language_Shira", "Language_Shira", "Language_Ciel", "Language_Ciel", "Language_Citeq", "Language_Citeq", "Language_Manstan", "Language_Manstan", "Language_Salkan", "Language_Salkan", "Language_Sansic", "Language_Sansic", "Language_Silq", "Language_Silq", "Language_Kleikan", "Language_Kleikan", "Language_Crinere", "Language_Crinere", "Language_Palmic", "Language_Palmic", "Language_Shorespeak", "Language_Shorespeak", "Language_Verdeni", "Language_Verdeni", "Language_Vulca", "Language_Vulca", "Language_Emotion", "Language_Emotion", "Language_Empathy", "Language_Empathy", "Language_Wolfwarg", "Language_Wolfwarg", "Language_Jovean", "Language_Jovean", "Language_Mytikan", "Language_Mytikan", "Lore_Academics", "Lore_Academics", "Lore_Health", "Lore_Health", "Lore_Mana", "Lore_Mana", "Lore_Mathematics", "Lore_Mathematics", "Lore_Nature", "Lore_Nature", "Lore_School", "Lore_School", "Lore_Spirit", "Lore_Spirit", "Lore_Warfare", "Lore_Warfare", "Lore_Zoology", "Lore_Zoology", "Lore_Profession", "Lore_Profession", "Lore_Farming", "Lore_Farming", "Lore_Fishing", "Lore_Fishing", "Lore_Hunting", "Lore_Hunting", "Lore_Legal", "Lore_Legal", "Lore_Mercantile", "Lore_Mercantile", "Lore_Mining", "Lore_Mining", "Lore_Craftmanship", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Alchemy", "Lore_Architecture", "Lore_Architecture", "Lore_Brewing", "Lore_Brewing", "Lore_Cooking", "Lore_Cooking", "Lore_Engineering", "Lore_Engineering", "Lore_Glassblowing", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Sculpting", "Lore_Smithing", "Lore_Smithing", "Lore_Weaving", "Lore_Weaving", "Lore_Geography", "Lore_Geography", "Lore_Aridsha", "Lore_Aridsha", "Lore_Ceres", "Lore_Ceres", "Lore_Colswei", "Lore_Colswei", "Lore_Khem", "Lore_Khem", "Lore_Novus", "Lore_Novus", "Lore_Walthair", "Lore_Walthair", "Lore_Wayling", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_Ethereal Plane", "Lore_History", "Lore_History", "Lore_Aridsha History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Colswei History", "Lore_Khem History", "Lore_Khem History", "Lore_Novus History", "Lore_Novus History", "Lore_Walthair History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Wayling History", "Lore_Culture", "Lore_Culture", "Lore_Art", "Lore_Art", "Lore_Etiquette", "Lore_Etiquette", "Lore_Fashion", "Lore_Fashion", "Lore_Games", "Lore_Games", "Lore_Music", "Lore_Music", "Lore_Scribing", "Lore_Scribing", "Lore_Theater", "Lore_Theater", "Lore_Religion", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Guidance", "Lore_Life's Circle", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Sylvan", "Lore_Zushaon", "Lore_Zushaon", "Job_Trainee", "Job_Trainee", "Job_Interceptor", "Job_Interceptor", "Job_Guardian", "Job_Guardian", "Job_Spellslinger", "Job_Spellslinger", "Job_Warrior", "Job_Warrior", "Job_Rogue", "Job_Rogue", "Job_Scholar", "Job_Scholar", "Job_Physician", "Job_Physician", "Role_Generalist", "Role_Generalist", "Role_Defender", "Role_Defender", "Role_Athlete", "Role_Athlete", "Role_Skirmisher", "Role_Skirmisher", "Role_Marksman", "Role_Marksman", "Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Defense Piercer ", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"], "7;Body": ["Brace"], "Body": ["Brace", "Fortitude"], "7;Body;Skill:skill_Survival:_rank": ["Fortitude"], "Skill:skill_Survival:_rank": ["Fortitude"], "7;Precision": ["Disruption"], "Precision": ["Disruption"], "7;prc;skillsneak_rank": ["Hide"], "prc": ["Hide", "Barrier", "Barrier"], "skillsneak_rank": ["Hide"], "Quickness": ["Evasion", "Evasion"], "7;qck;skillagility_rank": ["Reflex"], "qck": ["Reflex", "Initiative", "Initiative"], "skillagility_rank": ["Reflex"], "7;int": ["Insight", "Notice"], "int": ["Insight", "Notice", "Patience"], "7;rsn": ["Scrutiny"], "rsn": ["Scrutiny"], "7;cnv": ["Resolve"], "cnv": ["Resolve", "Willpower", "Willpower", "Approval", "Approval"], "40; bodRank": ["Carrying Capacity"], "bodRank": ["Carrying Capacity"], "!Gear": ["Reflex Penalty", "Reflex Penalty", "Speed Penalty", "Speed Penalty", "Block", "Block", "Armor", "Armor"], "Character Rank * 10": ["Durability"], "Character Rank ": ["Durability", "Heal Value"], "Character Rank * 2": ["Heal Value"], "pb*10;int": ["Patience"], "pb": ["Patience"] } },
 		_max = "_max",
 		_rank = "_rank",
 		_build = "_build",
@@ -3348,11 +3348,11 @@ var WuxDef = WuxDef || (function () {
 			}
 			return output;
 		},
-		getGroupVariables = function (filterData) {
+		getGroupVariables = function (filterData, mod1, mod2) {
 			let data = filter(filterData);
 			let output = [];
 			for (let i = 0; i < data.length; i++) {
-				output.push(data[i].getVariable());
+				output.push(data[i].getVariable(mod1, mod2));
 			}
 			return output;
 		}

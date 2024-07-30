@@ -67,64 +67,64 @@
 						<div class="wuxSectionContent">
 							<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 								<div class="wuxInteractiveInnerExpandBlock">
-									<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_full_name-expand" />
-									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_full_name-expand" />
+									<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="full_name" />
+									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="full_name" />
 									<span class="wuxInteractiveExpandIcon">&#9662;</span>
-									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_full_name-expand" />
+									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="full_name" />
 									<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 								</div>
 								<span class="wuxHeader">Full Name</span>
-								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_full_name-expand">
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="full_name">
 								<div class="wuxInteractiveExpandingContent">
-
+									<em>Definition</em>
 									<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
 								</div>
 							</div>
 							<input type="text" class="wuxInput" name="attr_full_name" />
 							<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 								<div class="wuxInteractiveInnerExpandBlock">
-									<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_display_name-expand" />
-									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_display_name-expand" />
+									<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="display_name" />
+									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="display_name" />
 									<span class="wuxInteractiveExpandIcon">&#9662;</span>
-									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_display_name-expand" />
+									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="display_name" />
 									<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 								</div>
 								<span class="wuxHeader">Display Name</span>
-								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_display_name-expand">
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="display_name">
 								<div class="wuxInteractiveExpandingContent">
-
+									<em>Definition</em>
 									<span class="wuxDescription">This is the name that is displayed when your character speaks.</span>
 								</div>
 							</div>
 							<input type="text" class="wuxInput" name="attr_display_name" />
 							<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 								<div class="wuxInteractiveInnerExpandBlock">
-									<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_base_level-expand" />
-									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_base_level-expand" />
+									<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="base_level" />
+									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="base_level" />
 									<span class="wuxInteractiveExpandIcon">&#9662;</span>
-									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_base_level-expand" />
+									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="base_level" />
 									<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 								</div>
 								<span class="wuxHeader">Character Level</span>
-								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_base_level-expand">
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="base_level">
 								<div class="wuxInteractiveExpandingContent">
-
+									<em>General</em>
 									<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
 								</div>
 							</div>
 							<input type="number" class="wuxInput" name="attr_base_level" />
 							<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 								<div class="wuxInteractiveInnerExpandBlock">
-									<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_affinity-expand" />
-									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_affinity-expand" />
+									<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="affinity" />
+									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="affinity" />
 									<span class="wuxInteractiveExpandIcon">&#9662;</span>
-									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_affinity-expand" />
+									<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="affinity" />
 									<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 								</div>
 								<span class="wuxHeader">Affinity</span>
-								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_affinity-expand">
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="affinity">
 								<div class="wuxInteractiveExpandingContent">
-
+									<em>Type</em>
 									<span class="wuxDescription">Characters that are able to cast spells will have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity.</span>
 									<span class="wuxDescription">This technique's element changes to one of your elemental affinities.</span>
 								</div>
@@ -4845,7 +4845,20 @@
 											<option value="2">Good (+2)</option>
 											<option value="-1">Bad (-1)</option>
 										</select>
-										<div class="wuxHeader2">Affected Stats</div>
+										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+											<div class="wuxInteractiveInnerExpandBlock">
+												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_attributebod_expand" />
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributebod_expand" />
+												<span class="wuxInteractiveExpandIcon">&#9662;</span>
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributebod_expand" />
+												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+											</div>
+											<div class="wuxHeader">Affected Stats</div>
+											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_attributebod_expand">
+											<div class="wuxInteractiveExpandingContent">
+												<span class="wuxHeader">Brace</span><span class="wuxDescription">Physical Defense</span><span class="wuxDescription">Brace represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects.</span><span class="wuxHeader">Fortitude</span><span class="wuxDescription">Internal Defense</span><span class="wuxDescription"></span>
+											</div>
+										</div>
 									</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
@@ -4855,7 +4868,20 @@
 											<option value="2">Good (+2)</option>
 											<option value="-1">Bad (-1)</option>
 										</select>
-										<div class="wuxHeader2">Affected Stats</div>
+										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+											<div class="wuxInteractiveInnerExpandBlock">
+												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_attributeprc_expand" />
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributeprc_expand" />
+												<span class="wuxInteractiveExpandIcon">&#9662;</span>
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributeprc_expand" />
+												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+											</div>
+											<div class="wuxHeader">Affected Stats</div>
+											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_attributeprc_expand">
+											<div class="wuxInteractiveExpandingContent">
+												<span class="wuxHeader">Disruption</span><span class="wuxDescription">Physical Defense</span><span class="wuxDescription">Guard represents a character's ability to resist an attack by disrupting its impact via parrying with a weapon or reducing its effectiveness. </span>
+											</div>
+										</div>
 									</span>
 								</div>
 							</div>
@@ -4867,7 +4893,20 @@
 											<option value="2">Good (+2)</option>
 											<option value="-1">Bad (-1)</option>
 										</select>
-										<div class="wuxHeader2">Affected Stats</div>
+										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+											<div class="wuxInteractiveInnerExpandBlock">
+												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_attributeqck_expand" />
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributeqck_expand" />
+												<span class="wuxInteractiveExpandIcon">&#9662;</span>
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributeqck_expand" />
+												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+											</div>
+											<div class="wuxHeader">Affected Stats</div>
+											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_attributeqck_expand">
+											<div class="wuxInteractiveExpandingContent">
+												<span class="wuxHeader">Evasion</span><span class="wuxDescription">Physical Defense</span><span class="wuxDescription">Evasion is your dodging ability. When an attack checks against any defense and fails, it will always then check against evasion. On failure, the attack does not connect and no aspect of its effects occur.</span><span class="wuxHeader">Evasion</span><span class="wuxDescription">Physical Defense</span><span class="wuxDescription">Evasion is your dodging ability. When an attack checks against any defense and fails, it will always then check against evasion. On failure, the attack does not connect and no aspect of its effects occur.</span>
+											</div>
+										</div>
 									</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
@@ -4877,7 +4916,20 @@
 											<option value="2">Good (+2)</option>
 											<option value="-1">Bad (-1)</option>
 										</select>
-										<div class="wuxHeader2">Affected Stats</div>
+										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+											<div class="wuxInteractiveInnerExpandBlock">
+												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_attributecnv_expand" />
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributecnv_expand" />
+												<span class="wuxInteractiveExpandIcon">&#9662;</span>
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributecnv_expand" />
+												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+											</div>
+											<div class="wuxHeader">Affected Stats</div>
+											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_attributecnv_expand">
+											<div class="wuxInteractiveExpandingContent">
+
+											</div>
+										</div>
 									</span>
 								</div>
 							</div>
@@ -4889,7 +4941,20 @@
 											<option value="2">Good (+2)</option>
 											<option value="-1">Bad (-1)</option>
 										</select>
-										<div class="wuxHeader2">Affected Stats</div>
+										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+											<div class="wuxInteractiveInnerExpandBlock">
+												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_attributeint_expand" />
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributeint_expand" />
+												<span class="wuxInteractiveExpandIcon">&#9662;</span>
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributeint_expand" />
+												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+											</div>
+											<div class="wuxHeader">Affected Stats</div>
+											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_attributeint_expand">
+											<div class="wuxInteractiveExpandingContent">
+
+											</div>
+										</div>
 									</span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
@@ -4899,7 +4964,20 @@
 											<option value="2">Good (+2)</option>
 											<option value="-1">Bad (-1)</option>
 										</select>
-										<div class="wuxHeader2">Affected Stats</div>
+										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+											<div class="wuxInteractiveInnerExpandBlock">
+												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_attributersn_expand" />
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributersn_expand" />
+												<span class="wuxInteractiveExpandIcon">&#9662;</span>
+												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_attributersn_expand" />
+												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+											</div>
+											<div class="wuxHeader">Affected Stats</div>
+											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_attributersn_expand">
+											<div class="wuxInteractiveExpandingContent">
+
+											</div>
+										</div>
 									</span>
 								</div>
 							</div>
@@ -6448,7 +6526,7 @@
 	UpdateBuildPoints: updateBuildPoints
 	};
 	}());
-	on("change:styleattr_stylebasicSet change:styleattr_styleswordplay change:styleattr_stylekiExtension change:techniqueattr_techniquebreakFree change:techniqueattr_techniquedash change:techniqueattr_techniqueescape change:techniqueattr_techniquegrapple change:techniqueattr_techniquehide change:techniqueattr_techniquemount change:techniqueattr_techniqueprepare change:techniqueattr_techniquereposition change:techniqueattr_techniqueseach change:techniqueattr_techniqueaid change:techniqueattr_techniqueencourage change:techniqueattr_techniquestabilize change:techniqueattr_techniqueskillCheck change:techniqueattr_techniquebuildRapport change:techniqueattr_techniquebuildPressure change:techniqueattr_techniquecaptivate change:techniqueattr_techniquedemand change:techniqueattr_techniquegrabAnEdge change:techniqueattr_techniqueinteract change:techniqueattr_techniquesecondWind change:techniqueattr_techniquesecondBreath change:techniqueattr_techniqueundaunted change:techniqueattr_techniquepreemptiveStrike change:techniqueattr_techniquepreemptiveStagger change:techniqueattr_techniquecriticalMaim change:techniqueattr_techniquespellshot change:techniqueattr_techniquefollow-UpSpellshot change:techniqueattr_techniqueburstingSpellshot change:techniqueattr_techniquesavior change:techniqueattr_techniqueknockAwaySavior change:techniqueattr_techniquesavior'sRetaliation change:techniqueattr_techniquespellstrike change:techniqueattr_techniquepowerSkirmish change:techniqueattr_techniquesneakAttack change:techniqueattr_techniquesneakyFollow-Up change:techniqueattr_techniqueassassinate change:techniqueattr_techniqueemergencyCare change:techniqueattr_techniquenightingale change:techniqueattr_techniquerhapsody change:techniqueattr_techniquemetamagic change:techniqueattr_techniquestrategize change:techniqueattr_techniqueforesight change:techniqueattr_techniquesawThatComing change:techniqueattr_techniqueasYouMayRecall change:techniqueattr_techniquegeneralist change:techniqueattr_techniquedefender change:techniqueattr_techniquedefenderII change:techniqueattr_techniquedefender'sWill change:techniqueattr_techniquedefender'sTaunt change:techniqueattr_techniquedefender'sRecovery change:techniqueattr_techniqueskirmisher change:techniqueattr_techniqueskirmisherII change:techniqueattr_techniqueskirmisher'sStep change:techniqueattr_techniqueskirmisher'sStrike change:techniqueattr_techniquemarksman change:techniqueattr_techniquemarksmanII change:techniqueattr_techniquemarksman'sLongshot change:techniqueattr_techniquemarksman'sSight change:techniqueattr_techniquemarksman'sStrike change:techniqueattr_techniqueathlete change:techniqueattr_techniqueathleteII change:techniqueattr_techniqueathlete'sSprint change:techniqueattr_techniqueathlete'sReach change:techniqueattr_techniqueboundingSprint change:techniqueattr_techniqueskulkAway change:techniqueattr_techniqueskulkThenHide change:techniqueattr_techniquefirstAid change:techniqueattr_techniquecleansingAid change:techniqueattr_techniqueenvironmentalAwareness change:techniqueattr_techniqueeclecticKnowledge change:techniqueattr_techniquepointOfClarity change:techniqueattr_techniquepoleVault change:techniqueattr_techniquequickDraw change:techniqueattr_techniqueextensionStrike change:techniqueattr_techniquestepExtension change:techniqueattr_techniquelastingExtension change:techniqueattr_techniquefarStrike change:techniqueattr_techniqueextensionStrike+ change:techniqueattr_techniquedefensePiercer change:techniqueattr_techniquequickSlash change:techniqueattr_techniqueprecisionBlade change:techniqueattr_techniquearmorPiercer change:techniqueattr_techniquequickSlashII change:techniqueattr_techniquecleave change:techniqueattr_techniquecrushingBlade change:techniqueattr_techniquegreatCleave change:techniqueattr_techniquecleave+ change:techniqueattr_techniquesuddenCleave change:techniqueattr_techniquegreatCleaveII change:techniqueattr_techniquepowerFlex change:techniqueattr_techniquecrushKnuckle change:techniqueattr_techniqueimpactKnuckle change:techniqueattr_techniqueknuckleFlurry change:techniqueattr_techniquewaterBlast change:techniqueattr_techniquegeyser change:techniqueattr_techniquegeyserLine change:techniqueattr_techniquesurf change:techniqueattr_techniquegreatGeyserLine change:techniqueattr_techniquetidalWave change:techniqueattr_techniquesandSurge change:techniqueattr_techniquesandSpout change:techniqueattr_techniquesandWave change:techniqueattr_techniquesandLauncher change:techniqueattr_techniquesicken change:techniqueattr_techniquespores change:techniqueattr_techniquesickeningCloud change:techniqueattr_techniquevirulentSpores change:techniqueattr_techniquefirebolt change:techniqueattr_techniqueflameArrow change:techniqueattr_techniquefireball change:techniqueattr_techniquefireblast change:techniqueattr_techniqueragnarok change:techniqueattr_techniquebonfire change:techniqueattr_techniquewallOfFire change:techniqueattr_techniquefieldOfFlame change:techniqueattr_techniquelightningShaft change:techniqueattr_techniqueshock change:techniqueattr_techniquelightningBolt change:techniqueattr_techniqueplasmaArc change:techniqueattr_techniquefulgor change:techniqueattr_techniquecoldSnap change:techniqueattr_techniquefrostbite change:techniqueattr_techniquefreezebind change:techniqueattr_techniquecoldBurst change:techniqueattr_techniquecoldFront change:techniqueattr_techniquediamondDust change:techniqueattr_techniquewindBullet change:techniqueattr_techniquegust change:techniqueattr_techniquewindsweep change:techniqueattr_techniquegale change:techniqueattr_techniquedarkness change:techniqueattr_techniqueshadowWall change:techniqueattr_techniquenightfall change:techniqueattr_techniquefogCloud change:techniqueattr_techniquesleet change:techniqueattr_techniquefreezingSleet change:techniqueattr_techniquehail change:techniqueattr_techniquebindingSleet change:techniqueattr_techniqueiceStorm change:techniqueattr_techniquefimbulwinter change:techniqueattr_techniquesmokeCloud change:techniqueattr_techniqueburningSmoke change:techniqueattr_techniquechokingSmoke change:techniqueattr_techniqueacceleration change:techniqueattr_techniquepowerVault change:techniqueattr_techniqueexpeditious change:techniqueattr_techniquequickClimb change:techniqueattr_techniquequickSwim change:techniqueattr_techniquepoise change:techniqueattr_techniquecatFall change:techniqueattr_techniquekipUp change:techniqueattr_techniquesilentStride change:techniqueattr_techniqueshove change:techniqueattr_techniqueknockdown change:techniqueattr_techniquetumble change:techniqueattr_techniquefieldMedic change:techniqueattr_techniquecamoflauge change:techniqueattr_techniqueblurredLight change:techniqueattr_techniquelightRefraction change:techniqueattr_techniqueshadowSteps change:techniqueattr_techniqueshadowWalker change:techniqueattr_techniquewindStep change:techniqueattr_techniqueupdraft change:techniqueattr_techniquecloudedUpdraft change:techniqueattr_techniquewindFall change:techniqueattr_techniquewalkOnAir change:techniqueattr_techniquefireStep change:techniqueattr_techniqueliftoff change:techniqueattr_techniquejet change:techniqueattr_techniquecunningAction change:techniqueattr_techniquedemoralize change:techniqueattr_techniquefascinate change:techniqueattr_techniqueimpersonator change:techniqueattr_techniqueetherSense change:techniqueattr_techniquespiritSense change:techniqueattr_techniquetremorsense change:techniqueattr_techniquedustcraft change:techniqueattr_techniqueshapeMaterial change:techniqueattr_techniquequickcraft change:techniqueattr_techniqueimprovedShaping change:techniqueattr_techniquegreaterShaping change:techniqueattr_techniquelegendaryShaping change:techniqueattr_techniquedustMaterial change:techniqueattr_techniquedustArea change:techniqueattr_techniqueimprovedDusting change:techniqueattr_techniquegreaterDusting change:techniqueattr_techniquelegendaryDusting change:techniqueattr_techniqueformPath change:techniqueattr_techniqueformPillar change:techniqueattr_techniquesteppingPath change:techniqueattr_techniqueformWall change:techniqueattr_techniquescatteredPillars change:techniqueattr_techniquegreatWall change:techniqueattr_techniquecultivate change:techniqueattr_techniqueentangle change:techniqueattr_techniquewildwood change:techniqueattr_techniquedistortion change:techniqueattr_techniquelastingDistortion change:techniqueattr_techniqueheatField change:techniqueattr_techniqueburnGuard change:techniqueattr_techniquecoldField change:techniqueattr_techniquechillGuard change:techniqueattr_techniquekinesis change:techniqueattr_techniquedistantKinesis change:techniqueattr_techniquekineticStrike change:techniqueattr_techniquekineticThrow change:techniqueattr_techniqueheavyKinesis change:techniqueattr_techniqueburden change:techniqueattr_techniquepressure change:techniqueattr_techniquerestrain change:techniqueattr_techniquewidePressure change:techniqueattr_techniqueprostration change:techniqueattr_techniquedeepPressure change:techniqueattr_techniquegravityWell change:techniqueattr_techniqueshieldBlock change:techniqueattr_techniqueglancingBlock change:techniqueattr_techniqueaegis change:techniqueattr_techniquelight change:techniqueattr_techniquedancingLights change:techniqueattr_techniqueflash change:techniqueattr_techniquesunlight change:techniqueattr_techniquestressRelease change:techniqueattr_techniquestressRelease+ change:techniqueattr_techniquestressRelease++ change:techniqueattr_techniquesensoryTraining change:techniqueattr_techniquesensoryTraining+ change:techniqueattr_techniquebroadStudy change:techniqueattr_techniqueexperiencedTracker change:techniqueattr_techniquemultilingual change:techniqueattr_techniquemultilingual+ change:techniqueattr_techniquespecializedLore change:techniqueattr_techniquespecializedLore+ change:techniqueattr_techniquespecializedLore++ change:techniqueattr_techniqueimprovedInitiative change:techniqueattr_techniqueknowledgeTraining change:techniqueattr_techniqueknowledgeTraining+ change:techniqueattr_techniqueknowledgeTraining++ change:techniqueattr_techniquesocialTraining change:techniqueattr_techniquesocialTraining+ change:techniqueattr_techniquesocialTraining++ change:techniqueattr_techniquerefocus change:techniqueattr_techniquerefocus+ change:techniqueattr_techniquesustainedChannel change:techniqueattr_techniquesustainedChannel+ change:techniqueattr_techniquekiControl change:techniqueattr_techniquekiControl+ change:techniqueattr_techniquekiControl++ change:techniqueattr_techniquesurgeValue change:techniqueattr_techniquesurgeValue+ change:techniqueattr_techniquechannelTraining change:techniqueattr_techniquechannelTraining+ change:techniqueattr_techniquechannelTraining++ change:techniqueattr_techniquephysicalTraining change:techniqueattr_techniquephysicalTraining+ change:techniqueattr_techniquebodyTraining change:techniqueattr_techniquebodyTraining+ change:techniqueattr_techniquebodyTraining++ change:techniqueattr_techniquetechnicalTraining change:techniqueattr_techniquetechnicalTraining+ change:techniqueattr_techniquetechnicalTraining++ change:techniqueattr_techniquemartialTraining change:techniqueattr_techniquemartialTraining+ change:techniqueattr_techniquemartialTraining++ change:techniqueattr_techniquehPUp change:techniqueattr_techniquehPUp+ change:techniqueattr_techniquehPUp++ change:techniqueattr_techniquevitalityBoost change:techniqueattr_techniquevitalityBoost+ change:techniqueattr_techniquevitalityBoost++ change:techniqueattr_techniqueundying change:techniqueattr_techniqueundying+ change:techniqueattr_techniqueextraFollow-UpAttack change:techniqueattr_techniqueextraFollow-UpAttack+ change:techniqueattr_techniquechangeTechSlots change:techniqueattr_techniqueholdOut change:techniqueattr_techniqueoverdrive", function (eventinfo) {
+	on("change:stylebasicSet change:styleswordplay change:stylekiExtension change:techniquebreakFree change:techniquedash change:techniqueescape change:techniquegrapple change:techniquehide change:techniquemount change:techniqueprepare change:techniquereposition change:techniqueseach change:techniqueaid change:techniqueencourage change:techniquestabilize change:techniqueskillCheck change:techniquebuildRapport change:techniquebuildPressure change:techniquecaptivate change:techniquedemand change:techniquegrabAnEdge change:techniqueinteract change:techniquesecondWind change:techniquesecondBreath change:techniqueundaunted change:techniquepreemptiveStrike change:techniquepreemptiveStagger change:techniquecriticalMaim change:techniquespellshot change:techniquefollow-UpSpellshot change:techniqueburstingSpellshot change:techniquesavior change:techniqueknockAwaySavior change:techniquesavior'sRetaliation change:techniquespellstrike change:techniquepowerSkirmish change:techniquesneakAttack change:techniquesneakyFollow-Up change:techniqueassassinate change:techniqueemergencyCare change:techniquenightingale change:techniquerhapsody change:techniquemetamagic change:techniquestrategize change:techniqueforesight change:techniquesawThatComing change:techniqueasYouMayRecall change:techniquegeneralist change:techniquedefender change:techniquedefenderII change:techniquedefender'sWill change:techniquedefender'sTaunt change:techniquedefender'sRecovery change:techniqueskirmisher change:techniqueskirmisherII change:techniqueskirmisher'sStep change:techniqueskirmisher'sStrike change:techniquemarksman change:techniquemarksmanII change:techniquemarksman'sLongshot change:techniquemarksman'sSight change:techniquemarksman'sStrike change:techniqueathlete change:techniqueathleteII change:techniqueathlete'sSprint change:techniqueathlete'sReach change:techniqueboundingSprint change:techniqueskulkAway change:techniqueskulkThenHide change:techniquefirstAid change:techniquecleansingAid change:techniqueenvironmentalAwareness change:techniqueeclecticKnowledge change:techniquepointOfClarity change:techniquepoleVault change:techniquequickDraw change:techniqueextensionStrike change:techniquestepExtension change:techniquelastingExtension change:techniquefarStrike change:techniqueextensionStrike+ change:techniquedefensePiercer change:techniquequickSlash change:techniqueprecisionBlade change:techniquearmorPiercer change:techniquequickSlashII change:techniquecleave change:techniquecrushingBlade change:techniquegreatCleave change:techniquecleave+ change:techniquesuddenCleave change:techniquegreatCleaveII change:techniquepowerFlex change:techniquecrushKnuckle change:techniqueimpactKnuckle change:techniqueknuckleFlurry change:techniquewaterBlast change:techniquegeyser change:techniquegeyserLine change:techniquesurf change:techniquegreatGeyserLine change:techniquetidalWave change:techniquesandSurge change:techniquesandSpout change:techniquesandWave change:techniquesandLauncher change:techniquesicken change:techniquespores change:techniquesickeningCloud change:techniquevirulentSpores change:techniquefirebolt change:techniqueflameArrow change:techniquefireball change:techniquefireblast change:techniqueragnarok change:techniquebonfire change:techniquewallOfFire change:techniquefieldOfFlame change:techniquelightningShaft change:techniqueshock change:techniquelightningBolt change:techniqueplasmaArc change:techniquefulgor change:techniquecoldSnap change:techniquefrostbite change:techniquefreezebind change:techniquecoldBurst change:techniquecoldFront change:techniquediamondDust change:techniquewindBullet change:techniquegust change:techniquewindsweep change:techniquegale change:techniquedarkness change:techniqueshadowWall change:techniquenightfall change:techniquefogCloud change:techniquesleet change:techniquefreezingSleet change:techniquehail change:techniquebindingSleet change:techniqueiceStorm change:techniquefimbulwinter change:techniquesmokeCloud change:techniqueburningSmoke change:techniquechokingSmoke change:techniqueacceleration change:techniquepowerVault change:techniqueexpeditious change:techniquequickClimb change:techniquequickSwim change:techniquepoise change:techniquecatFall change:techniquekipUp change:techniquesilentStride change:techniqueshove change:techniqueknockdown change:techniquetumble change:techniquefieldMedic change:techniquecamoflauge change:techniqueblurredLight change:techniquelightRefraction change:techniqueshadowSteps change:techniqueshadowWalker change:techniquewindStep change:techniqueupdraft change:techniquecloudedUpdraft change:techniquewindFall change:techniquewalkOnAir change:techniquefireStep change:techniqueliftoff change:techniquejet change:techniquecunningAction change:techniquedemoralize change:techniquefascinate change:techniqueimpersonator change:techniqueetherSense change:techniquespiritSense change:techniquetremorsense change:techniquedustcraft change:techniqueshapeMaterial change:techniquequickcraft change:techniqueimprovedShaping change:techniquegreaterShaping change:techniquelegendaryShaping change:techniquedustMaterial change:techniquedustArea change:techniqueimprovedDusting change:techniquegreaterDusting change:techniquelegendaryDusting change:techniqueformPath change:techniqueformPillar change:techniquesteppingPath change:techniqueformWall change:techniquescatteredPillars change:techniquegreatWall change:techniquecultivate change:techniqueentangle change:techniquewildwood change:techniquedistortion change:techniquelastingDistortion change:techniqueheatField change:techniqueburnGuard change:techniquecoldField change:techniquechillGuard change:techniquekinesis change:techniquedistantKinesis change:techniquekineticStrike change:techniquekineticThrow change:techniqueheavyKinesis change:techniqueburden change:techniquepressure change:techniquerestrain change:techniquewidePressure change:techniqueprostration change:techniquedeepPressure change:techniquegravityWell change:techniqueshieldBlock change:techniqueglancingBlock change:techniqueaegis change:techniquelight change:techniquedancingLights change:techniqueflash change:techniquesunlight change:techniquestressRelease change:techniquestressRelease+ change:techniquestressRelease++ change:techniquesensoryTraining change:techniquesensoryTraining+ change:techniquebroadStudy change:techniqueexperiencedTracker change:techniquemultilingual change:techniquemultilingual+ change:techniquespecializedLore change:techniquespecializedLore+ change:techniquespecializedLore++ change:techniqueimprovedInitiative change:techniqueknowledgeTraining change:techniqueknowledgeTraining+ change:techniqueknowledgeTraining++ change:techniquesocialTraining change:techniquesocialTraining+ change:techniquesocialTraining++ change:techniquerefocus change:techniquerefocus+ change:techniquesustainedChannel change:techniquesustainedChannel+ change:techniquekiControl change:techniquekiControl+ change:techniquekiControl++ change:techniquesurgeValue change:techniquesurgeValue+ change:techniquechannelTraining change:techniquechannelTraining+ change:techniquechannelTraining++ change:techniquephysicalTraining change:techniquephysicalTraining+ change:techniquebodyTraining change:techniquebodyTraining+ change:techniquebodyTraining++ change:techniquetechnicalTraining change:techniquetechnicalTraining+ change:techniquetechnicalTraining++ change:techniquemartialTraining change:techniquemartialTraining+ change:techniquemartialTraining++ change:techniquehPUp change:techniquehPUp+ change:techniquehPUp++ change:techniquevitalityBoost change:techniquevitalityBoost+ change:techniquevitalityBoost++ change:techniqueundying change:techniqueundying+ change:techniqueextraFollow-UpAttack change:techniqueextraFollow-UpAttack+ change:techniquechangeTechSlots change:techniqueholdOut change:techniqueoverdrive", function (eventinfo) {
 	WuxWorkerTechniques.UpdateBuildPoints(eventinfo)
 	});
 	var WuxWorkerKnowledges = WuxWorkerKnowledges || (function() {
@@ -6464,7 +6542,8 @@
 	UpdateBuildPoints: updateBuildPoints
 	};
 	}());
-	on("change:languageattr_languageminere_rank change:languageattr_languagejunal_rank change:languageattr_languageapollen_rank change:languageattr_languagelib_rank change:languageattr_languagecert_rank change:languageattr_languagebyric_rank change:languageattr_languagedustell_rank change:languageattr_languagemuralic_rank change:languageattr_languageshira_rank change:languageattr_languageciel_rank change:languageattr_languageciteq_rank change:languageattr_languagemanstan_rank change:languageattr_languagesalkan_rank change:languageattr_languagesansic_rank change:languageattr_languagesilq_rank change:languageattr_languagekleikan_rank change:languageattr_languagecrinere_rank change:languageattr_languagepalmic_rank change:languageattr_languageshorespeak_rank change:languageattr_languageverdeni_rank change:languageattr_languagevulca_rank change:languageattr_languageemotion_rank change:languageattr_languageempathy_rank change:languageattr_languagewolfwarg_rank change:languageattr_languagejovean_rank change:languageattr_languagemytikan_rank change:loreattr_loreacademics_rank change:loreattr_lorehealth_rank change:loreattr_loremana_rank change:loreattr_loremathematics_rank change:loreattr_lorenature_rank change:loreattr_loreschool_rank change:loreattr_lorespirit_rank change:loreattr_lorewarfare_rank change:loreattr_lorezoology_rank change:loreattr_loreprofession_rank change:loreattr_lorefarming_rank change:loreattr_lorefishing_rank change:loreattr_lorehunting_rank change:loreattr_lorelegal_rank change:loreattr_loremercantile_rank change:loreattr_loremining_rank change:loreattr_lorecraftmanship_rank change:loreattr_lorealchemy_rank change:loreattr_lorearchitecture_rank change:loreattr_lorebrewing_rank change:loreattr_lorecooking_rank change:loreattr_loreengineering_rank change:loreattr_loreglassblowing_rank change:loreattr_loreleatherworking_rank change:loreattr_loresculpting_rank change:loreattr_loresmithing_rank change:loreattr_loreweaving_rank change:loreattr_loregeography_rank change:loreattr_lorearidsha_rank change:loreattr_loreceres_rank change:loreattr_lorecolswei_rank change:loreattr_lorekhem_rank change:loreattr_lorenovus_rank change:loreattr_lorewalthair_rank change:loreattr_lorewayling_rank change:loreattr_loreetherealPlane_rank change:loreattr_lorehistory_rank change:loreattr_lorearidshaHistory_rank change:loreattr_loreceresHistory_rank change:loreattr_lorecolsweiHistory_rank change:loreattr_lorekhemHistory_rank change:loreattr_lorenovusHistory_rank change:loreattr_lorewalthairHistory_rank change:loreattr_lorewaylingHistory_rank change:loreattr_loreculture_rank change:loreattr_loreart_rank change:loreattr_loreetiquette_rank change:loreattr_lorefashion_rank change:loreattr_loregames_rank change:loreattr_loremusic_rank change:loreattr_lorescribing_rank change:loreattr_loretheater_rank change:loreattr_lorereligion_rank change:loreattr_lorechurchOfKongkwei_rank change:loreattr_loreguidance_rank change:loreattr_lorelife'sCircle_rank change:loreattr_loreoceanCourt_rank change:loreattr_loresylvan_rank change:loreattr_lorezushaon_rank", function (eventinfo) {
+	on("change:languageminere_rank change:languagejunal_rank change:languageapollen_rank change:languagelib_rank change:languagecert_rank change:languagebyric_rank change:languagedustell_rank change:languagemuralic_rank change:languageshira_rank change:languageciel_rank change:languageciteq_rank change:languagemanstan_rank change:languagesalkan_rank change:languagesansic_rank change:languagesilq_rank change:languagekleikan_rank change:languagecrinere_rank change:languagepalmic_rank change:languageshorespeak_rank change:languageverdeni_rank change:languagevulca_rank change:languageemotion_rank change:languageempathy_rank change:languagewolfwarg_rank change:languagejovean_rank change:languagemytikan_rank change:loreacademics_rank change:lorehealth_rank change:loremana_rank change:loremathematics_rank change:lorenature_rank change:loreschool_rank change:lorespirit_rank change:lorewarfare_rank change:lorezoology_rank change:loreprofession_rank change:lorefarming_rank change:lorefishing_rank change:lorehunting_rank change:lorelegal_rank change:loremercantile_rank change:loremining_rank change:lorecraftmanship_rank change:lorealchemy_rank change:lorearchitecture_rank change:lorebrewing_rank change:lorecooking_rank change:loreengineering_rank change:loreglassblowing_rank change:loreleatherworking_rank change:loresculpting_rank change:loresmithing_rank change:loreweaving_rank change:loregeography_rank change:lorearidsha_rank change:loreceres_rank change:lorecolswei_rank change:lorekhem_rank change:lorenovus_rank change:lorewalthair_rank change:lorewayling_rank change:loreetherealPlane_rank change:lorehistory_rank change:lorearidshaHistory_rank change:loreceresHistory_rank change:lorecolsweiHistory_rank change:lorekhemHistory_rank change:lorenovusHistory_rank change:lorewalthairHistory_rank change:lorewaylingHistory_rank change:loreculture_rank change:loreart_rank change:loreetiquette_rank change:lorefashion_rank change:loregames_rank change:loremusic_rank change:lorescribing_rank change:loretheater_rank change:lorereligion_rank change:lorechurchOfKongkwei_rank change:loreguidance_rank change:lorelife'sCircle_rank change:loreoceanCourt_rank change:loresylvan_rank change:lorezushaon_rank", function (eventinfo) {
+	console.log("Update Knowledge");
 	WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)
 	});
 	var WuxWorkerJobs = WuxWorkerJobs || (function() {
@@ -6480,7 +6559,8 @@
 	UpdateBuildPoints: updateBuildPoints
 	};
 	}());
-	on("change:jobattr_jobtrainee change:jobattr_jobinterceptor change:jobattr_jobguardian change:jobattr_jobspellslinger change:jobattr_jobwarrior change:jobattr_jobrogue change:jobattr_jobscholar change:jobattr_jobphysician", function (eventinfo) {
+	on("change:jobtrainee change:jobinterceptor change:jobguardian change:jobspellslinger change:jobwarrior change:jobrogue change:jobscholar change:jobphysician", function (eventinfo) {
+	console.log("Update Jobs");
 	WuxWorkerJobs.UpdateBuildPoints(eventinfo)
 	});
 	var WuxWorkerSkills = WuxWorkerSkills || (function() {
@@ -6496,7 +6576,8 @@
 	UpdateBuildPoints: updateBuildPoints
 	};
 	}());
-	on("change:skillattr_skillacrobatics_rank change:skillattr_skillagility_rank change:skillattr_skillanalyze_rank change:skillattr_skillbuild_rank change:skillattr_skillchannel_rank change:skillattr_skillcharm_rank change:skillattr_skillcommand_rank change:skillattr_skillconcoct_rank change:skillattr_skillcook_rank change:skillattr_skilldeception_rank change:skillattr_skilldisguise_rank change:skillattr_skillempathy_rank change:skillattr_skillenchant_rank change:skillattr_skillfinesse_rank change:skillattr_skillflexibility_rank change:skillattr_skillgrappling_rank change:skillattr_skillheal_rank change:skillattr_skillintimidation_rank change:skillattr_skillleadership_rank change:skillattr_skillmaneuver_rank change:skillattr_skillmedicine_rank change:skillattr_skillmight_rank change:skillattr_skillnegotiation_rank change:skillattr_skillpalming_rank change:skillattr_skillphysique_rank change:skillattr_skillpilot_rank change:skillattr_skillresonance_rank change:skillattr_skillsearch_rank change:skillattr_skillshoot_rank change:skillattr_skillskirmish_rank change:skillattr_skillsneak_rank change:skillattr_skillsurvival_rank change:skillattr_skillthrow_rank change:skillattr_skilltinker_rank change:skillattr_skilltraversal_rank", function (eventinfo) {
+	on("change:skillacrobatics_rank change:skillagility_rank change:skillanalyze_rank change:skillbuild_rank change:skillchannel_rank change:skillcharm_rank change:skillcommand_rank change:skillconcoct_rank change:skillcook_rank change:skilldeception_rank change:skilldisguise_rank change:skillempathy_rank change:skillenchant_rank change:skillfinesse_rank change:skillflexibility_rank change:skillgrappling_rank change:skillheal_rank change:skillintimidation_rank change:skillleadership_rank change:skillmaneuver_rank change:skillmedicine_rank change:skillmight_rank change:skillnegotiation_rank change:skillpalming_rank change:skillphysique_rank change:skillpilot_rank change:skillresonance_rank change:skillsearch_rank change:skillshoot_rank change:skillskirmish_rank change:skillsneak_rank change:skillsurvival_rank change:skillthrow_rank change:skilltinker_rank change:skilltraversal_rank", function (eventinfo) {
+	console.log("Update Skills");
 	WuxWorkerSkills.UpdateBuildPoints(eventinfo)
 	});
 	var WuxWorkerAttributes = WuxWorkerAttributes || (function() {
@@ -6513,6 +6594,7 @@
 	};
 	}());
 	on("change:attributebod change:attributeprc change:attributeqck change:attributecnv change:attributeint change:attributersn", function (eventinfo) {
+	console.log("Update Attributes");
 	WuxWorkerAttributes.UpdateBuildPoints(eventinfo)
 	});
 	

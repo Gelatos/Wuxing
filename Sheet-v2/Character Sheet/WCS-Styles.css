@@ -865,7 +865,7 @@ span.wuxFlexTableItemData,
 {
     color: #f4f6f8;
     font-size: 12px;
-	text-align: center;
+	/* text-align: center; */
 }
 
 input[type=number].wuxFlexTableItemData

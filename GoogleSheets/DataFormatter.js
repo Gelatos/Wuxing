@@ -56,9 +56,11 @@ function SetTechniquesDatabase(techniqueDatabaseString) {
     return PrintLargeEntry(jsClassData.print("WuxTechniqueDb"), "d");
 }
 
-function Test(stylesArray, techniqueDatabaseString) {
-    return JSON.stringify(SheetsDatabase.CreateStyles(stylesArray));
-	return PrintLargeEntry(DisplayTechniquesSheet.PrintTest(SheetsDatabase.CreateStyles(stylesArray), SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString))), "t");
+function Test(definitionArray) {
+    let data = new DefinitionData(definitionArray[0]);
+    data.setFormulaData();
+    return JSON.stringify(data);
+	// return PrintLargeEntry(DisplayTechniquesSheet.PrintTest(SheetsDatabase.CreateStyles(stylesArray), SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString))), "t");
 }
 
 function ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
@@ -154,7 +156,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createDefinitions = function (arr) {
-            return new ExtendedDescriptionDatabase(["group"], arr, function (arr) {
+            return new ExtendedDescriptionDatabase(["group", "formula"], arr, function (arr) {
                 return new DefinitionData(arr);
             });
         }
@@ -686,11 +688,11 @@ var WuxDefinition = WuxDefinition || (function () {
             }
             return output;
         },
-        getGroupVariables = function (filterData) {
+        getGroupVariables = function (filterData, mod1, mod2) {
             let data = filter(filterData);
             let output = [];
             for (let i = 0; i < data.length; i++) {
-                output.push(data[i].getVariable());
+                output.push(data[i].getVariable(mod1, mod2));
             }
             return output;
         },
@@ -707,11 +709,11 @@ var WuxDefinition = WuxDefinition || (function () {
             return output;
         },
 
-        displayCollapsibleTitle = function (definitionData, fieldName) {
+        displayCollapsibleTitle = function (definitionData) {
             if (definitionData == undefined) {
                 return "";
             }
-            let expandContents = "";
+            let expandContents = `<em>${definitionData.group}</em>`;
             let entryData = definitionData.descriptions;
             if (Array.isArray(entryData)) {
                 for (let i = 0; i < entryData.length; i++) {
@@ -719,7 +721,7 @@ var WuxDefinition = WuxDefinition || (function () {
                 }
             }
 
-            let expandFieldName = `${fieldName}-expand`;
+            let expandFieldName = definitionData.getVariable(WuxDef._expand);
 
             let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
             ${WuxSheetMain.Header(definitionData.name, "span")}

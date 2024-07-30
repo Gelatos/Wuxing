@@ -651,15 +651,21 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
 						buildAttribute = function (attributeDefinition, attributeValuesFilter) {
 							let contents = "";
-							contents += WuxSheetMain.Select(WuxDef.GetAttribute("Attribute", attributeDefinition.variable), attributeValuesFilter, false);
-							contents += WuxSheetMain.Header("Affected Stats");
+							contents += WuxSheetMain.Select(attributeDefinition.getAttribute(), attributeValuesFilter, false);
+
+							let expandContents = "";
 							let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formula", attributeDefinition.name));
-							for (let formula in formulaDefinitions) {
-							    contents += WuxSheetMain.Header2(formula.title);
-                                for (let description in formula.descriptions) {
-                                    contents += `\n${WuxSheetMain.Desc(description)}`;
+							for (let i = 0; i < formulaDefinitions.length; i++) {
+							    expandContents += WuxSheetMain.Header(formulaDefinitions[i].title, "span");
+							    expandContents += WuxSheetMain.Desc(formulaDefinitions[i].group);
+								for (let j = 0; j < formulaDefinitions[i].descriptions.length; j++) {
+                                    expandContents += `${WuxSheetMain.Desc(formulaDefinitions[i].descriptions[j])}`;
                                 }
 							}
+							let expandFieldName = attributeDefinition.getAttribute(WuxDef._expand);
+							contents += WuxSheetMain.InteractionElement.Build(true, `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
+							${WuxSheetMain.Header("Affected Stats")}
+							${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`);
 							
 							let output = WuxSheetMain.Table.FlexTableHeader(attributeDefinition.title);
 							output += WuxSheetMain.Table.FlexTableData(contents);
@@ -922,16 +928,14 @@ var BuilderBackend = BuilderBackend || (function () {
 
 				buildListeners = function () {
 					let output = "";
-					let styleGroupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"));
-					let techniqueGroupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Technique"));
 					
-					output += listenerUpdateBuildPoints(styleGroupVariables, techniqueGroupVariables);
+					output += listenerUpdateBuildPoints();
 
 					return output;
 				},
-				listenerUpdateBuildPoints = function(styleGroupVariables, techniqueGroupVariables) {
-				    let groupVariableNames = WuxDef.GetVariables("Style", styleGroupVariables);
-					groupVariableNames = groupVariableNames.concat(WuxDef.GetVariables("Technique", techniqueGroupVariables));
+				listenerUpdateBuildPoints = function() {
+				    let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"));
+					groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Technique")));
 				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -1020,17 +1024,14 @@ var TrainingBackend = TrainingBackend || (function () {
 				},
 				buildListeners = function () {
 					let output = "";
-					let languageGroupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Language"));
-					let loreGroupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Lore"));
-					
-					output += listenerUpdateBuildPoints(languageGroupVariables, loreGroupVariables);
+					output += listenerUpdateBuildPoints();
 
 					return output;
 				},
-				listenerUpdateBuildPoints = function(languageGroupVariables, loreGroupVariables) {
-				    let groupVariableNames = WuxDef.GetVariables("Language", languageGroupVariables, WuxDef._rank);
-				    groupVariableNames = groupVariableNames.concat(WuxDef.GetVariables("Lore", loreGroupVariables, WuxDef._rank));
-				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
+				listenerUpdateBuildPoints = function() {
+					let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Language"), WuxDef._rank);
+					groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Lore"), WuxDef._rank));
+				    let output = `console.log("Update Knowledge");\n${className}.UpdateBuildPoints(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
@@ -1079,15 +1080,14 @@ var AdvancementBackend = AdvancementBackend || (function () {
 				buildListeners = function () {
 					let output = "";
 					let groupName = "Job";
-					let groupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName));
 					
-					output += listenerUpdateBuildPoints(groupName, groupVariables);
+					output += listenerUpdateBuildPoints(groupName);
 
 					return output;
 				},
-				listenerUpdateBuildPoints = function(groupName, groupVariables) {
-					let groupVariableNames = WuxDef.GetVariables(groupName, groupVariables);
-				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
+				listenerUpdateBuildPoints = function(groupName) {
+					let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName));
+				    let output = `console.log("Update Jobs");\n${className}.UpdateBuildPoints(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
@@ -1117,15 +1117,13 @@ var AdvancementBackend = AdvancementBackend || (function () {
 				buildListeners = function () {
 					let output = "";
 					let groupName = "Skill";
-					let groupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName));
-					
-					output += listenerUpdateBuildPoints(groupName, groupVariables);
+					output += listenerUpdateBuildPoints(groupName);
 
 					return output;
 				},
-				listenerUpdateBuildPoints = function(groupName, groupVariables) {
-				    let groupVariableNames = WuxDef.GetVariables(groupName, groupVariables, WuxDef._rank);
-				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
+				listenerUpdateBuildPoints = function(groupName) {
+					let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName), WuxDef._rank);
+				    let output = `console.log("Update Skills");\n${className}.UpdateBuildPoints(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
@@ -1155,15 +1153,15 @@ var AdvancementBackend = AdvancementBackend || (function () {
 				buildListeners = function () {
 					let output = "";
 					let groupName = "Attribute";
-					let groupVariables = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName));
 					
-					output += listenerUpdateBuildPoints(groupName, groupVariables);
+					output += listenerUpdateBuildPoints(groupName);
 
 					return output;
 				},
-				listenerUpdateBuildPoints = function(groupName, groupVariables) {
-				    let groupVariableNames = WuxDef.GetVariables(groupName, groupVariables);
-				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
+				listenerUpdateBuildPoints = function(groupName) {
+					let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName));
+				    let output = `console.log("Update Attributes");
+					${className}.UpdateBuildPoints(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}

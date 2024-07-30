@@ -192,6 +192,7 @@ class ExtendedTechniqueDatabase extends Database {
 class ExtendedDescriptionDatabase extends Database {
     importSheets(dataArray, dataCreationCallback) {
         let data = {};
+        let formulaDefs;
         for (let i = 0; i < dataArray.length; i++) {
             data = dataCreationCallback(dataArray[i]);
             if (this.has(data.name)) {
@@ -199,9 +200,9 @@ class ExtendedDescriptionDatabase extends Database {
             }
             else {
                 this.add(data.name, data);
-                data.setFormulaData();
-                for (let propertyValue in data.modAttrs) {
-                    this.addSortingGroup("formula", propertyValue, data.name);
+                formulaDefs = data.getFormulaDefinitions();
+                for (let i = 0; i < formulaDefs.length; i++) {
+                    this.addSortingGroup("formula", formulaDefs[i], data.name);
                 }
             }
         }
@@ -319,7 +320,7 @@ class TechniqueData extends dbObj {
         let definition = new DefinitionData();
         definition.name = `${baseDefinition.name}_${this.name}`;
         definition.fieldName = this.fieldName;
-        definition.variable = baseDefinition.getAttribute(this.fieldName);
+        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
@@ -489,7 +490,7 @@ class TechniqueStyle extends dbObj {
         let definition = new DefinitionData();
         definition.name = `${baseDefinition.name}_${this.name}`;
         definition.fieldName = this.fieldName;
-        definition.variable = baseDefinition.getAttribute(this.fieldName);
+        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
@@ -524,7 +525,7 @@ class SkillData extends dbObj {
         let definition = new DefinitionData();
         definition.name = `${baseDefinition.name}_${this.name}`;
         definition.fieldName = this.fieldName;
-        definition.variable = baseDefinition.getAttribute(this.fieldName);
+        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
@@ -554,7 +555,7 @@ class LanguageData extends dbObj {
         let definition = new DefinitionData();
         definition.name = `${baseDefinition.name}_${this.name}`;
         definition.fieldName = this.fieldName;
-        definition.variable = baseDefinition.getAttribute(this.fieldName);
+        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
@@ -585,7 +586,7 @@ class LoreData extends dbObj {
         let definition = new DefinitionData();
         definition.name = `${baseDefinition.name}_${this.name}`;
         definition.fieldName = this.fieldName;
-        definition.variable = baseDefinition.getAttribute(this.fieldName);
+        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
@@ -628,7 +629,7 @@ class JobData extends dbObj {
         let definition = new DefinitionData();
         definition.name = `${baseDefinition.name}_${this.name}`;
         definition.fieldName = this.fieldName;
-        definition.variable = baseDefinition.getAttribute(this.fieldName);
+        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
@@ -697,7 +698,7 @@ class RoleData extends dbObj {
         let definition = new DefinitionData();
         definition.name = `${baseDefinition.name}_${this.name}`;
         definition.fieldName = this.fieldName;
-        definition.variable = baseDefinition.getAttribute(this.fieldName);
+        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
@@ -870,6 +871,7 @@ class DefinitionData extends dbObj {
 
         let mod = "";
         let multiplier = 1;
+        let modDefinition = {};
 
         let formulaArray = this.formula.split(";");
         formulaArray.forEach((formula) => {
@@ -882,8 +884,9 @@ class DefinitionData extends dbObj {
             }
 
             if (isNaN(parseInt(mod))) {
-                this.formulaCalculations.push(new WorkerFormula(mod, 0, multiplier));
-                this.modArray.push(mod);
+                modDefinition = WuxDef.Get(mod);
+                this.formulaCalculations.push(new WorkerFormula(modDefinition.getVariable(), 0, multiplier));
+                this.modAttrs.push(modDefinition.getVariable());
             }
             else {
                 this.formulaCalculations.push(new WorkerFormula("", parseInt(mod), multiplier));
@@ -895,6 +898,24 @@ class DefinitionData extends dbObj {
             this.formulaCalculations.push(new WorkerFormula(mod, 0, multiplier));
             this.modAttrs.push(this.getVariable(mod));
         });
+    }
+    getFormulaDefinitions() {
+        let mod = "";
+        let output = [];
+
+        let formulaArray = this.formula.split(";");
+        formulaArray.forEach((formula) => {
+            mod = formula.trim();
+            if (formula.indexOf("*") > -1) {
+                let split = mod.split("*");
+                mod = split[0];
+            }
+
+            if (isNaN(parseInt(mod))) {
+                output.push(mod);
+            }
+        });
+        return output;
     }
     getFormulaValue(attributeHandler) {
         let output = 0;
