@@ -108,7 +108,9 @@ class Database extends Dictionary {
         super.add(key, value);
         let propertyValue = "";
         for (let property in this.sortingGroups) {
-            this.addSortingGroup(property, value[property], value.name);
+            if (value.hasOwnProperty(property)) {
+                this.addSortingGroup(property, value[property], value.name);
+            }
         }
     }
     
@@ -202,7 +204,7 @@ class ExtendedDescriptionDatabase extends Database {
                 this.add(data.name, data);
                 formulaDefs = data.getFormulaDefinitions();
                 for (let i = 0; i < formulaDefs.length; i++) {
-                    this.addSortingGroup("formula", formulaDefs[i], data.name);
+                    this.addSortingGroup("formulaMods", formulaDefs[i], data.name);
                 }
             }
         }
