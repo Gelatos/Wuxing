@@ -156,7 +156,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createDefinitions = function (arr) {
-            return new ExtendedDescriptionDatabase(["group", "formula"], arr, function (arr) {
+            return new ExtendedDescriptionDatabase(["group", "formulaMods"], arr, function (arr) {
                 return new DefinitionData(arr);
             });
         }
