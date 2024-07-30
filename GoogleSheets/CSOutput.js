@@ -654,7 +654,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							contents += WuxSheetMain.Select(attributeDefinition.getAttribute(), attributeValuesFilter, false);
 
 							let expandContents = "";
-							let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formula", attributeDefinition.name));
+							let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinition.name));
 							for (let i = 0; i < formulaDefinitions.length; i++) {
 							    expandContents += WuxSheetMain.Header(formulaDefinitions[i].title, "span");
 							    expandContents += WuxSheetMain.Desc(formulaDefinitions[i].group);
