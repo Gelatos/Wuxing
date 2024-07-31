@@ -871,29 +871,26 @@ class DefinitionData extends dbObj {
             return;
         }
 
-        let mod = "";
-        let multiplier = 1;
+        let definition = {};
         let modDefinition = {};
-
-        let formulaArray = this.formula.split(";");
-        formulaArray.forEach((formula) => {
-            mod = formula.trim();
-            multiplier = 1;
-            if (formula.indexOf("*") > -1) {
-                let split = mod.split("*");
-                mod = split[0];
-                multiplier = split[1];
-            }
-
-            if (isNaN(parseInt(mod))) {
-                modDefinition = WuxDef.Get(mod);
-                this.formulaCalculations.push(new WorkerFormula(modDefinition.getVariable(), 0, multiplier));
-                this.modAttrs.push(modDefinition.getVariable());
+        let formulaVar = "";
+        this.iterateFormulaComponents(function (definitionName, definitionNameModifier, multiplier) {
+            if (isNaN(parseInt(definitionName))) {
+                definition = WuxDef.Get(definitionName);
+                if (definitionNameModifier == "") {
+                    formulaVar = definition.getVariable();
+                }
+                else {
+                    modDefinition = WuxDef.Get(definitionNameModifier);
+                    formulaVar = definition.getVariable(modDefinition.getVariable());
+                }
+                this.formulaCalculations.push(new WorkerFormula(formulaVar, 0, multiplier));
+                this.modAttrs.push(formulaVar);
             }
             else {
-                this.formulaCalculations.push(new WorkerFormula("", parseInt(mod), multiplier));
+                this.formulaCalculations.push(new WorkerFormula("", parseInt(definitionName), multiplier));
             }
-        });
+        })
 
         let modArray = this.modifiers.split(";");
         modArray.forEach((mod) => {
@@ -902,22 +899,47 @@ class DefinitionData extends dbObj {
         });
     }
     getFormulaDefinitions() {
-        let mod = "";
         let output = [];
+        
+        this.iterateFormulaComponents(function (definitionName, definitionNameModifier, multiplier) {
+            if (isNaN(parseInt(definitionName))) {
+                output.push(definitionName);
+            }
+        return output;
+    }
+    iterateFormulaComponents(callback) {
+        let definitionName = "";
+        let definitionNameModifier = "";
+        let multiplier = 1;
+        let modDefinition = {};
 
         let formulaArray = this.formula.split(";");
         formulaArray.forEach((formula) => {
-            mod = formula.trim();
+            definitionName = formula.trim();
+            
+            multiplier = 1;
             if (formula.indexOf("*") > -1) {
-                let split = mod.split("*");
-                mod = split[0];
+                let split = definitionName.split("*");
+                definitionName = split[0];
+                multiplier = split[1];
+            }
+            
+            definitionNameModifier = "";
+            if (formula.indexOf(":") > -1) {
+                let split = definitionName.split(":");
+                definitionName = split[0];
+                definitionNameModifier = split[1];
             }
 
-            if (isNaN(parseInt(mod))) {
-                output.push(mod);
+            if (isNaN(parseInt(definitionName))) {
+                modDefinition = WuxDef.Get(definitionName);
+                this.formulaCalculations.push(new WorkerFormula(modDefinition.getVariable(), 0, multiplier));
+                this.modAttrs.push(modDefinition.getVariable());
+            }
+            else {
+                this.formulaCalculations.push(new WorkerFormula("", parseInt(definitionName), multiplier));
             }
         });
-        return output;
     }
     getFormulaValue(attributeHandler) {
         let output = 0;
