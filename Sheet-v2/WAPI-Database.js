@@ -901,17 +901,17 @@ class DefinitionData extends dbObj {
     getFormulaDefinitions() {
         let output = [];
         
-        this.iterateFormulaComponents(function (definitionName, definitionNameModifier, multiplier) {
+        this.iterateFormulaComponents(function (definitionName) {
             if (isNaN(parseInt(definitionName))) {
                 output.push(definitionName);
             }
+        });
         return output;
     }
     iterateFormulaComponents(callback) {
         let definitionName = "";
         let definitionNameModifier = "";
         let multiplier = 1;
-        let modDefinition = {};
 
         let formulaArray = this.formula.split(";");
         formulaArray.forEach((formula) => {
@@ -931,14 +931,7 @@ class DefinitionData extends dbObj {
                 definitionNameModifier = split[1];
             }
 
-            if (isNaN(parseInt(definitionName))) {
-                modDefinition = WuxDef.Get(definitionName);
-                this.formulaCalculations.push(new WorkerFormula(modDefinition.getVariable(), 0, multiplier));
-                this.modAttrs.push(modDefinition.getVariable());
-            }
-            else {
-                this.formulaCalculations.push(new WorkerFormula("", parseInt(definitionName), multiplier));
-            }
+            callback(definitionName, definitionNameModifier, multiplier);
         });
     }
     getFormulaValue(attributeHandler) {
