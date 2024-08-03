@@ -239,7 +239,38 @@ class dbObj {
     importSheets(dataArray) { }
     createEmpty() { }
 }
-class TechniqueData extends dbObj {
+
+class WuxDatabaseData extends dbObj {
+    importJson(json) {
+        this.name = json.name;
+        this.fieldName = Format.ToCamelCase(this.name);
+        this.group = json.group;
+        this.description = json.description;
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToCamelCase(this.name);
+        this.group = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+    }
+    createEmpty() {
+        this.name = "";
+        this.fieldName = "";
+        this.group = "";
+        this.description = "";
+    }
+    createDefinition(baseDefinition) {
+        baseDefinition.name = `${baseDefinition.name}_${this.name}`;
+        baseDefinition.fieldName = this.fieldName;
+        baseDefinition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
+        baseDefinition.title = this.name;
+        baseDefinition.group = baseDefinition.name;
+        baseDefinition.descriptions = [this.description];
+    }
+
+}
+class TechniqueData extends WuxDatabaseData {
     importJson(json) {
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -317,16 +348,6 @@ class TechniqueData extends dbObj {
         this.autoEffects = [];
         this.effects = new Dictionary();
         this.onGoingTech = undefined;
-    }
-    createDefinition(baseDefinition) {
-        let definition = new DefinitionData();
-        definition.name = `${baseDefinition.name}_${this.name}`;
-        definition.fieldName = this.fieldName;
-        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
-        definition.title = this.name;
-        definition.group = baseDefinition.name;
-        definition.descriptions = [this.description];
-        return definition;
     }
 
     setAugmentTechValues(baseTechnique) {
@@ -462,7 +483,7 @@ class TechniqueEffect extends dbObj {
         this.traits = "";
     }
 }
-class TechniqueStyle extends dbObj {
+class TechniqueStyle extends WuxDatabaseData {
     importJson(json) {
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -488,18 +509,8 @@ class TechniqueStyle extends dbObj {
         this.affinity = "";
         this.cr = 0;
     }
-    createDefinition(baseDefinition) {
-        let definition = new DefinitionData();
-        definition.name = `${baseDefinition.name}_${this.name}`;
-        definition.fieldName = this.fieldName;
-        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
-        definition.title = this.name;
-        definition.group = baseDefinition.name;
-        definition.descriptions = [this.description];
-        return definition;
-    }
 }
-class SkillData extends dbObj {
+class SkillData extends WuxDatabaseData {
     importJson(json) {
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -523,20 +534,14 @@ class SkillData extends dbObj {
         this.abilityScore = "";
         this.description = "";
     }
-    createDefinition(baseDefinition) {
-        let definition = new DefinitionData();
-        definition.name = `${baseDefinition.name}_${this.name}`;
-        definition.fieldName = this.fieldName;
-        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
-        definition.title = this.name;
-        definition.group = baseDefinition.name;
-        definition.descriptions = [this.description];
-        return definition;
-    }
 }
-class LanguageData extends dbObj {
+class LanguageData extends WuxDatabaseData {
     importJson(json) {
-
+        this.name = json.name;
+        this.fieldName = Format.ToCamelCase(this.name);
+        this.group = json.group;
+        this.location = json.location;
+        this.description = json.description;
     }
     importSheets(dataArray) {
         let i = 0;
@@ -553,18 +558,8 @@ class LanguageData extends dbObj {
         this.location = "";
         this.description = "";
     }
-    createDefinition(baseDefinition) {
-        let definition = new DefinitionData();
-        definition.name = `${baseDefinition.name}_${this.name}`;
-        definition.fieldName = this.fieldName;
-        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
-        definition.title = this.name;
-        definition.group = baseDefinition.name;
-        definition.descriptions = [this.description];
-        return definition;
-    }
 }
-class LoreData extends dbObj {
+class LoreData extends WuxDatabaseData {
     importJson(json) {
         this.name = json.name;
         this.fieldName = json.fieldName;
@@ -584,18 +579,8 @@ class LoreData extends dbObj {
         this.group = "";
         this.description = "";
     }
-    createDefinition(baseDefinition) {
-        let definition = new DefinitionData();
-        definition.name = `${baseDefinition.name}_${this.name}`;
-        definition.fieldName = this.fieldName;
-        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
-        definition.title = this.name;
-        definition.group = baseDefinition.name;
-        definition.descriptions = [this.description];
-        return definition;
-    }
 }
-class JobData extends dbObj {
+class JobData extends WuxDatabaseData {
     createEmpty() {
         this.name = "";
         this.fieldName = "";
@@ -626,16 +611,6 @@ class JobData extends dbObj {
         this.roles = this.createRolesArray(dataArray.slice(i)); i += 5;
         this.prereq = "" + dataArray[i]; i++;
         this.techniques = this.createJobTechnique(dataArray.slice(i)); i++;
-    }
-    createDefinition(baseDefinition) {
-        let definition = new DefinitionData();
-        definition.name = `${baseDefinition.name}_${this.name}`;
-        definition.fieldName = this.fieldName;
-        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
-        definition.title = this.name;
-        definition.group = baseDefinition.name;
-        definition.descriptions = [this.description];
-        return definition;
     }
 
     createRolesArray(modArray) {
@@ -676,7 +651,7 @@ class JobData extends dbObj {
         return output;
     }
 }
-class RoleData extends dbObj {
+class RoleData extends WuxDatabaseData {
     importJson(json) {
 
     }
@@ -695,16 +670,6 @@ class RoleData extends dbObj {
         this.group = "";
         this.description = "";
         this.techniques = [];
-    }
-    createDefinition(baseDefinition) {
-        let definition = new DefinitionData();
-        definition.name = `${baseDefinition.name}_${this.name}`;
-        definition.fieldName = this.fieldName;
-        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
-        definition.title = this.name;
-        definition.group = baseDefinition.name;
-        definition.descriptions = [this.description];
-        return definition;
     }
 
     createTechnique(modArray) {
@@ -788,7 +753,7 @@ class AttributeGroupData extends dbObj {
         return output;
     }
 }
-class DefinitionData extends dbObj {
+class DefinitionData extends WuxDatabaseData {
     importJson(json) {
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
