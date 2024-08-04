@@ -851,6 +851,96 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 	};
 }());
 
+var DisplayOverviewSheet = DisplayOverviewSheet || (function () {
+    'use strict';
+
+	var
+		print = function (sheetsDb) {
+			let output = WuxSheetNavigation.BuildOriginPageNavigation("Origin") +
+				SideBarData.Print() +
+				MainContentData.Print();
+			return WuxSheet.SetDisplayStyle("Builder", output);
+		},
+
+		SideBarData = SideBarData || (function () {
+			'use strict';
+
+			var
+				print = function () {
+					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
+				}
+
+			return {
+				Print: print
+			};
+
+		}()),
+
+		MainContentData = MainContentData || (function () {
+			'use strict';
+
+			var
+				print = function () {
+					let output = "";
+					output += printBasics();
+
+					return output;
+				},
+
+				printBasics = function () {
+					let contents = buildBasicsData.Build();
+					let definition = WuxDef.Get("Origin");
+					contents = WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+
+					return WuxSheetMain.Build(contents);
+				},
+
+				buildBasicsData = buildBasicsData || (function () {
+					'use strict';
+
+					var
+						build = function () {
+							let output = "";
+							output += buildTextInput(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
+							output += buildTextInput(WuxDef.Get("Display Name"), WuxDef.GetAttribute("Display Name"));
+							output += buildNumberInput(WuxDef.Get("Character Level"), WuxDef.GetAttribute("Character Level"));
+							output += buildAffinity();
+							let definition = WuxDef.Get("Origin Basics");
+							return WuxSheetMain.CollapsibleSection(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, output);
+						},
+
+						buildTextInput = function (definition, fieldName) {
+							return WuxDefinition.DisplayCollapsibleTitle(definition, fieldName) + "\n" +
+								WuxSheetMain.Input("text", fieldName);
+						},
+
+						buildNumberInput = function (definition, fieldName) {
+							return WuxDefinition.DisplayCollapsibleTitle(definition, fieldName) + "\n" +
+								WuxSheetMain.Input("number", fieldName);
+						},
+
+						buildAffinity = function () {
+							let output = "";
+							let definition = WuxDef.Get("Affinity");
+							output += WuxDefinition.DisplayCollapsibleTitle(definition, definition.getAttribute());
+							output += WuxSheetMain.Select(definition.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "Affinity")]));
+							return output;
+						}
+
+					return {
+						Build: build
+					}
+				}())
+
+			return {
+				Print: print
+			}
+		}());
+	;
+	return {
+		Print: print
+	};
+}());
 
 var BuilderBackend = BuilderBackend || (function () {
 	'use strict';
