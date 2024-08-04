@@ -1202,6 +1202,14 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         buildOriginPageNavigation = function (sheetName) {
             return buildSection(buildCharacterCreationNavigation(sheetName));
         },
+        
+        buildMainPageNavigation = function (sheetName) {
+            let fieldName = WuxDef.GetAttribute("Main Page");
+            let mainContents = "";
+            mainContents += buildTabs(sheetName, fieldName, ["Attributes", "Skills", "Jobs", "Advancement"]);
+            mainContents += buildExitStickyButtons(fieldName, true);
+            mainContents += buildHeader("Advancement", sheetName);
+        },
 
         buildTrainingPageNavigation = function (sheetName) {
             let fieldName = WuxDef.GetAttribute("Training");
