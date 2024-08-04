@@ -360,7 +360,7 @@ input[type=number]::-webkit-inner-spin-button
 {
     position: relative;
     min-height: 20px;
-    min-width: 60px;
+    min-width: 90px;
 }
 
 .wuxTabButton

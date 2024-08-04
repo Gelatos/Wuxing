@@ -2,41 +2,42 @@
   Character Sheet Display Style
 ========================================*/
 
-.wuxCharacterSheetDisplayStyle-Builder,
-.wuxCharacterSheetDisplayStyle-Training,
-.wuxCharacterSheetDisplayStyle-Skills,
-.wuxCharacterSheetDisplayStyle-Knowledge,
-.wuxCharacterSheetDisplayStyle-Jobs,
-.wuxCharacterSheetDisplayStyle-Attributes,
-.wuxCharacterSheetDisplayStyle-Advancement,
-.wuxCharacterSheetDisplayStyle-LevelUp,
-.wuxCharacterSheetDisplayStyle-Techniques,
-.wuxCharacterSheetDisplayStyle-Character,
-.wuxCharacterSheetDisplayStyle-PartyManager,
-.wuxTechniqueDisplayStyle-Active,
-.wuxTechniqueDisplayStyle-Slot,
-.wuxTechniqueDisplayStyle-Learn,
-.wuxTrainingDisplayStyle-Skills
+.wuxPageDisplay-Origin,
+.wuxPageDisplay-Training,
+.wuxPageDisplay-Advancement,
+.wuxPageDisplay-Core,
+.wuxPageDisplay-Skills,
+.wuxPageDisplay-Knowledge,
+.wuxPageDisplay-Jobs,
+.wuxPageDisplay-Attributes,
+.wuxPageDisplay-LevelUp,
+.wuxPageDisplay-Techniques,
+.wuxPageDisplay-Character,
+.wuxPageDisplay-Overview,
+.wuxPageDisplay-Details,
+.wuxPageDisplay-Chat,
+.wuxPageDisplay-Options,
+.wuxPageDisplay-PartyManager
 {
 	display: none;
 }
 
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="0"] ~ .wuxCharacterSheetDisplayStyle-Builder,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Origin"] ~ .wuxCharacterSheetDisplayStyle-Builder,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Training"] ~ .wuxCharacterSheetDisplayStyle-Training,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Skills"] ~ .wuxCharacterSheetDisplayStyle-Skills,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Knowledge"] ~ .wuxCharacterSheetDisplayStyle-Knowledge,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Jobs"] ~ .wuxCharacterSheetDisplayStyle-Jobs,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Attributes"] ~ .wuxCharacterSheetDisplayStyle-Attributes,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Advancement"] ~ .wuxCharacterSheetDisplayStyle-Advancement,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="LevelUp"] ~ .wuxCharacterSheetDisplayStyle-LevelUp,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Techniques"] ~ .wuxCharacterSheetDisplayStyle-Techniques,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="Character"] ~ .wuxCharacterSheetDisplayStyle-Character,
-input[type=hidden].wuxCharacterSheetDisplayStyle-Flag[value="PartyManager"] ~ .wuxCharacterSheetDisplayStyle-PartyManager,
-input[type=hidden].wuxTechniqueDisplayStyle-Flag[value="Active"] ~ .wuxTechniqueDisplayStyle-Active,
-input[type=hidden].wuxTechniqueDisplayStyle-Flag[value="Slot"] ~ .wuxTechniqueDisplayStyle-Slot,
-input[type=hidden].wuxTechniqueDisplayStyle-Flag[value="Learn"] ~ .wuxTechniqueDisplayStyle-Learn,
-input[type=hidden].wuxTrainingDisplayStyle-Flag[value="Skills"] ~ .wuxTrainingDisplayStyle-Skills
+input[type=hidden].wuxPageDisplay-Flag[value="Origin"] ~ .wuxPageDisplay-Origin,
+input[type=hidden].wuxPageDisplay-Flag[value="Training"] ~ .wuxPageDisplay-Training,
+input[type=hidden].wuxPageDisplay-Flag[value="Advancement"] ~ .wuxPageDisplay-Advancement,
+input[type=hidden].wuxPageDisplay-Flag[value="Core"] ~ .wuxPageDisplay-Core,
+input[type=hidden].wuxPageDisplay-Flag[value="Skills"] ~ .wuxPageDisplay-Skills,
+input[type=hidden].wuxPageDisplay-Flag[value="Knowledge"] ~ .wuxPageDisplay-Knowledge,
+input[type=hidden].wuxPageDisplay-Flag[value="Jobs"] ~ .wuxPageDisplay-Jobs,
+input[type=hidden].wuxPageDisplay-Flag[value="Attributes"] ~ .wuxPageDisplay-Attributes,
+input[type=hidden].wuxPageDisplay-Flag[value="LevelUp"] ~ .wuxPageDisplay-LevelUp,
+input[type=hidden].wuxPageDisplay-Flag[value="Techniques"] ~ .wuxPageDisplay-Techniques,
+input[type=hidden].wuxPageDisplay-Flag[value="Character"] ~ .wuxPageDisplay-Character,
+input[type=hidden].wuxPageDisplay-Flag[value="Overview"] ~ .wuxPageDisplay-Overview,
+input[type=hidden].wuxPageDisplay-Flag[value="Details"] ~ .wuxPageDisplay-Details,
+input[type=hidden].wuxPageDisplay-Flag[value="Chat"] ~ .wuxPageDisplay-Chat,
+input[type=hidden].wuxPageDisplay-Flag[value="Options"] ~ .wuxPageDisplay-Options,
+input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-PartyManager
 {
 	display: block;
 }

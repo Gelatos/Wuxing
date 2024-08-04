@@ -2,10 +2,10 @@ function CreateCharacterSheet(stylesArray, skillsArray, languageArray, loreArray
 	let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
 		stylesArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString
 	);
-	return PrintLargeEntry(DisplayCharacterSheet.Print(sheetsDb));
+	return PrintLargeEntry(BuildCharacterSheet.Print(sheetsDb));
 }
 
-var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
+var BuildCharacterSheet = BuildCharacterSheet || (function () {
 	'use strict';
 
 	var
@@ -23,10 +23,8 @@ var DisplayCharacterSheet = DisplayCharacterSheet || (function () {
 			output += DisplayTrainingSheet.Print(sheetsDb);
 			output += DisplayAdvancementSheet.Print(sheetsDb);
 			output += DisplayTechniquesSheet.Print(sheetsDb);
-			return `<div class="wuxCharacterSheet">
-			<input class="wuxCharacterSheetDisplayStyle-Flag" name="attr_page-characterCreation" type="hidden" value="0">
-			${output}
-			</div>`;
+			output += DisplayCoreCharacterSheet.Print(sheetsDb);
+			return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n</div>`;
 		},
 
 		buildHiddenFields = function (sheetsDb) {
@@ -64,7 +62,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 			let output = WuxSheetNavigation.BuildOriginPageNavigation("Origin") +
 				SideBarData.Print() +
 				MainContentData.Print();
-			return WuxSheet.SetDisplayStyle("Builder", output);
+			return WuxSheet.PageDisplay("Origin", output);
 		},
 
 		SideBarData = SideBarData || (function () {
@@ -161,7 +159,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 			let output = WuxSheetNavigation.BuildTrainingPageNavigation("Knowledge") +
 				SideBarData.PrintKnowledge() +
 				MainContentData.PrintKnowledge(sheetsDb.language, sheetsDb.lore);
-			return WuxSheet.SetDisplayStyle("Knowledge", output);
+			return WuxSheet.PageDisplay("Knowledge", output);
 		},
 
 		SideBarData = SideBarData || (function () {
@@ -360,14 +358,14 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 			let output = WuxSheetNavigation.BuildAdvancementPageNavigation("Jobs") +
 				SideBarData.PrintJobs() +
 				MainContentData.PrintJobs(sheetsDb.job, sheetsDb.role, sheetsDb.techniques);
-			return WuxSheet.SetDisplayStyle("Jobs", output);
+			return WuxSheet.PageDisplay("Jobs", output);
 		},
 
 		printSkills = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildAdvancementPageNavigation("Skills") +
 				SideBarData.PrintSkills() +
 				MainContentData.PrintSkills(sheetsDb.skills);
-			return WuxSheet.SetDisplayStyle("Skills", output);
+			return WuxSheet.PageDisplay("Skills", output);
 		},
 
 		printAttributes = function (sheetsDb) {
@@ -375,7 +373,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 			let output = WuxSheetNavigation.BuildAdvancementPageNavigation("Attributes") +
 				SideBarData.PrintAttributes() +
 				MainContentData.PrintAttributes();
-			return WuxSheet.SetDisplayStyle("Attributes", output);
+			return WuxSheet.PageDisplay("Attributes", output);
 		},
 
 		SideBarData = SideBarData || (function () {
@@ -697,7 +695,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			let output = WuxSheetNavigation.BuildTechniquesNavigation() +
 				SideBarData.Print() +
 				MainContentData.Print(sheetsDb.styles, sheetsDb.techniques);
-			return WuxSheet.SetDisplayStyle("Techniques", output);
+			return WuxSheet.PageDisplay("Techniques", output);
 		},
 
 		printTest = function (stylesDatabase, techniqueDatabase) {
@@ -851,27 +849,70 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 	};
 }());
 
-var DisplayOverviewSheet = DisplayOverviewSheet || (function () {
+var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
     'use strict';
 
 	var
 		print = function (sheetsDb) {
-			let output = WuxSheetNavigation.BuildOriginPageNavigation("Origin") +
-				SideBarData.Print() +
-				MainContentData.Print();
-			return WuxSheet.SetDisplayStyle("Builder", output);
+			let output = "";
+			output += WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Character", WuxDef._tab));
+			output += printOverview(sheetsDb);
+			output += printDetails(sheetsDb);
+			output += printChat(sheetsDb);
+			output += printOptions(sheetsDb);
+			return WuxSheet.PageDisplay("Character", output);
+		},
+
+		printOverview = function (sheetsDb) {
+			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Overview") +
+				SideBarData.PrintOverview() +
+				MainContentData.PrintOverview();
+			return WuxSheet.PageDisplay("Overview", output);
+		},
+
+		printDetails = function (sheetsDb) {
+			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Details") +
+				SideBarData.PrintDetails() +
+				MainContentData.PrintDetails();
+			return WuxSheet.PageDisplay("Details", output);
+		},
+
+		printChat = function (sheetsDb) {
+			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Chat") +
+				SideBarData.PrintChat() +
+				MainContentData.PrintChat();
+			return WuxSheet.PageDisplay("Chat", output);
+		},
+
+		printOptions = function (sheetsDb) {
+			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Options") +
+				SideBarData.PrintOptions() +
+				MainContentData.PrintOptions();
+			return WuxSheet.PageDisplay("Options", output);
 		},
 
 		SideBarData = SideBarData || (function () {
 			'use strict';
 
 			var
-				print = function () {
-					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
+				printOverview = function () {
+					
+				},
+				printDetails = function () {
+					
+				},
+				printChat = function () {
+					
+				},
+				printOptions = function () {
+					
 				}
 
 			return {
-				Print: print
+				PrintOverview: printOverview,
+				PrintDetails: printDetails,
+				PrintChat: printChat,
+				PrintOptions: printOptions
 			};
 
 		}()),
@@ -880,60 +921,24 @@ var DisplayOverviewSheet = DisplayOverviewSheet || (function () {
 			'use strict';
 
 			var
-				print = function () {
-					let output = "";
-					output += printBasics();
-
-					return output;
+				printOverview = function () {
+					
 				},
-
-				printBasics = function () {
-					let contents = buildBasicsData.Build();
-					let definition = WuxDef.Get("Origin");
-					contents = WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-
-					return WuxSheetMain.Build(contents);
+				printDetails = function () {
+					
 				},
-
-				buildBasicsData = buildBasicsData || (function () {
-					'use strict';
-
-					var
-						build = function () {
-							let output = "";
-							output += buildTextInput(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
-							output += buildTextInput(WuxDef.Get("Display Name"), WuxDef.GetAttribute("Display Name"));
-							output += buildNumberInput(WuxDef.Get("Character Level"), WuxDef.GetAttribute("Character Level"));
-							output += buildAffinity();
-							let definition = WuxDef.Get("Origin Basics");
-							return WuxSheetMain.CollapsibleSection(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, output);
-						},
-
-						buildTextInput = function (definition, fieldName) {
-							return WuxDefinition.DisplayCollapsibleTitle(definition, fieldName) + "\n" +
-								WuxSheetMain.Input("text", fieldName);
-						},
-
-						buildNumberInput = function (definition, fieldName) {
-							return WuxDefinition.DisplayCollapsibleTitle(definition, fieldName) + "\n" +
-								WuxSheetMain.Input("number", fieldName);
-						},
-
-						buildAffinity = function () {
-							let output = "";
-							let definition = WuxDef.Get("Affinity");
-							output += WuxDefinition.DisplayCollapsibleTitle(definition, definition.getAttribute());
-							output += WuxSheetMain.Select(definition.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "Affinity")]));
-							return output;
-						}
-
-					return {
-						Build: build
-					}
-				}())
+				printChat = function () {
+					
+				},
+				printOptions = function () {
+					
+				}
 
 			return {
-				Print: print
+				PrintOverview: printOverview,
+				PrintDetails: printDetails,
+				PrintChat: printChat,
+				PrintOptions: printOptions
 			}
 		}());
 	;
@@ -941,6 +946,7 @@ var DisplayOverviewSheet = DisplayOverviewSheet || (function () {
 		Print: print
 	};
 }());
+
 
 var BuilderBackend = BuilderBackend || (function () {
 	'use strict';
@@ -977,8 +983,9 @@ var BuilderBackend = BuilderBackend || (function () {
 					console.log("Finish Character Creation Build");
 				    let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
                 	let attributeHandler  = new WorkerAttributeHandler();
-                	attributeHandler.addUpdate(WuxDef.GetAttribute("Character Creator"), "1");
-                	attributeHandler.addUpdate(WuxDef.GetAttribute("Core"), "Character");
+                	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
+                	attributeHandler.addUpdate(WuxDef.GetVariable("Page Set"), "Core");
+                	attributeHandler.addUpdate(WuxDef.GetVariable("Character", WuxDef._tab), "Overview");
                 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 					attributeHandler.addGetAttrCallback(function (attrHandler) {

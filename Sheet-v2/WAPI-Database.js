@@ -261,12 +261,14 @@ class WuxDatabaseData extends dbObj {
         this.description = "";
     }
     createDefinition(baseDefinition) {
-        baseDefinition.name = `${baseDefinition.name}_${this.name}`;
-        baseDefinition.fieldName = this.fieldName;
-        baseDefinition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
-        baseDefinition.title = this.name;
-        baseDefinition.group = baseDefinition.name;
-        baseDefinition.descriptions = [this.description];
+        let definition = new DefinitionData();
+        definition.name = `${baseDefinition.name}_${this.name}`;
+        definition.fieldName = this.fieldName;
+        definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
+        definition.title = this.name;
+        definition.group = baseDefinition.name;
+        definition.descriptions = [this.description];
+        return definition;
     }
 
 }
@@ -829,6 +831,7 @@ class DefinitionData extends WuxDatabaseData {
         return `attr_${this.getVariable(mod, mod1)}`;
     }
     setFormulaData() {
+        let baseDefinition = this;
         this.modAttrs = [];
         this.formulaCalculations = [];
         
@@ -849,17 +852,17 @@ class DefinitionData extends WuxDatabaseData {
                     modDefinition = WuxDef.Get(definitionNameModifier);
                     formulaVar = definition.getVariable(modDefinition.getVariable());
                 }
-                this.formulaCalculations.push(new WorkerFormula(formulaVar, 0, multiplier));
-                this.modAttrs.push(formulaVar);
+                baseDefinition.formulaCalculations.push(new WorkerFormula(formulaVar, 0, multiplier));
+                baseDefinition.modAttrs.push(formulaVar);
             }
             else {
-                this.formulaCalculations.push(new WorkerFormula("", parseInt(definitionName), multiplier));
+                baseDefinition.formulaCalculations.push(new WorkerFormula("", parseInt(definitionName), multiplier));
             }
         })
 
         let modArray = this.modifiers.split(";");
         modArray.forEach((mod) => {
-            this.formulaCalculations.push(new WorkerFormula(mod, 0, multiplier));
+            this.formulaCalculations.push(new WorkerFormula(mod, 0, 1));
             this.modAttrs.push(this.getVariable(mod));
         });
     }

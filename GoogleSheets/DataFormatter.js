@@ -1105,6 +1105,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Subheader: subheader,
         Desc: desc,
         Input: input,
+        CustomInput: customInput,
         Select: select,
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,
@@ -1127,15 +1128,10 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
   </div>`;
         },
 
-        buildCharacterCreationSplit = function (mainContents, characterCreationContents) {
-            return `<input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Character Creator")}" value="0">
-  <div class="wuxHiddenBlockField">
-  ${mainContents}
-  </div>
-  <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Character Creator")}" value="0">
-  <div class="wuxHiddenBlockAuxField">
-  ${characterCreationContents}
-  </div>`;
+        buildCharacterCreationSplit = function (fieldName, mainContents, characterCreationContents) {
+            return `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page Set"), "Character Creator")}
+            ${WuxSheet.PageDisplay(fieldName, mainContents)}
+            ${WuxSheet.PageDisplay("Character Creator", characterCreationContents)}`;
         },
 
         buildStickySideTab = function (contents) {
@@ -1145,9 +1141,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildTabButtonRow = function (contents) {
-            return `<div class="wuxTabButtonRow">
-  ${contents}
-  </div>`;
+            return `<div class="wuxTabButtonRow">\n${contents}\n</div>`;
         },
 
         buildTabButton = function (type, fieldName, value, name, isSelected, buttonClasses) {
@@ -1170,20 +1164,21 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             return `<div class="wuxHeader2">${subheader}</div>
   <div class="wuxHeader">${header}</div>`;
         },
+        
+        buildOverviewPageNavigation = function (selectedTab) {
+            let sideBarButtons = "";
+            let tabFieldName = WuxDef.GetAttribute("Character", WuxDef._tab);
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Options", "Options", selectedTab == "Options", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Chat", "Chat", selectedTab == "Chat", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Details", "Details", selectedTab == "Details", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", selectedTab == "Overview", "") + "\n";
 
-        buildTechniquesNavigation = function () {
-            let sideBarContents = buildTabs("Learn", "attr_tab-techniques", ["Active", "Slot", "Learn"]);
-            let mainContents = buildMainPageTabs("Techniques", sideBarContents);
-            let characterCreationContents = buildCharacterCreationNavigation("Techniques");
-            let output = buildCharacterCreationSplit(mainContents, characterCreationContents);
-
-            return buildSection(output);
+            return buildMainPageTabs("Character", buildStickySideTab(buildTabButtonRow(sideBarButtons)));
         },
 
         buildMainPageTabs = function (sheetName, sideBarButtons) {
-            let fieldName = WuxDef.GetAttribute("Core");
             let mainContents = "";
-            mainContents += buildTabs(sheetName, fieldName, ["Gear", "Techniques", "Chat", "Character"]);
+            mainContents += buildTabs(sheetName,  WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Styles", "Character"]);
             mainContents += sideBarButtons;
             mainContents += buildMainSheetHeader();
 
@@ -1200,56 +1195,61 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildOriginPageNavigation = function (sheetName) {
-            return buildSection(buildCharacterCreationNavigation(sheetName));
-        },
-        
-        buildMainPageNavigation = function (sheetName) {
-            let fieldName = WuxDef.GetAttribute("Main Page");
-            let mainContents = "";
-            mainContents += buildTabs(sheetName, fieldName, ["Attributes", "Skills", "Jobs", "Advancement"]);
-            mainContents += buildExitStickyButtons(fieldName, true);
-            mainContents += buildHeader("Advancement", sheetName);
+            return buildSection(characterCreationNavigation(sheetName));
         },
 
         buildTrainingPageNavigation = function (sheetName) {
+            let characterCreationContents = characterCreationNavigation(sheetName);
+            let output = buildCharacterCreationSplit("Training", trainingPageNavigation(sheetName), characterCreationContents);
+            return buildSection(output);
+        },
+
+        trainingPageNavigation = function (sheetName) {
             let fieldName = WuxDef.GetAttribute("Training");
             let mainContents = "";
-            mainContents += buildTabs(sheetName, fieldName, ["Knowledge", "Training"]);
+            mainContents += buildTabs(sheetName, fieldName, ["Techniques", "Knowledge", "Training"]);
             mainContents += buildExitStickyButtons(fieldName, true);
             mainContents += buildHeader("Training", sheetName);
-
-            let characterCreationContents = buildCharacterCreationNavigation(sheetName);
-            let output = buildCharacterCreationSplit(mainContents, characterCreationContents);
-            return buildSection(output);
+            return mainContents;
         },
 
         buildAdvancementPageNavigation = function (sheetName) {
-            let fieldName = WuxDef.GetAttribute("Advancement");
-            let mainContents = "";
-            mainContents += buildTabs(sheetName, fieldName, ["Attributes", "Skills", "Jobs", "Advancement"]);
-            mainContents += buildExitStickyButtons(fieldName, true);
-            mainContents += buildHeader("Advancement", sheetName);
-
-            let characterCreationContents = buildCharacterCreationNavigation(sheetName);
-            let output = buildCharacterCreationSplit(mainContents, characterCreationContents);
+            let characterCreationContents = characterCreationNavigation(sheetName);
+            let output = buildCharacterCreationSplit("Advancement", advancementPageNavigation(sheetName), characterCreationContents);
             return buildSection(output);
         },
 
-        buildCharacterCreationNavigation = function (sheetName) {
-            let output = "";
-            output += buildCharacterCreationTabs(sheetName);
-            output += buildExitStickyButtons(WuxDef.GetAttribute("Character Creator"), false);
-            output += buildHeader("Character Creation", sheetName);
-            return output;
+        advancementPageNavigation = function (sheetName) {
+            let fieldName = WuxDef.GetAttribute("Advancement");
+            let mainContents = buildTabs(sheetName, fieldName, ["Techniques", "Attributes", "Skills", "Jobs", "Advancement"]);
+            mainContents += buildExitStickyButtons(fieldName, true);
+            mainContents += buildHeader("Advancement", sheetName);
+            return mainContents;
+        },
+
+        buildTechniquesNavigation = function () {
+            let output = `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page Set"), "Character Creator")}
+            ${WuxSheet.PageDisplay("Character Creator", characterCreationNavigation("Techniques"))}
+            ${WuxSheet.PageDisplay("Training", trainingPageNavigation("Techniques"))}
+            ${WuxSheet.PageDisplay("Advancement", advancementPageNavigation("Techniques"))}
+            ${WuxSheet.PageDisplay("Core", trainingPageNavigation("Techniques"))}`;
+
+            return buildSection(output);
+        },
+
+        characterCreationNavigation = function (sheetName) {
+            let mainContents = buildCharacterCreationTabs(sheetName);
+            mainContents += buildExitStickyButtons(WuxDef.GetAttribute("Character Creator"), false);
+            mainContents += buildHeader("Character Creation", sheetName);
+            return mainContents;
         },
 
         buildCharacterCreationTabs = function (sheetName) {
             let output = "";
-            let fieldName = "attr_page-characterCreation";
             let tabNames = ["Techniques", "Attributes", "Knowledge", "Skills", "Jobs", "Origin"];
 
             for (let i = 0; i < tabNames.length; i++) {
-                output += buildTabButton("radio", fieldName, tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
+                output += buildTabButton("radio",  WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
             }
             output = buildTabButtonRow(output);
 
@@ -1268,6 +1268,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         }
         ;
     return {
+        BuildOverviewPageNavigation: buildOverviewPageNavigation,
         BuildOriginPageNavigation: buildOriginPageNavigation,
         BuildTechniquesNavigation: buildTechniquesNavigation,
         BuildTrainingPageNavigation: buildTrainingPageNavigation,
@@ -1280,14 +1281,22 @@ var WuxSheet = WuxSheet || (function () {
     'use strict';
 
     var
-        setDisplayStyle = function (sectionName, contents) {
-            return `<div class="wuxCharacterSheetDisplayStyle-${sectionName}">
-  ${contents}
-  </div>`;
+        pageDispayInput = function (fieldName, value) {
+            if (value == undefined) {
+                value = "";
+            }
+            else {
+                value = ` value="${value}"`;
+            }
+            return `<input type="hidden" class="wuxPageDisplay-Flag" name="${fieldName}"${value} />`
+        },
+        pageDisplay = function (fieldName, contents) {
+            return `<div class="wuxPageDisplay-${fieldName}">\n${contents}\n</div>`;
         }
         ;
     return {
-        SetDisplayStyle: setDisplayStyle
+        PageDisplayInput: pageDispayInput,
+        PageDisplay: pageDisplay
     };
 }());
 
