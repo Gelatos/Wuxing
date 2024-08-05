@@ -1121,11 +1121,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     var
 
         buildSection = function (contents) {
-            return `<div class="wuxFloatHeader wuxStickyHeader">
-  <div class="wuxSectionBlock wuxLargeLayoutItem">
-  ${contents}
-  </div>
-  </div>`;
+            return `<div class="wuxFloatHeader wuxStickyHeader">\n<div class="wuxSectionBlock wuxLargeLayoutItem">\n${contents}\n</div>\n</div>`;
         },
 
         buildCharacterCreationSplit = function (fieldName, mainContents, characterCreationContents) {
@@ -1135,9 +1131,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildStickySideTab = function (contents) {
-            return `<div class="wuxStickySideTab">
-  ${contents}
-  </div>`;
+            return `<div class="wuxStickySideTab">\n${contents}\n</div>`;
         },
 
         buildTabButtonRow = function (contents) {
@@ -1146,8 +1140,8 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         buildTabButton = function (type, fieldName, value, name, isSelected, buttonClasses) {
             return `<div class="wuxTabButton ${isSelected ? "wuxTabButtonSelected" : ""}">
-  <input type="${type}" class="wuxTabButton ${buttonClasses}" name="${fieldName}" value="${value}"><span>${name}</span>
-  </div>`;
+            <input type="${type}" class="wuxTabButton ${buttonClasses}" name="${fieldName}" value="${value}"><span>${name}</span>
+            </div>`;
         },
 
         buildTabs = function (sheetName, fieldName, tabNames) {

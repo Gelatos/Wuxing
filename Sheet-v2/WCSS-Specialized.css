@@ -145,6 +145,20 @@ input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-P
     width: auto;
 }
 
+.wuxStickyHeader .wuxHeader input
+{
+    font-size: 16px;
+    background: linear-gradient(to bottom, #f4f6f8, #cacbcf, #535353);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.wuxStickyHeader .wuxHeader input[type=text]::placeholder
+{
+    color: #686868;
+}
+
 /*========================================
     Emote Post
 ========================================*/
