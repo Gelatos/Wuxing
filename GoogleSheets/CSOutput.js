@@ -947,6 +947,55 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 	};
 }());
 
+var DisplayGearSheet = DisplayGearSheet || (function () {
+	'use strict';
+
+	var
+		print = function (sheetsDb) {
+			let output = "";
+			output += printEquipment(sheetsDb);
+			return output;
+		},
+
+		printEquipment = function (sheetsDb) {
+			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Gear") +
+				SideBarData.PrintEquipment() +
+				MainContentData.PrintEquipment(sheetsDb.language, sheetsDb.lore);
+			return WuxSheet.PageDisplay("Gear", output);
+		},
+
+		SideBarData = SideBarData || (function () {
+			'use strict';
+
+			var
+				printEquipment = function () {
+					return "";
+				}
+
+			return {
+				PrintEquipment: printEquipment
+			};
+
+		}()),
+
+		MainContentData = MainContentData || (function () {
+			'use strict';
+
+			var
+				printEquipment = function (languageDictionary, loreDictionary) {
+					return "";
+				}
+
+			return {
+				PrintEquipment: printEquipment
+			}
+		}());
+	;
+	return {
+		Print: print
+	};
+}());
+
 
 var BuilderBackend = BuilderBackend || (function () {
 	'use strict';

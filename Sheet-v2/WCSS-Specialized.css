@@ -17,6 +17,8 @@
 .wuxPageDisplay-Details,
 .wuxPageDisplay-Chat,
 .wuxPageDisplay-Options,
+.wuxPageDisplay-Gear,
+.wuxPageDisplay-Actions,
 .wuxPageDisplay-PartyManager
 {
 	display: none;
@@ -37,6 +39,8 @@ input[type=hidden].wuxPageDisplay-Flag[value="Overview"] ~ .wuxPageDisplay-Overv
 input[type=hidden].wuxPageDisplay-Flag[value="Details"] ~ .wuxPageDisplay-Details,
 input[type=hidden].wuxPageDisplay-Flag[value="Chat"] ~ .wuxPageDisplay-Chat,
 input[type=hidden].wuxPageDisplay-Flag[value="Options"] ~ .wuxPageDisplay-Options,
+input[type=hidden].wuxPageDisplay-Flag[value="Gear"] ~ .wuxPageDisplay-Gear,
+input[type=hidden].wuxPageDisplay-Flag[value="Actions"] ~ .wuxPageDisplay-Actions,
 input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-PartyManager
 {
 	display: block;

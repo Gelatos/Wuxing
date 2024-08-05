@@ -4,8 +4,17 @@ function SetTechniquesDatabaseJson(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr
     return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
 }
 
-function SetDefinitionsDatabase(definitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
-    let definitionDatabase = SheetsDatabase.CreateDefinitions(definitionArray);
+function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
+    let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
+
+    definitionDatabase.importSheets(definitionArray, function (arr) {
+        let definition = new DefinitionData(arr);
+        let baseDefinition = definitionDatabase.get(definition.group);
+        if (baseDefinition != undefined) {
+            return definition.createDefinition(baseDefinition);
+        }
+        return definition;
+    });
     definitionDatabase.importSheets(styleArray, function (arr) {
         let style = new TechniqueStyle(arr);
         return style.createDefinition(definitionDatabase.get("Style"));
@@ -155,9 +164,11 @@ var SheetsDatabase = SheetsDatabase || (function () {
             });
         },
 
-        createDefinitions = function (arr) {
+        createDefinitionTypes = function (arr) {
             return new ExtendedDescriptionDatabase(["group", "formulaMods"], arr, function (arr) {
-                return new DefinitionData(arr);
+                let definition = new DefinitionData(arr);
+                definition.variable += `{0}{1}`;
+                return definition;
             });
         }
         ;
@@ -170,7 +181,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         CreateLores: createLores,
         CreateJobs: createJobs,
         CreateRoles: createRoles,
-        CreateDefinitions: createDefinitions
+        CreateDefinitionTypes: createDefinitionTypes
     }
 }());
 
@@ -1168,10 +1179,21 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
             return buildSection(buildMainPageTabs("Character", buildStickySideTab(buildTabButtonRow(sideBarButtons))));
         },
+        
+        buildGearPageNavigation = function (selectedTab) {
+            let sideBarButtons = "";
+            let tabFieldName = WuxDef.GetAttribute("Core", WuxDef._tab);
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Options", "Options", selectedTab == "Options", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Chat", "Chat", selectedTab == "Chat", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Details", "Details", selectedTab == "Details", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", selectedTab == "Overview", "") + "\n";
+
+            return buildSection(buildMainPageTabs("Character", buildStickySideTab(buildTabButtonRow(sideBarButtons))));
+        },
 
         buildMainPageTabs = function (sheetName, sideBarButtons) {
             let mainContents = "";
-            mainContents += buildTabs(sheetName,  WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Styles", "Character"]);
+            mainContents += buildTabs(sheetName,  WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Techniques", "Character"]);
             mainContents += sideBarButtons;
             mainContents += buildMainSheetHeader();
 

@@ -268,6 +268,10 @@ class WuxDatabaseData extends dbObj {
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.descriptions = [this.description];
+        definition.formula = baseDefinition.formula;
+        definition.modifiers = baseDefinition.modifiers;
+        definition.linkedGroups = baseDefinition.linkedGroups;
+        definition.isResource = baseDefinition.isResource;
         return definition;
     }
 
@@ -767,6 +771,7 @@ class DefinitionData extends WuxDatabaseData {
         this.formula = json.formula;
         this.modifiers = json.modifiers;
         this.linkedGroups = json.linkedGroups;
+        this.isResource = json.isResource;
         this.modAttrs = [];
         this.formulaCalculations = [];
     }
@@ -782,6 +787,7 @@ class DefinitionData extends WuxDatabaseData {
         this.formula = "" + dataArray[i]; i++;
         this.modifiers = "" + dataArray[i]; i++;
         this.linkedGroups = Format.StringToArray("" + dataArray[i]).push(this.name); i++;
+        this.isResource = dataArray[i] == "TRUE"; i++;
         this.modAttrs = [];
         this.formulaCalculations = [];
     }
@@ -796,8 +802,22 @@ class DefinitionData extends WuxDatabaseData {
         this.formula = "";
         this.modifiers = "";
         this.linkedGroups = [];
+        this.isResource = false;
         this.modAttrs = [];
         this.formulaCalculations = [];
+    }
+    createDefinition(baseDefinition) {
+        this.definition = "";
+        let definition = super.createDefinition(baseDefinition);
+        definition.descriptions = this.descriptions;
+        definition.formula = this.formula;
+        definition.modifiers = this.modifiers;
+        definition.linkedGroups = this.linkedGroups;
+        definition.isResource = this.isResource;
+
+        delete this.description;
+        
+        return definition;
     }
     getVariables(array, mod1) {
         let output = [];
