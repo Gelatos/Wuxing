@@ -4,7 +4,7 @@ var upgrade_to_1_0_0 = function (doneUpdating) {
 	attributeHandler.addUpdate("version", "0");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page Set"), "Character Creator");
-	attributeHandler.addUpdate(WuxDef.GetVariable("Character", WuxDef._tab), "Overview");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
 
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 	attributeHandler.addGetAttrCallback(function (attrHandler) {

@@ -985,7 +985,7 @@ var BuilderBackend = BuilderBackend || (function () {
                 	let attributeHandler  = new WorkerAttributeHandler();
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Page Set"), "Core");
-                	attributeHandler.addUpdate(WuxDef.GetVariable("Character", WuxDef._tab), "Overview");
+                	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
                 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 					attributeHandler.addGetAttrCallback(function (attrHandler) {

@@ -1161,19 +1161,18 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildHeader = function (header, subheader) {
-            return `<div class="wuxHeader2">${subheader}</div>
-  <div class="wuxHeader">${header}</div>`;
+            return `<div class="wuxHeader2">${subheader}</div>\n<div class="wuxHeader">${header}</div>`;
         },
         
         buildOverviewPageNavigation = function (selectedTab) {
             let sideBarButtons = "";
-            let tabFieldName = WuxDef.GetAttribute("Character", WuxDef._tab);
+            let tabFieldName = WuxDef.GetAttribute("Core", WuxDef._tab);
             sideBarButtons += buildTabButton("radio", tabFieldName, "Options", "Options", selectedTab == "Options", "") + "\n";
             sideBarButtons += buildTabButton("radio", tabFieldName, "Chat", "Chat", selectedTab == "Chat", "") + "\n";
             sideBarButtons += buildTabButton("radio", tabFieldName, "Details", "Details", selectedTab == "Details", "") + "\n";
             sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", selectedTab == "Overview", "") + "\n";
 
-            return buildMainPageTabs("Character", buildStickySideTab(buildTabButtonRow(sideBarButtons)));
+            return buildSection(buildMainPageTabs("Character", buildStickySideTab(buildTabButtonRow(sideBarButtons))));
         },
 
         buildMainPageTabs = function (sheetName, sideBarButtons) {
@@ -1186,11 +1185,8 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildMainSheetHeader = function () {
-            let header = `<input type="text" name="attr_nickname" placeholder="Display Name" />`;
-            let subheader = `<span>Lv.</span>
-  <span name="attr_base_level">1</span>
-  <span style="width: 5px;">&nbsp;</span>
-  <span class="wuxFullName" name="attr_full_name" placeholder="Full Name"></span>`;
+            let header = `<input type="text" name="${WuxDef.GetAttribute("Display Name")}" placeholder="Display Name" />`;
+            let subheader = `<span name="${WuxDef.GetAttribute("Full Name")}"></span>`;
             return buildHeader(header, subheader);
         },
 
