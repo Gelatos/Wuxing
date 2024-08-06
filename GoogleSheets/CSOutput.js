@@ -24,6 +24,8 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
 			output += DisplayAdvancementSheet.Print(sheetsDb);
 			output += DisplayTechniquesSheet.Print(sheetsDb);
 			output += DisplayCoreCharacterSheet.Print(sheetsDb);
+			output += DisplayGearSheet.Print(sheetsDb);
+			output += DisplayActionsSheet.Print(sheetsDb);
 			return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n</div>`;
 		},
 
@@ -92,7 +94,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
 				printBasics = function () {
 					let contents = buildBasicsData.Build();
-					let definition = WuxDef.Get("Origin");
+					let definition = WuxDef.Get("Origin Page");
 					contents = WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
 
 					return WuxSheetMain.Build(contents);
@@ -106,7 +108,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 							let output = "";
 							output += buildTextInput(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
 							output += buildTextInput(WuxDef.Get("Display Name"), WuxDef.GetAttribute("Display Name"));
-							output += buildNumberInput(WuxDef.Get("Character Level"), WuxDef.GetAttribute("Character Level"));
+							output += buildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
 							output += buildAffinity();
 							let definition = WuxDef.Get("Origin Basics");
 							return WuxSheetMain.CollapsibleSection(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, output);
@@ -960,7 +962,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 		printEquipment = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Gear") +
 				SideBarData.PrintEquipment() +
-				MainContentData.PrintEquipment(sheetsDb.language, sheetsDb.lore);
+				MainContentData.PrintEquipment();
 			return WuxSheet.PageDisplay("Gear", output);
 		},
 
@@ -982,12 +984,61 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 			'use strict';
 
 			var
-				printEquipment = function (languageDictionary, loreDictionary) {
+				printEquipment = function () {
 					return "";
 				}
 
 			return {
 				PrintEquipment: printEquipment
+			}
+		}());
+	;
+	return {
+		Print: print
+	};
+}());
+
+var DisplayActionsSheet = DisplayActionsSheet || (function () {
+	'use strict';
+
+	var
+		print = function (sheetsDb) {
+			let output = "";
+			output += printActions(sheetsDb);
+			return output;
+		},
+
+		printActions = function (sheetsDb) {
+			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Gear") +
+				SideBarData.PrintActions() +
+				MainContentData.PrintActions();
+			return WuxSheet.PageDisplay("Gear", output);
+		},
+
+		SideBarData = SideBarData || (function () {
+			'use strict';
+
+			var
+				printActions = function () {
+					return "";
+				}
+
+			return {
+				PrintActions: printActions
+			};
+
+		}()),
+
+		MainContentData = MainContentData || (function () {
+			'use strict';
+
+			var
+				printActions = function () {
+					return "";
+				}
+
+			return {
+				PrintActions: printActions
 			}
 		}());
 	;

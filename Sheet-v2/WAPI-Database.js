@@ -267,6 +267,7 @@ class WuxDatabaseData extends dbObj {
         definition.variable = `${baseDefinition.getVariable(this.fieldName)}{0}`;
         definition.title = this.name;
         definition.group = baseDefinition.name;
+        definition.subGroup = "";
         definition.descriptions = [this.description];
         definition.formula = baseDefinition.formula;
         definition.modifiers = baseDefinition.modifiers;
@@ -765,6 +766,7 @@ class DefinitionData extends WuxDatabaseData {
         this.fieldName = Format.ToCamelCase(this.name);
         this.title = json.title;
         this.group = json.group;
+        this.subGroup = json.subGroup;
         this.descriptions = json.descriptions;
         this.abbreviation = json.abbreviation;
         this.variable = json.variable;
@@ -781,6 +783,7 @@ class DefinitionData extends WuxDatabaseData {
         this.fieldName = Format.ToCamelCase(this.name);
         this.title = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
+        this.subGroup = "" + dataArray[i]; i++;
         this.descriptions = [("" + dataArray[i])]; i++;
         this.abbreviation = "" + dataArray[i]; i++;
         this.variable = "" + dataArray[i]; i++;
@@ -796,6 +799,7 @@ class DefinitionData extends WuxDatabaseData {
         this.fieldName = "";
         this.title = "";
         this.group = "";
+        this.subGroup = "";
         this.descriptions = [];
         this.abbreviation = "";
         this.variable = "";
