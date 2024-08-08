@@ -21,8 +21,8 @@
     font-size: 11px;
 }
 
-.sheet-rolltemplate-action .sheet-wuxTrait .sheet-wuxTooltiptext,
-.sheet-rolltemplate-results .sheet-wuxTrait .sheet-wuxTooltiptext 
+.sheet-rolltemplate-action .sheet-wuxTrait .sheet-wuxTooltipContent,
+.sheet-rolltemplate-results .sheet-wuxTrait .sheet-wuxTooltipContent 
 {
     position: absolute;
     z-index: 1000;
@@ -41,8 +41,8 @@
    
 }
 
-.sheet-rolltemplate-action .sheet-wuxTrait:hover .sheet-wuxTooltiptext,
-.sheet-rolltemplate-results .sheet-wuxTrait:hover .sheet-wuxTooltiptext
+.sheet-rolltemplate-action .sheet-wuxTrait:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-results .sheet-wuxTrait:hover .sheet-wuxTooltipContent
 {
 visibility: visible;
 }
