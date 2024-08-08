@@ -712,26 +712,29 @@ var WuxDefinition = WuxDefinition || (function () {
             let output = "";
             let entryData = dictionary.get(key).descriptions;
 
-            output += WuxSheetMain.Header(key);
+            output += WuxSheetMain.Header2(key);
             for (let i = 0; i < entryData.length; i++) {
                 output += "\n" + WuxSheetMain.Desc(entryData[i]);
             }
 
             return output;
         },
-
+        tooltipDescription = function (definitionData) {
+            let expandContents = definitionContents(definitionData);
+            return WuxSheetMain.Tooltip(definitionData.title, definitionContents);
+        },
+        definitionContents = function(definitionData) {
+            let expandContents = `<em>${definitionData.subGroup}</em>`;
+            for (let i = 0; i < definitionData.descriptions.length; i++) {
+                expandContents += "\n" + WuxSheetMain.Desc(definitionData.descriptions[i]);
+            }
+            return expandContents;
+        }
         displayCollapsibleTitle = function (definitionData) {
             if (definitionData == undefined) {
                 return "";
             }
-            let expandContents = `<em>${definitionData.group}</em>`;
-            let entryData = definitionData.descriptions;
-            if (Array.isArray(entryData)) {
-                for (let i = 0; i < entryData.length; i++) {
-                    expandContents += "\n" + WuxSheetMain.Desc(entryData[i]);
-                }
-            }
-
+            let expandContents = definitionContents(definitionData);
             let expandFieldName = definitionData.getVariable(WuxDef._expand);
 
             let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
@@ -749,6 +752,7 @@ var WuxDefinition = WuxDefinition || (function () {
         GetVariables: getVariables,
         GetGroupVariables: getGroupVariables,
         DisplayEntry: displayEntry,
+        TooltipDescription: tooltipDescription,
         DisplayCollapsibleTitle: displayCollapsibleTitle
     }
 }());
@@ -899,6 +903,13 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 <div class="wuxStyleSectionHeader">\n${interactionElement.Build(true, `${interactionElement.ExpandableBlockIcon(fieldName)}${title}`)}\n</div>
                 <div class="wuxSectionHeaderFooter"></div>
                 <div class="wuxSectionContent">\n${contents}\n</div>
+            </div>`;
+        },
+        
+        tooltip = function (text, contents) {
+            return `<div class="wuxTooltip">
+            <div class="wuxTooltipText">\n${text}\n</div>
+            <div class="wuxTooltipContent">\n${contents}\n</div>
             </div>`;
         },
 
@@ -1111,6 +1122,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         SectionBlockContents: sectionBlockContents,
         CollapsibleSection: collapsibleSection,
         CollapsibleStyleSection: collapsibleStyleSection,
+        Tooltip: tooltip,
         Header: header,
         Header2: header2,
         Subheader: subheader,
