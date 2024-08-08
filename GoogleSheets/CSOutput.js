@@ -115,12 +115,12 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 						},
 
 						buildTextInput = function (definition, fieldName) {
-							return WuxDefinition.DisplayCollapsibleTitle(definition, fieldName) + "\n" +
+							return WuxDefinition.TooltipDescription(definition) + "\n" +
 								WuxSheetMain.Input("text", fieldName);
 						},
 
 						buildNumberInput = function (definition, fieldName) {
-							return WuxDefinition.DisplayCollapsibleTitle(definition, fieldName) + "\n" +
+							return WuxDefinition.TooltipDescription(definition) + "\n" +
 								WuxSheetMain.Input("number", fieldName);
 						},
 
@@ -924,17 +924,105 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
 			var
 				printOverview = function () {
-					
+					let contents = Overview.Build();
+					return WuxSheetMain.Build(contents);
 				},
+				Overview = Overview || (function () {
+        			'use strict';
+        
+        			var
+        			    build = function () {
+        			        let contents = "";
+        			        contents += basics();
+        			        contents += advancement();
+        			        
+        			        contents = WuxSheetMain.SectionBlock(WuxSheetMain.SectionBlockContents(contents));
+        			        
+        			        let definition = WuxDef.Get("Overview Page");
+        				    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+        			    },
+        			    
+        			    basics = function () {
+        			        let contents = "";
+        			        contents += buildTextInput(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
+        			        return contents;
+        			    },
+        			    
+        			    advancement = function () {
+        			        let contents = "";
+        			        contents += WuxSheetMain.Header("Advancement");
+        			        contents += 
+        			        return contents;
+        			    },
+
+						buildTextInput = function (definition, fieldName) {
+							return WuxDefinition.DisplayCollapsibleTitle(definition, fieldName) + "\n" +
+								WuxSheetMain.Input("text", fieldName);
+						},
+
+						buildNumberInput = function (definition, fieldName) {
+							return WuxDefinition.DisplayCollapsibleTitle(definition, fieldName) + "\n" +
+								WuxSheetMain.Input("number", fieldName);
+						},
+        			    
+        			    return {
+        			        Build : build
+        			    }
+				}()),
+    				
 				printDetails = function () {
-					
+					let contents = Details.Build();
+					return WuxSheetMain.Build(contents);
 				},
+				Details = Details || (function () {
+        			'use strict';
+        
+        			var
+        			    build = function () {
+        			        let contents = "";
+        				    return contents;
+        			    }
+        			    
+        			    return {
+        			        Build : build
+        			    }
+				}()),
+				
 				printChat = function () {
-					
+					let contents = Details.Build();
+					return WuxSheetMain.Build(contents);
 				},
+				Chat = Chat || (function () {
+        			'use strict';
+        
+        			var
+        			    build = function () {
+        			        let contents = "";
+        				    return contents;
+        			    }
+        			    
+        			    return {
+        			        Build : build
+        			    }
+				}()),
+				
 				printOptions = function () {
-					
-				}
+					let contents = Details.Build();
+					return WuxSheetMain.Build(contents);
+				},
+				Options = Options || (function () {
+        			'use strict';
+        
+        			var
+        			    build = function () {
+        			        let contents = "";
+        				    return contents;
+        			    }
+        			    
+        			    return {
+        			        Build : build
+        			    }
+				}())
 
 			return {
 				PrintOverview: printOverview,
@@ -985,8 +1073,22 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
 			var
 				printEquipment = function () {
-					return "";
-				}
+					let contents = Equipment.Build();
+					return WuxSheetMain.Build(contents);
+				},
+				Equipment = Equipment || (function () {
+        			'use strict';
+        
+        			var
+        			    build = function () {
+        			        let contents = "";
+        				    return contents;
+        			    }
+        			    
+        			    return {
+        			        Build : build
+        			    }
+				}())
 
 			return {
 				PrintEquipment: printEquipment
