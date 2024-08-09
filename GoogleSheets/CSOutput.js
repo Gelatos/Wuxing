@@ -94,7 +94,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
 				printBasics = function () {
 					let contents = buildBasicsData.Build();
-					let definition = WuxDef.Get("Origin Page");
+					let definition = WuxDef.Get("Page_Origin");
 					contents = WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
 
 					return WuxSheetMain.Build(contents);
@@ -110,8 +110,8 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 							output += buildTextInput(WuxDef.Get("Display Name"), WuxDef.GetAttribute("Display Name"));
 							output += buildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
 							output += buildAffinity();
-							let definition = WuxDef.Get("Origin Basics");
-							return WuxSheetMain.CollapsibleSection(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, output);
+							let definition = WuxDef.Get("Page_Basics");
+							return WuxSheetMain.CollapsibleSection(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, `<div class="wuxWidth300">${output}</div>`);
 						},
 
 						buildTextInput = function (definition, fieldName) {
@@ -127,7 +127,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 						buildAffinity = function () {
 							let output = "";
 							let definition = WuxDef.Get("Affinity");
-							output += WuxDefinition.DisplayCollapsibleTitle(definition, definition.getAttribute());
+							output += WuxDefinition.TooltipDescription(definition);
 							output += WuxSheetMain.Select(definition.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "Affinity")]));
 							return output;
 						}
@@ -938,7 +938,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			        
         			        contents = WuxSheetMain.SectionBlock(WuxSheetMain.SectionBlockContents(contents));
         			        
-        			        let definition = WuxDef.Get("Overview Page");
+        			        let definition = WuxDef.Get("Page_Overview");
         				    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
         			    },
         			    
@@ -951,19 +951,19 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			    advancement = function () {
         			        let contents = "";
         			        contents += WuxSheetMain.Header("Advancement");
-        			        contents += 
+        			        contents += "";
         			        return contents;
         			    },
 
 						buildTextInput = function (definition, fieldName) {
-							return WuxDefinition.DisplayCollapsibleTitle(definition, fieldName) + "\n" +
+							return WuxDefinition.TooltipDescription(definition) + "\n" +
 								WuxSheetMain.Input("text", fieldName);
 						},
 
 						buildNumberInput = function (definition, fieldName) {
-							return WuxDefinition.DisplayCollapsibleTitle(definition, fieldName) + "\n" +
+							return WuxDefinition.TooltipDescription(definition) + "\n" +
 								WuxSheetMain.Input("number", fieldName);
-						},
+						}
         			    
         			    return {
         			        Build : build

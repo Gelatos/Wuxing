@@ -942,10 +942,18 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
    Tooltip
 ========================================*/
 
+.wuxTooltip,
+.sheet-rolltemplate-technique .sheet-wuxTooltip,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip
+{
+    position: relative;
+}
+
 .wuxTooltipText,
 .sheet-rolltemplate-technique .sheet-wuxTooltipText,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltipText
 {
+    position: relative;
     text-decoration: underline dotted;
 }
 
@@ -960,15 +968,30 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     padding: 5px;
     z-index: 1000;
 
+    visibility: hidden;
+    border-radius: 6px;
+    border: 2px solid black;
+}
+
+.wuxTooltip .wuxTooltipContent,
+.sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.wuxTooltip .wuxTooltipContent .wuxDescription,
+.sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxDescription,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxDescription
+{
     color: #3e3e3e;
     font-size: 11px;
-    text-align: center;
+    text-align: left;
 
-    visibility: hidden;
     background: #fff;
-    border-radius: 6px;
-   border: 2px solid black;
-  }
+}
+.wuxTooltip .wuxTooltipContent .wuxHeader2,
+.sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxHeader2,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxHeader2
+{
+    color: #3e3e3e;
+}
   
   .wuxTooltip:hover .wuxTooltipContent,
   .sheet-rolltemplate-technique .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,

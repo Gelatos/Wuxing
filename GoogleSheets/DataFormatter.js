@@ -167,7 +167,9 @@ var SheetsDatabase = SheetsDatabase || (function () {
         createDefinitionTypes = function (arr) {
             return new ExtendedDescriptionDatabase(["group", "formulaMods"], arr, function (arr) {
                 let definition = new DefinitionData(arr);
-                definition.variable += `{0}{1}`;
+                if (definition.group == "Type") {
+                    definition.variable += `{0}{1}`;
+                }
                 return definition;
             });
         }
@@ -479,7 +481,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                         description += traits[i].descriptions[j] + " ";
                     }
                     if (displayOptions.hasCSS) {
-                        output += `<div class="wuxTrait">\n<span class="wuxTraitText">${traits[i].name}</span>\n<span class="wuxTooltiptext">${description}</span>\n</div>`;
+                        output += `<div class="wuxTrait wuxTooltip">\n<span class="wuxTraitText">${traits[i].name}</span>\n<span class="wuxTooltipContent">${description}</span>\n</div>`;
                     }
                     else {
                         output += `<a style="margin-right: 10px; text-decoration: underline dotted;" title="${description}">${traits[i].name}</a>`;
@@ -720,8 +722,8 @@ var WuxDefinition = WuxDefinition || (function () {
             return output;
         },
         tooltipDescription = function (definitionData) {
-            let expandContents = definitionContents(definitionData);
-            return WuxSheetMain.Tooltip(definitionData.title, definitionContents);
+            let expandContents = `${WuxSheetMain.Header2(definitionData.title)}\n${definitionContents(definitionData)}`;
+            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definitionData.title), expandContents);
         },
         definitionContents = function(definitionData) {
             let expandContents = `<em>${definitionData.subGroup}</em>`;
@@ -729,7 +731,7 @@ var WuxDefinition = WuxDefinition || (function () {
                 expandContents += "\n" + WuxSheetMain.Desc(definitionData.descriptions[i]);
             }
             return expandContents;
-        }
+        },
         displayCollapsibleTitle = function (definitionData) {
             if (definitionData == undefined) {
                 return "";
@@ -1148,9 +1150,9 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildCharacterCreationSplit = function (fieldName, mainContents, characterCreationContents) {
-            return `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page Set"), "Character Creator")}
+            return `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page Set"), "Builder")}
             ${WuxSheet.PageDisplay(fieldName, mainContents)}
-            ${WuxSheet.PageDisplay("Character Creator", characterCreationContents)}`;
+            ${WuxSheet.PageDisplay("Builder", characterCreationContents)}`;
         },
 
         buildStickySideTab = function (contents) {
@@ -1252,8 +1254,8 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildTechniquesNavigation = function () {
-            let output = `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page Set"), "Character Creator")}
-            ${WuxSheet.PageDisplay("Character Creator", characterCreationNavigation("Techniques"))}
+            let output = `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page Set"), "Builder")}
+            ${WuxSheet.PageDisplay("Builder", characterCreationNavigation("Techniques"))}
             ${WuxSheet.PageDisplay("Training", trainingPageNavigation("Techniques"))}
             ${WuxSheet.PageDisplay("Advancement", advancementPageNavigation("Techniques"))}
             ${WuxSheet.PageDisplay("Core", trainingPageNavigation("Techniques"))}`;
@@ -1263,7 +1265,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         characterCreationNavigation = function (sheetName) {
             let mainContents = buildCharacterCreationTabs(sheetName);
-            mainContents += buildExitStickyButtons(WuxDef.GetAttribute("Character Creator"), false);
+            mainContents += buildExitStickyButtons(WuxDef.GetAttribute("Builder"), false);
             mainContents += buildHeader("Character Creation", sheetName);
             return mainContents;
         },

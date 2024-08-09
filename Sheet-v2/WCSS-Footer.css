@@ -22,6 +22,11 @@
     width: 50px;
 }
 
+.wuxWidth300
+{
+    width: 300px;
+}
+
 .wuxMinWidth100
 {
     min-width: 100px;
