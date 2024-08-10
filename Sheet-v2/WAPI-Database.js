@@ -960,7 +960,10 @@ class DefinitionData extends WuxDatabaseData {
     getFormulaValue(attributeHandler) {
         let output = 0;
         this.formulaCalculations.forEach((formula) => {
-            output += formula.getValue(attributeHandler);
+            if (formula.modName != "") {
+                formula.value = attributeHandler.parseInt(formula.modName);
+            }
+            output += formula.value * formula.multiplier;
         });
         return output;
     }
@@ -1263,13 +1266,6 @@ class WorkerFormula {
         this.modName = modName == undefined ? "" : modName;
         this.value = isNaN(parseInt(value)) ? 0 : parseInt(value);
         this.multiplier = isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier);
-    }
-    getValue(attributeHandler) {
-        if (this.modName != "") {
-            this.value = attributeHandler.parseInt(this.modName);
-        }
-        
-        return this.value * this.multiplier;
     }
 }
 

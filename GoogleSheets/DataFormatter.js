@@ -727,7 +727,7 @@ var WuxDefinition = WuxDefinition || (function () {
         definitionContents = function(definitionData) {
             let expandContents = "";
             if(definitionData.subGroup != "") {
-                expandContents += `<em>${definitionData.subGroup}</em>`;
+                expandContents += WuxSheetMain.Desc(`<em>${definitionData.subGroup}</em>`);
             }
             for (let i = 0; i < definitionData.descriptions.length; i++) {
                 expandContents += "\n" + WuxSheetMain.Desc(definitionData.descriptions[i]);
@@ -1161,7 +1161,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildCharacterCreationSplit = function (fieldName, mainContents, characterCreationContents) {
-            return `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page Set"), "Builder")}
+            return `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("PageSet"), "Builder")}
             ${WuxSheet.PageDisplay(fieldName, mainContents)}
             ${WuxSheet.PageDisplay("Builder", characterCreationContents)}`;
         },
@@ -1242,7 +1242,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         trainingPageNavigation = function (sheetName) {
-            let fieldName = WuxDef.GetAttribute("Training");
+            let fieldName = WuxDef.GetAttribute("PageSet_Training");
             let mainContents = "";
             mainContents += buildTabs(sheetName, fieldName, ["Techniques", "Knowledge", "Training"]);
             mainContents += buildExitStickyButtons(fieldName, true);
@@ -1265,7 +1265,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildTechniquesNavigation = function () {
-            let output = `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page Set"), "Builder")}
+            let output = `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("PageSet"), "Builder")}
             ${WuxSheet.PageDisplay("Builder", characterCreationNavigation("Techniques"))}
             ${WuxSheet.PageDisplay("Training", trainingPageNavigation("Techniques"))}
             ${WuxSheet.PageDisplay("Advancement", advancementPageNavigation("Techniques"))}
@@ -1276,7 +1276,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         characterCreationNavigation = function (sheetName) {
             let mainContents = buildCharacterCreationTabs(sheetName);
-            mainContents += buildExitStickyButtons(WuxDef.GetAttribute("Builder"), false);
+            mainContents += buildExitStickyButtons(WuxDef.GetAttribute("PageSet_Character Creator"), false);
             mainContents += buildHeader("Character Creation", sheetName);
             return mainContents;
         },

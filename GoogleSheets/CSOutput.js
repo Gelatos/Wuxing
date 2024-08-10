@@ -580,11 +580,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
 						buildGroup = function (groupName, filteredData) {
 							return `<div class="wuxFlexTableItemGroup wuxMinWidth200">
-						<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName}</div>
-						<div class="wuxFlexTableItemData wuxTextLeft">
-							${buildSkillGroupSkills(filteredData)}
-						</div>
-					</div>`;
+								<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName}</div>
+								<div class="wuxFlexTableItemData wuxTextLeft">\n${buildSkillGroupSkills(filteredData)}\n</div>
+							</div>`;
 						},
 
 						buildSkillGroupSkills = function (skillDataArray) {
@@ -625,7 +623,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							for (let i = 0; i < attributes.length; i++) {
 								output.push(buildAttribute(attributes[i], attributeValuesFilter));
 							}
-							return WuxSheetMain.SectionBlockContents(WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 2));
+							return WuxSheetMain.SectionBlockContents(WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 3));
 						},
 
 						buildAttribute = function (attributeDefinition, attributeValuesFilter) {
@@ -635,7 +633,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							let expandContents = "";
 							let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinition.name));
 							for (let i = 0; i < formulaDefinitions.length; i++) {
-							    expandContents += WuxSheetMain.Header(formulaDefinitions[i].title, "span");
+							    expandContents += WuxSheetMain.Header2(formulaDefinitions[i].title, "span");
 								expandContents += "<br />";
 								expandContents += WuxDefinition.DefinitionContents(formulaDefinitions[i]);
 							}
@@ -644,9 +642,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							${WuxSheetMain.Header("Affected Stats")}
 							${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`);
 							
-							let output = WuxSheetMain.Table.FlexTableHeader(WuxSheetMain.Tooltip(attributeDefinition.title, WuxDefinition.TooltipDescription(attributeDefinition)));
+							let header = WuxSheetMain.Tooltip(attributeDefinition.title, WuxDefinition.TooltipDescription(attributeDefinition));
+							let output = WuxSheetMain.Table.FlexTableHeader(header);
 							output += WuxSheetMain.Table.FlexTableData(contents);
-							return WuxSheetMain.Table.FlextTableGroup(output, "wuxMinWidth300");
+							return WuxSheetMain.Table.FlextTableGroup(output, "wuxMinWidth200");
 						}
 						;
 					return {
@@ -1163,7 +1162,7 @@ var BuilderBackend = BuilderBackend || (function () {
 				    let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
                 	let attributeHandler  = new WorkerAttributeHandler();
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
-                	attributeHandler.addUpdate(WuxDef.GetVariable("Page Set"), "Core");
+                	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
                 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
@@ -1174,7 +1173,7 @@ var BuilderBackend = BuilderBackend || (function () {
 				},
 				
 				listenerFinishButton = function() {
-					let groupVariableNames = [WuxDef.GetVariable("Character Creator", WuxDef._finish)];
+					let groupVariableNames = [WuxDef.GetVariable("PageSet_Character Creator", WuxDef._finish)];
 				    let output = `${className}.FinishBuild();\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -1248,6 +1247,8 @@ var TrainingBackend = TrainingBackend || (function () {
 			'use strict';
 
 			var
+				className = "WuxWorkerTraining",
+
 				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
 					jsClassData.addPublicFunction("finishBuild", finishBuild);
@@ -1271,7 +1272,7 @@ var TrainingBackend = TrainingBackend || (function () {
 				},
 				
 				listenerFinishButton = function() {
-					let groupVariableNames = WuxDef.GetVariable("Training", WuxDef._finish);
+					let groupVariableNames = WuxDef.GetVariable("PageSet_Training", WuxDef._finish);
 				    let output = `${className}.FinishBuild();\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);

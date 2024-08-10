@@ -2,8 +2,8 @@ var upgrade_to_1_0_0 = function (doneUpdating) {
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
 	let attributeHandler = new WorkerAttributeHandler();
 	attributeHandler.addUpdate("version", "0");
-	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Knowledge");
-	attributeHandler.addUpdate(WuxDef.GetVariable("Page Set"), "Builder");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
 
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
