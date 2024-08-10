@@ -67,7 +67,6 @@ function SetTechniquesDatabase(techniqueDatabaseString) {
 
 function Test(definitionArray) {
     let data = new DefinitionData(definitionArray[0]);
-    data.setFormulaData();
     return JSON.stringify(data);
 	// return PrintLargeEntry(DisplayTechniquesSheet.PrintTest(SheetsDatabase.CreateStyles(stylesArray), SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString))), "t");
 }
@@ -723,10 +722,13 @@ var WuxDefinition = WuxDefinition || (function () {
         },
         tooltipDescription = function (definitionData) {
             let expandContents = `${WuxSheetMain.Header2(definitionData.title)}\n${definitionContents(definitionData)}`;
-            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definitionData.title), expandContents);
+            return expandContents;
         },
         definitionContents = function(definitionData) {
-            let expandContents = `<em>${definitionData.subGroup}</em>`;
+            let expandContents = "";
+            if(definitionData.subGroup != "") {
+                expandContents += `<em>${definitionData.subGroup}</em>`;
+            }
             for (let i = 0; i < definitionData.descriptions.length; i++) {
                 expandContents += "\n" + WuxSheetMain.Desc(definitionData.descriptions[i]);
             }
@@ -755,6 +757,7 @@ var WuxDefinition = WuxDefinition || (function () {
         GetGroupVariables: getGroupVariables,
         DisplayEntry: displayEntry,
         TooltipDescription: tooltipDescription,
+        DefinitionContents: definitionContents,
         DisplayCollapsibleTitle: displayCollapsibleTitle
     }
 }());
@@ -1005,8 +1008,8 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     return `<div class="wuxFlexTable">\n${contents}\n</div>`;
                 },
 
-                flextTableGroup = function (contents) {
-                    return `<div class="wuxFlexTableItemGroup">\n${contents}\n</div>`;
+                flextTableGroup = function (contents, className) {
+                    return `<div class="wuxFlexTableItemGroup${className != undefined ? ` ${className}` : ""}">\n${contents}\n</div>`;
                 },
 
                 flexTableHeader = function (data) {
@@ -1070,6 +1073,13 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     return `<div class="wuxInteractiveBlock${isExpanding ? " wuxInteractiveExpandingBlock" : ""}">\n${contents}\n</div>`;
                 },
 
+                buildTooltipCheckboxInput = function (fieldName, contents, tooltipContents) {
+                    return `<div class="wuxInteractiveBlock wuxTooltip">
+                    <div class="wuxTooltipText">\n${checkboxBlockIcon(fieldName, contents)}\n</div>
+                    <div class="wuxTooltipContent">\n${tooltipContents}\n</div>
+                    </div>`;
+                },
+
                 expandableBlockIcon = function (fieldName) {
                     let flagName = "wuxInteractiveExpandIcon-flag";
                     return `<div class="wuxInteractiveInnerExpandBlock">\n${customInput("checkbox", fieldName, "wuxInteractiveExpandingContent-flag")}
@@ -1104,6 +1114,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
 
             return {
                 Build: build,
+                BuildTooltipCheckboxInput: buildTooltipCheckboxInput,
                 ExpandableBlockIcon: expandableBlockIcon,
                 ExpandableBlockEmptyIcon: expandableBlockEmptyIcon,
                 InnerBlock: innerBlock,

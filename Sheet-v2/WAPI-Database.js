@@ -259,6 +259,7 @@ class WuxDatabaseData extends dbObj {
         this.fieldName = "";
         this.group = "";
         this.description = "";
+        this.variable = "";
     }
     createDefinition(baseDefinition) {
         let definition = new DefinitionData();
@@ -273,12 +274,14 @@ class WuxDatabaseData extends dbObj {
         definition.modifiers = baseDefinition.modifiers;
         definition.linkedGroups = baseDefinition.linkedGroups;
         definition.isResource = baseDefinition.isResource;
+        definition.setFormulaData();
         return definition;
     }
 
 }
 class TechniqueData extends WuxDatabaseData {
     importJson(json) {
+        this.createEmpty();
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
         this.techSet = json.techSet;
@@ -305,6 +308,7 @@ class TechniqueData extends WuxDatabaseData {
         this.onGoingTech = new TechniqueData(json.onGoingTech);
     }
     importSheets(dataArray) {
+        this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -332,6 +336,7 @@ class TechniqueData extends WuxDatabaseData {
         this.importEffectSheet(dataArray.slice(i));
     }
     createEmpty() {
+        super.createEmpty();
         this.name = "";
         this.fieldName = "";
         this.techSet = "";
@@ -459,6 +464,7 @@ class TechniqueData extends WuxDatabaseData {
 }
 class TechniqueEffect extends dbObj {
     importJson(json) {
+        this.createEmpty();
         this.target = json.target;
         this.type = json.type;
         this.subType = json.subType;
@@ -469,6 +475,7 @@ class TechniqueEffect extends dbObj {
         this.traits = json.traits;
     }
     importSheets(dataArray) {
+        this.createEmpty();
         let i = 0;
         this.target = "" + dataArray[i]; i++;
         this.type = "" + dataArray[i]; i++;
@@ -480,6 +487,7 @@ class TechniqueEffect extends dbObj {
         this.traits = "" + dataArray[i]; i++;
     }
     createEmpty() {
+        super.createEmpty();
         this.target = "";
         this.type = "";
         this.subType = "";
@@ -492,6 +500,7 @@ class TechniqueEffect extends dbObj {
 }
 class TechniqueStyle extends WuxDatabaseData {
     importJson(json) {
+        this.createEmpty();
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
         this.group = json.group;
@@ -500,6 +509,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.cr = json.cr;
     }
     importSheets(dataArray) {
+        this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -509,6 +519,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.cr = parseInt(dataArray[i]); i++;
     }
     createEmpty() {
+        super.createEmpty();
         this.name = "";
         this.fieldName = "";
         this.group = "";
@@ -519,6 +530,7 @@ class TechniqueStyle extends WuxDatabaseData {
 }
 class SkillData extends WuxDatabaseData {
     importJson(json) {
+        this.createEmpty();
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
         this.group = json.group;
@@ -526,6 +538,7 @@ class SkillData extends WuxDatabaseData {
         this.description = json.description;
     }
     importSheets(dataArray) {
+        this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -535,6 +548,7 @@ class SkillData extends WuxDatabaseData {
 
     }
     createEmpty() {
+        super.createEmpty();
         this.name = "";
         this.fieldName = "";
         this.group = "";
@@ -544,6 +558,7 @@ class SkillData extends WuxDatabaseData {
 }
 class LanguageData extends WuxDatabaseData {
     importJson(json) {
+        this.createEmpty();
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
         this.group = json.group;
@@ -551,6 +566,7 @@ class LanguageData extends WuxDatabaseData {
         this.description = json.description;
     }
     importSheets(dataArray) {
+        this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -559,6 +575,7 @@ class LanguageData extends WuxDatabaseData {
         this.description = "" + dataArray[i]; i++;
     }
     createEmpty() {
+        super.createEmpty();
         this.name = "";
         this.fieldName = "";
         this.group = "";
@@ -568,12 +585,14 @@ class LanguageData extends WuxDatabaseData {
 }
 class LoreData extends WuxDatabaseData {
     importJson(json) {
+        this.createEmpty();
         this.name = json.name;
         this.fieldName = json.fieldName;
         this.group = json.group;
         this.description = json.description;
     }
     importSheets(dataArray) {
+        this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -581,6 +600,7 @@ class LoreData extends WuxDatabaseData {
         this.description = "" + dataArray[i]; i++;
     }
     createEmpty() {
+        super.createEmpty();
         this.name = "";
         this.fieldName = "";
         this.group = "";
@@ -589,6 +609,7 @@ class LoreData extends WuxDatabaseData {
 }
 class JobData extends WuxDatabaseData {
     createEmpty() {
+        super.createEmpty();
         this.name = "";
         this.fieldName = "";
         this.group = "";
@@ -599,6 +620,7 @@ class JobData extends WuxDatabaseData {
         this.techniques = [];
     }
     importJson(json) {
+        this.createEmpty();
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
         this.group = json.group;
@@ -609,6 +631,7 @@ class JobData extends WuxDatabaseData {
         this.techniques = json.techniques;
     }
     importSheets(dataArray) {
+        this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -660,9 +683,11 @@ class JobData extends WuxDatabaseData {
 }
 class RoleData extends WuxDatabaseData {
     importJson(json) {
+        this.createEmpty();
 
     }
     importSheets(dataArray) {
+        this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -672,6 +697,7 @@ class RoleData extends WuxDatabaseData {
 
     }
     createEmpty() {
+        super.createEmpty();
         this.name = "";
         this.fieldName = "";
         this.group = "";
@@ -762,6 +788,7 @@ class AttributeGroupData extends dbObj {
 }
 class DefinitionData extends WuxDatabaseData {
     importJson(json) {
+        this.createEmpty();
         this.name = json.name;
         this.fieldName = Format.ToCamelCase(this.name);
         this.title = json.title;
@@ -774,10 +801,11 @@ class DefinitionData extends WuxDatabaseData {
         this.modifiers = json.modifiers;
         this.linkedGroups = json.linkedGroups;
         this.isResource = json.isResource;
-        this.modAttrs = [];
-        this.formulaCalculations = [];
+        this.modAttrs = json.modAttrs;
+        this.formulaCalculations = json.formulaCalculations;
     }
     importSheets(dataArray) {
+        this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToCamelCase(this.name);
@@ -791,10 +819,10 @@ class DefinitionData extends WuxDatabaseData {
         this.modifiers = "" + dataArray[i]; i++;
         this.linkedGroups = Format.StringToArray("" + dataArray[i]).push(this.name); i++;
         this.isResource = dataArray[i] == "TRUE"; i++;
-        this.modAttrs = [];
-        this.formulaCalculations = [];
+        this.setFormulaData();
     }
     createEmpty() {
+        super.createEmpty();
         this.name = "";
         this.fieldName = "";
         this.title = "";
@@ -809,10 +837,13 @@ class DefinitionData extends WuxDatabaseData {
         this.isResource = false;
         this.modAttrs = [];
         this.formulaCalculations = [];
+        
     }
     createDefinition(baseDefinition) {
         this.definition = "";
         let definition = super.createDefinition(baseDefinition);
+        definition.title = this.title;
+        definition.subGroup = this.subGroup;
         definition.descriptions = this.descriptions;
         definition.formula = this.formula;
         definition.modifiers = this.modifiers;

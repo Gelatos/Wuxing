@@ -962,7 +962,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent
 {
     position: absolute;
-    top: 18px;
+    top: 24px;
     left: 0px;
     width: 240px;
     padding: 5px;
@@ -993,12 +993,19 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     color: #3e3e3e;
 }
   
-  .wuxTooltip:hover .wuxTooltipContent,
-  .sheet-rolltemplate-technique .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
-  .sheet-rolltemplate-usetechnique .sheet-wuxTooltip:hover .sheet-wuxTooltipContent
-  {
-    visibility: visible;
-  }
+.wuxTooltip:hover .wuxTooltipContent,
+.sheet-rolltemplate-technique .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip:hover .sheet-wuxTooltipContent
+{
+  visibility: visible;
+}
+  
+.wuxTooltip .wuxTooltipContent:hover,
+.sheet-rolltemplate-technique .wuxTooltip .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-usetechnique .wuxTooltip .sheet-wuxTooltipContent:hover
+{
+  visibility: hidden;
+}
 
   /*========================================
      Heroic Techniques

@@ -186,7 +186,6 @@ class WuxWorkerBuildManager {
 	setupAttributeHandlerForPointUpdate(attributeHandler) {
 		let manager = this;
 		manager.iterate(function(worker) {
-			worker.definition.setFormulaData();
 			attributeHandler.addFormulaMods(worker.definition);
     		attributeHandler.addMod(worker.attrBuildDraft);
 		});

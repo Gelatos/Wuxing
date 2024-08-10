@@ -115,19 +115,19 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 						},
 
 						buildTextInput = function (definition, fieldName) {
-							return WuxDefinition.TooltipDescription(definition) + "\n" +
+							return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
 								WuxSheetMain.Input("text", fieldName);
 						},
 
 						buildNumberInput = function (definition, fieldName) {
-							return WuxDefinition.TooltipDescription(definition) + "\n" +
+							return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
 								WuxSheetMain.Input("number", fieldName);
 						},
 
 						buildAffinity = function () {
 							let output = "";
 							let definition = WuxDef.Get("Affinity");
-							output += WuxDefinition.TooltipDescription(definition);
+							output += WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition));
 							output += WuxSheetMain.Select(definition.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "Affinity")]));
 							return output;
 						}
@@ -243,18 +243,13 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 						},
 
 						buildLanguage = function (knowledge) {
-							let knowledgeDefinition = WuxDef.Get("Language");
-							let expandContents = `<div class="wuxDescription">${knowledge.description}</div>`;
-
-							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(knowledgeDefinition.getAttribute(knowledge.fieldName, WuxDef._expand))}
-							${WuxSheetMain.InteractionElement.CheckboxBlockIcon(knowledgeDefinition.getAttribute([knowledge.fieldName, WuxDef._rank]), buildInteractionMainBlock(knowledge))}
-							${WuxSheetMain.InteractionElement.ExpandableBlockContents(knowledgeDefinition.getAttribute(knowledge.fieldName, WuxDef._expand), expandContents)}`;
-
-							return WuxSheetMain.InteractionElement.Build(true, output);
+							let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
+							return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(knowledgeDefinition.getAttribute(WuxDef._rank),
+								buildInteractionMainBlock(knowledge, knowledgeDefinition), WuxDefinition.TooltipDescription(knowledgeDefinition));
 						},
 
-						buildInteractionMainBlock = function (knowledge) {
-							return `<span class="wuxHeader">${knowledge.name}</span>\n<span class="wuxSubheader"> - ${knowledge.location}</span>`;
+						buildInteractionMainBlock = function (knowledge, knowledgeDefinition) {
+							return `<span class="wuxHeader">${knowledgeDefinition.title}</span><span class="wuxSubheader"> - ${knowledge.location}</span>`;
 						}
 
 					return {
@@ -311,22 +306,18 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 							return output;
 						},
 
-						buildLore = function (knowledge, interactHeader, knowledgeDefinition) {
-							let expandContents = `<div class="wuxDescription">${knowledge.description}</div>`;
-
-							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(knowledgeDefinition.getAttribute(knowledge.fieldName, WuxDef._expand))}
-					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(knowledgeDefinition.getAttribute([knowledge.fieldName, WuxDef._rank]), interactHeader)}
-					${WuxSheetMain.InteractionElement.ExpandableBlockContents(knowledgeDefinition.getAttribute(knowledge.fieldName, WuxDef._expand), expandContents)}`;
-
-							return WuxSheetMain.InteractionElement.Build(true, output);
+						buildLore = function (knowledge, interactHeader) {
+							let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Lore"));
+							return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(knowledgeDefinition.getAttribute(WuxDef._rank),
+							interactHeader, WuxDefinition.TooltipDescription(knowledgeDefinition));
 						},
 
 						buildMainLore = function (knowledge) {
-							return buildLore(knowledge, `<span class="wuxHeader">General ${knowledge.name}</span>`, WuxDef.Get("Lore"));
+							return buildLore(knowledge, `<span class="wuxHeader">General ${knowledge.name}</span>`);
 						},
 
 						buildSubLore = function (knowledge) {
-							return buildLore(knowledge, `<span class="wuxSubheader">${knowledge.name}</span>`, WuxDef.Get("Lore"));
+							return buildLore(knowledge, `<span class="wuxSubheader">${knowledge.name}</span>`);
 						}
 
 					return {
@@ -573,13 +564,13 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							let groupName = "";
 							let filterSettings = [new DatabaseFilterData("group", "")];
 							let filteredData = {};
-							let languageGroups = database.getPropertyValues("group");
-							languageGroups = languageGroups.sort();
-							for (let i = 0; i < languageGroups.length; i++) {
-								if (languageGroups[i] == "") {
+							let skillGroups = database.getPropertyValues("group");
+							skillGroups = skillGroups.sort();
+							for (let i = 0; i < skillGroups.length; i++) {
+								if (skillGroups[i] == "") {
 									continue;
 								}
-								groupName = languageGroups[i];
+								groupName = skillGroups[i];
 								filterSettings[0].value = groupName;
 								filteredData = database.filter(filterSettings);
 								output.push(buildGroup(groupName, filteredData));
@@ -605,18 +596,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						},
 
 						buildSkill = function (skill) {
-							let fieldName = Format.ToCamelCase(skill.name);
-							let definition = WuxDef.Get("Skill");
-
-							let expandFieldName = `${definition.getAttribute([fieldName])}-expand`;
-							let expandContents = `<div class="wuxDescription">${skill.description}</div>`;
+							let skillDefinition = skill.createDefinition(WuxDef.Get("Skill"));
 							let interactHeader = `<span class="wuxHeader">${skill.name} (${skill.abilityScore})</span>`;
-
-							let output = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
-								${WuxSheetMain.InteractionElement.CheckboxBlockIcon(definition.getAttribute([fieldName, WuxDef._rank]), interactHeader)}
-								${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
-
-							return WuxSheetMain.InteractionElement.Build(true, output);
+							
+							return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(skillDefinition.getAttribute(WuxDef._rank),
+							interactHeader, WuxDefinition.TooltipDescription(skillDefinition));
 						}
 					return {
 						Build: build
@@ -636,17 +620,12 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
 						buildAttributes = function () {
 							let attributes = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
-							let output = "";
-							let attrRow = "";
+							let output = [];
 							let attributeValuesFilter = WuxDef.Filter([new DatabaseFilterData("group", "AttributeValue")]);
 							for (let i = 0; i < attributes.length; i++) {
-								attrRow += buildAttribute(attributes[i], attributeValuesFilter);
-								if (i % 2 == 1) {
-									output += WuxSheetMain.Table.FlexTable(attrRow);
-									attrRow = "";
-								}
+								output.push(buildAttribute(attributes[i], attributeValuesFilter));
 							}
-							return WuxSheetMain.SectionBlockContents(WuxSheetMain.Table.FlexTable(output));
+							return WuxSheetMain.SectionBlockContents(WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 2));
 						},
 
 						buildAttribute = function (attributeDefinition, attributeValuesFilter) {
@@ -657,19 +636,17 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinition.name));
 							for (let i = 0; i < formulaDefinitions.length; i++) {
 							    expandContents += WuxSheetMain.Header(formulaDefinitions[i].title, "span");
-							    expandContents += WuxSheetMain.Desc(formulaDefinitions[i].group);
-								for (let j = 0; j < formulaDefinitions[i].descriptions.length; j++) {
-                                    expandContents += `${WuxSheetMain.Desc(formulaDefinitions[i].descriptions[j])}`;
-                                }
+								expandContents += "<br />";
+								expandContents += WuxDefinition.DefinitionContents(formulaDefinitions[i]);
 							}
 							let expandFieldName = attributeDefinition.getAttribute(WuxDef._expand);
 							contents += WuxSheetMain.InteractionElement.Build(true, `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
 							${WuxSheetMain.Header("Affected Stats")}
 							${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`);
 							
-							let output = WuxSheetMain.Table.FlexTableHeader(attributeDefinition.title);
+							let output = WuxSheetMain.Table.FlexTableHeader(WuxSheetMain.Tooltip(attributeDefinition.title, WuxDefinition.TooltipDescription(attributeDefinition)));
 							output += WuxSheetMain.Table.FlexTableData(contents);
-							return WuxSheetMain.Table.FlextTableGroup(output);
+							return WuxSheetMain.Table.FlextTableGroup(output, "wuxMinWidth300");
 						}
 						;
 					return {
@@ -956,12 +933,12 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			    },
 
 						buildTextInput = function (definition, fieldName) {
-							return WuxDefinition.TooltipDescription(definition) + "\n" +
+							return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
 								WuxSheetMain.Input("text", fieldName);
 						},
 
 						buildNumberInput = function (definition, fieldName) {
-							return WuxDefinition.TooltipDescription(definition) + "\n" +
+							return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
 								WuxSheetMain.Input("number", fieldName);
 						}
         			    
