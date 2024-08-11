@@ -93,13 +93,13 @@ input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-P
 
 .wuxStickyHeader .wuxHeader2
 {
-    height: 10px;
+    height: 20px;
 }
 
 .wuxStickyHeader .wuxHeader2 span
 {
     font-family: "Candal";
-    font-size: 10px;
+    font-size: 12px;
     text-overflow: clip;
     color: #f4f6f8;
 }
@@ -163,6 +163,63 @@ input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-P
 .wuxStickyHeader .wuxHeader input[type=text]::placeholder
 {
     color: #686868;
+}
+
+/*========================================
+    Info Button
+========================================*/
+
+.wuxInfoButton {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin: 0px;
+    padding: 0px;
+    padding-right: 10px;
+}
+
+.wuxInfoButton input[type=radio],
+.wuxInfoButton input[type=checkbox] 
+{
+    position: absolute;
+    top: 0px;
+	left: 0px;
+	right: 0px;
+    width: 100%;
+    height: 100%;
+
+    z-index: 9999;
+
+    opacity: 0;
+}
+
+.wuxInfoButton span, 
+.wuxStickyHeader .wuxInfoButton span 
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    font-family: pictos;
+    font-size: 18px;
+    color: #f4f6f8;
+
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.wuxInfoButton input[type=radio]:checked + span,
+.wuxInfoButton input[type=checkbox]:checked + span
+{
+    color: #5b5b5b;
+}
+
+.wuxInfoButton input[type=radio]:hover + span,
+.wuxInfoButton input[type=checkbox]:hover + span
+{
+    color: #979898;
 }
 
 /*========================================

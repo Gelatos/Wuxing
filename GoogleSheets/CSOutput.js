@@ -61,7 +61,8 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
 	var
 		print = function (sheetsDb) {
-			let output = WuxSheetNavigation.BuildOriginPageNavigation("Origin") +
+			let definition = WuxDef.Get("Page_Origin");
+			let output = WuxSheetNavigation.BuildOriginPageNavigation(definition) +
 				SideBarData.Print() +
 				MainContentData.Print();
 			return WuxSheet.PageDisplay("Origin", output);
@@ -158,7 +159,8 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 		},
 
 		printKnowledge = function (sheetsDb) {
-			let output = WuxSheetNavigation.BuildTrainingPageNavigation("Knowledge") +
+			let definition = WuxDef.Get("Page_Knowledge");
+			let output = WuxSheetNavigation.BuildTrainingPageNavigation(definition) +
 				SideBarData.PrintKnowledge() +
 				MainContentData.PrintKnowledge(sheetsDb.language, sheetsDb.lore);
 			return WuxSheet.PageDisplay("Knowledge", output);
@@ -348,22 +350,24 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 		},
 
 		printJobs = function (sheetsDb) {
-			let output = WuxSheetNavigation.BuildAdvancementPageNavigation("Jobs") +
+			let definition = WuxDef.Get("Page_Jobs");
+			let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
 				SideBarData.PrintJobs() +
 				MainContentData.PrintJobs(sheetsDb.job, sheetsDb.role, sheetsDb.techniques);
 			return WuxSheet.PageDisplay("Jobs", output);
 		},
 
 		printSkills = function (sheetsDb) {
-			let output = WuxSheetNavigation.BuildAdvancementPageNavigation("Skills") +
+			let definition = WuxDef.Get("Page_Skills");
+			let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
 				SideBarData.PrintSkills() +
 				MainContentData.PrintSkills(sheetsDb.skills);
 			return WuxSheet.PageDisplay("Skills", output);
 		},
 
 		printAttributes = function (sheetsDb) {
-
-			let output = WuxSheetNavigation.BuildAdvancementPageNavigation("Attributes") +
+			let definition = WuxDef.Get("Page_Attributes");
+			let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
 				SideBarData.PrintAttributes() +
 				MainContentData.PrintAttributes();
 			return WuxSheet.PageDisplay("Attributes", output);
@@ -875,15 +879,19 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 			var
 				printOverview = function () {
 					
+					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
 				},
 				printDetails = function () {
 					
+					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
 				},
 				printChat = function () {
 					
+					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
 				},
 				printOptions = function () {
 					
+					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
 				}
 
 			return {
@@ -1035,7 +1043,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
 			var
 				printEquipment = function () {
-					return "";
+					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
 				}
 
 			return {
@@ -1098,7 +1106,7 @@ var DisplayActionsSheet = DisplayActionsSheet || (function () {
 
 			var
 				printActions = function () {
-					return "";
+					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
 				}
 
 			return {
