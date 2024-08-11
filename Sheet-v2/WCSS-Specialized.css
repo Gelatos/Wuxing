@@ -3,6 +3,7 @@
 ========================================*/
 
 .wuxPageDisplay-Origin,
+.wuxPageDisplay-Builder,
 .wuxPageDisplay-Training,
 .wuxPageDisplay-Advancement,
 .wuxPageDisplay-Core,
@@ -13,7 +14,6 @@
 .wuxPageDisplay-LevelUp,
 .wuxPageDisplay-Techniques,
 .wuxPageDisplay-Character,
-.wuxPageDisplay-Builder,
 .wuxPageDisplay-Overview,
 .wuxPageDisplay-Details,
 .wuxPageDisplay-Chat,
@@ -26,6 +26,7 @@
 }
 
 input[type=hidden].wuxPageDisplay-Flag[value="Origin"] ~ .wuxPageDisplay-Origin,
+input[type=hidden].wuxPageDisplay-Flag[value="Builder"] ~ .wuxPageDisplay-Builder,
 input[type=hidden].wuxPageDisplay-Flag[value="Training"] ~ .wuxPageDisplay-Training,
 input[type=hidden].wuxPageDisplay-Flag[value="Advancement"] ~ .wuxPageDisplay-Advancement,
 input[type=hidden].wuxPageDisplay-Flag[value="Core"] ~ .wuxPageDisplay-Core,
@@ -36,7 +37,6 @@ input[type=hidden].wuxPageDisplay-Flag[value="Attributes"] ~ .wuxPageDisplay-Att
 input[type=hidden].wuxPageDisplay-Flag[value="LevelUp"] ~ .wuxPageDisplay-LevelUp,
 input[type=hidden].wuxPageDisplay-Flag[value="Techniques"] ~ .wuxPageDisplay-Techniques,
 input[type=hidden].wuxPageDisplay-Flag[value="Character"] ~ .wuxPageDisplay-Character,
-input[type=hidden].wuxPageDisplay-Flag[value="Builder"] ~ .wuxPageDisplay-Builder,
 input[type=hidden].wuxPageDisplay-Flag[value="Overview"] ~ .wuxPageDisplay-Overview,
 input[type=hidden].wuxPageDisplay-Flag[value="Details"] ~ .wuxPageDisplay-Details,
 input[type=hidden].wuxPageDisplay-Flag[value="Chat"] ~ .wuxPageDisplay-Chat,

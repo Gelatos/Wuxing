@@ -1206,14 +1206,11 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
         
         buildGearPageNavigation = function (selectedTab) {
-            let sideBarButtons = "";
-            let tabFieldName = WuxDef.GetAttribute("Core", WuxDef._tab);
-            sideBarButtons += buildTabButton("radio", tabFieldName, "Options", "Options", selectedTab == "Options", "") + "\n";
-            sideBarButtons += buildTabButton("radio", tabFieldName, "Chat", "Chat", selectedTab == "Chat", "") + "\n";
-            sideBarButtons += buildTabButton("radio", tabFieldName, "Details", "Details", selectedTab == "Details", "") + "\n";
-            sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", selectedTab == "Overview", "") + "\n";
-
-            return buildSection(buildMainPageTabs("Character", buildStickySideTab(buildTabButtonRow(sideBarButtons))));
+            return buildSection(buildMainPageTabs("Gear", ""));
+        },
+        
+        buildActionsPageNavigation = function (selectedTab) {
+            return buildSection(buildMainPageTabs("Actions", ""));
         },
 
         buildMainPageTabs = function (sheetName, sideBarButtons) {
@@ -1269,7 +1266,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             ${WuxSheet.PageDisplay("Builder", characterCreationNavigation("Techniques"))}
             ${WuxSheet.PageDisplay("Training", trainingPageNavigation("Techniques"))}
             ${WuxSheet.PageDisplay("Advancement", advancementPageNavigation("Techniques"))}
-            ${WuxSheet.PageDisplay("Core", trainingPageNavigation("Techniques"))}`;
+            ${WuxSheet.PageDisplay("Core", buildMainPageTabs("Techniques", ""))}`;
 
             return buildSection(output);
         },
@@ -1306,6 +1303,8 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         ;
     return {
         BuildOverviewPageNavigation: buildOverviewPageNavigation,
+        BuildGearPageNavigation: buildGearPageNavigation,
+        BuildActionsPageNavigation: buildActionsPageNavigation,
         BuildOriginPageNavigation: buildOriginPageNavigation,
         BuildTechniquesNavigation: buildTechniquesNavigation,
         BuildTrainingPageNavigation: buildTrainingPageNavigation,

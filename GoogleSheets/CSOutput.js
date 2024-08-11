@@ -1024,7 +1024,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 		},
 
 		printEquipment = function (sheetsDb) {
-			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Gear") +
+			let output = WuxSheetNavigation.BuildGearPageNavigation("Gear") +
 				SideBarData.PrintEquipment() +
 				MainContentData.PrintEquipment();
 			return WuxSheet.PageDisplay("Gear", output);
@@ -1087,10 +1087,10 @@ var DisplayActionsSheet = DisplayActionsSheet || (function () {
 		},
 
 		printActions = function (sheetsDb) {
-			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Gear") +
+			let output = WuxSheetNavigation.BuildActionsPageNavigation("Actions") +
 				SideBarData.PrintActions() +
 				MainContentData.PrintActions();
-			return WuxSheet.PageDisplay("Gear", output);
+			return WuxSheet.PageDisplay("Actions", output);
 		},
 
 		SideBarData = SideBarData || (function () {
