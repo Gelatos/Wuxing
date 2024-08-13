@@ -1489,6 +1489,36 @@ input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-P
     color: #979898;
 }
 
+.wuxInfoContent
+{
+    position: relative;
+    width: 94%;
+    margin-left: 5%;
+
+    color: #3e3e3e;
+    font-size: 12px;
+    text-align: left;
+
+    background: #fff;
+    border-radius: 6px;
+    border: 2px solid black;
+}
+
+.wuxInfoContent .wuxHeader2
+{
+    color: #3e3e3e;
+    background: none;
+    font-size: 14px;
+    margin: 2px 10px;
+}
+
+.wuxStickyHeader .wuxInfoContent .wuxDescription
+{
+    color: #3e3e3e;
+    margin: 2px 10px;
+    background: #fff;
+}
+
 /*========================================
     Emote Post
 ========================================*/
