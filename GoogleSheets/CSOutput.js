@@ -677,7 +677,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			let output = WuxSheetNavigation.BuildTechniquesNavigation() +
 				SideBarData.Print() +
 				MainContentData.Print(sheetsDb.styles, sheetsDb.techniques);
-			return WuxSheet.PageDisplay("Techniques", output);
+			return WuxSheet.PageDisplay("Styles", output);
 		},
 
 		printTest = function (stylesDatabase, techniqueDatabase) {

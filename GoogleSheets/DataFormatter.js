@@ -1247,7 +1247,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         mainPageNavigation = function (definition, subheader, sideBarButtons) {
             let mainContents = "";
-            mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Techniques", "Character"]);
+            mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Styles", "Character"]);
             mainContents += sideBarButtons;
             mainContents += buildMainSheetHeader(subheader, definition.getAttribute(WuxDef._info));
 
@@ -1272,7 +1272,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         trainingPageNavigation = function (definition, subheader) {
             let fieldName = WuxDef.GetAttribute("PageSet_Training");
             let mainContents = "";
-            mainContents += buildTabs(definition.title, fieldName, ["Techniques", "Knowledge", "Training"]);
+            mainContents += buildTabs(definition.title, fieldName, ["Styles", "Knowledge", "Training"]);
             mainContents += buildExitStickyButtons(fieldName, true);
             mainContents += buildHeader("Training", subheader, definition.getAttribute(WuxDef._info));
             return mainContents;
@@ -1286,7 +1286,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         advancementPageNavigation = function (definition, subheader) {
             let fieldName = WuxDef.GetAttribute("Advancement");
-            let mainContents = buildTabs(definition.title, fieldName, ["Techniques", "Attributes", "Skills", "Jobs", "Advancement"]);
+            let mainContents = buildTabs(definition.title, fieldName, ["Styles", "Attributes", "Skills", "Jobs", "Advancement"]);
             mainContents += buildExitStickyButtons(fieldName, true);
             mainContents += buildHeader("Advancement", subheader, definition.getAttribute(WuxDef._info));
             return mainContents;
@@ -1325,7 +1325,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         buildCharacterCreationTabs = function (sheetName) {
             let output = "";
-            let tabNames = ["Techniques", "Attributes", "Knowledge", "Skills", "Jobs", "Origin"];
+            let tabNames = ["Styles", "Attributes", "Knowledge", "Skills", "Jobs", "Origin"];
 
             for (let i = 0; i < tabNames.length; i++) {
                 output += buildTabButton("radio",  WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
