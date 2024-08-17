@@ -1214,7 +1214,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         
         buildOverviewPageNavigation = function (selectedTab) {
             let sideBarButtons = "";
-            let tabFieldName = WuxDef.GetAttribute("Core", WuxDef._tab);
+            let tabFieldName = WuxDef.GetAttribute("PageSet_Core", WuxDef._tab);
             sideBarButtons += buildTabButton("radio", tabFieldName, "Options", "Options", selectedTab == "Options", "") + "\n";
             sideBarButtons += buildTabButton("radio", tabFieldName, "Chat", "Chat", selectedTab == "Chat", "") + "\n";
             sideBarButtons += buildTabButton("radio", tabFieldName, "Details", "Details", selectedTab == "Details", "") + "\n";
@@ -1285,7 +1285,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         advancementPageNavigation = function (definition, subheader) {
-            let fieldName = WuxDef.GetAttribute("Advancement");
+            let fieldName = WuxDef.GetAttribute("PageSet_Advancement");
             let mainContents = buildTabs(definition.title, fieldName, ["Styles", "Attributes", "Skills", "Jobs", "Advancement"]);
             mainContents += buildExitStickyButtons(fieldName, true);
             mainContents += buildHeader("Advancement", subheader, definition.getAttribute(WuxDef._info));
@@ -1293,7 +1293,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildTechniquesNavigation = function () {
-            let definition = WuxDef.Get("Page_Techniques");
+            let definition = WuxDef.Get("Page_Styles");
             let tabFieldName = WuxDef.GetAttribute("PageSet");
             let learnSubtitle = WuxDef.GetTitle("Page_LearnTechniques");
             let coreSubtitle = WuxDef.GetTitle("Page_SetStyles");

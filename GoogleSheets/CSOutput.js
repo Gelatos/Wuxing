@@ -837,7 +837,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 	var
 		print = function (sheetsDb) {
 			let output = "";
-			output += WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Core", WuxDef._tab));
+			output += WuxSheet.PageDisplayInput(WuxDef.GetAttribute("PageSet_Core", WuxDef._tab));
 			output += printOverview(sheetsDb);
 			output += printDetails(sheetsDb);
 			output += printChat(sheetsDb);
