@@ -427,6 +427,12 @@ input[type=hidden].wuxInteractiveExpandIcon-flag[value="on"] + .wuxInteractiveEx
     color: #DE9B72;
 }
 
+.wuxTabHeader input[type=hidden].wuxInteractiveExpandIcon-flag[value="on"] + .wuxInteractiveExpandIcon,
+.wuxTabHeader .wuxInteractiveExpandAuxIcon
+{
+    color: #71B9DE;
+}
+
 input[type=hidden].wuxInteractiveIcon-flag[value="on"] + .wuxInteractiveAuxIcon,
 input[type=hidden].wuxInteractiveExpandIcon-flag[value="on"] + .wuxInteractiveExpandAuxIcon
 {

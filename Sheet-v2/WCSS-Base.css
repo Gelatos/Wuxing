@@ -253,7 +253,7 @@ input[type=number]::-webkit-inner-spin-button
 {
     float: left;
     flex: 1;
-    top: 70px;
+    top: 80px;
 
     min-width: 80px;
     max-width: 80px;
@@ -307,7 +307,7 @@ input[type=number]::-webkit-inner-spin-button
 
 	background: #1d1e1f;
     border-bottom: 3px solid;
-    border-color: transparent transparent #DE9B72 transparent;
+    border-color: transparent transparent #71B9DE transparent;
     border-radius: 10px 10px 0px 0px;
 }
 
@@ -553,10 +553,10 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 }
 
 .wuxSectionContent,
-.wuxSectionContentCollapsed
+.wuxSectionContentCollapsed,
+.wuxTabContent
 {
     position: relative;
-    top: -3px;
     left: 0px;
     display: inherit;
 
@@ -567,9 +567,24 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 30%, #3A3D3E 100%);
     border-style: solid;
     border-width: 0px 3px 3px 0px;
+    border-radius: 0px 0px 5px 0px;
+}
+
+.wuxSectionContent,
+.wuxSectionContentCollapsed
+{
+    top: -3px;
+
     border-color: #a6a6a6 #a6a6a6 #a6a6a6 transparent;
     border-image: linear-gradient(to right, #a6a6a600 0%, #a6a6a600 35%, #a6a6a6FF 40%) 1;
-    border-radius: 0px 0px 5px 0px;
+}
+
+.wuxTabContent
+{
+    top: -16px;
+
+    border-color: #71B9DE #71B9DE #71B9DE transparent;
+    border-image: linear-gradient(to right, #a6a6a600 0%, #a6a6a600 20%, #71B9DE 25%) 1;
 }
 
 .wuxSectionContentCollapsed
@@ -582,6 +597,11 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .wuxLargeLayoutItem .wuxSectionContentCollapsed
 {
     border-image: linear-gradient(to right, #a6a6a600 0%, #a6a6a600 40%, #a6a6a6FF 45%) 1;
+}
+
+.wuxLargeLayoutItem .wuxTabContent
+{
+    border-image: linear-gradient(to right, #a6a6a600 0%, #a6a6a600 40%, #71B9DE 45%) 1;
 }
 
 .wuxSectionContentSet 

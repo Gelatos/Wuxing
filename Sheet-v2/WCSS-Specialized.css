@@ -239,13 +239,16 @@ input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-P
 
 .wuxInfoContent .wuxHeader2
 {
+    width: 94%;
+    
     color: #3e3e3e;
     background: none;
     font-size: 14px;
     margin: 2px 10px;
 }
 
-.wuxStickyHeader .wuxInfoContent .wuxDescription
+.wuxStickyHeader .wuxInfoContent .wuxDescription,
+.wuxSectionBlock .wuxInfoContent .wuxDescription
 {
     color: #3e3e3e;
     margin: 2px 10px;

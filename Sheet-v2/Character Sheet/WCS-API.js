@@ -6633,7 +6633,7 @@ var WuxDef = WuxDef || (function () {
 	'use strict';
 
 	var
-		keys = ["Attribute", "Skill", "Job", "Role", "Knowledge", "Language", "Lore", "Style", "Technique", "PageSet", "Page", "Defense", "Sense", "Affinity", "Combat", "Social", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_training", "_adv", "_pts", "_tech", "_expertise", "_gear", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training Page", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Basics", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Level", "CR", "XP", "TP", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion", "Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill", "Full Name", "Display Name", "HP", "WILL", "EN", "Initiative", "Carrying Capacity", "Combat_HV", "Combat_Armor", "Combat_Durability", "Combat_Surge", "Combat_Chakra", "Chakra", "Combat_Move Speed", "Combat_Move Potency", "Social_Approval", "Social_Patience", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Style_Basic Set", "Style_Swordplay", "Style_Ki Extension", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman", "Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Defense Piercer ", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"],
+		keys = ["Attribute", "Skill", "Job", "Role", "Knowledge", "Language", "Lore", "Style", "Technique", "PageSet", "Page", "Title", "Defense", "Sense", "Affinity", "Combat", "Social", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_training", "_adv", "_pts", "_tech", "_expertise", "_gear", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Basics", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Advancement", "Title_Training", "Level", "CR", "XP", "Training Points", "PP", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion", "Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill", "Full Name", "Display Name", "HP", "WILL", "EN", "Initiative", "Carrying Capacity", "Combat_HV", "Combat_Armor", "Combat_Durability", "Combat_Surge", "Combat_Chakra", "Chakra", "Combat_Move Speed", "Combat_Move Potency", "Social_Approval", "Social_Patience", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Style_Basic Set", "Style_Swordplay", "Style_Ki Extension", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman", "Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Defense Piercer ", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"],
 		values = {
 			"Attribute": {
 				"name": "Attribute", "fieldName": "attribute", "group": "Type", "description": "", "variable": "ATR{0}{1}", "title": "Attributes", "subGroup": "", "descriptions": [""],
@@ -6684,9 +6684,9 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Technique": {
 				"name": "Technique", "fieldName": "technique", "group": "Type", "description": "", "variable": "TCH{0}{1}", "title": "Techniques", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCH", "TCH"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCH", "TCH"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
@@ -6697,6 +6697,11 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Page": {
 				"name": "Page", "fieldName": "page", "group": "Type", "description": "", "variable": "PAG{0}{1}", "title": "Page", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"Title": {
+				"name": "Title", "fieldName": "title", "group": "Type", "description": "", "variable": "TTL{0}{1}", "title": "Title", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
@@ -6930,8 +6935,8 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
-			"PageSet_Training Page": {
-				"name": "PageSet_Training Page", "fieldName": "trainingPage", "group": "PageSet", "description": "", "variable": "PGStrainingPage{0}", "title": "Training", "subGroup": "", "descriptions": [""],
+			"PageSet_Training": {
+				"name": "PageSet_Training", "fieldName": "training", "group": "PageSet", "description": "", "variable": "PGStraining{0}", "title": "Training", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
@@ -6941,17 +6946,17 @@ var WuxDef = WuxDef || (function () {
 				"formulaCalculations": []
 			},
 			"Page_Jobs": {
-				"name": "Page_Jobs", "fieldName": "jobs", "group": "Page", "description": "", "variable": "PAGjobs{0}", "title": "Jobs", "subGroup": "", "descriptions": ["Jobs are a unique type of Style which broadly represents a character's role. A job will always grant bonuses to a character's combat or social stats, defenses, and special techniques to determine how the character acts in a conflict. When entering a conflict, only one job may be set at a time. ", "On this page, you can see the number of job points you have available to spend on the left column. Each time you spend a job point you may gain a rank in one job. A job's maximum rank is equal to your Character Rank.", "Gaining a rank in a job often grants new techniques to use when a job's techniques are active.", "You gain a number of job points equal to your Character Rank. You may choose to gain additional job points by spending progression points on level up."],
+				"name": "Page_Jobs", "fieldName": "jobs", "group": "Page", "description": "", "variable": "PAGjobs{0}", "title": "Jobs", "subGroup": "", "descriptions": ["Jobs are a unique type of Style which broadly represents a character's role. A job will always grant bonuses to a character's combat or social stats, defenses, and special techniques to determine how the character acts in a conflict. When entering a conflict, only one job may be set at a time. ", "On this page, you can see the number of job points you have available to spend on the left column. Each time you spend a job point you may gain a rank in one job. A job's maximum rank is equal to your Character Rank.", "Gaining a rank in a job often grants new techniques to use when a job's techniques are active.", "You gain a number of job points equal to your Character Rank. You may choose to gain additional job points by spending advancement points on level up."],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Page_Skills": {
-				"name": "Page_Skills", "fieldName": "skills", "group": "Page", "description": "", "variable": "PAGskills{0}", "title": "Skills", "subGroup": "", "descriptions": ["Skills represent a broad application of techniques and ability. Anytime you do anything complex in Wuxing you will be making a skill check to determine your success. In addition, most techniques will require the use of a skill to function.", "Skills are all tied to one of the six attributes. As a base, a skill modifier is equal to its associated attribute. When you are trained in a skill your modifier increases by 2 + your Character Rank.", "On this page you can see the number of skill points you have available to spend on the left column. Each time you spend a skill point you may become trained in one skill. To train a skill you must check the skill off on the checkbox.", "You gain a number of skill points equal to 8 + your Character Rank. You may choose to gain additional skill points by spending progression points on level up."],
+				"name": "Page_Skills", "fieldName": "skills", "group": "Page", "description": "", "variable": "PAGskills{0}", "title": "Skills", "subGroup": "", "descriptions": ["Skills represent a broad application of techniques and ability. Anytime you do anything complex in Wuxing you will be making a skill check to determine your success. In addition, most techniques will require the use of a skill to function.", "Skills are all tied to one of the six attributes. As a base, a skill modifier is equal to its associated attribute. When you are trained in a skill your modifier increases by 2 + your Character Rank.", "On this page you can see the number of skill points you have available to spend on the left column. Each time you spend a skill point you may become trained in one skill. To train a skill you must check the skill off on the checkbox.", "You gain a number of skill points equal to 8 + your Character Rank. You may choose to gain additional skill points by spending advancement points on level up."],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Page_Knowledge": {
-				"name": "Page_Knowledge", "fieldName": "knowledge", "group": "Page", "description": "", "variable": "PAGknowledge{0}", "title": "Knowledge", "subGroup": "", "descriptions": ["Knowledge represents information a character knows on a subject. Knowledge can be divided into two categories, languages and lore. ", "Languages are divided by the locations of the world where they are used. Learning a language allows one to speak, read, and write the language. ", "Lore is knowledge of a single broad topic. Whenever you use the Recall Knowledge technique, you will roll with the modifier of an appropriate lore knowledge for the subject you wish to recall knowledge for. When you make a lore check your modifier is equal to your lore's rank + your Character Rank.", "Lore is divided into categories based on the context of their usage. Each category has a General knowledge that can be trained. Normally, you cannot make a lore check without having an associated lore, however having the general knowledge of the subject will allow it. When making a general lore check, your modifier is equal to your Character Rank.", "On this page you can see the number of knowledge points you have available to spend on the left column. Each time you spend a knowledge point you may raise the rank of any lore or learn a language. To raise the rank of a lore, you may change the value of a lore with its dropdown. To learn a language you must check the language off on the checkbox.", "You gain a number of skill points equal to 8 + your Character Rank. You may choose to gain additional knowledge points by spending advancement points through training on level up."],
+				"name": "Page_Knowledge", "fieldName": "knowledge", "group": "Page", "description": "", "variable": "PAGknowledge{0}", "title": "Knowledge", "subGroup": "", "descriptions": ["Knowledge represents information a character knows on a subject. Knowledge can be divided into two categories, languages and lore. ", "Languages are divided by the locations of the world where they are used. Learning a language allows one to speak, read, and write the language. ", "Lore is knowledge of a single broad topic. Whenever you use the Recall Knowledge technique, you will roll with the modifier of an appropriate lore knowledge for the subject you wish to recall knowledge for. When you make a lore check your modifier is equal to your lore's rank + your Character Rank.", "Lore is divided into categories based on the context of their usage. Each category has a General knowledge that can be trained. Normally, you cannot make a lore check without having an associated lore, however having the general knowledge of the subject will allow it. When making a general lore check, your modifier is equal to your Character Rank.", "On this page you can see the number of knowledge points you have available to spend on the left column. Each time you spend a knowledge point you may raise the rank of any lore or learn a language. To raise the rank of a lore, you may change the value of a lore with its dropdown. To learn a language you must check the language off on the checkbox.", "You gain a number of skill points equal to 8 + your Character Rank. You may choose to gain additional knowledge points by spending training points through training on level up."],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
@@ -6966,12 +6971,12 @@ var WuxDef = WuxDef || (function () {
 				"formulaCalculations": []
 			},
 			"Page_LearnTechniques": {
-				"name": "Page_LearnTechniques", "fieldName": "learnTechniques", "group": "Page", "description": "", "variable": "PAGlearnTechniques{0}", "title": "Learn Styles and Techniques", "subGroup": "", "descriptions": ["Each technique allows a character to perform a variety of actions including granting bonuses to the character, performing attacks, manipulate others, or maneuvering around the world.", "All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style.", "On this page you can learn general styles and techniques. This page contains general styles and techniques that are available to all characters as long as they meet the requirements to learn the style or technique.", "When learning a style often the style will grant a set of techniques that are learned as part of the style. These are listed as Free Techniques in the Style's entry.", "You gain a number of technique points equal to 6 + your Level. You may choose to gain additional technique points by spending progression points on level up. You may also choose to gain additional technique points by spending advancement points through training on level up."],
+				"name": "Page_LearnTechniques", "fieldName": "learnTechniques", "group": "Page", "description": "", "variable": "PAGlearnTechniques{0}", "title": "Learn Styles and Techniques", "subGroup": "", "descriptions": ["Each technique allows a character to perform a variety of actions including granting bonuses to the character, performing attacks, manipulate others, or maneuvering around the world.", "All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style.", "On this page you can learn general styles and techniques. This page contains general styles and techniques that are available to all characters as long as they meet the requirements to learn the style or technique.", "When learning a style often the style will grant a set of techniques that are learned as part of the style. These are listed as Free Techniques in the Style's entry.", "You gain a number of technique points equal to 6 + your Character Rank x 2. You may choose to gain additional technique points by spending advancement points on level up. You may also choose to gain additional technique points by spending training points through training on level up."],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Page_SetStyles": {
-				"name": "Page_SetStyles", "fieldName": "setStyles", "group": "Page", "description": "", "variable": "PAGsetStyles{0}", "title": "Set Styles", "subGroup": "", "descriptions": ["All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style."],
+				"name": "Page_SetStyles", "fieldName": "setStyles", "group": "Page", "description": "", "variable": "PAGsetStyles{0}", "title": "Set Styles", "subGroup": "", "descriptions": ["All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style.", "On this page you can set which styles are currently active on the character, allowing them to be used in the Actions Page. You can set both job styles and general styles. Basic styles are always set. ", ""],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
@@ -7021,29 +7026,44 @@ var WuxDef = WuxDef || (function () {
 				"formulaCalculations": []
 			},
 			"Page_Advancement": {
-				"name": "Page_Advancement", "fieldName": "advancement", "group": "Page", "description": "", "variable": "PAGadvancement{0}", "title": "Advancement", "subGroup": "", "descriptions": [""],
+				"name": "Page_Advancement", "fieldName": "advancement", "group": "Page", "description": "", "variable": "PAGadvancement{0}", "title": "Advancement", "subGroup": "", "descriptions": ["As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. "],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"Title_Advancement": {
+				"name": "Title_Advancement", "fieldName": "advancement", "group": "Title", "description": "", "variable": "TTLadvancement{0}", "title": "Advancement", "subGroup": "", "descriptions": ["As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. ", "In this section you can see your current level and track their experience. When you are ready, you may also access the advancement menu which will allow you to spend gained build points from leveling up."],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"Title_Training": {
+				"name": "Title_Training", "fieldName": "training", "group": "Title", "description": "", "variable": "TTLtraining{0}", "title": "Training", "subGroup": "", "descriptions": ["The pursuit of skill and knowledge is an ever flowing river. Training is a system to track your progress in learning knowledge and new techniques apart from Advancement.", "In this section you can see how many training points you have gained along with your current PP values. When you are ready, you may also access the training menu which will calculate your current training points and allow you to spend them to learn new knowledge and techniques."],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Level": {
-				"name": "Level", "fieldName": "level", "group": "Progression", "description": "", "variable": "level", "title": "Character Level", "subGroup": "", "descriptions": ["A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP)."],
+				"name": "Level", "fieldName": "level", "group": "Advancement", "description": "", "variable": "level", "title": "Character Level", "subGroup": "", "descriptions": ["A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP)."],
 				"abbreviation": "Lv", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"CR": {
-				"name": "CR", "fieldName": "cR", "group": "Progression", "description": "", "variable": "cr", "title": "Character Rank", "subGroup": "", "descriptions": ["Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level."],
+				"name": "CR", "fieldName": "cR", "group": "Advancement", "description": "", "variable": "cr", "title": "Character Rank", "subGroup": "", "descriptions": ["Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level."],
 				"abbreviation": "CR", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"XP": {
-				"name": "XP", "fieldName": "xP", "group": "Progression", "description": "", "variable": "xp", "title": "Experience", "subGroup": "", "descriptions": ["Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up."],
+				"name": "XP", "fieldName": "xP", "group": "Advancement", "description": "", "variable": "xp", "title": "Experience", "subGroup": "", "descriptions": ["Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up."],
 				"abbreviation": "XP", "formula": "30", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": ["xp"],
 				"formulaCalculations": [{ "modName": "", "value": 30, "multiplier": 1 },
 				{ "modName": "", "value": 0, "multiplier": 1 }]
 			},
-			"TP": {
-				"name": "TP", "fieldName": "tP", "group": "Progression", "description": "", "variable": "tp", "title": "Training", "subGroup": "", "descriptions": ["TP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional TP if a character devotes an entire day to training. ", "Once a character reaches 12 TP, they may spend their TP to gain a new knowledge or technique."],
-				"abbreviation": "", "formula": "12", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": ["tp"],
+			"Training Points": {
+				"name": "Training Points", "fieldName": "trainingPoints", "group": "Training", "description": "", "variable": "trainingPoints", "title": "Training Points", "subGroup": "", "descriptions": ["Whenever you gain enough "],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"PP": {
+				"name": "PP", "fieldName": "pP", "group": "Training", "description": "", "variable": "pp", "title": "Progression", "subGroup": "", "descriptions": ["PP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional PP if a character devotes an entire day to training. ", "Once a character reaches 12 TP, they may spend their PP to gain a new knowledge or technique."],
+				"abbreviation": "", "formula": "12", "modifiers": "", "linkedGroups": 1, "isResource": false, "modAttrs": ["pp"],
 				"formulaCalculations": [{ "modName": "", "value": 12, "multiplier": 1 },
 				{ "modName": "", "value": 0, "multiplier": 1 }]
 			},
@@ -7111,7 +7131,8 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Defense_Reflex": {
 				"name": "Defense_Reflex", "fieldName": "reflex", "group": "Defense", "description": "", "variable": "DEFreflex{0}", "title": "Reflex", "subGroup": "Combat Defense", "descriptions": ["Reflex is used when a character could quickly react to a situation with movement. It is usually used to avoid powerful attacks or to get out of the way of harmful effects that only need to touch the character like a fireball."],
-				"abbreviation": "", "formula": "7;Attribute_QCK", "modifiers": "_expertise; _tech", "linkedGroups": 1, "isResource": false, "modAttrs": [],
+				"abbreviation": "", "formula": "7;Attribute_QCK", "modifiers": "_expertise; _tech", "linkedGroups": 1, "isResource": false, "modAttrs": []
+				,
 				"formulaCalculations": []
 			},
 			"Defense_Evasion": {
@@ -8211,8 +8232,7 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Job_Trainee": {
 				"name": "Job_Trainee", "fieldName": "trainee", "group": "Job", "description": "", "variable": "JOBtrainee{0}", "title": "Trainee", "subGroup": "", "descriptions": ["The trainee is representative of your character learning a skill. It delivers fewer growths at level up and no job techniques. Instead, every level grants points to spend on skills."],
-				"abbreviation": "", "formula": "CR", "modifiers": "_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "JOBtrainee_adv"]
-				,
+				"abbreviation": "", "formula": "CR", "modifiers": "_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "JOBtrainee_adv"],
 				"formulaCalculations": [{ "modName": "cr", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
@@ -8285,2217 +8305,2215 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Technique_Break Free": {
 				"name": "Technique_Break Free", "fieldName": "breakFree", "group": "Technique", "description": "", "variable": "TCHbreakFree{0}", "title": "Break Free", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHbreakFree_training", "TCHbreakFree_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHbreakFree_training", "TCHbreakFree_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Dash": {
 				"name": "Technique_Dash", "fieldName": "dash", "group": "Technique", "description": "", "variable": "TCHdash{0}", "title": "Dash", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdash_training", "TCHdash_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdash_training", "TCHdash_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Escape": {
 				"name": "Technique_Escape", "fieldName": "escape", "group": "Technique", "description": "", "variable": "TCHescape{0}", "title": "Escape", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHescape_training", "TCHescape_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHescape_training", "TCHescape_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Grapple": {
 				"name": "Technique_Grapple", "fieldName": "grapple", "group": "Technique", "description": "", "variable": "TCHgrapple{0}", "title": "Grapple", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgrapple_training", "TCHgrapple_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgrapple_training", "TCHgrapple_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Hide": {
 				"name": "Technique_Hide", "fieldName": "hide", "group": "Technique", "description": "", "variable": "TCHhide{0}", "title": "Hide", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHhide_training", "TCHhide_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHhide_training", "TCHhide_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Mount": {
 				"name": "Technique_Mount", "fieldName": "mount", "group": "Technique", "description": "", "variable": "TCHmount{0}", "title": "Mount", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmount_training", "TCHmount_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmount_training", "TCHmount_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Prepare": {
 				"name": "Technique_Prepare", "fieldName": "prepare", "group": "Technique", "description": "", "variable": "TCHprepare{0}", "title": "Prepare", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHprepare_training", "TCHprepare_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHprepare_training", "TCHprepare_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Reposition": {
 				"name": "Technique_Reposition", "fieldName": "reposition", "group": "Technique", "description": "", "variable": "TCHreposition{0}", "title": "Reposition", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHreposition_training", "TCHreposition_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHreposition_training", "TCHreposition_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Seach": {
 				"name": "Technique_Seach", "fieldName": "seach", "group": "Technique", "description": "", "variable": "TCHseach{0}", "title": "Seach", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHseach_training", "TCHseach_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHseach_training", "TCHseach_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Aid": {
 				"name": "Technique_Aid", "fieldName": "aid", "group": "Technique", "description": "", "variable": "TCHaid{0}", "title": "Aid", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHaid_training", "TCHaid_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHaid_training", "TCHaid_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Encourage": {
 				"name": "Technique_Encourage", "fieldName": "encourage", "group": "Technique", "description": "", "variable": "TCHencourage{0}", "title": "Encourage", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHencourage_training", "TCHencourage_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHencourage_training", "TCHencourage_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Stabilize": {
 				"name": "Technique_Stabilize", "fieldName": "stabilize", "group": "Technique", "description": "", "variable": "TCHstabilize{0}", "title": "Stabilize", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHstabilize_training", "TCHstabilize_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHstabilize_training", "TCHstabilize_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Skill Check": {
 				"name": "Technique_Skill Check", "fieldName": "skillCheck", "group": "Technique", "description": "", "variable": "TCHskillCheck{0}", "title": "Skill Check", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHskillCheck_training", "TCHskillCheck_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHskillCheck_training", "TCHskillCheck_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Build Rapport": {
 				"name": "Technique_Build Rapport", "fieldName": "buildRapport", "group": "Technique", "description": "", "variable": "TCHbuildRapport{0}", "title": "Build Rapport", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHbuildRapport_training", "TCHbuildRapport_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHbuildRapport_training", "TCHbuildRapport_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Build Pressure": {
 				"name": "Technique_Build Pressure", "fieldName": "buildPressure", "group": "Technique", "description": "", "variable": "TCHbuildPressure{0}", "title": "Build Pressure", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHbuildPressure_training", "TCHbuildPressure_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHbuildPressure_training", "TCHbuildPressure_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Captivate": {
 				"name": "Technique_Captivate", "fieldName": "captivate", "group": "Technique", "description": "", "variable": "TCHcaptivate{0}", "title": "Captivate", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcaptivate_training", "TCHcaptivate_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcaptivate_training", "TCHcaptivate_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Demand": {
 				"name": "Technique_Demand", "fieldName": "demand", "group": "Technique", "description": "", "variable": "TCHdemand{0}", "title": "Demand", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdemand_training", "TCHdemand_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdemand_training", "TCHdemand_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Grab an Edge": {
 				"name": "Technique_Grab an Edge", "fieldName": "grabAnEdge", "group": "Technique", "description": "", "variable": "TCHgrabAnEdge{0}", "title": "Grab an Edge", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgrabAnEdge_training", "TCHgrabAnEdge_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgrabAnEdge_training", "TCHgrabAnEdge_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Interact": {
 				"name": "Technique_Interact", "fieldName": "interact", "group": "Technique", "description": "", "variable": "TCHinteract{0}", "title": "Interact", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHinteract_training", "TCHinteract_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHinteract_training", "TCHinteract_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Second Wind": {
 				"name": "Technique_Second Wind", "fieldName": "secondWind", "group": "Technique", "description": "", "variable": "TCHsecondWind{0}", "title": "Second Wind", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsecondWind_training", "TCHsecondWind_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsecondWind_training", "TCHsecondWind_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Second Breath": {
 				"name": "Technique_Second Breath", "fieldName": "secondBreath", "group": "Technique", "description": "", "variable": "TCHsecondBreath{0}", "title": "Second Breath", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsecondBreath_training", "TCHsecondBreath_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsecondBreath_training", "TCHsecondBreath_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Undaunted": {
 				"name": "Technique_Undaunted", "fieldName": "undaunted", "group": "Technique", "description": "", "variable": "TCHundaunted{0}", "title": "Undaunted", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHundaunted_training", "TCHundaunted_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHundaunted_training", "TCHundaunted_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Preemptive Strike": {
 				"name": "Technique_Preemptive Strike", "fieldName": "preemptiveStrike", "group": "Technique", "description": "", "variable": "TCHpreemptiveStrike{0}", "title": "Preemptive Strike", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHpreemptiveStrike_training", "TCHpreemptiveStrike_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHpreemptiveStrike_training", "TCHpreemptiveStrike_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Preemptive Stagger": {
 				"name": "Technique_Preemptive Stagger", "fieldName": "preemptiveStagger", "group": "Technique", "description": "", "variable": "TCHpreemptiveStagger{0}", "title": "Preemptive Stagger", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHpreemptiveStagger_training", "TCHpreemptiveStagger_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHpreemptiveStagger_training", "TCHpreemptiveStagger_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Critical Maim": {
 				"name": "Technique_Critical Maim", "fieldName": "criticalMaim", "group": "Technique", "description": "", "variable": "TCHcriticalMaim{0}", "title": "Critical Maim", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcriticalMaim_training", "TCHcriticalMaim_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcriticalMaim_training", "TCHcriticalMaim_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Spellshot": {
 				"name": "Technique_Spellshot", "fieldName": "spellshot", "group": "Technique", "description": "", "variable": "TCHspellshot{0}", "title": "Spellshot", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHspellshot_training", "TCHspellshot_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHspellshot_training", "TCHspellshot_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Follow-Up Spellshot": {
 				"name": "Technique_Follow-Up Spellshot", "fieldName": "follow-UpSpellshot", "group": "Technique", "description": "", "variable": "TCHfollow-UpSpellshot{0}", "title": "Follow-Up Spellshot", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfollow-UpSpellshot_training", "TCHfollow-UpSpellshot_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfollow-UpSpellshot_training", "TCHfollow-UpSpellshot_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Bursting Spellshot": {
 				"name": "Technique_Bursting Spellshot", "fieldName": "burstingSpellshot", "group": "Technique", "description": "", "variable": "TCHburstingSpellshot{0}", "title": "Bursting Spellshot", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHburstingSpellshot_training", "TCHburstingSpellshot_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHburstingSpellshot_training", "TCHburstingSpellshot_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Savior": {
 				"name": "Technique_Savior", "fieldName": "savior", "group": "Technique", "description": "", "variable": "TCHsavior{0}", "title": "Savior", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsavior_training", "TCHsavior_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsavior_training", "TCHsavior_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Knock Away Savior": {
 				"name": "Technique_Knock Away Savior", "fieldName": "knockAwaySavior", "group": "Technique", "description": "", "variable": "TCHknockAwaySavior{0}", "title": "Knock Away Savior", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHknockAwaySavior_training", "TCHknockAwaySavior_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHknockAwaySavior_training", "TCHknockAwaySavior_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Savior's Retaliation": {
 				"name": "Technique_Savior's Retaliation", "fieldName": "savior'sRetaliation", "group": "Technique", "description": "", "variable": "TCHsavior'sRetaliation{0}", "title": "Savior's Retaliation", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsavior'sRetaliation_training", "TCHsavior'sRetaliation_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsavior'sRetaliation_training", "TCHsavior'sRetaliation_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Spellstrike": {
 				"name": "Technique_Spellstrike", "fieldName": "spellstrike", "group": "Technique", "description": "", "variable": "TCHspellstrike{0}", "title": "Spellstrike", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHspellstrike_training", "TCHspellstrike_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHspellstrike_training", "TCHspellstrike_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Power Skirmish": {
 				"name": "Technique_Power Skirmish", "fieldName": "powerSkirmish", "group": "Technique", "description": "", "variable": "TCHpowerSkirmish{0}", "title": "Power Skirmish", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHpowerSkirmish_training", "TCHpowerSkirmish_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHpowerSkirmish_training", "TCHpowerSkirmish_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sneak Attack": {
 				"name": "Technique_Sneak Attack", "fieldName": "sneakAttack", "group": "Technique", "description": "", "variable": "TCHsneakAttack{0}", "title": "Sneak Attack", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsneakAttack_training", "TCHsneakAttack_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsneakAttack_training", "TCHsneakAttack_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sneaky Follow-Up": {
 				"name": "Technique_Sneaky Follow-Up", "fieldName": "sneakyFollow-Up", "group": "Technique", "description": "", "variable": "TCHsneakyFollow-Up{0}", "title": "Sneaky Follow-Up", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsneakyFollow-Up_training", "TCHsneakyFollow-Up_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsneakyFollow-Up_training", "TCHsneakyFollow-Up_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Assassinate": {
 				"name": "Technique_Assassinate", "fieldName": "assassinate", "group": "Technique", "description": "", "variable": "TCHassassinate{0}", "title": "Assassinate", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHassassinate_training", "TCHassassinate_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHassassinate_training", "TCHassassinate_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Emergency Care": {
 				"name": "Technique_Emergency Care", "fieldName": "emergencyCare", "group": "Technique", "description": "", "variable": "TCHemergencyCare{0}", "title": "Emergency Care", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHemergencyCare_training", "TCHemergencyCare_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHemergencyCare_training", "TCHemergencyCare_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Nightingale": {
 				"name": "Technique_Nightingale", "fieldName": "nightingale", "group": "Technique", "description": "", "variable": "TCHnightingale{0}", "title": "Nightingale", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHnightingale_training", "TCHnightingale_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHnightingale_training", "TCHnightingale_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Rhapsody": {
 				"name": "Technique_Rhapsody", "fieldName": "rhapsody", "group": "Technique", "description": "", "variable": "TCHrhapsody{0}", "title": "Rhapsody", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHrhapsody_training", "TCHrhapsody_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHrhapsody_training", "TCHrhapsody_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Metamagic": {
 				"name": "Technique_Metamagic", "fieldName": "metamagic", "group": "Technique", "description": "", "variable": "TCHmetamagic{0}", "title": "Metamagic", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmetamagic_training", "TCHmetamagic_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmetamagic_training", "TCHmetamagic_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Strategize": {
 				"name": "Technique_Strategize", "fieldName": "strategize", "group": "Technique", "description": "", "variable": "TCHstrategize{0}", "title": "Strategize", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHstrategize_training", "TCHstrategize_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHstrategize_training", "TCHstrategize_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Foresight": {
 				"name": "Technique_Foresight", "fieldName": "foresight", "group": "Technique", "description": "", "variable": "TCHforesight{0}", "title": "Foresight", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHforesight_training", "TCHforesight_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHforesight_training", "TCHforesight_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Saw That Coming": {
 				"name": "Technique_Saw That Coming", "fieldName": "sawThatComing", "group": "Technique", "description": "", "variable": "TCHsawThatComing{0}", "title": "Saw That Coming", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsawThatComing_training", "TCHsawThatComing_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsawThatComing_training", "TCHsawThatComing_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_As You May Recall": {
 				"name": "Technique_As You May Recall", "fieldName": "asYouMayRecall", "group": "Technique", "description": "", "variable": "TCHasYouMayRecall{0}", "title": "As You May Recall", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHasYouMayRecall_training", "TCHasYouMayRecall_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHasYouMayRecall_training", "TCHasYouMayRecall_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Generalist": {
 				"name": "Technique_Generalist", "fieldName": "generalist", "group": "Technique", "description": "", "variable": "TCHgeneralist{0}", "title": "Generalist", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgeneralist_training", "TCHgeneralist_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgeneralist_training", "TCHgeneralist_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Defender": {
 				"name": "Technique_Defender", "fieldName": "defender", "group": "Technique", "description": "", "variable": "TCHdefender{0}", "title": "Defender", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdefender_training", "TCHdefender_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdefender_training", "TCHdefender_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Defender II": {
 				"name": "Technique_Defender II", "fieldName": "defenderII", "group": "Technique", "description": "", "variable": "TCHdefenderII{0}", "title": "Defender II", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdefenderII_training", "TCHdefenderII_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdefenderII_training", "TCHdefenderII_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Defender's Will": {
 				"name": "Technique_Defender's Will", "fieldName": "defender'sWill", "group": "Technique", "description": "", "variable": "TCHdefender'sWill{0}", "title": "Defender's Will", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdefender'sWill_training", "TCHdefender'sWill_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdefender'sWill_training", "TCHdefender'sWill_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Defender's Taunt": {
 				"name": "Technique_Defender's Taunt", "fieldName": "defender'sTaunt", "group": "Technique", "description": "", "variable": "TCHdefender'sTaunt{0}", "title": "Defender's Taunt", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdefender'sTaunt_training", "TCHdefender'sTaunt_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdefender'sTaunt_training", "TCHdefender'sTaunt_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Defender's Recovery": {
 				"name": "Technique_Defender's Recovery", "fieldName": "defender'sRecovery", "group": "Technique", "description": "", "variable": "TCHdefender'sRecovery{0}", "title": "Defender's Recovery", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdefender'sRecovery_training", "TCHdefender'sRecovery_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdefender'sRecovery_training", "TCHdefender'sRecovery_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Skirmisher": {
 				"name": "Technique_Skirmisher", "fieldName": "skirmisher", "group": "Technique", "description": "", "variable": "TCHskirmisher{0}", "title": "Skirmisher", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHskirmisher_training", "TCHskirmisher_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHskirmisher_training", "TCHskirmisher_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Skirmisher II": {
 				"name": "Technique_Skirmisher II", "fieldName": "skirmisherII", "group": "Technique", "description": "", "variable": "TCHskirmisherII{0}", "title": "Skirmisher II", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHskirmisherII_training", "TCHskirmisherII_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHskirmisherII_training", "TCHskirmisherII_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Skirmisher's Step": {
 				"name": "Technique_Skirmisher's Step", "fieldName": "skirmisher'sStep", "group": "Technique", "description": "", "variable": "TCHskirmisher'sStep{0}", "title": "Skirmisher's Step", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHskirmisher'sStep_training", "TCHskirmisher'sStep_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHskirmisher'sStep_training", "TCHskirmisher'sStep_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Skirmisher's Strike": {
 				"name": "Technique_Skirmisher's Strike", "fieldName": "skirmisher'sStrike", "group": "Technique", "description": "", "variable": "TCHskirmisher'sStrike{0}", "title": "Skirmisher's Strike", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHskirmisher'sStrike_training", "TCHskirmisher'sStrike_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHskirmisher'sStrike_training", "TCHskirmisher'sStrike_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Marksman": {
 				"name": "Technique_Marksman", "fieldName": "marksman", "group": "Technique", "description": "", "variable": "TCHmarksman{0}", "title": "Marksman", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmarksman_training", "TCHmarksman_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmarksman_training", "TCHmarksman_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Marksman II": {
 				"name": "Technique_Marksman II", "fieldName": "marksmanII", "group": "Technique", "description": "", "variable": "TCHmarksmanII{0}", "title": "Marksman II", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmarksmanII_training", "TCHmarksmanII_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmarksmanII_training", "TCHmarksmanII_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Marksman's Longshot": {
 				"name": "Technique_Marksman's Longshot", "fieldName": "marksman'sLongshot", "group": "Technique", "description": "", "variable": "TCHmarksman'sLongshot{0}", "title": "Marksman's Longshot", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmarksman'sLongshot_training", "TCHmarksman'sLongshot_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmarksman'sLongshot_training", "TCHmarksman'sLongshot_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Marksman's Sight": {
 				"name": "Technique_Marksman's Sight", "fieldName": "marksman'sSight", "group": "Technique", "description": "", "variable": "TCHmarksman'sSight{0}", "title": "Marksman's Sight", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmarksman'sSight_training", "TCHmarksman'sSight_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmarksman'sSight_training", "TCHmarksman'sSight_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Marksman's Strike": {
 				"name": "Technique_Marksman's Strike", "fieldName": "marksman'sStrike", "group": "Technique", "description": "", "variable": "TCHmarksman'sStrike{0}", "title": "Marksman's Strike", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmarksman'sStrike_training", "TCHmarksman'sStrike_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmarksman'sStrike_training", "TCHmarksman'sStrike_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Athlete": {
 				"name": "Technique_Athlete", "fieldName": "athlete", "group": "Technique", "description": "", "variable": "TCHathlete{0}", "title": "Athlete", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHathlete_training", "TCHathlete_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHathlete_training", "TCHathlete_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Athlete II": {
 				"name": "Technique_Athlete II", "fieldName": "athleteII", "group": "Technique", "description": "", "variable": "TCHathleteII{0}", "title": "Athlete II", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHathleteII_training", "TCHathleteII_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHathleteII_training", "TCHathleteII_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Athlete's Sprint": {
 				"name": "Technique_Athlete's Sprint", "fieldName": "athlete'sSprint", "group": "Technique", "description": "", "variable": "TCHathlete'sSprint{0}", "title": "Athlete's Sprint", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHathlete'sSprint_training", "TCHathlete'sSprint_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHathlete'sSprint_training", "TCHathlete'sSprint_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Athlete's Reach": {
 				"name": "Technique_Athlete's Reach", "fieldName": "athlete'sReach", "group": "Technique", "description": "", "variable": "TCHathlete'sReach{0}", "title": "Athlete's Reach", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHathlete'sReach_training", "TCHathlete'sReach_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHathlete'sReach_training", "TCHathlete'sReach_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Bounding Sprint": {
 				"name": "Technique_Bounding Sprint", "fieldName": "boundingSprint", "group": "Technique", "description": "", "variable": "TCHboundingSprint{0}", "title": "Bounding Sprint", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHboundingSprint_training", "TCHboundingSprint_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHboundingSprint_training", "TCHboundingSprint_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Skulk Away": {
 				"name": "Technique_Skulk Away", "fieldName": "skulkAway", "group": "Technique", "description": "", "variable": "TCHskulkAway{0}", "title": "Skulk Away", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHskulkAway_training", "TCHskulkAway_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHskulkAway_training", "TCHskulkAway_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Skulk Then Hide": {
 				"name": "Technique_Skulk Then Hide", "fieldName": "skulkThenHide", "group": "Technique", "description": "", "variable": "TCHskulkThenHide{0}", "title": "Skulk Then Hide", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHskulkThenHide_training", "TCHskulkThenHide_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHskulkThenHide_training", "TCHskulkThenHide_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_First Aid": {
 				"name": "Technique_First Aid", "fieldName": "firstAid", "group": "Technique", "description": "", "variable": "TCHfirstAid{0}", "title": "First Aid", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfirstAid_training", "TCHfirstAid_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfirstAid_training", "TCHfirstAid_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Cleansing Aid": {
 				"name": "Technique_Cleansing Aid", "fieldName": "cleansingAid", "group": "Technique", "description": "", "variable": "TCHcleansingAid{0}", "title": "Cleansing Aid", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcleansingAid_training", "TCHcleansingAid_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcleansingAid_training", "TCHcleansingAid_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Environmental Awareness": {
 				"name": "Technique_Environmental Awareness", "fieldName": "environmentalAwareness", "group": "Technique", "description": "", "variable": "TCHenvironmentalAwareness{0}", "title": "Environmental Awareness", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHenvironmentalAwareness_training", "TCHenvironmentalAwareness_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHenvironmentalAwareness_training", "TCHenvironmentalAwareness_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Eclectic Knowledge": {
 				"name": "Technique_Eclectic Knowledge", "fieldName": "eclecticKnowledge", "group": "Technique", "description": "", "variable": "TCHeclecticKnowledge{0}", "title": "Eclectic Knowledge", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHeclecticKnowledge_training", "TCHeclecticKnowledge_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHeclecticKnowledge_training", "TCHeclecticKnowledge_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Point of Clarity": {
 				"name": "Technique_Point of Clarity", "fieldName": "pointOfClarity", "group": "Technique", "description": "", "variable": "TCHpointOfClarity{0}", "title": "Point of Clarity", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHpointOfClarity_training", "TCHpointOfClarity_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHpointOfClarity_training", "TCHpointOfClarity_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Pole Vault": {
 				"name": "Technique_Pole Vault", "fieldName": "poleVault", "group": "Technique", "description": "", "variable": "TCHpoleVault{0}", "title": "Pole Vault", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHpoleVault_training", "TCHpoleVault_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHpoleVault_training", "TCHpoleVault_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Quick Draw": {
 				"name": "Technique_Quick Draw", "fieldName": "quickDraw", "group": "Technique", "description": "", "variable": "TCHquickDraw{0}", "title": "Quick Draw", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHquickDraw_training", "TCHquickDraw_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHquickDraw_training", "TCHquickDraw_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Extension Strike": {
 				"name": "Technique_Extension Strike", "fieldName": "extensionStrike", "group": "Technique", "description": "", "variable": "TCHextensionStrike{0}", "title": "Extension Strike", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHextensionStrike_training", "TCHextensionStrike_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHextensionStrike_training", "TCHextensionStrike_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Step Extension": {
-				"name": "Technique_Step Extension", "fieldName": "stepExtension", "group": "Technique", "description": "", "variable": "TCHstepExtension{0}", "title": "Step Extension", "subGroup": "", "descriptions": [""]
-				,
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHstepExtension_training", "TCHstepExtension_adv"],
+				"name": "Technique_Step Extension", "fieldName": "stepExtension", "group": "Technique", "description": "", "variable": "TCHstepExtension{0}", "title": "Step Extension", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHstepExtension_training", "TCHstepExtension_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Lasting Extension": {
 				"name": "Technique_Lasting Extension", "fieldName": "lastingExtension", "group": "Technique", "description": "", "variable": "TCHlastingExtension{0}", "title": "Lasting Extension", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHlastingExtension_training", "TCHlastingExtension_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHlastingExtension_training", "TCHlastingExtension_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Far Strike": {
 				"name": "Technique_Far Strike", "fieldName": "farStrike", "group": "Technique", "description": "", "variable": "TCHfarStrike{0}", "title": "Far Strike", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfarStrike_training", "TCHfarStrike_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfarStrike_training", "TCHfarStrike_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Extension Strike +": {
 				"name": "Technique_Extension Strike +", "fieldName": "extensionStrike+", "group": "Technique", "description": "", "variable": "TCHextensionStrike+{0}", "title": "Extension Strike +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHextensionStrike+_training", "TCHextensionStrike+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHextensionStrike+_training", "TCHextensionStrike+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Defense Piercer ": {
 				"name": "Technique_Defense Piercer ", "fieldName": "defensePiercer", "group": "Technique", "description": "", "variable": "TCHdefensePiercer{0}", "title": "Defense Piercer ", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdefensePiercer_training", "TCHdefensePiercer_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdefensePiercer_training", "TCHdefensePiercer_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Quick Slash": {
 				"name": "Technique_Quick Slash", "fieldName": "quickSlash", "group": "Technique", "description": "", "variable": "TCHquickSlash{0}", "title": "Quick Slash", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHquickSlash_training", "TCHquickSlash_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHquickSlash_training", "TCHquickSlash_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Precision Blade": {
 				"name": "Technique_Precision Blade", "fieldName": "precisionBlade", "group": "Technique", "description": "", "variable": "TCHprecisionBlade{0}", "title": "Precision Blade", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHprecisionBlade_training", "TCHprecisionBlade_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHprecisionBlade_training", "TCHprecisionBlade_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Armor Piercer": {
 				"name": "Technique_Armor Piercer", "fieldName": "armorPiercer", "group": "Technique", "description": "", "variable": "TCHarmorPiercer{0}", "title": "Armor Piercer", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHarmorPiercer_training", "TCHarmorPiercer_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHarmorPiercer_training", "TCHarmorPiercer_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Quick Slash II": {
 				"name": "Technique_Quick Slash II", "fieldName": "quickSlashII", "group": "Technique", "description": "", "variable": "TCHquickSlashII{0}", "title": "Quick Slash II", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHquickSlashII_training", "TCHquickSlashII_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHquickSlashII_training", "TCHquickSlashII_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Cleave": {
 				"name": "Technique_Cleave", "fieldName": "cleave", "group": "Technique", "description": "", "variable": "TCHcleave{0}", "title": "Cleave", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcleave_training", "TCHcleave_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcleave_training", "TCHcleave_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Crushing Blade": {
 				"name": "Technique_Crushing Blade", "fieldName": "crushingBlade", "group": "Technique", "description": "", "variable": "TCHcrushingBlade{0}", "title": "Crushing Blade", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcrushingBlade_training", "TCHcrushingBlade_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcrushingBlade_training", "TCHcrushingBlade_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Great Cleave": {
 				"name": "Technique_Great Cleave", "fieldName": "greatCleave", "group": "Technique", "description": "", "variable": "TCHgreatCleave{0}", "title": "Great Cleave", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgreatCleave_training", "TCHgreatCleave_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgreatCleave_training", "TCHgreatCleave_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Cleave +": {
 				"name": "Technique_Cleave +", "fieldName": "cleave+", "group": "Technique", "description": "", "variable": "TCHcleave+{0}", "title": "Cleave +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcleave+_training", "TCHcleave+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcleave+_training", "TCHcleave+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sudden Cleave": {
 				"name": "Technique_Sudden Cleave", "fieldName": "suddenCleave", "group": "Technique", "description": "", "variable": "TCHsuddenCleave{0}", "title": "Sudden Cleave", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsuddenCleave_training", "TCHsuddenCleave_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsuddenCleave_training", "TCHsuddenCleave_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Great Cleave II": {
 				"name": "Technique_Great Cleave II", "fieldName": "greatCleaveII", "group": "Technique", "description": "", "variable": "TCHgreatCleaveII{0}", "title": "Great Cleave II", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgreatCleaveII_training", "TCHgreatCleaveII_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgreatCleaveII_training", "TCHgreatCleaveII_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Power Flex": {
 				"name": "Technique_Power Flex", "fieldName": "powerFlex", "group": "Technique", "description": "", "variable": "TCHpowerFlex{0}", "title": "Power Flex", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHpowerFlex_training", "TCHpowerFlex_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHpowerFlex_training", "TCHpowerFlex_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Crush Knuckle": {
 				"name": "Technique_Crush Knuckle", "fieldName": "crushKnuckle", "group": "Technique", "description": "", "variable": "TCHcrushKnuckle{0}", "title": "Crush Knuckle", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcrushKnuckle_training", "TCHcrushKnuckle_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcrushKnuckle_training", "TCHcrushKnuckle_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Impact Knuckle": {
 				"name": "Technique_Impact Knuckle", "fieldName": "impactKnuckle", "group": "Technique", "description": "", "variable": "TCHimpactKnuckle{0}", "title": "Impact Knuckle", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHimpactKnuckle_training", "TCHimpactKnuckle_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHimpactKnuckle_training", "TCHimpactKnuckle_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Knuckle Flurry": {
 				"name": "Technique_Knuckle Flurry", "fieldName": "knuckleFlurry", "group": "Technique", "description": "", "variable": "TCHknuckleFlurry{0}", "title": "Knuckle Flurry", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHknuckleFlurry_training", "TCHknuckleFlurry_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHknuckleFlurry_training", "TCHknuckleFlurry_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Water Blast": {
 				"name": "Technique_Water Blast", "fieldName": "waterBlast", "group": "Technique", "description": "", "variable": "TCHwaterBlast{0}", "title": "Water Blast", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHwaterBlast_training", "TCHwaterBlast_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHwaterBlast_training", "TCHwaterBlast_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Geyser": {
 				"name": "Technique_Geyser", "fieldName": "geyser", "group": "Technique", "description": "", "variable": "TCHgeyser{0}", "title": "Geyser", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgeyser_training", "TCHgeyser_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgeyser_training", "TCHgeyser_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Geyser Line": {
 				"name": "Technique_Geyser Line", "fieldName": "geyserLine", "group": "Technique", "description": "", "variable": "TCHgeyserLine{0}", "title": "Geyser Line", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgeyserLine_training", "TCHgeyserLine_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgeyserLine_training", "TCHgeyserLine_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Surf": {
 				"name": "Technique_Surf", "fieldName": "surf", "group": "Technique", "description": "", "variable": "TCHsurf{0}", "title": "Surf", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsurf_training", "TCHsurf_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsurf_training", "TCHsurf_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Great Geyser Line": {
 				"name": "Technique_Great Geyser Line", "fieldName": "greatGeyserLine", "group": "Technique", "description": "", "variable": "TCHgreatGeyserLine{0}", "title": "Great Geyser Line", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgreatGeyserLine_training", "TCHgreatGeyserLine_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgreatGeyserLine_training", "TCHgreatGeyserLine_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Tidal Wave": {
 				"name": "Technique_Tidal Wave", "fieldName": "tidalWave", "group": "Technique", "description": "", "variable": "TCHtidalWave{0}", "title": "Tidal Wave", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHtidalWave_training", "TCHtidalWave_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHtidalWave_training", "TCHtidalWave_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sand Surge": {
 				"name": "Technique_Sand Surge", "fieldName": "sandSurge", "group": "Technique", "description": "", "variable": "TCHsandSurge{0}", "title": "Sand Surge", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsandSurge_training", "TCHsandSurge_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsandSurge_training", "TCHsandSurge_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sand Spout": {
 				"name": "Technique_Sand Spout", "fieldName": "sandSpout", "group": "Technique", "description": "", "variable": "TCHsandSpout{0}", "title": "Sand Spout", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsandSpout_training", "TCHsandSpout_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsandSpout_training", "TCHsandSpout_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sand Wave": {
 				"name": "Technique_Sand Wave", "fieldName": "sandWave", "group": "Technique", "description": "", "variable": "TCHsandWave{0}", "title": "Sand Wave", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsandWave_training", "TCHsandWave_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsandWave_training", "TCHsandWave_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sand Launcher": {
 				"name": "Technique_Sand Launcher", "fieldName": "sandLauncher", "group": "Technique", "description": "", "variable": "TCHsandLauncher{0}", "title": "Sand Launcher", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsandLauncher_training", "TCHsandLauncher_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsandLauncher_training", "TCHsandLauncher_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sicken": {
 				"name": "Technique_Sicken", "fieldName": "sicken", "group": "Technique", "description": "", "variable": "TCHsicken{0}", "title": "Sicken", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsicken_training", "TCHsicken_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsicken_training", "TCHsicken_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Spores": {
 				"name": "Technique_Spores", "fieldName": "spores", "group": "Technique", "description": "", "variable": "TCHspores{0}", "title": "Spores", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHspores_training", "TCHspores_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHspores_training", "TCHspores_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sickening Cloud": {
 				"name": "Technique_Sickening Cloud", "fieldName": "sickeningCloud", "group": "Technique", "description": "", "variable": "TCHsickeningCloud{0}", "title": "Sickening Cloud", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsickeningCloud_training", "TCHsickeningCloud_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsickeningCloud_training", "TCHsickeningCloud_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Virulent Spores": {
 				"name": "Technique_Virulent Spores", "fieldName": "virulentSpores", "group": "Technique", "description": "", "variable": "TCHvirulentSpores{0}", "title": "Virulent Spores", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHvirulentSpores_training", "TCHvirulentSpores_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHvirulentSpores_training", "TCHvirulentSpores_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Firebolt": {
 				"name": "Technique_Firebolt", "fieldName": "firebolt", "group": "Technique", "description": "", "variable": "TCHfirebolt{0}", "title": "Firebolt", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfirebolt_training", "TCHfirebolt_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfirebolt_training", "TCHfirebolt_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Flame Arrow": {
 				"name": "Technique_Flame Arrow", "fieldName": "flameArrow", "group": "Technique", "description": "", "variable": "TCHflameArrow{0}", "title": "Flame Arrow", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHflameArrow_training", "TCHflameArrow_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHflameArrow_training", "TCHflameArrow_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Fireball": {
 				"name": "Technique_Fireball", "fieldName": "fireball", "group": "Technique", "description": "", "variable": "TCHfireball{0}", "title": "Fireball", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfireball_training", "TCHfireball_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfireball_training", "TCHfireball_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Fireblast": {
 				"name": "Technique_Fireblast", "fieldName": "fireblast", "group": "Technique", "description": "", "variable": "TCHfireblast{0}", "title": "Fireblast", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfireblast_training", "TCHfireblast_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfireblast_training", "TCHfireblast_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Ragnarok": {
 				"name": "Technique_Ragnarok", "fieldName": "ragnarok", "group": "Technique", "description": "", "variable": "TCHragnarok{0}", "title": "Ragnarok", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHragnarok_training", "TCHragnarok_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHragnarok_training", "TCHragnarok_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Bonfire": {
 				"name": "Technique_Bonfire", "fieldName": "bonfire", "group": "Technique", "description": "", "variable": "TCHbonfire{0}", "title": "Bonfire", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHbonfire_training", "TCHbonfire_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHbonfire_training", "TCHbonfire_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Wall of Fire": {
 				"name": "Technique_Wall of Fire", "fieldName": "wallOfFire", "group": "Technique", "description": "", "variable": "TCHwallOfFire{0}", "title": "Wall of Fire", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHwallOfFire_training", "TCHwallOfFire_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHwallOfFire_training", "TCHwallOfFire_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Field of Flame": {
 				"name": "Technique_Field of Flame", "fieldName": "fieldOfFlame", "group": "Technique", "description": "", "variable": "TCHfieldOfFlame{0}", "title": "Field of Flame", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfieldOfFlame_training", "TCHfieldOfFlame_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfieldOfFlame_training", "TCHfieldOfFlame_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Lightning Shaft": {
 				"name": "Technique_Lightning Shaft", "fieldName": "lightningShaft", "group": "Technique", "description": "", "variable": "TCHlightningShaft{0}", "title": "Lightning Shaft", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHlightningShaft_training", "TCHlightningShaft_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHlightningShaft_training", "TCHlightningShaft_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Shock": {
 				"name": "Technique_Shock", "fieldName": "shock", "group": "Technique", "description": "", "variable": "TCHshock{0}", "title": "Shock", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHshock_training", "TCHshock_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHshock_training", "TCHshock_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Lightning Bolt": {
 				"name": "Technique_Lightning Bolt", "fieldName": "lightningBolt", "group": "Technique", "description": "", "variable": "TCHlightningBolt{0}", "title": "Lightning Bolt", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHlightningBolt_training", "TCHlightningBolt_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHlightningBolt_training", "TCHlightningBolt_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Plasma Arc": {
 				"name": "Technique_Plasma Arc", "fieldName": "plasmaArc", "group": "Technique", "description": "", "variable": "TCHplasmaArc{0}", "title": "Plasma Arc", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHplasmaArc_training", "TCHplasmaArc_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHplasmaArc_training", "TCHplasmaArc_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Fulgor": {
 				"name": "Technique_Fulgor", "fieldName": "fulgor", "group": "Technique", "description": "", "variable": "TCHfulgor{0}", "title": "Fulgor", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfulgor_training", "TCHfulgor_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfulgor_training", "TCHfulgor_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Cold Snap": {
 				"name": "Technique_Cold Snap", "fieldName": "coldSnap", "group": "Technique", "description": "", "variable": "TCHcoldSnap{0}", "title": "Cold Snap", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcoldSnap_training", "TCHcoldSnap_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcoldSnap_training", "TCHcoldSnap_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Frostbite": {
 				"name": "Technique_Frostbite", "fieldName": "frostbite", "group": "Technique", "description": "", "variable": "TCHfrostbite{0}", "title": "Frostbite", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfrostbite_training", "TCHfrostbite_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfrostbite_training", "TCHfrostbite_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Freezebind": {
 				"name": "Technique_Freezebind", "fieldName": "freezebind", "group": "Technique", "description": "", "variable": "TCHfreezebind{0}", "title": "Freezebind", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfreezebind_training", "TCHfreezebind_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfreezebind_training", "TCHfreezebind_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Cold Burst": {
 				"name": "Technique_Cold Burst", "fieldName": "coldBurst", "group": "Technique", "description": "", "variable": "TCHcoldBurst{0}", "title": "Cold Burst", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcoldBurst_training", "TCHcoldBurst_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcoldBurst_training", "TCHcoldBurst_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Cold Front": {
 				"name": "Technique_Cold Front", "fieldName": "coldFront", "group": "Technique", "description": "", "variable": "TCHcoldFront{0}", "title": "Cold Front", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcoldFront_training", "TCHcoldFront_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcoldFront_training", "TCHcoldFront_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Diamond Dust": {
 				"name": "Technique_Diamond Dust", "fieldName": "diamondDust", "group": "Technique", "description": "", "variable": "TCHdiamondDust{0}", "title": "Diamond Dust", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdiamondDust_training", "TCHdiamondDust_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdiamondDust_training", "TCHdiamondDust_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Wind Bullet": {
 				"name": "Technique_Wind Bullet", "fieldName": "windBullet", "group": "Technique", "description": "", "variable": "TCHwindBullet{0}", "title": "Wind Bullet", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHwindBullet_training", "TCHwindBullet_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHwindBullet_training", "TCHwindBullet_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Gust": {
 				"name": "Technique_Gust", "fieldName": "gust", "group": "Technique", "description": "", "variable": "TCHgust{0}", "title": "Gust", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgust_training", "TCHgust_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgust_training", "TCHgust_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Windsweep": {
 				"name": "Technique_Windsweep", "fieldName": "windsweep", "group": "Technique", "description": "", "variable": "TCHwindsweep{0}", "title": "Windsweep", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHwindsweep_training", "TCHwindsweep_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHwindsweep_training", "TCHwindsweep_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Gale": {
 				"name": "Technique_Gale", "fieldName": "gale", "group": "Technique", "description": "", "variable": "TCHgale{0}", "title": "Gale", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgale_training", "TCHgale_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgale_training", "TCHgale_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Darkness": {
 				"name": "Technique_Darkness", "fieldName": "darkness", "group": "Technique", "description": "", "variable": "TCHdarkness{0}", "title": "Darkness", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdarkness_training", "TCHdarkness_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdarkness_training", "TCHdarkness_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Shadow Wall": {
 				"name": "Technique_Shadow Wall", "fieldName": "shadowWall", "group": "Technique", "description": "", "variable": "TCHshadowWall{0}", "title": "Shadow Wall", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHshadowWall_training", "TCHshadowWall_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHshadowWall_training", "TCHshadowWall_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Nightfall": {
 				"name": "Technique_Nightfall", "fieldName": "nightfall", "group": "Technique", "description": "", "variable": "TCHnightfall{0}", "title": "Nightfall", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHnightfall_training", "TCHnightfall_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHnightfall_training", "TCHnightfall_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Fog Cloud": {
 				"name": "Technique_Fog Cloud", "fieldName": "fogCloud", "group": "Technique", "description": "", "variable": "TCHfogCloud{0}", "title": "Fog Cloud", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfogCloud_training", "TCHfogCloud_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfogCloud_training", "TCHfogCloud_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sleet": {
 				"name": "Technique_Sleet", "fieldName": "sleet", "group": "Technique", "description": "", "variable": "TCHsleet{0}", "title": "Sleet", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsleet_training", "TCHsleet_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsleet_training", "TCHsleet_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Freezing Sleet": {
 				"name": "Technique_Freezing Sleet", "fieldName": "freezingSleet", "group": "Technique", "description": "", "variable": "TCHfreezingSleet{0}", "title": "Freezing Sleet", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfreezingSleet_training", "TCHfreezingSleet_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfreezingSleet_training", "TCHfreezingSleet_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Hail": {
 				"name": "Technique_Hail", "fieldName": "hail", "group": "Technique", "description": "", "variable": "TCHhail{0}", "title": "Hail", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHhail_training", "TCHhail_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHhail_training", "TCHhail_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Binding Sleet": {
 				"name": "Technique_Binding Sleet", "fieldName": "bindingSleet", "group": "Technique", "description": "", "variable": "TCHbindingSleet{0}", "title": "Binding Sleet", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHbindingSleet_training", "TCHbindingSleet_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHbindingSleet_training", "TCHbindingSleet_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Ice Storm": {
 				"name": "Technique_Ice Storm", "fieldName": "iceStorm", "group": "Technique", "description": "", "variable": "TCHiceStorm{0}", "title": "Ice Storm", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHiceStorm_training", "TCHiceStorm_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHiceStorm_training", "TCHiceStorm_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Fimbulwinter": {
 				"name": "Technique_Fimbulwinter", "fieldName": "fimbulwinter", "group": "Technique", "description": "", "variable": "TCHfimbulwinter{0}", "title": "Fimbulwinter", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfimbulwinter_training", "TCHfimbulwinter_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfimbulwinter_training", "TCHfimbulwinter_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Smoke Cloud": {
 				"name": "Technique_Smoke Cloud", "fieldName": "smokeCloud", "group": "Technique", "description": "", "variable": "TCHsmokeCloud{0}", "title": "Smoke Cloud", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsmokeCloud_training", "TCHsmokeCloud_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsmokeCloud_training", "TCHsmokeCloud_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Burning Smoke": {
 				"name": "Technique_Burning Smoke", "fieldName": "burningSmoke", "group": "Technique", "description": "", "variable": "TCHburningSmoke{0}", "title": "Burning Smoke", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHburningSmoke_training", "TCHburningSmoke_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHburningSmoke_training", "TCHburningSmoke_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Choking Smoke": {
 				"name": "Technique_Choking Smoke", "fieldName": "chokingSmoke", "group": "Technique", "description": "", "variable": "TCHchokingSmoke{0}", "title": "Choking Smoke", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHchokingSmoke_training", "TCHchokingSmoke_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHchokingSmoke_training", "TCHchokingSmoke_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Acceleration": {
 				"name": "Technique_Acceleration", "fieldName": "acceleration", "group": "Technique", "description": "", "variable": "TCHacceleration{0}", "title": "Acceleration", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHacceleration_training", "TCHacceleration_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHacceleration_training", "TCHacceleration_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Power Vault": {
 				"name": "Technique_Power Vault", "fieldName": "powerVault", "group": "Technique", "description": "", "variable": "TCHpowerVault{0}", "title": "Power Vault", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHpowerVault_training", "TCHpowerVault_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHpowerVault_training", "TCHpowerVault_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Expeditious": {
 				"name": "Technique_Expeditious", "fieldName": "expeditious", "group": "Technique", "description": "", "variable": "TCHexpeditious{0}", "title": "Expeditious", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHexpeditious_training", "TCHexpeditious_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHexpeditious_training", "TCHexpeditious_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Quick Climb": {
 				"name": "Technique_Quick Climb", "fieldName": "quickClimb", "group": "Technique", "description": "", "variable": "TCHquickClimb{0}", "title": "Quick Climb", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHquickClimb_training", "TCHquickClimb_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHquickClimb_training", "TCHquickClimb_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Quick Swim": {
 				"name": "Technique_Quick Swim", "fieldName": "quickSwim", "group": "Technique", "description": "", "variable": "TCHquickSwim{0}", "title": "Quick Swim", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHquickSwim_training", "TCHquickSwim_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHquickSwim_training", "TCHquickSwim_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Poise": {
 				"name": "Technique_Poise", "fieldName": "poise", "group": "Technique", "description": "", "variable": "TCHpoise{0}", "title": "Poise", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHpoise_training", "TCHpoise_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHpoise_training", "TCHpoise_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Cat Fall": {
 				"name": "Technique_Cat Fall", "fieldName": "catFall", "group": "Technique", "description": "", "variable": "TCHcatFall{0}", "title": "Cat Fall", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcatFall_training", "TCHcatFall_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcatFall_training", "TCHcatFall_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Kip Up": {
 				"name": "Technique_Kip Up", "fieldName": "kipUp", "group": "Technique", "description": "", "variable": "TCHkipUp{0}", "title": "Kip Up", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHkipUp_training", "TCHkipUp_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHkipUp_training", "TCHkipUp_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Silent Stride": {
 				"name": "Technique_Silent Stride", "fieldName": "silentStride", "group": "Technique", "description": "", "variable": "TCHsilentStride{0}", "title": "Silent Stride", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsilentStride_training", "TCHsilentStride_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsilentStride_training", "TCHsilentStride_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Shove": {
 				"name": "Technique_Shove", "fieldName": "shove", "group": "Technique", "description": "", "variable": "TCHshove{0}", "title": "Shove", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHshove_training", "TCHshove_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHshove_training", "TCHshove_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Knockdown": {
 				"name": "Technique_Knockdown", "fieldName": "knockdown", "group": "Technique", "description": "", "variable": "TCHknockdown{0}", "title": "Knockdown", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHknockdown_training", "TCHknockdown_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHknockdown_training", "TCHknockdown_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Tumble": {
 				"name": "Technique_Tumble", "fieldName": "tumble", "group": "Technique", "description": "", "variable": "TCHtumble{0}", "title": "Tumble", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHtumble_training", "TCHtumble_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHtumble_training", "TCHtumble_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Field Medic": {
 				"name": "Technique_Field Medic", "fieldName": "fieldMedic", "group": "Technique", "description": "", "variable": "TCHfieldMedic{0}", "title": "Field Medic", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfieldMedic_training", "TCHfieldMedic_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfieldMedic_training", "TCHfieldMedic_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Camoflauge": {
 				"name": "Technique_Camoflauge", "fieldName": "camoflauge", "group": "Technique", "description": "", "variable": "TCHcamoflauge{0}", "title": "Camoflauge", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcamoflauge_training", "TCHcamoflauge_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcamoflauge_training", "TCHcamoflauge_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Blurred Light": {
 				"name": "Technique_Blurred Light", "fieldName": "blurredLight", "group": "Technique", "description": "", "variable": "TCHblurredLight{0}", "title": "Blurred Light", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHblurredLight_training", "TCHblurredLight_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHblurredLight_training", "TCHblurredLight_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Light Refraction": {
 				"name": "Technique_Light Refraction", "fieldName": "lightRefraction", "group": "Technique", "description": "", "variable": "TCHlightRefraction{0}", "title": "Light Refraction", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHlightRefraction_training", "TCHlightRefraction_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHlightRefraction_training", "TCHlightRefraction_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Shadow Steps": {
 				"name": "Technique_Shadow Steps", "fieldName": "shadowSteps", "group": "Technique", "description": "", "variable": "TCHshadowSteps{0}", "title": "Shadow Steps", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHshadowSteps_training", "TCHshadowSteps_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHshadowSteps_training", "TCHshadowSteps_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Shadow Walker": {
-				"name": "Technique_Shadow Walker", "fieldName": "shadowWalker", "group": "Technique", "description": "", "variable": "TCHshadowWalker{0}", "title": "Shadow Walker", "subGroup": "", "descriptions": [""]
-				,
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHshadowWalker_training", "TCHshadowWalker_adv"],
+				"name": "Technique_Shadow Walker", "fieldName": "shadowWalker", "group": "Technique", "description": "", "variable": "TCHshadowWalker{0}", "title": "Shadow Walker", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHshadowWalker_training", "TCHshadowWalker_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Wind Step": {
 				"name": "Technique_Wind Step", "fieldName": "windStep", "group": "Technique", "description": "", "variable": "TCHwindStep{0}", "title": "Wind Step", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHwindStep_training", "TCHwindStep_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHwindStep_training", "TCHwindStep_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Updraft": {
 				"name": "Technique_Updraft", "fieldName": "updraft", "group": "Technique", "description": "", "variable": "TCHupdraft{0}", "title": "Updraft", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHupdraft_training", "TCHupdraft_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHupdraft_training", "TCHupdraft_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Clouded Updraft": {
 				"name": "Technique_Clouded Updraft", "fieldName": "cloudedUpdraft", "group": "Technique", "description": "", "variable": "TCHcloudedUpdraft{0}", "title": "Clouded Updraft", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcloudedUpdraft_training", "TCHcloudedUpdraft_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcloudedUpdraft_training", "TCHcloudedUpdraft_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Wind Fall": {
 				"name": "Technique_Wind Fall", "fieldName": "windFall", "group": "Technique", "description": "", "variable": "TCHwindFall{0}", "title": "Wind Fall", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHwindFall_training", "TCHwindFall_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHwindFall_training", "TCHwindFall_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Walk on Air": {
 				"name": "Technique_Walk on Air", "fieldName": "walkOnAir", "group": "Technique", "description": "", "variable": "TCHwalkOnAir{0}", "title": "Walk on Air", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHwalkOnAir_training", "TCHwalkOnAir_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHwalkOnAir_training", "TCHwalkOnAir_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Fire Step": {
 				"name": "Technique_Fire Step", "fieldName": "fireStep", "group": "Technique", "description": "", "variable": "TCHfireStep{0}", "title": "Fire Step", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfireStep_training", "TCHfireStep_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfireStep_training", "TCHfireStep_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Liftoff": {
 				"name": "Technique_Liftoff", "fieldName": "liftoff", "group": "Technique", "description": "", "variable": "TCHliftoff{0}", "title": "Liftoff", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHliftoff_training", "TCHliftoff_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHliftoff_training", "TCHliftoff_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Jet": {
 				"name": "Technique_Jet", "fieldName": "jet", "group": "Technique", "description": "", "variable": "TCHjet{0}", "title": "Jet", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHjet_training", "TCHjet_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHjet_training", "TCHjet_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Cunning Action": {
 				"name": "Technique_Cunning Action", "fieldName": "cunningAction", "group": "Technique", "description": "", "variable": "TCHcunningAction{0}", "title": "Cunning Action", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcunningAction_training", "TCHcunningAction_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcunningAction_training", "TCHcunningAction_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Demoralize": {
 				"name": "Technique_Demoralize", "fieldName": "demoralize", "group": "Technique", "description": "", "variable": "TCHdemoralize{0}", "title": "Demoralize", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdemoralize_training", "TCHdemoralize_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdemoralize_training", "TCHdemoralize_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Fascinate": {
 				"name": "Technique_Fascinate", "fieldName": "fascinate", "group": "Technique", "description": "", "variable": "TCHfascinate{0}", "title": "Fascinate", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHfascinate_training", "TCHfascinate_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHfascinate_training", "TCHfascinate_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Impersonator": {
 				"name": "Technique_Impersonator", "fieldName": "impersonator", "group": "Technique", "description": "", "variable": "TCHimpersonator{0}", "title": "Impersonator", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHimpersonator_training", "TCHimpersonator_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHimpersonator_training", "TCHimpersonator_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Ether Sense": {
 				"name": "Technique_Ether Sense", "fieldName": "etherSense", "group": "Technique", "description": "", "variable": "TCHetherSense{0}", "title": "Ether Sense", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHetherSense_training", "TCHetherSense_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHetherSense_training", "TCHetherSense_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Spirit Sense": {
 				"name": "Technique_Spirit Sense", "fieldName": "spiritSense", "group": "Technique", "description": "", "variable": "TCHspiritSense{0}", "title": "Spirit Sense", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHspiritSense_training", "TCHspiritSense_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHspiritSense_training", "TCHspiritSense_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Tremorsense": {
 				"name": "Technique_Tremorsense", "fieldName": "tremorsense", "group": "Technique", "description": "", "variable": "TCHtremorsense{0}", "title": "Tremorsense", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHtremorsense_training", "TCHtremorsense_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHtremorsense_training", "TCHtremorsense_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Dustcraft": {
 				"name": "Technique_Dustcraft", "fieldName": "dustcraft", "group": "Technique", "description": "", "variable": "TCHdustcraft{0}", "title": "Dustcraft", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdustcraft_training", "TCHdustcraft_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdustcraft_training", "TCHdustcraft_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Shape Material": {
 				"name": "Technique_Shape Material", "fieldName": "shapeMaterial", "group": "Technique", "description": "", "variable": "TCHshapeMaterial{0}", "title": "Shape Material", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHshapeMaterial_training", "TCHshapeMaterial_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHshapeMaterial_training", "TCHshapeMaterial_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Quickcraft": {
 				"name": "Technique_Quickcraft", "fieldName": "quickcraft", "group": "Technique", "description": "", "variable": "TCHquickcraft{0}", "title": "Quickcraft", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHquickcraft_training", "TCHquickcraft_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHquickcraft_training", "TCHquickcraft_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Improved Shaping": {
 				"name": "Technique_Improved Shaping", "fieldName": "improvedShaping", "group": "Technique", "description": "", "variable": "TCHimprovedShaping{0}", "title": "Improved Shaping", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHimprovedShaping_training", "TCHimprovedShaping_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHimprovedShaping_training", "TCHimprovedShaping_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Greater Shaping": {
 				"name": "Technique_Greater Shaping", "fieldName": "greaterShaping", "group": "Technique", "description": "", "variable": "TCHgreaterShaping{0}", "title": "Greater Shaping", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgreaterShaping_training", "TCHgreaterShaping_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgreaterShaping_training", "TCHgreaterShaping_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Legendary Shaping": {
 				"name": "Technique_Legendary Shaping", "fieldName": "legendaryShaping", "group": "Technique", "description": "", "variable": "TCHlegendaryShaping{0}", "title": "Legendary Shaping", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHlegendaryShaping_training", "TCHlegendaryShaping_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHlegendaryShaping_training", "TCHlegendaryShaping_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Dust Material": {
 				"name": "Technique_Dust Material", "fieldName": "dustMaterial", "group": "Technique", "description": "", "variable": "TCHdustMaterial{0}", "title": "Dust Material", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdustMaterial_training", "TCHdustMaterial_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdustMaterial_training", "TCHdustMaterial_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Dust Area": {
 				"name": "Technique_Dust Area", "fieldName": "dustArea", "group": "Technique", "description": "", "variable": "TCHdustArea{0}", "title": "Dust Area", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdustArea_training", "TCHdustArea_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdustArea_training", "TCHdustArea_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Improved Dusting": {
 				"name": "Technique_Improved Dusting", "fieldName": "improvedDusting", "group": "Technique", "description": "", "variable": "TCHimprovedDusting{0}", "title": "Improved Dusting", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHimprovedDusting_training", "TCHimprovedDusting_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHimprovedDusting_training", "TCHimprovedDusting_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Greater Dusting": {
 				"name": "Technique_Greater Dusting", "fieldName": "greaterDusting", "group": "Technique", "description": "", "variable": "TCHgreaterDusting{0}", "title": "Greater Dusting", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgreaterDusting_training", "TCHgreaterDusting_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgreaterDusting_training", "TCHgreaterDusting_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Legendary Dusting": {
 				"name": "Technique_Legendary Dusting", "fieldName": "legendaryDusting", "group": "Technique", "description": "", "variable": "TCHlegendaryDusting{0}", "title": "Legendary Dusting", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHlegendaryDusting_training", "TCHlegendaryDusting_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHlegendaryDusting_training", "TCHlegendaryDusting_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Form Path": {
 				"name": "Technique_Form Path", "fieldName": "formPath", "group": "Technique", "description": "", "variable": "TCHformPath{0}", "title": "Form Path", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHformPath_training", "TCHformPath_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHformPath_training", "TCHformPath_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Form Pillar": {
 				"name": "Technique_Form Pillar", "fieldName": "formPillar", "group": "Technique", "description": "", "variable": "TCHformPillar{0}", "title": "Form Pillar", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHformPillar_training", "TCHformPillar_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHformPillar_training", "TCHformPillar_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Stepping Path": {
 				"name": "Technique_Stepping Path", "fieldName": "steppingPath", "group": "Technique", "description": "", "variable": "TCHsteppingPath{0}", "title": "Stepping Path", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsteppingPath_training", "TCHsteppingPath_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsteppingPath_training", "TCHsteppingPath_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Form Wall": {
 				"name": "Technique_Form Wall", "fieldName": "formWall", "group": "Technique", "description": "", "variable": "TCHformWall{0}", "title": "Form Wall", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHformWall_training", "TCHformWall_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHformWall_training", "TCHformWall_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Scattered Pillars": {
 				"name": "Technique_Scattered Pillars", "fieldName": "scatteredPillars", "group": "Technique", "description": "", "variable": "TCHscatteredPillars{0}", "title": "Scattered Pillars", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHscatteredPillars_training", "TCHscatteredPillars_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHscatteredPillars_training", "TCHscatteredPillars_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Great Wall": {
 				"name": "Technique_Great Wall", "fieldName": "greatWall", "group": "Technique", "description": "", "variable": "TCHgreatWall{0}", "title": "Great Wall", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgreatWall_training", "TCHgreatWall_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgreatWall_training", "TCHgreatWall_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Cultivate": {
 				"name": "Technique_Cultivate", "fieldName": "cultivate", "group": "Technique", "description": "", "variable": "TCHcultivate{0}", "title": "Cultivate", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcultivate_training", "TCHcultivate_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcultivate_training", "TCHcultivate_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Entangle": {
 				"name": "Technique_Entangle", "fieldName": "entangle", "group": "Technique", "description": "", "variable": "TCHentangle{0}", "title": "Entangle", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHentangle_training", "TCHentangle_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHentangle_training", "TCHentangle_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Wildwood": {
 				"name": "Technique_Wildwood", "fieldName": "wildwood", "group": "Technique", "description": "", "variable": "TCHwildwood{0}", "title": "Wildwood", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHwildwood_training", "TCHwildwood_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHwildwood_training", "TCHwildwood_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Distortion": {
 				"name": "Technique_Distortion", "fieldName": "distortion", "group": "Technique", "description": "", "variable": "TCHdistortion{0}", "title": "Distortion", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdistortion_training", "TCHdistortion_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdistortion_training", "TCHdistortion_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Lasting Distortion": {
 				"name": "Technique_Lasting Distortion", "fieldName": "lastingDistortion", "group": "Technique", "description": "", "variable": "TCHlastingDistortion{0}", "title": "Lasting Distortion", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHlastingDistortion_training", "TCHlastingDistortion_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHlastingDistortion_training", "TCHlastingDistortion_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Heat Field": {
 				"name": "Technique_Heat Field", "fieldName": "heatField", "group": "Technique", "description": "", "variable": "TCHheatField{0}", "title": "Heat Field", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHheatField_training", "TCHheatField_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHheatField_training", "TCHheatField_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Burn Guard": {
 				"name": "Technique_Burn Guard", "fieldName": "burnGuard", "group": "Technique", "description": "", "variable": "TCHburnGuard{0}", "title": "Burn Guard", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHburnGuard_training", "TCHburnGuard_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHburnGuard_training", "TCHburnGuard_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Cold Field": {
 				"name": "Technique_Cold Field", "fieldName": "coldField", "group": "Technique", "description": "", "variable": "TCHcoldField{0}", "title": "Cold Field", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHcoldField_training", "TCHcoldField_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHcoldField_training", "TCHcoldField_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Chill Guard": {
 				"name": "Technique_Chill Guard", "fieldName": "chillGuard", "group": "Technique", "description": "", "variable": "TCHchillGuard{0}", "title": "Chill Guard", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHchillGuard_training", "TCHchillGuard_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHchillGuard_training", "TCHchillGuard_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Kinesis": {
 				"name": "Technique_Kinesis", "fieldName": "kinesis", "group": "Technique", "description": "", "variable": "TCHkinesis{0}", "title": "Kinesis", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHkinesis_training", "TCHkinesis_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHkinesis_training", "TCHkinesis_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Distant Kinesis": {
 				"name": "Technique_Distant Kinesis", "fieldName": "distantKinesis", "group": "Technique", "description": "", "variable": "TCHdistantKinesis{0}", "title": "Distant Kinesis", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdistantKinesis_training", "TCHdistantKinesis_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdistantKinesis_training", "TCHdistantKinesis_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Kinetic Strike": {
 				"name": "Technique_Kinetic Strike", "fieldName": "kineticStrike", "group": "Technique", "description": "", "variable": "TCHkineticStrike{0}", "title": "Kinetic Strike", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHkineticStrike_training", "TCHkineticStrike_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHkineticStrike_training", "TCHkineticStrike_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Kinetic Throw": {
 				"name": "Technique_Kinetic Throw", "fieldName": "kineticThrow", "group": "Technique", "description": "", "variable": "TCHkineticThrow{0}", "title": "Kinetic Throw", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHkineticThrow_training", "TCHkineticThrow_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHkineticThrow_training", "TCHkineticThrow_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Heavy Kinesis": {
 				"name": "Technique_Heavy Kinesis", "fieldName": "heavyKinesis", "group": "Technique", "description": "", "variable": "TCHheavyKinesis{0}", "title": "Heavy Kinesis", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHheavyKinesis_training", "TCHheavyKinesis_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHheavyKinesis_training", "TCHheavyKinesis_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Burden": {
 				"name": "Technique_Burden", "fieldName": "burden", "group": "Technique", "description": "", "variable": "TCHburden{0}", "title": "Burden", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHburden_training", "TCHburden_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHburden_training", "TCHburden_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Pressure": {
 				"name": "Technique_Pressure", "fieldName": "pressure", "group": "Technique", "description": "", "variable": "TCHpressure{0}", "title": "Pressure", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHpressure_training", "TCHpressure_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHpressure_training", "TCHpressure_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Restrain": {
 				"name": "Technique_Restrain", "fieldName": "restrain", "group": "Technique", "description": "", "variable": "TCHrestrain{0}", "title": "Restrain", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHrestrain_training", "TCHrestrain_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHrestrain_training", "TCHrestrain_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Wide Pressure": {
 				"name": "Technique_Wide Pressure", "fieldName": "widePressure", "group": "Technique", "description": "", "variable": "TCHwidePressure{0}", "title": "Wide Pressure", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHwidePressure_training", "TCHwidePressure_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHwidePressure_training", "TCHwidePressure_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Prostration": {
 				"name": "Technique_Prostration", "fieldName": "prostration", "group": "Technique", "description": "", "variable": "TCHprostration{0}", "title": "Prostration", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHprostration_training", "TCHprostration_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHprostration_training", "TCHprostration_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Deep Pressure": {
 				"name": "Technique_Deep Pressure", "fieldName": "deepPressure", "group": "Technique", "description": "", "variable": "TCHdeepPressure{0}", "title": "Deep Pressure", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdeepPressure_training", "TCHdeepPressure_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdeepPressure_training", "TCHdeepPressure_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Gravity Well": {
 				"name": "Technique_Gravity Well", "fieldName": "gravityWell", "group": "Technique", "description": "", "variable": "TCHgravityWell{0}", "title": "Gravity Well", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHgravityWell_training", "TCHgravityWell_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHgravityWell_training", "TCHgravityWell_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Shield Block": {
 				"name": "Technique_Shield Block", "fieldName": "shieldBlock", "group": "Technique", "description": "", "variable": "TCHshieldBlock{0}", "title": "Shield Block", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHshieldBlock_training", "TCHshieldBlock_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHshieldBlock_training", "TCHshieldBlock_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Glancing Block": {
 				"name": "Technique_Glancing Block", "fieldName": "glancingBlock", "group": "Technique", "description": "", "variable": "TCHglancingBlock{0}", "title": "Glancing Block", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHglancingBlock_training", "TCHglancingBlock_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHglancingBlock_training", "TCHglancingBlock_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Aegis": {
 				"name": "Technique_Aegis", "fieldName": "aegis", "group": "Technique", "description": "", "variable": "TCHaegis{0}", "title": "Aegis", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHaegis_training", "TCHaegis_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHaegis_training", "TCHaegis_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Light": {
 				"name": "Technique_Light", "fieldName": "light", "group": "Technique", "description": "", "variable": "TCHlight{0}", "title": "Light", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHlight_training", "TCHlight_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHlight_training", "TCHlight_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Dancing Lights": {
 				"name": "Technique_Dancing Lights", "fieldName": "dancingLights", "group": "Technique", "description": "", "variable": "TCHdancingLights{0}", "title": "Dancing Lights", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHdancingLights_training", "TCHdancingLights_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHdancingLights_training", "TCHdancingLights_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Flash": {
 				"name": "Technique_Flash", "fieldName": "flash", "group": "Technique", "description": "", "variable": "TCHflash{0}", "title": "Flash", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHflash_training", "TCHflash_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHflash_training", "TCHflash_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sunlight": {
 				"name": "Technique_Sunlight", "fieldName": "sunlight", "group": "Technique", "description": "", "variable": "TCHsunlight{0}", "title": "Sunlight", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsunlight_training", "TCHsunlight_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsunlight_training", "TCHsunlight_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Stress Release": {
 				"name": "Technique_Stress Release", "fieldName": "stressRelease", "group": "Technique", "description": "", "variable": "TCHstressRelease{0}", "title": "Stress Release", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHstressRelease_training", "TCHstressRelease_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHstressRelease_training", "TCHstressRelease_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Stress Release +": {
 				"name": "Technique_Stress Release +", "fieldName": "stressRelease+", "group": "Technique", "description": "", "variable": "TCHstressRelease+{0}", "title": "Stress Release +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHstressRelease+_training", "TCHstressRelease+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHstressRelease+_training", "TCHstressRelease+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Stress Release ++": {
 				"name": "Technique_Stress Release ++", "fieldName": "stressRelease++", "group": "Technique", "description": "", "variable": "TCHstressRelease++{0}", "title": "Stress Release ++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHstressRelease++_training", "TCHstressRelease++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHstressRelease++_training", "TCHstressRelease++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sensory Training": {
 				"name": "Technique_Sensory Training", "fieldName": "sensoryTraining", "group": "Technique", "description": "", "variable": "TCHsensoryTraining{0}", "title": "Sensory Training", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsensoryTraining_training", "TCHsensoryTraining_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsensoryTraining_training", "TCHsensoryTraining_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sensory Training +": {
 				"name": "Technique_Sensory Training +", "fieldName": "sensoryTraining+", "group": "Technique", "description": "", "variable": "TCHsensoryTraining+{0}", "title": "Sensory Training +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsensoryTraining+_training", "TCHsensoryTraining+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsensoryTraining+_training", "TCHsensoryTraining+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Broad Study": {
 				"name": "Technique_Broad Study", "fieldName": "broadStudy", "group": "Technique", "description": "", "variable": "TCHbroadStudy{0}", "title": "Broad Study", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHbroadStudy_training", "TCHbroadStudy_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHbroadStudy_training", "TCHbroadStudy_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Experienced Tracker": {
 				"name": "Technique_Experienced Tracker", "fieldName": "experiencedTracker", "group": "Technique", "description": "", "variable": "TCHexperiencedTracker{0}", "title": "Experienced Tracker", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHexperiencedTracker_training", "TCHexperiencedTracker_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHexperiencedTracker_training", "TCHexperiencedTracker_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Multilingual": {
 				"name": "Technique_Multilingual", "fieldName": "multilingual", "group": "Technique", "description": "", "variable": "TCHmultilingual{0}", "title": "Multilingual", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmultilingual_training", "TCHmultilingual_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmultilingual_training", "TCHmultilingual_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Multilingual +": {
 				"name": "Technique_Multilingual +", "fieldName": "multilingual+", "group": "Technique", "description": "", "variable": "TCHmultilingual+{0}", "title": "Multilingual +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmultilingual+_training", "TCHmultilingual+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmultilingual+_training", "TCHmultilingual+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Specialized Lore": {
 				"name": "Technique_Specialized Lore", "fieldName": "specializedLore", "group": "Technique", "description": "", "variable": "TCHspecializedLore{0}", "title": "Specialized Lore", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHspecializedLore_training", "TCHspecializedLore_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHspecializedLore_training", "TCHspecializedLore_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Specialized Lore +": {
 				"name": "Technique_Specialized Lore +", "fieldName": "specializedLore+", "group": "Technique", "description": "", "variable": "TCHspecializedLore+{0}", "title": "Specialized Lore +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHspecializedLore+_training", "TCHspecializedLore+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHspecializedLore+_training", "TCHspecializedLore+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Specialized Lore ++": {
 				"name": "Technique_Specialized Lore ++", "fieldName": "specializedLore++", "group": "Technique", "description": "", "variable": "TCHspecializedLore++{0}", "title": "Specialized Lore ++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHspecializedLore++_training", "TCHspecializedLore++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHspecializedLore++_training", "TCHspecializedLore++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Improved Initiative": {
 				"name": "Technique_Improved Initiative", "fieldName": "improvedInitiative", "group": "Technique", "description": "", "variable": "TCHimprovedInitiative{0}", "title": "Improved Initiative", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHimprovedInitiative_training", "TCHimprovedInitiative_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHimprovedInitiative_training", "TCHimprovedInitiative_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Knowledge Training": {
 				"name": "Technique_Knowledge Training", "fieldName": "knowledgeTraining", "group": "Technique", "description": "", "variable": "TCHknowledgeTraining{0}", "title": "Knowledge Training", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHknowledgeTraining_training", "TCHknowledgeTraining_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHknowledgeTraining_training", "TCHknowledgeTraining_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Knowledge Training +": {
 				"name": "Technique_Knowledge Training +", "fieldName": "knowledgeTraining+", "group": "Technique", "description": "", "variable": "TCHknowledgeTraining+{0}", "title": "Knowledge Training +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHknowledgeTraining+_training", "TCHknowledgeTraining+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHknowledgeTraining+_training", "TCHknowledgeTraining+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Knowledge Training ++": {
 				"name": "Technique_Knowledge Training ++", "fieldName": "knowledgeTraining++", "group": "Technique", "description": "", "variable": "TCHknowledgeTraining++{0}", "title": "Knowledge Training ++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHknowledgeTraining++_training", "TCHknowledgeTraining++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHknowledgeTraining++_training", "TCHknowledgeTraining++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Social Training": {
 				"name": "Technique_Social Training", "fieldName": "socialTraining", "group": "Technique", "description": "", "variable": "TCHsocialTraining{0}", "title": "Social Training", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsocialTraining_training", "TCHsocialTraining_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsocialTraining_training", "TCHsocialTraining_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Social Training +": {
 				"name": "Technique_Social Training +", "fieldName": "socialTraining+", "group": "Technique", "description": "", "variable": "TCHsocialTraining+{0}", "title": "Social Training +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsocialTraining+_training", "TCHsocialTraining+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsocialTraining+_training", "TCHsocialTraining+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Social Training ++": {
 				"name": "Technique_Social Training ++", "fieldName": "socialTraining++", "group": "Technique", "description": "", "variable": "TCHsocialTraining++{0}", "title": "Social Training ++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsocialTraining++_training", "TCHsocialTraining++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsocialTraining++_training", "TCHsocialTraining++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Refocus": {
 				"name": "Technique_Refocus", "fieldName": "refocus", "group": "Technique", "description": "", "variable": "TCHrefocus{0}", "title": "Refocus", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHrefocus_training", "TCHrefocus_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHrefocus_training", "TCHrefocus_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Refocus +": {
 				"name": "Technique_Refocus +", "fieldName": "refocus+", "group": "Technique", "description": "", "variable": "TCHrefocus+{0}", "title": "Refocus +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHrefocus+_training", "TCHrefocus+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHrefocus+_training", "TCHrefocus+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sustained Channel": {
 				"name": "Technique_Sustained Channel", "fieldName": "sustainedChannel", "group": "Technique", "description": "", "variable": "TCHsustainedChannel{0}", "title": "Sustained Channel", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsustainedChannel_training", "TCHsustainedChannel_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsustainedChannel_training", "TCHsustainedChannel_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Sustained Channel +": {
 				"name": "Technique_Sustained Channel +", "fieldName": "sustainedChannel+", "group": "Technique", "description": "", "variable": "TCHsustainedChannel+{0}", "title": "Sustained Channel +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsustainedChannel+_training", "TCHsustainedChannel+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsustainedChannel+_training", "TCHsustainedChannel+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Ki Control": {
-				"name": "Technique_Ki Control", "fieldName": "kiControl", "group": "Technique", "description": "", "variable": "TCHkiControl{0}", "title": "Ki Control", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHkiControl_training", "TCHkiControl_adv"]
+				"name": "Technique_Ki Control", "fieldName": "kiControl", "group": "Technique", "description": "", "variable": "TCHkiControl{0}", "title": "Ki Control", "subGroup": "", "descriptions": [""]
 				,
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHkiControl_training", "TCHkiControl_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Ki Control +": {
 				"name": "Technique_Ki Control +", "fieldName": "kiControl+", "group": "Technique", "description": "", "variable": "TCHkiControl+{0}", "title": "Ki Control +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHkiControl+_training", "TCHkiControl+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHkiControl+_training", "TCHkiControl+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Ki Control ++": {
 				"name": "Technique_Ki Control ++", "fieldName": "kiControl++", "group": "Technique", "description": "", "variable": "TCHkiControl++{0}", "title": "Ki Control ++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHkiControl++_training", "TCHkiControl++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHkiControl++_training", "TCHkiControl++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Surge Value": {
 				"name": "Technique_Surge Value", "fieldName": "surgeValue", "group": "Technique", "description": "", "variable": "TCHsurgeValue{0}", "title": "Surge Value", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsurgeValue_training", "TCHsurgeValue_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsurgeValue_training", "TCHsurgeValue_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Surge Value +": {
 				"name": "Technique_Surge Value +", "fieldName": "surgeValue+", "group": "Technique", "description": "", "variable": "TCHsurgeValue+{0}", "title": "Surge Value +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHsurgeValue+_training", "TCHsurgeValue+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHsurgeValue+_training", "TCHsurgeValue+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Channel Training": {
 				"name": "Technique_Channel Training", "fieldName": "channelTraining", "group": "Technique", "description": "", "variable": "TCHchannelTraining{0}", "title": "Channel Training", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHchannelTraining_training", "TCHchannelTraining_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHchannelTraining_training", "TCHchannelTraining_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Channel Training +": {
 				"name": "Technique_Channel Training +", "fieldName": "channelTraining+", "group": "Technique", "description": "", "variable": "TCHchannelTraining+{0}", "title": "Channel Training +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHchannelTraining+_training", "TCHchannelTraining+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHchannelTraining+_training", "TCHchannelTraining+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Channel Training ++": {
 				"name": "Technique_Channel Training ++", "fieldName": "channelTraining++", "group": "Technique", "description": "", "variable": "TCHchannelTraining++{0}", "title": "Channel Training ++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHchannelTraining++_training", "TCHchannelTraining++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHchannelTraining++_training", "TCHchannelTraining++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Physical Training": {
 				"name": "Technique_Physical Training", "fieldName": "physicalTraining", "group": "Technique", "description": "", "variable": "TCHphysicalTraining{0}", "title": "Physical Training", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHphysicalTraining_training", "TCHphysicalTraining_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHphysicalTraining_training", "TCHphysicalTraining_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Physical Training +": {
 				"name": "Technique_Physical Training +", "fieldName": "physicalTraining+", "group": "Technique", "description": "", "variable": "TCHphysicalTraining+{0}", "title": "Physical Training +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHphysicalTraining+_training", "TCHphysicalTraining+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHphysicalTraining+_training", "TCHphysicalTraining+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Body Training": {
 				"name": "Technique_Body Training", "fieldName": "bodyTraining", "group": "Technique", "description": "", "variable": "TCHbodyTraining{0}", "title": "Body Training", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHbodyTraining_training", "TCHbodyTraining_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHbodyTraining_training", "TCHbodyTraining_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Body Training +": {
 				"name": "Technique_Body Training +", "fieldName": "bodyTraining+", "group": "Technique", "description": "", "variable": "TCHbodyTraining+{0}", "title": "Body Training +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHbodyTraining+_training", "TCHbodyTraining+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHbodyTraining+_training", "TCHbodyTraining+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Body Training ++": {
 				"name": "Technique_Body Training ++", "fieldName": "bodyTraining++", "group": "Technique", "description": "", "variable": "TCHbodyTraining++{0}", "title": "Body Training ++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHbodyTraining++_training", "TCHbodyTraining++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHbodyTraining++_training", "TCHbodyTraining++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Technical Training": {
 				"name": "Technique_Technical Training", "fieldName": "technicalTraining", "group": "Technique", "description": "", "variable": "TCHtechnicalTraining{0}", "title": "Technical Training", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHtechnicalTraining_training", "TCHtechnicalTraining_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHtechnicalTraining_training", "TCHtechnicalTraining_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Technical Training +": {
 				"name": "Technique_Technical Training +", "fieldName": "technicalTraining+", "group": "Technique", "description": "", "variable": "TCHtechnicalTraining+{0}", "title": "Technical Training +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHtechnicalTraining+_training", "TCHtechnicalTraining+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHtechnicalTraining+_training", "TCHtechnicalTraining+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Technical Training ++": {
 				"name": "Technique_Technical Training ++", "fieldName": "technicalTraining++", "group": "Technique", "description": "", "variable": "TCHtechnicalTraining++{0}", "title": "Technical Training ++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHtechnicalTraining++_training", "TCHtechnicalTraining++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHtechnicalTraining++_training", "TCHtechnicalTraining++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Martial Training": {
 				"name": "Technique_Martial Training", "fieldName": "martialTraining", "group": "Technique", "description": "", "variable": "TCHmartialTraining{0}", "title": "Martial Training", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmartialTraining_training", "TCHmartialTraining_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmartialTraining_training", "TCHmartialTraining_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Martial Training +": {
 				"name": "Technique_Martial Training +", "fieldName": "martialTraining+", "group": "Technique", "description": "", "variable": "TCHmartialTraining+{0}", "title": "Martial Training +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmartialTraining+_training", "TCHmartialTraining+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmartialTraining+_training", "TCHmartialTraining+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Martial Training ++": {
 				"name": "Technique_Martial Training ++", "fieldName": "martialTraining++", "group": "Technique", "description": "", "variable": "TCHmartialTraining++{0}", "title": "Martial Training ++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHmartialTraining++_training", "TCHmartialTraining++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHmartialTraining++_training", "TCHmartialTraining++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_HP Up": {
 				"name": "Technique_HP Up", "fieldName": "hPUp", "group": "Technique", "description": "", "variable": "TCHhPUp{0}", "title": "HP Up", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHhPUp_training", "TCHhPUp_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHhPUp_training", "TCHhPUp_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_HP Up+": {
 				"name": "Technique_HP Up+", "fieldName": "hPUp+", "group": "Technique", "description": "", "variable": "TCHhPUp+{0}", "title": "HP Up+", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHhPUp+_training", "TCHhPUp+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHhPUp+_training", "TCHhPUp+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_HP Up++": {
 				"name": "Technique_HP Up++", "fieldName": "hPUp++", "group": "Technique", "description": "", "variable": "TCHhPUp++{0}", "title": "HP Up++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHhPUp++_training", "TCHhPUp++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHhPUp++_training", "TCHhPUp++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Vitality Boost": {
 				"name": "Technique_Vitality Boost", "fieldName": "vitalityBoost", "group": "Technique", "description": "", "variable": "TCHvitalityBoost{0}", "title": "Vitality Boost", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHvitalityBoost_training", "TCHvitalityBoost_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHvitalityBoost_training", "TCHvitalityBoost_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Vitality Boost +": {
 				"name": "Technique_Vitality Boost +", "fieldName": "vitalityBoost+", "group": "Technique", "description": "", "variable": "TCHvitalityBoost+{0}", "title": "Vitality Boost +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHvitalityBoost+_training", "TCHvitalityBoost+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHvitalityBoost+_training", "TCHvitalityBoost+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Vitality Boost ++": {
 				"name": "Technique_Vitality Boost ++", "fieldName": "vitalityBoost++", "group": "Technique", "description": "", "variable": "TCHvitalityBoost++{0}", "title": "Vitality Boost ++", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHvitalityBoost++_training", "TCHvitalityBoost++_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHvitalityBoost++_training", "TCHvitalityBoost++_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Undying": {
 				"name": "Technique_Undying", "fieldName": "undying", "group": "Technique", "description": "", "variable": "TCHundying{0}", "title": "Undying", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHundying_training", "TCHundying_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHundying_training", "TCHundying_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Undying +": {
 				"name": "Technique_Undying +", "fieldName": "undying+", "group": "Technique", "description": "", "variable": "TCHundying+{0}", "title": "Undying +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHundying+_training", "TCHundying+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHundying+_training", "TCHundying+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Extra Follow-Up Attack": {
 				"name": "Technique_Extra Follow-Up Attack", "fieldName": "extraFollow-UpAttack", "group": "Technique", "description": "", "variable": "TCHextraFollow-UpAttack{0}", "title": "Extra Follow-Up Attack", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHextraFollow-UpAttack_training", "TCHextraFollow-UpAttack_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHextraFollow-UpAttack_training", "TCHextraFollow-UpAttack_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Extra Follow-Up Attack +": {
 				"name": "Technique_Extra Follow-Up Attack +", "fieldName": "extraFollow-UpAttack+", "group": "Technique", "description": "", "variable": "TCHextraFollow-UpAttack+{0}", "title": "Extra Follow-Up Attack +", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHextraFollow-UpAttack+_training", "TCHextraFollow-UpAttack+_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHextraFollow-UpAttack+_training", "TCHextraFollow-UpAttack+_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Change Tech Slots": {
 				"name": "Technique_Change Tech Slots", "fieldName": "changeTechSlots", "group": "Technique", "description": "", "variable": "TCHchangeTechSlots{0}", "title": "Change Tech Slots", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHchangeTechSlots_training", "TCHchangeTechSlots_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHchangeTechSlots_training", "TCHchangeTechSlots_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Hold Out": {
 				"name": "Technique_Hold Out", "fieldName": "holdOut", "group": "Technique", "description": "", "variable": "TCHholdOut{0}", "title": "Hold Out", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHholdOut_training", "TCHholdOut_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHholdOut_training", "TCHholdOut_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Overdrive": {
 				"name": "Technique_Overdrive", "fieldName": "overdrive", "group": "Technique", "description": "", "variable": "TCHoverdrive{0}", "title": "Overdrive", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;Level", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["level", "TCHoverdrive_training", "TCHoverdrive_adv"],
+				"abbreviation": "", "formula": "6;CR*2", "modifiers": "_training;_adv", "linkedGroups": 1, "isResource": false, "modAttrs": ["cr", "TCHoverdrive_training", "TCHoverdrive_adv"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "level", "value": 0, "multiplier": 1 },
+				{ "modName": "cr", "value": 0, "multiplier": 2 },
 				{ "modName": "_training", "value": 0, "multiplier": 1 },
 				{ "modName": "_adv", "value": 0, "multiplier": 1 }]
 			}
 		},
-		sortingGroups = { "group": { "Type": ["Attribute", "Skill", "Job", "Role", "Knowledge", "Language", "Lore", "Style", "Technique", "PageSet", "Page", "Defense", "Sense", "Affinity", "Combat", "Social", "Trait", "Status", "Condition"], "VariableMod": ["_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_training", "_adv", "_pts", "_tech", "_expertise", "_gear", "_error"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "AttributeValue": ["AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad"], "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3"], "LoreTier": ["LoreTier0"], "PageSet": ["PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training Page"], "Page": ["Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Basics", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement"], "Progression": ["Level", "CR", "XP", "TP"], "Attribute": ["Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN"], "Defense": ["Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion"], "Sense": ["Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill"], "General": ["Full Name", "Display Name", "HP", "WILL", "EN", "Initiative"], "Gear": ["Carrying Capacity"], "Combat": ["Combat_HV", "Combat_Armor", "Combat_Durability", "Combat_Surge", "Combat_Chakra", "Combat_Move Speed", "Combat_Move Potency"], "": ["Chakra"], "Social": ["Social_Approval", "Social_Patience"], "Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent"], "Status": ["Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious"], "Condition": ["Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised"], "Style": ["Style_Basic Set", "Style_Swordplay", "Style_Ki Extension"], "Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "Language": ["Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan"], "Lore": ["Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "Role": ["Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "Technique": ["Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Defense Piercer ", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"] }, "formulaMods": { "CR": ["Attribute", "Skill", "Job", "HP", "WILL", "Initiative", "Combat_HV", "Combat_Chakra", "Social_Approval", "Social_Patience", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "": ["Role", "Language", "Lore", "PageSet", "Page", "Defense", "Sense", "Affinity", "Combat", "Social", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_training", "_adv", "_pts", "_tech", "_expertise", "_gear", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training Page", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Basics", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Level", "CR", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "Full Name", "Display Name", "EN", "Chakra", "Social_Patience", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "Level": ["Technique", "HP", "WILL", "Social_Approval"], "Attribute_BOD": ["Defense_Brace", "Defense_Fortitude", "HP", "Carrying Capacity"], "Attribute_PRC": ["Defense_Disruption", "Defense_Hide"], "Attribute_QCK": ["Defense_Reflex", "Defense_Evasion", "Initiative"], "Attribute_INT": ["Sense_Insight", "Sense_Notice"], "Attribute_RSN": ["Sense_Scrutiny", "Sense_Detect"], "Attribute_CNV": ["Sense_Resolve", "Sense_Freewill", "WILL", "Combat_HV", "Social_Approval"] } },
+		sortingGroups = { "group": { "Type": ["Attribute", "Skill", "Job", "Role", "Knowledge", "Language", "Lore", "Style", "Technique", "PageSet", "Page", "Title", "Defense", "Sense", "Affinity", "Combat", "Social", "Trait", "Status", "Condition"], "VariableMod": ["_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_training", "_adv", "_pts", "_tech", "_expertise", "_gear", "_error"], "Affinity": ["Wood", "Fire", "Earth", "Metal", "Water"], "AttributeValue": ["AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad"], "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3"], "LoreTier": ["LoreTier0"], "PageSet": ["PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training"], "Page": ["Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Basics", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement"], "Title": ["Title_Advancement", "Title_Training"], "Advancement": ["Level", "CR", "XP"], "Training": ["Training Points", "PP"], "Attribute": ["Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN"], "Defense": ["Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion"], "Sense": ["Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill"], "General": ["Full Name", "Display Name", "HP", "WILL", "EN", "Initiative"], "Gear": ["Carrying Capacity"], "Combat": ["Combat_HV", "Combat_Armor", "Combat_Durability", "Combat_Surge", "Combat_Chakra", "Combat_Move Speed", "Combat_Move Potency"], "": ["Chakra"], "Social": ["Social_Approval", "Social_Patience"], "Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent"], "Status": ["Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious"], "Condition": ["Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised"], "Style": ["Style_Basic Set", "Style_Swordplay", "Style_Ki Extension"], "Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "Language": ["Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan"], "Lore": ["Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "Role": ["Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "Technique": ["Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Defense Piercer ", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"] }, "formulaMods": { "CR": ["Attribute", "Skill", "Job", "Technique", "HP", "WILL", "Initiative", "Combat_HV", "Combat_Chakra", "Social_Approval", "Social_Patience", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "": ["Role", "Language", "Lore", "PageSet", "Page", "Title", "Defense", "Sense", "Affinity", "Combat", "Social", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_training", "_adv", "_pts", "_tech", "_expertise", "_gear", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Basics", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Advancement", "Title_Training", "Level", "CR", "Training Points", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "Full Name", "Display Name", "EN", "Chakra", "Social_Patience", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "Attribute_BOD": ["Defense_Brace", "Defense_Fortitude", "HP", "Carrying Capacity"], "Attribute_PRC": ["Defense_Disruption", "Defense_Hide"], "Attribute_QCK": ["Defense_Reflex", "Defense_Evasion", "Initiative"], "Attribute_INT": ["Sense_Insight", "Sense_Notice"], "Attribute_RSN": ["Sense_Scrutiny", "Sense_Detect"], "Attribute_CNV": ["Sense_Resolve", "Sense_Freewill", "WILL", "Combat_HV", "Social_Approval"], "Level": ["HP", "WILL", "Social_Approval"] } },
 		_max = "_max",
 		_true = "_true",
 		_rank = "_rank",

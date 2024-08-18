@@ -2,9 +2,16 @@ var upgrade_to_1_0_0 = function () {
 	let attributeHandler = loaderAttrubuteHandler("0");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
-	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Core", WuxDef._tab), "Overview");
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Training", WuxDef._tab), "Training");
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement", WuxDef._tab), "Advancement");
+
 	attributeHandler.addUpdate(WuxDef.GetVariable("Level"), 1);
 	attributeHandler.addUpdate(WuxDef.GetVariable("CR"), 1);
+	attributeHandler.addUpdate(WuxDef.GetVariable("XP"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("Training Points"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("Training Points", WuxDef._max), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("PP"), 0);
 
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);

@@ -751,6 +751,25 @@ var WuxDefinition = WuxDefinition || (function () {
             ${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`;
 
             return WuxSheetMain.InteractionElement.Build(true, output);
+        },
+        infoHeader = function (definition) {
+            return `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(definition.getAttribute(WuxDef._info))}${definition.title}`)}
+            ${WuxSheetMain.Info.DefaultContents(definition)}`;
+        },
+
+        buildText = function (definition, fieldName) {
+            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+                WuxSheetMain.Span(fieldName);
+        },
+
+        buildTextInput = function (definition, fieldName) {
+            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+                WuxSheetMain.Input("text", fieldName);
+        },
+
+        buildNumberInput = function (definition, fieldName) {
+            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+                WuxSheetMain.Input("number", fieldName);
         }
         ;
     return {
@@ -764,7 +783,11 @@ var WuxDefinition = WuxDefinition || (function () {
         DisplayEntry: displayEntry,
         TooltipDescription: tooltipDescription,
         DefinitionContents: definitionContents,
-        DisplayCollapsibleTitle: displayCollapsibleTitle
+        DisplayCollapsibleTitle: displayCollapsibleTitle,
+        InfoHeader: infoHeader,
+        BuildText: buildText,
+        BuildTextInput: buildTextInput,
+        BuildNumberInput: buildNumberInput
     }
 }());
 
@@ -872,6 +895,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
             </div>`;
         },
 
+        tabBlock = function (contents) {
+            return `<div class="wuxSectionBlock wuxLayoutItem">\n<div class="wuxTabContent">\n${contents}\n</div>\n</div>`;
+        },
+
         sectionBlock = function (contents) {
             return `<div class="wuxSectionBlock wuxLayoutItem">\n${contents}\n</div>`;
         },
@@ -902,13 +929,6 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return sectionBlock(`${customInput("checkbox", fieldName, "wuxSectionContent-flag")}
             ${sectionBlockStyleHeader(interactionElement.ExpandableBlockIcon(fieldName) + title)}
             ${sectionBlockContents(contents)}`);
-
-            return `<div class="wuxSectionBlock wuxLayoutItem">
-                <input class="wuxSectionContent-flag" type="hidden" name="${fieldName}" style="display: block">
-                <div class="wuxStyleSectionHeader">\n${interactionElement.Build(true, `${interactionElement.ExpandableBlockIcon(fieldName)}${title}`)}\n</div>
-                <div class="wuxSectionHeaderFooter"></div>
-                <div class="wuxSectionContent">\n${contents}\n</div>
-            </div>`;
         },
         
         tooltip = function (text, contents) {
@@ -944,6 +964,14 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<span class="wuxDescription">${contents}</span>`;
         },
 
+        span = function (fieldName) {
+            return `<span class="wuxDescription" name="${fieldName}"></span>`;
+        },
+
+        div = function (contents) {
+            return `<div>${contents}</div>`;
+        },
+
         input = function (type, fieldName, value, placeholder) {
             value = value == undefined ? "" : ` value="${value}"`;
             placeholder = placeholder == undefined ? "" : ` placeholder="${placeholder}"`;
@@ -970,6 +998,16 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return output;
         },
 
+        button = function (fieldName, contents, className) {
+            if (className == undefined) {
+                className = "";
+            }
+            else {
+                className = " " + className; 
+            }
+            return `<div class="wuxButton${className}">\n<input type="checkbox" name="${fieldName}">\n<span>${contents}</span>\n </div>`;
+        },
+
         multiRowGroup = function (contents, containerCallback, rowSize) {
             let output = "";
             let rowContents = "";
@@ -991,6 +1029,32 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<input type="hidden" class="wuxHiddenField-flag" name="${fieldName}" value="0">
             <div class="wuxHiddenField">\n${contents}\n</div>\n`;
         },
+
+        info = info || (function () {
+            'use strict';
+
+            var
+            button = function (fieldName) {
+                return `<div class="wuxInfoButton"><input type="checkbox" name="${fieldName}"><span>i</span></div>`;
+            },
+    
+            contents = function (fieldName, contents) {
+                let output = `<div class="wuxInfoContent">\n${contents}\n</div>`;
+                return WuxSheetMain.HiddenField(fieldName, output);
+            },
+    
+            defaultContents = function (definition) {
+                let output = "";
+                output += WuxDefinition.TooltipDescription(definition);
+                return contents(definition.getAttribute(WuxDef._info), output);
+            }
+
+            return {
+                Button: button,
+                Contents: contents,
+                DefaultContents: defaultContents
+            };
+        }()),
 
         table = table || (function () {
             'use strict';
@@ -1129,6 +1193,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Tab: tab,
         TabHeader: tabHeader,
         CollapsibleTab: collapsibleTab,
+        TabBlock: tabBlock,
         SectionBlock: sectionBlock,
         SectionBlockHeader: sectionBlockHeader,
         SectionBlockHeaderFooter: sectionBlockHeaderFooter,
@@ -1140,11 +1205,15 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Header2: header2,
         Subheader: subheader,
         Desc: desc,
+        Span: span,
+        Div: div,
         Input: input,
         CustomInput: customInput,
         Select: select,
+        Button: button,
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,
+        Info: info,
         Table: table,
         DistinctSection: distinctSection,
         InteractionElement: interactionElement
@@ -1194,22 +1263,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildHeader = function (header, subheader, infoFieldName) {
-            return `<div class="wuxHeader2">${infoButton(infoFieldName)}${subheader}</div>\n<div class="wuxHeader">${header}</div>`;
-        },
-
-        infoButton = function (fieldName) {
-            return `<div class="wuxInfoButton"><input type="checkbox" name="${fieldName}"><span>i</span></div>`;
-        },
-
-        infoContent = function (fieldName, contents) {
-            let output = `<div class="wuxInfoContent">\n${contents}\n</div>`;
-            return WuxSheetMain.HiddenField(fieldName, output);
-        },
-
-        infoDefaultContents = function (definition) {
-            let output = "";
-            output += WuxDefinition.TooltipDescription(definition);
-            return infoContent(definition.getAttribute(WuxDef._info), output);
+            return `<div class="wuxHeader2">${WuxSheetMain.Info.Button(infoFieldName)}${subheader}</div>\n<div class="wuxHeader">${header}</div>`;
         },
         
         buildOverviewPageNavigation = function (selectedTab) {
@@ -1217,6 +1271,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             let tabFieldName = WuxDef.GetAttribute("PageSet_Core", WuxDef._tab);
             sideBarButtons += buildTabButton("radio", tabFieldName, "Options", "Options", selectedTab == "Options", "") + "\n";
             sideBarButtons += buildTabButton("radio", tabFieldName, "Chat", "Chat", selectedTab == "Chat", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Origin", "Origin", selectedTab == "Origin", "") + "\n";
             sideBarButtons += buildTabButton("radio", tabFieldName, "Details", "Details", selectedTab == "Details", "") + "\n";
             sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", selectedTab == "Overview", "") + "\n";
 
@@ -1230,19 +1285,20 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             output += WuxSheet.PageDisplayInput(tabFieldName, "Overview");
             output += WuxSheet.PageDisplay("Overview", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Overview")));
             output += WuxSheet.PageDisplay("Details", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Details")));
+            output += WuxSheet.PageDisplay("Origin", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Origin")));
             output += WuxSheet.PageDisplay("Chat", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Chat")));
             output += WuxSheet.PageDisplay("Options", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Options")));
-            return infoContent(fieldName, output);
+            return WuxSheetMain.Info.Contents(fieldName, output);
         },
         
         buildGearPageNavigation = function () {
             let definition = WuxDef.Get("Page_Gear");
-            return buildSection(mainPageNavigation(definition, definition.title, ""), infoDefaultContents(definition));
+            return buildSection(mainPageNavigation(definition, definition.title, ""), WuxSheetMain.Info.DefaultContents(definition));
         },
         
         buildActionsPageNavigation = function () {
             let definition = WuxDef.Get("Page_Actions");
-            return buildSection(mainPageNavigation(definition, definition.title, ""), infoDefaultContents(definition));
+            return buildSection(mainPageNavigation(definition, definition.title, ""), WuxSheetMain.Info.DefaultContents(definition));
         },
 
         mainPageNavigation = function (definition, subheader, sideBarButtons) {
@@ -1260,19 +1316,19 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildOriginPageNavigation = function (definition) {
-            return buildSection(characterCreationNavigation(definition, definition.title), infoDefaultContents(definition));
+            return buildSection(characterCreationNavigation(definition, definition.title), WuxSheetMain.Info.DefaultContents(definition));
         },
 
         buildTrainingPageNavigation = function (definition) {
             let characterCreationContents = characterCreationNavigation(definition, definition.title);
             let output = buildCharacterCreationSplit("Training", trainingPageNavigation(definition, definition.title), characterCreationContents);
-            return buildSection(output, infoDefaultContents(definition));
+            return buildSection(output, WuxSheetMain.Info.DefaultContents(definition));
         },
 
         trainingPageNavigation = function (definition, subheader) {
             let fieldName = WuxDef.GetAttribute("PageSet_Training");
             let mainContents = "";
-            mainContents += buildTabs(definition.title, fieldName, ["Styles", "Knowledge", "Training"]);
+            mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Styles", "Knowledge", "Training"]);
             mainContents += buildExitStickyButtons(fieldName, true);
             mainContents += buildHeader("Training", subheader, definition.getAttribute(WuxDef._info));
             return mainContents;
@@ -1281,12 +1337,12 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         buildAdvancementPageNavigation = function (definition) {
             let characterCreationContents = characterCreationNavigation(definition, definition.title);
             let output = buildCharacterCreationSplit("Advancement", advancementPageNavigation(definition, definition.title), characterCreationContents);
-            return buildSection(output, infoDefaultContents(definition));
+            return buildSection(output, WuxSheetMain.Info.DefaultContents(definition));
         },
 
         advancementPageNavigation = function (definition, subheader) {
             let fieldName = WuxDef.GetAttribute("PageSet_Advancement");
-            let mainContents = buildTabs(definition.title, fieldName, ["Styles", "Attributes", "Skills", "Jobs", "Advancement"]);
+            let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Styles", "Attributes", "Skills", "Jobs", "Advancement"]);
             mainContents += buildExitStickyButtons(fieldName, true);
             mainContents += buildHeader("Advancement", subheader, definition.getAttribute(WuxDef._info));
             return mainContents;
@@ -1313,7 +1369,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             output += WuxSheet.PageDisplay("Training", WuxDefinition.TooltipDescription(WuxDef.Get("Page_LearnTechniques")));
             output += WuxSheet.PageDisplay("Advancement", WuxDefinition.TooltipDescription(WuxDef.Get("Page_LearnTechniques")));
             output += WuxSheet.PageDisplay("Core", WuxDefinition.TooltipDescription(WuxDef.Get("Page_SetStyles")));
-            return infoContent(infoFieldName, output);
+            return WuxSheetMain.Info.Contents(infoFieldName, output);
         },
 
         characterCreationNavigation = function (definition, subheader) {
