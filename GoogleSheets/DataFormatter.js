@@ -52,6 +52,7 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArra
     jsClassData.addPublicFunction("getVariables", WuxDefinition.GetVariables);
     jsClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
     jsClassData.addPublicFunction("getTitle", WuxDefinition.GetTitle);
+    jsClassData.addPublicFunction("getDescription", WuxDefinition.GetDescription);
     let variableMods = definitionDatabase.filter(new DatabaseFilterData("group", "VariableMod"));
     for (let i = 0; i < variableMods.length; i++) {
         jsClassData.addPublicVariable(variableMods[i].variable, `"${variableMods[i].variable}"`);
@@ -713,6 +714,10 @@ var WuxDefinition = WuxDefinition || (function () {
             let data = get(key);
             return data.title;
         },
+        getDescription = function (key) {
+            let data = get(key);
+            return data.getDescription();
+        },
 
         displayEntry = function (dictionary, key) {
             let output = "";
@@ -757,9 +762,9 @@ var WuxDefinition = WuxDefinition || (function () {
             ${WuxSheetMain.Info.DefaultContents(definition)}`;
         },
 
-        buildText = function (definition, fieldName) {
+        buildText = function (definition, textContents) {
             return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
-                WuxSheetMain.Span(fieldName);
+                WuxSheetMain.Desc(textContents);
         },
 
         buildTextInput = function (definition, fieldName) {
@@ -767,9 +772,24 @@ var WuxDefinition = WuxDefinition || (function () {
                 WuxSheetMain.Input("text", fieldName);
         },
 
+        buildTextarea = function (definition, fieldName, className, placeholder) {
+            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+                WuxSheetMain.Textarea(fieldName, className, placeholder);
+        },
+
         buildNumberInput = function (definition, fieldName) {
             return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
                 WuxSheetMain.Input("number", fieldName);
+        },
+
+        buildNumberLabelInput = function (definition, fieldName, labelContent) {
+            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+            WuxSheetMain.MultiRow(WuxSheetMain.Input("number", fieldName) + WuxSheetMain.InputLabel(labelContent));
+        },
+
+        buildSelect = function (definition, fieldName, definitionGroup, showEmpty) {
+            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+                WuxSheetMain.Select(fieldName, definitionGroup, showEmpty);
         }
         ;
     return {
@@ -780,6 +800,7 @@ var WuxDefinition = WuxDefinition || (function () {
         GetVariables: getVariables,
         GetGroupVariables: getGroupVariables,
         GetTitle: getTitle,
+        GetDescription: getDescription,
         DisplayEntry: displayEntry,
         TooltipDescription: tooltipDescription,
         DefinitionContents: definitionContents,
@@ -787,7 +808,10 @@ var WuxDefinition = WuxDefinition || (function () {
         InfoHeader: infoHeader,
         BuildText: buildText,
         BuildTextInput: buildTextInput,
-        BuildNumberInput: buildNumberInput
+        BuildTextarea: buildTextarea,
+        BuildNumberInput: buildNumberInput,
+        BuildNumberLabelInput: buildNumberLabelInput,
+        BuildSelect: buildSelect
     }
 }());
 
@@ -964,12 +988,20 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<span class="wuxDescription">${contents}</span>`;
         },
 
-        span = function (fieldName) {
+        descField = function (fieldName) {
             return `<span class="wuxDescription" name="${fieldName}"></span>`;
         },
 
-        div = function (contents) {
-            return `<div>${contents}</div>`;
+        span = function (fieldName) {
+            return `<span name="${fieldName}"></span>`;
+        },
+
+        row = function (contents) {
+            return `<div class="wuxRow">${contents}</div>`;
+        },
+
+        multiRow = function (contents) {
+            return `<div class="wuxMultiRow">${contents}</div>`;
         },
 
         input = function (type, fieldName, value, placeholder) {
@@ -983,6 +1015,21 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 extras = "";
             }
             return `<input type="${type}" class="${className}" name="${fieldName}"${extras} />`
+        },
+
+        inputLabel = function(contents) {
+            return `<div class="wuxInputLabel">${contents}</div>`;
+        },
+
+        textarea = function (fieldName, className, placeholder) {
+            if (className == undefined) {
+                className = "";
+            }
+            else {
+                className = ` class="${className}"`;
+            }
+            placeholder = placeholder == undefined ? "" : ` placeholder="${placeholder}"`;
+            return `<textarea${className} name="${fieldName}"${placeholder}></textarea>`;
         },
 
         select = function (fieldName, definitionGroup, showEmpty) {
@@ -1205,10 +1252,14 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Header2: header2,
         Subheader: subheader,
         Desc: desc,
+        DescField: descField,
         Span: span,
-        Div: div,
+        Row: row,
+        MultiRow: multiRow,
         Input: input,
         CustomInput: customInput,
+        InputLabel: inputLabel,
+        Textarea: textarea,
         Select: select,
         Button: button,
         MultiRowGroup: multiRowGroup,

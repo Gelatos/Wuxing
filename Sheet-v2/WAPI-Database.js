@@ -263,7 +263,7 @@ class WuxDatabaseData extends dbObj {
     }
     createDefinition(baseDefinition) {
         let definition = new DefinitionData();
-        definition.name = `${baseDefinition.name}_${this.name}`;
+        definition.name = baseDefinition.isResource ? `${this.name}` : `${baseDefinition.name}_${this.name}`;
         definition.fieldName = this.fieldName;
         definition.variable = `${baseDefinition.getVariable(this.variable == "" ? this.fieldName : this.variable)}{0}`;
         definition.title = this.name;
@@ -818,7 +818,7 @@ class DefinitionData extends WuxDatabaseData {
         this.formula = "" + dataArray[i]; i++;
         this.modifiers = "" + dataArray[i]; i++;
         this.linkedGroups = Format.StringToArray("" + dataArray[i]).push(this.name); i++;
-        this.isResource = dataArray[i] == "TRUE"; i++;
+        this.isResource = dataArray[i]; i++;
         this.setFormulaData();
     }
     createEmpty() {
@@ -884,6 +884,13 @@ class DefinitionData extends WuxDatabaseData {
     }
     getAttribute(mod, mod1) {
         return `attr_${this.getVariable(mod, mod1)}`;
+    }
+    getDescription() {
+        let output = "";
+        this.descriptions.forEach((description) => {
+            output += description + "\n";
+        });
+        return output;
     }
     setFormulaData() {
         let baseDefinition = this;
@@ -1248,8 +1255,15 @@ class WorkerBuildStat extends dbObj {
 }
 class WorkerBuildStats extends Dictionary {
 
+    constructor() {
+        super();
+    }
+
     getPointsTotal() {
         let points = 0;
+        if (this.keys == undefined) {
+            return points;
+        }
         for (let i = 0; i < this.keys.length; i++) {
             if (this.values[this.keys[i]].value == "on") {
                 points++;
@@ -1266,6 +1280,86 @@ class WorkerFormula {
         this.modName = modName == undefined ? "" : modName;
         this.value = isNaN(parseInt(value)) ? 0 : parseInt(value);
         this.multiplier = isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier);
+    }
+}
+class ResistanceData {
+    constructor(json) {
+        if (json != undefined) {
+            this.importJson(json);
+        }
+        else {
+            this.createEmpty();
+        }
+    }
+
+    importJson(json) {
+        this.damageTypes = json.damageTypes;
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            this[this.damageTypes[i]] = json[this.damageTypes[i]];
+        }
+    }
+
+    createEmpty() {
+        let damageTypeDefs = WuxDef.Filter(new DatabaseFilterData("group", "DamageType"));
+        this.damageTypes = [];
+        for (let i = 0; i < damageTypeDefs.length; i++) {
+            this.damageTypes.push(damageTypeDefs[i].name);
+            this[damageTypeDefs[i].name] = 0;
+        }
+    }
+
+    addResistanceData(resistanceData) {
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            this[this.damageTypes[i]] += resistanceData[this.damageTypes[i]];
+        }
+    }
+
+    addResistanceValue(damageType, value) {
+        this[damageType] += value;
+    }
+
+    getResistanceValue(damageType) {
+        return this[damageType];
+    }
+
+    getResistanceString(damageType) {
+        if (this[damageType] == 0) {
+            return "";
+        }
+        else if (this[damageType] > 0) {
+            return `${damageType} Resistance: ${this[damageType]}`;
+        }
+        else {
+            return `${damageType} Weakness: ${Math.abs(this[damageType])}`;
+        }
+    }
+
+    getAllResistancesString() {
+        let output = "";
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            if (this[this.damageTypes[i]] > 0) {
+                if (output != "") {
+                    output += "\n";
+                }
+                output += `${damageType}: ${this[damageType]}`;
+            }
+        }
+        
+        return output;
+    }
+
+    getAllWeaknessesString() {
+        let output = "";
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            if (this[this.damageTypes[i]] < 0) {
+                if (output != "") {
+                    output += "\n";
+                }
+                output += `${damageType}: ${this[damageType]}`;
+            }
+        }
+        
+        return output;
     }
 }
 
@@ -1665,6 +1759,32 @@ var Dice = Dice || (function () {
         GetHighRolls: getHighRolls
     };
 }());
+
+var RowId = RowId || (function () {
+    'use strict';
+
+    var
+        buildId = function (sectionName, currentID, variableName) {
+
+            if (variableName.startsWith("attr")) {
+                variableName = variableName.substr(4);
+            }
+            return `${sectionName}${!sectionName.endsWith("_") ? "_" : ""}${currentID}${!variableName.startsWith("_") ? "_" : ""}${variableName}`;
+        },
+        buildIdFromArray = function (sectionName, currentID, variableNames) {
+            let output = [];
+            for (let i = 0; i < variableNames.length; i++) {
+                output.push(buildId(sectionName, currentID, variableNames[i]));
+            }
+            return output;
+        }
+
+        ;
+    return {
+        BuildId: buildId,
+        BuildIdFromArray: buildIdFromArray
+    };
+})();
 
 
 // ====== Section Ids

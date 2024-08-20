@@ -9,11 +9,15 @@ var upgrade_to_1_0_0 = function () {
 	attributeHandler.addUpdate(WuxDef.GetVariable("Level"), 1);
 	attributeHandler.addUpdate(WuxDef.GetVariable("CR"), 1);
 	attributeHandler.addUpdate(WuxDef.GetVariable("XP"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("Training Points"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("Training Points", WuxDef._max), 0);
 	attributeHandler.addUpdate(WuxDef.GetVariable("PP"), 0);
 
-	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
+	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementJob"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementSkill"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementTechnique"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("TrainingKnowledge"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("TrainingTechniques"), 0);
+
+	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute", "AdvancementPoints", "TrainingPoints"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
 		manager.setAttributeHandlerPoints(attrHandler);

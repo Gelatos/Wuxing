@@ -104,24 +104,59 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
 					var
 						build = function () {
-							let contents = "";
-							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
-							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Display Name"), WuxDef.GetAttribute("Display Name"));
-							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
-							contents += buildAffinity();
 
+        			        let contents = WuxSheetMain.MultiRowGroup([buildOrigin(), buildOriginStats(), buildAdvancement(), buildTraining()], WuxSheetMain.Table.FlexTable, 2);
         			        contents = WuxSheetMain.TabBlock(contents);
 							
         			        let definition = WuxDef.Get("Page_Origin");
         				    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
 						},
 
-						buildAffinity = function () {
-							let output = "";
-							let definition = WuxDef.Get("Affinity");
-							output += WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition));
-							output += WuxSheetMain.Select(definition.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "Affinity")]));
-							return output;
+						buildOrigin = function () {
+							let contents = "";
+        			        contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"));
+							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
+							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Display Name"), WuxDef.GetAttribute("Display Name"));
+							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
+							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
+							contents += WuxDefinition.BuildTextarea(WuxDef.Get("Background"), WuxDef.GetAttribute("Background"), "wuxInput wuxHeight150");
+							return WuxSheetMain.Table.FlextTableGroup(contents);
+						},
+
+						buildOriginStats = function () {
+							let contents = "";
+        			        contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
+							contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
+							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
+							contents += WuxDefinition.BuildSelect(WuxDef.Get("InnateDefense"), WuxDef.GetAttribute("InnateDefense"), WuxDef.Filter([new DatabaseFilterData("group", "InnateDefenseType")]));
+							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("InnateDefense", WuxDef._learn));
+							contents += WuxDefinition.BuildSelect(WuxDef.Get("InnateSense"), WuxDef.GetAttribute("InnateSense"), WuxDef.Filter([new DatabaseFilterData("group", "InnateSenseType")]));
+							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("InnateSense", WuxDef._learn));
+							return WuxSheetMain.Table.FlextTableGroup(contents);
+						},
+
+						buildAdvancement = function () {
+							let contents = "";
+        			        contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginAdvancement"));
+							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
+							contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR")));
+							contents += WuxDefinition.BuildText(WuxDef.Get("AdvancementPoints"), 
+								`${WuxSheetMain.Span(WuxDef.GetAttribute("AdvancementPoints"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("AdvancementPoints", WuxDef._max))}`);
+							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementJob"), WuxDef.GetAttribute("AdvancementJob"), `cost: 2 advancement points`);
+							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementSkill"), WuxDef.GetAttribute("AdvancementSkill"), `cost: 2 advancement points`);
+							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementTechnique"), WuxDef.GetAttribute("AdvancementTechnique"), `cost: 1 advancement point`);
+							return WuxSheetMain.Table.FlextTableGroup(contents);
+						},
+
+						buildTraining = function () {
+							let contents = "";
+        			        contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginTraining"));
+							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("TrainingPoints"), WuxDef.GetAttribute("TrainingPoints", WuxDef._max));
+							contents += WuxSheetMain.Desc(`${WuxSheetMain.Span(WuxDef.GetAttribute("TrainingPoints"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("TrainingPoints", WuxDef._max))}`);
+							
+							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 training point`);
+							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingTechniques"), WuxDef.GetAttribute("TrainingTechniques"), `cost: 1 training point`);
+							return WuxSheetMain.Table.FlextTableGroup(contents);
 						}
 
 					return {
@@ -171,7 +206,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 			var
 				printTraining = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Training Points")));
+					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("TrainingPoints")));
 				},
 				printKnowledge = function () {
 					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Knowledge")));
@@ -201,7 +236,6 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 					var
 						build = function () {
-							
         			        let contents = "";
         			        contents += basics();
 
@@ -213,7 +247,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
         			    
         			    basics = function () { 
         			        let contents = "";
-        			        contents += WuxDefinition.BuildText(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
+        			        contents += WuxDefinition.BuildText(WuxDef.Get("Full Name"), WuxSheetMain.Span(WuxDef.GetAttribute("Full Name")));
         			        return contents;
         			    }
 
@@ -940,7 +974,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			    
         			    basics = function () {
         			        let contents = "";
-        			        contents += WuxDefinition.BuildText(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
+        			        contents += WuxDefinition.BuildText(WuxDef.Get("Full Name"), WuxSheetMain.Span(WuxDef.GetAttribute("Full Name")));
         			        return contents;
         			    },
         			    
@@ -949,13 +983,13 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							let titleDefinition = WuxDef.Get("Title_Advancement");
         			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
 
-							contents += WuxSheetMain.Div(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
+							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
 
 							let levelDefinition = WuxDef.Get("Level");
-        			        contents += WuxDefinition.BuildText(levelDefinition, levelDefinition.getAttribute());
+        			        contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute()));
 
 							let xpDefinition = WuxDef.Get("XP");
-        			        contents += WuxDefinition.BuildNumberInput(xpDefinition, xpDefinition.getAttribute());
+        			        contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `max: <span name="${xpDefinition.getAttribute(WuxDef._max)}"></span>`);
 							
 							return WuxSheetMain.Table.FlextTableGroup(contents, "wuxMinWidth200");
         			    },
@@ -965,13 +999,13 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							let titleDefinition = WuxDef.Get("Title_Training");
         			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
 
-							contents += WuxSheetMain.Div(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
+							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
 
-							let levelDefinition = WuxDef.Get("Training Points");
-        			        contents += WuxDefinition.BuildText(levelDefinition, levelDefinition.getAttribute(WuxDef._max));
+							let levelDefinition = WuxDef.Get("TrainingPoints");
+        			        contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute(WuxDef._max)));
 
 							let xpDefinition = WuxDef.Get("PP");
-        			        contents += WuxDefinition.BuildNumberInput(xpDefinition, xpDefinition.getAttribute());
+        			        contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `max: <span name="${xpDefinition.getAttribute(WuxDef._max)}"></span>`);
 							
 							return WuxSheetMain.Table.FlextTableGroup(contents, "wuxMinWidth200");
         			    }
@@ -1203,17 +1237,25 @@ var BuilderBackend = BuilderBackend || (function () {
 				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
 					jsClassData.addPublicFunction("finishBuild", finishBuild);
+					jsClassData.addPublicFunction("setAffinityValue", setAffinityValue);
+					jsClassData.addPublicFunction("setInnateDefense", setInnateDefense);
+					jsClassData.addPublicFunction("setInnateSense", setInnateSense);
+					jsClassData.addFunction("getDefenseDescription", getDefenseDescription);
 					return jsClassData.print(className);
 				},
 
 				buildListeners = function () {
 					let output = "";
 					output += listenerFinishButton();
+					output += listenerSetAffinity();
+					output += listenerSetInnateDefense();
+					output += listenerSetInnateSense();
 					return output;
 				},
+
 				finishBuild = function() {
 					console.log("Finish Character Creation Build");
-				    let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
+				    let manager = new WuxWorkerBuildManager(["Advancement", "Training", "Skill", "Job", "Knowledge", "Attribute", "Technique"]);
                 	let attributeHandler  = new WorkerAttributeHandler();
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
@@ -1225,10 +1267,83 @@ var BuilderBackend = BuilderBackend || (function () {
 					});
 					attributeHandler.run();
 				},
+				setAffinityValue = function() {
+					console.log("Setting Affinity");
+                	let attributeHandler  = new WorkerAttributeHandler();
+					let affinityVariable = WuxDef.GetVariable("Affinity");
+
+					attributeHandler.addMod(affinityVariable);
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						attributeHandler.addUpdate(WuxDef.GetVariable("Affinity", WuxDef._learn), WuxDef.GetDescription(attrHandler.parseString(affinityVariable)));
+					});
+					attributeHandler.run();
+				},
+				setInnateDefense = function() {
+					console.log("Setting Innate Defense");
+                	let attributeHandler  = new WorkerAttributeHandler();
+					let innateDefenseVariable = WuxDef.GetVariable("InnateDefense");
+
+					attributeHandler.addMod(innateDefenseVariable);
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						switch (attrHandler.parseString(innateDefenseVariable)) {
+							case "BOD": attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), getDefenseDescription("Defense", "BOD", "Brace", "Fortitude")); break;
+							case "PRC": attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), getDefenseDescription("Defense", "PRC", "Disruption", "Hide")); break;
+							case "QCK": attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), getDefenseDescription("Defense", "QCK", "Reflex", "Evasion")); break;
+							default: attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), "Choose an attribute"); break;
+						}
+						
+					});
+					attributeHandler.run();
+				},
+				setInnateSense = function() {
+					console.log("Setting Innate Sense");
+                	let attributeHandler  = new WorkerAttributeHandler();
+					let innateSenseVariable = WuxDef.GetVariable("InnateSense");
+
+					attributeHandler.addMod(innateSenseVariable);
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						switch (attrHandler.parseString(innateSenseVariable)) {
+							case "CNV": attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), getDefenseDescription("Sense", "CNV", "Resolve", "Freewill")); break;
+							case "INT": attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), getDefenseDescription("Sense", "INT", "Insight", "Notice")); break;
+							case "RSN": attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), getDefenseDescription("Sense", "RSN", "Scrutiny", "Detect")); break;
+							default: attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), "Choose an attribute"); break;
+						}
+					});
+					attributeHandler.run();
+				},
+				getDefenseDescription = function(type, attribute, defense1, defense2) {
+					console.log("Getting Defense Description");
+					let attrDefinition = WuxDef.Get(`Attribute_${attribute}`);
+					let def1Definition = WuxDef.Get(`${type}_${defense1}`);
+					let def2Definition = WuxDef.Get(`${type}_${defense2}`);
+
+					let output = `${attrDefinition.title} is associated with the following ${type}s:\n\n`;
+					output += `${def1Definition.title}: ${def1Definition.getDescription()}\n\n${def2Definition.title}: ${def2Definition.getDescription()}`;
+					console.log(output);
+					return output;
+				},
 				
 				listenerFinishButton = function() {
 					let groupVariableNames = [WuxDef.GetVariable("PageSet_Character Creator", WuxDef._finish)];
 				    let output = `${className}.FinishBuild();\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				},
+				listenerSetAffinity = function() {
+					let groupVariableNames = [WuxDef.GetVariable("Affinity")];
+				    let output = `${className}.SetAffinityValue();\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				},
+				listenerSetInnateDefense = function() {
+					let groupVariableNames = [WuxDef.GetVariable("InnateDefense")];
+				    let output = `${className}.SetInnateDefense();\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				},
+				listenerSetInnateSense = function() {
+					let groupVariableNames = [WuxDef.GetVariable("InnateSense")];
+				    let output = `${className}.SetInnateSense();\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
@@ -1305,22 +1420,22 @@ var TrainingBackend = TrainingBackend || (function () {
 
 				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
-					jsClassData.addPublicFunction("goToTraining", goToTraining);
+					jsClassData.addPublicFunction("goToPageSet", goToPageSet);
 					jsClassData.addPublicFunction("finishBuild", finishBuild);
 					jsClassData.addPublicFunction("exitBuild", exitBuild);
-					jsClassData.addFunction("leaveTrainingVariables", leaveTrainingVariables);
+					jsClassData.addFunction("leavePageVariables", leavePageVariables);
 					return jsClassData.print(className);
 				},
 
 				buildListeners = function () {
 					let output = "";
-					output += listenerGoToTraining();
+					output += listenerGoToPageSet();
 					output += listenerFinishButton();
 					output += listenerExitButton();
 					return output;
 				},
 
-				goToTraining = function() {
+				goToPageSet = function() {
                 	let attributeHandler  = new WorkerAttributeHandler();
 					attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Training");
 					attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Training");
@@ -1330,7 +1445,7 @@ var TrainingBackend = TrainingBackend || (function () {
 				finishBuild = function() {
 				    let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
                 	let attributeHandler  = new WorkerAttributeHandler();
-					leaveTrainingVariables(attributeHandler);
+					leavePageVariables(attributeHandler);
                 
                 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 					attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -1341,7 +1456,7 @@ var TrainingBackend = TrainingBackend || (function () {
 				exitBuild = function() {
 				    let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
                 	let attributeHandler  = new WorkerAttributeHandler();
-					leaveTrainingVariables(attributeHandler);
+					leavePageVariables(attributeHandler);
                 
                 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 					attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -1349,15 +1464,15 @@ var TrainingBackend = TrainingBackend || (function () {
 					});
 					attributeHandler.run();
 				},
-				leaveTrainingVariables = function(attributeHandler) {
+				leavePageVariables = function(attributeHandler) {
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
 				},
 
-				listenerGoToTraining = function() {
+				listenerGoToPageSet = function() {
 					let groupVariableNames = [WuxDef.GetVariable("Title_Training")];
-				    let output = `${className}.GoToTraining();\n`;
+				    let output = `${className}.GoToPageSet();\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				},
@@ -1425,6 +1540,8 @@ var AdvancementBackend = AdvancementBackend || (function () {
 	var
 		print = function (sheetsDb) {
 			let output = "";
+			output += buildAdvancement.BuildClass();
+			output += buildAdvancement.BuildListeners();
 			output += buildJobs.BuildClass();
 			output += buildJobs.BuildListeners();
 			output += buildSkills.BuildClass();
@@ -1433,6 +1550,147 @@ var AdvancementBackend = AdvancementBackend || (function () {
 			output += buildAttributes.BuildListeners();
 			return output;
 		},
+
+		buildAdvancement = buildAdvancement || (function () {
+			'use strict';
+
+			var
+				className = "WuxWorkerAdvancement",
+
+				buildClass = function () {
+					let jsClassData = new JavascriptDataClass();
+					jsClassData.addPublicFunction("goToPageSet", goToPageSet);
+					jsClassData.addPublicFunction("finishBuild", finishBuild);
+					jsClassData.addPublicFunction("exitBuild", exitBuild);
+					jsClassData.addFunction("leavePageVariables", leavePageVariables);
+					jsClassData.addPublicFunction("setAffinityStats", setAffinityStats);
+					return jsClassData.print(className);
+				},
+
+				buildListeners = function () {
+					let output = "";
+					output += listenerGoToPageSet();
+					output += listenerFinishButton();
+					output += listenerExitButton();
+					return output;
+				},
+
+				goToPageSet = function() {
+                	let attributeHandler  = new WorkerAttributeHandler();
+					attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Advancement");
+					attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Advancement");
+					attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement"), "Advancement");
+					attributeHandler.run();
+				},
+				finishBuild = function() {
+				    let manager = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
+                	let attributeHandler  = new WorkerAttributeHandler();
+					leavePageVariables(attributeHandler);
+                
+                	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						manager.setAttributeHandlerPoints(attrHandler);
+					});
+					attributeHandler.run();
+				},
+				exitBuild = function() {
+				    let manager = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
+                	let attributeHandler  = new WorkerAttributeHandler();
+					leavePageVariables(attributeHandler);
+                
+                	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						manager.setAttributeHandlerPoints(attrHandler);
+					});
+					attributeHandler.run();
+				},
+				leavePageVariables = function(attributeHandler) {
+                	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
+                	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
+                	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+				},
+
+				setAffinityStats = function(attributeHandler) {
+					let affinityVariable = WuxDef.GetVariable("Affinity");
+					let crVariable = WuxDef.GetVariable("CR");
+					attributeHandler.addMod([affinityVariable, crVariable]);
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+
+						let crValue = attrHandler.parseInt(crVariable);
+						let initiativeVar = WuxDef.GetVariable("Initiative", WuxDef._affinity);
+						let hvVar = WuxDef.GetVariable("Combat_HV", WuxDef._affinity);
+						let surgeVar = WuxDef.GetVariable("Combat_Surge", WuxDef._affinity);
+						let armorVar = WuxDef.GetVariable("Combat_Armor", WuxDef._affinity);
+						let resistanceVar = WuxDef.GetVariable("Combat_Resistance", WuxDef._affinity);
+						let resistance = new ResistanceData();
+
+						attrHandler.set(initiativeVar, 0);
+						attrHandler.set(hvVar, 0);
+						attrHandler.set(surgeVar, 0);
+						attrHandler.set(armorVar, 0);
+						attrHandler.set(resistanceVar, JSON.stringify(resistance));
+
+						switch(attrHandler.get(affinityVariable)) {
+							case "Wood":
+								attrHandler.set(initiativeVar, crValue);
+								attrHandler.set(hvVar, crValue * 2);
+								resistance.addResistanceValue("Cold", crValue * 2);
+								attrHandler.set(resistanceVar, JSON.stringify(resistance));
+								break;
+							case "Fire":
+								attrHandler.set(initiativeVar, crValue);
+								resistance.addResistanceValue("Fire", crValue * 2);
+								resistance.addResistanceValue("Burn", crValue);
+								attrHandler.set(resistanceVar, JSON.stringify(resistance));
+								break;
+							case "Earth":
+								resistance.addResistanceValue("Fire", crValue * 2);
+								resistance.addResistanceValue("Piercing", crValue);
+								resistance.addResistanceValue("Shock", crValue * 2);
+								attrHandler.set(resistanceVar, JSON.stringify(resistance));
+								break;
+							case "Metal":
+								attrHandler.set(armorVar, crValue);
+								resistance.addResistanceValue("Force", crValue);
+								resistance.addResistanceValue("Piercing", crValue);
+								attrHandler.set(resistanceVar, JSON.stringify(resistance));
+								break;
+							case "Water":
+								attrHandler.set(surgeVar, 1);
+								resistance.addResistanceValue("Cold", crValue * 2);
+								resistance.addResistanceValue("Force", crValue);
+								attrHandler.set(resistanceVar, JSON.stringify(resistance));
+								break;
+
+						}
+					});
+				},
+
+				listenerGoToPageSet = function() {
+					let groupVariableNames = [WuxDef.GetVariable("Title_Advancement")];
+				    let output = `${className}.GoToPageSet();\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				},
+				listenerFinishButton = function() {
+					let groupVariableNames = [WuxDef.GetVariable("PageSet_Advancement", WuxDef._finish)];
+				    let output = `${className}.FinishBuild();\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				},
+				listenerExitButton = function() {
+					let groupVariableNames = [WuxDef.GetVariable("PageSet_Advancement", WuxDef._exit)];
+				    let output = `${className}.ExitBuild();\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				}
+				;
+			return {
+				BuildClass: buildClass,
+				BuildListeners: buildListeners
+			}
+		}()),
 
 		buildJobs = buildJobs || (function () {
 			'use strict';

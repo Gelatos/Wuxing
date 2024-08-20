@@ -999,7 +999,7 @@ function TargetSetBriefRested(sendTargets, targets) {
         if (briefrestResources != "") {
             briefrestResources = briefrestResources.split(",");
             _.each(briefrestResources, function (id) {
-                briefrestResource = GetCharacterAttribute(target.charId, GetSectionIdName(repeatingSection, id, "resourcecount"));
+                briefrestResource = GetCharacterAttribute(target.charId, RowId.BuildId(repeatingSection, id, "resourcecount"));
                 if (briefrestResource != undefined) {
                     briefrestResource.set("current", briefrestResource.get("max"));
                 }
@@ -1064,7 +1064,7 @@ function TargetSetShortRested(sendTargets, targets) {
         if (shortrestResources != "") {
             shortrestResources = shortrestResources.split(",");
             _.each(shortrestResources, function (id) {
-                shortrestResource = GetCharacterAttribute(target.charId, GetSectionIdName(repeatingSection, id, "resourcecount"));
+                shortrestResource = GetCharacterAttribute(target.charId, RowId.BuildId(repeatingSection, id, "resourcecount"));
                 if (shortrestResource != undefined) {
                     shortrestResource.set("current", shortrestResource.get("max"));
                 }
@@ -1161,7 +1161,7 @@ function TargetSetLongRested(sendTargets, targets, modifiers) {
         if (longrestResources != "") {
             longrestResources = longrestResources.split(",");
             _.each(longrestResources, function (id) {
-                longrestResource = GetCharacterAttribute(target.charId, GetSectionIdName(repeatingSection, id, "resourcecount"));
+                longrestResource = GetCharacterAttribute(target.charId, RowId.BuildId(repeatingSection, id, "resourcecount"));
                 if (longrestResource != undefined) {
                     longrestResource.set("current", longrestResource.get("max"));
                 }

@@ -806,3 +806,25 @@ div.wuxDescription .wuxTitle
 	background: #cacbcf;
 }
 
+textarea.wuxInput
+{
+    width: 92%;
+    margin: 0px -4px 0px 0px;
+    padding: 3px 4px 3px 5px;
+    vertical-align: bottom;
+}
+
+.wuxInputLabel
+{
+    display: inline-block;
+    height: auto;
+    margin: 0px 5px;
+    padding: 3px 4px 3px 5px;
+    vertical-align: bottom;
+
+    color: #1d1e1f;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+	background: #9e9fa1;
+}
+

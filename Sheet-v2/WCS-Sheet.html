@@ -67,56 +67,283 @@
 				<div class="wuxTab">
 					<div class="wuxSectionBlock wuxLayoutItem">
 						<div class="wuxTabContent">
-							<div class="wuxTooltip">
-								<div class="wuxTooltipText">
-									<div class="wuxHeader2">Full Name</div>
-								</div>
-								<div class="wuxTooltipContent">
-									<div class="wuxHeader2">Full Name</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxHeader">
+										<div class="wuxInfoButton"><input type="checkbox" name="attr_TTLorigin_info"><span>i</span></div>Origin
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_TTLorigin_info" value="0">
+									<div class="wuxHiddenField">
+										<div class="wuxInfoContent">
+											<div class="wuxHeader2">Origin</div>
 
-									<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
+											<span class="wuxDescription">These are the origin details of your character. They make no mechanical differences to your character, however may impact how you roleplay your character.</span>
+										</div>
+									</div>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Full Name</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Full Name</div>
+
+											<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
+										</div>
+									</div>
+									<input type="text" class="wuxInput" name="attr_full_name" />
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Display Name</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Display Name</div>
+
+											<span class="wuxDescription">This is the name that is displayed when your character speaks.</span>
+										</div>
+									</div>
+									<input type="text" class="wuxInput" name="attr_display_name" />
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Age</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Age</div>
+
+											<span class="wuxDescription">This represents how old the character is in years.</span>
+										</div>
+									</div>
+									<input type="text" class="wuxInput" name="attr_age" />
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Gender</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Gender</div>
+
+											<span class="wuxDescription">The gender the character identifies as.</span>
+										</div>
+									</div>
+									<input type="text" class="wuxInput" name="attr_gender" />
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Background</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Background</div>
+
+											<span class="wuxDescription">This is the background story of your character. Add any details on the character's past here.</span>
+										</div>
+									</div>
+									<textarea class="wuxInput wuxHeight150" name="attr_background"></textarea>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxHeader">
+										<div class="wuxInfoButton"><input type="checkbox" name="attr_TTLoriginStats_info"><span>i</span></div>Origin Statistics
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_TTLoriginStats_info" value="0">
+									<div class="wuxHiddenField">
+										<div class="wuxInfoContent">
+											<div class="wuxHeader2">Origin Statistics</div>
+
+											<span class="wuxDescription">These are your characters core statistics that are set at character creation and cannot change. Each stat can affect how your character plays. </span>
+										</div>
+									</div>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Affinity</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Affinity</div>
+
+											<span class="wuxDescription">Characters that are able to cast spells will have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity.</span>
+											<span class="wuxDescription">Your chosen affinity grants weaknesses and resistances to certain elemental damage types.</span>
+										</div>
+									</div>
+									<select class="wuxInput" name="attr_affinity" value="0">
+										<option value="0">-</option>
+										<option value="Wood">Wood</option>
+										<option value="Fire">Fire</option>
+										<option value="Earth">Earth</option>
+										<option value="Metal">Metal</option>
+										<option value="Water">Water</option>
+									</select><span class="wuxDescription" name="attr_affinity_learn"></span>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Innate Defense</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Innate Defense</div>
+
+											<span class="wuxDescription">You are especially proficient in a physical attribute when it comes to defending yourself. Check the Attributes page for more details on each of these attributes and what defenses they apply to.</span>
+											<span class="wuxDescription">All defenses that key off of your chosen attribute gains a permanent +2 bonus. </span>
+										</div>
+									</div>
+									<select class="wuxInput" name="attr_innateDefense" value="0">
+										<option value="0">-</option>
+										<option value="BOD">Body</option>
+										<option value="PRC">Precision</option>
+										<option value="QCK">Quickness</option>
+									</select><span class="wuxDescription" name="attr_innateDefense_learn"></span>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Innate Sense</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Innate Sense</div>
+
+											<span class="wuxDescription">You are especially proficient in a mental attribute when it comes to detecting attacks against you. Check the Attributes page for more details on each of these attributes and what defenses they apply to. </span>
+											<span class="wuxDescription">All senses that key off of your chosen attribute gains a permanent +2 bonus.</span>
+										</div>
+									</div>
+									<select class="wuxInput" name="attr_innateSense" value="0">
+										<option value="0">-</option>
+										<option value="CNV">Conviction</option>
+										<option value="INT">Intuition </option>
+										<option value="RSN">Reason</option>
+									</select><span class="wuxDescription" name="attr_innateSense_learn"></span>
 								</div>
 							</div>
-							<input type="text" class="wuxInput" name="attr_full_name" />
-							<div class="wuxTooltip">
-								<div class="wuxTooltipText">
-									<div class="wuxHeader2">Display Name</div>
-								</div>
-								<div class="wuxTooltipContent">
-									<div class="wuxHeader2">Display Name</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxHeader">
+										<div class="wuxInfoButton"><input type="checkbox" name="attr_TTLoriginAdvancement_info"><span>i</span></div>Advancement
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_TTLoriginAdvancement_info" value="0">
+									<div class="wuxHiddenField">
+										<div class="wuxInfoContent">
+											<div class="wuxHeader2">Advancement</div>
 
-									<span class="wuxDescription">This is the name that is displayed when your character speaks.</span>
+											<span class="wuxDescription">As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. </span>
+											<span class="wuxDescription">Here you can set your character's level. You may also spend any advancement points gained from increasing your character level on additional build points for jobs, skills, or techniques.</span>
+										</div>
+									</div>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Character Level</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Character Level</div>
+
+											<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
+										</div>
+									</div>
+									<input type="number" class="wuxInput" name="attr_ADVlevel" />
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Character Rank</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Character Rank</div>
+
+											<span class="wuxDescription">Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level.</span>
+										</div>
+									</div>
+									<span class="wuxDescription"><span name="attr_ADVcr"></span></span>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Advancement Points</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Advancement Points</div>
+
+											<span class="wuxDescription">Advancement Points are gained whenever you level. </span>
+											<span class="wuxDescription">Every level you gain grants you one advancement point.</span>
+										</div>
+									</div>
+									<span class="wuxDescription"><span name="attr_ADVap"></span> / <span name="attr_ADVap_max"></span></span>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Job Points</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Job Points</div>
+
+											<span class="wuxDescription">You can spend advancement points to gain Job Points. These job points can be used to increase tier in a job. You must spend 2 advancement points to gain 1 job point.</span>
+										</div>
+									</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_ADVapJob" />
+										<div class="wuxInputLabel">cost: 2 advancement points</div>
+									</div>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Skill Points</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Skill Points</div>
+
+											<span class="wuxDescription">You can spend advancement points to gain Skill Points. These skill points can be used to learn a new skill. You must spend 2 advancement points to gain 1 skill point.</span>
+										</div>
+									</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_ADVapSkill" />
+										<div class="wuxInputLabel">cost: 2 advancement points</div>
+									</div>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Technique Points</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Technique Points</div>
+
+											<span class="wuxDescription">You can spend advancement points to gain Technique Points. These technique points can be used to learn a new standard style or technique. You must spend 1 advancement points to gain 1 technique point.</span>
+										</div>
+									</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_ADVapTechnique" />
+										<div class="wuxInputLabel">cost: 1 advancement point</div>
+									</div>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxHeader">
+										<div class="wuxInfoButton"><input type="checkbox" name="attr_TTLoriginTraining_info"><span>i</span></div>Training
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_TTLoriginTraining_info" value="0">
+									<div class="wuxHiddenField">
+										<div class="wuxInfoContent">
+											<div class="wuxHeader2">Training</div>
+
+											<span class="wuxDescription">The pursuit of skill and knowledge is an ever flowing river. Training is a system to track your progress in learning knowledge and new techniques apart from Advancement.</span>
+											<span class="wuxDescription">Here you can set any training points your character may have gained prior to character creation. You may also immediately spend these points on further build points.</span>
+										</div>
+									</div>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Training Points</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Training Points</div>
+
+											<span class="wuxDescription">Training points are gained through training. You can spend training points on bonus build points for both knowledge and techniques. </span>
+											<span class="wuxDescription">Whenever you gain 12 PP, you gain one Training Point.</span>
+										</div>
+									</div>
+									<input type="number" class="wuxInput" name="attr_TRNtp_max" /><span class="wuxDescription"><span name="attr_TRNtp"></span> / <span name="attr_TRNtp_max"></span></span>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Knowledge Points</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Knowledge Points</div>
+
+											<span class="wuxDescription">You can spend training points to gain Knowledge Points. These knowledge points can be used to increase tier in a job. You must spend 1 training points to gain 1 knowledge point.</span>
+										</div>
+									</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_TRNtpKnowledge" />
+										<div class="wuxInputLabel">cost: 1 training point</div>
+									</div>
+									<div class="wuxTooltip">
+										<div class="wuxTooltipText">
+											<div class="wuxHeader2">Technique Points</div>
+										</div>
+										<div class="wuxTooltipContent">
+											<div class="wuxHeader2">Technique Points</div>
+
+											<span class="wuxDescription">You can spend training points to gain Technique Points. These technique points can be used to learn a new standard style or technique. You must spend 1 training points to gain 1 technique point.</span>
+										</div>
+									</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_TRNtpTechnique" />
+										<div class="wuxInputLabel">cost: 1 training point</div>
+									</div>
 								</div>
 							</div>
-							<input type="text" class="wuxInput" name="attr_display_name" />
-							<div class="wuxTooltip">
-								<div class="wuxTooltipText">
-									<div class="wuxHeader2">Character Level</div>
-								</div>
-								<div class="wuxTooltipContent">
-									<div class="wuxHeader2">Character Level</div>
-
-									<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
-								</div>
-							</div>
-							<input type="number" class="wuxInput" name="attr_level" />
-							<div class="wuxTooltip">
-								<div class="wuxTooltipText">
-									<div class="wuxHeader2">Affinity</div>
-								</div>
-								<div class="wuxTooltipContent">
-									<div class="wuxHeader2">Affinity</div>
-
-									<span class="wuxDescription">Characters that are able to cast spells will have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity.</span>
-								</div>
-							</div><select class="wuxInput" name="attr_AFN" value="0">
-								<option value="0">-</option>
-								<option value="wood">Wood</option>
-								<option value="fire">Fire</option>
-								<option value="earth">Earth</option>
-								<option value="metal">Metal</option>
-								<option value="water">Water</option>
-							</select>
 						</div>
 					</div>
 				</div>
@@ -207,11 +434,11 @@
 			<div class="wuxDistinctSection wuxSizeInverse">
 				<div class="wuxDistinctField">
 					<span class="wuxDistinctSubtitle">Pts</span>
-					<input type="hidden" class="wuxErrorField-flag" name="attr_trainingPoints_error" value="0">
+					<input type="hidden" class="wuxErrorField-flag" name="attr_TRNtp_error" value="0">
 					<span class='wuxDistinctSubdata'>
-						<span name='attr_trainingPoints' value="0">0</span>
+						<span name='attr_TRNtp' value="0">0</span>
 						<span class="wuxFontSize7">/ </span>
-						<span class="wuxFontSize7" name='attr_trainingPoints_max' value="0">0</span>
+						<span class="wuxFontSize7" name='attr_TRNtp_max' value="0">0</span>
 					</span>
 				</div>
 			</div>
@@ -241,7 +468,7 @@
 									<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
 								</div>
 							</div>
-							<span class="wuxDescription" name="attr_full_name"></span>
+							<span class="wuxDescription"><span name="attr_full_name"></span></span>
 						</div>
 					</div>
 				</div>
@@ -6408,7 +6635,7 @@
 										<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
 									</div>
 								</div>
-								<span class="wuxDescription" name="attr_full_name"></span>
+								<span class="wuxDescription"><span name="attr_full_name"></span></span>
 								<div class="wuxFlexTable">
 									<div class="wuxFlexTableItemGroup wuxMinWidth200">
 										<div class="wuxHeader">
@@ -6423,7 +6650,7 @@
 												<span class="wuxDescription">In this section you can see your current level and track their experience. When you are ready, you may also access the advancement menu which will allow you to spend gained build points from leveling up.</span>
 											</div>
 										</div>
-										<div>
+										<div class="wuxMultiRow">
 											<div class="wuxButton">
 												<input type="checkbox" name="attr_TTLadvancement">
 												<span>Go to Advancement</span>
@@ -6439,7 +6666,7 @@
 												<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
 											</div>
 										</div>
-										<span class="wuxDescription" name="attr_level"></span>
+										<span class="wuxDescription"><span name="attr_ADVlevel"></span></span>
 										<div class="wuxTooltip">
 											<div class="wuxTooltipText">
 												<div class="wuxHeader2">Experience</div>
@@ -6450,7 +6677,9 @@
 												<span class="wuxDescription">Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up.</span>
 											</div>
 										</div>
-										<input type="number" class="wuxInput" name="attr_xp" />
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_ADVxp" />
+											<div class="wuxInputLabel">max: <span name="attr_ADVxp_max"></span></div>
+										</div>
 									</div>
 									<div class="wuxFlexTableItemGroup wuxMinWidth200">
 										<div class="wuxHeader">
@@ -6465,7 +6694,7 @@
 												<span class="wuxDescription">In this section you can see how many training points you have gained along with your current PP values. When you are ready, you may also access the training menu which will calculate your current training points and allow you to spend them to learn new knowledge and techniques.</span>
 											</div>
 										</div>
-										<div>
+										<div class="wuxMultiRow">
 											<div class="wuxButton">
 												<input type="checkbox" name="attr_TTLtraining">
 												<span>Go to Training</span>
@@ -6478,10 +6707,11 @@
 											<div class="wuxTooltipContent">
 												<div class="wuxHeader2">Training Points</div>
 
-												<span class="wuxDescription">Whenever you gain enough </span>
+												<span class="wuxDescription">Training points are gained through training. You can spend training points on bonus build points for both knowledge and techniques. </span>
+												<span class="wuxDescription">Whenever you gain 12 PP, you gain one Training Point.</span>
 											</div>
 										</div>
-										<span class="wuxDescription" name="attr_trainingPoints"></span>
+										<span class="wuxDescription"><span name="attr_TRNtp_max"></span></span>
 										<div class="wuxTooltip">
 											<div class="wuxTooltipText">
 												<div class="wuxHeader2">Progression</div>
@@ -6493,7 +6723,9 @@
 												<span class="wuxDescription">Once a character reaches 12 TP, they may spend their PP to gain a new knowledge or technique.</span>
 											</div>
 										</div>
-										<input type="number" class="wuxInput" name="attr_pp" />
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_TRNpp" />
+											<div class="wuxInputLabel">max: <span name="attr_TRNpp_max"></span></div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -6934,7 +7166,7 @@
 	var 
 	finishBuild = function() {
 	console.log("Finish Character Creation Build");
-	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
+	let manager = new WuxWorkerBuildManager(["Advancement", "Training", "Skill", "Job", "Knowledge", "Attribute", "Technique"]);
 	let attributeHandler = new WorkerAttributeHandler();
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
@@ -6945,14 +7177,84 @@
 	manager.setAttributeHandlerPoints(attrHandler);
 	});
 	attributeHandler.run();
+	},
+	setAffinityValue = function() {
+	console.log("Setting Affinity");
+	let attributeHandler = new WorkerAttributeHandler();
+	let affinityVariable = WuxDef.GetVariable("Affinity");
+	
+	attributeHandler.addMod(affinityVariable);
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+	attributeHandler.addUpdate(WuxDef.GetVariable("Affinity", WuxDef._learn), WuxDef.GetDescription(attrHandler.parseString(affinityVariable)));
+	});
+	attributeHandler.run();
+	},
+	setInnateDefense = function() {
+	console.log("Setting Innate Defense");
+	let attributeHandler = new WorkerAttributeHandler();
+	let innateDefenseVariable = WuxDef.GetVariable("InnateDefense");
+	
+	attributeHandler.addMod(innateDefenseVariable);
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+	switch (attrHandler.parseString(innateDefenseVariable)) {
+	case "BOD": attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), getDefenseDescription("Defense", "BOD", "Brace", "Fortitude")); break;
+	case "PRC": attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), getDefenseDescription("Defense", "PRC", "Disruption", "Hide")); break;
+	case "QCK": attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), getDefenseDescription("Defense", "QCK", "Reflex", "Evasion")); break;
+	default: attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), "Choose an attribute"); break;
+	}
+	
+	});
+	attributeHandler.run();
+	},
+	setInnateSense = function() {
+	console.log("Setting Innate Sense");
+	let attributeHandler = new WorkerAttributeHandler();
+	let innateSenseVariable = WuxDef.GetVariable("InnateSense");
+	
+	attributeHandler.addMod(innateSenseVariable);
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+	switch (attrHandler.parseString(innateSenseVariable)) {
+	case "CNV": attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), getDefenseDescription("Sense", "CNV", "Resolve", "Freewill")); break;
+	case "INT": attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), getDefenseDescription("Sense", "INT", "Insight", "Notice")); break;
+	case "RSN": attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), getDefenseDescription("Sense", "RSN", "Scrutiny", "Detect")); break;
+	default: attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), "Choose an attribute"); break;
+	}
+	});
+	attributeHandler.run();
+	},
+	getDefenseDescription = function(type, attribute, defense1, defense2) {
+	console.log("Getting Defense Description");
+	let attrDefinition = WuxDef.Get(`Attribute_${attribute}`);
+	let def1Definition = WuxDef.Get(`${type}_${defense1}`);
+	let def2Definition = WuxDef.Get(`${type}_${defense2}`);
+	
+	let output = `${attrDefinition.title} is associated with the following ${type}s:\n\n`;
+	output += `${def1Definition.title}: ${def1Definition.getDescription()}\n\n${def2Definition.title}: ${def2Definition.getDescription()}`;
+	console.log(output);
+	return output;
 	}
 	;
 	return {
-	FinishBuild: finishBuild
+	FinishBuild: finishBuild,
+	SetAffinityValue: setAffinityValue,
+	SetInnateDefense: setInnateDefense,
+	SetInnateSense: setInnateSense
 	};
 	}());
 	on("change:PGScharacterCreator_finish", function (eventinfo) {
 	WuxWorkerCharacterCreation.FinishBuild();
+	
+	});
+	on("change:affinity", function (eventinfo) {
+	WuxWorkerCharacterCreation.SetAffinityValue();
+	
+	});
+	on("change:innateDefense", function (eventinfo) {
+	WuxWorkerCharacterCreation.SetInnateDefense();
+	
+	});
+	on("change:innateSense", function (eventinfo) {
+	WuxWorkerCharacterCreation.SetInnateSense();
 	
 	});
 	var WuxWorkerTechniques = WuxWorkerTechniques || (function() {
@@ -6975,7 +7277,7 @@
 	'use strict';
 	
 	var 
-	goToTraining = function() {
+	goToPageSet = function() {
 	let attributeHandler = new WorkerAttributeHandler();
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Training");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Training");
@@ -6985,7 +7287,7 @@
 	finishBuild = function() {
 	let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
 	let attributeHandler = new WorkerAttributeHandler();
-	leaveTrainingVariables(attributeHandler);
+	leavePageVariables(attributeHandler);
 	
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -6996,7 +7298,7 @@
 	exitBuild = function() {
 	let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
 	let attributeHandler = new WorkerAttributeHandler();
-	leaveTrainingVariables(attributeHandler);
+	leavePageVariables(attributeHandler);
 	
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -7004,20 +7306,20 @@
 	});
 	attributeHandler.run();
 	},
-	leaveTrainingVariables = function(attributeHandler) {
+	leavePageVariables = function(attributeHandler) {
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
 	}
 	;
 	return {
-	GoToTraining: goToTraining,
+	GoToPageSet: goToPageSet,
 	FinishBuild: finishBuild,
 	ExitBuild: exitBuild
 	};
 	}());
 	on("change:TTLtraining", function (eventinfo) {
-	WuxWorkerTraining.GoToTraining();
+	WuxWorkerTraining.GoToPageSet();
 	
 	});
 	on("change:PGStraining_finish", function (eventinfo) {
@@ -7044,6 +7346,120 @@
 	on("change:LNGminere_rank change:LNGjunal_rank change:LNGapollen_rank change:LNGlib_rank change:LNGcert_rank change:LNGbyric_rank change:LNGdustell_rank change:LNGmuralic_rank change:LNGshira_rank change:LNGciel_rank change:LNGciteq_rank change:LNGmanstan_rank change:LNGsalkan_rank change:LNGsansic_rank change:LNGsilq_rank change:LNGkleikan_rank change:LNGcrinere_rank change:LNGpalmic_rank change:LNGshorespeak_rank change:LNGverdeni_rank change:LNGvulca_rank change:LNGemotion_rank change:LNGempathy_rank change:LNGwolfwarg_rank change:LNGjovean_rank change:LNGmytikan_rank change:LORacademics_rank change:LORhealth_rank change:LORmana_rank change:LORmathematics_rank change:LORnature_rank change:LORschool_rank change:LORspirit_rank change:LORwarfare_rank change:LORzoology_rank change:LORprofession_rank change:LORfarming_rank change:LORfishing_rank change:LORhunting_rank change:LORlegal_rank change:LORmercantile_rank change:LORmining_rank change:LORcraftmanship_rank change:LORalchemy_rank change:LORarchitecture_rank change:LORbrewing_rank change:LORcooking_rank change:LORengineering_rank change:LORglassblowing_rank change:LORleatherworking_rank change:LORsculpting_rank change:LORsmithing_rank change:LORweaving_rank change:LORgeography_rank change:LORaridsha_rank change:LORceres_rank change:LORcolswei_rank change:LORkhem_rank change:LORnovus_rank change:LORwalthair_rank change:LORwayling_rank change:LORetherealPlane_rank change:LORhistory_rank change:LORaridshaHistory_rank change:LORceresHistory_rank change:LORcolsweiHistory_rank change:LORkhemHistory_rank change:LORnovusHistory_rank change:LORwalthairHistory_rank change:LORwaylingHistory_rank change:LORculture_rank change:LORart_rank change:LORetiquette_rank change:LORfashion_rank change:LORgames_rank change:LORmusic_rank change:LORscribing_rank change:LORtheater_rank change:LORreligion_rank change:LORchurchOfKongkwei_rank change:LORguidance_rank change:LORlife'sCircle_rank change:LORoceanCourt_rank change:LORsylvan_rank change:LORzushaon_rank", function (eventinfo) {
 	console.log("Update Knowledge");
 	WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)
+	});
+	var WuxWorkerAdvancement = WuxWorkerAdvancement || (function() {
+	'use strict';
+	
+	var 
+	goToPageSet = function() {
+	let attributeHandler = new WorkerAttributeHandler();
+	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Advancement");
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Advancement");
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement"), "Advancement");
+	attributeHandler.run();
+	},
+	finishBuild = function() {
+	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
+	let attributeHandler = new WorkerAttributeHandler();
+	leavePageVariables(attributeHandler);
+	
+	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+	manager.setAttributeHandlerPoints(attrHandler);
+	});
+	attributeHandler.run();
+	},
+	exitBuild = function() {
+	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
+	let attributeHandler = new WorkerAttributeHandler();
+	leavePageVariables(attributeHandler);
+	
+	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+	manager.setAttributeHandlerPoints(attrHandler);
+	});
+	attributeHandler.run();
+	},
+	leavePageVariables = function(attributeHandler) {
+	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+	},
+	setAffinityStats = function(attributeHandler) {
+	let affinityVariable = WuxDef.GetVariable("Affinity");
+	let crVariable = WuxDef.GetVariable("CR");
+	attributeHandler.addMod([affinityVariable, crVariable]);
+	
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+	
+	let crValue = attrHandler.parseInt(crVariable);
+	let initiativeVar = WuxDef.GetVariable("Initiative", WuxDef._affinity);
+	let hvVar = WuxDef.GetVariable("Combat_HV", WuxDef._affinity);
+	let surgeVar = WuxDef.GetVariable("Combat_Surge", WuxDef._affinity);
+	let armorVar = WuxDef.GetVariable("Combat_Armor", WuxDef._affinity);
+	let resistanceVar = WuxDef.GetVariable("Combat_Resistance", WuxDef._affinity);
+	let resistance = new ResistanceData();
+	
+	attrHandler.set(initiativeVar, 0);
+	attrHandler.set(hvVar, 0);
+	attrHandler.set(surgeVar, 0);
+	attrHandler.set(armorVar, 0);
+	attrHandler.set(resistanceVar, JSON.stringify(resistance));
+	
+	switch(attrHandler.get(affinityVariable)) {
+	case "Wood":
+	attrHandler.set(initiativeVar, crValue);
+	attrHandler.set(hvVar, crValue * 2);
+	resistance.addResistanceValue("Cold", crValue * 2);
+	attrHandler.set(resistanceVar, JSON.stringify(resistance));
+	break;
+	case "Fire":
+	attrHandler.set(initiativeVar, crValue);
+	resistance.addResistanceValue("Fire", crValue * 2);
+	resistance.addResistanceValue("Burn", crValue);
+	attrHandler.set(resistanceVar, JSON.stringify(resistance));
+	break;
+	case "Earth":
+	resistance.addResistanceValue("Fire", crValue * 2);
+	resistance.addResistanceValue("Piercing", crValue);
+	resistance.addResistanceValue("Shock", crValue * 2);
+	attrHandler.set(resistanceVar, JSON.stringify(resistance));
+	break;
+	case "Metal":
+	attrHandler.set(armorVar, crValue);
+	resistance.addResistanceValue("Force", crValue);
+	resistance.addResistanceValue("Piercing", crValue);
+	attrHandler.set(resistanceVar, JSON.stringify(resistance));
+	break;
+	case "Water":
+	attrHandler.set(surgeVar, 1);
+	resistance.addResistanceValue("Cold", crValue * 2);
+	resistance.addResistanceValue("Force", crValue);
+	attrHandler.set(resistanceVar, JSON.stringify(resistance));
+	break;
+	
+	}
+	});
+	}
+	;
+	return {
+	GoToPageSet: goToPageSet,
+	FinishBuild: finishBuild,
+	ExitBuild: exitBuild,
+	SetAffinityStats: setAffinityStats
+	};
+	}());
+	on("change:TTLadvancement", function (eventinfo) {
+	WuxWorkerAdvancement.GoToPageSet();
+	
+	});
+	on("change:PGSadvancement_finish", function (eventinfo) {
+	WuxWorkerAdvancement.FinishBuild();
+	
+	});
+	on("change:PGSadvancement_exit", function (eventinfo) {
+	WuxWorkerAdvancement.ExitBuild();
+	
 	});
 	var WuxWorkerJobs = WuxWorkerJobs || (function() {
 	'use strict';
