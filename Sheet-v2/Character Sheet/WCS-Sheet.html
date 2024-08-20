@@ -7185,7 +7185,7 @@
 	
 	attributeHandler.addMod(affinityVariable);
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
-	attributeHandler.addUpdate(WuxDef.GetVariable("Affinity", WuxDef._learn), WuxDef.GetDescription(attrHandler.parseString(affinityVariable)));
+	attrHandler.addUpdate(WuxDef.GetVariable("Affinity", WuxDef._learn), WuxDef.GetDescription(attrHandler.parseString(affinityVariable)));
 	});
 	attributeHandler.run();
 	},
@@ -7196,11 +7196,18 @@
 	
 	attributeHandler.addMod(innateDefenseVariable);
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
+	attrHandler.addUpdate(WuxDef.GetVariable("Defense_Brace", WuxDef._expertise), 0);
+	attrHandler.addUpdate(WuxDef.GetVariable("Defense_Fortitude", WuxDef._expertise), 0);
+	attrHandler.addUpdate(WuxDef.GetVariable("Defense_Disruption", WuxDef._expertise), 0);
+	attrHandler.addUpdate(WuxDef.GetVariable("Defense_Hide", WuxDef._expertise), 0);
+	attrHandler.addUpdate(WuxDef.GetVariable("Defense_Reflex", WuxDef._expertise), 0);
+	attrHandler.addUpdate(WuxDef.GetVariable("Defense_Evasion", WuxDef._expertise), 0);
+	
 	switch (attrHandler.parseString(innateDefenseVariable)) {
-	case "BOD": attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), getDefenseDescription("Defense", "BOD", "Brace", "Fortitude")); break;
-	case "PRC": attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), getDefenseDescription("Defense", "PRC", "Disruption", "Hide")); break;
-	case "QCK": attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), getDefenseDescription("Defense", "QCK", "Reflex", "Evasion")); break;
-	default: attributeHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), "Choose an attribute"); break;
+	case "BOD": setDefenseVariables(attrHandler, "Defense", "BOD", "Brace", "Fortitude"); break;
+	case "PRC": setDefenseVariables(attrHandler, "Defense", "PRC", "Disruption", "Hide"); break;
+	case "QCK": setDefenseVariables(attrHandler, "Defense", "QCK", "Reflex", "Evasion"); break;
+	default: attrHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), "Choose an attribute"); break;
 	}
 	
 	});
@@ -7213,20 +7220,33 @@
 	
 	attributeHandler.addMod(innateSenseVariable);
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
+	attrHandler.addUpdate(WuxDef.GetVariable("Sense_Resolve", WuxDef._expertise), 0);
+	attrHandler.addUpdate(WuxDef.GetVariable("Sense_Freewill", WuxDef._expertise), 0);
+	attrHandler.addUpdate(WuxDef.GetVariable("Sense_Insight", WuxDef._expertise), 0);
+	attrHandler.addUpdate(WuxDef.GetVariable("Sense_Notice", WuxDef._expertise), 0);
+	attrHandler.addUpdate(WuxDef.GetVariable("Sense_Scrutiny", WuxDef._expertise), 0);
+	attrHandler.addUpdate(WuxDef.GetVariable("Sense_Detect", WuxDef._expertise), 0);
+	
 	switch (attrHandler.parseString(innateSenseVariable)) {
-	case "CNV": attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), getDefenseDescription("Sense", "CNV", "Resolve", "Freewill")); break;
-	case "INT": attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), getDefenseDescription("Sense", "INT", "Insight", "Notice")); break;
-	case "RSN": attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), getDefenseDescription("Sense", "RSN", "Scrutiny", "Detect")); break;
-	default: attributeHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), "Choose an attribute"); break;
+	case "CNV": setDefenseVariables(attrHandler, "Sense", "CNV", "Resolve", "Freewill"); break;
+	case "INT": setDefenseVariables(attrHandler, "Sense", "INT", "Insight", "Notice"); break;
+	case "RSN": setDefenseVariables(attrHandler, "Sense", "RSN", "Scrutiny", "Detect"); break;
+	default: attrHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), "Choose an attribute"); break;
 	}
 	});
 	attributeHandler.run();
 	},
-	getDefenseDescription = function(type, attribute, defense1, defense2) {
-	console.log("Getting Defense Description");
+	setDefenseVariables = function(attrHandler, type, attribute, defense1, defense2) {
 	let attrDefinition = WuxDef.Get(`Attribute_${attribute}`);
 	let def1Definition = WuxDef.Get(`${type}_${defense1}`);
 	let def2Definition = WuxDef.Get(`${type}_${defense2}`);
+	
+	attrHandler.addUpdate(WuxDef.GetVariable(`Innate${type}`, WuxDef._learn), getDefenseDescription(type, attrDefinition, def1Definition, def2Definition));
+	attrHandler.addUpdate(def1Definition.getVariable(WuxDef._expertise), 2);
+	attrHandler.addUpdate(def2Definition.getVariable(WuxDef._expertise), 2);
+	},
+	getDefenseDescription = function(type, attrDefinition, def1Definition, def2Definition) {
+	console.log("Getting Defense Description");
 	
 	let output = `${attrDefinition.title} is associated with the following ${type}s:\n\n`;
 	output += `${def1Definition.title}: ${def1Definition.getDescription()}\n\n${def2Definition.title}: ${def2Definition.getDescription()}`;
