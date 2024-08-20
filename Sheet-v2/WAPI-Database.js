@@ -849,6 +849,7 @@ class DefinitionData extends WuxDatabaseData {
         definition.modifiers = this.modifiers;
         definition.linkedGroups = this.linkedGroups;
         definition.isResource = this.isResource;
+        definition.setFormulaData();
 
         delete this.description;
         

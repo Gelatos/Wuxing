@@ -1584,6 +1584,10 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					jsClassData.addPublicFunction("finishBuild", finishBuild);
 					jsClassData.addPublicFunction("exitBuild", exitBuild);
 					jsClassData.addFunction("leavePageVariables", leavePageVariables);
+					jsClassData.addPublicFunction("setLevel", setLevel);
+					jsClassData.addFunction("calculateCharacterRank", calculateCharacterRank);
+					jsClassData.addPublicFunction("setAdvancementPointsUpdate", setAdvancementPointsUpdate);
+					jsClassData.addFunction("setAdvancementPointsValue", setAdvancementPointsValue);
 					jsClassData.addPublicFunction("setAffinityStats", setAffinityStats);
 					return jsClassData.print(className);
 				},
@@ -1593,6 +1597,8 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					output += listenerGoToPageSet();
 					output += listenerFinishButton();
 					output += listenerExitButton();
+					output += listenerSetLevel();
+					output += listenerSetAdvancementPoints();
 					return output;
 				},
 
@@ -1631,6 +1637,62 @@ var AdvancementBackend = AdvancementBackend || (function () {
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
 				},
 
+				setLevel = function() {
+					console.log("Setting Level");
+                	let attributeHandler  = new WorkerAttributeHandler();
+					let levelVariable = WuxDef.GetVariable("Level");
+					attributeHandler.addMod(levelVariable);
+
+					let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute"]);
+					manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						let level = attrHandler.parseInt(levelVariable);
+						let crVal = calculateCharacterRank(level);
+						attrHandler.addUpdate(WuxDef.GetVariable("CR"), crVal);
+
+						manager.setAttributeHandlerPoints(attrHandler);
+					});
+					setAdvancementPointsValue(attributeHandler);
+					
+					attributeHandler.run();
+				},
+				calculateCharacterRank = function(level) {
+					if (level < 5) {
+						return 1;
+					}
+					else if (level < 15) {
+						return 2;
+					}
+					else if (level < 30) {
+						return 3;
+					}
+					else if (level < 50) {
+						return 4;
+					}
+					else {
+						return 5;
+					}
+				},
+				setAdvancementPointsUpdate = function() {
+					console.log("Setting Advancement Points");
+                	let attributeHandler  = new WorkerAttributeHandler();
+					setAdvancementPointsValue(attributeHandler);
+					attributeHandler.run();
+				},
+				setAdvancementPointsValue = function(attributeHandler) {
+					let advPointsDef = WuxDef.Get("AdvancementPoints");
+					attributeHandler.addMod(advPointsDef.modAttrs);
+					attributeHandler.addMod([WuxDef.GetVariable("AdvancementJob"), WuxDef.GetVariable("AdvancementSkill"), WuxDef.GetVariable("AdvancementTechnique")]);
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						let advJobs = attrHandler.parseInt(WuxDef.GetVariable("AdvancementJob"));
+						let advSkills = attrHandler.parseInt(WuxDef.GetVariable("AdvancementSkill"));
+						let advTechs = attrHandler.parseInt(WuxDef.GetVariable("AdvancementTechnique"));
+						let advPoints = advPointsDef.getFormulaValue(attrHandler);
+						attrHandler.addUpdate(advPointsDef.getVariable(), advPoints - (2 * (advJobs + advSkills)) - advTechs);
+						attrHandler.addUpdate(advPointsDef.getVariable(WuxDef._max), advPoints);
+					});
+				},
 				setAffinityStats = function(attributeHandler) {
 					let affinityVariable = WuxDef.GetVariable("Affinity");
 					let crVariable = WuxDef.GetVariable("CR");
@@ -1646,42 +1708,42 @@ var AdvancementBackend = AdvancementBackend || (function () {
 						let resistanceVar = WuxDef.GetVariable("Combat_Resistance", WuxDef._affinity);
 						let resistance = new ResistanceData();
 
-						attrHandler.set(initiativeVar, 0);
-						attrHandler.set(hvVar, 0);
-						attrHandler.set(surgeVar, 0);
-						attrHandler.set(armorVar, 0);
-						attrHandler.set(resistanceVar, JSON.stringify(resistance));
+						attrHandler.addUpdate(initiativeVar, 0);
+						attrHandler.addUpdate(hvVar, 0);
+						attrHandler.addUpdate(surgeVar, 0);
+						attrHandler.addUpdate(armorVar, 0);
+						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
 
 						switch(attrHandler.get(affinityVariable)) {
 							case "Wood":
-								attrHandler.set(initiativeVar, crValue);
-								attrHandler.set(hvVar, crValue * 2);
+								attrHandler.addUpdate(initiativeVar, crValue);
+								attrHandler.addUpdate(hvVar, crValue * 2);
 								resistance.addResistanceValue("Cold", crValue * 2);
-								attrHandler.set(resistanceVar, JSON.stringify(resistance));
+								attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
 								break;
 							case "Fire":
-								attrHandler.set(initiativeVar, crValue);
+								attrHandler.addUpdate(initiativeVar, crValue);
 								resistance.addResistanceValue("Fire", crValue * 2);
 								resistance.addResistanceValue("Burn", crValue);
-								attrHandler.set(resistanceVar, JSON.stringify(resistance));
+								attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
 								break;
 							case "Earth":
 								resistance.addResistanceValue("Fire", crValue * 2);
 								resistance.addResistanceValue("Piercing", crValue);
 								resistance.addResistanceValue("Shock", crValue * 2);
-								attrHandler.set(resistanceVar, JSON.stringify(resistance));
+								attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
 								break;
 							case "Metal":
-								attrHandler.set(armorVar, crValue);
+								attrHandler.addUpdate(armorVar, crValue);
 								resistance.addResistanceValue("Force", crValue);
 								resistance.addResistanceValue("Piercing", crValue);
-								attrHandler.set(resistanceVar, JSON.stringify(resistance));
+								attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
 								break;
 							case "Water":
-								attrHandler.set(surgeVar, 1);
+								attrHandler.addUpdate(surgeVar, 1);
 								resistance.addResistanceValue("Cold", crValue * 2);
 								resistance.addResistanceValue("Force", crValue);
-								attrHandler.set(resistanceVar, JSON.stringify(resistance));
+								attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
 								break;
 
 						}
@@ -1703,6 +1765,18 @@ var AdvancementBackend = AdvancementBackend || (function () {
 				listenerExitButton = function() {
 					let groupVariableNames = [WuxDef.GetVariable("PageSet_Advancement", WuxDef._exit)];
 				    let output = `${className}.ExitBuild();\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				},
+				listenerSetLevel = function() {
+					let groupVariableNames = [WuxDef.GetVariable("Level")];
+				    let output = `${className}.SetLevel();\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				},
+				listenerSetAdvancementPoints = function() {
+					let groupVariableNames = [WuxDef.GetVariable("AdvancementJob"), WuxDef.GetVariable("AdvancementSkill"), WuxDef.GetVariable("AdvancementTechnique")];
+				    let output = `${className}.SetAdvancementPointsUpdate();\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
