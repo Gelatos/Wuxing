@@ -171,9 +171,6 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		let advSkills = WuxDef.GetVariable("AdvancementSkill");
 		let advTechs = WuxDef.GetVariable("AdvancementTechnique");
 
-		console.log(`Set Points: ${this.definition.name}`);
-		console.log(`Update attrubutes: ${JSON.stringify(attributeHandler.update)}`);
-
 		if (this.buildStats.has(advJobs)) {
 			buildPoints += this.buildStats.get(advJobs).value * 2;
 		}
@@ -192,37 +189,34 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 	updateLevel(attributeHandler, fieldName, level) {
 		let worker = this;
 		level = parseInt(level);
-		attributeHandler.addMod(fieldName);
+		attributeHandler.addUpdate(fieldName, level);
 		attributeHandler.addMod(worker.attrBuildDraft);
 
 		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
-			let crVal = 0;
-			if (level < 5) {
-				crVal = 1;
-			}
-			else if (level < 15) {
-				crVal = 2;
-			}
-			else if (level < 30) {
-				crVal = 3;
-			}
-			else if (level < 50) {
-				crVal = 4;
-			}
-			else {
-				crVal = 5;
-			}
-			attrHandler.addUpdate(WuxDef.GetVariable("CR"), crVal);
+			attrHandler.addUpdate(WuxDef.GetVariable("CR"), worker.getCharacterRank(level));
 
-			worker.setBuildStatsDraft(attributeHandler);
-			worker.updateBuildStats(attributeHandler, fieldName, level);
-			worker.setPointsMax(attributeHandler);
-			worker.updatePoints(attributeHandler);
+			worker.setBuildStatsDraft(attrHandler);
+			worker.updateBuildStats(attrHandler, fieldName, level);
+			worker.setPointsMax(attrHandler);
+			worker.updatePoints(attrHandler);
 			manager.setAttributeHandlerPoints(attrHandler);
 		});
+	}
+
+	getCharacterRank(level) {
+		let cr = 1;
+		let incrementer = 5;
+		let modIncrementer = 5;
+		let checkingLevel = 5;
+		while (level >= checkingLevel) {
+			cr++;
+			incrementer += modIncrementer;
+			checkingLevel += incrementer;
+		}
+		return cr;
 	}
 
 	onChangeWorkerAttribute(updatingAttr, newValue) {

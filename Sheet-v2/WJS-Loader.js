@@ -14,12 +14,6 @@ var upgrade_to_1_0_0 = function () {
 	attributeHandler.addUpdate(WuxDef.GetVariable("XP"), 0);
 	attributeHandler.addUpdate(WuxDef.GetVariable("PP"), 0);
 
-	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementJob"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementSkill"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementTechnique"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("TrainingKnowledge"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("TrainingTechniques"), 0);
-
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 	attributeHandler.addGetAttrCallback(function (attrHandler) {

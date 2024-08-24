@@ -784,7 +784,7 @@ var WuxDefinition = WuxDefinition || (function () {
 
         buildNumberLabelInput = function (definition, fieldName, labelContent) {
             return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
-            WuxSheetMain.MultiRow(WuxSheetMain.Input("number", fieldName) + WuxSheetMain.InputLabel(labelContent));
+            WuxSheetMain.MultiRow(WuxSheetMain.Input("number", fieldName, "", "0") + WuxSheetMain.InputLabel(labelContent));
         },
 
         buildSelect = function (definition, fieldName, definitionGroup, showEmpty) {
