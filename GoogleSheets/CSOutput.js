@@ -140,8 +140,8 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
         			        contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginAdvancement"));
 							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
 							contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR")));
-							contents += WuxDefinition.BuildText(WuxDef.Get("AdvancementPoints"), 
-								`${WuxSheetMain.Span(WuxDef.GetAttribute("AdvancementPoints"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("AdvancementPoints", WuxDef._max))}`);
+							contents += WuxDefinition.BuildText(WuxDef.Get("Advancement"), 
+								`${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement", WuxDef._max))}`);
 							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementJob"), WuxDef.GetAttribute("AdvancementJob"), `cost: 2 advancement points`);
 							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementSkill"), WuxDef.GetAttribute("AdvancementSkill"), `cost: 2 advancement points`);
 							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementTechnique"), WuxDef.GetAttribute("AdvancementTechnique"), `cost: 1 advancement point`);
@@ -151,8 +151,8 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 						buildTraining = function () {
 							let contents = "";
         			        contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginTraining"));
-							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("TrainingPoints"), WuxDef.GetAttribute("TrainingPoints", WuxDef._max));
-							contents += WuxSheetMain.Desc(`${WuxSheetMain.Span(WuxDef.GetAttribute("TrainingPoints"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("TrainingPoints", WuxDef._max))}`);
+							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Training"), WuxDef.GetAttribute("Training", WuxDef._max));
+							contents += WuxSheetMain.Desc(`${WuxSheetMain.Span(WuxDef.GetAttribute("Training"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Training", WuxDef._max))}`);
 							
 							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 training point`);
 							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingTechniques"), WuxDef.GetAttribute("TrainingTechniques"), `cost: 1 training point`);
@@ -206,7 +206,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 			var
 				printTraining = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("TrainingPoints")));
+					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Training")));
 				},
 				printKnowledge = function () {
 					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Knowledge")));
@@ -1001,7 +1001,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
 							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
 
-							let levelDefinition = WuxDef.Get("TrainingPoints");
+							let levelDefinition = WuxDef.Get("Training");
         			        contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute(WuxDef._max)));
 
 							let xpDefinition = WuxDef.Get("PP");
@@ -1585,9 +1585,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					jsClassData.addPublicFunction("exitBuild", exitBuild);
 					jsClassData.addFunction("leavePageVariables", leavePageVariables);
 					jsClassData.addPublicFunction("setLevel", setLevel);
-					jsClassData.addFunction("calculateCharacterRank", calculateCharacterRank);
 					jsClassData.addPublicFunction("setAdvancementPointsUpdate", setAdvancementPointsUpdate);
-					jsClassData.addFunction("setAdvancementPointsValue", setAdvancementPointsValue);
 					jsClassData.addPublicFunction("setAffinityStats", setAffinityStats);
 					return jsClassData.print(className);
 				},
@@ -1636,62 +1634,18 @@ var AdvancementBackend = AdvancementBackend || (function () {
                 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
 				},
-
-				setLevel = function() {
+				
+				setLevel = function(eventinfo) {
 					console.log("Setting Level");
                 	let attributeHandler  = new WorkerAttributeHandler();
-					let levelVariable = WuxDef.GetVariable("Level");
-					attributeHandler.addMod(levelVariable);
-
-					let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute"]);
-					manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-					attributeHandler.addGetAttrCallback(function (attrHandler) {
-						let level = attrHandler.parseInt(levelVariable);
-						let crVal = calculateCharacterRank(level);
-						attrHandler.addUpdate(WuxDef.GetVariable("CR"), crVal);
-
-						manager.setAttributeHandlerPoints(attrHandler);
-					});
-					setAdvancementPointsValue(attributeHandler);
-					
+					let worker = new WuxAdvancementWorkerBuild();
+					worker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 					attributeHandler.run();
 				},
-				calculateCharacterRank = function(level) {
-					if (level < 5) {
-						return 1;
-					}
-					else if (level < 15) {
-						return 2;
-					}
-					else if (level < 30) {
-						return 3;
-					}
-					else if (level < 50) {
-						return 4;
-					}
-					else {
-						return 5;
-					}
-				},
-				setAdvancementPointsUpdate = function() {
+				setAdvancementPointsUpdate = function(eventinfo) {
 					console.log("Setting Advancement Points");
-                	let attributeHandler  = new WorkerAttributeHandler();
-					setAdvancementPointsValue(attributeHandler);
-					attributeHandler.run();
-				},
-				setAdvancementPointsValue = function(attributeHandler) {
-					let advPointsDef = WuxDef.Get("AdvancementPoints");
-					attributeHandler.addMod(advPointsDef.modAttrs);
-					attributeHandler.addMod([WuxDef.GetVariable("AdvancementJob"), WuxDef.GetVariable("AdvancementSkill"), WuxDef.GetVariable("AdvancementTechnique")]);
-
-					attributeHandler.addGetAttrCallback(function (attrHandler) {
-						let advJobs = attrHandler.parseInt(WuxDef.GetVariable("AdvancementJob"));
-						let advSkills = attrHandler.parseInt(WuxDef.GetVariable("AdvancementSkill"));
-						let advTechs = attrHandler.parseInt(WuxDef.GetVariable("AdvancementTechnique"));
-						let advPoints = advPointsDef.getFormulaValue(attrHandler);
-						attrHandler.addUpdate(advPointsDef.getVariable(), advPoints - (2 * (advJobs + advSkills)) - advTechs);
-						attrHandler.addUpdate(advPointsDef.getVariable(WuxDef._max), advPoints);
-					});
+					let worker = new WuxAdvancementWorkerBuild();
+					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
 				},
 				setAffinityStats = function(attributeHandler) {
 					let affinityVariable = WuxDef.GetVariable("Affinity");
@@ -1770,13 +1724,13 @@ var AdvancementBackend = AdvancementBackend || (function () {
 				},
 				listenerSetLevel = function() {
 					let groupVariableNames = [WuxDef.GetVariable("Level")];
-				    let output = `${className}.SetLevel();\n`;
+				    let output = `${className}.SetLevel(eventinfo);\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				},
 				listenerSetAdvancementPoints = function() {
 					let groupVariableNames = [WuxDef.GetVariable("AdvancementJob"), WuxDef.GetVariable("AdvancementSkill"), WuxDef.GetVariable("AdvancementTechnique")];
-				    let output = `${className}.SetAdvancementPointsUpdate();\n`;
+				    let output = `${className}.SetAdvancementPointsUpdate(eventinfo);\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}

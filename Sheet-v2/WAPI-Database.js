@@ -243,14 +243,14 @@ class dbObj {
 class WuxDatabaseData extends dbObj {
     importJson(json) {
         this.name = json.name;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.description = json.description;
     }
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
     }
@@ -283,7 +283,7 @@ class TechniqueData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
         this.name = json.name;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.techSet = json.techSet;
         this.linkedTech = json.linkedTech;
         this.group = json.group;
@@ -311,7 +311,7 @@ class TechniqueData extends WuxDatabaseData {
         this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.techSet = "" + dataArray[i]; i++;
         this.linkedTech = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
@@ -502,7 +502,7 @@ class TechniqueStyle extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
         this.name = json.name;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.description = json.description;
         this.affinity = json.affinity;
@@ -512,7 +512,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
         this.affinity = "" + dataArray[i]; i++;
@@ -532,7 +532,7 @@ class SkillData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
         this.name = json.name;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.abilityScore = json.abilityScore;
         this.description = json.description;
@@ -541,7 +541,7 @@ class SkillData extends WuxDatabaseData {
         this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
         this.abilityScore = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
@@ -560,7 +560,7 @@ class LanguageData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
         this.name = json.name;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.location = json.location;
         this.description = json.description;
@@ -569,7 +569,7 @@ class LanguageData extends WuxDatabaseData {
         this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
         this.location = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
@@ -595,7 +595,7 @@ class LoreData extends WuxDatabaseData {
         this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
     }
@@ -622,7 +622,7 @@ class JobData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
         this.name = json.name;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.description = json.description;
         this.attributes = json.attributes;
@@ -634,7 +634,7 @@ class JobData extends WuxDatabaseData {
         this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
         this.attributes = new AttributeGroupData(dataArray.slice(i)); i += 7;
@@ -690,7 +690,7 @@ class RoleData extends WuxDatabaseData {
         this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
         this.techniques = this.createTechnique(dataArray.slice(i)); i++;
@@ -790,7 +790,7 @@ class DefinitionData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
         this.name = json.name;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.title = json.title;
         this.group = json.group;
         this.subGroup = json.subGroup;
@@ -808,7 +808,7 @@ class DefinitionData extends WuxDatabaseData {
         this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.fieldName = Format.ToCamelCase(this.name);
+        this.fieldName = Format.ToFieldName(this.name);
         this.title = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
         this.subGroup = "" + dataArray[i]; i++;
@@ -1018,7 +1018,7 @@ class TechniqueDisplayData {
         this.technique = technique;
         this.name = technique.name;
         this.username = technique.username;
-        this.fieldName = Format.ToCamelCase(technique.name);
+        this.fieldName = Format.ToFieldName(technique.name);
         this.actionType = technique.action;
         this.isFree = technique.isFree;
     }
@@ -1239,18 +1239,15 @@ class TechniqueEffectDisplayData {
 class WorkerBuildStat extends dbObj {
     importJson(json) {
         this.name = json.name;
-        this.fieldName = Format.ToCamelCase(this.name);
         this.value = json.value;
     }
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i]; i++;
-        this.fieldName = Format.ToCamelCase(this.name);
         this.value = "" + dataArray[i]; i++;
     }
     createEmpty() {
         this.name = "";
-        this.fieldName = Format.ToCamelCase(this.name);
         this.value = "0";
     }
 }
@@ -1613,6 +1610,10 @@ var Format = Format || (function () {
             return words.join('');
         },
 
+        toFieldName = function (inputString) {
+            return inputString.toLowerCase().replace(/ /g, "_");
+        },
+
         romanize = function (num) {
             if (isNaN(num))
                 return NaN;
@@ -1707,6 +1708,7 @@ var Format = Format || (function () {
     return {
         ToCamelCase: toCamelCase,
         ToUpperCamelCase: toUpperCamelCase,
+        ToFieldName: toFieldName,
         Romanize: romanize,
         StringToArray: stringToArray,
         ArrayToString: arrayToString,

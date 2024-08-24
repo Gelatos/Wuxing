@@ -6,12 +6,13 @@ var upgrade_to_1_0_0 = function () {
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Training", WuxDef._tab), "Training");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement", WuxDef._tab), "Advancement");
 
-	attributeHandler.addUpdate(WuxDef.GetVariable("Level"), 1);
+	let advancementWorker = new WuxAdvancementWorkerBuild();
+	advancementWorker.setBuildStatsDraft(attributeHandler);
+	advancementWorker.updateLevel(attributeHandler, WuxDef.GetVariable("Level"), 1);
+
 	attributeHandler.addUpdate(WuxDef.GetVariable("CR"), 1);
 	attributeHandler.addUpdate(WuxDef.GetVariable("XP"), 0);
 	attributeHandler.addUpdate(WuxDef.GetVariable("PP"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementPoints"), 1);
-	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementPoints", WuxDef._max), 1);
 
 	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementJob"), 0);
 	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementSkill"), 0);
