@@ -348,11 +348,11 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 						buildGroup = function (groupName, filteredData) {
 							return `<div class="wuxFlexTableItemGroup wuxMinWidth200">
-						<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName} Lore</div>
-						<div class="wuxFlexTableItemData wuxTextLeft">
-							${buildLoreGroupSkills(filteredData)}
-						</div>
-					</div>`;
+								<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName} Lore</div>
+								<div class="wuxFlexTableItemData wuxTextLeft">
+									${buildLoreGroupSkills(filteredData)}
+								</div>
+							</div>`;
 						},
 
 						buildLoreGroupSkills = function (knowledgeDataArray) {
@@ -370,7 +370,8 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 						buildLore = function (knowledge, interactHeader) {
 							let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Lore"));
-							return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(knowledgeDefinition.getAttribute(WuxDef._rank),
+							return WuxSheetMain.InteractionElement.BuildTooltipSelectInput(knowledgeDefinition.getAttribute(WuxDef._rank),
+							WuxDef.Filter([new DatabaseFilterData("group", "LoreTier")]), false, "wuxWidth70 wuxMarginRight10",
 							interactHeader, WuxDefinition.TooltipDescription(knowledgeDefinition));
 						},
 
@@ -491,52 +492,41 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						},
 
 						buildJob = function (job, techDictionary) {
-							let fieldName = Format.ToCamelCase(job.name);
 							let jobDefinition = WuxDef.Get("Job");
 
-							let contents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDefinition.getAttribute(job.fieldName, WuxDef._expand))}
-							${WuxSheetMain.InteractionElement.CheckboxBlockIcon(jobDefinition.getAttribute(job.fieldName), WuxSheetMain.Header(job.name))}
+							let contents = `${buildJobHeader(jobDefinition, job)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
 							${WuxSheetMain.InteractionElement.ExpandableBlockContents(jobDefinition.getAttribute(job.fieldName, WuxDef._expand),
-								WuxSheetMain.SectionBlockContents(buildJobContents(fieldName, job, techDictionary)))}`;
+								WuxSheetMain.SectionBlockContents(buildJobContents(job, jobDefinition, techDictionary)))}`;
 
-							return WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents));
+							return WuxSheetMain.SectionBlock(contents);
 						},
 
-						buildJobContents = function (fieldName, job, techDictionary) {
+						buildJobHeader = function (jobDefinition, job) {
+							return WuxSheetMain.Header2(`${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDefinition.getAttribute(job.fieldName, WuxDef._expand))}
+								${WuxSheetMain.Select(jobDefinition.getAttribute(job.fieldName), 
+								WuxDef.Filter([new DatabaseFilterData("group", "JobTier")]), false, "wuxWidth70 wuxMarginRight10")}
+								${job.name}`
+							);
+						},
+
+						buildJobContents = function (job, jobDefinition, techDictionary) {
 							let output = "";
 
 							output += WuxSheetMain.Header2("Description") + WuxSheetMain.Desc(job.description);
-							output += buildJobContentsLevels(fieldName);
-							output += buildJobContentsRole(job);
-							output += buildJobContentsGrowths(job);
+							output += buildJobContentsLevels(jobDefinition.getAttribute(job.fieldName));
 							output += buildJobContentsTechniques(job, techDictionary, WuxDef.Get("Technique"));
 
 							return output;
 						},
 
 						buildJobContentsLevels = function (fieldName) {
-							return `<div class="wuxDistinctSection">
-						<div class="wuxDistinctField">
-						<span class="wuxDistinctTitle">Level</span>
-							<input type="text" class='wuxDistinctData' name='attr_advancement-level-${fieldName}'>
-						</div>
-					</div>`;
-						},
-
-						buildJobContentsRole = function (job) {
-							return `${WuxSheetMain.Header(`${job.name} Role`)}
-							${WuxSheetMain.Desc(`${job.name} is a ${job.group} and grants one level of ${job.group} whenever this job is taken.`)}`;
-						},
-
-						buildJobContentsGrowths = function (job) {
-							return `${WuxSheetMain.Header(`${job.name} Growths`)}
-							${WuxSheetMain.Table.Build(job.attributes.getAttributeAbrNames(), job.attributes.convertAttributesToArr())}`;
+							return WuxDefinition.BuildSelect(WuxDef.Get("JobTier"), fieldName, WuxDef.Filter([new DatabaseFilterData("group", "JobTier")]), false);
 						},
 
 						buildJobContentsTechniques = function (job, techDictionary, techniqueDefinition) {
-							return `${WuxSheetMain.Header(`${job.name} Techniques`)}
-							${WuxSheetMain.Desc(`Job Techniques are learned when reaching the associated level.`)}
+							let definition = WuxDef.Get("JobTechniques");
+							return `${WuxSheetMain.Header(`${job.name} Techniques${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`)}
 							${buildJobContentsTechniquesData(job, techDictionary, techniqueDefinition)}`;
 						},
 

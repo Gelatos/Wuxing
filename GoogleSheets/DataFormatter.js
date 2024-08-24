@@ -1025,8 +1025,16 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<textarea${className} name="${fieldName}"${placeholder}></textarea>`;
         },
 
-        select = function (fieldName, definitionGroup, showEmpty) {
-            let output = `<select class="wuxInput" name="${fieldName}" value="0">`;
+        select = function (fieldName, definitionGroup, showEmpty, className) {
+            if (className == undefined) {
+                className = "wuxInput";
+            }
+            else {
+                className = `wuxInput ${className}`;
+            }
+
+            let output = `<select class="${className}" name="${fieldName}" value="0">`;
+
             if (showEmpty == undefined || showEmpty) { 
                 output += `\n<option value="0">-</option>`;
             }
@@ -1189,16 +1197,16 @@ var WuxSheetMain = WuxSheetMain || (function () {
 
                 field = function (title, contents) {
                     return `<div class="wuxDistinctField">
-  <span class="wuxDistinctTitle">${title}</span>
-  <span class="wuxDistinctData">${contents}</span>
-  </div>`;
+                    <span class="wuxDistinctTitle">${title}</span>
+                    <span class="wuxDistinctData">${contents}</span>
+                    </div>`;
                 },
 
                 inputField = function (title, contentType, contentName, placeholder) {
                     return `<div class="wuxDistinctField">
-  <span class="wuxDistinctTitle">${title}</span>
-  <input class="wuxDistinctData" type="${contentType}" name="${contentName}" ${placeholder ? `placeholder="${placeholder}"` : ""}>
-  </div>`;
+                    <span class="wuxDistinctTitle">${title}</span>
+                    <input class="wuxDistinctData" type="${contentType}" name="${contentName}" ${placeholder ? `placeholder="${placeholder}"` : ""}>
+                    </div>`;
                 }
             return {
                 Build: build,
@@ -1218,6 +1226,16 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     return `<div class="wuxInteractiveBlock">
                     ${checkboxBlockIcon(fieldName, contents)}
                     ${WuxSheetMain.Tooltip.Icon(tooltipContents)}
+                    </div>`;
+                },
+
+                buildTooltipSelectInput = function (fieldName, definitionGroup, showEmpty, className, contents, tooltipContents) {
+                    return `<div class="wuxInteractiveBlock">
+                    ${select(fieldName, definitionGroup, showEmpty, className)}
+                    <div class="wuxInteractiveSelectContent">
+                    ${contents}
+                    ${WuxSheetMain.Tooltip.Icon(tooltipContents)}
+                    </div>
                     </div>`;
                 },
 
@@ -1256,6 +1274,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return {
                 Build: build,
                 BuildTooltipCheckboxInput: buildTooltipCheckboxInput,
+                BuildTooltipSelectInput: buildTooltipSelectInput,
                 ExpandableBlockIcon: expandableBlockIcon,
                 ExpandableBlockEmptyIcon: expandableBlockEmptyIcon,
                 InnerBlock: innerBlock,

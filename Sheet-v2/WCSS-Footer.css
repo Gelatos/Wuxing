@@ -12,6 +12,11 @@
     margin-left: 5px;
 }
 
+.wuxMarginRight10
+{
+    margin-right: 10px;
+}
+
 .wuxNoPadding
 {
     padding: 0px;
@@ -20,6 +25,11 @@
 .wuxWidth50
 {
     width: 50px;
+}
+
+.wuxWidth70
+{
+    width: 70px;
 }
 
 .wuxWidth300

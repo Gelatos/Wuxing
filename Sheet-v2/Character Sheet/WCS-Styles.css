@@ -1176,8 +1176,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubdata
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
 .wuxInteractiveInnerExpandBlock,
-.wuxInteractiveBlock .wuxInteractiveExpandingContent,
-.wuxInteractiveBlock .wuxInteractiveExpandingAuxContent
+.wuxInteractiveExpandingContent
 {
     position: relative;
 	height: 100%;
@@ -1185,14 +1184,13 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubdata
 
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
-.wuxInteractiveBlock .wuxInteractiveExpandingContent,
-.wuxInteractiveBlock .wuxInteractiveExpandingAuxContent
+.wuxInteractiveExpandingContent
 {
 	display: block;
 	width: 100%;
 }
 
-.wuxInteractiveBlock .wuxInteractiveExpandingContent
+.wuxInteractiveExpandingContent
 {
 	display: none;
 }
@@ -1313,6 +1311,13 @@ input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInterac
 input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInteractiveExpandingAuxContent
 {
     display: none;
+}
+
+.wuxInteractiveBlock .wuxInteractiveSelectContent 
+{
+    position: relative; 
+    display: inline-block; 
+    width: calc(100% - 85px);
 }
 
 /*========================================
@@ -7343,6 +7348,11 @@ Quest Box
     margin-left: 5px;
 }
 
+.wuxMarginRight10
+{
+    margin-right: 10px;
+}
+
 .wuxNoPadding
 {
     padding: 0px;
@@ -7351,6 +7361,11 @@ Quest Box
 .wuxWidth50
 {
     width: 50px;
+}
+
+.wuxWidth70
+{
+    width: 70px;
 }
 
 .wuxWidth300

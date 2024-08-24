@@ -344,8 +344,7 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubdata
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
 .wuxInteractiveInnerExpandBlock,
-.wuxInteractiveBlock .wuxInteractiveExpandingContent,
-.wuxInteractiveBlock .wuxInteractiveExpandingAuxContent
+.wuxInteractiveExpandingContent
 {
     position: relative;
 	height: 100%;
@@ -353,14 +352,13 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubdata
 
 .wuxInteractiveBlock .wuxInteractiveInnerBlock,
 .wuxInteractiveBlock .wuxInteractiveContent,
-.wuxInteractiveBlock .wuxInteractiveExpandingContent,
-.wuxInteractiveBlock .wuxInteractiveExpandingAuxContent
+.wuxInteractiveExpandingContent
 {
 	display: block;
 	width: 100%;
 }
 
-.wuxInteractiveBlock .wuxInteractiveExpandingContent
+.wuxInteractiveExpandingContent
 {
 	display: none;
 }
@@ -481,5 +479,12 @@ input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInterac
 input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInteractiveExpandingAuxContent
 {
     display: none;
+}
+
+.wuxInteractiveBlock .wuxInteractiveSelectContent 
+{
+    position: relative; 
+    display: inline-block; 
+    width: calc(100% - 85px);
 }
 
