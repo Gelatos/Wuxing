@@ -225,10 +225,85 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(worker.attrMax);
 		attributeHandler.addMod(worker.attrBuildDraft);
 
+		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			worker.setBuildStatsDraft(attrHandler);
 			worker.updateBuildStats(attrHandler, updatingAttr, newValue);
 			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
+		});
+		attributeHandler.run();
+	}
+}
+class WuxTrainingWorkerBuild extends WuxWorkerBuild {
+	constructor() {
+		super("Training");
+	}
+	setPointsMax(attributeHandler) {
+		// do nothing
+	}
+	updatePoints(attributeHandler) {
+		let buildPoints = 0;
+		let advKnowledge = WuxDef.GetVariable("TrainingKnowledge");
+		let advTechs = WuxDef.GetVariable("TrainingTechniques");
+
+		if (this.buildStats.has(advKnowledge)) {
+			buildPoints += this.buildStats.getIntValue(advKnowledge);
+		}
+		if (this.buildStats.has(advTechs)) {
+			buildPoints += this.buildStats.getIntValue(advTechs);
+		}
+		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
+
+		attributeHandler.addUpdate(this.definition.getVariable(), buildPointsMax - buildPoints);
+		attributeHandler.addUpdate(this.definition.getVariable(WuxDef._error), buildPoints == buildPointsMax ? "0" : buildPoints < buildPointsMax ? "1" : "-1");
+	}
+
+	updateTrainingPoints(attributeHandler, fieldName, level) {
+		let worker = this;
+		level = parseInt(level);
+		attributeHandler.addUpdate(fieldName, level);
+		attributeHandler.addMod(worker.attrBuildDraft);
+
+		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsDraft(attrHandler);
+			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
+		});
+	}
+
+	getCharacterRank(level) {
+		let cr = 1;
+		let incrementer = 5;
+		let modIncrementer = 5;
+		let checkingLevel = 5;
+		while (level >= checkingLevel) {
+			cr++;
+			incrementer += modIncrementer;
+			checkingLevel += incrementer;
+		}
+		return cr;
+	}
+
+	onChangeWorkerAttribute(updatingAttr, newValue) {
+		let worker = this;
+        let attributeHandler  = new WorkerAttributeHandler();
+		attributeHandler.addMod(worker.attrMax);
+		attributeHandler.addMod(worker.attrBuildDraft);
+
+		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsDraft(attrHandler);
+			worker.updateBuildStats(attrHandler, updatingAttr, newValue);
+			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
 		});
 		attributeHandler.run();
 	}

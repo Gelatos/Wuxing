@@ -7728,12 +7728,26 @@
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+	},
+	setTrainingPoints = function(eventinfo) {
+	console.log("Setting Training Points");
+	let attributeHandler = new WorkerAttributeHandler();
+	let worker = new WuxTrainingWorkerBuild();
+	worker.updateTrainingPoints(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+	attributeHandler.run();
+	},
+	setTrainingPointsUpdate = function(eventinfo) {
+	console.log("Setting Training Points");
+	let worker = new WuxTrainingWorkerBuild();
+	worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
 	}
 	;
 	return {
 	GoToPageSet: goToPageSet,
 	FinishBuild: finishBuild,
-	ExitBuild: exitBuild
+	ExitBuild: exitBuild,
+	SetTrainingPoints: setTrainingPoints,
+	SetTrainingPointsUpdate: setTrainingPointsUpdate
 	};
 	}());
 	on("change:ttl-training", function (eventinfo) {
@@ -7746,6 +7760,14 @@
 	});
 	on("change:pgs-training_exit", function (eventinfo) {
 	WuxWorkerTraining.ExitBuild();
+	
+	});
+	on("change:adv-level", function (eventinfo) {
+	WuxWorkerTraining.SetTrainingPoints(eventinfo);
+	
+	});
+	on("change:trn-tp_knowledge change:trn-tp_technique", function (eventinfo) {
+	WuxWorkerTraining.SetTrainingPointsUpdate(eventinfo);
 	
 	});
 	var WuxWorkerKnowledges = WuxWorkerKnowledges || (function() {

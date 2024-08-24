@@ -8,11 +8,13 @@ var upgrade_to_1_0_0 = function () {
 
 	let advancementWorker = new WuxAdvancementWorkerBuild();
 	advancementWorker.setBuildStatsDraft(attributeHandler);
+	attributeHandler.addUpdate(WuxDef.GetVariable("XP"), 0);
 	advancementWorker.updateLevel(attributeHandler, WuxDef.GetVariable("Level"), 1);
 
-	attributeHandler.addUpdate(WuxDef.GetVariable("CR"), 1);
-	attributeHandler.addUpdate(WuxDef.GetVariable("XP"), 0);
+	let trainingWorker = new WuxTrainingWorkerBuild();
+	trainingWorker.setBuildStatsDraft(attributeHandler);
 	attributeHandler.addUpdate(WuxDef.GetVariable("PP"), 0);
+	trainingWorker.updateTrainingPoints(attributeHandler, WuxDef.GetVariable("Training"), 0);
 
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);

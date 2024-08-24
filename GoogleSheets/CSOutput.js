@@ -1445,6 +1445,8 @@ var TrainingBackend = TrainingBackend || (function () {
 					jsClassData.addPublicFunction("finishBuild", finishBuild);
 					jsClassData.addPublicFunction("exitBuild", exitBuild);
 					jsClassData.addFunction("leavePageVariables", leavePageVariables);
+					jsClassData.addPublicFunction("setTrainingPoints", setTrainingPoints);
+					jsClassData.addPublicFunction("setTrainingPointsUpdate", setTrainingPointsUpdate);
 					return jsClassData.print(className);
 				},
 
@@ -1453,6 +1455,8 @@ var TrainingBackend = TrainingBackend || (function () {
 					output += listenerGoToPageSet();
 					output += listenerFinishButton();
 					output += listenerExitButton();
+					output += listenerSetTrainingPoints();
+					output += listenerSetTrainingPointsUpdate();
 					return output;
 				},
 
@@ -1490,6 +1494,19 @@ var TrainingBackend = TrainingBackend || (function () {
                 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
 				},
+				
+				setTrainingPoints = function(eventinfo) {
+					console.log("Setting Training Points");
+                	let attributeHandler  = new WorkerAttributeHandler();
+					let worker = new WuxTrainingWorkerBuild();
+					worker.updateTrainingPoints(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+					attributeHandler.run();
+				},
+				setTrainingPointsUpdate = function(eventinfo) {
+					console.log("Setting Training Points");
+					let worker = new WuxTrainingWorkerBuild();
+					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+				},
 
 				listenerGoToPageSet = function() {
 					let groupVariableNames = [WuxDef.GetVariable("Title_Training")];
@@ -1506,6 +1523,18 @@ var TrainingBackend = TrainingBackend || (function () {
 				listenerExitButton = function() {
 					let groupVariableNames = [WuxDef.GetVariable("PageSet_Training", WuxDef._exit)];
 				    let output = `${className}.ExitBuild();\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				},
+				listenerSetTrainingPoints = function() {
+					let groupVariableNames = [WuxDef.GetVariable("Level")];
+				    let output = `${className}.SetTrainingPoints(eventinfo);\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				},
+				listenerSetTrainingPointsUpdate = function() {
+					let groupVariableNames = [WuxDef.GetVariable("TrainingKnowledge"), WuxDef.GetVariable("TrainingTechniques")];
+				    let output = `${className}.SetTrainingPointsUpdate(eventinfo);\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				}
