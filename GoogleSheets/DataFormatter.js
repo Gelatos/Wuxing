@@ -301,7 +301,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     usedTechData = Format.SanitizeSheetRollAction(usedTechData);
 
                     return `<div class="wuxFeatureHeaderInteractBlock">
-    <button class="wuxFeatureHeaderInteractiveButton" type="roll" value="${FeatureService.GetRollTemplate(techDisplayData)}">i</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech ${usedTechData}">9</button>
+    <button class="wuxFeatureHeaderInteractiveButton" type="roll" value="${FeatureService.GetRollTemplate(techDisplayData)}">?</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech ${usedTechData}">9</button>
     </div>`;
                 }
 
@@ -763,32 +763,32 @@ var WuxDefinition = WuxDefinition || (function () {
         },
 
         buildText = function (definition, textContents) {
-            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
                 WuxSheetMain.Desc(textContents);
         },
 
         buildTextInput = function (definition, fieldName) {
-            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
                 WuxSheetMain.Input("text", fieldName);
         },
 
         buildTextarea = function (definition, fieldName, className, placeholder) {
-            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
                 WuxSheetMain.Textarea(fieldName, className, placeholder);
         },
 
         buildNumberInput = function (definition, fieldName) {
-            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
                 WuxSheetMain.Input("number", fieldName);
         },
 
         buildNumberLabelInput = function (definition, fieldName, labelContent) {
-            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
             WuxSheetMain.MultiRow(WuxSheetMain.Input("number", fieldName, "", "0") + WuxSheetMain.InputLabel(labelContent));
         },
 
         buildSelect = function (definition, fieldName, definitionGroup, showEmpty) {
-            return WuxSheetMain.Tooltip(WuxSheetMain.Header2(definition.title), WuxDefinition.TooltipDescription(definition)) + "\n" +
+            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
                 WuxSheetMain.Select(fieldName, definitionGroup, showEmpty);
         }
         ;
@@ -954,13 +954,6 @@ var WuxSheetMain = WuxSheetMain || (function () {
             ${sectionBlockStyleHeader(interactionElement.ExpandableBlockIcon(fieldName) + title)}
             ${sectionBlockContents(contents)}`);
         },
-        
-        tooltip = function (text, contents) {
-            return `<div class="wuxTooltip">
-            <div class="wuxTooltipText">\n${text}\n</div>
-            <div class="wuxTooltipContent">\n${contents}\n</div>
-            </div>`;
-        },
 
         // string formatting
         header = function (contents, htmlType) {
@@ -1082,7 +1075,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
 
             var
             button = function (fieldName) {
-                return `<div class="wuxInfoButton"><input type="checkbox" name="${fieldName}"><span>i</span></div>`;
+                return `<div class="wuxInfoButton"><input type="checkbox" name="${fieldName}"><span>?</span></div>`;
             },
     
             contents = function (fieldName, contents) {
@@ -1100,6 +1093,43 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 Button: button,
                 Contents: contents,
                 DefaultContents: defaultContents
+            };
+        }()),
+
+        tooltip = tooltip || (function () {
+            'use strict';
+
+            var
+            button = function (fieldName, contents) {
+                return `<div class="wuxTooltipButtonContainer">
+                <div class="wuxTooltipButton">
+                <input type="checkbox" name="${fieldName}">
+                <div class="wuxTooltipText">i</div>
+                <div class="wuxTooltipContent">\n${contents}\n</div>
+                </div>
+                </div>`;
+            },
+
+            icon = function (contents) {
+                return `<div class="wuxTooltipButtonContainer">
+                <div class="wuxTooltipButton">
+                <div class="wuxTooltipText">i</div>
+                <div class="wuxTooltipContent">\n${contents}\n</div>
+                </div>
+                </div>`;
+            },
+
+            text = function (text, contents) {
+                return `<div class="wuxTooltip">
+                <div class="wuxTooltipText">\n${text}\n</div>
+                <div class="wuxTooltipContent">\n${contents}\n</div>
+                </div>`;
+            }
+
+            return {
+                Button: button,
+                Icon: icon,
+                Text: text
             };
         }()),
 
@@ -1185,9 +1215,9 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 },
 
                 buildTooltipCheckboxInput = function (fieldName, contents, tooltipContents) {
-                    return `<div class="wuxInteractiveBlock wuxTooltip">
-                    <div class="wuxTooltipText">\n${checkboxBlockIcon(fieldName, contents)}\n</div>
-                    <div class="wuxTooltipContent">\n${tooltipContents}\n</div>
+                    return `<div class="wuxInteractiveBlock">
+                    ${checkboxBlockIcon(fieldName, contents)}
+                    ${WuxSheetMain.Tooltip.Icon(tooltipContents)}
                     </div>`;
                 },
 
@@ -1247,7 +1277,6 @@ var WuxSheetMain = WuxSheetMain || (function () {
         SectionBlockContents: sectionBlockContents,
         CollapsibleSection: collapsibleSection,
         CollapsibleStyleSection: collapsibleStyleSection,
-        Tooltip: tooltip,
         Header: header,
         Header2: header2,
         Subheader: subheader,
@@ -1265,6 +1294,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,
         Info: info,
+        Tooltip: tooltip,
         Table: table,
         DistinctSection: distinctSection,
         InteractionElement: interactionElement

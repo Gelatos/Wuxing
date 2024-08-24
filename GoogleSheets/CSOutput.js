@@ -675,7 +675,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							${WuxSheetMain.Header("Affected Stats")}
 							${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`);
 							
-							let header = WuxSheetMain.Tooltip(attributeDefinition.title, WuxDefinition.TooltipDescription(attributeDefinition));
+							let header = `${attributeDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(attributeDefinition))}`;
 							let output = WuxSheetMain.Table.FlexTableHeader(header);
 							output += WuxSheetMain.Table.FlexTableData(contents);
 							return WuxSheetMain.Table.FlextTableGroup(output, "wuxMinWidth200");

@@ -5783,7 +5783,7 @@ class TechniqueEffectDisplayData {
 class WorkerBuildStat extends dbObj {
     importJson(json) {
         this.name = json.name;
-        this.value = json.value;
+        this.value = parseInt(json.value);
     }
     importSheets(dataArray) {
         let i = 0;
@@ -5799,6 +5799,11 @@ class WorkerBuildStats extends Dictionary {
 
     constructor() {
         super();
+    }
+
+    getIntValue(name) {
+        let stat = this.get(name);
+        return stat == undefined ? 0 : isNaN(parseInt(stat.value)) ? 0 : parseInt(stat.value);
     }
 
     getPointsTotal() {

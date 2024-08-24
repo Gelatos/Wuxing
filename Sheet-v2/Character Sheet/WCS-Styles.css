@@ -715,6 +715,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 
 .wuxHeader
 {
+    position: relative;
     display: inline-block;
     width: 100%;
 	padding-top: 5px;
@@ -733,6 +734,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .wuxHeader2,
 .wuxData
 {
+    position: relative;
     display: inline-block;
     
     color: #d0d0d0;
@@ -1555,7 +1557,7 @@ input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-P
 .wuxInfoContent .wuxHeader2
 {
     width: 94%;
-    
+
     color: #3e3e3e;
     background: none;
     font-size: 14px;
@@ -2356,6 +2358,56 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     position: relative;
 }
 
+.wuxTooltipButtonContainer 
+{
+    position: absolute;
+    top: 0px;
+	left: 0px;
+	right: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.wuxTooltipButton 
+{
+    float: right;
+    width: 18px;
+    height: 18px;
+    margin: 0px;
+    padding: 0px;
+    padding-right: 10px;
+    z-index: 900;
+
+    border-width: 0px;
+}
+
+.wuxTooltipButton input[type=radio],
+.wuxTooltipButton input[type=checkbox] 
+{
+    position: absolute;
+    top: 0px;
+	left: 0px;
+	right: 0px;
+    width: 100%;
+    height: 100%;
+
+    z-index: 999;
+
+    opacity: 0;
+}
+
+.wuxTooltipButton input[type=radio]:checked + span,
+.wuxTooltipButton input[type=checkbox]:checked + span
+{
+    color: #5b5b5b;
+}
+
+.wuxTooltipButton input[type=radio]:hover + span,
+.wuxTooltipButton input[type=checkbox]:hover + span
+{
+    color: #979898;
+}
+
 .wuxTooltipText,
 .sheet-rolltemplate-technique .sheet-wuxTooltipText,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltipText
@@ -2364,16 +2416,47 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     text-decoration: underline dotted;
 }
 
+.wuxTooltipButton .wuxTooltipText
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 900;
+
+    font-family: pictos;
+    font-size: 18px;
+    color: #f4f6f8;
+    text-decoration: none;
+
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.wuxTooltipButtonContainer .wuxTooltipButton .wuxTooltipText,
+.wuxInteractiveBlock .wuxTooltipButton .wuxTooltipText
+{
+    visibility: hidden;
+}
+
+.wuxTooltipButtonContainer:hover .wuxTooltipButton .wuxTooltipText,
+.wuxInteractiveBlock:hover .wuxTooltipButton .wuxTooltipText
+{
+    visibility: visible;
+}
+
 .wuxTooltip .wuxTooltipContent,
+.wuxTooltipButton .wuxTooltipContent,
 .sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent
 {
     position: absolute;
     top: 24px;
-    left: 0px;
     width: 240px;
     padding: 5px;
-    z-index: 1000;
+    z-index: 9999;
+
+    font-weight: normal;
 
     visibility: hidden;
     border-radius: 6px;
@@ -2382,8 +2465,22 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 
 .wuxTooltip .wuxTooltipContent,
 .sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent
+{
+    left: 0px;
+}
+
+.wuxTooltipButton .wuxTooltipContent
+{
+    right: 0px;
+}
+
+.wuxTooltip .wuxTooltipContent,
+.wuxTooltipButton .wuxTooltipContent,
+.sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .wuxTooltip .wuxTooltipContent .wuxDescription,
+.wuxTooltipButton .wuxTooltipContent .wuxDescription,
 .sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxDescription,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxDescription
 {
@@ -2394,13 +2491,16 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     background: #fff;
 }
 .wuxTooltip .wuxTooltipContent .wuxHeader2,
+.wuxTooltipButton .wuxTooltipContent .wuxHeader2,
 .sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxHeader2,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxHeader2
 {
+    font-weight: bold;
     color: #3e3e3e;
 }
   
 .wuxTooltip:hover .wuxTooltipContent,
+.wuxTooltipButton:hover .wuxTooltipContent,
 .sheet-rolltemplate-technique .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip:hover .sheet-wuxTooltipContent
 {
@@ -2408,6 +2508,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 }
   
 .wuxTooltip .wuxTooltipContent:hover,
+.wuxTooltipButton .wuxTooltipContent:hover,
 .sheet-rolltemplate-technique .wuxTooltip .sheet-wuxTooltipContent:hover,
 .sheet-rolltemplate-usetechnique .wuxTooltip .sheet-wuxTooltipContent:hover
 {

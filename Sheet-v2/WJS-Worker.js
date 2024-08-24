@@ -172,13 +172,13 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		let advTechs = WuxDef.GetVariable("AdvancementTechnique");
 
 		if (this.buildStats.has(advJobs)) {
-			buildPoints += this.buildStats.get(advJobs).value * 2;
+			buildPoints += this.buildStats.getIntValue(advJobs) * 2;
 		}
 		if (this.buildStats.has(advSkills)) {
-			buildPoints += this.buildStats.get(advSkills).value * 2;
+			buildPoints += this.buildStats.getIntValue(advSkills) * 2;
 		}
 		if (this.buildStats.has(advTechs)) {
-			buildPoints += this.buildStats.get(advTechs).value;
+			buildPoints += this.buildStats.getIntValue(advTechs);
 		}
 		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
 

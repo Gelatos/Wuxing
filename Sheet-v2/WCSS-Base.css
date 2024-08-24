@@ -715,6 +715,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 
 .wuxHeader
 {
+    position: relative;
     display: inline-block;
     width: 100%;
 	padding-top: 5px;
@@ -733,6 +734,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .wuxHeader2,
 .wuxData
 {
+    position: relative;
     display: inline-block;
     
     color: #d0d0d0;
