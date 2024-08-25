@@ -266,14 +266,14 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     let isChecked = displayOptions.autoExpand ? `checked value="on"` : "";
 
                     return `<div class="wuxFeatureHeaderInteractBlock">
-    <div class="wuxFeatureHeaderInteractInnerBlock">
-    <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${attributeName}" ${isChecked}>
-    <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
-    <span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-    <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
-    <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
-    </div>
-    </div>`;
+                    <div class="wuxFeatureHeaderInteractInnerBlock">
+                    <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${attributeName}" ${isChecked}>
+                    <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
+                    <span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
+                    <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
+                    <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
+                    </div>
+                    </div>`;
                 }
                 return "";
             },
@@ -301,8 +301,9 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     usedTechData = Format.SanitizeSheetRollAction(usedTechData);
 
                     return `<div class="wuxFeatureHeaderInteractBlock">
-    <button class="wuxFeatureHeaderInteractiveButton" type="roll" value="${FeatureService.GetRollTemplate(techDisplayData)}">?</button><button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech ${usedTechData}">9</button>
-    </div>`;
+                    <button class="wuxFeatureHeaderInteractiveButton" type="roll" value="${FeatureService.GetRollTemplate(techDisplayData)}">?</button>
+                    <button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech ${usedTechData}">9</button>
+                    </div>`;
                 }
 
                 return "";
@@ -398,23 +399,26 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
 
                 printAuto = function (techDisplayData, displayOptions) {
                     let output = "";
-                    if (techDisplayData.autoEffects.auto.length > 0) {
+                    if (techDisplayData.autoEffects.length > 0) {
                         output += setFeatureLine("wuxFeatureCheckHeader", "Effects", displayOptions);
-                        output += setTechniqueDisplayCheckBlock(techDisplayData.autoEffects.auto, false, displayOptions);
+                        output += setTechniqueDisplayCheckBlock(techDisplayData.autoEffects, displayOptions);
                     }
                     return output;
                 },
 
                 printEffects = function (techDisplayData, displayOptions) {
                     let output = "";
-                    techDisplayData.effects.iterate(function (effect, key) {
-                        output += setFeatureLine("wuxFeatureCheckHeader", `vs. ${isNaN(parseInt(key)) ? WuxDef.GetAbbreviation(key) : `DC ${key}`}`, displayOptions);
-                        if(effect.auto.length > 0) {
-                            output += setTechniqueDisplayCheckBlock(effect.auto, false, displayOptions);
+                    let defenseDisplay = "";
+                    techDisplayData.effects.iterate(function (effectData, key) {
+                        if (isNaN(parseInt(key))) {
+                            let definition = WuxDef.Get(key);
+                            defenseDisplay = WuxSheetMain.Tooltip.Text(`vs. ${definition.title}`, WuxDefinition.TooltipDescription(definition));
                         }
-                        if(effect.onPass.length > 0) {
-                            output += setTechniqueDisplayCheckBlock(effect.onPass, true, displayOptions);
+                        else {
+                            defenseDisplay = `vs. DC ${key}`;
                         }
+                        output += setFeatureLine("wuxFeatureCheckHeader", defenseDisplay, displayOptions);
+                        output += setTechniqueDisplayCheckBlock(effectData, displayOptions);
                     });
 
                     if (output != "") {
@@ -423,13 +427,9 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     return output;
                 },
 
-                setTechniqueDisplayCheckBlock = function (techEffectsArray, addOnPass, displayOptions) {
+                setTechniqueDisplayCheckBlock = function (techEffectsArray, displayOptions) {
 
                     if (techEffectsArray.length > 0) {
-                        let output = "";
-                        if (addOnPass) {
-                            output += setFeatureLine("wuxFeatureCheckBlockRowHeader", "On Success", displayOptions);
-                        }
                         let effectsOutput = "";
                         for (let i = 0; i < techEffectsArray.length; i++) {
                             if (effectsOutput != "") {
@@ -437,9 +437,10 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                             }
                             effectsOutput += techEffectsArray[i];
                         }
-                        output += `<span ${setFeatureStyle("wuxFeatureCheckBlockRow", displayOptions)}>${effectsOutput}</span>\n`;
 
-                        return `<div ${setFeatureStyle("wuxFeatureCheckBlock", displayOptions)}>${output}</div>\n`;
+                        return `<div ${setFeatureStyle("wuxFeatureCheckBlock", displayOptions)}>
+                        <span ${setFeatureStyle("wuxFeatureCheckBlockRow", displayOptions)}>${effectsOutput}</span>
+                        </div>\n`;
                     }
                     return "";
                 }

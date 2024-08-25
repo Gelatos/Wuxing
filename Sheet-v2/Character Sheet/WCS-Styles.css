@@ -1689,7 +1689,7 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     display: inline-block;
     height: auto;
     vertical-align: top;
-    min-width: 350px;
+    min-width: 340px;
     width: 375px;
     flex: 1;
     margin-bottom: 10px;
@@ -1715,7 +1715,7 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 {
     position: relative;
     display: inline-block;
-    min-width: 350px; 
+    min-width: 340px; 
     max-width: 500px; 
     width: calc(100% - 10px);
     height: min-content;

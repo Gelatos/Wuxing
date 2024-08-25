@@ -396,7 +396,6 @@ class TechniqueData extends WuxDatabaseData {
     importEffectSheet(dataArray) {
         let i = 0;
         let defense = "" + dataArray[i]; i++;
-        let onPass = "" + dataArray[i]; i++;
         let effect = new TechniqueEffect(dataArray.slice(i)); i++;
 
         if (effect.type == "Definition") {
@@ -412,7 +411,7 @@ class TechniqueData extends WuxDatabaseData {
             this.autoEffects.push(effect);
         }
         else {
-            this.addEffect(defense, onPass, effect);
+            this.addEffect(defense, effect);
         }
 
         if (effect.type == "Condition") {
@@ -426,8 +425,7 @@ class TechniqueData extends WuxDatabaseData {
         else {
             let effect = technique.effects.getByIndex(0);
             if (effect != undefined) {
-                let isOnPass = effect.onPass.length > 0;
-                this.addEffect(technique.effects.getkey(0), isOnPass, isOnPass ? effect.onPass[0] : effect.auto[0]);
+                this.addEffect(technique.effects.getkey(0), effect[0]);
             }
         }
 
@@ -435,16 +433,11 @@ class TechniqueData extends WuxDatabaseData {
             this.addDefinition(technique.definitions[0]);
         }
     }
-    addEffect(defense, onPass, effect) {
+    addEffect(defense, effect) {
         if (!this.effects.has(defense)) {
-            this.effects.add(defense, {onPass: [], auto: []});
+            this.effects.add(defense, []);
         }
-        if (onPass == "1") {
-            this.effects.get(defense).onPass.push(effect);
-        }
-        else {
-            this.effects.get(defense).auto.push(effect);
-        }
+        this.effects.get(defense).push(effect);
     }
 
     importOngoingTechnique(technique) {
@@ -923,11 +916,13 @@ class DefinitionData extends WuxDatabaseData {
             }
         })
 
-        let modArray = this.modifiers.split(";");
-        modArray.forEach((mod) => {
-            this.formulaCalculations.push(new WorkerFormula(mod, 0, 1));
-            this.modAttrs.push(this.getVariable(mod));
-        });
+        if (this.modifiers != "") {
+            let modArray = this.modifiers.split(";");
+            modArray.forEach((mod) => {
+                this.formulaCalculations.push(new WorkerFormula(mod, 0, 1));
+                this.modAttrs.push(this.getVariable(mod));
+            });
+        }
     }
     getFormulaDefinitions() {
         let output = [];
@@ -1096,12 +1091,12 @@ class TechniqueDisplayData {
     }
 
     setAutoEffects(technique) {
-        this.autoEffects = new TechniqueEffectDisplayData(technique.autoEffects);
+        this.autoEffects = new TechniqueEffectDisplayData.Get(technique.autoEffects);
     }
     setEffects(technique) {
         this.effects = new Dictionary();
         technique.effects.iterate((effect, defense) => {
-            this.effects.add(defense, new TechniqueEffectDisplayData(effect));
+            this.effects.add(defense, new TechniqueEffectDisplayData.Get(effect));
         });
     }
     setOngoingEffects(technique) {
@@ -1136,83 +1131,82 @@ class TechniqueDisplayData {
         this.ongoingEffects = undefined;
     }
 }
-class TechniqueEffectDisplayData {
-    constructor(techniqueEffect) {
-        this.createEmptyDefense();
-        if (Array.isArray(techniqueEffect)) {
-            this.auto = this.importEffectData(techniqueEffect);
-        }
-        else if (techniqueEffect != undefined) {
-            this.importTechniqueEffect(techniqueEffect);
-        }
-    }
 
-    createEmptyDefense() {
-        this.auto = [];
-        this.onPass = [];
-    }
+var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
+    'use strict';
 
-    importTechniqueEffect(techniqueEffect) {
-        if (techniqueEffect.auto.length > 0) {
-            this.auto = this.importEffectData(techniqueEffect.auto);
-        }
-        if (techniqueEffect.onPass.length > 0) {
-            this.onPass = this.importEffectData(techniqueEffect.onPass);
-        }
-    }
+    var
+    get = function (techniqueEffect) {
+        return importEffectData(techniqueEffect);
+    },
 
-    importEffectData(effectData) {
-        let output = [];
+    importEffectData = function (effectData) {
+        let data = [];
         for (let i = 0; i < effectData.length; i++) {
-            output.push(this.formatEffect(effectData[i]));
+            data.push(formatEffect(effectData[i]));
         }
+        return data;
+    },
 
-        return output;
-    }
-
-    formatEffect(effect) {
+    formatEffect = function (effect) {
         let output = "";
         switch (effect.type) {
             case "Damage":
-                output = this.formatDamageEffect(effect);
-            break;
+                output = formatDamageEffect(effect);
+                break;
+            case "Status":
+                output = formatStatusEffect(effect);
+                break;
             case "Condition":
-                output = this.formatConditionEffect(effect);
-            break;
+                output = formatConditionEffect(effect);
+                break;
             case "Definition":
-            break;
+                break;
             case "":
-                output = this.formatDescriptionEffect(effect);
-            break;
+                output = formatDescriptionEffect(effect);
+                break;
         }
         
         return output;
-    }
+    },
 
-    formatDamageEffect(effect) {
-        return `[${this.formatCalcBonus(effect)}] ${effect.effect} damage`;
-    }
+    formatDamageEffect = function (effect) {
+        return `[${formatCalcBonus(effect)}] ${effect.effect} damage`;
+    },
 
-    formatConditionEffect(effect) {
-        let condition = WuxDef.Get(effect.effect);
-        let target = effect.target == "Self" ? "You" : "Target";
-        let ranks = this.formatCalcBonus(effect);
-        switch (effect.subType) {
-            case "Add": return `${target} gains the ${condition.name} ${condition.group}`;
-            case "Remove": return `${target} loses the ${condition.name} ${condition.group}`;
-            case "Remove Any": return `${target} loses any condition of your choice`;
-            case "Rank Up": return `${target} gains [${ranks}] rank in the ${condition.name} ${condition.group}`;
-            case "Rank Down": return `${target} loses [${ranks}] rank in the ${condition.name} ${condition.group}`;
-            default: return `${target} gains the ${condition.name} ${condition.group}`;
+    formatStatusEffect = function (effect) {
+        return formatStateEffect(effect, `Status_${effect.effect}`);
+    },
+
+    formatConditionEffect = function (effect) {
+        return formatStateEffect(effect, `Condition_${effect.effect}`);
+    },
+
+    formatStateEffect = function (effect, effectName) {
+        let state = WuxDef.Get(effectName);
+        let target = "Target";
+        let plural = "s";
+        if (effect.target == "Self") {
+            target = "You";
+            plural = "";
         }
-    }
+        let ranks = formatCalcBonus(effect);
+        switch (effect.subType) {
+            case "Add": return `${target} gain${plural} the ${state.title} ${state.group}`;
+            case "Remove": return `${target} lose${plural} the ${state.title} ${state.group}`;
+            case "Remove Any": return `${target} lose${plural} any condition of your choice`;
+            case "Rank Up": return `${target} gain${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
+            case "Rank Down": return `${target} lose${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
+            default: return `${target} gain${plural} the ${state.title} ${state.group}`;
+        }
+    },
     
-    formatDescriptionEffect(effect) {
+    formatDescriptionEffect = function (effect) {
         return effect.effect;
-    }
+    },
 
-    formatCalcBonus(effect) {
-        let output = this.formatEffectDice(effect);
+    formatCalcBonus = function (effect) {
+        let output = formatEffectDice(effect);
         let bonusEffects = effect.dBonus.split(";");
         for(let i = 0; i < bonusEffects.length; i++) {
             bonusEffects[i] = bonusEffects[i].trim();
@@ -1227,15 +1221,20 @@ class TechniqueEffectDisplayData {
             }
         }
         return output;
-    }
+    },
 
-    formatEffectDice(effect) {
+    formatEffectDice = function (effect) {
         if (effect.dVal != "" && effect.dVal > 0) {
             return `${effect.dVal}d${effect.dType}`;
         }
         return "";
     }
-}
+
+    return {
+        Get: get
+    }
+}());
+
 class WorkerBuildStat extends dbObj {
     importJson(json) {
         this.name = json.name;
