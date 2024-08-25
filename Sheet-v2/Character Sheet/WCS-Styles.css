@@ -1842,7 +1842,7 @@ input.wuxFeatureHeader-flag[value="Equipment"] + .wuxFeatureHeader,
     position: absolute;
     display: inline-block;
     right: 0px;
-    width: 90px; 
+    width: 95px; 
     padding: 5px 0px; 
 
     vertical-align: top; 
@@ -1905,7 +1905,7 @@ input.wuxFeatureType-flag[value="Standard"] + .wuxFeatureType,
 {
     position: relative;
     display: block;
-    font-size: 6px;
+    font-size: 9px;
 }
 
 .wuxFeatureHeaderInteractBlock,

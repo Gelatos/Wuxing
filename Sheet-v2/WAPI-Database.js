@@ -998,7 +998,6 @@ class TechniqueDisplayData {
         this.createEmpty();
         this.setTechBasics(technique);
         this.setTechSetData(technique);
-        this.setTechActionData(technique);
         this.setTechTargetData(technique);
         this.setExtentionEffects(technique);
         this.setTraits(technique);
@@ -1020,44 +1019,32 @@ class TechniqueDisplayData {
     setTechSetData(technique) {
         this.techSetDisplay = technique.affinity;
         this.techSetTitle = technique.skill == "" ? "No Check" : technique.skill;
-        this.techSetSub = technique.techSet == "" ? "No Style" : technique.techSet;
-        if (technique.linkedTech == "") {
-            this.techSetSub2 = "Free";
-        }
-        else if (technique.isFree) {
-            this.techSetSub2 = `No Restrictions`;
-        }
-        else if (technique.affinity == "" && technique.tier > 1) {
-            this.techSetSub2 = `CR ${Format.Romanize(technique.tier)}`;
-        }
-        else if (technique.tier <= 1) {
-            this.techSetSub2 = `${technique.affinity}`;
-        }
-        else {
-            this.techSetSub2 = `${technique.affinity} | CR ${Format.Romanize(technique.tier)}`;
-        }
-    }
-    setTechActionData(technique) {
-        this.actionData = "";
-        if (technique.action != "") {
-            this.actionData += technique.action;
-        }
+
+        let subText = "";
         if (technique.limits != "") {
-            if (this.actionData != "") {
-                this.actionData += "; ";
+            if (subText != "") {
+                subText += "; ";
             }
-            this.actionData += technique.limits;
+            subText += technique.limits;
         }
         if (technique.resourceCost != "") {
-            if (this.actionData != "") {
-                this.actionData += "; ";
+            if (subText != "") {
+                subText += "; ";
             }
-            this.actionData += technique.resourceCost;
+            subText += technique.resourceCost;
         }
+        this.techSetSub = subText == "" ? "-" : subText;
     }
     setTechTargetData(technique) {
+        this.targetData = "";
+        if (technique.action != "") {
+            this.targetData += technique.action;
+        }
         if (technique.range != "") {
-            this.targetData = `Range: ${technique.range}`;
+            if (this.targetData != "") {
+                this.targetData += "; ";
+            }
+            this.targetData += `Range: ${technique.range}`;
         }
         if (technique.target != "") {
             if (this.targetData != "") {
@@ -1115,7 +1102,6 @@ class TechniqueDisplayData {
         this.techSetSub = "";
         this.techSetSub2 = "";
         
-        this.actionData = "";
         this.targetData = "";
 
         this.trigger = "";

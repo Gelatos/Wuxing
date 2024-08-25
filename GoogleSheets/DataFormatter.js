@@ -253,10 +253,10 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             setTechniqueDisplayHeaderSlotBox = function (techDisplayData, displayOptions) {
                 let techSetStyling = ["wuxFeatureType", `wuxFeatureType-${techDisplayData.techSetDisplay}`];
                 return `<div ${setFeatureStyle(techSetStyling, displayOptions)}>
-    <span ${setFeatureStyle("wuxFeatureTypeHeader", displayOptions)}>${techDisplayData.techSetTitle}</span>
-    <span ${setFeatureStyle("wuxFeatureTypeFooter", displayOptions)}>${techDisplayData.techSetSub}</span>
-    <span ${setFeatureStyle("wuxFeatureTypeFooter", displayOptions)}>${techDisplayData.techSetSub2}</span>
-    </div>`;
+                <span ${setFeatureStyle("wuxFeatureTypeHeader", displayOptions)}>${techDisplayData.techSetTitle}</span>
+                <span ${setFeatureStyle("wuxFeatureTypeFooter", displayOptions)}>${techDisplayData.techSetSub}</span>
+                <span ${setFeatureStyle("wuxFeatureTypeFooter", displayOptions)}>${techDisplayData.techSetSub2}</span>
+                </div>`;
             },
 
             setTechniqueDisplayHeaderExpandSection = function (techDisplayData, displayOptions) {
@@ -312,7 +312,6 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             setTechniqueDisplayHeaderNameFields = function (techDisplayData, displayOptions) {
                 return `<div ${setFeatureStyle("wuxFeatureHeaderDisplayBlock", displayOptions)}>
     <span ${setFeatureStyle("wuxFeatureHeaderName", displayOptions)}>${techDisplayData.name}</span>
-    <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.actionData}</div>
     <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.targetData}</div>
     </div>`;
             },
