@@ -265,7 +265,7 @@ class WuxDatabaseData extends dbObj {
         let definition = new DefinitionData();
         definition.name = baseDefinition.isResource ? `${this.name}` : `${baseDefinition.name}_${this.name}`;
         definition.fieldName = this.fieldName;
-        definition.variable = `${baseDefinition.getVariable(this.variable == "" ? this.fieldName : this.variable)}{0}`;
+        definition.variable = `${baseDefinition.getVariable(`-${this.variable == "" ? this.fieldName : this.variable}`)}{0}`;
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.subGroup = "";

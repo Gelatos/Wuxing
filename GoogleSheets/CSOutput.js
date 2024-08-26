@@ -368,19 +368,19 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 							return output;
 						},
 
-						buildLore = function (knowledge, interactHeader) {
+						buildLore = function (knowledge, groupName, interactHeader) {
 							let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Lore"));
 							return WuxSheetMain.InteractionElement.BuildTooltipSelectInput(knowledgeDefinition.getAttribute(WuxDef._rank),
-							WuxDef.Filter([new DatabaseFilterData("group", "LoreTier")]), false, "wuxWidth70 wuxMarginRight10",
+							WuxDef.Filter([new DatabaseFilterData("group", groupName)]), false, "wuxWidth70 wuxMarginRight10",
 							interactHeader, WuxDefinition.TooltipDescription(knowledgeDefinition));
 						},
 
 						buildMainLore = function (knowledge) {
-							return buildLore(knowledge, `<span class="wuxHeader">General ${knowledge.name}</span>`);
+							return buildLore(knowledge, "GeneralLoreTier", `<span class="wuxHeader">General ${knowledge.name}</span>`);
 						},
 
 						buildSubLore = function (knowledge) {
-							return buildLore(knowledge, `<span class="wuxSubheader">${knowledge.name}</span>`);
+							return buildLore(knowledge, "LoreTier", `<span class="wuxSubheader">${knowledge.name}</span>`);
 						}
 
 					return {
@@ -1227,6 +1227,7 @@ var BuilderBackend = BuilderBackend || (function () {
 				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
 					jsClassData.addPublicFunction("finishBuild", finishBuild);
+					jsClassData.addFunction("leavePageVariables", leavePageVariables);
 					jsClassData.addPublicFunction("setAffinityValue", setAffinityValue);
 					jsClassData.addPublicFunction("setInnateDefense", setInnateDefense);
 					jsClassData.addPublicFunction("setInnateSense", setInnateSense);
@@ -1246,17 +1247,24 @@ var BuilderBackend = BuilderBackend || (function () {
 
 				finishBuild = function() {
 					console.log("Finish Character Creation Build");
-				    let manager = new WuxWorkerBuildManager(["Advancement", "Training", "Skill", "Job", "Knowledge", "Attribute", "Technique"]);
                 	let attributeHandler  = new WorkerAttributeHandler();
+					leavePageVariables(attributeHandler);
+
+				    let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Technique"]);
+                	pointManagers.commitChanges(attributeHandler);
+					
+					let trainingWorker = new WuxTrainingWorkerBuild();
+					trainingWorker.commitChanges(attributeHandler);
+					
+					let advancementWorker = new WuxAdvancementWorkerBuild();
+					advancementWorker.commitChanges(attributeHandler);
+
+					attributeHandler.run();
+				},
+				leavePageVariables = function(attributeHandler) {
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
-                	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-
-					attributeHandler.addGetAttrCallback(function (attrHandler) {
-						manager.setAttributeHandlerPoints(attrHandler);
-					});
-					attributeHandler.run();
 				},
 				setAffinityValue = function() {
 					console.log("Setting Affinity");
@@ -1377,8 +1385,10 @@ var BuilderBackend = BuilderBackend || (function () {
 					return jsClassData.print(className);
 				},
 				updateBuildPoints = function(eventinfo) {
+					let attributeHandler  = new WorkerAttributeHandler();
 					let worker = new WuxWorkerBuildManager("Technique");
-					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+					attributeHandler.run();
 				},
 
 				buildListeners = function () {
@@ -1494,8 +1504,10 @@ var TrainingBackend = TrainingBackend || (function () {
 				},
 				setTrainingPointsUpdate = function(eventinfo) {
 					console.log("Setting Training Points");
+					let attributeHandler  = new WorkerAttributeHandler();
 					let worker = new WuxTrainingWorkerBuild();
-					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+					attributeHandler.run();
 				},
 
 				listenerGoToPageSet = function() {
@@ -1547,8 +1559,10 @@ var TrainingBackend = TrainingBackend || (function () {
 					return jsClassData.print(className);
 				},
 				updateBuildPoints = function(eventinfo) {
+					let attributeHandler  = new WorkerAttributeHandler();
 					let worker = new WuxWorkerBuildManager("Knowledge");
-					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+					attributeHandler.run();
 				},
 				buildListeners = function () {
 					let output = "";
@@ -1663,8 +1677,10 @@ var AdvancementBackend = AdvancementBackend || (function () {
 				},
 				setAdvancementPointsUpdate = function(eventinfo) {
 					console.log("Setting Advancement Points");
+					let attributeHandler  = new WorkerAttributeHandler();
 					let worker = new WuxAdvancementWorkerBuild();
-					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+					attributeHandler.run();
 				},
 				setAffinityStats = function(attributeHandler) {
 					let affinityVariable = WuxDef.GetVariable("Affinity");
@@ -1772,8 +1788,10 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					return jsClassData.print(className);
 				},
 				updateBuildPoints = function(eventinfo) {
+					let attributeHandler  = new WorkerAttributeHandler();
 					let worker = new WuxWorkerBuildManager("Job");
-					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+					attributeHandler.run();
 				},
 
 				buildListeners = function () {
@@ -1809,8 +1827,10 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					return jsClassData.print(className);
 				},
 				updateBuildPoints = function(eventinfo) {
+					let attributeHandler  = new WorkerAttributeHandler();
 					let worker = new WuxWorkerBuildManager("Skill");
-					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+					attributeHandler.run();
 				},
 
 				buildListeners = function () {
@@ -1845,8 +1865,10 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					return jsClassData.print(className);
 				},
 				updateBuildPoints = function(eventinfo) {
+					let attributeHandler  = new WorkerAttributeHandler();
 					let worker = new WuxWorkerBuildManager("Attribute");
-					worker.onChangeWorkerAttribute(eventinfo.sourceAttribute, eventinfo.newValue);
+					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+					attributeHandler.run();
 				},
 
 				buildListeners = function () {

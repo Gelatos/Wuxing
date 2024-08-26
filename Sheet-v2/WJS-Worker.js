@@ -160,6 +160,43 @@ class WuxWorkerBuild {
 	revertBuildStatsDraft(attributeHandler) {
 	    attributeHandler.addUpdate(this.attrBuildDraft, JSON.stringify(this.buildStats));
 	}
+
+    changeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
+		let worker = this;
+		
+		console.log(`Updating ${worker.definition.name} variable ${updatingAttr} to ${newValue}`);
+		attributeHandler.addMod(worker.attrMax);
+		attributeHandler.addMod(worker.attrBuildDraft);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsDraft(attrHandler);
+			worker.updateBuildStats(attrHandler, updatingAttr, newValue);
+			worker.updatePoints(attrHandler);
+		});
+	}
+	
+	commitChanges(attributeHandler) {
+		let worker = this;
+		attributeHandler.addMod(worker.attrBuildDraft);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsDraft(attrHandler);
+			worker.cleanBuildStats();
+			worker.saveBuildStatsToFinal(attrHandler);
+		});
+	}
+	
+	resetChanges(attributeHandler) {
+		let worker = this;
+		
+		attributeHandler.addMod(worker.attrBuildFinal);
+		
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsFinal(attrHandler);
+			worker.cleanBuildStats();
+			worker.revertBuildStatsDraft(attrHandler);
+		});
+	}
 }
 class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 	constructor() {
@@ -344,53 +381,21 @@ class WuxWorkerBuildManager {
 		});
 	}
     
-    onChangeWorkerAttribute(updatingAttr, newValue) {
-		let manager = this;
-        let attributeHandler  = new WorkerAttributeHandler();
-		manager.iterate(function(worker) {
-		    console.log(`Updating ${worker.definition.name} variable ${updatingAttr} to ${newValue}`);
-    		attributeHandler.addMod(worker.attrMax);
-			attributeHandler.addMod(worker.attrBuildDraft);
-		});
-		attributeHandler.addGetAttrCallback(function (attrHandler) {
-		    manager.iterate(function(worker) {
-    			worker.setBuildStatsDraft(attrHandler);
-    			worker.updateBuildStats(attrHandler, updatingAttr, newValue);
-    			worker.updatePoints(attrHandler);
-		    });
-		});
-		attributeHandler.run();
-	}
-	
-	onCommit() {
-		let manager = this;
-        let attributeHandler  = new WorkerAttributeHandler();
-		manager.iterate(function(worker) {
-    		attributeHandler.addMod(worker.attrBuildDraft);
-		});
-		attributeHandler.get(attributeHandler, function () {
-		    manager.iterate(function(worker) {
-    			worker.setBuildStatsDraft(attributeHandler);
-				worker.cleanBuildStats();
-    			worker.saveBuildStatsToFinal(attributeHandler);
-		    });
-		    attributeHandler.set();
+    onChangeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
+		this.iterate(function(worker) {
+			worker.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
 		});
 	}
 	
-	onReset() {
-		let manager = this;
-        let attributeHandler  = new WorkerAttributeHandler();
-		manager.iterate(function(worker) {
-    		attributeHandler.addMod(worker.attrBuildFinal);
+	commitChanges(attributeHandler) {
+		this.iterate(function(worker) {
+			worker.commitChanges(attributeHandler);
 		});
-		attributeHandler.get(attributeHandler, function () {
-		    manager.iterate(function(worker) {
-    			worker.setBuildStatsFinal(attributeHandler);
-				worker.cleanBuildStats();
-    			worker.revertBuildStatsDraft(attributeHandler);
-		    });
-		    attributeHandler.set();
+	}
+	
+	resetChanges(attributeHandler) {
+		this.iterate(function(worker) {
+			worker.resetChanges(attributeHandler);
 		});
 	}
 }
