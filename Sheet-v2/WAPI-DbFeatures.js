@@ -3,7 +3,7 @@ var WuxDef = WuxDef || (function () {
 	'use strict';
 
 	var
-		keys = ["Attribute", "Skill", "Job", "Role", "Knowledge", "Language", "Lore", "Style", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_Training", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "Defense_Combat", "Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion", "Sense_Social", "Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "HP", "WILL", "EN", "Initiative", "Affinity", "InnateDefense", "InnateSense", "Recall", "Carrying Capacity", "Combat_HV", "Combat_Armor", "Combat_Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Combat_Durability", "Combat_Surge", "Combat_Chakra", "Chakra", "Combat_Move Speed", "Combat_Move Potency", "Social_Approval", "Social_Patience", "Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Style_Basic Set", "Style_Swordplay", "Style_Ki Extension", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman", "Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Unarmed Strike", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact, Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"],
+		keys = ["Attribute", "Skill", "Job", "Role", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_Training", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "Defense_Combat", "Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion", "Sense_Social", "Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "HP", "WILL", "EN", "Initiative", "Affinity", "InnateDefense", "InnateSense", "Recall", "Carrying Capacity", "Combat_HV", "Combat_Armor", "Combat_Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Combat_Durability", "Combat_Surge", "Combat_Chakra", "Chakra", "Combat_Move Speed", "Combat_Move Potency", "Social_Approval", "Social_Patience", "Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Style_Basic Set", "Style_Swordplay", "Style_Ki Extension", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "LoreCategory_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCategory_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCategory_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCategory_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCategory_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCategory_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCategory_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman", "Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Unarmed Strike", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact, Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"],
 		values = {
 			"Attribute": {
 				"name": "Attribute", "fieldName": "attribute", "group": "Type", "description": "", "variable": "atr{0}{1}", "title": "Attributes", "subGroup": "", "descriptions": [""],
@@ -37,6 +37,11 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Language": {
 				"name": "Language", "fieldName": "language", "group": "Type", "description": "", "variable": "lng{0}{1}", "title": "Language", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"LoreCategory": {
+				"name": "LoreCategory", "fieldName": "lorecategory", "group": "Type", "description": "", "variable": "lrc{0}{1}", "title": "Lore Category", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
@@ -363,6 +368,41 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
+			"Academics": {
+				"name": "Academics", "fieldName": "academics", "group": "LoreCategory", "description": "", "variable": "Academics", "title": "Academics", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"Profession": {
+				"name": "Profession", "fieldName": "profession", "group": "LoreCategory", "description": "", "variable": "Profession", "title": "Profession", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"Craftmanship": {
+				"name": "Craftmanship", "fieldName": "craftmanship", "group": "LoreCategory", "description": "", "variable": "Craftmanship", "title": "Craftmanship", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"Geography": {
+				"name": "Geography", "fieldName": "geography", "group": "LoreCategory", "description": "", "variable": "Geography", "title": "Geography", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"History": {
+				"name": "History", "fieldName": "history", "group": "LoreCategory", "description": "", "variable": "History", "title": "History", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"Culture": {
+				"name": "Culture", "fieldName": "culture", "group": "LoreCategory", "description": "", "variable": "Culture", "title": "Culture", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
+			},
+			"Religion": {
+				"name": "Religion", "fieldName": "religion", "group": "LoreCategory", "description": "", "variable": "Religion", "title": "Religion", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
+			},
 			"PageSet_Character Creator": {
 				"name": "PageSet_Character Creator", "fieldName": "character_creator", "group": "PageSet", "description": "", "variable": "pgs-character_creator{0}", "title": "Character Creator", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
@@ -464,7 +504,8 @@ var WuxDef = WuxDef || (function () {
 				"formulaCalculations": []
 			},
 			"Page_Advancement": {
-				"name": "Page_Advancement", "fieldName": "advancement", "group": "Page", "description": "", "variable": "pag-advancement{0}", "title": "Advancement", "subGroup": "", "descriptions": ["As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. "],
+				"name": "Page_Advancement", "fieldName": "advancement", "group": "Page", "description": "", "variable": "pag-advancement{0}", "title": "Advancement", "subGroup": "", "descriptions": ["As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. "]
+				,
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
@@ -500,17 +541,17 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Level": {
 				"name": "Level", "fieldName": "level", "group": "Advancement", "description": "", "variable": "adv-level{0}", "title": "Character Level", "subGroup": "", "descriptions": ["A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP)."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"abbreviation": "Lv", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"CR": {
 				"name": "CR", "fieldName": "cr", "group": "Advancement", "description": "", "variable": "adv-cr{0}", "title": "Character Rank", "subGroup": "", "descriptions": ["Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level.", "Your Character rank begins at 1. \nAt 5th Level it increases to 2.\nAt 15th Level it increases to 3.\nAt 30th Level it increases to 4.\nAt 50th Level it increases to 5."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"abbreviation": "CR", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"XP": {
 				"name": "XP", "fieldName": "xp", "group": "Advancement", "description": "", "variable": "adv-xp{0}", "title": "Experience", "subGroup": "", "descriptions": ["Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up."],
-				"abbreviation": "", "formula": "30", "modifiers": "", "linkedGroups": 1, "isResource": true, "modAttrs": [],
+				"abbreviation": "XP", "formula": "30", "modifiers": "", "linkedGroups": 1, "isResource": true, "modAttrs": [],
 				"formulaCalculations": [{ "modName": "", "value": 30, "multiplier": 1 }]
 			},
 			"AdvancementJob": {
@@ -555,32 +596,32 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Attribute_BOD": {
 				"name": "Attribute_BOD", "fieldName": "bod", "group": "Attribute", "description": "", "variable": "atr-bod{0}", "title": "Body", "subGroup": "Attribute", "descriptions": [""],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"abbreviation": "BOD", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Attribute_PRC": {
 				"name": "Attribute_PRC", "fieldName": "prc", "group": "Attribute", "description": "", "variable": "atr-prc{0}", "title": "Precision", "subGroup": "Attribute", "descriptions": [""],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"abbreviation": "PRC", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Attribute_QCK": {
 				"name": "Attribute_QCK", "fieldName": "qck", "group": "Attribute", "description": "", "variable": "atr-qck{0}", "title": "Quickness", "subGroup": "Attribute", "descriptions": [""],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"abbreviation": "QCK", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Attribute_CNV": {
 				"name": "Attribute_CNV", "fieldName": "cnv", "group": "Attribute", "description": "", "variable": "atr-cnv{0}", "title": "Conviction", "subGroup": "Attribute", "descriptions": [""],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"abbreviation": "CNV", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Attribute_INT": {
 				"name": "Attribute_INT", "fieldName": "int", "group": "Attribute", "description": "", "variable": "atr-int{0}", "title": "Intuition ", "subGroup": "Attribute", "descriptions": [""],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"abbreviation": "INT", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Attribute_RSN": {
 				"name": "Attribute_RSN", "fieldName": "rsn", "group": "Attribute", "description": "", "variable": "atr-rsn{0}", "title": "Reason", "subGroup": "Attribute", "descriptions": [""],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"abbreviation": "RSN", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
 			"Defense_Combat": {
@@ -785,7 +826,7 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Combat_HV": {
 				"name": "Combat_HV", "fieldName": "hv", "group": "Combat", "description": "", "variable": "cmb-hv{0}", "title": "Heal Value", "subGroup": "", "descriptions": ["This value is a standard amount of HP you recover from some healing abilities."],
-				"abbreviation": "", "formula": "5;CR*4;Attribute_CNV", "modifiers": "_tech;_affinity", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "atr-cnv", "cmb-hv_tech", "cmb-hv_affinity"],
+				"abbreviation": "HV", "formula": "5;CR*4;Attribute_CNV", "modifiers": "_tech;_affinity", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "atr-cnv", "cmb-hv_tech", "cmb-hv_affinity"],
 				"formulaCalculations": [{ "modName": "", "value": 5, "multiplier": 1 },
 				{ "modName": "adv-cr", "value": 0, "multiplier": 4 },
 				{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
@@ -1198,248 +1239,208 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Skill_Acrobatics": {
 				"name": "Skill_Acrobatics", "fieldName": "acrobatics", "group": "Skill", "description": "", "variable": "skl-acrobatics{0}", "title": "Acrobatics", "subGroup": "", "descriptions": ["Your Acrobatics check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_QCK", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-qck", "skl-acrobatics_rank"],
+				"formulaCalculations": [{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Agility": {
 				"name": "Skill_Agility", "fieldName": "agility", "group": "Skill", "description": "", "variable": "skl-agility{0}", "title": "Agility", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_QCK", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-qck", "skl-agility_rank"],
+				"formulaCalculations": [{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Analyze": {
 				"name": "Skill_Analyze", "fieldName": "analyze", "group": "Skill", "description": "", "variable": "skl-analyze{0}", "title": "Analyze", "subGroup": "", "descriptions": ["When attempting to find clues and make deductions based on those clues, you make an Analyze check. You might deduce the location of a hidden object, discern from the appearance of a wound what kind of weapon dealt it, or determine the weakest point in a tunnel that could cause it to collapse. Poring through books in search of a hidden fragment of knowledge might also call for an Analyze check."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-rsn", "skl-analyze_rank"],
+				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Build": {
 				"name": "Skill_Build", "fieldName": "build", "group": "Skill", "description": "", "variable": "skl-build{0}", "title": "Build", "subGroup": "", "descriptions": ["Build is the skill to create structures and objects. This skill includes several different forms of artistic impression such as through drawing, sculpting, handcrafting of fine objects, and conveying art and information through images and technique. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-rsn", "skl-build_rank"],
+				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Channel": {
 				"name": "Skill_Channel", "fieldName": "channel", "group": "Skill", "description": "", "variable": "skl-channel{0}", "title": "Channel", "subGroup": "", "descriptions": ["Channel is the skill to maintain concentration on ether you have manipulated in order to continue its effects. Magical effects that create a sustained area of effect typically use channel to determine their effectiveness."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-cnv", "skl-channel_rank"],
+				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Charm": {
 				"name": "Skill_Charm", "fieldName": "charm", "group": "Skill", "description": "", "variable": "skl-charm{0}", "title": "Charm", "subGroup": "", "descriptions": ["Enticing, fascinating, and endearing others to you on a personal basis. It can be used to win someone over emotionally through friendliness, joy, and an ability to read a situation. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-cnv", "skl-charm_rank"],
+				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Command": {
 				"name": "Skill_Command", "fieldName": "command", "group": "Skill", "description": "", "variable": "skl-command{0}", "title": "Command", "subGroup": "", "descriptions": ["Command is the ability to use perceived authority or intimidation to control another's perceptions and action. One may use command to inspire a companion, intimidate a foe into backing down, or when making demands of another. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
 			},
 			"Skill_Concoct": {
 				"name": "Skill_Concoct", "fieldName": "concoct", "group": "Skill", "description": "", "variable": "skl-concoct{0}", "title": "Concoct", "subGroup": "", "descriptions": ["Concoct is the skill of combining ingredients inorder to create a new product. If you are cooking a meal, making medicine, or otherwise blending items together to form a new item you would use the mix skill."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
 			},
 			"Skill_Cook": {
 				"name": "Skill_Cook", "fieldName": "cook", "group": "Skill", "description": "", "variable": "skl-cook{0}", "title": "Cook", "subGroup": "", "descriptions": ["Cook allows one to create food and drinks from ingredients. Food is an important fuel to sustain life but also well made food improves mood and allows one to push themselves."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_INT", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-int", "skl-cook_rank"],
+				"formulaCalculations": [{ "modName": "atr-int", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Deception": {
 				"name": "Skill_Deception", "fieldName": "deception", "group": "Skill", "description": "", "variable": "skl-deception{0}", "title": "Deception", "subGroup": "", "descriptions": ["Deception is the skill of telling convincing lies, as well as feigning emotion, belief, or frame of mind. Deception can encompass everything from misleading others through ambiguity to telling outright lies. This skill is also used to convince others of a disguise. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-rsn", "skl-deception_rank"],
+				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Disguise": {
 				"name": "Skill_Disguise", "fieldName": "disguise", "group": "Skill", "description": "", "variable": "skl-disguise{0}", "title": "Disguise", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_INT", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-int", "skl-disguise_rank"],
+				"formulaCalculations": [{ "modName": "atr-int", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Empathy": {
 				"name": "Skill_Empathy", "fieldName": "empathy", "group": "Skill", "description": "", "variable": "skl-empathy{0}", "title": "Empathy", "subGroup": "", "descriptions": ["Empathy is used to sense both feelings in other creatures and any existing mana or ether in the environment. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_INT", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-int", "skl-empathy_rank"],
+				"formulaCalculations": [{ "modName": "atr-int", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Enchant": {
 				"name": "Skill_Enchant", "fieldName": "enchant", "group": "Skill", "description": "", "variable": "skl-enchant{0}", "title": "Enchant", "subGroup": "", "descriptions": ["Enchant is the skill to control ones own ether and impart it into another person or object. This is the basis for techniques like healing and empowerment magic."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-cnv", "skl-enchant_rank"],
+				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Finesse": {
 				"name": "Skill_Finesse", "fieldName": "finesse", "group": "Skill", "description": "", "variable": "skl-finesse{0}", "title": "Finesse", "subGroup": "", "descriptions": ["Finesse is used to strike with light and nimble weapons such as daggers, shortswords, and rapiers. Those that use finesse weapons will often fight deftly, exploiting weaknesses in an enemy's defenses. Weapons in this group are typically easy to hide and allow their wielders to exploit a brace vulnerability. Techniques that support this skill will often grant more mobility options to a character."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_QCK", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-qck", "skl-finesse_rank"],
+				"formulaCalculations": [{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Flexibility": {
 				"name": "Skill_Flexibility", "fieldName": "flexibility", "group": "Skill", "description": "", "variable": "skl-flexibility{0}", "title": "Flexibility", "subGroup": "", "descriptions": ["Your flexibility check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
 			},
 			"Skill_Grappling": {
 				"name": "Skill_Grappling", "fieldName": "grappling", "group": "Skill", "description": "", "variable": "skl-grappling{0}", "title": "Grappling", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_BOD", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-bod", "skl-grappling_rank"],
+				"formulaCalculations": [{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Heal": {
 				"name": "Skill_Heal", "fieldName": "heal", "group": "Skill", "description": "", "variable": "skl-heal{0}", "title": "Heal", "subGroup": "", "descriptions": ["Heal is used to perform medical procedures such as administering drugs, performing first aid, and conducting surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character’s medical condition."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
 			},
 			"Skill_Intimidation": {
 				"name": "Skill_Intimidation", "fieldName": "intimidation", "group": "Skill", "description": "", "variable": "skl-intimidation{0}", "title": "Intimidation", "subGroup": "", "descriptions": ["When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision. When intimidating others you target their resolve."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-cnv", "skl-intimidation_rank"],
+				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Leadership": {
 				"name": "Skill_Leadership", "fieldName": "leadership", "group": "Skill", "description": "", "variable": "skl-leadership{0}", "title": "Leadership", "subGroup": "", "descriptions": ["Leadership is the ability to direct and motivate others. This skill is especially helpful in situations where the will of a teammate is shaken or someone is being asked to do something uncomfortable."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_INT", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-int", "skl-leadership_rank"],
+				"formulaCalculations": [{ "modName": "atr-int", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Maneuver": {
 				"name": "Skill_Maneuver", "fieldName": "maneuver", "group": "Skill", "description": "", "variable": "skl-maneuver{0}", "title": "Maneuver", "subGroup": "", "descriptions": ["Maneuvers govern techniques that allow you to move or manipulate another creature into a new position or state."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": [],
+				"formulaCalculations": []
 			},
 			"Skill_Medicine": {
 				"name": "Skill_Medicine", "fieldName": "medicine", "group": "Skill", "description": "", "variable": "skl-medicine{0}", "title": "Medicine", "subGroup": "", "descriptions": ["Medicine is the skill to create and administer drugs for yourself and others. Drugs are often used both to quickly provide a temporary boost to another and to administer long term care for another."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-rsn", "skl-medicine_rank"],
+				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Might": {
 				"name": "Skill_Might", "fieldName": "might", "group": "Skill", "description": "", "variable": "skl-might{0}", "title": "Might", "subGroup": "", "descriptions": ["This skill allows one to attack with brute strength while wielding heavy and cumbersome weapons. These weapons support large damage values allowing their wielders to smash through their enemies. Weapons in this group often will pierce through armor or exploit a reflex vulnerability. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_BOD", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-bod", "skl-might_rank"],
+				"formulaCalculations": [{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Negotiation": {
 				"name": "Skill_Negotiation", "fieldName": "negotiation", "group": "Skill", "description": "", "variable": "skl-negotiation{0}", "title": "Negotiation", "subGroup": "", "descriptions": ["Negotiation governs a character’s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-rsn", "skl-negotiation_rank"],
+				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Palming": {
 				"name": "Skill_Palming", "fieldName": "palming", "group": "Skill", "description": "", "variable": "skl-palming{0}", "title": "Palming", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_QCK", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-qck", "skl-palming_rank"],
+				"formulaCalculations": [{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Physique": {
 				"name": "Skill_Physique", "fieldName": "physique", "group": "Skill", "description": "", "variable": "skl-physique{0}", "title": "Physique", "subGroup": "", "descriptions": ["The Physique skill represents a character’s raw strength and endurance. It is used when using physical strength to break through objects and restraints or when attempting to lift things beyond your carrying capacity."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_BOD", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-bod", "skl-physique_rank"],
+				"formulaCalculations": [{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Pilot": {
 				"name": "Skill_Pilot", "fieldName": "pilot", "group": "Skill", "description": "", "variable": "skl-pilot{0}", "title": "Pilot", "subGroup": "", "descriptions": ["When attempting to drive a vehicle of any kind, the pilot skill often governs most checks. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_QCK", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-qck", "skl-pilot_rank"],
+				"formulaCalculations": [{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Resonance": {
 				"name": "Skill_Resonance", "fieldName": "resonance", "group": "Skill", "description": "", "variable": "skl-resonance{0}", "title": "Resonance", "subGroup": "", "descriptions": ["Resonance is the ability to detect and release ether. It is most often used to detect magical structures and as communication with spirits. Less commonly, it can be used to destroy magical effects and structures made from ether that hasn't been permanently bound."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-cnv", "skl-resonance_rank"],
+				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Search": {
 				"name": "Skill_Search", "fieldName": "search", "group": "Skill", "description": "", "variable": "skl-search{0}", "title": "Search", "subGroup": "", "descriptions": ["This is used to actively search for for clues or anything out of sorts. You might deduce the location of a hidden object, discern from the appearance of a wound what kind of weapon dealt it, or determine the weakest point in a tunnel that could cause it to collapse. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_INT", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-int", "skl-search_rank"],
+				"formulaCalculations": [{ "modName": "atr-int", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Shoot": {
 				"name": "Skill_Shoot", "fieldName": "shoot", "group": "Skill", "description": "", "variable": "skl-shoot{0}", "title": "Shoot", "subGroup": "", "descriptions": ["The skill of using a bow or firearm. These weapons have the most variety in weapon ranges allowing one to reliably attack from a distance. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_PRC", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-prc", "skl-shoot_rank"],
+				"formulaCalculations": [{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Skirmish": {
 				"name": "Skill_Skirmish", "fieldName": "skirmish", "group": "Skill", "description": "", "variable": "skl-skirmish{0}", "title": "Skirmish", "subGroup": "", "descriptions": ["This skill governs most balanced, close range fighting styles such as with longswords, clubs, and polearms. Weapons in this category offer the most variety of technique options to manipulate the battlefield to their favor. Unique to this group are weapons that can exploit both reflex and brace vulnerabilities."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_PRC", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-prc", "skl-skirmish_rank"],
+				"formulaCalculations": [{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Sneak": {
 				"name": "Skill_Sneak", "fieldName": "sneak", "group": "Skill", "description": "", "variable": "skl-sneak{0}", "title": "Sneak", "subGroup": "", "descriptions": ["Make a Sneak check when you attempt to conceal yourself from enemies, palm an object, slink past guards, slip away without being noticed, or sneak up on some one without being seen or heard. "],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_PRC", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-prc", "skl-sneak_rank"],
+				"formulaCalculations": [{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Survival": {
 				"name": "Skill_Survival", "fieldName": "survival", "group": "Skill", "description": "", "variable": "skl-survival{0}", "title": "Survival", "subGroup": "", "descriptions": ["Survival is the ability to stay alive in ex- treme environmental conditions for extended periods of time. The skill governs a character’s ability to per- form vital outdoor tasks such as start a fire, build a shel- ter, scrounge for food, etc."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_BOD", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-bod", "skl-survival_rank"],
+				"formulaCalculations": [{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Throw": {
 				"name": "Skill_Throw", "fieldName": "throw", "group": "Skill", "description": "", "variable": "skl-throw{0}", "title": "Throw", "subGroup": "", "descriptions": ["When one strikes at a foe or aims for a location by throwing an object, it is typical to use the throw skill. Many melee weapons will have a range increment. In order to use this range the user will instead use the Throw skill to determine accuracy."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_PRC", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-prc", "skl-throw_rank"],
+				"formulaCalculations": [{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Tinker": {
 				"name": "Skill_Tinker", "fieldName": "tinker", "group": "Skill", "description": "", "variable": "skl-tinker{0}", "title": "Tinker", "subGroup": "", "descriptions": ["This skill covers building, repairing, and disabling mechanical devices such as locks, tools, and machinery."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_PRC", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-prc", "skl-tinker_rank"],
+				"formulaCalculations": [{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Skill_Traversal": {
 				"name": "Skill_Traversal", "fieldName": "traversal", "group": "Skill", "description": "", "variable": "skl-traversal{0}", "title": "Traversal", "subGroup": "", "descriptions": ["Your traversal check covers movement through an environment such as when climbing, jumping, or swimming."],
-				"abbreviation": "", "formula": "8;CR;AdvancementSkill", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_skill"],
-				"formulaCalculations": [{ "modName": "", "value": 8, "multiplier": 1 },
-				{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
-				{ "modName": "adv-ap_skill", "value": 0, "multiplier": 1 }]
+				"abbreviation": "", "formula": "Attribute_BOD", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["atr-bod", "skl-traversal_rank"],
+				"formulaCalculations": [{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Language_Minere": {
 				"name": "Language_Minere", "fieldName": "minere", "group": "Language", "description": "", "variable": "lng-minere{0}", "title": "Minere", "subGroup": "", "descriptions": ["The common language used in Minerva and the lands surrounding it. Minere is made up of three root languages that were once spoken commonly amongst the coastal civilizations of the area."],
@@ -1547,8 +1548,7 @@ var WuxDef = WuxDef || (function () {
 				"formulaCalculations": []
 			},
 			"Language_Emotion": {
-				"name": "Language_Emotion", "fieldName": "emotion", "group": "Language", "description": "", "variable": "lng-emotion{0}", "title": "Emotion", "subGroup": "", "descriptions": ["The language of the spirits. This language is incredibly simplistic as it is communicated entirely through emotions."]
-				,
+				"name": "Language_Emotion", "fieldName": "emotion", "group": "Language", "description": "", "variable": "lng-emotion{0}", "title": "Emotion", "subGroup": "", "descriptions": ["The language of the spirits. This language is incredibly simplistic as it is communicated entirely through emotions."],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
@@ -1572,300 +1572,359 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
 				"formulaCalculations": []
 			},
-			"Lore_Academics": {
-				"name": "Lore_Academics", "fieldName": "academics", "group": "Lore", "description": "", "variable": "lor-academics{0}", "title": "Academics", "subGroup": "", "descriptions": ["This represents general education for academic study for the purposes of functioning in modern society."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+			"LoreCategory_Academics": {
+				"name": "LoreCategory_Academics", "fieldName": "academics", "group": "LoreCategory", "description": "", "variable": "lrc-academics{0}", "title": "Academics", "subGroup": "Academics", "descriptions": ["This represents general education for academic study for the purposes of functioning in modern society."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lrc-academics_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Health": {
-				"name": "Lore_Health", "fieldName": "health", "group": "Lore", "description": "", "variable": "lor-health{0}", "title": "Health", "subGroup": "", "descriptions": ["This covers the study of human physiology and health."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Health", "fieldName": "health", "group": "Lore", "description": "", "variable": "lor-health{0}", "title": "Health", "subGroup": "Academics", "descriptions": ["This covers the study of human physiology and health."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-health_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Mana": {
-				"name": "Lore_Mana", "fieldName": "mana", "group": "Lore", "description": "", "variable": "lor-mana{0}", "title": "Mana", "subGroup": "", "descriptions": ["The study of ki, ether, and magic. "],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Mana", "fieldName": "mana", "group": "Lore", "description": "", "variable": "lor-mana{0}", "title": "Mana", "subGroup": "Academics", "descriptions": ["The study of ki, ether, and magic. "],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-mana_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Mathematics": {
-				"name": "Lore_Mathematics", "fieldName": "mathematics", "group": "Lore", "description": "", "variable": "lor-mathematics{0}", "title": "Mathematics", "subGroup": "", "descriptions": ["Mathematics knowledge represents an understanding of math and calculations."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Mathematics", "fieldName": "mathematics", "group": "Lore", "description": "", "variable": "lor-mathematics{0}", "title": "Mathematics", "subGroup": "Academics", "descriptions": ["Mathematics knowledge represents an understanding of math and calculations."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-mathematics_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Nature": {
-				"name": "Lore_Nature", "fieldName": "nature", "group": "Lore", "description": "", "variable": "lor-nature{0}", "title": "Nature", "subGroup": "", "descriptions": ["Nature knowledge grants an understanding of various types of plant life and their uses."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Nature", "fieldName": "nature", "group": "Lore", "description": "", "variable": "lor-nature{0}", "title": "Nature", "subGroup": "Academics", "descriptions": ["Nature knowledge grants an understanding of various types of plant life and their uses."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-nature_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_School": {
-				"name": "Lore_School", "fieldName": "school", "group": "Lore", "description": "", "variable": "lor-school{0}", "title": "School", "subGroup": "", "descriptions": ["This knowledge represents information related to schools, famous educators, and forms of education used in the lands."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_School", "fieldName": "school", "group": "Lore", "description": "", "variable": "lor-school{0}", "title": "School", "subGroup": "Academics", "descriptions": ["This knowledge represents information related to schools, famous educators, and forms of education used in the lands."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-school_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Spirit": {
-				"name": "Lore_Spirit", "fieldName": "spirit", "group": "Lore", "description": "", "variable": "lor-spirit{0}", "title": "Spirit", "subGroup": "", "descriptions": ["Spirit knowledge represents an understanding of how spirits behave, their various forms, their interactions with magic and ether, and their abilities to manifest into the material plane."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Spirit", "fieldName": "spirit", "group": "Lore", "description": "", "variable": "lor-spirit{0}", "title": "Spirit", "subGroup": "Academics", "descriptions": ["Spirit knowledge represents an understanding of how spirits behave, their various forms, their interactions with magic and ether, and their abilities to manifest into the material plane."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-spirit_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Warfare": {
-				"name": "Lore_Warfare", "fieldName": "warfare", "group": "Lore", "description": "", "variable": "lor-warfare{0}", "title": "Warfare", "subGroup": "", "descriptions": ["Warfare knowledge covers various tactics used in war and the management of an army."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Warfare", "fieldName": "warfare", "group": "Lore", "description": "", "variable": "lor-warfare{0}", "title": "Warfare", "subGroup": "Academics", "descriptions": ["Warfare knowledge covers various tactics used in war and the management of an army."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-warfare_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Zoology": {
-				"name": "Lore_Zoology", "fieldName": "zoology", "group": "Lore", "description": "", "variable": "lor-zoology{0}", "title": "Zoology", "subGroup": "", "descriptions": ["This knowledge represents physiological knowledge of living creatures of the world."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Zoology", "fieldName": "zoology", "group": "Lore", "description": "", "variable": "lor-zoology{0}", "title": "Zoology", "subGroup": "Academics", "descriptions": ["This knowledge represents physiological knowledge of living creatures of the world."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-zoology_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
-			"Lore_Profession": {
-				"name": "Lore_Profession", "fieldName": "profession", "group": "Lore", "description": "", "variable": "lor-profession{0}", "title": "Profession", "subGroup": "", "descriptions": ["Profession is the general knowledge of any kind of job, what they do, and how it is performed."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+			"LoreCategory_Profession": {
+				"name": "LoreCategory_Profession", "fieldName": "profession", "group": "LoreCategory", "description": "", "variable": "lrc-profession{0}", "title": "Profession", "subGroup": "Profession", "descriptions": ["Profession is the general knowledge of any kind of job, what they do, and how it is performed."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lrc-profession_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Farming": {
-				"name": "Lore_Farming", "fieldName": "farming", "group": "Lore", "description": "", "variable": "lor-farming{0}", "title": "Farming", "subGroup": "", "descriptions": ["Farming knowledge covers all aspects of growing and nurturing plantlife in order to provide food"],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Farming", "fieldName": "farming", "group": "Lore", "description": "", "variable": "lor-farming{0}", "title": "Farming", "subGroup": "Profession", "descriptions": ["Farming knowledge covers all aspects of growing and nurturing plantlife in order to provide food"],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-farming_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Fishing": {
-				"name": "Lore_Fishing", "fieldName": "fishing", "group": "Lore", "description": "", "variable": "lor-fishing{0}", "title": "Fishing", "subGroup": "", "descriptions": ["Fishing knowledge covers all aspects of fishing."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Fishing", "fieldName": "fishing", "group": "Lore", "description": "", "variable": "lor-fishing{0}", "title": "Fishing", "subGroup": "Profession", "descriptions": ["Fishing knowledge covers all aspects of fishing."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-fishing_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Hunting": {
-				"name": "Lore_Hunting", "fieldName": "hunting", "group": "Lore", "description": "", "variable": "lor-hunting{0}", "title": "Hunting", "subGroup": "", "descriptions": ["Hunting knowledge imparts wisdom related to tracking, catching, and killing various creatures."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Hunting", "fieldName": "hunting", "group": "Lore", "description": "", "variable": "lor-hunting{0}", "title": "Hunting", "subGroup": "Profession", "descriptions": ["Hunting knowledge imparts wisdom related to tracking, catching, and killing various creatures."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-hunting_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Legal": {
-				"name": "Lore_Legal", "fieldName": "legal", "group": "Lore", "description": "", "variable": "lor-legal{0}", "title": "Legal", "subGroup": "", "descriptions": ["Legal knowledge imparts a knowledge of general laws common amongst civilizations and the penalties that may be gained from disobeying them."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Legal", "fieldName": "legal", "group": "Lore", "description": "", "variable": "lor-legal{0}", "title": "Legal", "subGroup": "Profession", "descriptions": ["Legal knowledge imparts a knowledge of general laws common amongst civilizations and the penalties that may be gained from disobeying them."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-legal_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Mercantile": {
-				"name": "Lore_Mercantile", "fieldName": "mercantile", "group": "Lore", "description": "", "variable": "lor-mercantile{0}", "title": "Mercantile", "subGroup": "", "descriptions": ["Mercantile knowledge grants wisdom related to the buying and selling of goods."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Mercantile", "fieldName": "mercantile", "group": "Lore", "description": "", "variable": "lor-mercantile{0}", "title": "Mercantile", "subGroup": "Profession", "descriptions": ["Mercantile knowledge grants wisdom related to the buying and selling of goods."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-mercantile_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Mining": {
-				"name": "Lore_Mining", "fieldName": "mining", "group": "Lore", "description": "", "variable": "lor-mining{0}", "title": "Mining", "subGroup": "", "descriptions": ["Mining knowledge represents information related to breaking apart rock for material."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Mining", "fieldName": "mining", "group": "Lore", "description": "", "variable": "lor-mining{0}", "title": "Mining", "subGroup": "Profession", "descriptions": ["Mining knowledge represents information related to breaking apart rock for material."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-mining_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
-			"Lore_Craftmanship": {
-				"name": "Lore_Craftmanship", "fieldName": "craftmanship", "group": "Lore", "description": "", "variable": "lor-craftmanship{0}", "title": "Craftmanship", "subGroup": "", "descriptions": ["The knowledge of creating items through manipulation of substances and materials. A knowledge check here will help one identify techniques used to create an object but not necessarily how to recreate it."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+			"LoreCategory_Craftmanship": {
+				"name": "LoreCategory_Craftmanship", "fieldName": "craftmanship", "group": "LoreCategory", "description": "", "variable": "lrc-craftmanship{0}", "title": "Craftmanship", "subGroup": "Craftmanship", "descriptions": ["The knowledge of creating items through manipulation of substances and materials. A knowledge check here will help one identify techniques used to create an object but not necessarily how to recreate it."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lrc-craftmanship_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Alchemy": {
-				"name": "Lore_Alchemy", "fieldName": "alchemy", "group": "Lore", "description": "", "variable": "lor-alchemy{0}", "title": "Alchemy", "subGroup": "", "descriptions": ["Alchemy is the science of substances and how they can change. When working with chemicals and material that on their own should not be consumed, Alchemy will typically apply. Alchemy is typically used in the creation of drugs and substances."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Alchemy", "fieldName": "alchemy", "group": "Lore", "description": "", "variable": "lor-alchemy{0}", "title": "Alchemy", "subGroup": "Craftmanship", "descriptions": ["Alchemy is the science of substances and how they can change. When working with chemicals and material that on their own should not be consumed, Alchemy will typically apply. Alchemy is typically used in the creation of drugs and substances."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-alchemy_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Architecture": {
-				"name": "Lore_Architecture", "fieldName": "architecture", "group": "Lore", "description": "", "variable": "lor-architecture{0}", "title": "Architecture", "subGroup": "", "descriptions": ["This knowledge represents a general knowledge about building design, general points of entry, and potential weaknesses."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Architecture", "fieldName": "architecture", "group": "Lore", "description": "", "variable": "lor-architecture{0}", "title": "Architecture", "subGroup": "Craftmanship", "descriptions": ["This knowledge represents a general knowledge about building design, general points of entry, and potential weaknesses."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-architecture_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Brewing": {
-				"name": "Lore_Brewing", "fieldName": "brewing", "group": "Lore", "description": "", "variable": "lor-brewing{0}", "title": "Brewing", "subGroup": "", "descriptions": ["Brewing is the skill that governs any kind of skill the requires the mixing of ingredients into a drink or broth."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Brewing", "fieldName": "brewing", "group": "Lore", "description": "", "variable": "lor-brewing{0}", "title": "Brewing", "subGroup": "Craftmanship", "descriptions": ["Brewing is the skill that governs any kind of skill the requires the mixing of ingredients into a drink or broth."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-brewing_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Cooking": {
-				"name": "Lore_Cooking", "fieldName": "cooking", "group": "Lore", "description": "", "variable": "lor-cooking{0}", "title": "Cooking", "subGroup": "", "descriptions": ["Food is important for survival, so making it enjoyable is a craft of great appreciation. Cooking knowledge gives you the knowledge of different cooking techniques to create meals."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Cooking", "fieldName": "cooking", "group": "Lore", "description": "", "variable": "lor-cooking{0}", "title": "Cooking", "subGroup": "Craftmanship", "descriptions": ["Food is important for survival, so making it enjoyable is a craft of great appreciation. Cooking knowledge gives you the knowledge of different cooking techniques to create meals."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-cooking_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Engineering": {
-				"name": "Lore_Engineering", "fieldName": "engineering", "group": "Lore", "description": "", "variable": "lor-engineering{0}", "title": "Engineering", "subGroup": "", "descriptions": ["Engineering knowledge represents an understanding of mechanisms and systems to build complex structures and items."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Engineering", "fieldName": "engineering", "group": "Lore", "description": "", "variable": "lor-engineering{0}", "title": "Engineering", "subGroup": "Craftmanship", "descriptions": ["Engineering knowledge represents an understanding of mechanisms and systems to build complex structures and items."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-engineering_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Glassblowing": {
-				"name": "Lore_Glassblowing", "fieldName": "glassblowing", "group": "Lore", "description": "", "variable": "lor-glassblowing{0}", "title": "Glassblowing", "subGroup": "", "descriptions": ["When working with and shaping glass, the skill of glassblowing is required."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Glassblowing", "fieldName": "glassblowing", "group": "Lore", "description": "", "variable": "lor-glassblowing{0}", "title": "Glassblowing", "subGroup": "Craftmanship", "descriptions": ["When working with and shaping glass, the skill of glassblowing is required."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-glassblowing_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Leatherworking": {
-				"name": "Lore_Leatherworking", "fieldName": "leatherworking", "group": "Lore", "description": "", "variable": "lor-leatherworking{0}", "title": "Leatherworking", "subGroup": "", "descriptions": ["Leatherworking entails any skills related to skinning and using animal skins for clothing, and items. "],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Leatherworking", "fieldName": "leatherworking", "group": "Lore", "description": "", "variable": "lor-leatherworking{0}", "title": "Leatherworking", "subGroup": "Craftmanship", "descriptions": ["Leatherworking entails any skills related to skinning and using animal skins for clothing, and items. "],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-leatherworking_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Sculpting": {
-				"name": "Lore_Sculpting", "fieldName": "sculpting", "group": "Lore", "description": "", "variable": "lor-sculpting{0}", "title": "Sculpting", "subGroup": "", "descriptions": ["Sculpting allows one to use soft material like clay and shape it into a desired form."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Sculpting", "fieldName": "sculpting", "group": "Lore", "description": "", "variable": "lor-sculpting{0}", "title": "Sculpting", "subGroup": "Craftmanship", "descriptions": ["Sculpting allows one to use soft material like clay and shape it into a desired form."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-sculpting_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Smithing": {
-				"name": "Lore_Smithing", "fieldName": "smithing", "group": "Lore", "description": "", "variable": "lor-smithing{0}", "title": "Smithing", "subGroup": "", "descriptions": ["Smithing is the skill that allows you to shape various materials, usually metal, into tools of combat or other larger metalic items. "],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Smithing", "fieldName": "smithing", "group": "Lore", "description": "", "variable": "lor-smithing{0}", "title": "Smithing", "subGroup": "Craftmanship", "descriptions": ["Smithing is the skill that allows you to shape various materials, usually metal, into tools of combat or other larger metalic items. "],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-smithing_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Weaving": {
-				"name": "Lore_Weaving", "fieldName": "weaving", "group": "Lore", "description": "", "variable": "lor-weaving{0}", "title": "Weaving", "subGroup": "", "descriptions": ["Weaving is the skill for putting together and shaping fabrics and cloths into useful material and objects."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Weaving", "fieldName": "weaving", "group": "Lore", "description": "", "variable": "lor-weaving{0}", "title": "Weaving", "subGroup": "Craftmanship", "descriptions": ["Weaving is the skill for putting together and shaping fabrics and cloths into useful material and objects."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-weaving_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
-			"Lore_Geography": {
-				"name": "Lore_Geography", "fieldName": "geography", "group": "Lore", "description": "", "variable": "lor-geography{0}", "title": "Geography", "subGroup": "", "descriptions": ["Geography represents general knowledge of terrains and locations within an area."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+			"LoreCategory_Geography": {
+				"name": "LoreCategory_Geography", "fieldName": "geography", "group": "LoreCategory", "description": "", "variable": "lrc-geography{0}", "title": "Geography", "subGroup": "Geography", "descriptions": ["Geography represents general knowledge of terrains and locations within an area."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lrc-geography_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Aridsha": {
-				"name": "Lore_Aridsha", "fieldName": "aridsha", "group": "Lore", "description": "", "variable": "lor-aridsha{0}", "title": "Aridsha", "subGroup": "", "descriptions": ["This check represents geographical knowledge of Juno and the Aridsha desert region to the west. "],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Aridsha", "fieldName": "aridsha", "group": "Lore", "description": "", "variable": "lor-aridsha{0}", "title": "Aridsha", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of Juno and the Aridsha desert region to the west. "],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-aridsha_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Ceres": {
-				"name": "Lore_Ceres", "fieldName": "ceres", "group": "Lore", "description": "", "variable": "lor-ceres{0}", "title": "Ceres", "subGroup": "", "descriptions": ["This check represents geographical knowledge of Capitol City and the Ceres plains to the north."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Ceres", "fieldName": "ceres", "group": "Lore", "description": "", "variable": "lor-ceres{0}", "title": "Ceres", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of Capitol City and the Ceres plains to the north."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-ceres_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Colswei": {
-				"name": "Lore_Colswei", "fieldName": "colswei", "group": "Lore", "description": "", "variable": "lor-colswei{0}", "title": "Colswei", "subGroup": "", "descriptions": ["This check represents geographical knowledge of Liber and the frozen lands of the Colswei in the south."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Colswei", "fieldName": "colswei", "group": "Lore", "description": "", "variable": "lor-colswei{0}", "title": "Colswei", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of Liber and the frozen lands of the Colswei in the south."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-colswei_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Khem": {
-				"name": "Lore_Khem", "fieldName": "khem", "group": "Lore", "description": "", "variable": "lor-khem{0}", "title": "Khem", "subGroup": "", "descriptions": ["This check represents geographical knowledge of the Kingdom of Apollo and its mountainous region of Khem to the north east."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Khem", "fieldName": "khem", "group": "Lore", "description": "", "variable": "lor-khem{0}", "title": "Khem", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of the Kingdom of Apollo and its mountainous region of Khem to the north east."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-khem_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Novus": {
-				"name": "Lore_Novus", "fieldName": "novus", "group": "Lore", "description": "", "variable": "lor-novus{0}", "title": "Novus", "subGroup": "", "descriptions": ["This check represents geographical knowledge of Novus and the Blessed Lands beyond the ocean."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Novus", "fieldName": "novus", "group": "Lore", "description": "", "variable": "lor-novus{0}", "title": "Novus", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of Novus and the Blessed Lands beyond the ocean."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-novus_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Walthair": {
-				"name": "Lore_Walthair", "fieldName": "walthair", "group": "Lore", "description": "", "variable": "lor-walthair{0}", "title": "Walthair", "subGroup": "", "descriptions": ["This check represents geographical knowledge of Minerva and the grasslands and eastern sea islands of Walthair to the east."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Walthair", "fieldName": "walthair", "group": "Lore", "description": "", "variable": "lor-walthair{0}", "title": "Walthair", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of Minerva and the grasslands and eastern sea islands of Walthair to the east."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-walthair_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Wayling": {
-				"name": "Lore_Wayling", "fieldName": "wayling", "group": "Lore", "description": "", "variable": "lor-wayling{0}", "title": "Wayling", "subGroup": "", "descriptions": ["This check represents geographical knowledge of the central grasslands and marsh of Wayling."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Wayling", "fieldName": "wayling", "group": "Lore", "description": "", "variable": "lor-wayling{0}", "title": "Wayling", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of the central grasslands and marsh of Wayling."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-wayling_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Ethereal Plane": {
-				"name": "Lore_Ethereal Plane", "fieldName": "ethereal_plane", "group": "Lore", "description": "", "variable": "lor-ethereal_plane{0}", "title": "Ethereal Plane", "subGroup": "", "descriptions": ["Ethereal Plane knowledge represents known methods of entering the plane, its dangers, qualities, and points of interest within the plane."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Ethereal Plane", "fieldName": "ethereal_plane", "group": "Lore", "description": "", "variable": "lor-ethereal_plane{0}", "title": "Ethereal Plane", "subGroup": "Geography", "descriptions": ["Ethereal Plane knowledge represents known methods of entering the plane, its dangers, qualities, and points of interest within the plane."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-ethereal_plane_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
-			"Lore_History": {
-				"name": "Lore_History", "fieldName": "history", "group": "Lore", "description": "", "variable": "lor-history{0}", "title": "History", "subGroup": "", "descriptions": ["History knowledges represent known history of civilizations and any legends that may exist."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+			"LoreCategory_History": {
+				"name": "LoreCategory_History", "fieldName": "history", "group": "LoreCategory", "description": "", "variable": "lrc-history{0}", "title": "History", "subGroup": "History", "descriptions": ["History knowledges represent known history of civilizations and any legends that may exist."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lrc-history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Aridsha History": {
-				"name": "Lore_Aridsha History", "fieldName": "aridsha_history", "group": "Lore", "description": "", "variable": "lor-aridsha_history{0}", "title": "Aridsha History", "subGroup": "", "descriptions": ["This check represents history of Juno and the Aridsha desert region to the west. "],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Aridsha History", "fieldName": "aridsha_history", "group": "Lore", "description": "", "variable": "lor-aridsha_history{0}", "title": "Aridsha History", "subGroup": "History", "descriptions": ["This check represents history of Juno and the Aridsha desert region to the west. "],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-aridsha_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Ceres History": {
-				"name": "Lore_Ceres History", "fieldName": "ceres_history", "group": "Lore", "description": "", "variable": "lor-ceres_history{0}", "title": "Ceres History", "subGroup": "", "descriptions": ["This check represents history of Capitol City and the Ceres plains to the north."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Ceres History", "fieldName": "ceres_history", "group": "Lore", "description": "", "variable": "lor-ceres_history{0}", "title": "Ceres History", "subGroup": "History", "descriptions": ["This check represents history of Capitol City and the Ceres plains to the north."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-ceres_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Colswei History": {
-				"name": "Lore_Colswei History", "fieldName": "colswei_history", "group": "Lore", "description": "", "variable": "lor-colswei_history{0}", "title": "Colswei History", "subGroup": "", "descriptions": ["This check represents history of Liber and the frozen lands of the Colswei in the south."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Colswei History", "fieldName": "colswei_history", "group": "Lore", "description": "", "variable": "lor-colswei_history{0}", "title": "Colswei History", "subGroup": "History", "descriptions": ["This check represents history of Liber and the frozen lands of the Colswei in the south."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-colswei_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Khem History": {
-				"name": "Lore_Khem History", "fieldName": "khem_history", "group": "Lore", "description": "", "variable": "lor-khem_history{0}", "title": "Khem History", "subGroup": "", "descriptions": ["This check represents history of the Kingdom of Apollo and its mountainous region of Khem to the north east."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Khem History", "fieldName": "khem_history", "group": "Lore", "description": "", "variable": "lor-khem_history{0}", "title": "Khem History", "subGroup": "History", "descriptions": ["This check represents history of the Kingdom of Apollo and its mountainous region of Khem to the north east."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-khem_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Novus History": {
-				"name": "Lore_Novus History", "fieldName": "novus_history", "group": "Lore", "description": "", "variable": "lor-novus_history{0}", "title": "Novus History", "subGroup": "", "descriptions": ["This check represents history of Novus and the Blessed Lands beyond the ocean."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Novus History", "fieldName": "novus_history", "group": "Lore", "description": "", "variable": "lor-novus_history{0}", "title": "Novus History", "subGroup": "History", "descriptions": ["This check represents history of Novus and the Blessed Lands beyond the ocean."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-novus_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Walthair History": {
-				"name": "Lore_Walthair History", "fieldName": "walthair_history", "group": "Lore", "description": "", "variable": "lor-walthair_history{0}", "title": "Walthair History", "subGroup": "", "descriptions": ["This check represents history of Minerva and the grasslands and eastern sea islands of Walthair to the east."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Walthair History", "fieldName": "walthair_history", "group": "Lore", "description": "", "variable": "lor-walthair_history{0}", "title": "Walthair History", "subGroup": "History", "descriptions": ["This check represents history of Minerva and the grasslands and eastern sea islands of Walthair to the east."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-walthair_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Wayling History": {
-				"name": "Lore_Wayling History", "fieldName": "wayling_history", "group": "Lore", "description": "", "variable": "lor-wayling_history{0}", "title": "Wayling History", "subGroup": "", "descriptions": ["This check represents history of the central grasslands and marsh of Wayling."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Wayling History", "fieldName": "wayling_history", "group": "Lore", "description": "", "variable": "lor-wayling_history{0}", "title": "Wayling History", "subGroup": "History", "descriptions": ["This check represents history of the central grasslands and marsh of Wayling."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-wayling_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
-			"Lore_Culture": {
-				"name": "Lore_Culture", "fieldName": "culture", "group": "Lore", "description": "", "variable": "lor-culture{0}", "title": "Culture", "subGroup": "", "descriptions": ["Culture knowledge represents information on societal customs, art, and entertainment options."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+			"LoreCategory_Culture": {
+				"name": "LoreCategory_Culture", "fieldName": "culture", "group": "LoreCategory", "description": "", "variable": "lrc-culture{0}", "title": "Culture", "subGroup": "Culture", "descriptions": ["Culture knowledge represents information on societal customs, art, and entertainment options."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lrc-culture_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Art": {
-				"name": "Lore_Art", "fieldName": "art", "group": "Lore", "description": "", "variable": "lor-art{0}", "title": "Art", "subGroup": "", "descriptions": ["Art knowledge details information on the world of art and the artists behind famous works of art."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Art", "fieldName": "art", "group": "Lore", "description": "", "variable": "lor-art{0}", "title": "Art", "subGroup": "Culture", "descriptions": ["Art knowledge details information on the world of art and the artists behind famous works of art."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-art_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Etiquette": {
-				"name": "Lore_Etiquette", "fieldName": "etiquette", "group": "Lore", "description": "", "variable": "lor-etiquette{0}", "title": "Etiquette", "subGroup": "", "descriptions": ["Etiquette knowledge represents your study of social customs within specific cultures and societies and will help you avoid embarrassing yourself or causing insult."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Etiquette", "fieldName": "etiquette", "group": "Lore", "description": "", "variable": "lor-etiquette{0}", "title": "Etiquette", "subGroup": "Culture", "descriptions": ["Etiquette knowledge represents your study of social customs within specific cultures and societies and will help you avoid embarrassing yourself or causing insult."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-etiquette_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Fashion": {
-				"name": "Lore_Fashion", "fieldName": "fashion", "group": "Lore", "description": "", "variable": "lor-fashion{0}", "title": "Fashion", "subGroup": "", "descriptions": ["Fashion knowledge focuses on keeping up with clothing and physical beatuy products."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Fashion", "fieldName": "fashion", "group": "Lore", "description": "", "variable": "lor-fashion{0}", "title": "Fashion", "subGroup": "Culture", "descriptions": ["Fashion knowledge focuses on keeping up with clothing and physical beatuy products."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-fashion_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Games": {
-				"name": "Lore_Games", "fieldName": "games", "group": "Lore", "description": "", "variable": "lor-games{0}", "title": "Games", "subGroup": "", "descriptions": ["Games knowledge covers general understanding of how many games are played whether they are reliant on cards, dice, or other kinds of chance."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Games", "fieldName": "games", "group": "Lore", "description": "", "variable": "lor-games{0}", "title": "Games", "subGroup": "Culture", "descriptions": ["Games knowledge covers general understanding of how many games are played whether they are reliant on cards, dice, or other kinds of chance."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-games_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Music": {
-				"name": "Lore_Music", "fieldName": "music", "group": "Lore", "description": "", "variable": "lor-music{0}", "title": "Music", "subGroup": "", "descriptions": ["Music knowledge represents general understanding of sheet music, famous songs and the artists behind them, and an understanding of the industry."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Music", "fieldName": "music", "group": "Lore", "description": "", "variable": "lor-music{0}", "title": "Music", "subGroup": "Culture", "descriptions": ["Music knowledge represents general understanding of sheet music, famous songs and the artists behind them, and an understanding of the industry."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-music_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Scribing": {
-				"name": "Lore_Scribing", "fieldName": "scribing", "group": "Lore", "description": "", "variable": "lor-scribing{0}", "title": "Scribing", "subGroup": "", "descriptions": ["Scribing knowledge represents an understanding of how to communicate with the written word and techniques used to write."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Scribing", "fieldName": "scribing", "group": "Lore", "description": "", "variable": "lor-scribing{0}", "title": "Scribing", "subGroup": "Culture", "descriptions": ["Scribing knowledge represents an understanding of how to communicate with the written word and techniques used to write."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-scribing_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Theater": {
-				"name": "Lore_Theater", "fieldName": "theater", "group": "Lore", "description": "", "variable": "lor-theater{0}", "title": "Theater", "subGroup": "", "descriptions": ["Theater knowledge is the knowledge of the stage, techniques to tell a story, and famous plays."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Theater", "fieldName": "theater", "group": "Lore", "description": "", "variable": "lor-theater{0}", "title": "Theater", "subGroup": "Culture", "descriptions": ["Theater knowledge is the knowledge of the stage, techniques to tell a story, and famous plays."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-theater_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
-			"Lore_Religion": {
-				"name": "Lore_Religion", "fieldName": "religion", "group": "Lore", "description": "", "variable": "lor-religion{0}", "title": "Religion", "subGroup": "", "descriptions": ["Religion knowledge represent known tenets, famous people and creatures of the religion, and information about legends, beliefs, and organizations."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+			"LoreCategory_Religion": {
+				"name": "LoreCategory_Religion", "fieldName": "religion", "group": "LoreCategory", "description": "", "variable": "lrc-religion{0}", "title": "Religion", "subGroup": "Religion", "descriptions": ["Religion knowledge represent known tenets, famous people and creatures of the religion, and information about legends, beliefs, and organizations."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lrc-religion_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Church of Kongkwei": {
-				"name": "Lore_Church of Kongkwei", "fieldName": "church_of_kongkwei", "group": "Lore", "description": "", "variable": "lor-church_of_kongkwei{0}", "title": "Church of Kongkwei", "subGroup": "", "descriptions": ["The Church of Kongkwei is tied to the creation of the Kingdom of Apollo. It follows the fire god Guong Kongkwei and attempts to follow their goals of expansion and control."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Church of Kongkwei", "fieldName": "church_of_kongkwei", "group": "Lore", "description": "", "variable": "lor-church_of_kongkwei{0}", "title": "Church of Kongkwei", "subGroup": "Religion", "descriptions": ["The Church of Kongkwei is tied to the creation of the Kingdom of Apollo. It follows the fire god Guong Kongkwei and attempts to follow their goals of expansion and control."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-church_of_kongkwei_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Guidance": {
-				"name": "Lore_Guidance", "fieldName": "guidance", "group": "Lore", "description": "", "variable": "lor-guidance{0}", "title": "Guidance", "subGroup": "", "descriptions": ["The Guidance is one of the oldest religions in the world of Wuxing. They seek to give its people advice in times of hardship through the divinations of spirits."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Guidance", "fieldName": "guidance", "group": "Lore", "description": "", "variable": "lor-guidance{0}", "title": "Guidance", "subGroup": "Religion", "descriptions": ["The Guidance is one of the oldest religions in the world of Wuxing. They seek to give its people advice in times of hardship through the divinations of spirits."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-guidance_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Life's Circle": {
-				"name": "Lore_Life's Circle", "fieldName": "life's_circle", "group": "Lore", "description": "", "variable": "lor-life's_circle{0}", "title": "Life's Circle", "subGroup": "", "descriptions": ["The Life's Circle is the religion of the Novae. It follows the cycle of life and helps determine a person's role in society through reincarnation and destiny."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Life's Circle", "fieldName": "life's_circle", "group": "Lore", "description": "", "variable": "lor-life's_circle{0}", "title": "Life's Circle", "subGroup": "Religion", "descriptions": ["The Life's Circle is the religion of the Novae. It follows the cycle of life and helps determine a person's role in society through reincarnation and destiny."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-life's_circle_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Ocean Court": {
-				"name": "Lore_Ocean Court", "fieldName": "ocean_court", "group": "Lore", "description": "", "variable": "lor-ocean_court{0}", "title": "Ocean Court", "subGroup": "", "descriptions": ["The Ocean Court follows the Ocean Queen, Minerra, and her court of gods that ensure her commandments are followed. Those that revere her and her court do so for her protection and luck whether its in her domain at sea or deep in the lands."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Ocean Court", "fieldName": "ocean_court", "group": "Lore", "description": "", "variable": "lor-ocean_court{0}", "title": "Ocean Court", "subGroup": "Religion", "descriptions": ["The Ocean Court follows the Ocean Queen, Minerra, and her court of gods that ensure her commandments are followed. Those that revere her and her court do so for her protection and luck whether its in her domain at sea or deep in the lands."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-ocean_court_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Sylvan": {
-				"name": "Lore_Sylvan", "fieldName": "sylvan", "group": "Lore", "description": "", "variable": "lor-sylvan{0}", "title": "Sylvan", "subGroup": "", "descriptions": ["The Sylvans are a group of powerful spirits that hold dominion over territories across the world. They are creatures of whimsy and chaos, the cause of weather patterns and together, the changing of the seasons."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Sylvan", "fieldName": "sylvan", "group": "Lore", "description": "", "variable": "lor-sylvan{0}", "title": "Sylvan", "subGroup": "Religion", "descriptions": ["The Sylvans are a group of powerful spirits that hold dominion over territories across the world. They are creatures of whimsy and chaos, the cause of weather patterns and together, the changing of the seasons."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-sylvan_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Lore_Zushaon": {
-				"name": "Lore_Zushaon", "fieldName": "zushaon", "group": "Lore", "description": "", "variable": "lor-zushaon{0}", "title": "Zushaon", "subGroup": "", "descriptions": ["Many Ceresians follow Zushaon, a tradition of ancestor worship. The religion seeks to offer reverence for those that came before and a desire to find ones own place in the world."],
-				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": [],
-				"formulaCalculations": []
+				"name": "Lore_Zushaon", "fieldName": "zushaon", "group": "Lore", "description": "", "variable": "lor-zushaon{0}", "title": "Zushaon", "subGroup": "Religion", "descriptions": ["Many Ceresians follow Zushaon, a tradition of ancestor worship. The religion seeks to offer reverence for those that came before and a desire to find ones own place in the world."],
+				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": 1, "isResource": "", "modAttrs": ["recall", "lor-zushaon_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
 			},
 			"Job_Trainee": {
 				"name": "Job_Trainee", "fieldName": "trainee", "group": "Job", "description": "", "variable": "job-trainee{0}", "title": "Trainee", "subGroup": "", "descriptions": ["The trainee is representative of your character learning a skill. It delivers fewer growths at level up and no job techniques. Instead, every level grants points to spend on skills."],
@@ -2045,7 +2104,8 @@ var WuxDef = WuxDef || (function () {
 				{ "modName": "trn-tp_technique", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Unarmed Strike": {
-				"name": "Technique_Unarmed Strike", "fieldName": "unarmed_strike", "group": "Technique", "description": "", "variable": "tch-unarmed_strike{0}", "title": "Unarmed Strike", "subGroup": "", "descriptions": [""],
+				"name": "Technique_Unarmed Strike", "fieldName": "unarmed_strike", "group": "Technique", "description": "", "variable": "tch-unarmed_strike{0}", "title": "Unarmed Strike", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_technique", "trn-tp_technique"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
 				{ "modName": "adv-cr", "value": 0, "multiplier": 2 },
@@ -2677,7 +2737,8 @@ var WuxDef = WuxDef || (function () {
 				{ "modName": "trn-tp_technique", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Knuckle Flurry": {
-				"name": "Technique_Knuckle Flurry", "fieldName": "knuckle_flurry", "group": "Technique", "description": "", "variable": "tch-knuckle_flurry{0}", "title": "Knuckle Flurry", "subGroup": "", "descriptions": [""],
+				"name": "Technique_Knuckle Flurry", "fieldName": "knuckle_flurry", "group": "Technique", "description": "", "variable": "tch-knuckle_flurry{0}", "title": "Knuckle Flurry", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_technique", "trn-tp_technique"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
 				{ "modName": "adv-cr", "value": 0, "multiplier": 2 },
@@ -2789,8 +2850,7 @@ var WuxDef = WuxDef || (function () {
 				{ "modName": "trn-tp_technique", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Virulent Spores": {
-				"name": "Technique_Virulent Spores", "fieldName": "virulent_spores", "group": "Technique", "description": "", "variable": "tch-virulent_spores{0}", "title": "Virulent Spores", "subGroup": "", "descriptions": [""]
-				,
+				"name": "Technique_Virulent Spores", "fieldName": "virulent_spores", "group": "Technique", "description": "", "variable": "tch-virulent_spores{0}", "title": "Virulent Spores", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_technique", "trn-tp_technique"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
 				{ "modName": "adv-cr", "value": 0, "multiplier": 2 },
@@ -3326,7 +3386,8 @@ var WuxDef = WuxDef || (function () {
 				{ "modName": "trn-tp_technique", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Ether Sense": {
-				"name": "Technique_Ether Sense", "fieldName": "ether_sense", "group": "Technique", "description": "", "variable": "tch-ether_sense{0}", "title": "Ether Sense", "subGroup": "", "descriptions": [""],
+				"name": "Technique_Ether Sense", "fieldName": "ether_sense", "group": "Technique", "description": "", "variable": "tch-ether_sense{0}", "title": "Ether Sense", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_technique", "trn-tp_technique"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
 				{ "modName": "adv-cr", "value": 0, "multiplier": 2 },
@@ -3958,7 +4019,8 @@ var WuxDef = WuxDef || (function () {
 				{ "modName": "trn-tp_technique", "value": 0, "multiplier": 1 }]
 			},
 			"Technique_Physical Training": {
-				"name": "Technique_Physical Training", "fieldName": "physical_training", "group": "Technique", "description": "", "variable": "tch-physical_training{0}", "title": "Physical Training", "subGroup": "", "descriptions": [""],
+				"name": "Technique_Physical Training", "fieldName": "physical_training", "group": "Technique", "description": "", "variable": "tch-physical_training{0}", "title": "Physical Training", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": 1, "isResource": "", "modAttrs": ["adv-cr", "adv-ap_technique", "trn-tp_technique"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
 				{ "modName": "adv-cr", "value": 0, "multiplier": 2 },
@@ -4150,7 +4212,7 @@ var WuxDef = WuxDef || (function () {
 				{ "modName": "trn-tp_technique", "value": 0, "multiplier": 1 }]
 			}
 		},
-		sortingGroups = { "group": { "Type": ["Attribute", "Skill", "Job", "Role", "Knowledge", "Language", "Lore", "Style", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "Combat", "Social", "DamageType", "Trait", "Status", "Condition"], "VariableMod": ["_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error"], "AffinityType": ["Wood", "Fire", "Earth", "Metal", "Water"], "InnateDefenseType": ["BOD", "PRC", "QCK"], "InnateSenseType": ["CNV", "INT", "RSN"], "AttributeValue": ["AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad"], "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3"], "LoreTier": ["LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3"], "GeneralLoreTier": ["GeneralLoreTier0", "GeneralLoreTier1"], "PageSet": ["PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training"], "Page": ["Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement"], "Title": ["Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_Training"], "Advancement": ["Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques"], "Training": ["TrainingKnowledge", "TrainingTechniques", "PP"], "Attribute": ["Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN"], "Defense": ["Defense_Combat", "Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion"], "Sense": ["Sense_Social", "Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill"], "General": ["Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "HP", "WILL", "EN", "Initiative", "Affinity", "InnateDefense", "InnateSense", "Recall"], "Gear": ["Carrying Capacity"], "Combat": ["Combat_HV", "Combat_Armor", "Combat_Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Combat_Durability", "Combat_Surge", "Combat_Chakra", "Combat_Move Speed", "Combat_Move Potency"], "": ["Chakra"], "Social": ["Social_Approval", "Social_Patience"], "DamageType": ["Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension"], "Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent"], "Status": ["Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious"], "Condition": ["Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised"], "Style": ["Style_Basic Set", "Style_Swordplay", "Style_Ki Extension"], "Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "Language": ["Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan"], "Lore": ["Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "Role": ["Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "Technique": ["Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Unarmed Strike", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact, Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"] }, "formulaMods": { "CR": ["Attribute", "Skill", "Job", "Technique", "HP", "WILL", "Initiative", "Combat_HV", "Combat_Chakra", "Social_Approval", "Social_Patience", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "AdvancementSkill": ["Skill", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "AdvancementJob": ["Job", "Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "": ["Role", "Language", "Lore", "PageSet", "Page", "Title", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_Training", "Level", "CR", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "TrainingKnowledge", "TrainingTechniques", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "Defense_Combat", "Sense_Social", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "EN", "Affinity", "InnateDefense", "InnateSense", "Combat_Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Chakra", "Social_Patience", "Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "Lore_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "TrainingKnowledge": ["Knowledge"], "AdvancementTechnique": ["Technique"], "TrainingTechniques": ["Technique"], "Level": ["Advancement", "HP", "WILL", "Social_Approval"], "Attribute_BOD": ["Defense_Brace", "Defense_Fortitude", "HP", "Carrying Capacity"], "Attribute_PRC": ["Defense_Disruption", "Defense_Hide"], "Attribute_QCK": ["Defense_Reflex", "Defense_Evasion", "Initiative"], "Attribute_INT": ["Sense_Insight", "Sense_Notice"], "Attribute_RSN": ["Sense_Scrutiny", "Sense_Detect", "Recall"], "Attribute_CNV": ["Sense_Resolve", "Sense_Freewill", "WILL", "Combat_HV", "Social_Approval"] } },
+		sortingGroups = { "group": { "Type": ["Attribute", "Skill", "Job", "Role", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "Combat", "Social", "DamageType", "Trait", "Status", "Condition"], "VariableMod": ["_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error"], "AffinityType": ["Wood", "Fire", "Earth", "Metal", "Water"], "InnateDefenseType": ["BOD", "PRC", "QCK"], "InnateSenseType": ["CNV", "INT", "RSN"], "AttributeValue": ["AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad"], "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3"], "LoreTier": ["LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3"], "GeneralLoreTier": ["GeneralLoreTier0", "GeneralLoreTier1"], "LoreCategory": ["Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "LoreCategory_Academics", "LoreCategory_Profession", "LoreCategory_Craftmanship", "LoreCategory_Geography", "LoreCategory_History", "LoreCategory_Culture", "LoreCategory_Religion"], "PageSet": ["PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training"], "Page": ["Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement"], "Title": ["Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_Training"], "Advancement": ["Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques"], "Training": ["TrainingKnowledge", "TrainingTechniques", "PP"], "Attribute": ["Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN"], "Defense": ["Defense_Combat", "Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion"], "Sense": ["Sense_Social", "Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill"], "General": ["Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "HP", "WILL", "EN", "Initiative", "Affinity", "InnateDefense", "InnateSense", "Recall"], "Gear": ["Carrying Capacity"], "Combat": ["Combat_HV", "Combat_Armor", "Combat_Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Combat_Durability", "Combat_Surge", "Combat_Chakra", "Combat_Move Speed", "Combat_Move Potency"], "": ["Chakra"], "Social": ["Social_Approval", "Social_Patience"], "DamageType": ["Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension"], "Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent"], "Status": ["Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious"], "Condition": ["Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised"], "Style": ["Style_Basic Set", "Style_Swordplay", "Style_Ki Extension"], "Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "Language": ["Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan"], "Lore": ["Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "Role": ["Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "Technique": ["Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Encourage", "Technique_Stabilize", "Technique_Skill Check", "Technique_Unarmed Strike", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact, Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"] }, "formulaMods": { "CR": ["Attribute", "Skill", "Job", "Technique", "HP", "WILL", "Initiative", "Combat_HV", "Combat_Chakra", "Social_Approval", "Social_Patience", "Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "AdvancementSkill": ["Skill"], "AdvancementJob": ["Job", "Job_Trainee", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "": ["Role", "Language", "LoreCategory", "Lore", "PageSet", "Page", "Title", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_Training", "Level", "CR", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "TrainingKnowledge", "TrainingTechniques", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "Defense_Combat", "Sense_Social", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "EN", "Affinity", "InnateDefense", "InnateSense", "Combat_Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Chakra", "Social_Patience", "Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Skill_Command", "Skill_Concoct", "Skill_Flexibility", "Skill_Heal", "Skill_Maneuver", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "TrainingKnowledge": ["Knowledge"], "AdvancementTechnique": ["Technique"], "TrainingTechniques": ["Technique"], "Level": ["Advancement", "HP", "WILL", "Social_Approval"], "Attribute_BOD": ["Defense_Brace", "Defense_Fortitude", "HP", "Carrying Capacity", "Skill_Grappling", "Skill_Might", "Skill_Physique", "Skill_Survival", "Skill_Traversal"], "Attribute_PRC": ["Defense_Disruption", "Defense_Hide", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker"], "Attribute_QCK": ["Defense_Reflex", "Defense_Evasion", "Initiative", "Skill_Acrobatics", "Skill_Agility", "Skill_Finesse", "Skill_Palming", "Skill_Pilot"], "Attribute_INT": ["Sense_Insight", "Sense_Notice", "Skill_Cook", "Skill_Disguise", "Skill_Empathy", "Skill_Leadership", "Skill_Search"], "Attribute_RSN": ["Sense_Scrutiny", "Sense_Detect", "Recall", "Skill_Analyze", "Skill_Build", "Skill_Deception", "Skill_Medicine", "Skill_Negotiation"], "Attribute_CNV": ["Sense_Resolve", "Sense_Freewill", "WILL", "Combat_HV", "Social_Approval", "Skill_Channel", "Skill_Charm", "Skill_Enchant", "Skill_Intimidation", "Skill_Resonance"], "Recall": ["LoreCategory_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCategory_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCategory_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCategory_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCategory_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCategory_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCategory_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"] } },
 		_max = "_max",
 		_true = "_true",
 		_rank = "_rank",

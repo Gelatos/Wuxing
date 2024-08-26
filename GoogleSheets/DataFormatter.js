@@ -29,7 +29,12 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArra
     });
     definitionDatabase.importSheets(loreArray, function (arr) {
         let lore = new LoreData(arr);
-        return lore.createDefinition(definitionDatabase.get("Lore"));
+        if (lore.group == lore.name) {
+            return lore.createDefinition(definitionDatabase.get("LoreCategory"));
+        }
+        else {
+            return lore.createDefinition(definitionDatabase.get("Lore"));
+        }
     });
     definitionDatabase.importSheets(jobsArray, function (arr) {
         let job = new JobData(arr);

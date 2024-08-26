@@ -368,19 +368,18 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 							return output;
 						},
 
-						buildLore = function (knowledge, groupName, interactHeader) {
-							let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Lore"));
+						buildLore = function (knowledgeDefinition, groupName, interactHeader) {
 							return WuxSheetMain.InteractionElement.BuildTooltipSelectInput(knowledgeDefinition.getAttribute(WuxDef._rank),
 							WuxDef.Filter([new DatabaseFilterData("group", groupName)]), false, "wuxWidth70 wuxMarginRight10",
 							interactHeader, WuxDefinition.TooltipDescription(knowledgeDefinition));
 						},
 
 						buildMainLore = function (knowledge) {
-							return buildLore(knowledge, "GeneralLoreTier", `<span class="wuxHeader">General ${knowledge.name}</span>`);
+							return buildLore(knowledge.createDefinition(WuxDef.Get("LoreCategory")), "GeneralLoreTier", `<span class="wuxHeader">General ${knowledge.name}</span>`);
 						},
 
 						buildSubLore = function (knowledge) {
-							return buildLore(knowledge, "LoreTier", `<span class="wuxSubheader">${knowledge.name}</span>`);
+							return buildLore(knowledge.createDefinition(WuxDef.Get("Lore")), "LoreTier", `<span class="wuxSubheader">${knowledge.name}</span>`);
 						}
 
 					return {
@@ -612,7 +611,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
 						buildSkill = function (skill) {
 							let skillDefinition = skill.createDefinition(WuxDef.Get("Skill"));
-							let interactHeader = `<span class="wuxHeader">${skill.name} (${skill.abilityScore})</span>`;
+							let interactHeader = `<span class="wuxHeader">${skill.name} (${WuxDef.GetAbbreviation(skill.abilityScore)})</span>`;
 							
 							return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(skillDefinition.getAttribute(WuxDef._rank),
 							interactHeader, WuxDefinition.TooltipDescription(skillDefinition));
@@ -1260,6 +1259,8 @@ var BuilderBackend = BuilderBackend || (function () {
 					advancementWorker.commitChanges(attributeHandler);
 
 					WuxWorkerAttributes.UpdateStats(attributeHandler);
+					WuxWorkerSkills.UpdateStats(attributeHandler);
+					WuxWorkerKnowledges.UpdateStats(attributeHandler);
 
 					attributeHandler.run();
 				},
@@ -1558,6 +1559,7 @@ var TrainingBackend = TrainingBackend || (function () {
 				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
 					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
+					jsClassData.addPublicFunction("updateStats", updateStats);
 					return jsClassData.print(className);
 				},
 				updateBuildPoints = function(eventinfo) {
@@ -1566,6 +1568,55 @@ var TrainingBackend = TrainingBackend || (function () {
 					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 					attributeHandler.run();
 				},
+				updateStats = function(attributeHandler) {
+					let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
+					let loreDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Lore"));
+					let languageDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Language"));
+
+					for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+						attributeHandler.addMod(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+					}
+					for (let i = 0; i < loreDefinitions.length; i++) {
+						attributeHandler.addMod(loreDefinitions[i].getVariable(WuxDef._rank));
+					}
+					for (let i = 0; i < languageDefinitions.length; i++) {
+						attributeHandler.addMod(languageDefinitions[i].getVariable(WuxDef._rank));
+					}
+
+					attributeHandler.addFormulaMods(["CR", "Recall"]);
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						let skillPointValue = 0;
+						let skillRank = 0;
+						let loreCategories = {};
+						for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+							loreCategories[loreCategoryDefinitions[i].title] = {};
+
+							skillRank = attrHandler.parseInt(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+							if (skillRank > 0) {
+								skillPointValue = skillRank + attrHandler.parseInt(WuxDef.GetVariable("CR")) + attrHandler.parseInt(WuxDef.GetVariable("Recall"));
+								loreCategories[loreCategoryDefinitions[i].title]["General"] = skillPointValue;
+							}
+						}
+						for (let i = 0; i < loreDefinitions.length; i++) {
+							skillRank = attrHandler.parseInt(loreDefinitions[i].getVariable(WuxDef._rank));
+							if (skillRank > 0) {
+								skillPointValue = skillRank + attrHandler.parseInt(WuxDef.GetVariable("CR")) + attrHandler.parseInt(WuxDef.GetVariable("Recall"));
+								loreCategories[loreDefinitions[i].subGroup][loreDefinitions[i].title] = skillPointValue;
+							}
+						}
+						attrHandler.addUpdate(WuxDef.GetVariable("Lore", WuxDef._true), JSON.stringify(loreCategories));
+
+						let languages = [];
+						for (let i = 0; i < languageDefinitions.length; i++) {
+							skillRank = attrHandler.parseInt(languageDefinitions[i].getVariable(WuxDef._rank));
+							if (skillRank > 0) {
+								languages.push(languageDefinitions[i].title);
+							}
+						}
+						attrHandler.addUpdate(WuxDef.GetVariable("Language", WuxDef._true), JSON.stringify(languages));
+					});
+				},
+
 				buildListeners = function () {
 					let output = "";
 					output += listenerUpdateBuildPoints();
@@ -1574,6 +1625,7 @@ var TrainingBackend = TrainingBackend || (function () {
 				},
 				listenerUpdateBuildPoints = function() {
 					let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Language"), WuxDef._rank);
+					groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "LoreCategory"), WuxDef._rank));
 					groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Lore"), WuxDef._rank));
 				    let output = `console.log("Update Knowledge");\n${className}.UpdateBuildPoints(eventinfo)`;
 
@@ -1826,6 +1878,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
 					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
+					jsClassData.addPublicFunction("updateStats", updateStats);
 					return jsClassData.print(className);
 				},
 				updateBuildPoints = function(eventinfo) {
@@ -1833,6 +1886,25 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					let worker = new WuxWorkerBuildManager("Skill");
 					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 					attributeHandler.run();
+				},
+				updateStats = function(attributeHandler) {
+					let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
+					for (let i = 0; i < skillDefinitions.length; i++) {
+						attributeHandler.addFormulaMods(skillDefinitions[i]);
+					}
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						let skillPointValue = 0;
+						let skillRank = 0;
+						for (let i = 0; i < skillDefinitions.length; i++) {
+							skillPointValue = skillDefinitions[i].getFormulaValue(attrHandler);
+							skillRank = attrHandler.parseInt(skillDefinitions[i].getVariable(WuxDef._rank));
+							if (skillRank > 0) {
+								skillPointValue = skillPointValue + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+							}
+							attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);
+						}
+					});
 				},
 
 				buildListeners = function () {

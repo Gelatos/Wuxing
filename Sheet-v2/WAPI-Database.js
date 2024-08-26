@@ -548,6 +548,13 @@ class SkillData extends WuxDatabaseData {
         this.abilityScore = "";
         this.description = "";
     }
+    createDefinition(baseDefinition) {
+        let definition = super.createDefinition(baseDefinition);
+        definition.formula = `${this.abilityScore}`;
+        definition.modifiers = WuxDef._rank;
+        definition.setFormulaData();
+        return definition;
+    }
 }
 class LanguageData extends WuxDatabaseData {
     importJson(json) {
@@ -598,6 +605,14 @@ class LoreData extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.description = "";
+    }
+    createDefinition(baseDefinition) {
+        let definition = super.createDefinition(baseDefinition);
+        definition.subGroup = this.group;
+        definition.formula = `Recall`;
+        definition.modifiers = WuxDef._rank;
+        definition.setFormulaData();
+        return definition;
     }
 }
 class JobData extends WuxDatabaseData {
@@ -838,6 +853,7 @@ class DefinitionData extends WuxDatabaseData {
         definition.title = this.title;
         definition.subGroup = this.subGroup;
         definition.descriptions = this.descriptions;
+        definition.abbreviation = this.abbreviation;
         definition.formula = this.formula;
         definition.modifiers = this.modifiers;
         definition.linkedGroups = this.linkedGroups;
