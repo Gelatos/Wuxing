@@ -1259,6 +1259,8 @@ var BuilderBackend = BuilderBackend || (function () {
 					let advancementWorker = new WuxAdvancementWorkerBuild();
 					advancementWorker.commitChanges(attributeHandler);
 
+					WuxWorkerAttributes.UpdateStats(attributeHandler);
+
 					attributeHandler.run();
 				},
 				leavePageVariables = function(attributeHandler) {
@@ -1862,6 +1864,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
 					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
+					jsClassData.addPublicFunction("updateStats", updateStats);
 					return jsClassData.print(className);
 				},
 				updateBuildPoints = function(eventinfo) {
@@ -1869,6 +1872,23 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					let worker = new WuxWorkerBuildManager("Attribute");
 					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 					attributeHandler.run();
+				},
+				updateStats = function(attributeHandler) {
+					let attributeDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Attribute"));
+					let formulaDefinitions = [];
+					for (let i = 0; i < attributeDefinitions.length; i++) {
+						formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinitions[i].name)));
+					}
+
+					for (let i = 0; i < formulaDefinitions.length; i++) {
+						attributeHandler.addFormulaMods(formulaDefinitions[i]);
+					}
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						for (let i = 0; i < formulaDefinitions.length; i++) {
+							attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+						}
+					});
 				},
 
 				buildListeners = function () {

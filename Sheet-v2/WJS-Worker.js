@@ -182,19 +182,26 @@ class WuxWorkerBuild {
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			worker.setBuildStatsDraft(attrHandler);
 			worker.cleanBuildStats();
+			worker.setBuildStatVariables(attrHandler);
 			worker.saveBuildStatsToFinal(attrHandler);
 		});
 	}
 	
 	resetChanges(attributeHandler) {
 		let worker = this;
-		
 		attributeHandler.addMod(worker.attrBuildFinal);
 		
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			worker.setBuildStatsFinal(attrHandler);
 			worker.cleanBuildStats();
+			worker.setBuildStatVariables(attrHandler);
 			worker.revertBuildStatsDraft(attrHandler);
+		});
+	}
+
+	setBuildStatVariables(attributeHandler) {
+		this.buildStats.iterate(function (buildStat) {
+			attributeHandler.addUpdate(buildStat.name, buildStat.value);
 		});
 	}
 }

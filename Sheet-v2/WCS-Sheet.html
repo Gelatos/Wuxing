@@ -7281,6 +7281,8 @@
 	let advancementWorker = new WuxAdvancementWorkerBuild();
 	advancementWorker.commitChanges(attributeHandler);
 	
+	WuxWorkerAttributes.UpdateStats(attributeHandler);
+	
 	attributeHandler.run();
 	},
 	leavePageVariables = function(attributeHandler) {
@@ -7690,10 +7692,28 @@
 	let worker = new WuxWorkerBuildManager("Attribute");
 	worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 	attributeHandler.run();
+	},
+	updateStats = function(attributeHandler) {
+	let attributeDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Attribute"));
+	let formulaDefinitions = [];
+	for (let i = 0; i < attributeDefinitions.length; i++) {
+	formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinitions[i].name)));
+	}
+	
+	for (let i = 0; i < formulaDefinitions.length; i++) {
+	attributeHandler.addFormulaMods(formulaDefinitions[i]);
+	}
+	
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+	for (let i = 0; i < formulaDefinitions.length; i++) {
+	attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+	}
+	});
 	}
 	;
 	return {
-	UpdateBuildPoints: updateBuildPoints
+	UpdateBuildPoints: updateBuildPoints,
+	UpdateStats: updateStats
 	};
 	}());
 	on("change:atr-bod change:atr-prc change:atr-qck change:atr-cnv change:atr-int change:atr-rsn", function (eventinfo) {
