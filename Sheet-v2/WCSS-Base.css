@@ -185,6 +185,11 @@ input[type=number]::-webkit-inner-spin-button
 	position: relative;
 }
 
+input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment 
+{
+    display: none;
+}
+
 /*========================================
   Layouts
 ========================================*/

@@ -147,6 +147,7 @@ class WuxWorkerBuild {
 	}
 	cleanBuildStats() {
 		this.buildStats.clean(this.getBuildVariables());
+		this.buildStats.cleanValues();
 	}
 	setVariablesToBuildStats(attributeHandler) {
 		this.buildStats.iterate(function (buildStat) {

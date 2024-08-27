@@ -361,6 +361,14 @@ class TechniqueData extends WuxDatabaseData {
         this.effects = new Dictionary();
         this.onGoingTech = undefined;
     }
+    createDefinition(baseDefinition) {
+        let definition = super.createDefinition(baseDefinition);
+        definition.subGroup = this.group;
+        definition.formula = this.isFree;
+        definition.modAttrs = [];
+        definition.formulaCalculations = [];
+        return definition;
+    }
 
     setAugmentTechValues(baseTechnique) {
 
@@ -520,6 +528,11 @@ class TechniqueStyle extends WuxDatabaseData {
         this.affinity = "";
         this.cr = 0;
     }
+    createDefinition(baseDefinition) {
+        let definition = super.createDefinition(baseDefinition);
+        definition.subGroup = this.group;
+        return definition;
+    }
 }
 class SkillData extends WuxDatabaseData {
     importJson(json) {
@@ -550,6 +563,7 @@ class SkillData extends WuxDatabaseData {
     }
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
+        definition.subGroup = `${this.group} Skill`;
         definition.formula = `${this.abilityScore}`;
         definition.modifiers = WuxDef._rank;
         definition.setFormulaData();
@@ -1028,6 +1042,7 @@ class TechniqueDisplayData {
         this.technique = technique;
         this.name = technique.name;
         this.username = technique.username;
+        this.definition = technique.createDefinition(WuxDef.Get("Technique"));
         this.fieldName = Format.ToFieldName(technique.name);
         this.actionType = technique.action;
         this.isFree = technique.isFree;
@@ -1110,6 +1125,7 @@ class TechniqueDisplayData {
         this.name = "";
         this.actionType = "";
         this.username = "";
+        this.definition = {};
         this.fieldName = "";
         this.isFree = false;
 
@@ -1277,6 +1293,19 @@ class WorkerBuildStats extends Dictionary {
             }
         }
         return points;
+    }
+
+    cleanValues() {
+        let keys = [];
+        let values = {};
+        for (let i = 0; i < this.keys.length; i++) {
+            if (parseInt(this.values[keys[i]]) != 0) {
+                keys.push(this.keys[i]);
+                values[this.keys[i]] = this.values[this.keys[i]];
+            }
+        }
+        this.keys = keys;
+        this.values = values;
     }
 }
 class WorkerFormula {

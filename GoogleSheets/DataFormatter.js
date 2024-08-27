@@ -232,7 +232,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
 
             let prequel = "";
             if (displayOptions.showSelect) {
-                prequel = `<input type="hidden" class="wuxFeature-flag" name="${displayOptions.techniqueDefinition.getAttribute(techDisplayData.fieldName)}">`;
+                prequel = `<input type="hidden" class="wuxFeature-flag" name="${techDisplayData.definition.getAttribute()}">`;
             }
 
             return `${prequel}<div ${setFeatureStyle("wuxFeature", displayOptions)}>${contents}</div>\n`;
@@ -267,7 +267,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             setTechniqueDisplayHeaderExpandSection = function (techDisplayData, displayOptions) {
                 if (displayOptions.hasCSS) {
                     // add the collapsible field
-                    let attributeName = WuxDef.GetAttribute("Technique", techDisplayData.fieldName, WuxDef._expand);
+                    let attributeName = techDisplayData.definition.getAttribute(WuxDef._expand);
                     let isChecked = displayOptions.autoExpand ? `checked value="on"` : "";
 
                     return `<div class="wuxFeatureHeaderInteractBlock">
@@ -284,17 +284,19 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             },
 
             setTechniqueDisplayHeaderSelectSection = function (techDisplayData, displayOptions) {
-                if (displayOptions.showSelect && (displayOptions.showSelectIfFree || !techDisplayData.isFree)) {
-                    return `
-    <div class="wuxFeatureHeaderInteractBlock">
-    <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${displayOptions.techniqueDefinition.getAttribute(techDisplayData.fieldName)}">
-    <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${displayOptions.techniqueDefinition.getAttribute(techDisplayData.fieldName)}">
-    <span class="wuxFeatureHeaderInteractiveIcon">&#9635;</span>
-    <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${displayOptions.techniqueDefinition.getAttribute(techDisplayData.fieldName)}">
-    <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9634;</span>
-    </div>`;
-                }
-                return "";
+                return `
+                ${WuxSheetMain.CustomInput("hidden", techDisplayData.definition.getAttribute(WuxDef._subfilter), "wuxFeatureInteraction-flag", ` value="0"`)}
+                <div class="wuxFeatureHeaderInteractBlock">
+                <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${techDisplayData.definition.getAttribute()}">
+                <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${techDisplayData.definition.getAttribute()}">
+                <span class="wuxFeatureHeaderInteractiveIcon">&#9635;</span>
+                <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${techDisplayData.definition.getAttribute()}">
+                <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9634;</span>
+                </div>
+                ${WuxSheetMain.CustomInput("hidden", displayOptions.techniqueDefinition.getAttribute(WuxDef._subfilter), "wuxFeatureInteractionButton-flag", ` value="0"`)}
+                <div class="wuxFeatureHeaderInteractBlock">
+                <button class="wuxFeatureHeaderInteractiveButton" type="roll" value="@{technique-onUse}">9</button>
+                </div>`;
             },
 
             setTechniqueDisplayHeaderUseSection = function (techDisplayData, displayOptions) {
@@ -351,7 +353,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 output += techniqueDisplayContentEffects.PrintEffects(techDisplayData, displayOptions);
 
                 if (displayOptions.hasCSS) {
-                    let attributeName = WuxDef.GetAttribute("Technique", techDisplayData.fieldName, WuxDef._expand);
+                    let attributeName = techDisplayData.definition.getAttribute(WuxDef._expand);
                     let isChecked = displayOptions.autoExpand ? ` checked value="on"` : "";
 
                     return `<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="${attributeName}"${isChecked}>\n<div class="wuxFeatureExpandingContent">\n${output}\n</div>\n`;
@@ -1083,6 +1085,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
             <div class="wuxHiddenField">\n${contents}\n</div>\n`;
         },
 
+        hiddenAuxField = function (fieldName, contents) {
+            return `<input type="hidden" class="wuxHiddenField-flag" name="${fieldName}" value="0">
+            <div class="wuxHiddenAuxField">\n${contents}\n</div>\n`;
+        },
+
         info = info || (function () {
             'use strict';
 
@@ -1317,6 +1324,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Button: button,
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,
+        HiddenAuxField: hiddenAuxField,
         Info: info,
         Tooltip: tooltip,
         Table: table,

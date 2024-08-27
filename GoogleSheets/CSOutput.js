@@ -502,8 +502,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						},
 
 						buildJobHeader = function (jobDefinition, job) {
-							return WuxSheetMain.Header2(`${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDefinition.getAttribute(job.fieldName, WuxDef._expand))}
-								${WuxSheetMain.Select(jobDefinition.getAttribute(job.fieldName), 
+							let jobDef = job.createDefinition(jobDefinition);
+							return WuxSheetMain.Header2(`${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDef.getAttribute(WuxDef._expand))}
+								${WuxSheetMain.Select(jobDef.getAttribute(WuxDef._rank), 
 								WuxDef.Filter([new DatabaseFilterData("group", "JobTier")]), false, "wuxWidth70 wuxMarginRight10")}
 								${job.name}`
 							);
@@ -512,8 +513,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						buildJobContents = function (job, jobDefinition, techDictionary) {
 							let output = "";
 
+							let jobDef = job.createDefinition(jobDefinition);
 							output += WuxSheetMain.Header2("Description") + WuxSheetMain.Desc(job.description);
-							output += buildJobContentsLevels(jobDefinition.getAttribute(job.fieldName));
+							output += buildJobContentsLevels(jobDefinition.getAttribute(jobDef.getAttribute(WuxDef._rank)));
 							output += buildJobContentsTechniques(job, techDictionary, WuxDef.Get("Technique"));
 
 							return output;
@@ -694,7 +696,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 		print = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildTechniquesNavigation() +
 				SideBarData.Print() +
-				MainContentData.Print(sheetsDb.styles, sheetsDb.techniques);
+				MainContentData.Print(sheetsDb.styles, sheetsDb.job, sheetsDb.techniques);
 			return WuxSheet.PageDisplay("Styles", output);
 		},
 
@@ -714,11 +716,17 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 			var
 				print = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Technique")));
+					let output = ``;
+					output += WuxSheetMain.HiddenField(WuxDef.GetAttribute("Technique", WuxDef._filter), buildTechPointsSection(WuxDef.GetAttribute("Technique")));
+					output += WuxSheetMain.HiddenAuxField(WuxDef.GetAttribute("Technique", WuxDef._filter), 
+						buildTechPointsSection(WuxDef.GetAttribute("JobStyle"), "Job") + buildTechPointsSection(WuxDef.GetAttribute("Style"), "Standard")
+					);
+					
+					return WuxSheetSidebar.Build(output);
 				},
 
-				buildTechPointsSection = function (fieldName) {
-					return WuxSheetSidebar.BuildPointsSection(fieldName);
+				buildTechPointsSection = function (fieldName, header) {
+					return WuxSheetSidebar.BuildPointsSection(fieldName, header);
 				}
 
 			return {
@@ -731,15 +739,16 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			'use strict';
 
 			var
-				print = function (stylesDatabase, techniqueDatabase) {
+				print = function (stylesDatabase, jobDatabase, techniqueDatabase) {
 
-					return WuxSheetMain.Build(buildTechniquesByGroup(stylesDatabase, techniqueDatabase, WuxDef.Get("Technique")));
+					return WuxSheetMain.Build(buildTechniquesByGroup(stylesDatabase, jobDatabase, techniqueDatabase, WuxDef.Get("Technique")));
 				},
 
-				buildTechniquesByGroup = function (stylesDatabase, techniqueDatabase, techniqueDefinition) {
+				buildTechniquesByGroup = function (stylesDatabase, jobDatabase, techniqueDatabase, techniqueDefinition) {
 					let displayOptions = getDisplayOptions(techniqueDefinition);
 					let output = "";
-					output += buildStandardTechniqueGroup(stylesDatabase, techniqueDatabase, "Standard", displayOptions);
+					output += buildJobStyle(jobDatabase, techniqueDatabase, displayOptions);
+					output += buildStyle(stylesDatabase, techniqueDatabase, "Standard", displayOptions);
 					return output;
 				},
 
@@ -751,7 +760,21 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					return displayOptions;
 				},
 
-				buildStandardTechniqueGroup = function (stylesDatabase, techniqueDatabase, groupName, displayOptions) {
+				buildJobStyle = function (jobDatabase, techniqueDatabase, displayOptions) {
+					let groupName = "Job";
+					let techStyles = [];
+					for (let i = 0; i < jobDatabase.length; i++) {
+						techStyles.push(buildTechStyleSection(jobDatabase[i], techniqueDatabase, displayOptions));
+					}
+					let output = WuxSheetMain.MultiRowGroup(techStyles, WuxSheetMain.Table.FlexTable, 2);
+					output = WuxSheetMain.TabBlock(output);
+					let definition = WuxDef.Get("StyleType");
+
+					return `${WuxSheetMain.CustomInput("hidden", definition.getAttribute(groupName, WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
+					${WuxSheetMain.CollapsibleTab(definition.getAttribute(groupName, WuxDef._expand), `${groupName} ${definition.title}`, output)}`;
+				},
+
+				buildStyle = function (stylesDatabase, techniqueDatabase, groupName, displayOptions) {
 					let filters = [new DatabaseFilterData("group", groupName)];
 
 					let filteredData = stylesDatabase.filter(filters);
@@ -762,23 +785,25 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					}
 					let output = WuxSheetMain.MultiRowGroup(techStyles, WuxSheetMain.Table.FlexTable, 2);
 					output = WuxSheetMain.TabBlock(output);
-					let definition = WuxDef.Get("Style");
+					let definition = WuxDef.Get("StyleType");
 
-					return WuxSheetMain.CollapsibleTab(definition.getAttribute(`_${groupName}${WuxDef._tab}`, WuxDef._expand), `${groupName} ${definition.title}`, output);
+					return `${WuxSheetMain.CustomInput("hidden", definition.getAttribute(groupName, WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
+					${WuxSheetMain.CollapsibleTab(definition.getAttribute(groupName, WuxDef._expand), `${groupName} ${definition.title}`, output)}`;
 				},
 
 				buildTechStyleSection = function (style, techniqueDatabase, displayOptions) {
 
 					let styleDefinition = WuxDef.Get("Style");
+					let styleDef = style.createDefinition(styleDefinition);
 
-					let contents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(styleDefinition.getAttribute(style.fieldName, WuxDef._expand))}
-					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDefinition.getAttribute(style.fieldName), WuxSheetMain.Header(style.name))}
+					let contents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(styleDef.getAttribute(WuxDef._expand))}
+					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDef.getAttribute(), WuxSheetMain.Header(style.name))}
 					${WuxSheetMain.SectionBlockHeaderFooter()}
-					${WuxSheetMain.InteractionElement.ExpandableBlockContents(styleDefinition.getAttribute(style.fieldName, WuxDef._expand),
+					${WuxSheetMain.InteractionElement.ExpandableBlockContents(styleDef.getAttribute(WuxDef._expand),
 						WuxSheetMain.SectionBlockContents(buildStyleContents(style, styleDefinition, techniqueDatabase, displayOptions)))}`;
 
-					return `<input type="hidden" class="wuxFilterSection-flag" name="${styleDefinition.getAttribute(style.fieldName)}" value="">
-					${WuxSheetMain.Table.FlextTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)))}`;
+					return WuxSheetMain.Table.FlextTableGroup(`${WuxSheetMain.CustomInput("hidden", styleDef.getAttribute(WuxDef._filter), "wuxFilterSection-flag", ` value="0"`)}
+					${WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents))}`);
 				},
 
 				buildStyleContents = function (style, styleDefinition, techniqueDatabase, displayOptions) {
@@ -833,10 +858,11 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				},
 
 				buildTechnique = function (technique, displayOptions) {
-					let fieldName = WuxDef.GetAttribute("Technique", technique.fieldName, WuxDef._filter);
+					let techDef = technique.createDefinition(WuxDef.Get("Technique"));
+					let fieldName = techDef.getAttribute(WuxDef._filter);
 
 					let output = "";
-					output += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="">`;
+					output += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="0">`;
 					output += WuxPrintTechnique.Get(technique, displayOptions);
 					return output;
 				}
@@ -1247,7 +1273,6 @@ var BuilderBackend = BuilderBackend || (function () {
 				finishBuild = function() {
 					console.log("Finish Character Creation Build");
                 	let attributeHandler  = new WorkerAttributeHandler();
-					leavePageVariables(attributeHandler);
 
 				    let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Technique"]);
                 	pointManagers.commitChanges(attributeHandler);
@@ -1261,13 +1286,16 @@ var BuilderBackend = BuilderBackend || (function () {
 					WuxWorkerAttributes.UpdateStats(attributeHandler);
 					WuxWorkerSkills.UpdateStats(attributeHandler);
 					WuxWorkerKnowledges.UpdateStats(attributeHandler);
+					WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
 
+					leavePageVariables(attributeHandler);
 					attributeHandler.run();
 				},
 				leavePageVariables = function(attributeHandler) {
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+					WuxWorkerTechniques.FilterTechniquesForSet(attributeHandler);
 				},
 				setAffinityValue = function() {
 					console.log("Setting Affinity");
@@ -1385,6 +1413,9 @@ var BuilderBackend = BuilderBackend || (function () {
 				buildClass = function () {
 					let jsClassData = new JavascriptDataClass();
 					jsClassData.addPublicFunction("updateBuildPoints", updateBuildPoints);
+					jsClassData.addPublicFunction("filterTechniquesForLearn", filterTechniquesForLearn);
+					jsClassData.addPublicFunction("filterTechniquesForSet", filterTechniquesForSet);
+					jsClassData.addPublicFunction("updateLearnedStats", updateLearnedStats);
 					return jsClassData.print(className);
 				},
 				updateBuildPoints = function(eventinfo) {
@@ -1392,6 +1423,152 @@ var BuilderBackend = BuilderBackend || (function () {
 					let worker = new WuxWorkerBuildManager("Technique");
 					worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 					attributeHandler.run();
+				},
+				filterTechniquesForLearn = function(attributeHandler) {
+					let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
+					let techDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Technique"));
+
+					let worker = new WuxWorkerBuild("Technique");
+					attributeHandler.addMod(worker.attrBuildFinal);
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						worker.setBuildStatsFinal(attrHandler);
+						worker.cleanBuildStats();
+						
+						for (let i = 0; i < techDefinitions.length; i++) {
+							attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._filter), "1");
+							attrHandler.addUpdate(techDefinitions[i].getVariable(), worker.buildStats.has(techDefinitions[i].name) ? "1" : "0");
+							attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._subfilter), techDefinitions[i].formula == true ? "1" : "0");
+						}
+						
+						for (let i = 0; i < styleDefinitions.length; i++) {
+							attrHandler.addUpdate(styleDefinitions[i].getVariable(WuxDef._filter), "0");
+							attrHandler.addUpdate(styleDefinitions[i].getVariable(), worker.buildStats.has(styleDefinitions[i].name) ? "1" : "0");
+						}
+						attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Job", WuxDef._filter), "1");
+						attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Standard", WuxDef._filter), "0");
+						attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._filter), "1");
+						attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._subfilter), "1");
+					});
+				},
+				filterTechniquesForSet = function(attributeHandler) {
+					let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
+					let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
+					let techDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Technique"));
+
+					let styleWorker = new WuxWorkerBuild("Style");
+					styleWorker.addMod(styleWorker.attrBuildFinal);
+
+					let jobWorker = new WuxWorkerBuild("Job");
+					jobWorker.addMod(jobWorker.attrBuildFinal);
+
+					let techniqueWorker = new WuxWorkerBuild("Technique");
+					techniqueWorker.addMod(techniqueWorker.attrBuildFinal);
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						styleWorker.setBuildStatsFinal(attrHandler);
+						styleWorker.cleanBuildStats();
+						jobWorker.setBuildStatsFinal(attrHandler);
+						jobWorker.cleanBuildStats();
+						techniqueWorker.setBuildStatsFinal(attrHandler);
+						techniqueWorker.cleanBuildStats();
+						
+						let isVisible = false;
+						for (let i = 0; i < styleDefinitions.length; i++) {
+							isVisible = techniqueWorker.buildStats.has(styleDefinitions[i].name);
+							attrHandler.addUpdate(styleDefinitions[i].getVariable(WuxDef._filter), isVisible ? "1" : "0");
+							attrHandler.addUpdate(styleDefinitions[i].getVariable(), styleWorker.buildStats.has(styleDefinitions[i].name) ? "1" : "0");
+						}
+						
+						for (let i = 0; i < jobDefinitions.length; i++) {
+							isVisible = jobWorker.buildStats.has(jobDefinitions[i].name);
+							attrHandler.addUpdate(jobDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+							attrHandler.addUpdate(jobDefinitions[i].getVariable(), styleWorker.buildStats.has(jobDefinitions[i].name) ? "1" : "0");
+						}
+
+						for (let i = 0; i < techDefinitions.length; i++) {
+							isVisible = techDefinitions[i].formula == true || techniqueWorker.buildStats.has(techDefinitions[i].name);
+							attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+							attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._subfilter), "1");
+						}
+						
+						attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Job", WuxDef._filter), "0");
+						attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Standard", WuxDef._filter), "0");
+						attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._filter), "0");
+						attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._subfilter), "1");
+					});
+				},
+				updateLearnedStats = function(attributeHandler) {
+					let jobStyleWorker = new WuxWorkerBuild("JobStyle");
+					jobStyleWorker.addMod(jobStyleWorker.attrBuildFinal);
+					attributeHandler.addMod(jobStyleWorker.attrMax);
+
+					let jobWorker = new WuxWorkerBuild("Job");
+					jobWorker.addMod(jobWorker.attrBuildFinal);
+
+					let styleWorker = new WuxWorkerBuild("Style");
+					styleWorker.addMod(styleWorker.attrBuildFinal);
+					attributeHandler.addMod(styleWorker.attrMax);
+
+					let techniqueWorker = new WuxWorkerBuild("Technique");
+					techniqueWorker.addMod(techniqueWorker.attrBuildFinal);
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						jobStyleWorker.setBuildStatsFinal(attrHandler);
+						jobWorker.setBuildStatsFinal(attrHandler);
+						styleWorker.setBuildStatsFinal(attrHandler);
+						techniqueWorker.setBuildStatsFinal(attrHandler);
+						
+						jobStyleWorker.buildStats.iterate(function (value, key) {
+							if(!jobWorker.buildStats.has(key) || !parseInt(jobWorker.buildStats.get(key)) > 0) {
+								jobStyleWorker.buildStats.set(key, "0");
+							}
+						});
+						styleWorker.buildStats.iterate(function (value, key) {
+							if(!techniqueWorker.buildStats.has(key) || !parseInt(techniqueWorker.buildStats.get(key)) > 0) {
+								styleWorker.buildStats.set(key, "0");
+							}
+						});
+
+						jobStyleWorker.cleanBuildStats(attrHandler);
+						jobStyleWorker.updatePoints(attrHandler);
+						jobStyleWorker.saveBuildStatsToFinal(attrHandler);
+						styleWorker.cleanBuildStats(attrHandler);
+						styleWorker.updatePoints(attrHandler);
+						styleWorker.saveBuildStatsToFinal(attrHandler);
+					});
+				},
+				updateSetStyles = function(attributeHandler) {
+					let jobStyleWorker = new WuxWorkerBuild("JobStyle");
+					jobStyleWorker.addMod(jobStyleWorker.attrBuildFinal);
+
+					let styleWorker = new WuxWorkerBuild("Style");
+					styleWorker.addMod(styleWorker.attrBuildFinal);
+
+					let techniqueWorker = new WuxWorkerBuild("Technique");
+					techniqueWorker.addMod(techniqueWorker.attrBuildFinal);
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						jobStyleWorker.setBuildStatsFinal(attrHandler);
+						styleWorker.setBuildStatsFinal(attrHandler);
+						techniqueWorker.setBuildStatsFinal(attrHandler);
+						
+						jobStyleWorker.buildStats.iterate(function (value, key) {
+							if(!jobWorker.buildStats.has(key) || !parseInt(jobWorker.buildStats.get(key)) > 0) {
+								jobStyleWorker.buildStats.set(key, "0");
+							}
+						});
+						styleWorker.buildStats.iterate(function (value, key) {
+							if(!techniqueWorker.buildStats.has(key) || !parseInt(techniqueWorker.buildStats.get(key)) > 0) {
+								styleWorker.buildStats.set(key, "0");
+							}
+						});
+
+						jobStyleWorker.cleanBuildStats(attrHandler);
+						jobStyleWorker.saveBuildStatsToFinal(attrHandler);
+						styleWorker.cleanBuildStats(attrHandler);
+						styleWorker.saveBuildStatsToFinal(attrHandler);
+					});
 				},
 
 				buildListeners = function () {
@@ -1404,6 +1581,7 @@ var BuilderBackend = BuilderBackend || (function () {
 				listenerUpdateBuildPoints = function() {
 				    let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"));
 					groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Technique")));
+					groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job")));
 				    let output = `${className}.UpdateBuildPoints(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -1468,6 +1646,7 @@ var TrainingBackend = TrainingBackend || (function () {
 					attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Training");
 					attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Training");
 					attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Training"), "Training");
+					WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
 					attributeHandler.run();
 				},
 				finishBuild = function() {
@@ -1496,6 +1675,7 @@ var TrainingBackend = TrainingBackend || (function () {
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+					WuxWorkerTechniques.FilterTechniquesForSet(attributeHandler);
 				},
 				
 				setTrainingPoints = function(eventinfo) {
@@ -1692,6 +1872,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Advancement");
 					attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Advancement");
 					attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement"), "Advancement");
+					WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
 					attributeHandler.run();
 				},
 				finishBuild = function() {
@@ -1720,6 +1901,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
                 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+					WuxWorkerTechniques.FilterTechniquesForSet(attributeHandler);
 				},
 				
 				setLevel = function(eventinfo) {
@@ -1857,7 +2039,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					return output;
 				},
 				listenerUpdateBuildPoints = function(groupName) {
-					let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName));
+					let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", groupName), WuxDef._rank);
 				    let output = `console.log("Update Jobs");\n${className}.UpdateBuildPoints(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);

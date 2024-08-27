@@ -426,6 +426,11 @@ input[type=hidden].wuxFeature-flag[value="on"] + .wuxFeature
     border: 3px solid #ba7417;
 }
 
+input[type=hidden].wuxFilterFeature-flag + .wuxFeature 
+{
+    display: block;
+}
+
 input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature 
 {
     display: none;
@@ -594,6 +599,16 @@ input.wuxFeatureType-flag[value="Standard"] + .wuxFeatureType,
 	display: inline-block;
 	width: 25px;
 	height: 20px;
+}
+
+input[type=hidden].wuxFeatureInteraction-flag[value="1"] + .wuxFeatureHeaderInteractBlock 
+{
+    display: none;
+}
+
+input[type=hidden].wuxFeatureInteractionButton-flag[value="1"] + .wuxFeatureHeaderInteractBlock 
+{
+    display: none;
 }
 
 .wuxFeatureTableHeaderInteractBlock span
