@@ -1457,13 +1457,13 @@ var BuilderBackend = BuilderBackend || (function () {
 					let techDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Technique"));
 
 					let styleWorker = new WuxWorkerBuild("Style");
-					styleWorker.addMod(styleWorker.attrBuildFinal);
+					attributeHandler.addMod(styleWorker.attrBuildFinal);
 
 					let jobWorker = new WuxWorkerBuild("Job");
-					jobWorker.addMod(jobWorker.attrBuildFinal);
+					attributeHandler.addMod(jobWorker.attrBuildFinal);
 
 					let techniqueWorker = new WuxWorkerBuild("Technique");
-					techniqueWorker.addMod(techniqueWorker.attrBuildFinal);
+					attributeHandler.addMod(techniqueWorker.attrBuildFinal);
 
 					attributeHandler.addGetAttrCallback(function (attrHandler) {
 						styleWorker.setBuildStatsFinal(attrHandler);
@@ -1488,7 +1488,7 @@ var BuilderBackend = BuilderBackend || (function () {
 
 						for (let i = 0; i < techDefinitions.length; i++) {
 							isVisible = techDefinitions[i].formula == true || techniqueWorker.buildStats.has(techDefinitions[i].name);
-							attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+							attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._filter), isVisible ? "1" : "0");
 							attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._subfilter), "1");
 						}
 						
@@ -1500,18 +1500,18 @@ var BuilderBackend = BuilderBackend || (function () {
 				},
 				updateLearnedStats = function(attributeHandler) {
 					let jobStyleWorker = new WuxWorkerBuild("JobStyle");
-					jobStyleWorker.addMod(jobStyleWorker.attrBuildFinal);
+					attributeHandler.addMod(jobStyleWorker.attrBuildFinal);
 					attributeHandler.addMod(jobStyleWorker.attrMax);
 
 					let jobWorker = new WuxWorkerBuild("Job");
-					jobWorker.addMod(jobWorker.attrBuildFinal);
+					attributeHandler.addMod(jobWorker.attrBuildFinal);
 
 					let styleWorker = new WuxWorkerBuild("Style");
-					styleWorker.addMod(styleWorker.attrBuildFinal);
+					attributeHandler.addMod(styleWorker.attrBuildFinal);
 					attributeHandler.addMod(styleWorker.attrMax);
 
 					let techniqueWorker = new WuxWorkerBuild("Technique");
-					techniqueWorker.addMod(techniqueWorker.attrBuildFinal);
+					attributeHandler.addMod(techniqueWorker.attrBuildFinal);
 
 					attributeHandler.addGetAttrCallback(function (attrHandler) {
 						jobStyleWorker.setBuildStatsFinal(attrHandler);
@@ -1540,13 +1540,13 @@ var BuilderBackend = BuilderBackend || (function () {
 				},
 				updateSetStyles = function(attributeHandler) {
 					let jobStyleWorker = new WuxWorkerBuild("JobStyle");
-					jobStyleWorker.addMod(jobStyleWorker.attrBuildFinal);
+					attributeHandler.addMod(jobStyleWorker.attrBuildFinal);
 
 					let styleWorker = new WuxWorkerBuild("Style");
-					styleWorker.addMod(styleWorker.attrBuildFinal);
+					attributeHandler.addMod(styleWorker.attrBuildFinal);
 
 					let techniqueWorker = new WuxWorkerBuild("Technique");
-					techniqueWorker.addMod(techniqueWorker.attrBuildFinal);
+					attributeHandler.addMod(techniqueWorker.attrBuildFinal);
 
 					attributeHandler.addGetAttrCallback(function (attrHandler) {
 						jobStyleWorker.setBuildStatsFinal(attrHandler);
