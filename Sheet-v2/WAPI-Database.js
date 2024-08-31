@@ -272,7 +272,7 @@ class WuxDatabaseData extends dbObj {
         definition.descriptions = [this.description];
         definition.formula = baseDefinition.formula;
         definition.modifiers = baseDefinition.modifiers;
-        definition.linkedGroups = baseDefinition.linkedGroups;
+        definition.linkedGroups = [];
         definition.isResource = baseDefinition.isResource;
         definition.setFormulaData();
         return definition;
@@ -363,7 +363,7 @@ class TechniqueData extends WuxDatabaseData {
     }
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
-        definition.subGroup = this.group;
+        definition.subGroup = this.techSet;
         definition.formula = this.isFree;
         definition.modAttrs = [];
         definition.formulaCalculations = [];
@@ -839,7 +839,7 @@ class DefinitionData extends WuxDatabaseData {
         this.variable = "" + dataArray[i]; i++;
         this.formula = "" + dataArray[i]; i++;
         this.modifiers = "" + dataArray[i]; i++;
-        this.linkedGroups = Format.StringToArray("" + dataArray[i]).push(this.name); i++;
+        this.linkedGroups = Format.StringToArray("" + dataArray[i]); i++;
         this.isResource = dataArray[i]; i++;
         this.setFormulaData();
     }
@@ -1296,12 +1296,14 @@ class WorkerBuildStats extends Dictionary {
     }
 
     cleanValues() {
+        let key = "";
         let keys = [];
         let values = {};
         for (let i = 0; i < this.keys.length; i++) {
-            if (parseInt(this.values[keys[i]]) != 0) {
-                keys.push(this.keys[i]);
-                values[this.keys[i]] = this.values[this.keys[i]];
+            key = this.keys[i];
+            if (parseInt(this.values[key].value) != 0) {
+                keys.push(key);
+                values[key] = this.values[key];
             }
         }
         this.keys = keys;
@@ -1675,7 +1677,10 @@ var Format = Format || (function () {
                 delimeter = ";";
             }
             let arr = string.split(delimeter);
-            return arr.map(s => s.trim());
+            for (let i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].trim();
+            }
+            return arr;
         },
 
         arrayToString = function (array, delimeter) {

@@ -171,7 +171,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createDefinitionTypes = function (arr) {
-            return new ExtendedDescriptionDatabase(["group", "formulaMods"], arr, function (arr) {
+            return new ExtendedDescriptionDatabase(["group", "subGroup", "formulaMods"], arr, function (arr) {
                 let definition = new DefinitionData(arr);
                 if (definition.group == "Type") {
                     definition.variable += `{0}{1}`;
@@ -229,13 +229,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
         },
 
         setTechniqueDisplayFeatureDiv = function (techDisplayData, displayOptions, contents) {
-
-            let prequel = "";
-            if (displayOptions.showSelect) {
-                prequel = `<input type="hidden" class="wuxFeature-flag" name="${techDisplayData.definition.getAttribute()}">`;
-            }
-
-            return `${prequel}<div ${setFeatureStyle("wuxFeature", displayOptions)}>${contents}</div>\n`;
+            return `<div ${setFeatureStyle("wuxFeature", displayOptions)}>${contents}</div>\n`;
         },
 
         techniqueDisplayHeader = techniqueDisplayHeader || (function () {

@@ -135,12 +135,19 @@ class WuxWorkerBuild {
 	    attributeHandler.addUpdate(this.attrBuildDraft, JSON.stringify(this.buildStats));
 	}
 	getBuildVariables() {
+		let splitVariable;
 		let buildVariableNames = []; 
 		let buildVariables = []; 
 		for (let i = 0; i < this.definition.linkedGroups.length; i++) {
 			if (this.definition.linkedGroups[i] != "") {
-				buildVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", this.definition.linkedGroups[i]));
-				buildVariables = buildVariables.concat(WuxDef.GetVariables(this.definition.linkedGroups[i], buildVariableNames));
+				splitVariable = this.definition.linkedGroups[i].split(":");
+				if (splitVariable.length == 1) {
+					buildVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", splitVariable[0]));
+				}
+				else {
+					buildVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", splitVariable[0]), splitVariable[1]);
+				}
+				buildVariables = buildVariables.concat(buildVariableNames);
 			}
 		}
 		return buildVariables;
