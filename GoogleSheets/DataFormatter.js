@@ -1459,17 +1459,25 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildTechniquesNavigation = function () {
-            let definition = WuxDef.Get("Page_Styles");
+            let learnDefinition = WuxDef.Get("Page_LearnTechniques");
             let tabFieldName = WuxDef.GetAttribute("PageSet");
             let learnSubtitle = WuxDef.GetTitle("Page_LearnTechniques");
-            let coreSubtitle = WuxDef.GetTitle("Page_SetStyles");
             let output = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
-            ${WuxSheet.PageDisplay("Builder", characterCreationNavigation(definition, learnSubtitle))}
-            ${WuxSheet.PageDisplay("Training", trainingPageNavigation(definition, learnSubtitle))}
-            ${WuxSheet.PageDisplay("Advancement", advancementPageNavigation(definition, learnSubtitle))}
-            ${WuxSheet.PageDisplay("Core", mainPageNavigation(definition, coreSubtitle, ""))}`;
+            ${WuxSheet.PageDisplay("Builder", characterCreationNavigation(learnDefinition, learnSubtitle))}
+            ${WuxSheet.PageDisplay("Training", trainingPageNavigation(learnDefinition, learnSubtitle))}
+            ${WuxSheet.PageDisplay("Advancement", advancementPageNavigation(learnDefinition, learnSubtitle))}
+            ${WuxSheet.PageDisplay("Core", techniquesCorePageNavigation())}`;
 
-            return buildSection(output, techniquesInfoContents(definition.getAttribute(WuxDef._info), tabFieldName));
+            return buildSection(output, techniquesInfoContents(learnDefinition.getAttribute(WuxDef._info), tabFieldName));
+        },
+
+        techniquesCorePageNavigation = function () {
+            let tabFieldName = WuxDef.GetAttribute("Page");
+            let setStyleDefinition = WuxDef.Get("Page_SetStyles");
+            let actionsDefinition = WuxDef.Get("Page_Actions");
+            return `${WuxSheet.PageDisplayInput(tabFieldName, "Styles")}
+            ${WuxSheet.PageDisplay("Styles", mainPageNavigation(setStyleDefinition, setStyleDefinition.title, ""))}
+            ${WuxSheet.PageDisplay("Actions", mainPageNavigation(actionsDefinition, actionsDefinition.title, ""))}`;
         },
 
         techniquesInfoContents = function (infoFieldName, tabFieldName) {

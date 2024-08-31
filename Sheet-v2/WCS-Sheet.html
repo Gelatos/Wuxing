@@ -4819,13 +4819,13 @@
 			</div>
 		</div>
 	</div>
-	<div class="wuxPageDisplay-Styles">
+	<div class="wuxPageDisplay-Technique">
 		<div class="wuxFloatHeader wuxStickyHeader">
 			<div class="wuxSectionBlock wuxLargeLayoutItem">
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
 				<div class="wuxPageDisplay-Builder">
 					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
+						<div class="wuxTabButton wuxTabButtonSelected">
 							<input type="radio" class="wuxTabButton " name="attr_pag" value="Techniques"><span>Techniques</span>
 						</div>
 						<div class="wuxTabButton ">
@@ -4854,13 +4854,13 @@
 						</div>
 					</div>
 					<div class="wuxHeader2">
-						<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-styles_info"><span>?</span></div>Learn Styles and Techniques
+						<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-learntechniques_info"><span>?</span></div>Techniques
 					</div>
 					<div class="wuxHeader">Character Creation</div>
 				</div>
 				<div class="wuxPageDisplay-Training">
 					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
+						<div class="wuxTabButton wuxTabButtonSelected">
 							<input type="radio" class="wuxTabButton " name="attr_pag" value="Techniques"><span>Techniques</span>
 						</div>
 						<div class="wuxTabButton ">
@@ -4883,13 +4883,13 @@
 						</div>
 					</div>
 					<div class="wuxHeader2">
-						<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-styles_info"><span>?</span></div>Learn Styles and Techniques
+						<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-learntechniques_info"><span>?</span></div>Techniques
 					</div>
 					<div class="wuxHeader">Training</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
+						<div class="wuxTabButton wuxTabButtonSelected">
 							<input type="radio" class="wuxTabButton " name="attr_pag" value="Techniques"><span>Techniques</span>
 						</div>
 						<div class="wuxTabButton ">
@@ -4918,37 +4918,61 @@
 						</div>
 					</div>
 					<div class="wuxHeader2">
-						<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-styles_info"><span>?</span></div>Learn Styles and Techniques
+						<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-learntechniques_info"><span>?</span></div>Techniques
 					</div>
 					<div class="wuxHeader">Advancement</div>
 				</div>
 				<div class="wuxPageDisplay-Core">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
-						</div>
+					<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Styles" />
+					<div class="wuxPageDisplay-Styles">
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton ">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
+							</div>
+							<div class="wuxTabButton ">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonSelected">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton ">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
+							</div>
 
+						</div>
+						<div class="wuxHeader2">
+							<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-setstyles_info"><span>?</span></div>Styles
+						</div>
+						<div class="wuxHeader"><input type="text" name="attr_display_name" placeholder="Display Name" /></div>
 					</div>
-					<div class="wuxHeader2">
-						<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-styles_info"><span>?</span></div>Set Styles
+					<div class="wuxPageDisplay-Actions">
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonSelected">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
+							</div>
+							<div class="wuxTabButton ">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton ">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton ">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
+							</div>
+
+						</div>
+						<div class="wuxHeader2">
+							<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-actions_info"><span>?</span></div>Actions
+						</div>
+						<div class="wuxHeader"><input type="text" name="attr_display_name" placeholder="Display Name" /></div>
 					</div>
-					<div class="wuxHeader"><input type="text" name="attr_display_name" placeholder="Display Name" /></div>
 				</div>
-				<input type="hidden" class="wuxHiddenField-flag" name="attr_pag-styles_info" value="0">
+				<input type="hidden" class="wuxHiddenField-flag" name="attr_pag-learntechniques_info" value="0">
 				<div class="wuxHiddenField">
 					<div class="wuxInfoContent">
 						<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Overview" />
 						<div class="wuxPageDisplay-Builder">
-							<div class="wuxHeader2">Learn Styles and Techniques</div>
+							<div class="wuxHeader2">Techniques</div>
 
 							<span class="wuxDescription">Each technique allows a character to perform a variety of actions including granting bonuses to the character, performing attacks, manipulate others, or maneuvering around the world.</span>
 							<span class="wuxDescription">All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style.</span>
@@ -4957,7 +4981,7 @@
 							<span class="wuxDescription">You gain a number of technique points equal to 6 + your Character Rank x 2. You may choose to gain additional technique points by spending advancement points on level up. You may also choose to gain additional technique points by spending training points through training on level up.</span>
 						</div>
 						<div class="wuxPageDisplay-Training">
-							<div class="wuxHeader2">Learn Styles and Techniques</div>
+							<div class="wuxHeader2">Techniques</div>
 
 							<span class="wuxDescription">Each technique allows a character to perform a variety of actions including granting bonuses to the character, performing attacks, manipulate others, or maneuvering around the world.</span>
 							<span class="wuxDescription">All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style.</span>
@@ -4966,7 +4990,7 @@
 							<span class="wuxDescription">You gain a number of technique points equal to 6 + your Character Rank x 2. You may choose to gain additional technique points by spending advancement points on level up. You may also choose to gain additional technique points by spending training points through training on level up.</span>
 						</div>
 						<div class="wuxPageDisplay-Advancement">
-							<div class="wuxHeader2">Learn Styles and Techniques</div>
+							<div class="wuxHeader2">Techniques</div>
 
 							<span class="wuxDescription">Each technique allows a character to perform a variety of actions including granting bonuses to the character, performing attacks, manipulate others, or maneuvering around the world.</span>
 							<span class="wuxDescription">All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style.</span>
@@ -4975,7 +4999,7 @@
 							<span class="wuxDescription">You gain a number of technique points equal to 6 + your Character Rank x 2. You may choose to gain additional technique points by spending advancement points on level up. You may also choose to gain additional technique points by spending training points through training on level up.</span>
 						</div>
 						<div class="wuxPageDisplay-Core">
-							<div class="wuxHeader2">Set Styles</div>
+							<div class="wuxHeader2">Styles</div>
 
 							<span class="wuxDescription">All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style.</span>
 							<span class="wuxDescription">On this page you can set which styles are currently active on the character, allowing them to be used in the Actions Page. You can set both job styles and general styles. Basic styles are always set. </span>
@@ -4986,8 +5010,8 @@
 
 			</div>
 		</div>
-		<div class="wuxFloatSidebar"><input type="hidden" class="wuxHiddenField-flag" name="attr_tch_filter" value="0">
-			<div class="wuxHiddenField">
+		<div class="wuxFloatSidebar"><input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
+			<div class="wuxPageDisplay-Techniques">
 				<div class="wuxHeader">&nbsp;Build</div>
 				<div class="wuxDistinctSection wuxSizeInverse">
 					<div class="wuxDistinctField">
@@ -5001,8 +5025,7 @@
 					</div>
 				</div>
 			</div>
-			<input type="hidden" class="wuxHiddenField-flag" name="attr_tch_filter" value="0">
-			<div class="wuxHiddenAuxField">
+			<div class="wuxPageDisplay-Styles">
 				<div class="wuxHeader">&nbsp;Job</div>
 				<div class="wuxDistinctSection wuxSizeInverse">
 					<div class="wuxDistinctField">
@@ -5027,6 +5050,9 @@
 						</span>
 					</div>
 				</div>
+			</div>
+			<div class="wuxPageDisplay-Actions">
+
 			</div>
 		</div>
 		<div class="wuxMainContent">
@@ -6199,6 +6225,7 @@
 	
 	var 
 	updatePageState = function(eventinfo) {
+	console.log("Update Page State");
 	let attributeHandler = new WorkerAttributeHandler();
 	switch(eventinfo.newValue) {
 	case "Styles":
@@ -6216,7 +6243,7 @@
 	UpdatePageState: updatePageState
 	};
 	}());
-	on("change:a change:t change:t change:r change:_ change:p change:a change:g", function (eventinfo) {
+	on("change:pag", function (eventinfo) {
 	WuxWorkerGeneral.UpdatePageState(eventinfo)
 	});
 	var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function() {
@@ -6457,6 +6484,8 @@
 	});
 	},
 	filterTechniquesForStyleSet = function(attributeHandler) {
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_TechType", WuxDef._tab), "Styles");
+	
 	let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
 	let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 	
@@ -6493,6 +6522,8 @@
 	});
 	},
 	filterTechniquesForActions = function(attributeHandler) {
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_TechType", WuxDef._tab), "Actions");
+	
 	let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
 	let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 	

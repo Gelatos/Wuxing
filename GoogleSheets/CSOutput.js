@@ -694,7 +694,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			let output = WuxSheetNavigation.BuildTechniquesNavigation() +
 				SideBarData.Print() +
 				MainContentData.Print(sheetsDb.styles, sheetsDb.job, sheetsDb.techniques);
-			return WuxSheet.PageDisplay("Styles", output);
+			return WuxSheet.PageDisplay("Technique", output);
 		},
 
 		printTest = function (stylesDatabase, techniqueDatabase) {
@@ -713,11 +713,11 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 			var
 				print = function () {
-					let output = ``;
-					output += WuxSheetMain.HiddenField(WuxDef.GetAttribute("Technique", WuxDef._filter), buildTechPointsSection(WuxDef.GetAttribute("Technique")));
-					output += WuxSheetMain.HiddenAuxField(WuxDef.GetAttribute("Technique", WuxDef._filter), 
-						buildTechPointsSection(WuxDef.GetAttribute("JobStyle"), "Job") + buildTechPointsSection(WuxDef.GetAttribute("Style"), "Standard")
-					);
+					let tabFieldName = WuxDef.GetAttribute("Page");
+					let output = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
+					${WuxSheet.PageDisplay("Techniques", buildTechPointsSection(WuxDef.GetAttribute("Technique")))}
+					${WuxSheet.PageDisplay("Styles", buildTechPointsSection(WuxDef.GetAttribute("JobStyle"), "Job") + buildTechPointsSection(WuxDef.GetAttribute("Style"), "Standard"))}
+					${WuxSheet.PageDisplay("Actions", "<div>&nbsp;</div>")}`;
 					
 					return WuxSheetSidebar.Build(output);
 				},
@@ -1205,6 +1205,7 @@ var BuilderBackend = BuilderBackend || (function () {
 					return jsClassData.print(className);
 				},
 				updatePageState = function(eventinfo) {
+					console.log("Update Page State");
 					let attributeHandler  = new WorkerAttributeHandler();
 					switch(eventinfo.newValue) {
 						case "Styles":
@@ -1226,7 +1227,7 @@ var BuilderBackend = BuilderBackend || (function () {
 					return output;
 				},
 				listenerUpdatePageState = function() {
-					let groupVariableNames = WuxDef.GetAttribute("Page");
+					let groupVariableNames = [WuxDef.GetVariable("Page")];
 				    let output = `${className}.UpdatePageState(eventinfo)`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -1519,6 +1520,8 @@ var BuilderBackend = BuilderBackend || (function () {
 					});
 				},
 				filterTechniquesForStyleSet = function(attributeHandler) {
+					attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_TechType", WuxDef._tab), "Styles");
+
 					let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
 					let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 
@@ -1555,6 +1558,8 @@ var BuilderBackend = BuilderBackend || (function () {
 					});
 				},
 				filterTechniquesForActions = function(attributeHandler) {
+					attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_TechType", WuxDef._tab), "Actions");
+
 					let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
 					let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 

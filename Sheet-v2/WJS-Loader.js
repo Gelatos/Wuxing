@@ -3,6 +3,7 @@ var upgrade_to_1_0_0 = function () {
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Core", WuxDef._tab), "Overview");
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_TechType", WuxDef._tab), "Style");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Training", WuxDef._tab), "Training");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement", WuxDef._tab), "Advancement");
 
