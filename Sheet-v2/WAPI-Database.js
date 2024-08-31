@@ -364,9 +364,9 @@ class TechniqueData extends WuxDatabaseData {
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
         definition.subGroup = this.techSet;
-        definition.formula = this.isFree;
         definition.modAttrs = [];
         definition.formulaCalculations = [];
+        definition.extraData = {tier: this.tier, isFree: this.isFree};
         return definition;
     }
 
@@ -825,6 +825,7 @@ class DefinitionData extends WuxDatabaseData {
         this.isResource = json.isResource;
         this.modAttrs = json.modAttrs;
         this.formulaCalculations = json.formulaCalculations;
+        this.extraData = json.extraData;
     }
     importSheets(dataArray) {
         this.createEmpty();
@@ -842,6 +843,7 @@ class DefinitionData extends WuxDatabaseData {
         this.linkedGroups = Format.StringToArray("" + dataArray[i]); i++;
         this.isResource = dataArray[i]; i++;
         this.setFormulaData();
+        this.extraData = {};
     }
     createEmpty() {
         super.createEmpty();
@@ -859,6 +861,7 @@ class DefinitionData extends WuxDatabaseData {
         this.isResource = false;
         this.modAttrs = [];
         this.formulaCalculations = [];
+        this.extraData = {};
         
     }
     createDefinition(baseDefinition) {
@@ -873,6 +876,7 @@ class DefinitionData extends WuxDatabaseData {
         definition.linkedGroups = this.linkedGroups;
         definition.isResource = this.isResource;
         definition.setFormulaData();
+        definition.extraData = {};
 
         delete this.description;
         

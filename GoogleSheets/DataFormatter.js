@@ -212,6 +212,9 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
         },
 
         get = function (technique, displayOptions) {
+            if (technique == undefined) {
+                return "";
+            }
             if (displayOptions == undefined) {
                 displayOptions = getDisplayOptions();
                 displayOptions.hasCSS = true;
@@ -1435,7 +1438,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         trainingPageNavigation = function (definition, subheader) {
             let fieldName = WuxDef.GetAttribute("PageSet_Training");
             let mainContents = "";
-            mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Styles", "Knowledge", "Training"]);
+            mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Techniques", "Knowledge", "Training"]);
             mainContents += buildExitStickyButtons(fieldName, true);
             mainContents += buildHeader("Training", subheader, definition.getAttribute(WuxDef._info));
             return mainContents;
@@ -1449,7 +1452,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         advancementPageNavigation = function (definition, subheader) {
             let fieldName = WuxDef.GetAttribute("PageSet_Advancement");
-            let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Styles", "Attributes", "Skills", "Jobs", "Advancement"]);
+            let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Techniques", "Attributes", "Skills", "Jobs", "Advancement"]);
             mainContents += buildExitStickyButtons(fieldName, true);
             mainContents += buildHeader("Advancement", subheader, definition.getAttribute(WuxDef._info));
             return mainContents;
@@ -1488,7 +1491,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         buildCharacterCreationTabs = function (sheetName) {
             let output = "";
-            let tabNames = ["Styles", "Attributes", "Knowledge", "Skills", "Jobs", "Origin"];
+            let tabNames = ["Techniques", "Attributes", "Knowledge", "Skills", "Jobs", "Origin"];
 
             for (let i = 0; i < tabNames.length; i++) {
                 output += buildTabButton("radio",  WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
