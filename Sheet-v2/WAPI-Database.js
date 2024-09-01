@@ -366,7 +366,7 @@ class TechniqueData extends WuxDatabaseData {
         definition.subGroup = this.techSet;
         definition.modAttrs = [];
         definition.formulaCalculations = [];
-        definition.extraData = {tier: this.tier, isFree: this.isFree};
+        definition.extraData = {tier: this.tier, affinity: this.affinity, isFree: this.isFree};
         return definition;
     }
 
@@ -531,7 +531,25 @@ class TechniqueStyle extends WuxDatabaseData {
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
         definition.subGroup = this.group;
+        definition.extraData = {requirements: this.getRequirements()};
         return definition;
+    }
+    getRequirements() {
+        let requirements = "";
+
+        if (this.cr > 1) {
+            requirements += `You must be at least Character Rank ${this.cr}`;
+        }
+        if (this.affinity != "") {
+            if (requirements != "") {
+                requirements += "\n";
+            }
+            requirements += `You must have a ${this.affinity} affinity`;
+        }
+        if (requirements == "") {
+            requirements = "None";
+        }
+        return requirements;
     }
 }
 class SkillData extends WuxDatabaseData {
@@ -663,6 +681,24 @@ class JobData extends WuxDatabaseData {
         this.roles = this.createRolesArray(dataArray.slice(i)); i += 5;
         this.prereq = "" + dataArray[i]; i++;
         this.techniques = this.createJobTechnique(dataArray.slice(i)); i++;
+    }
+    createDefinition(baseDefinition) {
+        let definition = super.createDefinition(baseDefinition);
+        definition.subGroup = this.group;
+        definition.extraData = {requirements: this.getRequirements()};
+        return definition;
+    }
+
+    getRequirements() {
+        let requirements = "";
+
+        if (this.prereq != "") {
+            requirements += this.prereq;
+        }
+        if (requirements == "") {
+            requirements = "None";
+        }
+        return requirements;
     }
 
     createRolesArray(modArray) {
