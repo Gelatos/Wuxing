@@ -1161,7 +1161,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 build = function (headers, data) {
                     let output = ``;
                     for (let i = 0; i < headers.length; i++) {
-                        output += flextTableGroup(`${flexTableHeader(headers[i])}\n${flexTableData(data[i])}\n`);
+                        output += flexTableGroup(`${flexTableHeader(headers[i])}\n${flexTableData(data[i])}\n`);
                     }
                     return flexTable(output);
                 },
@@ -1170,7 +1170,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     return `<div class="wuxFlexTable">\n${contents}\n</div>`;
                 },
 
-                flextTableGroup = function (contents, className) {
+                flexTableGroup = function (contents, className) {
                     return `<div class="wuxFlexTableItemGroup${className != undefined ? ` ${className}` : ""}">\n${contents}\n</div>`;
                 },
 
@@ -1193,7 +1193,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return {
                 Build: build,
                 FlexTable: flexTable,
-                FlextTableGroup: flextTableGroup,
+                FlexTableGroup: flexTableGroup,
                 FlexTableHeader: flexTableHeader,
                 FlexTableSubheader: flexTableSubheader,
                 FlexTableData: flexTableData,

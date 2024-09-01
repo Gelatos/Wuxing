@@ -1,5 +1,5 @@
 var upgrade_to_1_0_0 = function () {
-	let attributeHandler = loaderAttrubuteHandler("0");
+	let attributeHandler = loaderAttrubuteHandler("1.0.0");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Core", WuxDef._tab), "Overview");
@@ -36,7 +36,7 @@ var loaderAttrubuteHandler = function (version) {
 	console.log(`Upgrading to ${version}`);
 	let attributeHandler = new WorkerAttributeHandler();
 	attributeHandler.addUpdate("version", version);
-	// attributeHandler.addFinishCallback(versioning);
+	attributeHandler.addFinishCallback(versioning);
 	return attributeHandler;
 }
 

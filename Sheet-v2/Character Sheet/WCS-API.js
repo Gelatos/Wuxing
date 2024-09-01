@@ -6865,7 +6865,7 @@ var WuxDef = WuxDef || (function () {
 			},
 			"JobStyle": {
 				"name": "JobStyle", "fieldName": "jobstyle", "group": "Type", "description": "", "variable": "jbs{0}{1}", "title": "Job", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "1", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "formula": "1", "modifiers": "", "linkedGroups": ["Job"],
 				"isResource": "", "modAttrs": [],
 				"formulaCalculations": [{ "modName": "", "value": 1, "multiplier": 1 }],
 				"extraData": {}

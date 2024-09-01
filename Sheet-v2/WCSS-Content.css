@@ -50,6 +50,11 @@
 	flex: 8;
 }
 
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup 
+{
+    display: none;
+}
+
 .wuxFlexTableItemHeader,
 .wuxFlexTableItemSubheader,
 .wuxFlexTableItemData

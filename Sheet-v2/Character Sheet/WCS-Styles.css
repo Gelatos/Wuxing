@@ -493,11 +493,6 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
     margin-bottom: 10px;
 }
 
-input[type=hidden].wuxFilterSection-flag[value="1"] + .wuxSectionBlock 
-{
-    display: none;
-}
-
 .wuxSectionHeader,
 .wuxStyleSectionHeader
 {
@@ -885,6 +880,11 @@ textarea.wuxInput
 .wuxFlexTableItemGroup8
 {
 	flex: 8;
+}
+
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup 
+{
+    display: none;
 }
 
 .wuxFlexTableItemHeader,
