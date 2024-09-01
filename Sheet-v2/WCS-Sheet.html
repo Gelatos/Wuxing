@@ -6433,6 +6433,13 @@
 										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
 											<div class="wuxPageDisplay-Techniques">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_sty-swordplay_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-swordplay_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-swordplay_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
 												<div class="wuxHeader">Swordplay</div>
 											</div>
 											<div class="wuxPageDisplay-Styles">
@@ -6456,6 +6463,13 @@
 												</div>
 											</div>
 											<div class="wuxPageDisplay-Actions">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_sty-swordplay_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-swordplay_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-swordplay_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
 												<div class="wuxHeader">Swordplay</div>
 											</div>
 											<div class="wuxSectionHeaderFooter"></div>
@@ -6780,6 +6794,13 @@
 										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
 											<div class="wuxPageDisplay-Techniques">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_sty-ki_extension_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-ki_extension_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-ki_extension_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
 												<div class="wuxHeader">Ki Extension</div>
 											</div>
 											<div class="wuxPageDisplay-Styles">
@@ -6803,6 +6824,13 @@
 												</div>
 											</div>
 											<div class="wuxPageDisplay-Actions">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_sty-ki_extension_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-ki_extension_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-ki_extension_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
 												<div class="wuxHeader">Ki Extension</div>
 											</div>
 											<div class="wuxSectionHeaderFooter"></div>
@@ -7118,6 +7146,13 @@
 										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
 											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
 											<div class="wuxPageDisplay-Techniques">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_sty-basic_set_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-basic_set_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-basic_set_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
 												<div class="wuxHeader">Basic Set</div>
 											</div>
 											<div class="wuxPageDisplay-Styles">
@@ -7141,6 +7176,13 @@
 												</div>
 											</div>
 											<div class="wuxPageDisplay-Actions">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_sty-basic_set_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-basic_set_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_sty-basic_set_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
 												<div class="wuxHeader">Basic Set</div>
 											</div>
 											<div class="wuxSectionHeaderFooter"></div>
@@ -8559,65 +8601,136 @@
 	'use strict';
 	
 	var 
-	updateBuildPoints = function(eventinfo) {
+	updateTechniqueBuildPoints = function(eventinfo) {
 	let attributeHandler = new WorkerAttributeHandler();
 	let worker = new WuxWorkerBuildManager("Technique");
 	worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 	attributeHandler.run();
 	},
-	filterTechniquesForLearn = function(attributeHandler) {
-	let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
-	let techDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Technique"));
-	
-	let techniqueWorker = new WuxWorkerBuild("Technique");
-	attributeHandler.addMod(techniqueWorker.attrBuildFinal);
+	updateStyleBuildPoints = function(eventinfo) {
+	let attributeHandler = new WorkerAttributeHandler();
+	attributeHandler.addMod(WuxDef.GetVariable("Page"));
 	
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
-	techniqueWorker.setBuildStatsFinal(attrHandler);
-	techniqueWorker.cleanBuildStats();
+	let attributeHandler2 = new WorkerAttributeHandler();
+	if (attrHandler.parseString(WuxDef.GetVariable("Page")) == "Techniques") {
+	let worker = new WuxWorkerBuildManager("Technique");
+	worker.onChangeWorkerAttribute(attributeHandler2, eventinfo.sourceAttribute, eventinfo.newValue);
+	
+	attributeHandler2.addMod(WuxDef.GetVariable("CR"));
+	attributeHandler2.addMod(WuxDef.GetVariable("Affinity"));
+	
+	attributeHandler2.addGetAttrCallback(function (attrHandler2) {
+	let techniqueWorker = new WuxWorkerBuild("Technique");
+	techniqueWorker.setBuildStatsDraft(attrHandler2);
 	let workerVariableName = "";
-	
-	for (let i = 0; i < techDefinitions.length; i++) {
-	workerVariableName = techDefinitions[i].getVariable();
-	if (techniqueWorker.buildStats.has(workerVariableName)) {
-	attrHandler.addUpdate(workerVariableName, techniqueWorker.buildStats.get(workerVariableName).value);
-	}
-	attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._filter), "0");
-	attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._subfilter), techDefinitions[i].extraData.isFree ? "1" : "0");
-	}
-	
+	let styleValue = "0";
+	let cr = attrHandler2.parseInt(WuxDef.GetVariable("CR"));
+	let affinities = [attrHandler2.parseString(WuxDef.GetVariable("Affinity"))];
+	let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
 	for (let i = 0; i < styleDefinitions.length; i++) {
 	workerVariableName = styleDefinitions[i].getVariable();
-	attrHandler.addUpdate(styleDefinitions[i].getVariable(WuxDef._filter), "0");
-	attrHandler.addUpdate(styleDefinitions[i].getVariable(WuxDef._subfilter), "0");
-	if (techniqueWorker.buildStats.has(workerVariableName)) {
-	attrHandler.addUpdate(styleDefinitions[i].getVariable(), techniqueWorker.buildStats.get(workerVariableName).value);
+	if (workerVariableName == eventinfo.sourceAttribute) {
+	styleValue = eventinfo.newValue;
+	filterStyleTechniquesForLearn(styleDefinitions[i], styleValue.toString(), cr, affinities, attrHandler2, techniqueWorker);
 	}
+	};
+	techniqueWorker.updatePoints(attrHandler2);
+	});
+	
 	}
+	else if (attrHandler.parseString(WuxDef.GetVariable("Page")) == "Styles") {
+	let worker = new WuxWorkerBuildManager("Style");
+	worker.onChangeWorkerAttribute(attributeHandler2, eventinfo.sourceAttribute, eventinfo.newValue);
+	}
+	attributeHandler2.run();
+	});
+	
+	
+	attributeHandler.run();
+	},
+	updateTechniquesPageToLearn = function(attributeHandler) {
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
 	attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Job", WuxDef._filter), "1");
 	attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Standard", WuxDef._filter), "0");
 	attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Basic", WuxDef._filter), "1");
 	attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._filter), "1");
 	attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._subfilter), "1");
 	});
+	filterTechniquesForLearn(attributeHandler);
+	},
+	filterTechniquesForLearn = function(attributeHandler) {
+	let techniqueWorker = new WuxWorkerBuild("Technique");
+	attributeHandler.addMod(techniqueWorker.attrBuildDraft);
+	attributeHandler.addMod(WuxDef.GetVariable("CR"));
+	attributeHandler.addMod(WuxDef.GetVariable("Affinity"));
+	
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+	techniqueWorker.setBuildStatsDraft(attrHandler);
+	techniqueWorker.cleanBuildStats();
+	let workerVariableName = "";
+	let styleValue = "0";
+	let cr = attrHandler.parseInt(WuxDef.GetVariable("CR"));
+	let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity"))];
+	
+	let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
+	for (let i = 0; i < styleDefinitions.length; i++) {
+	workerVariableName = styleDefinitions[i].getVariable();
+	styleValue = techniqueWorker.buildStats.has(workerVariableName) ? techniqueWorker.buildStats.get(workerVariableName).value : "0";
+	filterStyleTechniquesForLearn(styleDefinitions[i], styleValue.toString(), cr, affinities, attrHandler, techniqueWorker);
+	};
+	
+	techniqueWorker.updatePoints(attrHandler);
+	});
+	},
+	filterStyleTechniquesForLearn = function(styleDefinition, styleStatus, cr, affinities, attrHandler, techniqueWorker) {
+	let workerVariableName = styleDefinition.getVariable();
+	attrHandler.addUpdate(styleDefinition.getVariable(WuxDef._filter), "0");
+	let tier = styleDefinition.extraData.tier;
+	tier = isNaN(tier) ? 0 : tier;
+	let affinity = styleDefinition.extraData.affinity;
+	let isLearnable = styleDefinition.extraData.tier <= cr && (affinity == "" || affinities.includes(affinity));
+	attrHandler.addUpdate(styleDefinition.getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
+	attrHandler.addUpdate(styleDefinition.getVariable(), styleStatus);
+	
+	let techDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Technique"), new DatabaseFilterData("subGroup", styleDefinition.title)]);
+	for (let i = 0; i < techDefinitions.length; i++) {
+	tier = parseInt(techDefinitions[i].extraData.tier);
+	tier = isNaN(tier) ? 0 : tier;
+	affinity = techDefinitions[i].extraData.affinity;
+	isLearnable = !techDefinitions[i].extraData.isFree && styleStatus != "0" && tier <= cr && (affinity == "" || affinities.includes(affinity));
+	attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
+	
+	workerVariableName = techDefinitions[i].getVariable();
+	if (techniqueWorker.buildStats.has(workerVariableName)) {
+	if (!isLearnable) {
+	attrHandler.addUpdate(workerVariableName, 0);
+	techniqueWorker.updateBuildStats(attrHandler, workerVariableName, 0);
+	}
+	else {
+	attrHandler.addUpdate(workerVariableName, techniqueWorker.buildStats.get(workerVariableName).value);
+	}
+	}
+	attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._filter), "0");
+	}
 	},
 	filterTechniquesForCore = function(attributeHandler) {
 	let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
 	let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 	
 	let styleWorker = new WuxWorkerBuild("Style");
-	attributeHandler.addMod(styleWorker.attrBuildFinal);
+	attributeHandler.addMod(styleWorker.attrBuildDraft);
 	
-	let jobWorker = new WuxWorkerBuild("Job");
-	attributeHandler.addMod(jobWorker.attrBuildFinal);
+	let jobWorker = new WuxWorkerBuild("JobStyle");
+	attributeHandler.addMod(jobWorker.attrBuildDraft);
 	
 	let techniqueWorker = new WuxWorkerBuild("Technique");
 	attributeHandler.addMod(techniqueWorker.attrBuildFinal);
 	
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
-	styleWorker.setBuildStatsFinal(attrHandler);
+	styleWorker.setBuildStatsDraft(attrHandler);
 	styleWorker.cleanBuildStats();
-	jobWorker.setBuildStatsFinal(attrHandler);
+	jobWorker.setBuildStatsDraft(attrHandler);
 	jobWorker.cleanBuildStats();
 	techniqueWorker.setBuildStatsFinal(attrHandler);
 	techniqueWorker.cleanBuildStats();
@@ -8668,18 +8781,18 @@
 	let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 	
 	let styleWorker = new WuxWorkerBuild("Style");
-	attributeHandler.addMod(styleWorker.attrBuildFinal);
+	attributeHandler.addMod(styleWorker.attrBuildDraft);
 	
-	let jobWorker = new WuxWorkerBuild("Job");
-	attributeHandler.addMod(jobWorker.attrBuildFinal);
+	let jobWorker = new WuxWorkerBuild("JobStyle");
+	attributeHandler.addMod(jobWorker.attrBuildDraft);
 	
 	let techniqueWorker = new WuxWorkerBuild("Technique");
 	attributeHandler.addMod(techniqueWorker.attrBuildFinal);
 	
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
-	styleWorker.setBuildStatsFinal(attrHandler);
+	styleWorker.setBuildStatsDraft(attrHandler);
 	styleWorker.cleanBuildStats();
-	jobWorker.setBuildStatsFinal(attrHandler);
+	jobWorker.setBuildStatsDraft(attrHandler);
 	jobWorker.cleanBuildStats();
 	techniqueWorker.setBuildStatsFinal(attrHandler);
 	techniqueWorker.cleanBuildStats();
@@ -8704,10 +8817,13 @@
 	let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 	
 	let styleWorker = new WuxWorkerBuild("Style");
-	attributeHandler.addMod(styleWorker.attrBuildFinal);
+	attributeHandler.addMod(styleWorker.attrBuildDraft);
+	
+	let jobWorker = new WuxWorkerBuild("JobStyle");
+	attributeHandler.addMod(jobWorker.attrBuildDraft);
 	
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
-	styleWorker.setBuildStatsFinal(attrHandler);
+	styleWorker.setBuildStatsDraft(attrHandler);
 	styleWorker.cleanBuildStats();
 	
 	let isVisible = false;
@@ -8770,7 +8886,9 @@
 	}
 	;
 	return {
-	UpdateBuildPoints: updateBuildPoints,
+	UpdateTechniqueBuildPoints: updateTechniqueBuildPoints,
+	UpdateStyleBuildPoints: updateStyleBuildPoints,
+	UpdateTechniquesPageToLearn: updateTechniquesPageToLearn,
 	FilterTechniquesForLearn: filterTechniquesForLearn,
 	FilterTechniquesForCore: filterTechniquesForCore,
 	FilterTechniquesForStyleSet: filterTechniquesForStyleSet,
@@ -8778,8 +8896,14 @@
 	UpdateLearnedStats: updateLearnedStats
 	};
 	}());
-	on("change:sty-basic_set change:sty-swordplay change:sty-ki_extension change:tch-break_free change:tch-dash change:tch-escape change:tch-grapple change:tch-hide change:tch-mount change:tch-prepare change:tch-reposition change:tch-seach change:tch-aid change:tch-stabilize change:tch-skill_check change:tch-unarmed_strike change:tch-encourage change:tch-build_rapport change:tch-build_pressure change:tch-captivate change:tch-demand change:tch-grab_an_edge change:tch-interact change:tch-second_wind change:tch-second_breath change:tch-undaunted change:tch-preemptive_strike change:tch-preemptive_stagger change:tch-critical_maim change:tch-spellshot change:tch-follow-up_spellshot change:tch-bursting_spellshot change:tch-savior change:tch-knock_away_savior change:tch-savior's_retaliation change:tch-spellstrike change:tch-power_skirmish change:tch-sneak_attack change:tch-sneaky_follow-up change:tch-assassinate change:tch-emergency_care change:tch-nightingale change:tch-rhapsody change:tch-metamagic change:tch-strategize change:tch-foresight change:tch-saw_that_coming change:tch-as_you_may_recall change:tch-generalist change:tch-defender change:tch-defender_ii change:tch-defender's_will change:tch-defender's_taunt change:tch-defender's_recovery change:tch-skirmisher change:tch-skirmisher_ii change:tch-skirmisher's_step change:tch-skirmisher's_strike change:tch-marksman change:tch-marksman_ii change:tch-marksman's_longshot change:tch-marksman's_sight change:tch-marksman's_strike change:tch-athlete change:tch-athlete_ii change:tch-athlete's_sprint change:tch-athlete's_reach change:tch-bounding_sprint change:tch-skulk_away change:tch-skulk_then_hide change:tch-first_aid change:tch-cleansing_aid change:tch-environmental_awareness change:tch-eclectic_knowledge change:tch-point_of_clarity change:tch-pole_vault change:tch-quick_draw change:tch-extension_strike change:tch-step_extension change:tch-lasting_extension change:tch-far_strike change:tch-extension_strike_+ change:tch-quick_slash change:tch-precision_blade change:tch-armor_piercer change:tch-quick_slash_ii change:tch-cleave change:tch-crushing_blade change:tch-great_cleave change:tch-cleave_+ change:tch-sudden_cleave change:tch-great_cleave_ii change:tch-power_flex change:tch-crush_knuckle change:tch-impact_knuckle change:tch-knuckle_flurry change:tch-water_blast change:tch-geyser change:tch-geyser_line change:tch-surf change:tch-great_geyser_line change:tch-tidal_wave change:tch-sand_surge change:tch-sand_spout change:tch-sand_wave change:tch-sand_launcher change:tch-sicken change:tch-spores change:tch-sickening_cloud change:tch-virulent_spores change:tch-firebolt change:tch-flame_arrow change:tch-fireball change:tch-fireblast change:tch-ragnarok change:tch-bonfire change:tch-wall_of_fire change:tch-field_of_flame change:tch-lightning_shaft change:tch-shock change:tch-lightning_bolt change:tch-plasma_arc change:tch-fulgor change:tch-cold_snap change:tch-frostbite change:tch-freezebind change:tch-cold_burst change:tch-cold_front change:tch-diamond_dust change:tch-wind_bullet change:tch-gust change:tch-windsweep change:tch-gale change:tch-darkness change:tch-shadow_wall change:tch-nightfall change:tch-fog_cloud change:tch-sleet change:tch-freezing_sleet change:tch-hail change:tch-binding_sleet change:tch-ice_storm change:tch-fimbulwinter change:tch-smoke_cloud change:tch-burning_smoke change:tch-choking_smoke change:tch-acceleration change:tch-power_vault change:tch-expeditious change:tch-quick_climb change:tch-quick_swim change:tch-poise change:tch-cat_fall change:tch-kip_up change:tch-silent_stride change:tch-shove change:tch-knockdown change:tch-tumble change:tch-field_medic change:tch-camoflauge change:tch-blurred_light change:tch-light_refraction change:tch-shadow_steps change:tch-shadow_walker change:tch-wind_step change:tch-updraft change:tch-clouded_updraft change:tch-wind_fall change:tch-walk_on_air change:tch-fire_step change:tch-liftoff change:tch-jet change:tch-cunning_action change:tch-demoralize change:tch-fascinate change:tch-impersonator change:tch-ether_sense change:tch-spirit_sense change:tch-tremorsense change:tch-dustcraft change:tch-shape_material change:tch-quickcraft change:tch-improved_shaping change:tch-greater_shaping change:tch-legendary_shaping change:tch-dust_material change:tch-dust_area change:tch-improved_dusting change:tch-greater_dusting change:tch-legendary_dusting change:tch-form_path change:tch-form_pillar change:tch-stepping_path change:tch-form_wall change:tch-scattered_pillars change:tch-great_wall change:tch-cultivate change:tch-entangle change:tch-wildwood change:tch-distortion change:tch-lasting_distortion change:tch-heat_field change:tch-burn_guard change:tch-cold_field change:tch-chill_guard change:tch-kinesis change:tch-distant_kinesis change:tch-kinetic_strike change:tch-kinetic_throw change:tch-heavy_kinesis change:tch-burden change:tch-pressure change:tch-restrain change:tch-wide_pressure change:tch-prostration change:tch-deep_pressure change:tch-gravity_well change:tch-shield_block change:tch-glancing_block change:tch-aegis change:tch-light change:tch-dancing_lights change:tch-flash change:tch-sunlight change:tch-stress_release change:tch-stress_release_+ change:tch-stress_release_++ change:tch-sensory_training change:tch-sensory_training_+ change:tch-broad_study change:tch-experienced_tracker change:tch-multilingual change:tch-multilingual_+ change:tch-specialized_lore change:tch-specialized_lore_+ change:tch-specialized_lore_++ change:tch-improved_initiative change:tch-knowledge_training change:tch-knowledge_training_+ change:tch-knowledge_training_++ change:tch-social_training change:tch-social_training_+ change:tch-social_training_++ change:tch-refocus change:tch-refocus_+ change:tch-sustained_channel change:tch-sustained_channel_+ change:tch-ki_control change:tch-ki_control_+ change:tch-ki_control_++ change:tch-surge_value change:tch-surge_value_+ change:tch-channel_training change:tch-channel_training_+ change:tch-channel_training_++ change:tch-physical_training change:tch-physical_training_+ change:tch-body_training change:tch-body_training_+ change:tch-body_training_++ change:tch-technical_training change:tch-technical_training_+ change:tch-technical_training_++ change:tch-martial_training change:tch-martial_training_+ change:tch-martial_training_++ change:tch-hp_up change:tch-hp_up+ change:tch-hp_up++ change:tch-vitality_boost change:tch-vitality_boost_+ change:tch-vitality_boost_++ change:tch-undying change:tch-undying_+ change:tch-extra_follow-up_attack change:tch-extra_follow-up_attack_+ change:tch-change_tech_slots change:tch-hold_out change:tch-overdrive", function (eventinfo) {
-	WuxWorkerTechniques.UpdateBuildPoints(eventinfo)
+	on("change:tch-break_free change:tch-dash change:tch-escape change:tch-grapple change:tch-hide change:tch-mount change:tch-prepare change:tch-reposition change:tch-seach change:tch-aid change:tch-stabilize change:tch-skill_check change:tch-unarmed_strike change:tch-encourage change:tch-build_rapport change:tch-build_pressure change:tch-captivate change:tch-demand change:tch-grab_an_edge change:tch-interact change:tch-second_wind change:tch-second_breath change:tch-undaunted change:tch-preemptive_strike change:tch-preemptive_stagger change:tch-critical_maim change:tch-spellshot change:tch-follow-up_spellshot change:tch-bursting_spellshot change:tch-savior change:tch-knock_away_savior change:tch-savior's_retaliation change:tch-spellstrike change:tch-power_skirmish change:tch-sneak_attack change:tch-sneaky_follow-up change:tch-assassinate change:tch-emergency_care change:tch-nightingale change:tch-rhapsody change:tch-metamagic change:tch-strategize change:tch-foresight change:tch-saw_that_coming change:tch-as_you_may_recall change:tch-generalist change:tch-defender change:tch-defender_ii change:tch-defender's_will change:tch-defender's_taunt change:tch-defender's_recovery change:tch-skirmisher change:tch-skirmisher_ii change:tch-skirmisher's_step change:tch-skirmisher's_strike change:tch-marksman change:tch-marksman_ii change:tch-marksman's_longshot change:tch-marksman's_sight change:tch-marksman's_strike change:tch-athlete change:tch-athlete_ii change:tch-athlete's_sprint change:tch-athlete's_reach change:tch-bounding_sprint change:tch-skulk_away change:tch-skulk_then_hide change:tch-first_aid change:tch-cleansing_aid change:tch-environmental_awareness change:tch-eclectic_knowledge change:tch-point_of_clarity change:tch-pole_vault change:tch-quick_draw change:tch-extension_strike change:tch-step_extension change:tch-lasting_extension change:tch-far_strike change:tch-extension_strike_+ change:tch-quick_slash change:tch-precision_blade change:tch-armor_piercer change:tch-quick_slash_ii change:tch-cleave change:tch-crushing_blade change:tch-great_cleave change:tch-cleave_+ change:tch-sudden_cleave change:tch-great_cleave_ii change:tch-power_flex change:tch-crush_knuckle change:tch-impact_knuckle change:tch-knuckle_flurry change:tch-water_blast change:tch-geyser change:tch-geyser_line change:tch-surf change:tch-great_geyser_line change:tch-tidal_wave change:tch-sand_surge change:tch-sand_spout change:tch-sand_wave change:tch-sand_launcher change:tch-sicken change:tch-spores change:tch-sickening_cloud change:tch-virulent_spores change:tch-firebolt change:tch-flame_arrow change:tch-fireball change:tch-fireblast change:tch-ragnarok change:tch-bonfire change:tch-wall_of_fire change:tch-field_of_flame change:tch-lightning_shaft change:tch-shock change:tch-lightning_bolt change:tch-plasma_arc change:tch-fulgor change:tch-cold_snap change:tch-frostbite change:tch-freezebind change:tch-cold_burst change:tch-cold_front change:tch-diamond_dust change:tch-wind_bullet change:tch-gust change:tch-windsweep change:tch-gale change:tch-darkness change:tch-shadow_wall change:tch-nightfall change:tch-fog_cloud change:tch-sleet change:tch-freezing_sleet change:tch-hail change:tch-binding_sleet change:tch-ice_storm change:tch-fimbulwinter change:tch-smoke_cloud change:tch-burning_smoke change:tch-choking_smoke change:tch-acceleration change:tch-power_vault change:tch-expeditious change:tch-quick_climb change:tch-quick_swim change:tch-poise change:tch-cat_fall change:tch-kip_up change:tch-silent_stride change:tch-shove change:tch-knockdown change:tch-tumble change:tch-field_medic change:tch-camoflauge change:tch-blurred_light change:tch-light_refraction change:tch-shadow_steps change:tch-shadow_walker change:tch-wind_step change:tch-updraft change:tch-clouded_updraft change:tch-wind_fall change:tch-walk_on_air change:tch-fire_step change:tch-liftoff change:tch-jet change:tch-cunning_action change:tch-demoralize change:tch-fascinate change:tch-impersonator change:tch-ether_sense change:tch-spirit_sense change:tch-tremorsense change:tch-dustcraft change:tch-shape_material change:tch-quickcraft change:tch-improved_shaping change:tch-greater_shaping change:tch-legendary_shaping change:tch-dust_material change:tch-dust_area change:tch-improved_dusting change:tch-greater_dusting change:tch-legendary_dusting change:tch-form_path change:tch-form_pillar change:tch-stepping_path change:tch-form_wall change:tch-scattered_pillars change:tch-great_wall change:tch-cultivate change:tch-entangle change:tch-wildwood change:tch-distortion change:tch-lasting_distortion change:tch-heat_field change:tch-burn_guard change:tch-cold_field change:tch-chill_guard change:tch-kinesis change:tch-distant_kinesis change:tch-kinetic_strike change:tch-kinetic_throw change:tch-heavy_kinesis change:tch-burden change:tch-pressure change:tch-restrain change:tch-wide_pressure change:tch-prostration change:tch-deep_pressure change:tch-gravity_well change:tch-shield_block change:tch-glancing_block change:tch-aegis change:tch-light change:tch-dancing_lights change:tch-flash change:tch-sunlight change:tch-stress_release change:tch-stress_release_+ change:tch-stress_release_++ change:tch-sensory_training change:tch-sensory_training_+ change:tch-broad_study change:tch-experienced_tracker change:tch-multilingual change:tch-multilingual_+ change:tch-specialized_lore change:tch-specialized_lore_+ change:tch-specialized_lore_++ change:tch-improved_initiative change:tch-knowledge_training change:tch-knowledge_training_+ change:tch-knowledge_training_++ change:tch-social_training change:tch-social_training_+ change:tch-social_training_++ change:tch-refocus change:tch-refocus_+ change:tch-sustained_channel change:tch-sustained_channel_+ change:tch-ki_control change:tch-ki_control_+ change:tch-ki_control_++ change:tch-surge_value change:tch-surge_value_+ change:tch-channel_training change:tch-channel_training_+ change:tch-channel_training_++ change:tch-physical_training change:tch-physical_training_+ change:tch-body_training change:tch-body_training_+ change:tch-body_training_++ change:tch-technical_training change:tch-technical_training_+ change:tch-technical_training_++ change:tch-martial_training change:tch-martial_training_+ change:tch-martial_training_++ change:tch-hp_up change:tch-hp_up+ change:tch-hp_up++ change:tch-vitality_boost change:tch-vitality_boost_+ change:tch-vitality_boost_++ change:tch-undying change:tch-undying_+ change:tch-extra_follow-up_attack change:tch-extra_follow-up_attack_+ change:tch-change_tech_slots change:tch-hold_out change:tch-overdrive", function (eventinfo) {
+	WuxWorkerTechniques.UpdateTechniqueBuildPoints(eventinfo)
+	});
+	on("change:sty-basic_set change:sty-swordplay change:sty-ki_extension", function (eventinfo) {
+	WuxWorkerTechniques.UpdateStyleBuildPoints(eventinfo)
+	});
+	on("change:jbs-interceptor change:jbs-guardian change:jbs-spellslinger change:jbs-warrior change:jbs-rogue change:jbs-scholar change:jbs-physician", function (eventinfo) {
+	WuxWorkerTechniques.UpdateJobStyleBuildPoints(eventinfo)
 	});
 	var WuxWorkerTraining = WuxWorkerTraining || (function() {
 	'use strict';
@@ -8790,7 +8914,7 @@
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Training");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Training");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Training"), "Training");
-	WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
+	WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
 	attributeHandler.run();
 	},
 	finishBuild = function() {
@@ -8941,7 +9065,7 @@
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Advancement");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Advancement");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement"), "Advancement");
-	WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
+	WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
 	attributeHandler.run();
 	},
 	finishBuild = function() {
@@ -8977,6 +9101,7 @@
 	let attributeHandler = new WorkerAttributeHandler();
 	let worker = new WuxAdvancementWorkerBuild();
 	worker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+	WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
 	attributeHandler.run();
 	},
 	setAdvancementPointsUpdate = function(eventinfo) {

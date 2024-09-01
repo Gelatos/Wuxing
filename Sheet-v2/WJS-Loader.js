@@ -27,7 +27,7 @@ var upgrade_to_1_0_0 = function () {
 		});
 	});
 
-	WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
+	WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
 	
 	attributeHandler.run();
 };

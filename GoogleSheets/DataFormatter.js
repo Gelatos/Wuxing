@@ -40,6 +40,10 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArra
         let job = new JobData(arr);
         return job.createDefinition(definitionDatabase.get("Job"));
     });
+    definitionDatabase.importSheets(jobsArray, function (arr) {
+        let job = new JobData(arr);
+        return job.createDefinition(definitionDatabase.get("JobStyle"));
+    });
     definitionDatabase.importSheets(rolesArray, function (arr) {
         let role = new RoleData(arr);
         return role.createDefinition(definitionDatabase.get("Role"));

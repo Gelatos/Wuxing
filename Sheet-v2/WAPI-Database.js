@@ -531,7 +531,7 @@ class TechniqueStyle extends WuxDatabaseData {
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
         definition.subGroup = this.group;
-        definition.extraData = {requirements: this.getRequirements()};
+        definition.extraData = {tier: this.cr, affinity: this.affinity, requirements: this.getRequirements()};
         return definition;
     }
     getRequirements() {
