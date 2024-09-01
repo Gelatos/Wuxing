@@ -744,8 +744,11 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				buildTechniquesByGroup = function (stylesDatabase, jobDatabase, techniqueDatabase, techniqueDefinition) {
 					let displayOptions = getDisplayOptions(techniqueDefinition);
 					let output = "";
+					displayOptions.hasSelect = false;
 					output += buildJobStyle(jobDatabase, techniqueDatabase, displayOptions);
+					displayOptions.hasSelect = true;
 					output += buildStyle(stylesDatabase, techniqueDatabase, "Standard", displayOptions);
+					displayOptions.hasSelect = false;
 					output += buildStyle(stylesDatabase, techniqueDatabase, "Basic", displayOptions);
 					return output;
 				},
@@ -754,7 +757,6 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					let displayOptions = WuxPrintTechnique.GetDisplayOptions();
 					displayOptions.techniqueDefinition = techniqueDefinition;
 					displayOptions.hasCSS = true;
-					displayOptions.showSelect = true;
 					return displayOptions;
 				},
 
@@ -1604,7 +1606,7 @@ var BuilderBackend = BuilderBackend || (function () {
 					}
 				},
 				filterTechniquesForCore = function(attributeHandler) {
-					let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
+					let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
 					let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 
 					let styleWorker = new WuxWorkerBuild("Style");
@@ -1671,7 +1673,7 @@ var BuilderBackend = BuilderBackend || (function () {
 					});
 				},
 				filterTechniquesForStyleSet = function(attributeHandler) {
-					let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
+					let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
 					let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 
 					let styleWorker = new WuxWorkerBuild("Style");
@@ -1712,7 +1714,7 @@ var BuilderBackend = BuilderBackend || (function () {
 					});
 				},
 				filterTechniquesForActions = function(attributeHandler) {
-					let styleDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Style"));
+					let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
 					let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 
 					let styleWorker = new WuxWorkerBuild("Style");

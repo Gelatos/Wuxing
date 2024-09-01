@@ -208,10 +208,8 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 autoExpand: false,
                 hasCSS: false,
                 hasUseInteraction: false,
-                showSelect: false,
                 showTrigger: false,
-                showKiCharge: false,
-                showSelectIfFree: false,
+                showKiCharge: false
             }
         },
 
@@ -285,36 +283,46 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             },
 
             setTechniqueDisplayHeaderSelectSection = function (techDisplayData, displayOptions) {
-                return `
-                ${WuxSheetMain.CustomInput("hidden", techDisplayData.definition.getAttribute(WuxDef._subfilter), "wuxFeatureInteraction-flag", ` value="0"`)}
-                <div class="wuxFeatureHeaderInteractBlock">
-                <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${techDisplayData.definition.getAttribute()}">
-                <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${techDisplayData.definition.getAttribute()}">
-                <span class="wuxFeatureHeaderInteractiveIcon">&#9635;</span>
-                <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${techDisplayData.definition.getAttribute()}">
-                <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9634;</span>
-                </div>
-                ${WuxSheetMain.CustomInput("hidden", displayOptions.techniqueDefinition.getAttribute(WuxDef._subfilter), "wuxFeatureInteractionButton-flag", ` value="0"`)}
-                <div class="wuxFeatureHeaderInteractBlock">
-                <button class="wuxFeatureHeaderInteractiveButton" type="roll" value="@{technique-onUse}">9</button>
-                </div>`;
+                if (displayOptions.hasSelect) {
+                    return `
+                    ${WuxSheetMain.CustomInput("hidden", techDisplayData.definition.getAttribute(WuxDef._subfilter), "wuxFeatureInteraction-flag", ` value="0"`)}
+                    <div class="wuxFeatureHeaderInteractBlock">
+                    <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${techDisplayData.definition.getAttribute()}">
+                    <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${techDisplayData.definition.getAttribute()}">
+                    <span class="wuxFeatureHeaderInteractiveIcon">&#9635;</span>
+                    <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${techDisplayData.definition.getAttribute()}">
+                    <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9634;</span>
+                    </div>`;
+                }
+                return "";
             },
 
             setTechniqueDisplayHeaderUseSection = function (techDisplayData, displayOptions) {
 
-                if (displayOptions.hasUseInteraction) {
-                    // add technique data for the api
-                    techDisplayData.technique.username = "@{character_name}";
-                    let usedTechData = JSON.stringify(techDisplayData.technique);
-                    usedTechData = Format.SanitizeSheetRollAction(usedTechData);
+                // add technique data for the api
+                techDisplayData.technique.username = "@{character_name}";
+                let usedTechData = JSON.stringify(techDisplayData.technique);
+                usedTechData = Format.SanitizeSheetRollAction(usedTechData);
+                let showDefinition = WuxDef.Get("Title_ShowTechnique");
+                let useDefinition = WuxDef.Get("Title_UseTechnique");
 
-                    return `<div class="wuxFeatureHeaderInteractBlock">
-                    <button class="wuxFeatureHeaderInteractiveButton" type="roll" value="${FeatureService.GetRollTemplate(techDisplayData)}">?</button>
-                    <button class="wuxFeatureHeaderInteractiveButton" type="roll" value="!ctech ${usedTechData}">9</button>
-                    </div>`;
-                }
-
-                return "";
+                return `
+                ${WuxSheetMain.CustomInput("hidden", displayOptions.techniqueDefinition.getAttribute(WuxDef._subfilter), "wuxFeatureInteractionButton-flag", ` value="0"`)}
+                <div class="wuxFeatureHeaderInteractBlock">
+                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value="${FeatureService.GetRollTemplate(techDisplayData)}">
+                        ?
+                        <div class="wuxTooltipContent">
+                            ${WuxDefinition.TooltipDescription(showDefinition)}
+                        </div>
+                    </button>
+                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value="!ctech ${usedTechData}">
+                        9
+                        <div class="wuxTooltipContent">
+                            ${WuxDefinition.TooltipDescription(useDefinition)}
+                        </div>
+                    </button>
+                </div>
+                `;
             },
 
             setTechniqueDisplayHeaderNameFields = function (techDisplayData, displayOptions) {

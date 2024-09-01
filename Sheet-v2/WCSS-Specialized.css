@@ -1160,6 +1160,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     padding: 5px;
     z-index: 9999;
 
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
 
     visibility: hidden;
