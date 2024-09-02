@@ -309,13 +309,13 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 return `
                 ${WuxSheetMain.CustomInput("hidden", displayOptions.techniqueDefinition.getAttribute(WuxDef._subfilter), "wuxFeatureInteractionButton-flag", ` value="0"`)}
                 <div class="wuxFeatureHeaderInteractBlock">
-                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value="${FeatureService.GetRollTemplate(techDisplayData)}">
+                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value=\`${FeatureService.GetRollTemplate(techDisplayData)}\`>
                         ?
                         <div class="wuxTooltipContent">
                             ${WuxDefinition.TooltipDescription(showDefinition)}
                         </div>
                     </button>
-                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value="!ctech ${usedTechData}">
+                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value=\`!ctech ${usedTechData}\`>
                         9
                         <div class="wuxTooltipContent">
                             ${WuxDefinition.TooltipDescription(useDefinition)}

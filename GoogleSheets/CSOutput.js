@@ -72,7 +72,12 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
 			var
 				print = function () {
-					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
+					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Advancement"))
+					+ buildTechPointsSection(WuxDef.GetAttribute("Training")));
+				},
+
+				buildTechPointsSection = function (fieldName) {
+					return WuxSheetSidebar.BuildPointsSection(fieldName);
 				}
 
 			return {
@@ -1183,8 +1188,54 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			var
         			    build = function () {
         			        let contents = "";
+							contents += createStatGroup("Attribute");
+							contents += createStatGroup("Defense");
+							contents += createStatGroup("Sense");
+							contents += createStatGroup("General");
+							contents += createStatGroup("Combat");
+							contents += createStatGroup("Social");
+							contents += createStatGroup("Skill");
         				    return contents;
-        			    }
+        			    },
+
+						createStatGroup = function (groupName) {
+							let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
+							let output = "";
+							for (let i = 0; i < filteredStats.length; i++) {
+								output += createStatBlock(filteredStats[i]);
+							}
+							output = WuxSheetMain.TabBlock(WuxSheetMain.Table.FlexTable(output));
+
+        			        let definition = WuxDef.Get(groupName);
+        				    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, output);
+						},
+
+						createStatBlock = function (statDefinition) {
+							let header = `${statDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(statDefinition))}`;
+							let contents = "";
+							if (statDefinition.isResource) {
+								// contents += createStatBlockValueWithHeader("Current", statDefinition.getAttribute());
+								// contents += createStatBlockValueWithHeader("Max", statDefinition.getAttribute(WuxDef._max));
+								contents += createStatBlockValue(statDefinition.getAttribute(WuxDef._max));
+							}
+							else {
+								contents += createStatBlockValue(statDefinition.getAttribute());
+							}
+							contents = WuxSheetMain.Table.FlexTable(contents);
+
+							let output = WuxSheetMain.Table.FlexTableHeader(header);
+							output += WuxSheetMain.Table.FlexTableData(contents);
+							return WuxSheetMain.Table.FlexTableGroup(output, "wuxMinWidth200");
+						},
+
+						createStatBlockValue = function (fieldName) {
+							return WuxSheetMain.Table.FlexTableGroup(`<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, "wuxMinWidth100");
+						},
+
+						createStatBlockValueWithHeader = function (name, fieldName) {
+							return WuxSheetMain.Table.FlexTableGroup(`${WuxSheetMain.Table.FlexTableSubheader(name)}
+							<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, "wuxMinWidth100");
+						}
         			    
         			    return {
         			        Build : build
@@ -1199,10 +1250,35 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			'use strict';
         
         			var
-        			    build = function () {
-        			        let contents = "";
-        				    return contents;
-        			    }
+						build = function () {
+							let contents = WuxSheetMain.MultiRowGroup([buildOrigin(), buildOriginStats()], WuxSheetMain.Table.FlexTable, 2);
+							contents = WuxSheetMain.TabBlock(contents);
+							
+							let definition = WuxDef.Get("Page_Origin");
+							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+						},
+
+						buildOrigin = function () {
+							let contents = "";
+							contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"));
+							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
+							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
+							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
+							contents += WuxDefinition.BuildTextarea(WuxDef.Get("Background"), WuxDef.GetAttribute("Background"), "wuxInput wuxHeight150");
+							return WuxSheetMain.Table.FlexTableGroup(contents);
+						},
+
+						buildOriginStats = function () {
+							let contents = "";
+							contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
+							contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
+							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
+							contents += WuxDefinition.BuildSelect(WuxDef.Get("InnateDefense"), WuxDef.GetAttribute("InnateDefense"), WuxDef.Filter([new DatabaseFilterData("group", "InnateDefenseType")]));
+							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("InnateDefense", WuxDef._learn));
+							contents += WuxDefinition.BuildSelect(WuxDef.Get("InnateSense"), WuxDef.GetAttribute("InnateSense"), WuxDef.Filter([new DatabaseFilterData("group", "InnateSenseType")]));
+							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("InnateSense", WuxDef._learn));
+							return WuxSheetMain.Table.FlexTableGroup(contents);
+						}
         			    
         			    return {
         			        Build : build
@@ -2554,7 +2630,12 @@ var AdvancementBackend = AdvancementBackend || (function () {
 
 					attributeHandler.addGetAttrCallback(function (attrHandler) {
 						for (let i = 0; i < formulaDefinitions.length; i++) {
-							attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+							if (formulaDefinitions[i].isResource) {
+								attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].getFormulaValue(attrHandler));
+							}
+							else {
+								attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+							}
 						}
 					});
 				},

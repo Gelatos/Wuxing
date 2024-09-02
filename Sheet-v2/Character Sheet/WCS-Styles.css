@@ -7450,6 +7450,11 @@ Quest Box
     font-family: pictos;
 }
 
+.wuxTextCenter
+{
+    text-align: center;
+}
+
 /*========================================
     CheckBox
 ========================================*/
