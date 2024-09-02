@@ -1,5 +1,5 @@
-var upgrade_to_1_0_0 = function () {
-	let attributeHandler = loaderAttrubuteHandler("1.0.0");
+var upgrade_to_1_0_0 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.0");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Core", WuxDef._tab), "Overview");
@@ -14,7 +14,9 @@ var upgrade_to_1_0_0 = function () {
 	let trainingWorker = new WuxTrainingWorkerBuild();
 	trainingWorker.setBuildStatsDraft(attributeHandler);
 	attributeHandler.addUpdate(WuxDef.GetVariable("PP"), 0);
-	trainingWorker.updateTrainingPoints(attributeHandler, WuxDef.GetVariable("Training"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("Training"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("Training", WuxDef._max), 0);
+	trainingWorker.updateTrainingPoints(attributeHandler);
 
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute", "Style", "JobStyle"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
@@ -32,24 +34,27 @@ var upgrade_to_1_0_0 = function () {
 	attributeHandler.run();
 };
 
-var loaderAttrubuteHandler = function (version) {
-	console.log(`Upgrading to ${version}`);
+var loaderAttrubuteHandler = function (currentVersion, newVersion) {
+	console.log(`Upgrading v${currentVersion} to v${newVersion}`);
 	let attributeHandler = new WorkerAttributeHandler();
-	attributeHandler.addUpdate("version", version);
-	attributeHandler.addFinishCallback(versioning);
+	attributeHandler.addUpdate("version", newVersion);
+	if (currentVersion != newVersion) {
+		attributeHandler.addFinishCallback(versioning);
+	}
 	return attributeHandler;
 }
 
 var versioning = function () {
 	getAttrs(["version"], function (v) {
+		let currentVersion = "1.0.0";
 		console.log("Checking version " + v["version"]);
 
 		switch(v["version"]) {
-			case "1.0.0":
-				console.log("Wuxing Sheet modified from 5th Edition OGL by Roll20 v" + v["version"]);
+			case currentVersion:
+				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${currentVersion}`);
 				break;
 			default:
-				upgrade_to_1_0_0();
+				upgrade_to_1_0_0(v["version"]);
 		}
 	});
 }
