@@ -480,18 +480,97 @@
 				<div class="wuxTab">
 					<div class="wuxSectionBlock wuxLayoutItem">
 						<div class="wuxTabContent">
-							<div class="wuxHeader2">Full Name<div class="wuxTooltipButtonContainer">
-									<div class="wuxTooltipButton">
-										<div class="wuxTooltipText">i</div>
-										<div class="wuxTooltipContent">
-											<div class="wuxHeader2">Full Name</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxHeader">
+										<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-trainingconversion_info"><span>?</span></div>Conversion
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-trainingconversion_info" value="0">
+									<div class="wuxHiddenField">
+										<div class="wuxInfoContent">
+											<div class="wuxHeader2">Conversion</div>
 
-											<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
+											<span class="wuxDescription">PP is used to gain Training Points for your character. You can convert PP into Training Points by using the convert to TP button below.</span>
+										</div>
+									</div>
+									<div class="wuxHeader2">Progression<div class="wuxTooltipButtonContainer">
+											<div class="wuxTooltipButton">
+												<div class="wuxTooltipText">i</div>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Progression</div>
+
+													<span class="wuxDescription">PP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional PP if a character devotes an entire day to training. </span>
+													<span class="wuxDescription">Once a character reaches 12 TP, they may spend their PP to gain a new knowledge or technique.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-pp" value="" placeholder="0" />
+										<div class="wuxInputLabel">To Training Point: 12</span></div>
+									</div>
+									<div class="wuxMultiRow">
+										<div class="wuxButton">
+											<input type="checkbox" name="attr_ttl-trainingconversion">
+											<span>Convert To TP</span>
 										</div>
 									</div>
 								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxHeader">
+										<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-origintraining_info"><span>?</span></div>Training
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-origintraining_info" value="0">
+									<div class="wuxHiddenField">
+										<div class="wuxInfoContent">
+											<div class="wuxHeader2">Training</div>
+
+											<span class="wuxDescription">The pursuit of skill and knowledge is an ever flowing river. Training is a system to track your progress in learning knowledge and new techniques apart from Advancement.</span>
+											<span class="wuxDescription">Here you can set any training points your character may have gained prior to character creation. You may also immediately spend these points on further build points.</span>
+										</div>
+									</div>
+									<div class="wuxHeader2">Training Points<div class="wuxTooltipButtonContainer">
+											<div class="wuxTooltipButton">
+												<div class="wuxTooltipText">i</div>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Training Points</div>
+
+													<span class="wuxDescription">Training points are gained through training. You can spend training points on bonus build points for both knowledge and techniques. </span>
+													<span class="wuxDescription">Whenever you gain PP, you gain one Training Point.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<input type="number" class="wuxInput" name="attr_trn_max" /><span class="wuxDescription"><span name="attr_trn"></span> / <span name="attr_trn_max"></span></span>
+									<div class="wuxHeader2">Knowledge Points<div class="wuxTooltipButtonContainer">
+											<div class="wuxTooltipButton">
+												<div class="wuxTooltipText">i</div>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Knowledge Points</div>
+
+													<span class="wuxDescription">You can spend training points to gain Knowledge Points. These knowledge points can be used to increase tier in a job. You must spend 1 training points to gain 1 knowledge point.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_knowledge" value="" placeholder="0" />
+										<div class="wuxInputLabel">cost: 1 training point</div>
+									</div>
+									<div class="wuxHeader2">Technique Points<div class="wuxTooltipButtonContainer">
+											<div class="wuxTooltipButton">
+												<div class="wuxTooltipText">i</div>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Technique Points</div>
+
+													<span class="wuxDescription">You can spend training points to gain Technique Points. These technique points can be used to learn a new standard style or technique. You must spend 1 training points to gain 1 technique point.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_technique" value="" placeholder="0" />
+										<div class="wuxInputLabel">cost: 1 training point</div>
+									</div>
+								</div>
 							</div>
-							<span class="wuxDescription"><span name="attr_full_name"></span></span>
 						</div>
 					</div>
 				</div>
@@ -10853,32 +10932,43 @@
 	
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
 	worker.setBuildStatsFinal(attrHandler);
-	worker.updateBuildStats(attrHandler, WuxDef.GetVariable("PP"), attrHandler.parseInt(WuxDef.GetVariable("XP")));
+	worker.updateMaxBuildStats(attrHandler, WuxDef.GetVariable("PP"), attrHandler.parseInt(WuxDef.GetVariable("PP")));
+	worker.revertBuildStatsDraft(attrHandler);
 	});
 	
 	WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
 	attributeHandler.run();
 	},
 	finishBuild = function() {
-	let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+	console.log("Finish Training Build");
 	let attributeHandler = new WorkerAttributeHandler();
-	leavePageVariables(attributeHandler);
 	
-	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-	attributeHandler.addGetAttrCallback(function (attrHandler) {
-	manager.setAttributeHandlerPoints(attrHandler);
-	});
+	let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+	pointManagers.commitChanges(attributeHandler);
+	
+	let trainingWorker = new WuxTrainingWorkerBuild();
+	trainingWorker.commitChanges(attributeHandler);
+	
+	WuxWorkerKnowledges.UpdateStats(attributeHandler);
+	WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+	
+	leavePageVariables(attributeHandler);
 	attributeHandler.run();
 	},
 	exitBuild = function() {
-	let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+	console.log("Exit Training Build");
 	let attributeHandler = new WorkerAttributeHandler();
-	leavePageVariables(attributeHandler);
 	
-	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-	attributeHandler.addGetAttrCallback(function (attrHandler) {
-	manager.setAttributeHandlerPoints(attrHandler);
-	});
+	let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+	pointManagers.resetChanges(attributeHandler);
+	
+	let trainingWorker = new WuxTrainingWorkerBuild();
+	trainingWorker.resetChanges(attributeHandler);
+	
+	WuxWorkerKnowledges.UpdateStats(attributeHandler);
+	WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+	
+	leavePageVariables(attributeHandler);
 	attributeHandler.run();
 	},
 	leavePageVariables = function(attributeHandler) {
@@ -10886,6 +10976,13 @@
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
 	WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
+	},
+	convertPp = function() {
+	console.log("Converting PP to Level");
+	let attributeHandler = new WorkerAttributeHandler();
+	let worker = new WuxTrainingWorkerBuild();
+	worker.convertPp(attributeHandler);
+	attributeHandler.run();
 	},
 	setTrainingPoints = function() {
 	let attributeHandler = new WorkerAttributeHandler();
@@ -10905,6 +11002,7 @@
 	GoToPageSet: goToPageSet,
 	FinishBuild: finishBuild,
 	ExitBuild: exitBuild,
+	ConvertPp: convertPp,
 	SetTrainingPoints: setTrainingPoints,
 	SetTrainingPointsUpdate: setTrainingPointsUpdate
 	};
@@ -10919,6 +11017,10 @@
 	});
 	on("change:pgs-training_exit", function (eventinfo) {
 	WuxWorkerTraining.ExitBuild();
+	
+	});
+	on("change:ttl-trainingconversion", function (eventinfo) {
+	WuxWorkerTraining.ConvertPp();
 	
 	});
 	on("change:trn_max", function (eventinfo) {

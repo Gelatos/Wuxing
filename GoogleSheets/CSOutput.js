@@ -234,20 +234,35 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 					var
 						build = function () {
-        			        let contents = "";
-        			        contents += basics();
+							let contents = WuxSheetMain.MultiRowGroup([buildConversion(), buildTraining()], WuxSheetMain.Table.FlexTable, 2);
+							contents = WuxSheetMain.TabBlock(contents);
+							
+							let definition = WuxDef.Get("Page_Training");
+							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+						},
 
-        			        contents = WuxSheetMain.TabBlock(contents);
+						buildConversion = function() {
+							let contents = "";
+							let titleDefinition = WuxDef.Get("Title_TrainingConversion");
+							contents +=  WuxDefinition.InfoHeader(titleDefinition);
 
-        			        let definition = WuxDef.Get("Page_Training");
-        				    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-        			    },
-        			    
-        			    basics = function () { 
-        			        let contents = "";
-        			        contents += WuxDefinition.BuildText(WuxDef.Get("Full Name"), WuxSheetMain.Span(WuxDef.GetAttribute("Full Name")));
-        			        return contents;
-        			    }
+							let ppDefinition = WuxDef.Get("PP");
+							contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.getFormulaValue()}</span>`);
+							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Convert To TP`));
+
+							return WuxSheetMain.Table.FlexTableGroup(contents);
+						},
+
+						buildTraining = function () {
+							let contents = "";
+        			        contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginTraining"));
+							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Training"), WuxDef.GetAttribute("Training", WuxDef._max));
+							contents += WuxSheetMain.Desc(`${WuxSheetMain.Span(WuxDef.GetAttribute("Training"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Training", WuxDef._max))}`);
+							
+							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 training point`);
+							contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingTechniques"), WuxDef.GetAttribute("TrainingTechniques"), `cost: 1 training point`);
+							return WuxSheetMain.Table.FlexTableGroup(contents);
+						}
 
 					return {
 						Build: build
@@ -1952,6 +1967,7 @@ var TrainingBackend = TrainingBackend || (function () {
 					jsClassData.addPublicFunction("finishBuild", finishBuild);
 					jsClassData.addPublicFunction("exitBuild", exitBuild);
 					jsClassData.addFunction("leavePageVariables", leavePageVariables);
+					jsClassData.addPublicFunction("convertPp", convertPp);
 					jsClassData.addPublicFunction("setTrainingPoints", setTrainingPoints);
 					jsClassData.addPublicFunction("setTrainingPointsUpdate", setTrainingPointsUpdate);
 					return jsClassData.print(className);
@@ -1970,32 +1986,43 @@ var TrainingBackend = TrainingBackend || (function () {
 
 					attributeHandler.addGetAttrCallback(function (attrHandler) {
 						worker.setBuildStatsFinal(attrHandler);
-						worker.updateBuildStats(attrHandler, WuxDef.GetVariable("PP"), attrHandler.parseInt(WuxDef.GetVariable("XP")));
+						worker.updateMaxBuildStats(attrHandler, WuxDef.GetVariable("PP"), attrHandler.parseInt(WuxDef.GetVariable("PP")));
+						worker.revertBuildStatsDraft(attrHandler);
 					});
 
 					WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
 					attributeHandler.run();
 				},
 				finishBuild = function() {
-				    let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+					console.log("Finish Training Build");
                 	let attributeHandler  = new WorkerAttributeHandler();
+
+				    let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+                	pointManagers.commitChanges(attributeHandler);
+					
+					let trainingWorker = new WuxTrainingWorkerBuild();
+					trainingWorker.commitChanges(attributeHandler);
+
+					WuxWorkerKnowledges.UpdateStats(attributeHandler);
+					WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+
 					leavePageVariables(attributeHandler);
-                
-                	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-					attributeHandler.addGetAttrCallback(function (attrHandler) {
-						manager.setAttributeHandlerPoints(attrHandler);
-					});
 					attributeHandler.run();
 				},
 				exitBuild = function() {
-				    let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+					console.log("Exit Training Build");
                 	let attributeHandler  = new WorkerAttributeHandler();
+
+				    let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+                	pointManagers.resetChanges(attributeHandler);
+					
+					let trainingWorker = new WuxTrainingWorkerBuild();
+					trainingWorker.resetChanges(attributeHandler);
+
+					WuxWorkerKnowledges.UpdateStats(attributeHandler);
+					WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+
 					leavePageVariables(attributeHandler);
-                
-                	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-					attributeHandler.addGetAttrCallback(function (attrHandler) {
-						manager.setAttributeHandlerPoints(attrHandler);
-					});
 					attributeHandler.run();
 				},
 				leavePageVariables = function(attributeHandler) {
@@ -2005,6 +2032,13 @@ var TrainingBackend = TrainingBackend || (function () {
 					WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
 				},
 				
+				convertPp = function() {
+					console.log("Converting PP to Level");
+                	let attributeHandler  = new WorkerAttributeHandler();
+					let worker = new WuxTrainingWorkerBuild();
+					worker.convertPp(attributeHandler);
+					attributeHandler.run();
+				},
 				setTrainingPoints = function() {
                 	let attributeHandler  = new WorkerAttributeHandler();
 					let worker = new WuxTrainingWorkerBuild();
@@ -2024,6 +2058,7 @@ var TrainingBackend = TrainingBackend || (function () {
 					output += listenerGoToPageSet();
 					output += listenerFinishButton();
 					output += listenerExitButton();
+					output += listenerConvertPp();
 					output += listenerSetTrainingPoints();
 					output += listenerSetTrainingPointsUpdate();
 					return output;
@@ -2043,6 +2078,12 @@ var TrainingBackend = TrainingBackend || (function () {
 				listenerExitButton = function() {
 					let groupVariableNames = [WuxDef.GetVariable("PageSet_Training", WuxDef._exit)];
 				    let output = `${className}.ExitBuild();\n`;
+
+					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+				},
+				listenerConvertPp = function() {
+					let groupVariableNames = [WuxDef.GetVariable("Title_TrainingConversion")];
+				    let output = `${className}.ConvertPp();\n`;
 
 					return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 				},

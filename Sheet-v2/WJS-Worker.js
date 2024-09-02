@@ -290,6 +290,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 			attrHandler.addUpdate(xpDefinition.getVariable(), xp);
 			
 			let attributeHandler2 = new WorkerAttributeHandler();
+			worker.updateBuildStats(attributeHandler2, xpDefinition.getVariable(), xp);
 			worker.updateLevel(attributeHandler2, WuxDef.GetVariable("Level"), level);
 			attributeHandler2.run();
 		});
@@ -355,6 +356,43 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 	getBuildVariables() {
 		return [WuxDef.GetVariable("Training", WuxDef._max), WuxDef.GetVariable("PP"), 
 			WuxDef.GetVariable("TrainingKnowledge"), WuxDef.GetVariable("TrainingTechniques")];
+	}
+
+	convertPp(attributeHandler) {
+		let worker = this;
+		let ppDefinition = WuxDef.Get("PP");
+		attributeHandler.addMod(ppDefinition.getVariable());
+		attributeHandler.addMod(worker.attrBuildDraft);
+		attributeHandler.addMod(worker.attrBuildFinal);
+
+		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsFinal(attrHandler);
+			
+			let trainingPoints = 0;
+			if (worker.buildStats.has(worker.attrMax)) {
+				trainingPoints = worker.buildStats.get(worker.attrMax).value;
+			}
+			let pp = attrHandler.parseInt(ppDefinition.getVariable());
+			let xpNeeded = ppDefinition.getFormulaValue(attrHandler);
+
+			worker.setBuildStatsDraft(attrHandler);
+
+			while (pp >= xpNeeded) {
+				trainingPoints++;
+				pp -= xpNeeded;
+			}
+			attrHandler.addUpdate(ppDefinition.getVariable(), pp);
+			attrHandler.addUpdate(worker.attrMax, trainingPoints);
+			
+			worker.updateBuildStats(attrHandler, ppDefinition.getVariable(), pp);
+			worker.updateBuildStats(attrHandler, worker.attrMax, trainingPoints);
+			worker.setPointsMax(attrHandler);
+			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
+		});
 	}
 
 	updateTrainingPoints(attributeHandler) {
