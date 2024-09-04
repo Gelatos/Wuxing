@@ -99,6 +99,59 @@ class WorkerAttributeHandler {
 	}
 }
 
+class WuxWorkerBuildManager {
+    constructor(definitionIds) {
+        this.workers = [];
+        if (Array.isArray(definitionIds)) {
+            for (let i = 0; i < definitionIds.length; i++) {
+                this.workers.push(new WuxWorkerBuild(definitionIds[i]));
+            }
+        }
+        else {
+            this.workers.push(new WuxWorkerBuild(definitionIds));
+        }
+    }
+
+	iterate(callback) {
+		this.workers.forEach((worker) => {
+			callback(worker);
+		});
+	}
+
+	setupAttributeHandlerForPointUpdate(attributeHandler) {
+		let manager = this;
+		manager.iterate(function(worker) {
+			attributeHandler.addFormulaMods(worker.definition);
+    		attributeHandler.addMod(worker.attrBuildDraft);
+		});
+	}
+
+	setAttributeHandlerPoints(attributeHandler) {
+		this.iterate(function(worker) {
+			worker.setBuildStatsDraft(attributeHandler);
+			worker.setPointsMax(attributeHandler);
+			worker.updatePoints(attributeHandler);
+		});
+	}
+    
+    onChangeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
+		this.iterate(function(worker) {
+			worker.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
+		});
+	}
+	
+	commitChanges(attributeHandler) {
+		this.iterate(function(worker) {
+			worker.commitChanges(attributeHandler);
+		});
+	}
+	
+	resetChanges(attributeHandler) {
+		this.iterate(function(worker) {
+			worker.resetChanges(attributeHandler);
+		});
+	}
+}
 class WuxWorkerBuild {
 	constructor(definitionId) {
 		this.definition = WuxDef.Get(definitionId);
@@ -432,57 +485,4 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 	}
 }
 
-class WuxWorkerBuildManager {
-    constructor(definitionIds) {
-        this.workers = [];
-        if (Array.isArray(definitionIds)) {
-            for (let i = 0; i < definitionIds.length; i++) {
-                this.workers.push(new WuxWorkerBuild(definitionIds[i]));
-            }
-        }
-        else {
-            this.workers.push(new WuxWorkerBuild(definitionIds));
-        }
-    }
-
-	iterate(callback) {
-		this.workers.forEach((worker) => {
-			callback(worker);
-		});
-	}
-
-	setupAttributeHandlerForPointUpdate(attributeHandler) {
-		let manager = this;
-		manager.iterate(function(worker) {
-			attributeHandler.addFormulaMods(worker.definition);
-    		attributeHandler.addMod(worker.attrBuildDraft);
-		});
-	}
-
-	setAttributeHandlerPoints(attributeHandler) {
-		this.iterate(function(worker) {
-			worker.setBuildStatsDraft(attributeHandler);
-			worker.setPointsMax(attributeHandler);
-			worker.updatePoints(attributeHandler);
-		});
-	}
-    
-    onChangeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
-		this.iterate(function(worker) {
-			worker.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
-		});
-	}
-	
-	commitChanges(attributeHandler) {
-		this.iterate(function(worker) {
-			worker.commitChanges(attributeHandler);
-		});
-	}
-	
-	resetChanges(attributeHandler) {
-		this.iterate(function(worker) {
-			worker.resetChanges(attributeHandler);
-		});
-	}
-}
 

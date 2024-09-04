@@ -1199,15 +1199,17 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			    },
 
 						createStatGroup = function (groupName) {
+        			        let definition = WuxDef.Get(groupName);
+        				    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, createStatTable(groupName));
+						},
+
+						createStatTable = function (groupName) {
 							let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
 							let output = "";
 							for (let i = 0; i < filteredStats.length; i++) {
 								output += createStatBlock(filteredStats[i]);
 							}
-							output = WuxSheetMain.TabBlock(WuxSheetMain.Table.FlexTable(output));
-
-        			        let definition = WuxDef.Get(groupName);
-        				    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, output);
+							return WuxSheetMain.TabBlock(WuxSheetMain.Table.FlexTable(output));
 						},
 
 						createStatBlock = function (statDefinition) {
@@ -1424,6 +1426,7 @@ var BuilderBackend = BuilderBackend || (function () {
 				buildClass = function (jobData) {
 					let jsClassData = new JavascriptDataClass();
 					jsClassData.addPublicFunction("updatePageState", updatePageState);
+					jsClassData.addPublicFunction("updateStats", updateStats);
 					return jsClassData.print(className);
 				},
 				updatePageState = function(eventinfo) {
@@ -1439,6 +1442,28 @@ var BuilderBackend = BuilderBackend || (function () {
 							attributeHandler.run();
 							break;
 					}
+				},
+				updateStats = function(attributeHandler) {
+					let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", "CR"));
+					formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", "Level")));
+					formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("group", "General")));
+					formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("group", "Combat")));
+					formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("group", "Social")));
+
+					for (let i = 0; i < formulaDefinitions.length; i++) {
+						attributeHandler.addFormulaMods(formulaDefinitions[i]);
+					}
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						for (let i = 0; i < formulaDefinitions.length; i++) {
+							if (formulaDefinitions[i].isResource) {
+								attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].getFormulaValue(attrHandler));
+							}
+							else {
+								attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+							}
+						}
+					});
 				},
 
 				buildListeners = function () {
@@ -1505,6 +1530,8 @@ var BuilderBackend = BuilderBackend || (function () {
 					WuxWorkerSkills.UpdateStats(attributeHandler);
 					WuxWorkerKnowledges.UpdateStats(attributeHandler);
 					WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+					WuxWorkerAdvancement.UpdateStats(attributeHandler);
+					WuxWorkerGeneral.UpdateStats(attributeHandler);
 
 					leavePageVariables(attributeHandler);
 					attributeHandler.run();
@@ -2307,6 +2334,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					jsClassData.addPublicFunction("setLevel", setLevel);
 					jsClassData.addPublicFunction("setAdvancementPointsUpdate", setAdvancementPointsUpdate);
 					jsClassData.addPublicFunction("setAffinityStats", setAffinityStats);
+					jsClassData.addPublicFunction("updateStats", updateStats);
 					return jsClassData.print(className);
 				},
 
@@ -2343,6 +2371,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					WuxWorkerAttributes.UpdateStats(attributeHandler);
 					WuxWorkerSkills.UpdateStats(attributeHandler);
 					WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+					UpdateStats(attributeHandler);
 
 					leavePageVariables(attributeHandler);
 					attributeHandler.run();
@@ -2360,6 +2389,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 					WuxWorkerAttributes.UpdateStats(attributeHandler);
 					WuxWorkerSkills.UpdateStats(attributeHandler);
 					WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+					UpdateStats(attributeHandler);
 
 					leavePageVariables(attributeHandler);
 					attributeHandler.run();
@@ -2445,6 +2475,25 @@ var AdvancementBackend = AdvancementBackend || (function () {
 								attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
 								break;
 
+						}
+					});
+				},
+				updateStats = function(attributeHandler) {
+					let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", "CR"));
+					formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", "Level")));
+
+					for (let i = 0; i < formulaDefinitions.length; i++) {
+						attributeHandler.addFormulaMods(formulaDefinitions[i]);
+					}
+
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						for (let i = 0; i < formulaDefinitions.length; i++) {
+							if (formulaDefinitions[i].isResource) {
+								attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].getFormulaValue(attrHandler));
+							}
+							else {
+								attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+							}
 						}
 					});
 				},
@@ -2620,6 +2669,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 				updateStats = function(attributeHandler) {
 					let attributeDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Attribute"));
 					let formulaDefinitions = [];
+
 					for (let i = 0; i < attributeDefinitions.length; i++) {
 						formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinitions[i].name)));
 					}
