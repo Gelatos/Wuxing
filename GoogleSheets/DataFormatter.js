@@ -10,7 +10,7 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArra
     definitionDatabase.importSheets(definitionArray, function (arr) {
         let definition = new DefinitionData(arr);
         let baseDefinition = definitionDatabase.get(definition.group);
-        if (baseDefinition != undefined) {
+        if (baseDefinition != undefined && baseDefinition.group == "Type") {
             return definition.createDefinition(baseDefinition);
         }
         return definition;
