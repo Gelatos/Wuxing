@@ -5182,6 +5182,68 @@ var update_emotes = function () {
 	});
 }
 
+class EmoteSetData {
+    constructor(json) {
+        this.createEmpty();
+        if (json != undefined) {
+            this.importJson(json);
+        }
+    }
+
+    importJson(json) {
+        if (json.name == undefined) {
+            console.log("EmoteSetData: No name found in json");
+            return;
+        }
+        if (json.defaultEmote == undefined) {
+            console.log("EmoteSetData: No defaultEmote found in json");
+            return;
+        }
+        if (json.emotes == undefined) {
+            console.log("EmoteSetData: No emotes found in json");
+            return;
+        }
+        this.name = json.name;
+        this.defaultEmote = json.defaultEmote;
+        this.emotes = json.emotes;
+    }
+
+    createEmpty() {
+        this.name = "";
+        this.defaultEmote = "";
+        this.emotes = [];
+    }
+
+    addEmote(name, url) {
+        this.emotes.push(new EmoteData({name: name, url: url}));
+    }
+
+    iterate(callback) {
+        for (let i = 0; i < this.emotes.length; i++) {
+            callback(this.emotes[i]);
+        }
+    }
+}
+
+class EmoteData {
+    constructor(json) {
+		this.createEmpty();
+        if (json != undefined) {
+            this.importJson(json);
+        }
+    }
+
+    importJson(json) {
+        this.name = json.name;
+        this.url = json.url;
+    }
+
+    createEmpty() {
+        this.name = "";
+        this.url = "";
+    }   
+}
+
 var update_active_emoteset = function (newset) {
 	console.log("UPDATING ACTIVE EMOTE SET");
 
@@ -5211,6 +5273,7 @@ var update_active_emoteset = function (newset) {
 
 			// get data
 			var emoteSetData = "";
+			var emoteSetJsonVar = "";
 
 			// set the active emote data
 			_.each(idarray2, function (currentID2) {
@@ -5238,6 +5301,7 @@ var update_active_emoteset = function (newset) {
 					}
 					update["emote_activesetemotes"] = emoteSetData;
 					update["repeating_emoteOutfits_" + currentID2 + "_isSelected"] = "1";
+					emoteSetJsonVar = "repeating_emoteOutfits_" + currentID2 + "_emoteJson";
 				} else {
 					update["repeating_emoteOutfits_" + currentID2 + "_isSelected"] = "0";
 				}
@@ -5257,6 +5321,8 @@ var update_active_emoteset = function (newset) {
 					});
 
 					getAttrs(emote_fields, function (w) {
+						let newEmoteSet = new EmoteSetData();
+						newEmoteSet.name = newset;
 
 						_.each(idarray, function (currentID) {
 
@@ -5267,14 +5333,26 @@ var update_active_emoteset = function (newset) {
 								var newrowid = generateRowID();
 								update["repeating_emotesSet2_" + newrowid + "_emote_name"] = w["repeating_emotes_" + currentID + "_emote_name"];
 								update["repeating_emotesSet2_" + newrowid + "_url"] = w["repeating_emotes_" + currentID + "_url"];
+								newEmoteSet.addEmote(w["repeating_emotes_" + currentID + "_emote_name"], w["repeating_emotes_" + currentID + "_url"]);
+								if (w["repeating_emotes_" + currentID + "_emote_name"] == "Serious") {
+									newEmoteSet.defaultEmote = w["repeating_emotes_" + currentID + "_url"];
+								}
 							}
 						});
+
+						if (newEmoteSet.defaultEmote == "") {
+							newEmoteSet.defaultEmote = newEmoteSet.emotes[0].url;
+						}
+						update[emoteSetJsonVar] = JSON.stringify(newEmoteSet);
+						console.log(`Emote Set ${emoteSetJsonVar}: ${JSON.stringify(newEmoteSet)}`);
 
 						// set the data
 						setAttrs(update);
 					});
 				});
 			} else {
+				let newEmoteSet = new EmoteSetData();
+				newEmoteSet.name = newset;
 
 				// the emote set data has enough information to create buttons from it
 				// so split the data and create buttons
@@ -5286,6 +5364,17 @@ var update_active_emoteset = function (newset) {
 					var newrowid = generateRowID();
 					update["repeating_emotesSet2_" + newrowid + "_emote_name"] = setData[0];
 					update["repeating_emotesSet2_" + newrowid + "_url"] = setData[1];
+
+					newEmoteSet.addEmote(setData[0], setData[1]);
+					if (setData[0] == "Serious") {
+						newEmoteSet.defaultEmote = setData[1];
+					}
+
+					if (newEmoteSet.defaultEmote == "") {
+						newEmoteSet.defaultEmote = newEmoteSet.emotes[0].url;
+					}
+					update[emoteSetJsonVar] = JSON.stringify(newEmoteSet);
+					console.log(`Emote Set ${emoteSetJsonVar}: ${JSON.stringify(newEmoteSet)}`);
 
 				});
 

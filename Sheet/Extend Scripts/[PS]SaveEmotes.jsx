@@ -31,7 +31,8 @@ function SaveEmotes() {
     outfitName = outfitName.substring(0, outfitName.length - 1);
     var docName = charName + " (" + outfitName + ")";
     var saveTextData = {
-      outfit: outfitName,
+      name: outfitName,
+      defaultEmote: "",
       emotes: []
     };
     var emoteNames = [];
