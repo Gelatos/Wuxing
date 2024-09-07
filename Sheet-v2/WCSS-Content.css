@@ -390,6 +390,15 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubdata
 	pointer-events: none;
 }
 
+.wuxInteractiveBlock .wuxHeader2
+{
+	display: inline-block;
+	width: auto;
+
+	border: none;
+	pointer-events: none;
+}
+
 .wuxInteractiveBlock .wuxInteractiveIcon,
 .wuxInteractiveBlock .wuxInteractiveAuxIcon,
 .wuxInteractiveBlock .wuxInteractiveExpandIcon,
@@ -459,7 +468,9 @@ input[type=hidden].wuxInteractiveIcon-flag[value="on"] + .wuxHeader
 }
 
 input[type="checkbox"].wuxInteractiveContent-flag,
-input[type="checkbox"].wuxInteractiveExpandingContent-flag
+input[type="checkbox"].wuxInteractiveExpandingContent-flag,
+input[type="radio"].wuxInteractiveContent-flag,
+input[type="radio"].wuxInteractiveExpandingContent-flag
 {
     opacity: 0;    
     position: absolute;

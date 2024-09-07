@@ -1241,6 +1241,13 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     </div>`;
                 },
 
+                buildTooltipRadioInput = function (fieldName, value, contents, tooltipContents) {
+                    return `<div class="wuxInteractiveBlock">
+                    ${radioBlockIcon(fieldName, value, contents)}
+                    ${WuxSheetMain.Tooltip.Icon(tooltipContents)}
+                    </div>`;
+                },
+
                 buildTooltipSelectInput = function (fieldName, definitionGroup, showEmpty, className, contents, tooltipContents) {
                     return `<div class="wuxInteractiveBlock">
                     ${select(fieldName, definitionGroup, showEmpty, className)}
@@ -1281,11 +1288,23 @@ var WuxSheetMain = WuxSheetMain || (function () {
                         ${customInput("hidden", fieldName, flagName)}\n${contents != undefined ? contents : ""}
                         </div>
                     </div>`;
+                },
+
+                radioBlockIcon = function (fieldName, value, contents) {
+                    let flagName = "wuxInteractiveIcon-flag";
+                    return `<div class="wuxInteractiveInnerBlock">
+                    ${customInput("radio", fieldName, "wuxInteractiveContent-flag", ` value="${value}"`)}
+                        <div class="wuxInteractiveContent">
+                        ${customInput("radio", fieldName, "wuxInput", ` value="${value}"`)}
+                        ${customInput("hidden", fieldName, flagName)}\n${contents != undefined ? contents : ""}
+                        </div>
+                    </div>`;
                 }
 
             return {
                 Build: build,
                 BuildTooltipCheckboxInput: buildTooltipCheckboxInput,
+                BuildTooltipRadioInput: buildTooltipRadioInput,
                 BuildTooltipSelectInput: buildTooltipSelectInput,
                 ExpandableBlockIcon: expandableBlockIcon,
                 ExpandableBlockEmptyIcon: expandableBlockEmptyIcon,

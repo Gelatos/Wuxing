@@ -1300,13 +1300,58 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			    build = function () {
         			        let contents = "";
 							contents += createChatDisplay();
-
-							let definition = WuxDef.Get("Page_Chat");
-							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+							return contents;
         			    },
 
 						createChatDisplay = function () {
+							let contents = WuxSheetMain.MultiRowGroup([chatBox(), languageSelect()], WuxSheetMain.Table.FlexTable, 2);
+        			        contents = WuxSheetMain.TabBlock(contents);
 
+							let definition = WuxDef.Get("Page_Chat");
+							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+						},
+
+						chatBox = function () {
+        			        let contents = "";
+							let titleDefinition = WuxDef.Get("Title_Chat");
+        			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
+
+							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Type"), "wuxInput");
+							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Target"), "wuxInput");
+							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Message"), "wuxInput");
+							contents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Chat_PostContent"), "wuxInput wuxHeight150");
+							contents += `<div class="wuxNoRepControl">
+								<fieldset class="repeating_emotesSet">
+									<button class="wuxEmoteButton" type="roll" value="&{template:@{${WuxDef.GetVariable("Chat_Type")}}} {{url=@{url}}} {{title=@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} {{message=@{${WuxDef.GetVariable("Chat_Message")}}}} @{${WuxDef.GetVariable("Chat_LanguageTag")}}">
+										<span name="attr_emote_name">emote</span>
+									</button>
+									<input type="hidden" name="attr_url">
+								</fieldset>
+							</div>`;
+							
+							return WuxSheetMain.Table.FlexTableGroup(contents, "wuxMinWidth150");
+						},
+
+						languageSelect = function () {
+        			        let contents = "";
+							let titleDefinition = WuxDef.Get("Title_LanguageSelect");
+        			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
+							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_LanguageTag"), "wuxInput");
+
+							let languageAttr = WuxDef.GetAttribute("Chat_Language");
+							let languageFilters = WuxDef.Filter([new DatabaseFilterData("group", "Language")]);
+							for (let i = 0; i < languageFilters.length; i++) {
+								contents += WuxSheetMain.HiddenField(languageFilters[i].getAttribute(WuxDef._filter), 
+								WuxSheetMain.InteractionElement.BuildTooltipRadioInput(languageAttr, languageFilters[i].title, 
+									languageTitle(languageFilters[i]), WuxDefinition.TooltipDescription(languageFilters[i]))
+								);
+							}
+							
+							return WuxSheetMain.Table.FlexTableGroup(contents, "wuxMinWidth150");
+						},
+
+						languageTitle = function (languageDef) {
+							return `<span class="wuxHeader2">${languageDef.title}</span><span class="wuxSubheader"> - ${languageDef.extraData.location}</span>`;
 						}
         			    
         			    return {

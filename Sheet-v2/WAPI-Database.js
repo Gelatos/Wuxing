@@ -614,6 +614,12 @@ class LanguageData extends WuxDatabaseData {
         this.location = "";
         this.description = "";
     }
+    createDefinition(baseDefinition) {
+        let definition = super.createDefinition(baseDefinition);
+        definition.subGroup = this.group;
+        definition.extraData = {location: this.location};
+        return definition;
+    }
 }
 class LoreData extends WuxDatabaseData {
     importJson(json) {

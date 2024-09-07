@@ -1358,10 +1358,11 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 
 			let languages = [];
 			for (let i = 0; i < languageDefinitions.length; i++) {
-				skillRank = attrHandler.parseInt(languageDefinitions[i].getVariable(WuxDef._rank));
-				if (skillRank > 0) {
+				skillRank = attrHandler.parseString(languageDefinitions[i].getVariable(WuxDef._rank));
+				if (skillRank == "on") {
 					languages.push(languageDefinitions[i].title);
 				}
+				attrHandler.addUpdate(languageDefinitions[i].getVariable(WuxDef._filter), skillRank == "on" ? "1" : "0");
 			}
 			attrHandler.addUpdate(WuxDef.GetVariable("Language", WuxDef._true), JSON.stringify(languages));
 		});
