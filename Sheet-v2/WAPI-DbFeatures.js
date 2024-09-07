@@ -955,125 +955,125 @@ var WuxDef = WuxDef || (function () {
 			"Defense_Brace": {
 				"name": "Defense_Brace", "fieldName": "brace", "group": "Defense", "description": "", "variable": "def-brace{0}", "title": "Brace", "subGroup": "Combat Defense", "descriptions": ["Brace represents a character's ability to resist a physical force and shrug it off by holding strong and blocking. Common uses of this defense are to prevent a fast attack from harming the character or to resist the effect of many pushing effects."],
 				"abbreviation": "", "formula": "7;Attribute_BOD", "modifiers": "_expertise; _tech;_gear", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-bod", "def-brace_expertise", "def-brace _tech", "def-brace_gear"],
+				"isResource": "", "modAttrs": ["atr-bod", "def-brace_expertise", "def-brace_tech", "def-brace_gear"],
 				"formulaCalculations": [{ "modName": "", "value": 7, "multiplier": 1 },
 				{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 },
-				{ "modName": "_gear", "value": 0, "multiplier": 1 }],
+				{ "modName": "def-brace_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "def-brace_tech", "value": 0, "multiplier": 1 },
+				{ "modName": "def-brace_gear", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Defense_Fortitude": {
 				"name": "Defense_Fortitude", "fieldName": "fortitude", "group": "Defense", "description": "", "variable": "def-fortitude{0}", "title": "Fortitude", "subGroup": "Defense", "descriptions": ["Fortitude is your body's defense against afflictions that would attack you internally such as poisons or sickness. "],
 				"abbreviation": "", "formula": "7;Attribute_BOD", "modifiers": "_expertise; _tech", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-bod", "def-fortitude_expertise", "def-fortitude _tech"],
+				"isResource": "", "modAttrs": ["atr-bod", "def-fortitude_expertise", "def-fortitude_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 7, "multiplier": 1 },
 				{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "def-fortitude_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "def-fortitude_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Defense_Disruption": {
 				"name": "Defense_Disruption", "fieldName": "disruption", "group": "Defense", "description": "", "variable": "def-disruption{0}", "title": "Disruption", "subGroup": "Combat Defense", "descriptions": ["Guard represents a character's ability to resist an attack by disrupting its impact via parrying with a weapon or reducing its effectiveness. "],
 				"abbreviation": "", "formula": "7;Attribute_PRC", "modifiers": "_expertise; _tech;_gear", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-prc", "def-disruption_expertise", "def-disruption _tech", "def-disruption_gear"],
+				"isResource": "", "modAttrs": ["atr-prc", "def-disruption_expertise", "def-disruption_tech", "def-disruption_gear"],
 				"formulaCalculations": [{ "modName": "", "value": 7, "multiplier": 1 },
 				{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 },
-				{ "modName": "_gear", "value": 0, "multiplier": 1 }],
+				{ "modName": "def-disruption_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "def-disruption_tech", "value": 0, "multiplier": 1 },
+				{ "modName": "def-disruption_gear", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Defense_Hide": {
 				"name": "Defense_Hide", "fieldName": "hide", "group": "Defense", "description": "", "variable": "def-hide{0}", "title": "Hide", "subGroup": "Defense", "descriptions": ["Hide is your ability to stay quiet and out of sight while you have the hidden status. "],
 				"abbreviation": "", "formula": "7;Attribute_PRC", "modifiers": "_expertise; _tech", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-prc", "def-hide_expertise", "def-hide _tech"],
+				"isResource": "", "modAttrs": ["atr-prc", "def-hide_expertise", "def-hide_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 7, "multiplier": 1 },
 				{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "def-hide_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "def-hide_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Defense_Reflex": {
 				"name": "Defense_Reflex", "fieldName": "reflex", "group": "Defense", "description": "", "variable": "def-reflex{0}", "title": "Reflex", "subGroup": "Combat Defense", "descriptions": ["Reflex is used when a character could quickly react to a situation with movement. It is usually used to avoid powerful attacks or to get out of the way of harmful effects that only need to touch the character like a fireball."],
 				"abbreviation": "", "formula": "7;Attribute_QCK", "modifiers": "_expertise; _tech;_gear", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-qck", "def-reflex_expertise", "def-reflex _tech", "def-reflex_gear"],
+				"isResource": "", "modAttrs": ["atr-qck", "def-reflex_expertise", "def-reflex_tech", "def-reflex_gear"],
 				"formulaCalculations": [{ "modName": "", "value": 7, "multiplier": 1 },
 				{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 },
-				{ "modName": "_gear", "value": 0, "multiplier": 1 }],
+				{ "modName": "def-reflex_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "def-reflex_tech", "value": 0, "multiplier": 1 },
+				{ "modName": "def-reflex_gear", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Defense_Evasion": {
 				"name": "Defense_Evasion", "fieldName": "evasion", "group": "Defense", "description": "", "variable": "def-evasion{0}", "title": "Evasion", "subGroup": "Defense", "descriptions": ["Evasion is your dodging ability. When an attack checks against any defense and fails, it will always then check against evasion. On failure, the attack does not connect and no aspect of its effects occur."],
 				"abbreviation": "", "formula": "4;Attribute_QCK", "modifiers": "_expertise; _tech;_gear", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-qck", "def-evasion_expertise", "def-evasion _tech", "def-evasion_gear"],
+				"isResource": "", "modAttrs": ["atr-qck", "def-evasion_expertise", "def-evasion_tech", "def-evasion_gear"],
 				"formulaCalculations": [{ "modName": "", "value": 4, "multiplier": 1 },
 				{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 },
-				{ "modName": "_gear", "value": 0, "multiplier": 1 }],
+				{ "modName": "def-evasion_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "def-evasion_tech", "value": 0, "multiplier": 1 },
+				{ "modName": "def-evasion_gear", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Sense_Insight": {
 				"name": "Sense_Insight", "fieldName": "insight", "group": "Sense", "description": "", "variable": "sen-insight{0}", "title": "Insight", "subGroup": "Social Sense", "descriptions": ["Insight represents a character's ability to sense emotional state and sudden changes in behaviour. It is useful when detecting someone is trying to charm or deceive you. "],
 				"abbreviation": "", "formula": "7;Attribute_INT", "modifiers": "_expertise; _tech", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-int", "sen-insight_expertise", "sen-insight _tech"],
+				"isResource": "", "modAttrs": ["atr-int", "sen-insight_expertise", "sen-insight_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 7, "multiplier": 1 },
 				{ "modName": "atr-int", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "sen-insight_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "sen-insight_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Sense_Notice": {
 				"name": "Sense_Notice", "fieldName": "notice", "group": "Sense", "description": "", "variable": "sen-notice{0}", "title": "Notice", "subGroup": "Sense", "descriptions": ["Notice is the ability to see or hear sudden changes in your environment. It is typically used to counter a character's sneak attempts or to passively hear effects from afar. "],
 				"abbreviation": "", "formula": "7;Attribute_INT", "modifiers": "_expertise; _tech", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-int", "sen-notice_expertise", "sen-notice _tech"],
+				"isResource": "", "modAttrs": ["atr-int", "sen-notice_expertise", "sen-notice_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 7, "multiplier": 1 },
 				{ "modName": "atr-int", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "sen-notice_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "sen-notice_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Sense_Scrutiny": {
 				"name": "Sense_Scrutiny", "fieldName": "scrutiny", "group": "Sense", "description": "", "variable": "sen-scrutiny{0}", "title": "Scrutiny", "subGroup": "Social Sense", "descriptions": ["Scrutiny represents your ability to find holes in another's logical reasoning. It is often used in defense against another's attempts at lying and from being tripped up against a skilled negotiator. "],
 				"abbreviation": "", "formula": "7;Attribute_RSN", "modifiers": "_expertise; _tech", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-rsn", "sen-scrutiny_expertise", "sen-scrutiny _tech"],
+				"isResource": "", "modAttrs": ["atr-rsn", "sen-scrutiny_expertise", "sen-scrutiny_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 7, "multiplier": 1 },
 				{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "sen-scrutiny_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "sen-scrutiny_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Sense_Detect": {
 				"name": "Sense_Detect", "fieldName": "detect", "group": "Sense", "description": "", "variable": "sen-detect{0}", "title": "Detect", "subGroup": "Sense", "descriptions": ["Detect is a character's ability to immediately analyze an effect or location for anything that is out of place or is not behaving normally. It is most often used to defend against illusory effects or to find those obscurred in plain sight."],
 				"abbreviation": "", "formula": "7;Attribute_RSN", "modifiers": "_expertise; _tech", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-rsn", "sen-detect_expertise", "sen-detect _tech"],
+				"isResource": "", "modAttrs": ["atr-rsn", "sen-detect_expertise", "sen-detect_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 7, "multiplier": 1 },
 				{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "sen-detect_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "sen-detect_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Sense_Resolve": {
 				"name": "Sense_Resolve", "fieldName": "resolve", "group": "Sense", "description": "", "variable": "sen-resolve{0}", "title": "Resolve", "subGroup": "Social Sense", "descriptions": ["Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in."],
 				"abbreviation": "", "formula": "7;Attribute_CNV", "modifiers": "_expertise; _tech", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-cnv", "sen-resolve_expertise", "sen-resolve _tech"],
+				"isResource": "", "modAttrs": ["atr-cnv", "sen-resolve_expertise", "sen-resolve_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 7, "multiplier": 1 },
 				{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "sen-resolve_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "sen-resolve_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Sense_Freewill": {
 				"name": "Sense_Freewill", "fieldName": "freewill", "group": "Sense", "description": "", "variable": "sen-freewill{0}", "title": "Freewill", "subGroup": "Sense", "descriptions": ["Freewill is a character's sense of self and being. This sense defends against those that would manipulate your soul or memory through enchantments or possession. "],
 				"abbreviation": "", "formula": "10;Attribute_CNV", "modifiers": "_expertise; _tech", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["atr-cnv", "sen-freewill_expertise", "sen-freewill _tech"],
+				"isResource": "", "modAttrs": ["atr-cnv", "sen-freewill_expertise", "sen-freewill_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 10, "multiplier": 1 },
 				{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
-				{ "modName": "_expertise", "value": 0, "multiplier": 1 },
-				{ "modName": " _tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "sen-freewill_expertise", "value": 0, "multiplier": 1 },
+				{ "modName": "sen-freewill_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"CombatDefense": {
@@ -1140,7 +1140,7 @@ var WuxDef = WuxDef || (function () {
 				"extraData": {}
 			},
 			"Affinity": {
-				"name": "Affinity", "fieldName": "affinity", "group": "OriginStat", "description": "", "variable": "affinity{0}", "title": "Affinity", "subGroup": "", "descriptions": ["Characters that are able to cast spells will have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity.", "Your chosen affinity grants weaknesses and resistances to certain elemental damage types."],
+				"name": "Affinity", "fieldName": "affinity", "group": "OriginStat", "description": "", "variable": "affinity{0}", "title": "Elemental Affinity", "subGroup": "", "descriptions": ["Characters that are able to cast spells have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity before they may be taken.", "Your chosen affinity grants weaknesses and resistances to certain elemental damage types."],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": [],
 				"formulaCalculations": [],
@@ -1168,19 +1168,19 @@ var WuxDef = WuxDef || (function () {
 				{ "modName": "adv-cr", "value": 0, "multiplier": 10 },
 				{ "modName": "adv-level", "value": 0, "multiplier": 1 },
 				{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 },
-				{ "modName": "_affinity", "value": 0, "multiplier": 1 }],
+				{ "modName": "hp_tech", "value": 0, "multiplier": 1 },
+				{ "modName": "hp_affinity", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"WILL": {
 				"name": "WILL", "fieldName": "will", "group": "General", "description": "", "variable": "will{0}", "title": "Willpower", "subGroup": "", "descriptions": ["Willpower is a character's ability to stay invested in a situation. "],
-				"abbreviation": "WILL", "formula": "5;CR*5;Level;Attribute_CNV", "modifiers": "_tech", "linkedGroups": [],
+				"abbreviation": "WILL", "formula": "10;CR*5;Level;Attribute_CNV", "modifiers": "_tech", "linkedGroups": [],
 				"isResource": true, "modAttrs": ["adv-cr", "adv-level", "atr-cnv", "will_tech"],
-				"formulaCalculations": [{ "modName": "", "value": 5, "multiplier": 1 },
+				"formulaCalculations": [{ "modName": "", "value": 10, "multiplier": 1 },
 				{ "modName": "adv-cr", "value": 0, "multiplier": 5 },
 				{ "modName": "adv-level", "value": 0, "multiplier": 1 },
 				{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "will_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"EN": {
@@ -1196,8 +1196,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "modAttrs": ["adv-cr", "atr-qck", "initiative_tech", "initiative_affinity"],
 				"formulaCalculations": [{ "modName": "adv-cr", "value": 0, "multiplier": 1 },
 				{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 },
-				{ "modName": "_affinity", "value": 0, "multiplier": 1 }],
+				{ "modName": "initiative_tech", "value": 0, "multiplier": 1 },
+				{ "modName": "initiative_affinity", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Recall": {
@@ -1205,7 +1205,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_tech", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-rsn", "recall_tech"],
 				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "recall_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Carrying Capacity": {
@@ -1214,7 +1214,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "modAttrs": ["atr-bod", "capacity_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 40, "multiplier": 1 },
 				{ "modName": "atr-bod", "value": 0, "multiplier": 20 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "capacity_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Combat_HV": {
@@ -1224,8 +1224,8 @@ var WuxDef = WuxDef || (function () {
 				"formulaCalculations": [{ "modName": "", "value": 5, "multiplier": 1 },
 				{ "modName": "adv-cr", "value": 0, "multiplier": 4 },
 				{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 },
-				{ "modName": "_affinity", "value": 0, "multiplier": 1 }],
+				{ "modName": "cmb-hv_tech", "value": 0, "multiplier": 1 },
+				{ "modName": "cmb-hv_affinity", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Combat_Armor": {
@@ -1233,9 +1233,9 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "0", "modifiers": "_tech;_gear;_affinity", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["cmb-armor_tech", "cmb-armor_gear", "cmb-armor_affinity"],
 				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 },
-				{ "modName": "_gear", "value": 0, "multiplier": 1 },
-				{ "modName": "_affinity", "value": 0, "multiplier": 1 }],
+				{ "modName": "cmb-armor_tech", "value": 0, "multiplier": 1 },
+				{ "modName": "cmb-armor_gear", "value": 0, "multiplier": 1 },
+				{ "modName": "cmb-armor_affinity", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Resistance": {
@@ -1264,7 +1264,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "2", "modifiers": "_tech", "linkedGroups": [],
 				"isResource": true, "modAttrs": ["cmb-vitality_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 2, "multiplier": 1 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "cmb-vitality_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Combat_Surge": {
@@ -1272,8 +1272,8 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "4", "modifiers": "_tech;_affinity", "linkedGroups": [],
 				"isResource": true, "modAttrs": ["cmb-surge_tech", "cmb-surge_affinity"],
 				"formulaCalculations": [{ "modName": "", "value": 4, "multiplier": 1 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 },
-				{ "modName": "_affinity", "value": 0, "multiplier": 1 }],
+				{ "modName": "cmb-surge_tech", "value": 0, "multiplier": 1 },
+				{ "modName": "cmb-surge_affinity", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Combat_Chakra": {
@@ -1296,8 +1296,8 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "3", "modifiers": "_tech;_gear", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["cmb-movespeed_tech", "cmb-movespeed_gear"],
 				"formulaCalculations": [{ "modName": "", "value": 3, "multiplier": 1 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 },
-				{ "modName": "_gear", "value": 0, "multiplier": 1 }],
+				{ "modName": "cmb-movespeed_tech", "value": 0, "multiplier": 1 },
+				{ "modName": "cmb-movespeed_gear", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Combat_Move Potency": {
@@ -1305,7 +1305,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "6", "modifiers": "_tech", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["cmb-movepotency_tech"],
 				"formulaCalculations": [{ "modName": "", "value": 6, "multiplier": 1 },
-				{ "modName": "_tech", "value": 0, "multiplier": 1 }],
+				{ "modName": "cmb-movepotency_tech", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Social_Approval": {
@@ -1365,15 +1365,15 @@ var WuxDef = WuxDef || (function () {
 				"name": "Shock", "fieldName": "shock", "group": "DamageType", "description": "", "variable": "dmg-shock{0}", "title": "Shock", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": [],
-				"formulaCalculations": [],
+				"formulaCalculations": []
+				,
 				"extraData": {}
 			},
 			"Tension": {
 				"name": "Tension", "fieldName": "tension", "group": "DamageType", "description": "", "variable": "dmg-tension{0}", "title": "Tension", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": [],
-				"formulaCalculations": []
-				,
+				"formulaCalculations": [],
 				"extraData": {}
 			},
 			"Trait_Accurate": {
@@ -1822,7 +1822,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_QCK", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-qck", "skl-acrobatics_rank"],
 				"formulaCalculations": [{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-acrobatics_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Agility": {
@@ -1830,7 +1830,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_QCK", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-qck", "skl-agility_rank"],
 				"formulaCalculations": [{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-agility_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Analyze": {
@@ -1838,7 +1838,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-rsn", "skl-analyze_rank"],
 				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-analyze_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Build": {
@@ -1846,7 +1846,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-rsn", "skl-build_rank"],
 				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-build_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Channel": {
@@ -1854,7 +1854,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-cnv", "skl-channel_rank"],
 				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-channel_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Charm": {
@@ -1862,7 +1862,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-cnv", "skl-charm_rank"],
 				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-charm_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Command": {
@@ -1884,7 +1884,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_INT", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-int", "skl-cook_rank"],
 				"formulaCalculations": [{ "modName": "atr-int", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-cook_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Deception": {
@@ -1892,7 +1892,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-rsn", "skl-deception_rank"],
 				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-deception_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Disguise": {
@@ -1900,7 +1900,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_INT", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-int", "skl-disguise_rank"],
 				"formulaCalculations": [{ "modName": "atr-int", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-disguise_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Empathy": {
@@ -1908,7 +1908,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_INT", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-int", "skl-empathy_rank"],
 				"formulaCalculations": [{ "modName": "atr-int", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-empathy_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Enchant": {
@@ -1916,7 +1916,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-cnv", "skl-enchant_rank"],
 				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-enchant_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Finesse": {
@@ -1924,7 +1924,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_QCK", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-qck", "skl-finesse_rank"],
 				"formulaCalculations": [{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-finesse_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Flexibility": {
@@ -1939,7 +1939,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_BOD", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-bod", "skl-grappling_rank"],
 				"formulaCalculations": [{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-grappling_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Heal": {
@@ -1954,7 +1954,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-cnv", "skl-intimidation_rank"],
 				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-intimidation_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Leadership": {
@@ -1962,7 +1962,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_INT", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-int", "skl-leadership_rank"],
 				"formulaCalculations": [{ "modName": "atr-int", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-leadership_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Maneuver": {
@@ -1977,7 +1977,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-rsn", "skl-medicine_rank"],
 				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-medicine_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Might": {
@@ -1985,7 +1985,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_BOD", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-bod", "skl-might_rank"],
 				"formulaCalculations": [{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-might_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Negotiation": {
@@ -1993,7 +1993,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-rsn", "skl-negotiation_rank"],
 				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-negotiation_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Palming": {
@@ -2001,7 +2001,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_QCK", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-qck", "skl-palming_rank"],
 				"formulaCalculations": [{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-palming_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Physique": {
@@ -2009,7 +2009,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_BOD", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-bod", "skl-physique_rank"],
 				"formulaCalculations": [{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-physique_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Pilot": {
@@ -2017,7 +2017,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_QCK", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-qck", "skl-pilot_rank"],
 				"formulaCalculations": [{ "modName": "atr-qck", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-pilot_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Resonance": {
@@ -2025,7 +2025,8 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-cnv", "skl-resonance_rank"],
 				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-resonance_rank", "value": 0, "multiplier": 1 }]
+				,
 				"extraData": {}
 			},
 			"Skill_Search": {
@@ -2033,8 +2034,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_INT", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-int", "skl-search_rank"],
 				"formulaCalculations": [{ "modName": "atr-int", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }]
-				,
+				{ "modName": "skl-search_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Shoot": {
@@ -2042,7 +2042,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_PRC", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-prc", "skl-shoot_rank"],
 				"formulaCalculations": [{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-shoot_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Skirmish": {
@@ -2050,7 +2050,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_PRC", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-prc", "skl-skirmish_rank"],
 				"formulaCalculations": [{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-skirmish_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Sneak": {
@@ -2058,7 +2058,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_PRC", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-prc", "skl-sneak_rank"],
 				"formulaCalculations": [{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-sneak_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Survival": {
@@ -2066,7 +2066,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_BOD", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-bod", "skl-survival_rank"],
 				"formulaCalculations": [{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-survival_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Throw": {
@@ -2074,7 +2074,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_PRC", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-prc", "skl-throw_rank"],
 				"formulaCalculations": [{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-throw_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Tinker": {
@@ -2082,7 +2082,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_PRC", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-prc", "skl-tinker_rank"],
 				"formulaCalculations": [{ "modName": "atr-prc", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-tinker_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Traversal": {
@@ -2090,7 +2090,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_BOD", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-bod", "skl-traversal_rank"],
 				"formulaCalculations": [{ "modName": "atr-bod", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-traversal_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Language_Minere": {
@@ -2278,474 +2278,474 @@ var WuxDef = WuxDef || (function () {
 			"LoreCategory_Academics": {
 				"name": "LoreCategory_Academics", "fieldName": "academics", "group": "LoreCategory", "description": "", "variable": "lrc-academics{0}", "title": "Academics", "subGroup": "Academics", "descriptions": ["This represents general education for academic study for the purposes of functioning in modern society."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lrc-academics_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lrc-academics_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lrc-academics_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Health": {
 				"name": "Lore_Health", "fieldName": "health", "group": "Lore", "description": "", "variable": "lor-health{0}", "title": "Health", "subGroup": "Academics", "descriptions": ["This covers the study of human physiology and health."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-health_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-health_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-health_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Mana": {
 				"name": "Lore_Mana", "fieldName": "mana", "group": "Lore", "description": "", "variable": "lor-mana{0}", "title": "Mana", "subGroup": "Academics", "descriptions": ["The study of ki, ether, and magic. "],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-mana_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-mana_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-mana_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Mathematics": {
 				"name": "Lore_Mathematics", "fieldName": "mathematics", "group": "Lore", "description": "", "variable": "lor-mathematics{0}", "title": "Mathematics", "subGroup": "Academics", "descriptions": ["Mathematics knowledge represents an understanding of math and calculations."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-mathematics_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-mathematics_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-mathematics_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Nature": {
 				"name": "Lore_Nature", "fieldName": "nature", "group": "Lore", "description": "", "variable": "lor-nature{0}", "title": "Nature", "subGroup": "Academics", "descriptions": ["Nature knowledge grants an understanding of various types of plant life and their uses."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-nature_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-nature_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-nature_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_School": {
 				"name": "Lore_School", "fieldName": "school", "group": "Lore", "description": "", "variable": "lor-school{0}", "title": "School", "subGroup": "Academics", "descriptions": ["This knowledge represents information related to schools, famous educators, and forms of education used in the lands."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-school_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-school_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-school_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Spirit": {
 				"name": "Lore_Spirit", "fieldName": "spirit", "group": "Lore", "description": "", "variable": "lor-spirit{0}", "title": "Spirit", "subGroup": "Academics", "descriptions": ["Spirit knowledge represents an understanding of how spirits behave, their various forms, their interactions with magic and ether, and their abilities to manifest into the material plane."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-spirit_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-spirit_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-spirit_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Warfare": {
 				"name": "Lore_Warfare", "fieldName": "warfare", "group": "Lore", "description": "", "variable": "lor-warfare{0}", "title": "Warfare", "subGroup": "Academics", "descriptions": ["Warfare knowledge covers various tactics used in war and the management of an army."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-warfare_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-warfare_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-warfare_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Zoology": {
 				"name": "Lore_Zoology", "fieldName": "zoology", "group": "Lore", "description": "", "variable": "lor-zoology{0}", "title": "Zoology", "subGroup": "Academics", "descriptions": ["This knowledge represents physiological knowledge of living creatures of the world."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-zoology_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-zoology_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-zoology_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"LoreCategory_Profession": {
 				"name": "LoreCategory_Profession", "fieldName": "profession", "group": "LoreCategory", "description": "", "variable": "lrc-profession{0}", "title": "Profession", "subGroup": "Profession", "descriptions": ["Profession is the general knowledge of any kind of job, what they do, and how it is performed."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lrc-profession_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lrc-profession_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lrc-profession_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Farming": {
 				"name": "Lore_Farming", "fieldName": "farming", "group": "Lore", "description": "", "variable": "lor-farming{0}", "title": "Farming", "subGroup": "Profession", "descriptions": ["Farming knowledge covers all aspects of growing and nurturing plantlife in order to provide food"],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-farming_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-farming_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-farming_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Fishing": {
 				"name": "Lore_Fishing", "fieldName": "fishing", "group": "Lore", "description": "", "variable": "lor-fishing{0}", "title": "Fishing", "subGroup": "Profession", "descriptions": ["Fishing knowledge covers all aspects of fishing."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-fishing_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-fishing_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-fishing_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Hunting": {
 				"name": "Lore_Hunting", "fieldName": "hunting", "group": "Lore", "description": "", "variable": "lor-hunting{0}", "title": "Hunting", "subGroup": "Profession", "descriptions": ["Hunting knowledge imparts wisdom related to tracking, catching, and killing various creatures."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-hunting_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-hunting_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-hunting_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Legal": {
 				"name": "Lore_Legal", "fieldName": "legal", "group": "Lore", "description": "", "variable": "lor-legal{0}", "title": "Legal", "subGroup": "Profession", "descriptions": ["Legal knowledge imparts a knowledge of general laws common amongst civilizations and the penalties that may be gained from disobeying them."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-legal_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-legal_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-legal_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Mercantile": {
 				"name": "Lore_Mercantile", "fieldName": "mercantile", "group": "Lore", "description": "", "variable": "lor-mercantile{0}", "title": "Mercantile", "subGroup": "Profession", "descriptions": ["Mercantile knowledge grants wisdom related to the buying and selling of goods."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-mercantile_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-mercantile_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-mercantile_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Mining": {
 				"name": "Lore_Mining", "fieldName": "mining", "group": "Lore", "description": "", "variable": "lor-mining{0}", "title": "Mining", "subGroup": "Profession", "descriptions": ["Mining knowledge represents information related to breaking apart rock for material."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-mining_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-mining_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-mining_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"LoreCategory_Craftmanship": {
 				"name": "LoreCategory_Craftmanship", "fieldName": "craftmanship", "group": "LoreCategory", "description": "", "variable": "lrc-craftmanship{0}", "title": "Craftmanship", "subGroup": "Craftmanship", "descriptions": ["The knowledge of creating items through manipulation of substances and materials. A knowledge check here will help one identify techniques used to create an object but not necessarily how to recreate it."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lrc-craftmanship_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lrc-craftmanship_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lrc-craftmanship_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Alchemy": {
 				"name": "Lore_Alchemy", "fieldName": "alchemy", "group": "Lore", "description": "", "variable": "lor-alchemy{0}", "title": "Alchemy", "subGroup": "Craftmanship", "descriptions": ["Alchemy is the science of substances and how they can change. When working with chemicals and material that on their own should not be consumed, Alchemy will typically apply. Alchemy is typically used in the creation of drugs and substances."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-alchemy_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-alchemy_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-alchemy_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Architecture": {
 				"name": "Lore_Architecture", "fieldName": "architecture", "group": "Lore", "description": "", "variable": "lor-architecture{0}", "title": "Architecture", "subGroup": "Craftmanship", "descriptions": ["This knowledge represents a general knowledge about building design, general points of entry, and potential weaknesses."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-architecture_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-architecture_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-architecture_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Brewing": {
 				"name": "Lore_Brewing", "fieldName": "brewing", "group": "Lore", "description": "", "variable": "lor-brewing{0}", "title": "Brewing", "subGroup": "Craftmanship", "descriptions": ["Brewing is the skill that governs any kind of skill the requires the mixing of ingredients into a drink or broth."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-brewing_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-brewing_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-brewing_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Cooking": {
 				"name": "Lore_Cooking", "fieldName": "cooking", "group": "Lore", "description": "", "variable": "lor-cooking{0}", "title": "Cooking", "subGroup": "Craftmanship", "descriptions": ["Food is important for survival, so making it enjoyable is a craft of great appreciation. Cooking knowledge gives you the knowledge of different cooking techniques to create meals."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-cooking_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-cooking_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-cooking_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Engineering": {
 				"name": "Lore_Engineering", "fieldName": "engineering", "group": "Lore", "description": "", "variable": "lor-engineering{0}", "title": "Engineering", "subGroup": "Craftmanship", "descriptions": ["Engineering knowledge represents an understanding of mechanisms and systems to build complex structures and items."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-engineering_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-engineering_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-engineering_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Glassblowing": {
 				"name": "Lore_Glassblowing", "fieldName": "glassblowing", "group": "Lore", "description": "", "variable": "lor-glassblowing{0}", "title": "Glassblowing", "subGroup": "Craftmanship", "descriptions": ["When working with and shaping glass, the skill of glassblowing is required."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-glassblowing_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-glassblowing_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-glassblowing_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Leatherworking": {
 				"name": "Lore_Leatherworking", "fieldName": "leatherworking", "group": "Lore", "description": "", "variable": "lor-leatherworking{0}", "title": "Leatherworking", "subGroup": "Craftmanship", "descriptions": ["Leatherworking entails any skills related to skinning and using animal skins for clothing, and items. "],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-leatherworking_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-leatherworking_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-leatherworking_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Sculpting": {
 				"name": "Lore_Sculpting", "fieldName": "sculpting", "group": "Lore", "description": "", "variable": "lor-sculpting{0}", "title": "Sculpting", "subGroup": "Craftmanship", "descriptions": ["Sculpting allows one to use soft material like clay and shape it into a desired form."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-sculpting_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-sculpting_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-sculpting_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Smithing": {
 				"name": "Lore_Smithing", "fieldName": "smithing", "group": "Lore", "description": "", "variable": "lor-smithing{0}", "title": "Smithing", "subGroup": "Craftmanship", "descriptions": ["Smithing is the skill that allows you to shape various materials, usually metal, into tools of combat or other larger metalic items. "],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-smithing_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-smithing_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-smithing_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Weaving": {
 				"name": "Lore_Weaving", "fieldName": "weaving", "group": "Lore", "description": "", "variable": "lor-weaving{0}", "title": "Weaving", "subGroup": "Craftmanship", "descriptions": ["Weaving is the skill for putting together and shaping fabrics and cloths into useful material and objects."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-weaving_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-weaving_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-weaving_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"LoreCategory_Geography": {
 				"name": "LoreCategory_Geography", "fieldName": "geography", "group": "LoreCategory", "description": "", "variable": "lrc-geography{0}", "title": "Geography", "subGroup": "Geography", "descriptions": ["Geography represents general knowledge of terrains and locations within an area."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lrc-geography_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lrc-geography_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lrc-geography_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Aridsha": {
 				"name": "Lore_Aridsha", "fieldName": "aridsha", "group": "Lore", "description": "", "variable": "lor-aridsha{0}", "title": "Aridsha", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of Juno and the Aridsha desert region to the west. "],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-aridsha_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-aridsha_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-aridsha_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Ceres": {
 				"name": "Lore_Ceres", "fieldName": "ceres", "group": "Lore", "description": "", "variable": "lor-ceres{0}", "title": "Ceres", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of Capitol City and the Ceres plains to the north."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-ceres_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-ceres_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-ceres_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Colswei": {
 				"name": "Lore_Colswei", "fieldName": "colswei", "group": "Lore", "description": "", "variable": "lor-colswei{0}", "title": "Colswei", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of Liber and the frozen lands of the Colswei in the south."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-colswei_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-colswei_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-colswei_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Khem": {
 				"name": "Lore_Khem", "fieldName": "khem", "group": "Lore", "description": "", "variable": "lor-khem{0}", "title": "Khem", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of the Kingdom of Apollo and its mountainous region of Khem to the north east."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-khem_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-khem_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-khem_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Novus": {
 				"name": "Lore_Novus", "fieldName": "novus", "group": "Lore", "description": "", "variable": "lor-novus{0}", "title": "Novus", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of Novus and the Blessed Lands beyond the ocean."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-novus_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-novus_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-novus_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Walthair": {
 				"name": "Lore_Walthair", "fieldName": "walthair", "group": "Lore", "description": "", "variable": "lor-walthair{0}", "title": "Walthair", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of Minerva and the grasslands and eastern sea islands of Walthair to the east."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-walthair_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-walthair_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-walthair_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Wayling": {
 				"name": "Lore_Wayling", "fieldName": "wayling", "group": "Lore", "description": "", "variable": "lor-wayling{0}", "title": "Wayling", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of the central grasslands and marsh of Wayling."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-wayling_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-wayling_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-wayling_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Ethereal Plane": {
 				"name": "Lore_Ethereal Plane", "fieldName": "ethereal_plane", "group": "Lore", "description": "", "variable": "lor-ethereal_plane{0}", "title": "Ethereal Plane", "subGroup": "Geography", "descriptions": ["Ethereal Plane knowledge represents known methods of entering the plane, its dangers, qualities, and points of interest within the plane."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-ethereal_plane_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-ethereal_plane_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-ethereal_plane_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"LoreCategory_History": {
 				"name": "LoreCategory_History", "fieldName": "history", "group": "LoreCategory", "description": "", "variable": "lrc-history{0}", "title": "History", "subGroup": "History", "descriptions": ["History knowledges represent known history of civilizations and any legends that may exist."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lrc-history_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lrc-history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lrc-history_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Aridsha History": {
 				"name": "Lore_Aridsha History", "fieldName": "aridsha_history", "group": "Lore", "description": "", "variable": "lor-aridsha_history{0}", "title": "Aridsha History", "subGroup": "History", "descriptions": ["This check represents history of Juno and the Aridsha desert region to the west. "],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-aridsha_history_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-aridsha_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-aridsha_history_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Ceres History": {
 				"name": "Lore_Ceres History", "fieldName": "ceres_history", "group": "Lore", "description": "", "variable": "lor-ceres_history{0}", "title": "Ceres History", "subGroup": "History", "descriptions": ["This check represents history of Capitol City and the Ceres plains to the north."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-ceres_history_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-ceres_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-ceres_history_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Colswei History": {
 				"name": "Lore_Colswei History", "fieldName": "colswei_history", "group": "Lore", "description": "", "variable": "lor-colswei_history{0}", "title": "Colswei History", "subGroup": "History", "descriptions": ["This check represents history of Liber and the frozen lands of the Colswei in the south."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-colswei_history_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-colswei_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-colswei_history_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Khem History": {
 				"name": "Lore_Khem History", "fieldName": "khem_history", "group": "Lore", "description": "", "variable": "lor-khem_history{0}", "title": "Khem History", "subGroup": "History", "descriptions": ["This check represents history of the Kingdom of Apollo and its mountainous region of Khem to the north east."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-khem_history_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-khem_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-khem_history_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Novus History": {
 				"name": "Lore_Novus History", "fieldName": "novus_history", "group": "Lore", "description": "", "variable": "lor-novus_history{0}", "title": "Novus History", "subGroup": "History", "descriptions": ["This check represents history of Novus and the Blessed Lands beyond the ocean."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-novus_history_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-novus_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-novus_history_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Walthair History": {
 				"name": "Lore_Walthair History", "fieldName": "walthair_history", "group": "Lore", "description": "", "variable": "lor-walthair_history{0}", "title": "Walthair History", "subGroup": "History", "descriptions": ["This check represents history of Minerva and the grasslands and eastern sea islands of Walthair to the east."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-walthair_history_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-walthair_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-walthair_history_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Wayling History": {
 				"name": "Lore_Wayling History", "fieldName": "wayling_history", "group": "Lore", "description": "", "variable": "lor-wayling_history{0}", "title": "Wayling History", "subGroup": "History", "descriptions": ["This check represents history of the central grasslands and marsh of Wayling."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-wayling_history_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-wayling_history_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-wayling_history_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"LoreCategory_Culture": {
 				"name": "LoreCategory_Culture", "fieldName": "culture", "group": "LoreCategory", "description": "", "variable": "lrc-culture{0}", "title": "Culture", "subGroup": "Culture", "descriptions": ["Culture knowledge represents information on societal customs, art, and entertainment options."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lrc-culture_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lrc-culture_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lrc-culture_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Art": {
 				"name": "Lore_Art", "fieldName": "art", "group": "Lore", "description": "", "variable": "lor-art{0}", "title": "Art", "subGroup": "Culture", "descriptions": ["Art knowledge details information on the world of art and the artists behind famous works of art."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-art_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-art_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-art_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Etiquette": {
 				"name": "Lore_Etiquette", "fieldName": "etiquette", "group": "Lore", "description": "", "variable": "lor-etiquette{0}", "title": "Etiquette", "subGroup": "Culture", "descriptions": ["Etiquette knowledge represents your study of social customs within specific cultures and societies and will help you avoid embarrassing yourself or causing insult."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-etiquette_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-etiquette_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-etiquette_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Fashion": {
 				"name": "Lore_Fashion", "fieldName": "fashion", "group": "Lore", "description": "", "variable": "lor-fashion{0}", "title": "Fashion", "subGroup": "Culture", "descriptions": ["Fashion knowledge focuses on keeping up with clothing and physical beatuy products."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-fashion_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-fashion_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-fashion_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Games": {
 				"name": "Lore_Games", "fieldName": "games", "group": "Lore", "description": "", "variable": "lor-games{0}", "title": "Games", "subGroup": "Culture", "descriptions": ["Games knowledge covers general understanding of how many games are played whether they are reliant on cards, dice, or other kinds of chance."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-games_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-games_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-games_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Music": {
 				"name": "Lore_Music", "fieldName": "music", "group": "Lore", "description": "", "variable": "lor-music{0}", "title": "Music", "subGroup": "Culture", "descriptions": ["Music knowledge represents general understanding of sheet music, famous songs and the artists behind them, and an understanding of the industry."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-music_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-music_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-music_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Scribing": {
 				"name": "Lore_Scribing", "fieldName": "scribing", "group": "Lore", "description": "", "variable": "lor-scribing{0}", "title": "Scribing", "subGroup": "Culture", "descriptions": ["Scribing knowledge represents an understanding of how to communicate with the written word and techniques used to write."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-scribing_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-scribing_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-scribing_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Theater": {
 				"name": "Lore_Theater", "fieldName": "theater", "group": "Lore", "description": "", "variable": "lor-theater{0}", "title": "Theater", "subGroup": "Culture", "descriptions": ["Theater knowledge is the knowledge of the stage, techniques to tell a story, and famous plays."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-theater_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-theater_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-theater_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"LoreCategory_Religion": {
 				"name": "LoreCategory_Religion", "fieldName": "religion", "group": "LoreCategory", "description": "", "variable": "lrc-religion{0}", "title": "Religion", "subGroup": "Religion", "descriptions": ["Religion knowledge represent known tenets, famous people and creatures of the religion, and information about legends, beliefs, and organizations."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lrc-religion_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lrc-religion_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lrc-religion_rank", "value": 0, "multiplier": 1 }]
+				,
 				"extraData": {}
 			},
 			"Lore_Church of Kongkwei": {
 				"name": "Lore_Church of Kongkwei", "fieldName": "church_of_kongkwei", "group": "Lore", "description": "", "variable": "lor-church_of_kongkwei{0}", "title": "Church of Kongkwei", "subGroup": "Religion", "descriptions": ["The Church of Kongkwei is tied to the creation of the Kingdom of Apollo. It follows the fire god Guong Kongkwei and attempts to follow their goals of expansion and control."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-church_of_kongkwei_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-church_of_kongkwei_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-church_of_kongkwei_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Guidance": {
 				"name": "Lore_Guidance", "fieldName": "guidance", "group": "Lore", "description": "", "variable": "lor-guidance{0}", "title": "Guidance", "subGroup": "Religion", "descriptions": ["The Guidance is one of the oldest religions in the world of Wuxing. They seek to give its people advice in times of hardship through the divinations of spirits."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-guidance_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-guidance_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-guidance_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Life's Circle": {
 				"name": "Lore_Life's Circle", "fieldName": "life's_circle", "group": "Lore", "description": "", "variable": "lor-life's_circle{0}", "title": "Life's Circle", "subGroup": "Religion", "descriptions": ["The Life's Circle is the religion of the Novae. It follows the cycle of life and helps determine a person's role in society through reincarnation and destiny."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-life's_circle_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-life's_circle_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-life's_circle_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Ocean Court": {
 				"name": "Lore_Ocean Court", "fieldName": "ocean_court", "group": "Lore", "description": "", "variable": "lor-ocean_court{0}", "title": "Ocean Court", "subGroup": "Religion", "descriptions": ["The Ocean Court follows the Ocean Queen, Minerra, and her court of gods that ensure her commandments are followed. Those that revere her and her court do so for her protection and luck whether its in her domain at sea or deep in the lands."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-ocean_court_rank"]
-				,
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-ocean_court_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-ocean_court_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Sylvan": {
 				"name": "Lore_Sylvan", "fieldName": "sylvan", "group": "Lore", "description": "", "variable": "lor-sylvan{0}", "title": "Sylvan", "subGroup": "Religion", "descriptions": ["The Sylvans are a group of powerful spirits that hold dominion over territories across the world. They are creatures of whimsy and chaos, the cause of weather patterns and together, the changing of the seasons."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-sylvan_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-sylvan_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-sylvan_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Zushaon": {
 				"name": "Lore_Zushaon", "fieldName": "zushaon", "group": "Lore", "description": "", "variable": "lor-zushaon{0}", "title": "Zushaon", "subGroup": "Religion", "descriptions": ["Many Ceresians follow Zushaon, a tradition of ancestor worship. The religion seeks to offer reverence for those that came before and a desire to find ones own place in the world."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["", "lor-zushaon_rank"],
-				"formulaCalculations": [{ "modName": "", "value": 0, "multiplier": 1 },
-				{ "modName": "_rank", "value": 0, "multiplier": 1 }],
+				"isResource": "", "modAttrs": ["recall", "lor-zushaon_rank"],
+				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
+				{ "modName": "lor-zushaon_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Job_Interceptor": {
@@ -3442,7 +3442,8 @@ var WuxDef = WuxDef || (function () {
 				"extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Technique_Quick Slash": {
-				"name": "Technique_Quick Slash", "fieldName": "quick_slash", "group": "Technique", "description": "", "variable": "tch-quick_slash{0}", "title": "Quick Slash", "subGroup": "Swordplay", "descriptions": [""],
+				"name": "Technique_Quick Slash", "fieldName": "quick_slash", "group": "Technique", "description": "", "variable": "tch-quick_slash{0}", "title": "Quick Slash", "subGroup": "Swordplay", "descriptions": [""]
+				,
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": [],
 				"formulaCalculations": [],
@@ -3484,8 +3485,7 @@ var WuxDef = WuxDef || (function () {
 				"extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Technique_Great Cleave": {
-				"name": "Technique_Great Cleave", "fieldName": "great_cleave", "group": "Technique", "description": "", "variable": "tch-great_cleave{0}", "title": "Great Cleave", "subGroup": "", "descriptions": [""]
-				,
+				"name": "Technique_Great Cleave", "fieldName": "great_cleave", "group": "Technique", "description": "", "variable": "tch-great_cleave{0}", "title": "Great Cleave", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": [],
 				"formulaCalculations": [],
@@ -4256,7 +4256,8 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Technique_Wildwood": {
 				"name": "Technique_Wildwood", "fieldName": "wildwood", "group": "Technique", "description": "", "variable": "tch-wildwood{0}", "title": "Wildwood", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": [],
+				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": []
+				,
 				"isResource": "", "modAttrs": [],
 				"formulaCalculations": [],
 				"extraData": { "tier": null, "affinity": "", "isFree": true }
@@ -4299,8 +4300,7 @@ var WuxDef = WuxDef || (function () {
 			"Technique_Chill Guard": {
 				"name": "Technique_Chill Guard", "fieldName": "chill_guard", "group": "Technique", "description": "", "variable": "tch-chill_guard{0}", "title": "Chill Guard", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": [],
-				"isResource": "", "modAttrs": []
-				,
+				"isResource": "", "modAttrs": [],
 				"formulaCalculations": [],
 				"extraData": { "tier": null, "affinity": "", "isFree": true }
 			},

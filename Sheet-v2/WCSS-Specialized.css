@@ -155,6 +155,7 @@ input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-P
 
     margin-top: 10px;
     width: auto;
+    max-width: calc(100% - 210px);
 }
 
 .wuxStickyHeader .wuxHeader input
@@ -366,32 +367,6 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     Techniques
 ========================================*/
 
-.wuxFeatureGroup,
-.wuxFeatureGroupWithAugments
-{
-    position: relative;
-    display: inline-block;
-    height: auto;
-    vertical-align: top;
-    min-width: 340px;
-    width: 375px;
-    flex: 1;
-    margin-bottom: 10px;
-}
-
-.wuxFeatureGroupWithAugments
-{
-    height: min-content;
-
-    background: #1d1e1f;
-    background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 30%, #3A3D3E 100%);
-    border-style: solid;
-    border-width: 0px 0px 3px 3px;
-    border-color: #a6a6a6 #a6a6a6 #a6a6a6 transparent;
-    border-image: linear-gradient(to left, #a6a6a600 0%, #a6a6a600 35%, #a6a6a6FF 40%) 1;
-    border-radius: 0px 0px 0px 5px;
-}
-
 .wuxFeature,
 .sheet-rolltemplate-technique,
 .sheet-rolltemplate-usetechnique,
@@ -399,7 +374,7 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 {
     position: relative;
     display: inline-block;
-    min-width: 340px; 
+    min-width: 160px;
     max-width: 500px; 
     width: calc(100% - 10px);
     height: min-content;
@@ -706,7 +681,8 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 {
     position: relative;
     display:inline-block; 
-    width: calc(100% - 115px);
+    min-width: 150px;
+    width: calc(100% - 60px);
 }
 
 .wuxFeatureHeaderName,
@@ -716,6 +692,7 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
     position: relative;
     display: block; 
 
+    min-width: 150px;
     width: 100%;
     margin-top: 5px; 
     
@@ -730,6 +707,8 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
     position: relative;
     display: block; 
 
+    min-width: 150px;
+    width: 100%;
     font-size: 11px;
 }
 

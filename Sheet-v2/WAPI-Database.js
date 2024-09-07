@@ -989,7 +989,8 @@ class DefinitionData extends WuxDatabaseData {
         if (this.modifiers != "") {
             let modArray = this.modifiers.split(";");
             modArray.forEach((mod) => {
-                this.formulaCalculations.push(new WorkerFormula(mod, 0, 1));
+                mod = mod.trim();
+                this.formulaCalculations.push(new WorkerFormula(this.getVariable(mod), 0, 1));
                 this.modAttrs.push(this.getVariable(mod));
             });
         }
@@ -1030,11 +1031,14 @@ class DefinitionData extends WuxDatabaseData {
             callback(definitionName, definitionNameModifier, multiplier);
         });
     }
-    getFormulaValue(attributeHandler) {
+    getFormulaValue(attributeHandler, printBreakdown) {
         let output = 0;
         this.formulaCalculations.forEach((formula) => {
             if (formula.modName != "") {
                 formula.value = attributeHandler.parseInt(formula.modName);
+                if (printBreakdown) {
+                    console.log(`Adding ${formula.modName}(${formula.value}) to ${this.name}`);
+                }
             }
             output += formula.value * formula.multiplier;
         });
@@ -1067,7 +1071,7 @@ class TechniqueDisplayData {
     importTechnique(technique) {
         this.createEmpty();
         this.setTechBasics(technique);
-        this.setTechSetData(technique);
+        this.setTechSetResourceData(technique);
         this.setTechTargetData(technique);
         this.setExtentionEffects(technique);
         this.setTraits(technique);
@@ -1087,30 +1091,23 @@ class TechniqueDisplayData {
         this.actionType = technique.action;
         this.isFree = technique.isFree;
     }
-    setTechSetData(technique) {
-        this.techSetDisplay = technique.affinity;
-        this.techSetTitle = technique.skill == "" ? "No Check" : technique.skill;
-
-        let subText = "";
+    setTechSetResourceData(technique) {
+        this.resourceData = technique.action;
         if (technique.limits != "") {
-            if (subText != "") {
-                subText += "; ";
+            if (this.resourceData != "") {
+                this.resourceData += "; ";
             }
-            subText += technique.limits;
+            this.resourceData += technique.limits;
         }
         if (technique.resourceCost != "") {
-            if (subText != "") {
-                subText += "; ";
+            if (this.resourceData != "") {
+                this.resourceData += "; ";
             }
-            subText += technique.resourceCost;
+            this.resourceData += technique.resourceCost;
         }
-        this.techSetSub = subText == "" ? "-" : subText;
     }
     setTechTargetData(technique) {
-        this.targetData = "";
-        if (technique.action != "") {
-            this.targetData += technique.action;
-        }
+        this.targetData = technique.skill == "" ? "No Check" : technique.skill;
         if (technique.range != "") {
             if (this.targetData != "") {
                 this.targetData += "; ";
@@ -1168,12 +1165,8 @@ class TechniqueDisplayData {
         this.definition = {};
         this.fieldName = "";
         this.isFree = false;
-
-        this.techSetDisplay = "";
-        this.techSetTitle = "";
-        this.techSetSub = "";
-        this.techSetSub2 = "";
         
+        this.resourceData = "";
         this.targetData = "";
 
         this.trigger = "";

@@ -243,7 +243,6 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             var
             print = function (techDisplayData, displayOptions) {
                 let output = "";
-                output += setTechniqueDisplayHeaderSlotBox(techDisplayData, displayOptions);
                 output += setTechniqueDisplayHeaderExpandSection(techDisplayData, displayOptions);
                 output += setTechniqueDisplayHeaderSelectSection(techDisplayData, displayOptions);
                 output += setTechniqueDisplayHeaderUseSection(techDisplayData, displayOptions);
@@ -252,15 +251,6 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 output = `<div ${setFeatureStyle(["wuxFeatureHeader", `wuxFeatureHeader-${techDisplayData.actionType}`], displayOptions)}>\n${output}\n</div>\n`;
                 output += setTechniqueDisplayHeaderExtentFeatures(techDisplayData, displayOptions);
                 return output;
-            },
-
-            setTechniqueDisplayHeaderSlotBox = function (techDisplayData, displayOptions) {
-                let techSetStyling = ["wuxFeatureType", `wuxFeatureType-${techDisplayData.techSetDisplay}`];
-                return `<div ${setFeatureStyle(techSetStyling, displayOptions)}>
-                <span ${setFeatureStyle("wuxFeatureTypeHeader", displayOptions)}>${techDisplayData.techSetTitle}</span>
-                <span ${setFeatureStyle("wuxFeatureTypeFooter", displayOptions)}>${techDisplayData.techSetSub}</span>
-                <span ${setFeatureStyle("wuxFeatureTypeFooter", displayOptions)}>${techDisplayData.techSetSub2}</span>
-                </div>`;
             },
 
             setTechniqueDisplayHeaderExpandSection = function (techDisplayData, displayOptions) {
@@ -327,9 +317,10 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
 
             setTechniqueDisplayHeaderNameFields = function (techDisplayData, displayOptions) {
                 return `<div ${setFeatureStyle("wuxFeatureHeaderDisplayBlock", displayOptions)}>
-    <span ${setFeatureStyle("wuxFeatureHeaderName", displayOptions)}>${techDisplayData.name}</span>
-    <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.targetData}</div>
-    </div>`;
+                <span ${setFeatureStyle("wuxFeatureHeaderName", displayOptions)}>${techDisplayData.name}</span>
+                <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.resourceData}</div>
+                <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.targetData}</div>
+                </div>`;
             },
 
             setTechniqueDisplayHeaderExtentFeatures = function (techDisplayData, displayOptions) {
@@ -940,7 +931,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         },
 
         sectionBlock = function (contents) {
-            return `<div class="wuxSectionBlock wuxLayoutItem">\n${contents}\n</div>`;
+            return `<div class="wuxSectionBlock">\n${contents}\n</div>`;
         },
 
         sectionBlockHeader = function (contents) {

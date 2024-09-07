@@ -216,7 +216,7 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
 
 .wuxLayoutItem
 {
-    min-width: 320px;
+    min-width: 245px;
     flex: 2;
 }
 
@@ -351,8 +351,7 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
     
     overflow-x: auto;
     overflow-y: hidden;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    scrollbar-width: thin;
 }
 
 .wuxTabButtonRow::-webkit-scrollbar 

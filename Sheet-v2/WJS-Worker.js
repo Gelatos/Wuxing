@@ -317,8 +317,8 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 			worker.setPointsMax(attrHandler);
 			worker.updatePoints(attrHandler);
 			manager.setAttributeHandlerPoints(attrHandler);
-			WuxWorkerTechniques.FilterTechniquesForLearn(attrHandler);
 		});
+		WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
 	}
 
 	convertXp(attributeHandler) {
@@ -485,4 +485,985 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 	}
 }
 
+var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
+	'use strict';
 
+	var
+	updatePageState = function(eventinfo) {
+		console.log("Update Page State");
+		let attributeHandler  = new WorkerAttributeHandler();
+		switch(eventinfo.newValue) {
+			case "Styles":
+				WuxWorkerTechniques.FilterTechniquesForStyleSet(attributeHandler);
+				attributeHandler.run();
+				break;
+			case "Actions":
+				WuxWorkerTechniques.FilterTechniquesForActions(attributeHandler);
+				attributeHandler.run();
+				break;
+		}
+	},
+	updateStats = function(attributeHandler) {
+		let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", "CR"));
+		formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", "Level")));
+		formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("group", "General")));
+		formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("group", "Combat")));
+		formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("group", "Social")));
+
+		for (let i = 0; i < formulaDefinitions.length; i++) {
+			attributeHandler.addFormulaMods(formulaDefinitions[i]);
+		}
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			for (let i = 0; i < formulaDefinitions.length; i++) {
+				if (formulaDefinitions[i].isResource) {
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].getFormulaValue(attrHandler));
+				}
+				else {
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+				}
+			}
+		});
+	}
+	return {
+		UpdatePageState: updatePageState,
+		UpdateStats: updateStats
+	};
+}());
+
+var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
+	'use strict';
+
+	var
+	finishBuild = function() {
+		console.log("Finish Character Creation Build");
+		let attributeHandler  = new WorkerAttributeHandler();
+
+		let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Technique"]);
+		pointManagers.commitChanges(attributeHandler);
+		
+		let trainingWorker = new WuxTrainingWorkerBuild();
+		trainingWorker.commitChanges(attributeHandler);
+		
+		let advancementWorker = new WuxAdvancementWorkerBuild();
+		advancementWorker.commitChanges(attributeHandler);
+
+		WuxWorkerAttributes.UpdateStats(attributeHandler);
+		WuxWorkerSkills.UpdateStats(attributeHandler);
+		WuxWorkerKnowledges.UpdateStats(attributeHandler);
+		WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+		WuxWorkerAdvancement.UpdateStats(attributeHandler);
+		WuxWorkerGeneral.UpdateStats(attributeHandler);
+
+		leavePageVariables(attributeHandler);
+		attributeHandler.run();
+	},
+	leavePageVariables = function(attributeHandler) {
+		attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
+		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
+		attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+		WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
+	},
+	setAffinityValue = function() {
+		console.log("Setting Affinity");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let affinityVariable = WuxDef.GetVariable("Affinity");
+
+		attributeHandler.addMod(affinityVariable);
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			attrHandler.addUpdate(WuxDef.GetVariable("Affinity", WuxDef._learn), WuxDef.GetDescription(attrHandler.parseString(affinityVariable)));
+		});
+		attributeHandler.run();
+	},
+	setInnateDefense = function() {
+		console.log("Setting Innate Defense");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let innateDefenseVariable = WuxDef.GetVariable("InnateDefense");
+		let braceDef = WuxDef.Get("Defense_Brace");
+		let fortitudeDef = WuxDef.Get("Defense_Fortitude");
+		let disruptionDef = WuxDef.Get("Defense_Disruption");
+		let hideDef = WuxDef.Get("Defense_Hide");
+		let reflexDef = WuxDef.Get("Defense_Reflex");
+		let evasionDef = WuxDef.Get("Defense_Evasion");
+		attributeHandler.addFormulaMods(braceDef);
+		attributeHandler.addFormulaMods(fortitudeDef);
+		attributeHandler.addFormulaMods(disruptionDef);
+		attributeHandler.addFormulaMods(hideDef);
+		attributeHandler.addFormulaMods(reflexDef);
+		attributeHandler.addFormulaMods(evasionDef);
+
+		attributeHandler.addMod(innateDefenseVariable);
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			attrHandler.addUpdate(braceDef.getVariable(WuxDef._expertise), 0);
+			attrHandler.addUpdate(fortitudeDef.getVariable(WuxDef._expertise), 0);
+			attrHandler.addUpdate(disruptionDef.getVariable(WuxDef._expertise), 0);
+			attrHandler.addUpdate(hideDef.getVariable(WuxDef._expertise), 0);
+			attrHandler.addUpdate(reflexDef.getVariable(WuxDef._expertise), 0);
+			attrHandler.addUpdate(evasionDef.getVariable(WuxDef._expertise), 0);
+
+			switch (attrHandler.parseString(innateDefenseVariable)) {
+				case "BOD": setDefenseVariables(attrHandler, "Defense", "BOD", "Brace", "Fortitude"); break;
+				case "PRC": setDefenseVariables(attrHandler, "Defense", "PRC", "Disruption", "Hide"); break;
+				case "QCK": setDefenseVariables(attrHandler, "Defense", "QCK", "Reflex", "Evasion"); break;
+				default: attrHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), "Choose an attribute"); break;
+			}
+
+			attrHandler.addUpdate(braceDef.getVariable(), braceDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(fortitudeDef.getVariable(), fortitudeDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(disruptionDef.getVariable(), disruptionDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(hideDef.getVariable(), hideDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(reflexDef.getVariable(), reflexDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(evasionDef.getVariable(), evasionDef.getFormulaValue(attrHandler));
+		});
+		attributeHandler.run();
+	},
+	setInnateSense = function() {
+		console.log("Setting Innate Sense");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let innateSenseVariable = WuxDef.GetVariable("InnateSense");
+		let senseResolveDef = WuxDef.Get("Sense_Resolve");
+		let senseFreewillDef = WuxDef.Get("Sense_Freewill");
+		let senseInsightDef = WuxDef.Get("Sense_Insight");
+		let senseNoticeDef = WuxDef.Get("Sense_Notice");
+		let senseScrutinyDef = WuxDef.Get("Sense_Scrutiny");
+		let senseDetectDef = WuxDef.Get("Sense_Detect");
+		attributeHandler.addFormulaMods(senseResolveDef);
+		attributeHandler.addFormulaMods(senseFreewillDef);
+		attributeHandler.addFormulaMods(senseInsightDef);
+		attributeHandler.addFormulaMods(senseNoticeDef);
+		attributeHandler.addFormulaMods(senseScrutinyDef);
+		attributeHandler.addFormulaMods(senseDetectDef);
+
+		attributeHandler.addMod(innateSenseVariable);
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			attrHandler.addUpdate(senseResolveDef.getVariable(WuxDef._expertise), 0);
+			attrHandler.addUpdate(senseFreewillDef.getVariable(WuxDef._expertise), 0);
+			attrHandler.addUpdate(senseInsightDef.getVariable(WuxDef._expertise), 0);
+			attrHandler.addUpdate(senseNoticeDef.getVariable(WuxDef._expertise), 0);
+			attrHandler.addUpdate(senseScrutinyDef.getVariable(WuxDef._expertise), 0);
+			attrHandler.addUpdate(senseDetectDef.getVariable(WuxDef._expertise), 0);
+
+			switch (attrHandler.parseString(innateSenseVariable)) {
+				case "CNV": setDefenseVariables(attrHandler, "Sense", "CNV", "Resolve", "Freewill"); break;
+				case "INT": setDefenseVariables(attrHandler, "Sense", "INT", "Insight", "Notice"); break;
+				case "RSN": setDefenseVariables(attrHandler, "Sense", "RSN", "Scrutiny", "Detect"); break;
+				default: attrHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), "Choose an attribute"); break;
+			}
+
+			attrHandler.addUpdate(senseResolveDef.getVariable(), senseResolveDef.getFormulaValue(attrHandler, true));
+			attrHandler.addUpdate(senseFreewillDef.getVariable(), senseFreewillDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(senseInsightDef.getVariable(), senseInsightDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(senseNoticeDef.getVariable(), senseNoticeDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(senseScrutinyDef.getVariable(), senseScrutinyDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(senseDetectDef.getVariable(), senseDetectDef.getFormulaValue(attrHandler));
+		});
+		attributeHandler.run();
+	},
+	setDefenseVariables = function(attrHandler, type, attribute, defense1, defense2) {
+		let attrDefinition = WuxDef.Get(`Attribute_${attribute}`);
+		let def1Definition = WuxDef.Get(`${type}_${defense1}`);
+		let def2Definition = WuxDef.Get(`${type}_${defense2}`);
+
+		attrHandler.addUpdate(WuxDef.GetVariable(`Innate${type}`, WuxDef._learn), getDefenseDescription(type, attrDefinition, def1Definition, def2Definition));
+		attrHandler.addUpdate(def1Definition.getVariable(WuxDef._expertise), 2);
+		attrHandler.addUpdate(def2Definition.getVariable(WuxDef._expertise), 2);
+	},
+	getDefenseDescription = function(type, attrDefinition, def1Definition, def2Definition) {
+		console.log("Getting Defense Description");
+
+		let output = `${attrDefinition.title} is associated with the following ${type}s:\n\n`;
+		output += `${def1Definition.title}: ${def1Definition.getDescription()}\n\n${def2Definition.title}: ${def2Definition.getDescription()}`;
+		console.log(output);
+		return output;
+	}
+	
+	return {
+		FinishBuild: finishBuild,
+		SetAffinityValue: setAffinityValue,
+		SetInnateDefense: setInnateDefense,
+		SetInnateSense: setInnateSense
+	};
+}());
+
+var WuxWorkerTraining = WuxWorkerTraining || (function () {
+	'use strict';
+
+	var
+	goToPageSet = function() {
+		let attributeHandler  = new WorkerAttributeHandler();
+		attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Training");
+		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Training");
+		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Training"), "Training");
+		
+		attributeHandler.addMod(WuxDef.GetVariable("PP"));
+		let worker = new WuxTrainingWorkerBuild();
+		attributeHandler.addMod(worker.attrMax);
+		attributeHandler.addMod(worker.attrBuildFinal);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsFinal(attrHandler);
+			worker.updateMaxBuildStats(attrHandler, WuxDef.GetVariable("PP"), attrHandler.parseInt(WuxDef.GetVariable("PP")));
+			worker.revertBuildStatsDraft(attrHandler);
+		});
+
+		WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
+		attributeHandler.run();
+	},
+	finishBuild = function() {
+		console.log("Finish Training Build");
+		let attributeHandler  = new WorkerAttributeHandler();
+
+		let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		pointManagers.commitChanges(attributeHandler);
+		
+		let trainingWorker = new WuxTrainingWorkerBuild();
+		trainingWorker.commitChanges(attributeHandler);
+
+		WuxWorkerKnowledges.UpdateStats(attributeHandler);
+		WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+
+		leavePageVariables(attributeHandler);
+		attributeHandler.run();
+	},
+	exitBuild = function() {
+		console.log("Exit Training Build");
+		let attributeHandler  = new WorkerAttributeHandler();
+
+		let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		pointManagers.resetChanges(attributeHandler);
+		
+		let trainingWorker = new WuxTrainingWorkerBuild();
+		trainingWorker.resetChanges(attributeHandler);
+
+		WuxWorkerKnowledges.UpdateStats(attributeHandler);
+		WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+
+		leavePageVariables(attributeHandler);
+		attributeHandler.run();
+	},
+	leavePageVariables = function(attributeHandler) {
+		attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
+		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
+		attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+		WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
+	},
+	
+	convertPp = function() {
+		console.log("Converting PP to Level");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxTrainingWorkerBuild();
+		worker.convertPp(attributeHandler);
+		attributeHandler.run();
+	},
+	setTrainingPoints = function() {
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxTrainingWorkerBuild();
+		worker.updateTrainingPoints(attributeHandler);
+		attributeHandler.run();
+	},
+	setTrainingPointsUpdate = function(eventinfo) {
+		console.log("Setting Training Points Values");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxTrainingWorkerBuild();
+		worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+		attributeHandler.run();
+	}
+
+	return {
+		GoToPageSet: goToPageSet,
+		FinishBuild: finishBuild,
+		ExitBuild: exitBuild,
+		ConvertPp: convertPp,
+		SetTrainingPoints: setTrainingPoints,
+		SetTrainingPointsUpdate: setTrainingPointsUpdate
+	};
+}());
+
+var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
+	'use strict';
+
+	var
+	goToPageSet = function() {
+		let attributeHandler  = new WorkerAttributeHandler();
+		attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Advancement");
+		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Advancement");
+		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement"), "Advancement");
+
+		attributeHandler.addMod(WuxDef.GetVariable("XP"));
+		let worker = new WuxAdvancementWorkerBuild();
+		attributeHandler.addMod(worker.attrMax);
+		attributeHandler.addMod(worker.attrBuildFinal);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsFinal(attrHandler);
+			worker.updateMaxBuildStats(attrHandler, WuxDef.GetVariable("XP"), attrHandler.parseInt(WuxDef.GetVariable("XP")));
+			worker.revertBuildStatsDraft(attrHandler);
+		});
+
+		WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
+		attributeHandler.run();
+	},
+	finishBuild = function() {
+		console.log("Finish Advancement Build");
+		let attributeHandler  = new WorkerAttributeHandler();
+
+		let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
+		pointManagers.commitChanges(attributeHandler);
+		
+		let advancementWorker = new WuxAdvancementWorkerBuild();
+		advancementWorker.commitChanges(attributeHandler);
+
+		WuxWorkerAttributes.UpdateStats(attributeHandler);
+		WuxWorkerSkills.UpdateStats(attributeHandler);
+		WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+		UpdateStats(attributeHandler);
+
+		leavePageVariables(attributeHandler);
+		attributeHandler.run();
+	},
+	exitBuild = function() {
+		console.log("Exit Advancement Build");
+		let attributeHandler  = new WorkerAttributeHandler();
+
+		let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
+		pointManagers.resetChanges(attributeHandler);
+		
+		let advancementWorker = new WuxAdvancementWorkerBuild();
+		advancementWorker.resetChanges(attributeHandler);
+
+		WuxWorkerAttributes.UpdateStats(attributeHandler);
+		WuxWorkerSkills.UpdateStats(attributeHandler);
+		WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+		UpdateStats(attributeHandler);
+
+		leavePageVariables(attributeHandler);
+		attributeHandler.run();
+	},
+	leavePageVariables = function(attributeHandler) {
+		attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
+		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
+		attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+		WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
+	},
+	
+	convertXp = function() {
+		console.log("Converting XP to Level");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxAdvancementWorkerBuild();
+		worker.convertXp(attributeHandler);
+		attributeHandler.run();
+	},
+	setLevel = function(eventinfo) {
+		console.log("Setting Level");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxAdvancementWorkerBuild();
+		worker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+		attributeHandler.run();
+	},
+	setAdvancementPointsUpdate = function(eventinfo) {
+		console.log("Setting Advancement Points");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxAdvancementWorkerBuild();
+		worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+		attributeHandler.run();
+	},
+	setAffinityStats = function(attributeHandler) {
+		let affinityVariable = WuxDef.GetVariable("Affinity");
+		let crVariable = WuxDef.GetVariable("CR");
+		attributeHandler.addMod([affinityVariable, crVariable]);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+
+			let crValue = attrHandler.parseInt(crVariable);
+			let initiativeVar = WuxDef.GetVariable("Initiative", WuxDef._affinity);
+			let hvVar = WuxDef.GetVariable("Combat_HV", WuxDef._affinity);
+			let surgeVar = WuxDef.GetVariable("Combat_Surge", WuxDef._affinity);
+			let armorVar = WuxDef.GetVariable("Combat_Armor", WuxDef._affinity);
+			let resistanceVar = WuxDef.GetVariable("Combat_Resistance", WuxDef._affinity);
+			let resistance = new ResistanceData();
+
+			attrHandler.addUpdate(initiativeVar, 0);
+			attrHandler.addUpdate(hvVar, 0);
+			attrHandler.addUpdate(surgeVar, 0);
+			attrHandler.addUpdate(armorVar, 0);
+			attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+
+			switch(attrHandler.get(affinityVariable)) {
+				case "Wood":
+					attrHandler.addUpdate(initiativeVar, crValue);
+					attrHandler.addUpdate(hvVar, crValue * 2);
+					resistance.addResistanceValue("Cold", crValue * 2);
+					attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+					break;
+				case "Fire":
+					attrHandler.addUpdate(initiativeVar, crValue);
+					resistance.addResistanceValue("Fire", crValue * 2);
+					resistance.addResistanceValue("Burn", crValue);
+					attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+					break;
+				case "Earth":
+					resistance.addResistanceValue("Fire", crValue * 2);
+					resistance.addResistanceValue("Piercing", crValue);
+					resistance.addResistanceValue("Shock", crValue * 2);
+					attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+					break;
+				case "Metal":
+					attrHandler.addUpdate(armorVar, crValue);
+					resistance.addResistanceValue("Force", crValue);
+					resistance.addResistanceValue("Piercing", crValue);
+					attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+					break;
+				case "Water":
+					attrHandler.addUpdate(surgeVar, 1);
+					resistance.addResistanceValue("Cold", crValue * 2);
+					resistance.addResistanceValue("Force", crValue);
+					attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+					break;
+
+			}
+		});
+	},
+	updateStats = function(attributeHandler) {
+		let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", "CR"));
+		formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", "Level")));
+
+		for (let i = 0; i < formulaDefinitions.length; i++) {
+			attributeHandler.addFormulaMods(formulaDefinitions[i]);
+		}
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			for (let i = 0; i < formulaDefinitions.length; i++) {
+				if (formulaDefinitions[i].isResource) {
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].getFormulaValue(attrHandler));
+				}
+				else {
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+				}
+			}
+		});
+	}
+
+	return {
+		GoToPageSet: goToPageSet,
+		FinishBuild: finishBuild,
+		ExitBuild: exitBuild,
+		ConvertXp: convertXp,
+		SetLevel: setLevel,
+		SetAdvancementPointsUpdate: setAdvancementPointsUpdate,
+		SetAffinityStats: setAffinityStats,
+		UpdateStats: updateStats
+	};
+}());
+
+var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
+	'use strict';
+
+	var
+	updateTechniqueBuildPoints = function(eventinfo) {
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxWorkerBuildManager("Technique");
+		worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+		attributeHandler.run();
+	},
+	updateStyleBuildPoints = function(eventinfo) {
+		let attributeHandler  = new WorkerAttributeHandler();
+		attributeHandler.addMod(WuxDef.GetVariable("Page"));
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			let attributeHandler2  = new WorkerAttributeHandler();
+			if (attrHandler.parseString(WuxDef.GetVariable("Page")) == "Techniques") {
+				let worker = new WuxWorkerBuildManager("Technique");
+				worker.onChangeWorkerAttribute(attributeHandler2, eventinfo.sourceAttribute, eventinfo.newValue);
+
+				attributeHandler2.addMod(WuxDef.GetVariable("CR"));
+				attributeHandler2.addMod(WuxDef.GetVariable("Affinity"));
+
+				attributeHandler2.addGetAttrCallback(function (attrHandler2) {
+					let techniqueWorker = new WuxWorkerBuild("Technique");
+					techniqueWorker.setBuildStatsDraft(attrHandler2);
+					let workerVariableName = "";
+					let styleValue = "0";
+					let cr = attrHandler2.parseInt(WuxDef.GetVariable("CR"));
+					let affinities = [attrHandler2.parseString(WuxDef.GetVariable("Affinity"))];
+					let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
+					for (let i = 0; i < styleDefinitions.length; i++) {
+						workerVariableName = styleDefinitions[i].getVariable();
+						if (workerVariableName == eventinfo.sourceAttribute) {
+							styleValue = eventinfo.newValue;
+							filterStyleTechniquesForLearn(styleDefinitions[i], styleValue.toString(), cr, affinities, attrHandler2, techniqueWorker);
+						}
+					};
+					techniqueWorker.updatePoints(attrHandler2);
+				});
+
+			}
+			else if (attrHandler.parseString(WuxDef.GetVariable("Page")) == "Styles") {
+				let worker = new WuxWorkerBuildManager("Style");
+				worker.onChangeWorkerAttribute(attributeHandler2, eventinfo.sourceAttribute, eventinfo.newValue);
+			}
+			attributeHandler2.run();
+		});
+
+		
+		attributeHandler.run();
+	},
+	updateJobStyleBuildPoints = function(eventinfo) {
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxWorkerBuildManager("JobStyle");
+		worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+		attributeHandler.run();
+	},
+	updateTechniquesPageToLearn = function(attributeHandler) {
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Job", WuxDef._filter), "1");
+			attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Standard", WuxDef._filter), "0");
+			attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Basic", WuxDef._filter), "1");
+			attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._filter), "1");
+			attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._subfilter), "1");
+		});
+		filterTechniquesForLearn(attributeHandler);
+	},
+	filterTechniquesForLearn = function(attributeHandler) {
+		let techniqueWorker = new WuxWorkerBuild("Technique");
+		attributeHandler.addMod(techniqueWorker.attrBuildDraft);
+		attributeHandler.addMod(WuxDef.GetVariable("CR"));
+		attributeHandler.addMod(WuxDef.GetVariable("Affinity"));
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			techniqueWorker.setBuildStatsDraft(attrHandler);
+			techniqueWorker.cleanBuildStats();
+			let workerVariableName = "";
+			let styleValue = "0";
+			let cr = attrHandler.parseInt(WuxDef.GetVariable("CR"));
+			let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity"))];
+
+			let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
+			for (let i = 0; i < styleDefinitions.length; i++) {
+				workerVariableName = styleDefinitions[i].getVariable();
+				styleValue = techniqueWorker.buildStats.has(workerVariableName) ? techniqueWorker.buildStats.get(workerVariableName).value : "0";
+				filterStyleTechniquesForLearn(styleDefinitions[i], styleValue.toString(), cr, affinities, attrHandler, techniqueWorker);
+			};
+
+			techniqueWorker.updatePoints(attrHandler);
+		});
+	},
+	filterStyleTechniquesForLearn = function(styleDefinition, styleStatus, cr, affinities, attrHandler, techniqueWorker) {
+		let workerVariableName = styleDefinition.getVariable();
+		attrHandler.addUpdate(styleDefinition.getVariable(WuxDef._filter), "0");
+		let tier = styleDefinition.extraData.tier;
+		tier = isNaN(tier) ? 0 : tier;
+		let affinity = styleDefinition.extraData.affinity;
+		let isLearnable = styleDefinition.extraData.tier <= cr && (affinity == "" || affinities.includes(affinity));
+		attrHandler.addUpdate(styleDefinition.getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
+		attrHandler.addUpdate(styleDefinition.getVariable(), styleStatus);
+
+		let techDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Technique"), new DatabaseFilterData("subGroup", styleDefinition.title)]);
+		for (let i = 0; i < techDefinitions.length; i++) {
+			tier = parseInt(techDefinitions[i].extraData.tier);
+			tier = isNaN(tier) ? 0 : tier;
+			affinity = techDefinitions[i].extraData.affinity;
+			isLearnable = !techDefinitions[i].extraData.isFree && styleStatus != "0" && tier <= cr && (affinity == "" || affinities.includes(affinity));
+			attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
+
+			workerVariableName = techDefinitions[i].getVariable();
+			if (techniqueWorker.buildStats.has(workerVariableName)) {
+				if (!isLearnable) {
+					attrHandler.addUpdate(workerVariableName, 0);
+					techniqueWorker.updateBuildStats(attrHandler, workerVariableName, 0);
+				}
+				else {
+					attrHandler.addUpdate(workerVariableName, techniqueWorker.buildStats.get(workerVariableName).value);
+				}
+			}
+			attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._filter), "0");
+		}
+	},
+	filterTechniquesForCore = function(attributeHandler) {
+		let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
+		let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
+
+		let styleWorker = new WuxWorkerBuild("Style");
+		attributeHandler.addMod(styleWorker.attrBuildDraft);
+
+		let jobWorker = new WuxWorkerBuild("Job");
+		attributeHandler.addMod(jobWorker.attrBuildDraft);
+
+		let jobStyleWorker = new WuxWorkerBuild("JobStyle");
+		attributeHandler.addMod(jobStyleWorker.attrBuildDraft);
+
+		let techniqueWorker = new WuxWorkerBuild("Technique");
+		attributeHandler.addMod(techniqueWorker.attrBuildFinal);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			styleWorker.setBuildStatsDraft(attrHandler);
+			styleWorker.cleanBuildStats();
+			jobWorker.setBuildStatsDraft(attrHandler);
+			jobWorker.cleanBuildStats();
+			jobStyleWorker.setBuildStatsDraft(attrHandler);
+			jobStyleWorker.cleanBuildStats();
+			techniqueWorker.setBuildStatsFinal(attrHandler);
+			techniqueWorker.cleanBuildStats();
+			
+			let isVisible = false;
+			let workerVariableName = "";
+			let techDefinitions;
+			for (let i = 0; i < styleDefinitions.length; i++) {
+				workerVariableName = styleDefinitions[i].getVariable();
+				isVisible = techniqueWorker.buildStats.has(workerVariableName);
+				attrHandler.addUpdate(workerVariableName, styleWorker.buildStats.has(workerVariableName) ? "0" : "1");
+
+				if (isVisible) {
+					techDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Technique"), new DatabaseFilterData("subGroup", styleDefinitions[i].title)]);
+					for (let j = 0; j < techDefinitions.length; j++) {
+						workerVariableName = techDefinitions[j].getVariable();
+						isVisible = techDefinitions[j].extraData.isFree || techniqueWorker.buildStats.has(workerVariableName);
+						attrHandler.addUpdate(techDefinitions[j].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+						attrHandler.addUpdate(techDefinitions[j].getVariable(WuxDef._subfilter), "1");
+						attrHandler.addUpdate(workerVariableName, "0");
+					}
+				}
+			}
+			
+			for (let i = 0; i < jobDefinitions.length; i++) {
+				workerVariableName = jobDefinitions[i].getVariable();
+				attrHandler.addUpdate(workerVariableName, jobStyleWorker.buildStats.has(workerVariableName) ? "0" : "1");
+
+				workerVariableName = jobDefinitions[i].getVariable(WuxDef._rank);
+				if (jobWorker.buildStats.has(workerVariableName)) {
+					techDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Technique"), new DatabaseFilterData("subGroup", jobDefinitions[i].title)]);
+					for (let j = 0; j < techDefinitions.length; j++) {
+						isVisible = techDefinitions[j].extraData.tier <= jobWorker.buildStats.get(workerVariableName).value;
+						attrHandler.addUpdate(techDefinitions[j].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+						attrHandler.addUpdate(techDefinitions[j].getVariable(WuxDef._subfilter), "1");
+						attrHandler.addUpdate(techDefinitions[j].getVariable(), "0");
+					}
+				}
+			}
+			
+			attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Job", WuxDef._filter), "0");
+			attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Standard", WuxDef._filter), "0");
+			attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._filter), "0");
+		});
+	},
+	filterTechniquesForStyleSet = function(attributeHandler) {
+		let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
+		let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
+
+		let styleWorker = new WuxWorkerBuild("Style");
+		attributeHandler.addMod(styleWorker.attrBuildDraft);
+
+		let jobStyleWorker = new WuxWorkerBuild("JobStyle");
+		attributeHandler.addMod(jobStyleWorker.attrBuildDraft);
+
+		let jobWorker = new WuxWorkerBuild("Job");
+		attributeHandler.addMod(jobWorker.attrBuildFinal);
+
+		let techniqueWorker = new WuxWorkerBuild("Technique");
+		attributeHandler.addMod(techniqueWorker.attrBuildFinal);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			styleWorker.setBuildStatsDraft(attrHandler);
+			styleWorker.cleanBuildStats();
+			jobStyleWorker.setBuildStatsDraft(attrHandler);
+			jobStyleWorker.cleanBuildStats();
+			jobWorker.setBuildStatsFinal(attrHandler);
+			jobWorker.cleanBuildStats();
+			techniqueWorker.setBuildStatsFinal(attrHandler);
+			techniqueWorker.cleanBuildStats();
+			
+			let isVisible = false;
+			for (let i = 0; i < styleDefinitions.length; i++) {
+				isVisible = techniqueWorker.buildStats.has(styleDefinitions[i].getVariable());
+				attrHandler.addUpdate(styleDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+			}
+			
+			for (let i = 0; i < jobDefinitions.length; i++) {
+				isVisible = jobWorker.buildStats.has(jobDefinitions[i].getVariable(WuxDef._rank));
+				attrHandler.addUpdate(jobDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+			}
+			
+			attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Basic", WuxDef._filter), "1");
+			attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._subfilter), "1");
+		});
+	},
+	filterTechniquesForActions = function(attributeHandler) {
+		let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
+		let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
+
+		let styleWorker = new WuxWorkerBuild("Style");
+		attributeHandler.addMod(styleWorker.attrBuildDraft);
+
+		let jobStyleWorker = new WuxWorkerBuild("JobStyle");
+		attributeHandler.addMod(jobStyleWorker.attrBuildDraft);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			styleWorker.setBuildStatsDraft(attrHandler);
+			styleWorker.cleanBuildStats();
+			jobStyleWorker.setBuildStatsDraft(attrHandler);
+			jobStyleWorker.cleanBuildStats();
+			
+			let isVisible = false;
+			let workerVariableName = "";
+			for (let i = 0; i < styleDefinitions.length; i++) {
+				workerVariableName = styleDefinitions[i].getVariable();
+				isVisible = styleWorker.buildStats.has(workerVariableName);
+				attrHandler.addUpdate(styleDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+			}
+			
+			for (let i = 0; i < jobDefinitions.length; i++) {
+				workerVariableName = jobDefinitions[i].getVariable();
+				isVisible = jobStyleWorker.buildStats.has(workerVariableName);
+				attrHandler.addUpdate(jobDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+			}
+			
+			attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Basic", WuxDef._filter), "0");
+			attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._subfilter), "0");
+		});
+	},
+	updateLearnedStats = function(attributeHandler) {
+		let jobStyleWorker = new WuxWorkerBuild("JobStyle");
+		attributeHandler.addMod(jobStyleWorker.attrBuildFinal);
+		attributeHandler.addMod(jobStyleWorker.attrMax);
+
+		let jobWorker = new WuxWorkerBuild("Job");
+		attributeHandler.addMod(jobWorker.attrBuildFinal);
+
+		let styleWorker = new WuxWorkerBuild("Style");
+		attributeHandler.addMod(styleWorker.attrBuildFinal);
+		attributeHandler.addMod(styleWorker.attrMax);
+
+		let techniqueWorker = new WuxWorkerBuild("Technique");
+		attributeHandler.addMod(techniqueWorker.attrBuildFinal);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			jobStyleWorker.setBuildStatsFinal(attrHandler);
+			jobWorker.setBuildStatsFinal(attrHandler);
+			styleWorker.setBuildStatsFinal(attrHandler);
+			techniqueWorker.setBuildStatsFinal(attrHandler);
+			
+			jobStyleWorker.buildStats.iterate(function (value, key) {
+				if(!jobWorker.buildStats.has(key) || !parseInt(jobWorker.buildStats.get(key)) > 0) {
+					jobStyleWorker.buildStats.set(key, "0");
+				}
+			});
+			styleWorker.buildStats.iterate(function (value, key) {
+				if(!techniqueWorker.buildStats.has(key) || !parseInt(techniqueWorker.buildStats.get(key)) > 0) {
+					styleWorker.buildStats.set(key, "0");
+				}
+			});
+
+			jobStyleWorker.cleanBuildStats(attrHandler);
+			jobStyleWorker.updatePoints(attrHandler);
+			jobStyleWorker.saveBuildStatsToFinal(attrHandler);
+			styleWorker.cleanBuildStats(attrHandler);
+			styleWorker.updatePoints(attrHandler);
+			styleWorker.saveBuildStatsToFinal(attrHandler);
+		});
+	},
+	updateSetStyles = function(attributeHandler) {
+		let jobStyleWorker = new WuxWorkerBuild("JobStyle");
+		attributeHandler.addMod(jobStyleWorker.attrBuildFinal);
+
+		let styleWorker = new WuxWorkerBuild("Style");
+		attributeHandler.addMod(styleWorker.attrBuildFinal);
+
+		let techniqueWorker = new WuxWorkerBuild("Technique");
+		attributeHandler.addMod(techniqueWorker.attrBuildFinal);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			jobStyleWorker.setBuildStatsFinal(attrHandler);
+			styleWorker.setBuildStatsFinal(attrHandler);
+			techniqueWorker.setBuildStatsFinal(attrHandler);
+			
+			jobStyleWorker.buildStats.iterate(function (value, key) {
+				if(!jobWorker.buildStats.has(key) || !parseInt(jobWorker.buildStats.get(key)) > 0) {
+					jobStyleWorker.buildStats.set(key, "0");
+				}
+			});
+			styleWorker.buildStats.iterate(function (value, key) {
+				if(!techniqueWorker.buildStats.has(key) || !parseInt(techniqueWorker.buildStats.get(key)) > 0) {
+					styleWorker.buildStats.set(key, "0");
+				}
+			});
+
+			jobStyleWorker.cleanBuildStats(attrHandler);
+			jobStyleWorker.saveBuildStatsToFinal(attrHandler);
+			styleWorker.cleanBuildStats(attrHandler);
+			styleWorker.saveBuildStatsToFinal(attrHandler);
+		});
+	}
+	
+	return {
+		UpdateTechniqueBuildPoints: updateTechniqueBuildPoints,
+		UpdateStyleBuildPoints: updateStyleBuildPoints,
+		UpdateJobStyleBuildPoints: updateJobStyleBuildPoints,
+		UpdateTechniquesPageToLearn: updateTechniquesPageToLearn,
+		FilterTechniquesForLearn: filterTechniquesForLearn,
+		FilterTechniquesForCore: filterTechniquesForCore,
+		FilterTechniquesForStyleSet: filterTechniquesForStyleSet,
+		FilterTechniquesForActions: filterTechniquesForActions,
+		UpdateLearnedStats: updateLearnedStats,
+		UpdateSetStyles: updateSetStyles
+	};
+}());
+
+var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
+	'use strict';
+
+	var
+	updateBuildPoints = function(eventinfo) {
+		console.log("Update Knowledge");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxWorkerBuildManager("Knowledge");
+		worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+		attributeHandler.run();
+	},
+	updateStats = function(attributeHandler) {
+		let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
+		let loreDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Lore"));
+		let languageDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Language"));
+
+		for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+			attributeHandler.addMod(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+		}
+		for (let i = 0; i < loreDefinitions.length; i++) {
+			attributeHandler.addMod(loreDefinitions[i].getVariable(WuxDef._rank));
+		}
+		for (let i = 0; i < languageDefinitions.length; i++) {
+			attributeHandler.addMod(languageDefinitions[i].getVariable(WuxDef._rank));
+		}
+
+		attributeHandler.addFormulaMods(["CR", "Recall"]);
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			let skillPointValue = 0;
+			let skillRank = 0;
+			let loreCategories = {};
+			for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+				loreCategories[loreCategoryDefinitions[i].title] = {};
+
+				skillRank = attrHandler.parseInt(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+				if (skillRank > 0) {
+					skillPointValue = skillRank + attrHandler.parseInt(WuxDef.GetVariable("CR")) + attrHandler.parseInt(WuxDef.GetVariable("Recall"));
+					loreCategories[loreCategoryDefinitions[i].title]["General"] = skillPointValue;
+				}
+			}
+			for (let i = 0; i < loreDefinitions.length; i++) {
+				skillRank = attrHandler.parseInt(loreDefinitions[i].getVariable(WuxDef._rank));
+				if (skillRank > 0) {
+					skillPointValue = skillRank + attrHandler.parseInt(WuxDef.GetVariable("CR")) + attrHandler.parseInt(WuxDef.GetVariable("Recall"));
+					loreCategories[loreDefinitions[i].subGroup][loreDefinitions[i].title] = skillPointValue;
+				}
+			}
+			attrHandler.addUpdate(WuxDef.GetVariable("Lore", WuxDef._true), JSON.stringify(loreCategories));
+
+			let languages = [];
+			for (let i = 0; i < languageDefinitions.length; i++) {
+				skillRank = attrHandler.parseInt(languageDefinitions[i].getVariable(WuxDef._rank));
+				if (skillRank > 0) {
+					languages.push(languageDefinitions[i].title);
+				}
+			}
+			attrHandler.addUpdate(WuxDef.GetVariable("Language", WuxDef._true), JSON.stringify(languages));
+		});
+	}
+
+	return {
+		UpdateBuildPoints: updateBuildPoints,
+		UpdateStats: updateStats
+	};
+}());
+
+var WuxWorkerJobs = WuxWorkerJobs || (function () {
+	'use strict';
+
+	var
+	updateBuildPoints = function(eventinfo) {
+		console.log("Update Jobs");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxWorkerBuildManager("Job");
+		worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+		attributeHandler.run();
+	}
+
+	return {
+		UpdateBuildPoints: updateBuildPoints
+	};
+}());
+
+var WuxWorkerSkills = WuxWorkerSkills || (function () {
+	'use strict';
+
+	var
+	updateBuildPoints = function(eventinfo) {
+		console.log("Update Skills");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxWorkerBuildManager("Skill");
+		worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+		attributeHandler.run();
+	},
+	updateStats = function(attributeHandler) {
+		let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
+		for (let i = 0; i < skillDefinitions.length; i++) {
+			attributeHandler.addFormulaMods(skillDefinitions[i]);
+		}
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			let skillPointValue = 0;
+			let skillRank = 0;
+			for (let i = 0; i < skillDefinitions.length; i++) {
+				skillPointValue = skillDefinitions[i].getFormulaValue(attrHandler);
+				skillRank = attrHandler.parseInt(skillDefinitions[i].getVariable(WuxDef._rank));
+				if (skillRank > 0) {
+					skillPointValue = skillPointValue + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+				}
+				attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);
+			}
+		});
+	}
+
+	return {
+		UpdateBuildPoints: updateBuildPoints,
+		UpdateStats: updateStats
+	};
+}());
+
+var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
+	'use strict';
+
+	var
+	updateBuildPoints = function(eventinfo) {
+		console.log("Update Attributes");
+		let attributeHandler  = new WorkerAttributeHandler();
+		let worker = new WuxWorkerBuildManager("Attribute");
+		worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+		attributeHandler.run();
+	},
+	updateStats = function(attributeHandler) {
+		let attributeDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Attribute"));
+		let formulaDefinitions = [];
+
+		for (let i = 0; i < attributeDefinitions.length; i++) {
+			formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinitions[i].name)));
+		}
+
+		for (let i = 0; i < formulaDefinitions.length; i++) {
+			attributeHandler.addFormulaMods(formulaDefinitions[i]);
+		}
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			for (let i = 0; i < formulaDefinitions.length; i++) {
+				if (formulaDefinitions[i].isResource) {
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].getFormulaValue(attrHandler));
+				}
+				else {
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+				}
+			}
+		});
+	}
+
+	return {
+		UpdateBuildPoints: updateBuildPoints,
+		UpdateStats: updateStats
+	};
+}());
