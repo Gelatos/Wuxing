@@ -1318,13 +1318,15 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							let titleDefinition = WuxDef.Get("Title_Chat");
         			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
 
-							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Type"), "wuxInput");
-							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Target"), "wuxInput");
-							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Message"), "wuxInput");
+							let buttonContents = `&{template:@{${WuxDef.GetVariable("Chat_Type")}}} {{url=@{${WuxDef.GetVariable("Chat_PostURL")}}}} `;
+							buttonContents += `{{title=@{${WuxDef.GetVariable("Display Name")}}@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} `;
+							buttonContents += `{{message=@{${WuxDef.GetVariable("Chat_Message")}}}} @{${WuxDef.GetVariable("Chat_LanguageTag")}}`;
+
+							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Message"));
 							contents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Chat_PostContent"), "wuxInput wuxHeight150");
 							contents += `<div class="wuxNoRepControl wuxEmotePostGroup">
 								<fieldset class="${WuxDef.GetVariable("RepeatingActiveEmotes")}">
-									<button class="wuxEmoteButton" type="roll" value="&{template:@{${WuxDef.GetVariable("Chat_Type")}}} {{url=@{${WuxDef.GetVariable("Chat_PostURL")}}}} {{title=@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} {{message=@{${WuxDef.GetVariable("Chat_Message")}}}} @{${WuxDef.GetVariable("Chat_LanguageTag")}}">
+									<button class="wuxEmoteButton" type="roll" value="${buttonContents}">
 										<span name="${WuxDef.GetAttribute("Chat_PostName")}">emote</span>
 									</button>
 									<input type="hidden" name="${WuxDef.GetAttribute("Chat_PostURL")}">
@@ -1750,6 +1752,8 @@ var ChatBuilder = ChatBuilder || (function () {
 	var
 		print = function () {
 			let output = "";
+			output += listenerUpdatePostContent();
+			output += listenerUpdateLanguage();
 			output += listenerUpdateRepeatingChatSelection();
 			output += listenerUpdateRepeatingChatEmoteSetName();
 			output += listenerUpdateRepeatingChatEmoteSetInput();
@@ -1757,6 +1761,18 @@ var ChatBuilder = ChatBuilder || (function () {
 			output += listenerUpdateRepeatingChatEmoteNameUpdate();
 			output += listenerUpdateRepeatingChatEmoteUrlUpdate();
 			return output;
+		},
+		listenerUpdatePostContent = function() {
+			let groupVariableNames = [`${WuxDef.GetVariable("Chat_PostContent")}`];
+			let output = `WuxWorkerChat.UpdatePostContent(eventinfo)`;
+
+			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+		},
+		listenerUpdateLanguage = function() {
+			let groupVariableNames = [`${WuxDef.GetVariable("Chat_Language")}`];
+			let output = `WuxWorkerChat.UpdateSelectedLanguage(eventinfo)`;
+
+			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 		},
 		listenerUpdateRepeatingChatSelection = function() {
 			let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");

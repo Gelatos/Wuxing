@@ -38,20 +38,49 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 		});
 	},
 
+	updatePostContent = function (eventinfo) {
+		console.log(`Updating post content`);
+		let attributeHandler  = new WorkerAttributeHandler();
+		
+		let messageObj = WuxMessage.Parse(eventinfo.newValue);
+		if (messageObj.constructor.name == "SimpleMessage") {
+			messageObj = new SpeakEmoteMessage(eventinfo.newValue);
+		}
+		
+		attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Type"), messageObj.template);
+		attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Message"), messageObj.message);
+		if (messageObj instanceof EmoteMessage) {
+			messageObj.setTitle("");
+			attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Target"), messageObj.title);
+		}
+		
+		attributeHandler.run();
+	},
+
+	updateSelectedLanguage = function (eventinfo) {
+		console.log(`Updating selected language to ${eventinfo.newValue}`);
+		let message = new EmoteMessage("");
+		message.setLanguage(eventinfo.newValue);
+
+		let attributeHandler  = new WorkerAttributeHandler();
+		attributeHandler.addUpdate(WuxDef.GetVariable("Chat_LanguageTag"), message.languageTag);
+		console.log(`setting language tag to ${message.languageTag}`);
+		attributeHandler.run();
+	},
+
 	updateActiveEmoteSet = function (emoteButtonRepeater, attrHandler, outfitEmotes) {
 		let emotesVar = WuxDef.GetVariable("Chat_Emotes");
 		attrHandler.addUpdate(emotesVar, JSON.stringify(outfitEmotes));
 
 		let newrowid;
 		let postNameVar = WuxDef.GetVariable("Chat_PostName");
-		let postUrlVar = WuxDef.GetVariable("Chat_PostUrl");
+		let postUrlVar = WuxDef.GetVariable("Chat_PostURL");
 		outfitEmotes.iterate(function (emote) {
 			newrowid = generateRowID();
 			attrHandler.addUpdate(emoteButtonRepeater.getFieldName(newrowid, postNameVar), emote.name);
 			attrHandler.addUpdate(emoteButtonRepeater.getFieldName(newrowid, postUrlVar), emote.url);
 		});
 	},
-
 	updateNameOutfit = function (eventinfo) {
 		console.log(`Renaming outfit ${eventinfo.previousValue} to ${eventinfo.newValue}`);
 		let attributeHandler  = new WorkerAttributeHandler();
@@ -205,6 +234,8 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 	}
 	return {
 		SelectOutfit: selectOutfit,
+		UpdatePostContent: updatePostContent,
+		UpdateSelectedLanguage: updateSelectedLanguage,
 		UpdateNameOutfit: updateNameOutfit,
 		UpdateOutfitEmotesGroup: updateOutfitEmotesGroup,
 		UpdateOutfitEmotesName: updateOutfitEmotesName,

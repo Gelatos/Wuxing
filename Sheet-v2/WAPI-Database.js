@@ -2118,68 +2118,6 @@ function GetLanguageName(language) {
     }
 }
 
-function GetLanguageTag(language) {
-
-    if (language == undefined) {
-        return "{{language-default=1}}";
-    }
-
-    switch (language.toLowerCase()) {
-        case "minere":
-            return "{{language-coastal=1}}";
-        case "apollen":
-            return "{{language-mountain=1}}";
-        case "junal":
-            return "{{language-desert=1}}";
-        case "cert":
-            return "{{language-plains=1}}";
-        case "lib":
-            return "{{language-rare=1}}";
-
-
-        case "palmic":
-        case "shorespeak":
-        case "verdeni":
-            return "{{language-coastal=1}}{{language-regional=1}}";
-        case "crinere":
-        case "vulca":
-            return "{{language-coastal=1}}{{language-ancient=1}}";
-
-        case "kleikan":
-            return "{{language-mountain=1}}{{language-regional=1}}";
-
-        case "byric":
-        case "dustell":
-        case "muralic":
-            return "{{language-desert=1}}{{language-regional=1}}";
-        case "shira":
-            return "{{language-desert=1}}{{language-ancient=1}}";
-
-        case "ciel":
-        case "citeq":
-        case "manstan":
-        case "salkan":
-        case "sansic":
-        case "silq":
-            return "{{language-plains=1}}{{language-regional=1}}";
-
-        case "jovean":
-            return "{{language-rare=1}}{{language-regional=1}}";
-        case "mytikan":
-            return "{{language-rare=1}}{{language-ancient=1}}";
-
-        case "wolfwarg":
-        case "beast":
-        case "empathy":
-        case "emotion":
-        case "spirit":
-            return "{{language-special=1}}";
-
-        default:
-            return "{{language-default=1}}";
-    }
-}
-
 // ===== Generators
 // =================================================
 

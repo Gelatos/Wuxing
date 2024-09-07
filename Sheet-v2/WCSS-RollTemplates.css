@@ -25,11 +25,11 @@
 .sheet-rolltemplate-results .sheet-wuxTrait .sheet-wuxTooltipContent 
 {
     position: absolute;
-    z-index: 1000;
     top: 18px;
     left: 0px;
     width: 240px;
     padding: 5px;
+    z-index: 1000;
 
     color: #3e3e3e;
     font-size: 11px;
@@ -537,6 +537,7 @@ visibility: visible;
 {
     border: 0px solid black; 
     margin: 0px -40px 0px -40px;
+    max-width: 280px;
 }
 
 .sheet-rolltemplate-ctmsg .sheet-chatimage,
@@ -1141,6 +1142,7 @@ visibility: visible;
 .sheet-rolltemplate-dmAlert .sheet-formattedTextbox
 {
     position: relative; 
+    margin: 0px 10px 0px -40px; 
     display: inline-block; 
     font-size: 12px; 
     padding: 5px; 
@@ -1561,11 +1563,25 @@ visibility: visible;
     color: #33ff4d;
 
     display: inline-block;
-    border: 1px solid #33ff4d;
+    border: 2px solid #33ff4d;
     border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
     background: #313235;
     position: relative;
 } 
+
+.sheet-rolltemplate-systemBox .sheet-formattedTextbox::before 
+{
+    content: '';
+    border: 1px solid #000;
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0) scale(1.015) rotate(0.5deg);
+    border-radius: 1% 1% 2% 4% / 2% 6% 5% 4%;
+}
 
 .sheet-rolltemplate-dmAlert .sheet-formattedTextbox 
 {
@@ -1806,28 +1822,6 @@ Roll template modified roll button
 .sheet-rolltemplate-systemInfoAuxBox .sheet-formattedTextbox a[href^="!"]
 {
     color: yellow;
-}
-
-.sheet-rolltemplate-systemBox .sheet-formattedTextbox a[href^="!"]
-{
-    color: #FFF;
-    background: #444;
-}
-
-/* ============================
-Table
-============================= */
-
-.sheet-rolltemplate-systemBox .sheet-wuxTableHeader 
-{
-    padding: 2px 10px;
-    font-weight: bold;
-}
-
-.sheet-rolltemplate-systemBox .sheet-wuxTableData 
-{
-    padding: 2px 10px;
-    font-weight: normal;
 }
 
 /* ============================
@@ -2270,4 +2264,3 @@ Quest Box
     position: absolute; 
     width: 280px;
 }
-

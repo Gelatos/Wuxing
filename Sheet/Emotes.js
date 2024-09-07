@@ -178,14 +178,6 @@ function ReplaceBraces(str) {
 	return str;
 }
 
-function RestoreSpecialCharactersHTML(str) {
-    
-	if (str != "undefined" && str != "" && str != null) {
-		str = str.replace(/&lsquo;/gi, "'");
-	}
-	return str;
-}
-
 // ======= Get Emote Data Functions
 // =================================================
 
@@ -429,6 +421,7 @@ function FormatChatMessageData(chatType, chatTitle, message) {
             break;
         case "t":
             chattemplate = "ctthk";
+            chattemplateTitle = "";
             break;
         case "d":
             chattemplate = "ctdesc";
@@ -444,6 +437,7 @@ function FormatChatMessageData(chatType, chatTitle, message) {
             break;
         case "intro":
             chattemplate = "ctintro";
+            chattemplateTitle = "";
             break;
     }
 

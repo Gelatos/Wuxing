@@ -11677,13 +11677,13 @@
 												<span class="wuxDescription">You can use the chat messaging system from here.</span>
 											</div>
 										</div>
-										<input type="hidden" class="wuxInput" name="attr_chat-type" value="wuxInput" /><input type="hidden" class="wuxInput" name="attr_chat-target" value="wuxInput" /><input type="hidden" class="wuxInput" name="attr_chat-message" value="wuxInput" /><textarea class="wuxInput wuxHeight150" name="attr_chat-postcontent"></textarea>
+										<input type="hidden" class="wuxInput" name="attr_chat-message" /><textarea class="wuxInput wuxHeight150" name="attr_chat-postcontent"></textarea>
 										<div class="wuxNoRepControl wuxEmotePostGroup">
 											<fieldset class="repeating_activeemotes">
-												<button class="wuxEmoteButton" type="roll" value="&{template:@{chat-type}} {{url=@{chat-post_url}}} {{title=@{chat-target}}} {{language=@{chat-language}}} {{message=@{chat-message}}} @{chat-languagetag}">
+												<button class="wuxEmoteButton" type="roll" value="&{template:@{chat-type}} {{url=@{chat-post_url}}} {{title=@{display_name}@{chat-target}}} {{language=@{chat-language}}} {{message=@{chat-message}}} @{chat-languagetag}">
 													<span name="attr_chat-post_name">emote</span>
 												</button>
-												<input type="hidden" name="attr_chat-post_url">
+												<input type="hidden" name="attr_chat-post_url" value="">
 											</fieldset>
 										</div>
 									</div>
@@ -12731,6 +12731,12 @@
 	});
 	on("change:atr-bod change:atr-prc change:atr-qck change:atr-cnv change:atr-int change:atr-rsn", function (eventinfo) {
 	WuxWorkerAttributes.UpdateBuildPoints(eventinfo)
+	});
+	on("change:chat-postcontent", function (eventinfo) {
+	WuxWorkerChat.UpdatePostContent(eventinfo)
+	});
+	on("change:chat-language", function (eventinfo) {
+	WuxWorkerChat.UpdateSelectedLanguage(eventinfo)
 	});
 	on("change:repeating_emotes:chat-outfit_name_learn", function (eventinfo) {
 	WuxWorkerChat.SelectOutfit(eventinfo)
