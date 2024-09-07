@@ -992,8 +992,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<span class="wuxDescription" name="${fieldName}"></span>`;
         },
 
-        span = function (fieldName) {
-            return `<span name="${fieldName}"></span>`;
+        span = function (fieldName, contents) {
+            if (contents == undefined) {
+                contents = "";
+            }
+            return `<span name="${fieldName}">${contents}</span>`;
         },
 
         row = function (contents) {

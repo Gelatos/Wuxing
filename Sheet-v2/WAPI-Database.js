@@ -1291,71 +1291,6 @@ var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
         Get: get
     }
 }());
-
-class WorkerBuildStat extends dbObj {
-    importJson(json) {
-        this.name = json.name;
-        this.value = parseInt(json.value);
-    }
-    importSheets(dataArray) {
-        let i = 0;
-        this.name = "" + dataArray[i]; i++;
-        this.value = "" + dataArray[i]; i++;
-    }
-    createEmpty() {
-        this.name = "";
-        this.value = "0";
-    }
-}
-class WorkerBuildStats extends Dictionary {
-
-    constructor() {
-        super();
-    }
-
-    getIntValue(name) {
-        let stat = this.get(name);
-        return stat == undefined ? 0 : isNaN(parseInt(stat.value)) ? 0 : parseInt(stat.value);
-    }
-
-    getPointsTotal() {
-        let points = 0;
-        if (this.keys == undefined) {
-            return points;
-        }
-        for (let i = 0; i < this.keys.length; i++) {
-            if (this.values[this.keys[i]].value == "on") {
-                points++;
-            }
-            else {
-                points += isNaN(parseInt(this.values[this.keys[i]].value)) ? 0 : parseInt(this.values[this.keys[i]].value);
-            }
-        }
-        return points;
-    }
-
-    cleanValues() {
-        let key = "";
-        let keys = [];
-        let values = {};
-        for (let i = 0; i < this.keys.length; i++) {
-            key = this.keys[i];
-            if (parseInt(this.values[key].value) != 0) {
-                keys.push(key);
-                values[key] = this.values[key];
-            }
-        }
-        this.keys = keys;
-        this.values = values;
-    }
-}
-class WorkerFormula {
-    constructor(modName, value, multiplier) {
-        this.modName = modName == undefined ? "" : modName;
-        this.value = isNaN(parseInt(value)) ? 0 : parseInt(value);
-        this.multiplier = isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier);
-    }
-}
 class ResistanceData {
     constructor(json) {
         if (json != undefined) {
@@ -1435,6 +1370,189 @@ class ResistanceData {
         
         return output;
     }
+}
+
+class WuxRepeatingSection {
+	constructor(definitionId) {
+		this.definition = WuxDef.Get(definitionId);
+        this.repeatingSection = this.definition.getVariable();
+        this.ids = [];
+	}
+
+    getIds(callback) {
+		let repeater = this;
+		getSectionIDs(this.repeatingSection, function (ids) {
+			ids.forEach(function (id) {
+                repeater.ids.push(id);
+			});
+            callback(repeater);
+		});
+    }
+
+    addIds(ids) {
+        this.ids = this.ids.concat(ids);
+    }
+    clearIds() {
+        this.ids = [];
+    }
+    iterate(callback) {
+        for (let i = 0; i < this.ids.length; i++) {
+            callback(this.ids[i]);
+        }
+    }
+    getFieldName(id, fieldName) {
+        return `${this.repeatingSection}_${id}_${fieldName}`;
+    }
+    addAttributeMods(attributeHandler, fieldNames) {
+        let repeater = this;
+
+        if (!Array.isArray(fieldNames)) {
+            fieldNames = [fieldNames];
+        }
+        this.iterate(function (id) {
+            for (let i = 0; i < fieldNames.length; i++) {
+                attributeHandler.addMod(repeater.getFieldName(id, fieldNames[i]));
+            }
+        });
+    }
+    getIdFromFieldName(fieldName) {
+        return fieldName.split("_")[2];
+    }
+    removeId(id) {
+        removeRepeatingRow(this.repeatingSection + "_" + id);
+    }
+    removeAllIds() {
+        for (let i = 0; i < this.ids.length; i++) {
+            this.removeId(this.ids[i]);
+        }
+    }
+}
+
+class WorkerBuildStat extends dbObj {
+    importJson(json) {
+        this.name = json.name;
+        this.value = parseInt(json.value);
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.value = "" + dataArray[i]; i++;
+    }
+    createEmpty() {
+        this.name = "";
+        this.value = "0";
+    }
+}
+class WorkerBuildStats extends Dictionary {
+
+    constructor() {
+        super();
+    }
+
+    getIntValue(name) {
+        let stat = this.get(name);
+        return stat == undefined ? 0 : isNaN(parseInt(stat.value)) ? 0 : parseInt(stat.value);
+    }
+
+    getPointsTotal() {
+        let points = 0;
+        if (this.keys == undefined) {
+            return points;
+        }
+        for (let i = 0; i < this.keys.length; i++) {
+            if (this.values[this.keys[i]].value == "on") {
+                points++;
+            }
+            else {
+                points += isNaN(parseInt(this.values[this.keys[i]].value)) ? 0 : parseInt(this.values[this.keys[i]].value);
+            }
+        }
+        return points;
+    }
+
+    cleanValues() {
+        let key = "";
+        let keys = [];
+        let values = {};
+        for (let i = 0; i < this.keys.length; i++) {
+            key = this.keys[i];
+            if (parseInt(this.values[key].value) != 0) {
+                keys.push(key);
+                values[key] = this.values[key];
+            }
+        }
+        this.keys = keys;
+        this.values = values;
+    }
+}
+class WorkerFormula {
+    constructor(modName, value, multiplier) {
+        this.modName = modName == undefined ? "" : modName;
+        this.value = isNaN(parseInt(value)) ? 0 : parseInt(value);
+        this.multiplier = isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier);
+    }
+}
+
+class EmoteSetData {
+    constructor(json) {
+        this.createEmpty();
+        if (json != undefined) {
+            this.importJson(json);
+        }
+    }
+
+    importJson(json) {
+        if (json.name == undefined) {
+            console.log("EmoteSetData: No name found in json");
+            return;
+        }
+        if (json.defaultEmote == undefined) {
+            console.log("EmoteSetData: No defaultEmote found in json");
+            return;
+        }
+        if (json.emotes == undefined) {
+            console.log("EmoteSetData: No emotes found in json");
+            return;
+        }
+        this.name = json.name;
+        this.defaultEmote = json.defaultEmote;
+        this.emotes = json.emotes;
+    }
+
+    createEmpty() {
+        this.name = "";
+        this.defaultEmote = "";
+        this.emotes = [];
+    }
+
+    addEmote(name, url) {
+        this.emotes.push(new EmoteData({name: name, url: url}));
+    }
+
+    iterate(callback) {
+        for (let i = 0; i < this.emotes.length; i++) {
+            callback(this.emotes[i]);
+        }
+    }
+}
+
+class EmoteData {
+    constructor(json) {
+        this.createEmpty();
+        if (json != undefined) {
+            this.importJson(json);
+        }
+    }
+
+    importJson(json) {
+        this.name = json.name;
+        this.url = json.url;
+    }
+
+    createEmpty() {
+        this.name = "";
+        this.url = "";
+    }   
 }
 
 // ====== Formatters

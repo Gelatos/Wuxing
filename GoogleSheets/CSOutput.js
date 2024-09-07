@@ -42,6 +42,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
 			output += BuilderBackend.Print(sheetsDb);
 			output += TrainingBackend.Print(sheetsDb);
 			output += AdvancementBackend.Print(sheetsDb);
+			output += ChatBuilder.Print();
 			return `<script type="text/worker">
 			on("sheet:opened", function(eventinfo) {
 				on_sheet_opened();
@@ -1300,6 +1301,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			    build = function () {
         			        let contents = "";
 							contents += createChatDisplay();
+							contents += createOutfitDisplay();
 							return contents;
         			    },
 
@@ -1320,12 +1322,12 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Target"), "wuxInput");
 							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Message"), "wuxInput");
 							contents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Chat_PostContent"), "wuxInput wuxHeight150");
-							contents += `<div class="wuxNoRepControl">
-								<fieldset class="repeating_emotesSet">
-									<button class="wuxEmoteButton" type="roll" value="&{template:@{${WuxDef.GetVariable("Chat_Type")}}} {{url=@{url}}} {{title=@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} {{message=@{${WuxDef.GetVariable("Chat_Message")}}}} @{${WuxDef.GetVariable("Chat_LanguageTag")}}">
-										<span name="attr_emote_name">emote</span>
+							contents += `<div class="wuxNoRepControl wuxEmotePostGroup">
+								<fieldset class="${WuxDef.GetVariable("RepeatingActiveEmotes")}">
+									<button class="wuxEmoteButton" type="roll" value="&{template:@{${WuxDef.GetVariable("Chat_Type")}}} {{url=@{${WuxDef.GetVariable("Chat_PostURL")}}}} {{title=@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} {{message=@{${WuxDef.GetVariable("Chat_Message")}}}} @{${WuxDef.GetVariable("Chat_LanguageTag")}}">
+										<span name="${WuxDef.GetAttribute("Chat_PostName")}">emote</span>
 									</button>
-									<input type="hidden" name="attr_url">
+									<input type="hidden" name="${WuxDef.GetAttribute("Chat_PostURL")}">
 								</fieldset>
 							</div>`;
 							
@@ -1352,7 +1354,76 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
 						languageTitle = function (languageDef) {
 							return `<span class="wuxHeader2">${languageDef.title}</span><span class="wuxSubheader"> - ${languageDef.extraData.location}</span>`;
+						},
+
+						createOutfitDisplay = function () {
+							let contents = outfitCollection();
+        			        contents = WuxSheetMain.TabBlock(contents);
+
+							let definition = WuxDef.Get("Title_Emotes");
+							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+						},
+
+						outfitCollection = function () {
+        			        let contents = "";
+							let titleDefinition = WuxDef.Get("Title_Outfits");
+        			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
+							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_SetId"));
+							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Emotes"));
+							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_DefaultEmote"));
+
+							let outfitNameDef = WuxDef.Get("Chat_OutfitName");
+							let emoteContents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(outfitNameDef.getAttribute(WuxDef._expand))}
+							${WuxSheetMain.InteractionElement.CheckboxBlockIcon(outfitNameDef.getAttribute(WuxDef._learn), 
+								WuxSheetMain.Header(WuxSheetMain.Span(outfitNameDef.getAttribute(), "New Outfit")))}
+							${WuxSheetMain.SectionBlockHeaderFooter()}
+							${WuxSheetMain.InteractionElement.ExpandableBlockContents(outfitNameDef.getAttribute(WuxDef._expand),
+								WuxSheetMain.SectionBlockContents(buildOutfitContents()))}`;
+							
+							emoteContents = `<div class="wuxSectionBlock wuxMaxWidth220">\n${WuxSheetMain.InteractionElement.Build(true, emoteContents)}\n</div>`;
+
+							contents += `<div class="wuxRepeatingFlexSection">
+								<fieldset class="${WuxDef.GetVariable("RepeatingOutfits")}">
+									${emoteContents}
+								</fieldset>
+							</div>`;
+							return contents;
+						},
+
+						buildOutfitContents = function () {
+							let contents = "";
+							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_OutfitEmotes", WuxDef._true));
+
+							let outfitNameDefinition = WuxDef.Get("Chat_OutfitName");
+        			        contents += WuxSheetMain.Header2(outfitNameDefinition.title) + "\n" +
+								WuxSheetMain.Input("text", outfitNameDefinition.getAttribute(), "New Outfit");
+
+							let outfitEmotesDef = WuxDef.Get("Chat_OutfitEmotes");
+        			        contents += WuxSheetMain.Header2(`${outfitEmotesDef.title}`) + "\n" +
+							WuxSheetMain.Textarea(outfitEmotesDef.getAttribute(), "wuxInput wuxHeight60");
+
+							contents += WuxSheetMain.Row("&nbsp;");
+
+							let defaultNameDefinition = WuxDef.Get("Chat_OutfitDefault");
+							let defaultURLDefinition = WuxDef.Get("Chat_OutfitDefaultURL");
+        			        contents += WuxSheetMain.Header2(defaultNameDefinition.title) + "\n" +
+								WuxSheetMain.Input("text", defaultNameDefinition.getAttribute());
+								contents += WuxSheetMain.Header2(defaultURLDefinition.title) + "\n" +
+									WuxSheetMain.Input("text", defaultURLDefinition.getAttribute(), "");
+							contents += WuxSheetMain.Row("&nbsp;");
+
+							let nameDefinition = WuxDef.Get("Chat_EmoteName");
+							let urlDefinition = WuxDef.Get("Chat_EmoteURL");
+							for (let i = 2; i <= 30; i++) {
+								contents += WuxSheetMain.Header2(`${nameDefinition.title} ${i}`) + "\n" +
+								WuxSheetMain.Input("text", nameDefinition.getAttribute() + i);
+								contents += WuxSheetMain.Header2(`${urlDefinition.title} ${i}`) + "\n" +
+								WuxSheetMain.Input("text", urlDefinition.getAttribute() + i);
+							}
+
+							return contents;
 						}
+						
         			    
         			    return {
         			        Build : build
@@ -1472,7 +1543,6 @@ var BuilderBackend = BuilderBackend || (function () {
 			output += listenerUpdateStyleBuildPoints();
 			output += listenerUpdateJobStyleBuildPoints();
 			return output;
-
 		},
 
 		listenerUpdatePageState = function() {
@@ -1673,4 +1743,71 @@ var AdvancementBackend = AdvancementBackend || (function () {
 		Print: print
 	}
 }())
+
+var ChatBuilder = ChatBuilder || (function () {
+	'use strict';
+
+	var
+		print = function () {
+			let output = "";
+			output += listenerUpdateRepeatingChatSelection();
+			output += listenerUpdateRepeatingChatEmoteSetName();
+			output += listenerUpdateRepeatingChatEmoteSetInput();
+			output += listenerUpdateRepeatingChatEmoteDefaultUrlUpdate();
+			output += listenerUpdateRepeatingChatEmoteNameUpdate();
+			output += listenerUpdateRepeatingChatEmoteUrlUpdate();
+			return output;
+		},
+		listenerUpdateRepeatingChatSelection = function() {
+			let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
+			let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Chat_OutfitName", WuxDef._learn)}`];
+			let output = `WuxWorkerChat.SelectOutfit(eventinfo)`;
+
+			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+		},
+		listenerUpdateRepeatingChatEmoteSetName = function() {
+			let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
+			let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Chat_OutfitName")}`];
+			let output = `WuxWorkerChat.UpdateNameOutfit(eventinfo)`;
+
+			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+		},
+		listenerUpdateRepeatingChatEmoteSetInput = function() {
+			let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
+			let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Chat_OutfitEmotes")}`];
+			let output = `WuxWorkerChat.UpdateOutfitEmotesGroup(eventinfo)`;
+
+			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+		},
+		listenerUpdateRepeatingChatEmoteDefaultUrlUpdate = function() {
+			let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
+			let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Chat_OutfitDefaultURL")}`];
+			let output = `WuxWorkerChat.UpdateOutfitEmotesDefaultUrl(eventinfo)`;
+
+			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+		},
+		listenerUpdateRepeatingChatEmoteNameUpdate = function() {
+			let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
+			let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Chat_OutfitDefault")}`];
+			for (let i = 2; i <= 30; i++) {
+				groupVariableNames.push(`${repeatingSection}:${WuxDef.GetVariable("Chat_EmoteName")}${i}`);
+			}
+			let output = `WuxWorkerChat.UpdateOutfitEmotesName(eventinfo)`;
+
+			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+		},
+		listenerUpdateRepeatingChatEmoteUrlUpdate = function() {
+			let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
+			let groupVariableNames = [];
+			for (let i = 2; i <= 30; i++) {
+				groupVariableNames.push(`${repeatingSection}:${WuxDef.GetVariable("Chat_EmoteURL")}${i}`);
+			}
+			let output = `WuxWorkerChat.UpdateOutfitEmotesUrl(eventinfo)`;
+
+			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+		}
+	return {
+		Print: print
+	}
+}());
 

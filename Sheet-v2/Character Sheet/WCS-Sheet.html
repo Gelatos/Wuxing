@@ -11678,12 +11678,12 @@
 											</div>
 										</div>
 										<input type="hidden" class="wuxInput" name="attr_chat-type" value="wuxInput" /><input type="hidden" class="wuxInput" name="attr_chat-target" value="wuxInput" /><input type="hidden" class="wuxInput" name="attr_chat-message" value="wuxInput" /><textarea class="wuxInput wuxHeight150" name="attr_chat-postcontent"></textarea>
-										<div class="wuxNoRepControl">
-											<fieldset class="repeating_emotesSet">
-												<button class="wuxEmoteButton" type="roll" value="&{template:@{chat-type}} {{url=@{url}}} {{title=@{chat-target}}} {{language=@{chat-language}}} {{message=@{chat-message}}} @{chat-languagetag}">
-													<span name="attr_emote_name">emote</span>
+										<div class="wuxNoRepControl wuxEmotePostGroup">
+											<fieldset class="repeating_activeemotes">
+												<button class="wuxEmoteButton" type="roll" value="&{template:@{chat-type}} {{url=@{chat-post_url}}} {{title=@{chat-target}}} {{language=@{chat-language}}} {{message=@{chat-message}}} @{chat-languagetag}">
+													<span name="attr_chat-post_name">emote</span>
 												</button>
-												<input type="hidden" name="attr_url">
+												<input type="hidden" name="attr_chat-post_url">
 											</fieldset>
 										</div>
 									</div>
@@ -12304,6 +12304,196 @@
 						</div>
 					</div>
 				</div>
+				<div class="wuxSegment">
+					<input type="checkbox" class="wuxTab-flag" name="attr_ttl-emotes_tab" checked="checked" />
+					<div class="wuxTabHeader">
+						<div class="wuxInteractiveInnerExpandBlock">
+							<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_ttl-emotes_tab" />
+							<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_ttl-emotes_tab" />
+							<span class="wuxInteractiveExpandIcon">&#9662;</span>
+							<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_ttl-emotes_tab" />
+							<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+						</div><span>Emotes</span>
+					</div>
+					<div class="wuxTab">
+						<div class="wuxSectionBlock wuxLayoutItem">
+							<div class="wuxTabContent">
+								<div class="wuxHeader">
+									<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-outfits_info"><span>?</span></div>Outfits
+								</div>
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-outfits_info" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxInfoContent">
+										<div class="wuxHeader2">Outfits</div>
+
+										<span class="wuxDescription">You can add in your character art from here to populate your character's emotes.</span>
+										<span class="wuxDescription">Press the Plus (+) button below to add a new instance of an outfit. From there you can populate the outfit data with emotes.</span>
+									</div>
+								</div>
+								<input type="hidden" class="wuxInput" name="attr_chat-emoteset_id" /><input type="hidden" class="wuxInput" name="attr_chat-emoteset" /><input type="hidden" class="wuxInput" name="attr_chat-default_emote" />
+								<div class="wuxRepeatingFlexSection">
+									<fieldset class="repeating_emotes">
+										<div class="wuxSectionBlock wuxMaxWidth220">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_chat-outfit_name_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_chat-outfit_name_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_chat-outfit_name_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_chat-outfit_name_learn" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_chat-outfit_name_learn" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_chat-outfit_name_learn" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_chat-outfit_name_learn" />
+														<div class="wuxHeader"><span name="attr_chat-outfit_name">New Outfit</span></div>
+													</div>
+												</div>
+												<div class="wuxSectionHeaderFooter"></div>
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_chat-outfit_name_expand">
+												<div class="wuxInteractiveExpandingContent">
+													<div class="wuxSectionContent">
+														<input type="hidden" class="wuxInput" name="attr_chat-outfit_emotes_true" />
+														<div class="wuxHeader2">Outfit Name</div>
+														<input type="text" class="wuxInput" name="attr_chat-outfit_name" value="New Outfit" />
+														<div class="wuxHeader2">Outfit Emotes</div>
+														<textarea class="wuxInput wuxHeight60" name="attr_chat-outfit_emotes"></textarea>
+														<div class="wuxRow">&nbsp;</div>
+														<div class="wuxHeader2">Default Emote Name</div>
+														<input type="text" class="wuxInput" name="attr_chat-outfit_default_name" />
+														<div class="wuxHeader2">Default Emote URL</div>
+														<input type="text" class="wuxInput" name="attr_chat-outfit_default_url" value="" />
+														<div class="wuxRow">&nbsp;</div>
+														<div class="wuxHeader2">Emote Name 2</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name2" />
+														<div class="wuxHeader2">Emote URL 2</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url2" />
+														<div class="wuxHeader2">Emote Name 3</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name3" />
+														<div class="wuxHeader2">Emote URL 3</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url3" />
+														<div class="wuxHeader2">Emote Name 4</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name4" />
+														<div class="wuxHeader2">Emote URL 4</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url4" />
+														<div class="wuxHeader2">Emote Name 5</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name5" />
+														<div class="wuxHeader2">Emote URL 5</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url5" />
+														<div class="wuxHeader2">Emote Name 6</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name6" />
+														<div class="wuxHeader2">Emote URL 6</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url6" />
+														<div class="wuxHeader2">Emote Name 7</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name7" />
+														<div class="wuxHeader2">Emote URL 7</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url7" />
+														<div class="wuxHeader2">Emote Name 8</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name8" />
+														<div class="wuxHeader2">Emote URL 8</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url8" />
+														<div class="wuxHeader2">Emote Name 9</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name9" />
+														<div class="wuxHeader2">Emote URL 9</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url9" />
+														<div class="wuxHeader2">Emote Name 10</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name10" />
+														<div class="wuxHeader2">Emote URL 10</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url10" />
+														<div class="wuxHeader2">Emote Name 11</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name11" />
+														<div class="wuxHeader2">Emote URL 11</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url11" />
+														<div class="wuxHeader2">Emote Name 12</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name12" />
+														<div class="wuxHeader2">Emote URL 12</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url12" />
+														<div class="wuxHeader2">Emote Name 13</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name13" />
+														<div class="wuxHeader2">Emote URL 13</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url13" />
+														<div class="wuxHeader2">Emote Name 14</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name14" />
+														<div class="wuxHeader2">Emote URL 14</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url14" />
+														<div class="wuxHeader2">Emote Name 15</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name15" />
+														<div class="wuxHeader2">Emote URL 15</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url15" />
+														<div class="wuxHeader2">Emote Name 16</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name16" />
+														<div class="wuxHeader2">Emote URL 16</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url16" />
+														<div class="wuxHeader2">Emote Name 17</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name17" />
+														<div class="wuxHeader2">Emote URL 17</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url17" />
+														<div class="wuxHeader2">Emote Name 18</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name18" />
+														<div class="wuxHeader2">Emote URL 18</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url18" />
+														<div class="wuxHeader2">Emote Name 19</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name19" />
+														<div class="wuxHeader2">Emote URL 19</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url19" />
+														<div class="wuxHeader2">Emote Name 20</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name20" />
+														<div class="wuxHeader2">Emote URL 20</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url20" />
+														<div class="wuxHeader2">Emote Name 21</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name21" />
+														<div class="wuxHeader2">Emote URL 21</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url21" />
+														<div class="wuxHeader2">Emote Name 22</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name22" />
+														<div class="wuxHeader2">Emote URL 22</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url22" />
+														<div class="wuxHeader2">Emote Name 23</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name23" />
+														<div class="wuxHeader2">Emote URL 23</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url23" />
+														<div class="wuxHeader2">Emote Name 24</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name24" />
+														<div class="wuxHeader2">Emote URL 24</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url24" />
+														<div class="wuxHeader2">Emote Name 25</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name25" />
+														<div class="wuxHeader2">Emote URL 25</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url25" />
+														<div class="wuxHeader2">Emote Name 26</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name26" />
+														<div class="wuxHeader2">Emote URL 26</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url26" />
+														<div class="wuxHeader2">Emote Name 27</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name27" />
+														<div class="wuxHeader2">Emote URL 27</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url27" />
+														<div class="wuxHeader2">Emote Name 28</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name28" />
+														<div class="wuxHeader2">Emote URL 28</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url28" />
+														<div class="wuxHeader2">Emote Name 29</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name29" />
+														<div class="wuxHeader2">Emote URL 29</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url29" />
+														<div class="wuxHeader2">Emote Name 30</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name30" />
+														<div class="wuxHeader2">Emote URL 30</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url30" />
+													</div>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="wuxPageDisplay-Options">
@@ -12541,6 +12731,24 @@
 	});
 	on("change:atr-bod change:atr-prc change:atr-qck change:atr-cnv change:atr-int change:atr-rsn", function (eventinfo) {
 	WuxWorkerAttributes.UpdateBuildPoints(eventinfo)
+	});
+	on("change:repeating_emotes:chat-outfit_name_learn", function (eventinfo) {
+	WuxWorkerChat.SelectOutfit(eventinfo)
+	});
+	on("change:repeating_emotes:chat-outfit_name", function (eventinfo) {
+	WuxWorkerChat.UpdateNameOutfit(eventinfo)
+	});
+	on("change:repeating_emotes:chat-outfit_emotes", function (eventinfo) {
+	WuxWorkerChat.UpdateOutfitEmotesGroup(eventinfo)
+	});
+	on("change:repeating_emotes:chat-outfit_default_url", function (eventinfo) {
+	WuxWorkerChat.UpdateOutfitEmotesDefaultUrl(eventinfo)
+	});
+	on("change:repeating_emotes:chat-outfit_default_name change:repeating_emotes:chat-emote_name2 change:repeating_emotes:chat-emote_name3 change:repeating_emotes:chat-emote_name4 change:repeating_emotes:chat-emote_name5 change:repeating_emotes:chat-emote_name6 change:repeating_emotes:chat-emote_name7 change:repeating_emotes:chat-emote_name8 change:repeating_emotes:chat-emote_name9 change:repeating_emotes:chat-emote_name10 change:repeating_emotes:chat-emote_name11 change:repeating_emotes:chat-emote_name12 change:repeating_emotes:chat-emote_name13 change:repeating_emotes:chat-emote_name14 change:repeating_emotes:chat-emote_name15 change:repeating_emotes:chat-emote_name16 change:repeating_emotes:chat-emote_name17 change:repeating_emotes:chat-emote_name18 change:repeating_emotes:chat-emote_name19 change:repeating_emotes:chat-emote_name20 change:repeating_emotes:chat-emote_name21 change:repeating_emotes:chat-emote_name22 change:repeating_emotes:chat-emote_name23 change:repeating_emotes:chat-emote_name24 change:repeating_emotes:chat-emote_name25 change:repeating_emotes:chat-emote_name26 change:repeating_emotes:chat-emote_name27 change:repeating_emotes:chat-emote_name28 change:repeating_emotes:chat-emote_name29 change:repeating_emotes:chat-emote_name30", function (eventinfo) {
+	WuxWorkerChat.UpdateOutfitEmotesName(eventinfo)
+	});
+	on("change:repeating_emotes:chat-emote_url2 change:repeating_emotes:chat-emote_url3 change:repeating_emotes:chat-emote_url4 change:repeating_emotes:chat-emote_url5 change:repeating_emotes:chat-emote_url6 change:repeating_emotes:chat-emote_url7 change:repeating_emotes:chat-emote_url8 change:repeating_emotes:chat-emote_url9 change:repeating_emotes:chat-emote_url10 change:repeating_emotes:chat-emote_url11 change:repeating_emotes:chat-emote_url12 change:repeating_emotes:chat-emote_url13 change:repeating_emotes:chat-emote_url14 change:repeating_emotes:chat-emote_url15 change:repeating_emotes:chat-emote_url16 change:repeating_emotes:chat-emote_url17 change:repeating_emotes:chat-emote_url18 change:repeating_emotes:chat-emote_url19 change:repeating_emotes:chat-emote_url20 change:repeating_emotes:chat-emote_url21 change:repeating_emotes:chat-emote_url22 change:repeating_emotes:chat-emote_url23 change:repeating_emotes:chat-emote_url24 change:repeating_emotes:chat-emote_url25 change:repeating_emotes:chat-emote_url26 change:repeating_emotes:chat-emote_url27 change:repeating_emotes:chat-emote_url28 change:repeating_emotes:chat-emote_url29 change:repeating_emotes:chat-emote_url30", function (eventinfo) {
+	WuxWorkerChat.UpdateOutfitEmotesUrl(eventinfo)
 	});
 	
 	class WorkerAttributeHandler {
@@ -14013,7 +14221,220 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 		UpdateStats: updateStats
 	};
 }());
-var wuxCurrentVersion = "1.0.0";
+var WuxWorkerChat = WuxWorkerChat || (function () {
+	'use strict';
+
+	var
+	selectOutfit = function (eventinfo) {
+		console.log(`Selecting outfit`);
+
+		let outfitRepeatingSection = new WuxRepeatingSection("RepeatingOutfits");
+		outfitRepeatingSection.getIds(function (outfitRepeater) {
+			let emoteButtonRepeaterSection = new WuxRepeatingSection("RepeatingActiveEmotes");
+			emoteButtonRepeaterSection.getIds(function (emoteButtonRepeater) {
+				emoteButtonRepeater.removeAllIds();
+				
+				let attributeHandler  = new WorkerAttributeHandler();
+				let setIdVar = WuxDef.GetVariable("Chat_SetId");
+				let outfitEmotesVar = WuxDef.GetVariable("Chat_OutfitEmotes", WuxDef._true);
+				let outfitSelectVar = WuxDef.GetVariable("Chat_OutfitName", WuxDef._learn);
+				attributeHandler.addMod(setIdVar);
+				outfitRepeater.addAttributeMods(attributeHandler, [outfitEmotesVar]);
+
+				attributeHandler.addGetAttrCallback(function (attrHandler) {
+					let setId = attrHandler.parseString(setIdVar);
+					let newSelectionId = outfitRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+
+					outfitRepeater.iterate(function (id) {
+						if (setId == id) {
+							attrHandler.addUpdate(outfitRepeater.getFieldName(id, outfitSelectVar), "0");
+						}
+					});
+					attrHandler.addUpdate(outfitRepeater.getFieldName(newSelectionId, outfitSelectVar), "on"); 
+					attrHandler.addUpdate(setIdVar, newSelectionId);
+					let emotesString = attrHandler.parseString(outfitRepeater.getFieldName(newSelectionId, outfitEmotesVar));
+					let outfitEmotes = new EmoteSetData(JSON.parse(emotesString));
+					updateActiveEmoteSet(emoteButtonRepeater, attrHandler, outfitEmotes);
+				});
+				attributeHandler.run();
+			});
+		});
+	},
+
+	updateActiveEmoteSet = function (emoteButtonRepeater, attrHandler, outfitEmotes) {
+		let emotesVar = WuxDef.GetVariable("Chat_Emotes");
+		attrHandler.addUpdate(emotesVar, JSON.stringify(outfitEmotes));
+
+		let newrowid;
+		let postNameVar = WuxDef.GetVariable("Chat_PostName");
+		let postUrlVar = WuxDef.GetVariable("Chat_PostUrl");
+		outfitEmotes.iterate(function (emote) {
+			newrowid = generateRowID();
+			attrHandler.addUpdate(emoteButtonRepeater.getFieldName(newrowid, postNameVar), emote.name);
+			attrHandler.addUpdate(emoteButtonRepeater.getFieldName(newrowid, postUrlVar), emote.url);
+		});
+	},
+
+	updateNameOutfit = function (eventinfo) {
+		console.log(`Renaming outfit ${eventinfo.previousValue} to ${eventinfo.newValue}`);
+		let attributeHandler  = new WorkerAttributeHandler();
+		let setIdVar = WuxDef.GetVariable("Chat_SetId");
+		let updateId = outfitRepeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
+
+		attributeHandler.addMod(setIdVar);
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			let setId = attrHandler.parseString(setIdVar);
+			if (setId == updateId) {
+				attrHandler.addUpdate(setIdVar, eventinfo.newValue);
+			}
+		});
+		attributeHandler.run();
+	},
+	updateOutfitEmotesGroup = function (eventinfo) {
+		console.log(`Setting outfit emotes through a json submission`);
+		let outfitRepeatingSection = new WuxRepeatingSection("RepeatingOutfits");
+
+		try {
+			JSON.parse(eventinfo.newValue);
+		} catch (e) {
+			let attributeHandler  = new WorkerAttributeHandler();
+			attributeHandler.addUpdate(eventinfo.sourceAttribute, "Invalid JSON. This field could not be read as a JSON object.");
+			attributeHandler.run();
+			return;
+		}
+
+		let outfitEmotes = new EmoteSetData(JSON.parse(eventinfo.newValue));
+
+		if (outfitEmotes.name == "") {
+			let attributeHandler  = new WorkerAttributeHandler();
+			attributeHandler.addUpdate(eventinfo.sourceAttribute, "Invalid Data. This field must contain a JSON object with a 'name', 'defaultEmote', and 'emotes' array.");
+			attributeHandler.run();
+			return;
+		}
+
+		let updateId = outfitRepeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
+
+		let emoteButtonRepeaterSection = new WuxRepeatingSection("RepeatingActiveEmotes");
+		emoteButtonRepeaterSection.getIds(function (emoteButtonRepeater) {
+
+			let attributeHandler  = new WorkerAttributeHandler();
+			let setIdVar = WuxDef.GetVariable("Chat_SetId");
+			attributeHandler.addMod(setIdVar);
+			
+			attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitName")), outfitEmotes.name);
+			attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitEmotes")), JSON.stringify(outfitEmotes));
+			attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitEmotes", WuxDef._true)), JSON.stringify(outfitEmotes));
+			console.log(`Setting outfit emotes for ${outfitEmotes.name} to \n${JSON.stringify(outfitEmotes)}`);
+
+			let emoteIndex = 2;
+			outfitEmotes.iterate(function (emote) {
+				if (emote.url == outfitEmotes.defaultEmote) {
+					attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitDefault")), emote.name);
+					attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitDefaultURL")), emote.url);
+				}
+				else {
+					attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, `${WuxDef.GetVariable("Chat_EmoteName")}${emoteIndex}`), emote.name);
+					attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, `${WuxDef.GetVariable("Chat_EmoteURL")}${emoteIndex}`), emote.url);
+					emoteIndex++;
+				}
+			});
+
+			while (emoteIndex <= 30) {
+				attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, `${WuxDef.GetVariable("Chat_EmoteName")}${emoteIndex}`), "");
+				attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, `${WuxDef.GetVariable("Chat_EmoteURL")}${emoteIndex}`), "");
+				emoteIndex++;
+			}
+
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				let setId = attrHandler.parseString(setIdVar);
+				if (setId == updateId) {
+					emoteButtonRepeater.removeAllIds();
+					updateActiveEmoteSet(emoteButtonRepeater, attrHandler, outfitEmotes);
+				}
+			});
+			attributeHandler.run();
+		});
+		
+	},
+	updateOutfitEmotesName = function (eventinfo) {
+		console.log(`Setting outfit emotes through a name entry to ${eventinfo.newValue}`);
+		setOutfitEmotesIndividualEntry(eventinfo);
+	},
+	updateOutfitEmotesDefaultUrl = function (eventinfo) {
+		console.log(`Setting outfit emotes through a url entry to ${eventinfo.newValue}`);
+		setOutfitEmotesIndividualEntry(eventinfo);
+	},
+	updateOutfitEmotesUrl = function (eventinfo) {
+		console.log(`Setting outfit emotes through a url entry to ${eventinfo.newValue}`);
+		setOutfitEmotesIndividualEntry(eventinfo);
+	},
+	setOutfitEmotesIndividualEntry = function (eventinfo) {
+		let outfitRepeatingSection = new WuxRepeatingSection("RepeatingOutfits");
+		outfitRepeatingSection.getIds(function (outfitRepeater) {
+			let emoteButtonRepeaterSection = new WuxRepeatingSection("RepeatingActiveEmotes");
+			emoteButtonRepeaterSection.getIds(function (emoteButtonRepeater) {
+				emoteButtonRepeater.removeAllIds();
+				
+				let updateId = outfitRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+				let attributeHandler  = new WorkerAttributeHandler();
+				let setIdVar = WuxDef.GetVariable("Chat_SetId");
+				let setNameVar = WuxDef.GetVariable("Chat_OutfitName");
+				let defaultNameVar = WuxDef.GetVariable("Chat_OutfitDefault");
+				let defaultUrlVar = WuxDef.GetVariable("Chat_OutfitDefaultURL");
+				let emoteNameVar = WuxDef.GetVariable("Chat_EmoteName");
+				let emoteUrlVar = WuxDef.GetVariable("Chat_EmoteURL");
+				let outfitEmotesVar = WuxDef.GetVariable("Chat_OutfitEmotes", WuxDef._true);
+				attributeHandler.addMod(setIdVar);
+				attributeHandler.addMod(outfitRepeater.getFieldName(updateId, setNameVar));
+				attributeHandler.addMod(outfitRepeater.getFieldName(updateId, defaultNameVar));
+				attributeHandler.addMod(outfitRepeater.getFieldName(updateId, defaultNameVar));
+				attributeHandler.addMod(outfitRepeater.getFieldName(updateId, defaultUrlVar));
+				attributeHandler.addMod(outfitRepeater.getFieldName(updateId, outfitEmotesVar));
+				for (let i = 2; i <= 30; i++) {
+					attributeHandler.addMod(outfitRepeater.getFieldName(updateId, `${emoteNameVar}${i}`));
+					attributeHandler.addMod(outfitRepeater.getFieldName(updateId, `${emoteUrlVar}${i}`));
+				}
+
+				attributeHandler.addGetAttrCallback(function (attrHandler) {
+					let setId = attrHandler.parseString(setIdVar);
+
+					let outfitEmotes = new EmoteSetData();
+					outfitEmotes.name = attrHandler.parseString(outfitRepeater.getFieldName(updateId, setNameVar));
+					outfitEmotes.defaultEmote = attrHandler.parseString(outfitRepeater.getFieldName(updateId, defaultUrlVar));
+					outfitEmotes.addEmote(attrHandler.parseString(outfitRepeater.getFieldName(updateId, defaultNameVar)),
+						attrHandler.parseString(outfitRepeater.getFieldName(updateId, defaultUrlVar)));
+					
+					let emoteName = "";
+					
+					for (let i = 2; i <= 30; i++) {
+						emoteName = attrHandler.parseString(outfitRepeater.getFieldName(updateId, `${emoteNameVar}${i}`));
+						if (emoteName != "") {
+							outfitEmotes.addEmote(emoteName, attrHandler.parseString(outfitRepeater.getFieldName(updateId, `${emoteUrlVar}${i}`)));
+						}
+					}
+					attrHandler.addUpdate(outfitRepeater.getFieldName(updateId, outfitEmotesVar), JSON.stringify(outfitEmotes));
+					attrHandler.addUpdate(outfitRepeater.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitEmotes")), JSON.stringify(outfitEmotes));
+					
+					if (setId == updateId) {
+						emoteButtonRepeater.removeAllIds();
+						updateActiveEmoteSet(emoteButtonRepeater, attrHandler, outfitEmotes);
+					}
+				});
+				attributeHandler.run();
+
+			});
+
+		});
+	}
+	return {
+		SelectOutfit: selectOutfit,
+		UpdateNameOutfit: updateNameOutfit,
+		UpdateOutfitEmotesGroup: updateOutfitEmotesGroup,
+		UpdateOutfitEmotesName: updateOutfitEmotesName,
+		UpdateOutfitEmotesDefaultUrl: updateOutfitEmotesDefaultUrl,
+		UpdateOutfitEmotesUrl: updateOutfitEmotesUrl
+	};
+}());var wuxCurrentVersion = "1.0.0";
 
 var upgrade_to_1_0_0 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.0");
@@ -15373,71 +15794,6 @@ var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
         Get: get
     }
 }());
-
-class WorkerBuildStat extends dbObj {
-    importJson(json) {
-        this.name = json.name;
-        this.value = parseInt(json.value);
-    }
-    importSheets(dataArray) {
-        let i = 0;
-        this.name = "" + dataArray[i]; i++;
-        this.value = "" + dataArray[i]; i++;
-    }
-    createEmpty() {
-        this.name = "";
-        this.value = "0";
-    }
-}
-class WorkerBuildStats extends Dictionary {
-
-    constructor() {
-        super();
-    }
-
-    getIntValue(name) {
-        let stat = this.get(name);
-        return stat == undefined ? 0 : isNaN(parseInt(stat.value)) ? 0 : parseInt(stat.value);
-    }
-
-    getPointsTotal() {
-        let points = 0;
-        if (this.keys == undefined) {
-            return points;
-        }
-        for (let i = 0; i < this.keys.length; i++) {
-            if (this.values[this.keys[i]].value == "on") {
-                points++;
-            }
-            else {
-                points += isNaN(parseInt(this.values[this.keys[i]].value)) ? 0 : parseInt(this.values[this.keys[i]].value);
-            }
-        }
-        return points;
-    }
-
-    cleanValues() {
-        let key = "";
-        let keys = [];
-        let values = {};
-        for (let i = 0; i < this.keys.length; i++) {
-            key = this.keys[i];
-            if (parseInt(this.values[key].value) != 0) {
-                keys.push(key);
-                values[key] = this.values[key];
-            }
-        }
-        this.keys = keys;
-        this.values = values;
-    }
-}
-class WorkerFormula {
-    constructor(modName, value, multiplier) {
-        this.modName = modName == undefined ? "" : modName;
-        this.value = isNaN(parseInt(value)) ? 0 : parseInt(value);
-        this.multiplier = isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier);
-    }
-}
 class ResistanceData {
     constructor(json) {
         if (json != undefined) {
@@ -15517,6 +15873,189 @@ class ResistanceData {
         
         return output;
     }
+}
+
+class WuxRepeatingSection {
+	constructor(definitionId) {
+		this.definition = WuxDef.Get(definitionId);
+        this.repeatingSection = this.definition.getVariable();
+        this.ids = [];
+	}
+
+    getIds(callback) {
+		let repeater = this;
+		getSectionIDs(this.repeatingSection, function (ids) {
+			ids.forEach(function (id) {
+                repeater.ids.push(id);
+			});
+            callback(repeater);
+		});
+    }
+
+    addIds(ids) {
+        this.ids = this.ids.concat(ids);
+    }
+    clearIds() {
+        this.ids = [];
+    }
+    iterate(callback) {
+        for (let i = 0; i < this.ids.length; i++) {
+            callback(this.ids[i]);
+        }
+    }
+    getFieldName(id, fieldName) {
+        return `${this.repeatingSection}_${id}_${fieldName}`;
+    }
+    addAttributeMods(attributeHandler, fieldNames) {
+        let repeater = this;
+
+        if (!Array.isArray(fieldNames)) {
+            fieldNames = [fieldNames];
+        }
+        this.iterate(function (id) {
+            for (let i = 0; i < fieldNames.length; i++) {
+                attributeHandler.addMod(repeater.getFieldName(id, fieldNames[i]));
+            }
+        });
+    }
+    getIdFromFieldName(fieldName) {
+        return fieldName.split("_")[2];
+    }
+    removeId(id) {
+        removeRepeatingRow(this.repeatingSection + "_" + id);
+    }
+    removeAllIds() {
+        for (let i = 0; i < this.ids.length; i++) {
+            this.removeId(this.ids[i]);
+        }
+    }
+}
+
+class WorkerBuildStat extends dbObj {
+    importJson(json) {
+        this.name = json.name;
+        this.value = parseInt(json.value);
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.value = "" + dataArray[i]; i++;
+    }
+    createEmpty() {
+        this.name = "";
+        this.value = "0";
+    }
+}
+class WorkerBuildStats extends Dictionary {
+
+    constructor() {
+        super();
+    }
+
+    getIntValue(name) {
+        let stat = this.get(name);
+        return stat == undefined ? 0 : isNaN(parseInt(stat.value)) ? 0 : parseInt(stat.value);
+    }
+
+    getPointsTotal() {
+        let points = 0;
+        if (this.keys == undefined) {
+            return points;
+        }
+        for (let i = 0; i < this.keys.length; i++) {
+            if (this.values[this.keys[i]].value == "on") {
+                points++;
+            }
+            else {
+                points += isNaN(parseInt(this.values[this.keys[i]].value)) ? 0 : parseInt(this.values[this.keys[i]].value);
+            }
+        }
+        return points;
+    }
+
+    cleanValues() {
+        let key = "";
+        let keys = [];
+        let values = {};
+        for (let i = 0; i < this.keys.length; i++) {
+            key = this.keys[i];
+            if (parseInt(this.values[key].value) != 0) {
+                keys.push(key);
+                values[key] = this.values[key];
+            }
+        }
+        this.keys = keys;
+        this.values = values;
+    }
+}
+class WorkerFormula {
+    constructor(modName, value, multiplier) {
+        this.modName = modName == undefined ? "" : modName;
+        this.value = isNaN(parseInt(value)) ? 0 : parseInt(value);
+        this.multiplier = isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier);
+    }
+}
+
+class EmoteSetData {
+    constructor(json) {
+        this.createEmpty();
+        if (json != undefined) {
+            this.importJson(json);
+        }
+    }
+
+    importJson(json) {
+        if (json.name == undefined) {
+            console.log("EmoteSetData: No name found in json");
+            return;
+        }
+        if (json.defaultEmote == undefined) {
+            console.log("EmoteSetData: No defaultEmote found in json");
+            return;
+        }
+        if (json.emotes == undefined) {
+            console.log("EmoteSetData: No emotes found in json");
+            return;
+        }
+        this.name = json.name;
+        this.defaultEmote = json.defaultEmote;
+        this.emotes = json.emotes;
+    }
+
+    createEmpty() {
+        this.name = "";
+        this.defaultEmote = "";
+        this.emotes = [];
+    }
+
+    addEmote(name, url) {
+        this.emotes.push(new EmoteData({name: name, url: url}));
+    }
+
+    iterate(callback) {
+        for (let i = 0; i < this.emotes.length; i++) {
+            callback(this.emotes[i]);
+        }
+    }
+}
+
+class EmoteData {
+    constructor(json) {
+        this.createEmpty();
+        if (json != undefined) {
+            this.importJson(json);
+        }
+    }
+
+    importJson(json) {
+        this.name = json.name;
+        this.url = json.url;
+    }
+
+    createEmpty() {
+        this.name = "";
+        this.url = "";
+    }   
 }
 
 // ====== Formatters
@@ -16373,7 +16912,7 @@ var WuxDef = WuxDef || (function () {
 	'use strict';
 
 	var
-		keys = ["Attribute", "Skill", "Job", "JobStyle", "Role", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion", "Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill", "CombatDefense", "SocialSense", "WillBreak", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity", "Combat_HV", "Combat_Armor", "Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Combat_Vitality", "Combat_Surge", "Combat_Chakra", "Chakra", "Combat_Move Speed", "Combat_Move Potency", "Social_Approval", "Social_Patience", "Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support", "Style_Swordplay", "Style_Ki Extension", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "LoreCategory_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCategory_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCategory_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCategory_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCategory_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCategory_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCategory_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician", "JobStyle_Interceptor", "JobStyle_Guardian", "JobStyle_Spellslinger", "JobStyle_Warrior", "JobStyle_Rogue", "JobStyle_Scholar", "JobStyle_Physician", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman", "Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Stabilize", "Technique_Skill Check", "Technique_Unarmed Strike", "Technique_Encourage", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"],
+		keys = ["Attribute", "Skill", "Job", "JobStyle", "Role", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Emotes", "Title_Outfits", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion", "Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill", "CombatDefense", "SocialSense", "WillBreak", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity", "Combat_HV", "Combat_Armor", "Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Combat_Vitality", "Combat_Surge", "Combat_Chakra", "Chakra", "Combat_Move Speed", "Combat_Move Potency", "Social_Approval", "Social_Patience", "Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support", "Style_Swordplay", "Style_Ki Extension", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "LoreCategory_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCategory_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCategory_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCategory_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCategory_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCategory_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCategory_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician", "JobStyle_Interceptor", "JobStyle_Guardian", "JobStyle_Spellslinger", "JobStyle_Warrior", "JobStyle_Rogue", "JobStyle_Scholar", "JobStyle_Physician", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman", "Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Stabilize", "Technique_Skill Check", "Technique_Unarmed Strike", "Technique_Encourage", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"],
 		values = {
 			"Attribute": {
 				"name": "Attribute", "fieldName": "attribute", "group": "Type", "description": "", "variable": "atr{0}{1}", "title": "Attributes", "subGroup": "", "descriptions": [""],
@@ -17203,6 +17742,20 @@ var WuxDef = WuxDef || (function () {
 				"formulaCalculations": [],
 				"extraData": {}
 			},
+			"Title_Emotes": {
+				"name": "Title_Emotes", "fieldName": "emotes", "group": "Title", "description": "", "variable": "ttl-emotes{0}", "title": "Emotes", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Title_Outfits": {
+				"name": "Title_Outfits", "fieldName": "outfits", "group": "Title", "description": "", "variable": "ttl-outfits{0}", "title": "Outfits", "subGroup": "", "descriptions": ["You can add in your character art from here to populate your character's emotes.", "Press the Plus (+) button below to add a new instance of an outfit. From there you can populate the outfit data with emotes."],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
 			"Chat_Type": {
 				"name": "Chat_Type", "fieldName": "type", "group": "Chat", "description": "", "variable": "chat-type{0}", "title": "ChatType", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
@@ -17240,6 +17793,97 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Chat_PostContent": {
 				"name": "Chat_PostContent", "fieldName": "postcontent", "group": "Chat", "description": "", "variable": "chat-postcontent{0}", "title": "ChatContent", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"RepeatingActiveEmotes": {
+				"name": "RepeatingActiveEmotes", "fieldName": "repeatingactiveemotes", "group": "Untyped", "description": "", "variable": "repeating_activeemotes", "title": "RepeatingActiveEmotes", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_SetId": {
+				"name": "Chat_SetId", "fieldName": "setid", "group": "Chat", "description": "", "variable": "chat-emoteset_id{0}", "title": "SetId", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_Emotes": {
+				"name": "Chat_Emotes", "fieldName": "emotes", "group": "Chat", "description": "", "variable": "chat-emoteset{0}", "title": "Emotes", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_DefaultEmote": {
+				"name": "Chat_DefaultEmote", "fieldName": "defaultemote", "group": "Chat", "description": "", "variable": "chat-default_emote{0}", "title": "DefaultEmote", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_PostName": {
+				"name": "Chat_PostName", "fieldName": "postname", "group": "Chat", "description": "", "variable": "chat-post_name{0}", "title": "PostName", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_PostURL": {
+				"name": "Chat_PostURL", "fieldName": "posturl", "group": "Chat", "description": "", "variable": "chat-post_url{0}", "title": "PostURL", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_OutfitName": {
+				"name": "Chat_OutfitName", "fieldName": "outfitname", "group": "Chat", "description": "", "variable": "chat-outfit_name{0}", "title": "Outfit Name", "subGroup": "", "descriptions": ["This is the name of the outfit or emote set. Give it a name to differentiate it from other emote sets."],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_OutfitEmotes": {
+				"name": "Chat_OutfitEmotes", "fieldName": "outfitemotes", "group": "Chat", "description": "", "variable": "chat-outfit_emotes{0}", "title": "Outfit Emotes", "subGroup": "", "descriptions": ["This is a JSON file of the emote set. This is used to populate chat data. You can either replace the text here with data containing the emote set's data or you may fill in each emote individually below."],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_EmoteName": {
+				"name": "Chat_EmoteName", "fieldName": "emotename", "group": "Chat", "description": "", "variable": "chat-emote_name{0}", "title": "Emote Name", "subGroup": "", "descriptions": ["This is the name of an individual emote. This is what this emote will be referred to when selecting it from this character's available emotes."],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_EmoteURL": {
+				"name": "Chat_EmoteURL", "fieldName": "emoteurl", "group": "Chat", "description": "", "variable": "chat-emote_url{0}", "title": "Emote URL", "subGroup": "", "descriptions": ["This is a URL that references the emote's image. This is the image that will be shown when this emote is used."],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"RepeatingOutfits": {
+				"name": "RepeatingOutfits", "fieldName": "repeatingoutfits", "group": "Untyped", "description": "", "variable": "repeating_emotes", "title": "", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_OutfitDefault": {
+				"name": "Chat_OutfitDefault", "fieldName": "outfitdefault", "group": "Chat", "description": "", "variable": "chat-outfit_default_name{0}", "title": "Default Emote Name", "subGroup": "", "descriptions": ["This is the name of an individual emote. This is what this emote will be referred to when selecting it from this character's available emotes.", "The default emote name is the emote that will be shown whenever the character appears in various UIs where the character is not speaking."],
+				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
+				"isResource": "", "modAttrs": [],
+				"formulaCalculations": [],
+				"extraData": {}
+			},
+			"Chat_OutfitDefaultURL": {
+				"name": "Chat_OutfitDefaultURL", "fieldName": "outfitdefaulturl", "group": "Chat", "description": "", "variable": "chat-outfit_default_url{0}", "title": "Default Emote URL", "subGroup": "", "descriptions": ["This is a URL that references the emote's image. This is the image that will be shown when this emote is used.", "The default emote url is the emote that will be shown whenever the character appears in various UIs where the character is not speaking."],
 				"abbreviation": "", "formula": "", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": [],
 				"formulaCalculations": [],
@@ -17653,7 +18297,8 @@ var WuxDef = WuxDef || (function () {
 			"Combat_HV": {
 				"name": "Combat_HV", "fieldName": "hv", "group": "Combat", "description": "", "variable": "cmb-hv{0}", "title": "Heal Value", "subGroup": "", "descriptions": ["This value is a standard amount of HP you recover from some healing abilities."],
 				"abbreviation": "HV", "formula": "5;CR*4;Attribute_CNV", "modifiers": "_tech;_affinity", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["adv-cr", "atr-cnv", "cmb-hv_tech", "cmb-hv_affinity"],
+				"isResource": "", "modAttrs": ["adv-cr", "atr-cnv", "cmb-hv_tech", "cmb-hv_affinity"]
+				,
 				"formulaCalculations": [{ "modName": "", "value": 5, "multiplier": 1 },
 				{ "modName": "adv-cr", "value": 0, "multiplier": 4 },
 				{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
@@ -17742,8 +18387,7 @@ var WuxDef = WuxDef || (function () {
 				"extraData": {}
 			},
 			"Social_Approval": {
-				"name": "Social_Approval", "fieldName": "approval", "group": "Social", "description": "", "variable": "soc-approval{0}", "title": "Approval Resistance", "subGroup": "", "descriptions": ["Approval is a character's resistance to place their trust in another. In social conflict it acts similarly to HP, representing a character's threshold before allowing another to have their favor. "]
-				,
+				"name": "Social_Approval", "fieldName": "approval", "group": "Social", "description": "", "variable": "soc-approval{0}", "title": "Approval Resistance", "subGroup": "", "descriptions": ["Approval is a character's resistance to place their trust in another. In social conflict it acts similarly to HP, representing a character's threshold before allowing another to have their favor. "],
 				"abbreviation": "", "formula": "20;CR*15;Level;Attribute_CNV", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["adv-cr", "adv-level", "atr-cnv"],
 				"formulaCalculations": [{ "modName": "", "value": 20, "multiplier": 1 },
@@ -18349,7 +18993,8 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_CNV", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-cnv", "skl-enchant_rank"],
 				"formulaCalculations": [{ "modName": "atr-cnv", "value": 0, "multiplier": 1 },
-				{ "modName": "skl-enchant_rank", "value": 0, "multiplier": 1 }],
+				{ "modName": "skl-enchant_rank", "value": 0, "multiplier": 1 }]
+				,
 				"extraData": {}
 			},
 			"Skill_Finesse": {
@@ -18426,8 +19071,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Attribute_RSN", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["atr-rsn", "skl-negotiation_rank"],
 				"formulaCalculations": [{ "modName": "atr-rsn", "value": 0, "multiplier": 1 },
-				{ "modName": "skl-negotiation_rank", "value": 0, "multiplier": 1 }]
-				,
+				{ "modName": "skl-negotiation_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Skill_Palming": {
@@ -18999,7 +19643,8 @@ var WuxDef = WuxDef || (function () {
 			"LoreCategory_History": {
 				"name": "LoreCategory_History", "fieldName": "history", "group": "LoreCategory", "description": "", "variable": "lrc-history{0}", "title": "History", "subGroup": "History", "descriptions": ["History knowledges represent known history of civilizations and any legends that may exist."],
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
-				"isResource": "", "modAttrs": ["recall", "lrc-history_rank"],
+				"isResource": "", "modAttrs": ["recall", "lrc-history_rank"]
+				,
 				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
 				{ "modName": "lrc-history_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
@@ -19089,8 +19734,7 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "formula": "Recall", "modifiers": "_rank", "linkedGroups": [],
 				"isResource": "", "modAttrs": ["recall", "lor-fashion_rank"],
 				"formulaCalculations": [{ "modName": "recall", "value": 0, "multiplier": 1 },
-				{ "modName": "lor-fashion_rank", "value": 0, "multiplier": 1 }]
-				,
+				{ "modName": "lor-fashion_rank", "value": 0, "multiplier": 1 }],
 				"extraData": {}
 			},
 			"Lore_Games": {
@@ -19724,7 +20368,8 @@ var WuxDef = WuxDef || (function () {
 				"name": "Technique_Marksman's Longshot", "fieldName": "marksman's_longshot", "group": "Technique", "description": "", "variable": "tch-marksman's_longshot{0}", "title": "Marksman's Longshot", "subGroup": "Marksman", "descriptions": [""],
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": [],
-				"formulaCalculations": [],
+				"formulaCalculations": []
+				,
 				"extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Technique_Marksman's Sight": {
@@ -19829,8 +20474,7 @@ var WuxDef = WuxDef || (function () {
 				"name": "Technique_Pole Vault", "fieldName": "pole_vault", "group": "Technique", "description": "", "variable": "tch-pole_vault{0}", "title": "Pole Vault", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": [],
-				"formulaCalculations": []
-				,
+				"formulaCalculations": [],
 				"extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Technique_Quick Draw": {
@@ -20530,7 +21174,8 @@ var WuxDef = WuxDef || (function () {
 				"name": "Technique_Impersonator", "fieldName": "impersonator", "group": "Technique", "description": "", "variable": "tch-impersonator{0}", "title": "Impersonator", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": [],
-				"formulaCalculations": [],
+				"formulaCalculations": []
+				,
 				"extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Technique_Ether Sense": {
@@ -20639,8 +21284,7 @@ var WuxDef = WuxDef || (function () {
 				"extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Technique_Form Pillar": {
-				"name": "Technique_Form Pillar", "fieldName": "form_pillar", "group": "Technique", "description": "", "variable": "tch-form_pillar{0}", "title": "Form Pillar", "subGroup": "", "descriptions": [""]
-				,
+				"name": "Technique_Form Pillar", "fieldName": "form_pillar", "group": "Technique", "description": "", "variable": "tch-form_pillar{0}", "title": "Form Pillar", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "formula": "6;CR*2;AdvancementTechnique;TrainingTechniques", "modifiers": "", "linkedGroups": [],
 				"isResource": "", "modAttrs": [],
 				"formulaCalculations": [],
@@ -21258,9 +21902,9 @@ var WuxDef = WuxDef || (function () {
 		},
 		sortingGroups = {
 			"group": {
-				"Type": ["Attribute", "Skill", "Job", "JobStyle", "Role", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition"], "Untyped": ["General", "Resistance"], "VariableMod": ["_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error"], "AffinityType": ["Wood", "Fire", "Earth", "Metal", "Water"], "InnateDefenseType": ["BOD", "PRC", "QCK"], "InnateSenseType": ["CNV", "INT", "RSN"], "AttributeValue": ["AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad"], "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3"], "LoreTier": ["LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3"], "GeneralLoreTier": ["GeneralLoreTier0", "GeneralLoreTier1"], "LoreCategory": ["Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "LoreCategory_Academics", "LoreCategory_Profession", "LoreCategory_Craftmanship", "LoreCategory_Geography", "LoreCategory_History", "LoreCategory_Culture", "LoreCategory_Religion"], "PageSet": ["PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training"], "Page": ["Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement"], "Title": ["Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect"], "Chat": ["Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent"], "Advancement": ["Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques"], "Training": ["TrainingKnowledge", "TrainingTechniques", "PP"], "Attribute": ["Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN"], "Defense": ["Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion"], "Sense": ["Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill"], "Special Defense": ["CombatDefense", "SocialSense", "WillBreak"], "Origin": ["Full Name", "Display Name", "Background", "Age", "Gender", "Homeland"], "OriginStat": ["Affinity", "InnateDefense", "InnateSense"], "General": ["HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity"], "Combat": ["Combat_HV", "Combat_Armor", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Combat_Vitality", "Combat_Surge", "Combat_Chakra", "Combat_Move Speed", "Combat_Move Potency"], "": ["Chakra"], "Social": ["Social_Approval", "Social_Patience"], "DamageType": ["Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension"], "Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent"], "Status": ["Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious"], "Condition": ["Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised"], "Style": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support", "Style_Swordplay", "Style_Ki Extension"], "Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "Language": ["Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan"], "Lore": ["Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "JobStyle": ["JobStyle_Interceptor", "JobStyle_Guardian", "JobStyle_Spellslinger", "JobStyle_Warrior", "JobStyle_Rogue", "JobStyle_Scholar", "JobStyle_Physician"], "Role": ["Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"]
-				, "Technique": ["Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Stabilize", "Technique_Skill Check", "Technique_Unarmed Strike", "Technique_Encourage", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"]
-			}, "subGroup": { "": ["Attribute", "Skill", "Job", "JobStyle", "Role", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "WillBreak", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity", "Combat_HV", "Combat_Armor", "Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Combat_Vitality", "Combat_Surge", "Combat_Chakra", "Chakra", "Combat_Move Speed", "Combat_Move Potency", "Social_Approval", "Social_Patience", "Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "JobStyle_Interceptor", "JobStyle_Guardian", "JobStyle_Spellslinger", "JobStyle_Warrior", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"], "Attribute": ["Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN"], "Combat Defense": ["Defense_Brace", "Defense_Disruption", "Defense_Reflex"], "Defense": ["Defense_Fortitude", "Defense_Hide", "Defense_Evasion"], "Social Sense": ["Sense_Insight", "Sense_Scrutiny", "Sense_Resolve"], "Sense": ["Sense_Notice", "Sense_Detect", "Sense_Freewill"], "Special Defense": ["CombatDefense", "SocialSense"], "Technique Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall"], "Item Trait": ["Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud"], "Material Trait": ["Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent"], "Basic": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support"], "Standard": ["Style_Swordplay", "Style_Ki Extension"], "Athletics Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Physique", "Skill_Sneak", "Skill_Traversal"], "Sensing Skill": ["Skill_Analyze", "Skill_Empathy", "Skill_Resonance", "Skill_Search", "Skill_Survival"], "Creation Skill": ["Skill_Build", "Skill_Channel", "Skill_Cook", "Skill_Disguise", "Skill_Medicine"], "Social Skill": ["Skill_Charm", "Skill_Deception", "Skill_Intimidation", "Skill_Leadership", "Skill_Negotiation"], " Skill": ["Skill_Command", "Skill_Concoct", "Skill_Flexibility", "Skill_Heal", "Skill_Maneuver"], "Manipulate Skill": ["Skill_Enchant", "Skill_Palming", "Skill_Pilot", "Skill_Throw", "Skill_Tinker"], "Combat Skill": ["Skill_Finesse", "Skill_Grappling", "Skill_Might", "Skill_Shoot", "Skill_Skirmish"], "Walthair": ["Language_Minere", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca"], "Aridsha": ["Language_Junal", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira"], "Khem": ["Language_Apollen", "Language_Kleikan"], "Colswei": ["Language_Lib"], "Ceres": ["Language_Cert", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq"], "Special": ["Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan"], "Academics": ["LoreCategory_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology"], "Profession": ["LoreCategory_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining"], "Craftmanship": ["LoreCategory_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving"], "Geography": ["LoreCategory_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane"], "History": ["LoreCategory_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History"], "Culture": ["LoreCategory_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater"], "Religion": ["LoreCategory_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Athletics": ["Job_Rogue", "JobStyle_Rogue"], "Focus": ["Job_Scholar", "JobStyle_Scholar"], "Technical": ["Job_Physician", "JobStyle_Physician"], "Basic Movement": ["Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Reposition"], "Basic Attack": ["Technique_Grapple", "Technique_Unarmed Strike"], "Basic Action": ["Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Seach", "Technique_Skill Check", "Technique_Grab an Edge", "Technique_Interact"], "Basic Support": ["Technique_Aid", "Technique_Stabilize", "Technique_Encourage"], "Basic Social": ["Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand"], "Warrior": ["Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted"], "Interceptor": ["Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim"], "Spellslinger": ["Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot"], "Guardian": ["Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation"], "Generalist": ["Technique_Generalist"], "Defender": ["Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery"], "Skirmisher": ["Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike"], "Marksman": ["Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike"], "Athlete": ["Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint"], "Ki Extension": ["Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +"], "Swordplay": ["Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II"] }, "formulaMods": { "CR": ["Attribute", "Skill", "Job", "Technique", "HP", "WILL", "Initiative", "Combat_HV", "Combat_Chakra", "Social_Approval", "Social_Patience", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "AdvancementSkill": ["Skill"], "AdvancementJob": ["Job", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "": ["Role", "Language", "LoreCategory", "Lore", "StyleType", "PageSet", "Page", "Title", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "Level", "CR", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "CombatDefense", "SocialSense", "WillBreak", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "EN", "Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Chakra", "Social_Patience", "Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Skill_Command", "Skill_Concoct", "Skill_Flexibility", "Skill_Heal", "Skill_Maneuver", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "TrainingKnowledge": ["Knowledge"], "AdvancementTechnique": ["Technique"], "TrainingTechniques": ["Technique"], "Level": ["Advancement", "HP", "WILL", "Social_Approval"], "Attribute_BOD": ["Defense_Brace", "Defense_Fortitude", "HP", "Carrying Capacity", "Skill_Grappling", "Skill_Might", "Skill_Physique", "Skill_Survival", "Skill_Traversal"], "Attribute_PRC": ["Defense_Disruption", "Defense_Hide", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker"], "Attribute_QCK": ["Defense_Reflex", "Defense_Evasion", "Initiative", "Skill_Acrobatics", "Skill_Agility", "Skill_Finesse", "Skill_Palming", "Skill_Pilot"], "Attribute_INT": ["Sense_Insight", "Sense_Notice", "Skill_Cook", "Skill_Disguise", "Skill_Empathy", "Skill_Leadership", "Skill_Search"], "Attribute_RSN": ["Sense_Scrutiny", "Sense_Detect", "Recall", "Skill_Analyze", "Skill_Build", "Skill_Deception", "Skill_Medicine", "Skill_Negotiation"], "Attribute_CNV": ["Sense_Resolve", "Sense_Freewill", "WILL", "Combat_HV", "Social_Approval", "Skill_Channel", "Skill_Charm", "Skill_Enchant", "Skill_Intimidation", "Skill_Resonance"], "Recall": ["LoreCategory_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCategory_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCategory_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCategory_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCategory_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCategory_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCategory_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"] }
+				"Type": ["Attribute", "Skill", "Job", "JobStyle", "Role", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition"], "Untyped": ["General", "RepeatingActiveEmotes", "RepeatingOutfits", "Resistance"], "VariableMod": ["_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error"], "AffinityType": ["Wood", "Fire", "Earth", "Metal", "Water"], "InnateDefenseType": ["BOD", "PRC", "QCK"], "InnateSenseType": ["CNV", "INT", "RSN"], "AttributeValue": ["AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad"], "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3"], "LoreTier": ["LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3"], "GeneralLoreTier": ["GeneralLoreTier0", "GeneralLoreTier1"], "LoreCategory": ["Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "LoreCategory_Academics", "LoreCategory_Profession", "LoreCategory_Craftmanship", "LoreCategory_Geography", "LoreCategory_History", "LoreCategory_Culture", "LoreCategory_Religion"], "PageSet": ["PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training"], "Page": ["Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement"], "Title": ["Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Emotes", "Title_Outfits"], "Chat": ["Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "Chat_OutfitDefault", "Chat_OutfitDefaultURL"], "Advancement": ["Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques"], "Training": ["TrainingKnowledge", "TrainingTechniques", "PP"], "Attribute": ["Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN"], "Defense": ["Defense_Brace", "Defense_Fortitude", "Defense_Disruption", "Defense_Hide", "Defense_Reflex", "Defense_Evasion"], "Sense": ["Sense_Insight", "Sense_Notice", "Sense_Scrutiny", "Sense_Detect", "Sense_Resolve", "Sense_Freewill"], "Special Defense": ["CombatDefense", "SocialSense", "WillBreak"], "Origin": ["Full Name", "Display Name", "Background", "Age", "Gender", "Homeland"], "OriginStat": ["Affinity", "InnateDefense", "InnateSense"], "General": ["HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity"], "Combat": ["Combat_HV", "Combat_Armor", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Combat_Vitality", "Combat_Surge", "Combat_Chakra", "Combat_Move Speed", "Combat_Move Potency"], "": ["Chakra"], "Social": ["Social_Approval", "Social_Patience"], "DamageType": ["Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension"], "Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent"], "Status": ["Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious"]
+				, "Condition": ["Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised"], "Style": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support", "Style_Swordplay", "Style_Ki Extension"], "Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "Language": ["Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan"], "Lore": ["Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "JobStyle": ["JobStyle_Interceptor", "JobStyle_Guardian", "JobStyle_Spellslinger", "JobStyle_Warrior", "JobStyle_Rogue", "JobStyle_Scholar", "JobStyle_Physician"], "Role": ["Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "Technique": ["Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Grapple", "Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Reposition", "Technique_Seach", "Technique_Aid", "Technique_Stabilize", "Technique_Skill Check", "Technique_Unarmed Strike", "Technique_Encourage", "Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand", "Technique_Grab an Edge", "Technique_Interact", "Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted", "Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim", "Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot", "Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Generalist", "Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery", "Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike", "Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike", "Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +", "Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"]
+			}, "subGroup": { "": ["Attribute", "Skill", "Job", "JobStyle", "Role", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Emotes", "Title_Outfits", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "WillBreak", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity", "Combat_HV", "Combat_Armor", "Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Combat_Vitality", "Combat_Surge", "Combat_Chakra", "Chakra", "Combat_Move Speed", "Combat_Move Potency", "Social_Approval", "Social_Patience", "Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "JobStyle_Interceptor", "JobStyle_Guardian", "JobStyle_Spellslinger", "JobStyle_Warrior", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman", "Technique_Spellstrike", "Technique_Power Skirmish", "Technique_Sneak Attack", "Technique_Sneaky Follow-Up", "Technique_Assassinate", "Technique_Emergency Care", "Technique_Nightingale", "Technique_Rhapsody", "Technique_Metamagic", "Technique_Strategize", "Technique_Foresight", "Technique_Saw That Coming", "Technique_As You May Recall", "Technique_Skulk Away", "Technique_Skulk Then Hide", "Technique_First Aid", "Technique_Cleansing Aid", "Technique_Environmental Awareness", "Technique_Eclectic Knowledge", "Technique_Point of Clarity", "Technique_Pole Vault", "Technique_Quick Draw", "Technique_Cleave", "Technique_Crushing Blade", "Technique_Great Cleave", "Technique_Cleave +", "Technique_Sudden Cleave", "Technique_Great Cleave II", "Technique_Power Flex", "Technique_Crush Knuckle", "Technique_Impact Knuckle", "Technique_Knuckle Flurry", "Technique_Water Blast", "Technique_Geyser", "Technique_Geyser Line", "Technique_Surf", "Technique_Great Geyser Line", "Technique_Tidal Wave", "Technique_Sand Surge", "Technique_Sand Spout", "Technique_Sand Wave", "Technique_Sand Launcher", "Technique_Sicken", "Technique_Spores", "Technique_Sickening Cloud", "Technique_Virulent Spores", "Technique_Firebolt", "Technique_Flame Arrow", "Technique_Fireball", "Technique_Fireblast", "Technique_Ragnarok", "Technique_Bonfire", "Technique_Wall of Fire", "Technique_Field of Flame", "Technique_Lightning Shaft", "Technique_Shock", "Technique_Lightning Bolt", "Technique_Plasma Arc", "Technique_Fulgor", "Technique_Cold Snap", "Technique_Frostbite", "Technique_Freezebind", "Technique_Cold Burst", "Technique_Cold Front", "Technique_Diamond Dust", "Technique_Wind Bullet", "Technique_Gust", "Technique_Windsweep", "Technique_Gale", "Technique_Darkness", "Technique_Shadow Wall", "Technique_Nightfall", "Technique_Fog Cloud", "Technique_Sleet", "Technique_Freezing Sleet", "Technique_Hail", "Technique_Binding Sleet", "Technique_Ice Storm", "Technique_Fimbulwinter", "Technique_Smoke Cloud", "Technique_Burning Smoke", "Technique_Choking Smoke", "Technique_Acceleration", "Technique_Power Vault", "Technique_Expeditious", "Technique_Quick Climb", "Technique_Quick Swim", "Technique_Poise", "Technique_Cat Fall", "Technique_Kip Up", "Technique_Silent Stride", "Technique_Shove", "Technique_Knockdown", "Technique_Tumble", "Technique_Field Medic", "Technique_Camoflauge", "Technique_Blurred Light", "Technique_Light Refraction", "Technique_Shadow Steps", "Technique_Shadow Walker", "Technique_Wind Step", "Technique_Updraft", "Technique_Clouded Updraft", "Technique_Wind Fall", "Technique_Walk on Air", "Technique_Fire Step", "Technique_Liftoff", "Technique_Jet", "Technique_Cunning Action", "Technique_Demoralize", "Technique_Fascinate", "Technique_Impersonator", "Technique_Ether Sense", "Technique_Spirit Sense", "Technique_Tremorsense", "Technique_Dustcraft", "Technique_Shape Material", "Technique_Quickcraft", "Technique_Improved Shaping", "Technique_Greater Shaping", "Technique_Legendary Shaping", "Technique_Dust Material", "Technique_Dust Area", "Technique_Improved Dusting", "Technique_Greater Dusting", "Technique_Legendary Dusting", "Technique_Form Path", "Technique_Form Pillar", "Technique_Stepping Path", "Technique_Form Wall", "Technique_Scattered Pillars", "Technique_Great Wall", "Technique_Cultivate", "Technique_Entangle", "Technique_Wildwood", "Technique_Distortion", "Technique_Lasting Distortion", "Technique_Heat Field", "Technique_Burn Guard", "Technique_Cold Field", "Technique_Chill Guard", "Technique_Kinesis", "Technique_Distant Kinesis", "Technique_Kinetic Strike", "Technique_Kinetic Throw", "Technique_Heavy Kinesis", "Technique_Burden", "Technique_Pressure", "Technique_Restrain", "Technique_Wide Pressure", "Technique_Prostration", "Technique_Deep Pressure", "Technique_Gravity Well", "Technique_Shield Block", "Technique_Glancing Block", "Technique_Aegis", "Technique_Light", "Technique_Dancing Lights", "Technique_Flash", "Technique_Sunlight", "Technique_Stress Release", "Technique_Stress Release +", "Technique_Stress Release ++", "Technique_Sensory Training", "Technique_Sensory Training +", "Technique_Broad Study", "Technique_Experienced Tracker", "Technique_Multilingual", "Technique_Multilingual +", "Technique_Specialized Lore", "Technique_Specialized Lore +", "Technique_Specialized Lore ++", "Technique_Improved Initiative", "Technique_Knowledge Training", "Technique_Knowledge Training +", "Technique_Knowledge Training ++", "Technique_Social Training", "Technique_Social Training +", "Technique_Social Training ++", "Technique_Refocus", "Technique_Refocus +", "Technique_Sustained Channel", "Technique_Sustained Channel +", "Technique_Ki Control", "Technique_Ki Control +", "Technique_Ki Control ++", "Technique_Surge Value", "Technique_Surge Value +", "Technique_Channel Training", "Technique_Channel Training +", "Technique_Channel Training ++", "Technique_Physical Training", "Technique_Physical Training +", "Technique_Body Training", "Technique_Body Training +", "Technique_Body Training ++", "Technique_Technical Training", "Technique_Technical Training +", "Technique_Technical Training ++", "Technique_Martial Training", "Technique_Martial Training +", "Technique_Martial Training ++", "Technique_HP Up", "Technique_HP Up+", "Technique_HP Up++", "Technique_Vitality Boost", "Technique_Vitality Boost +", "Technique_Vitality Boost ++", "Technique_Undying", "Technique_Undying +", "Technique_Extra Follow-Up Attack", "Technique_Extra Follow-Up Attack +", "Technique_Change Tech Slots", "Technique_Hold Out", "Technique_Overdrive"], "Attribute": ["Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN"], "Combat Defense": ["Defense_Brace", "Defense_Disruption", "Defense_Reflex"], "Defense": ["Defense_Fortitude", "Defense_Hide", "Defense_Evasion"], "Social Sense": ["Sense_Insight", "Sense_Scrutiny", "Sense_Resolve"], "Sense": ["Sense_Notice", "Sense_Detect", "Sense_Freewill"], "Special Defense": ["CombatDefense", "SocialSense"], "Technique Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall"], "Item Trait": ["Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud"], "Material Trait": ["Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent"], "Basic": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support"], "Standard": ["Style_Swordplay", "Style_Ki Extension"], "Athletics Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Physique", "Skill_Sneak", "Skill_Traversal"], "Sensing Skill": ["Skill_Analyze", "Skill_Empathy", "Skill_Resonance", "Skill_Search", "Skill_Survival"], "Creation Skill": ["Skill_Build", "Skill_Channel", "Skill_Cook", "Skill_Disguise", "Skill_Medicine"], "Social Skill": ["Skill_Charm", "Skill_Deception", "Skill_Intimidation", "Skill_Leadership", "Skill_Negotiation"], " Skill": ["Skill_Command", "Skill_Concoct", "Skill_Flexibility", "Skill_Heal", "Skill_Maneuver"], "Manipulate Skill": ["Skill_Enchant", "Skill_Palming", "Skill_Pilot", "Skill_Throw", "Skill_Tinker"], "Combat Skill": ["Skill_Finesse", "Skill_Grappling", "Skill_Might", "Skill_Shoot", "Skill_Skirmish"], "Walthair": ["Language_Minere", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca"], "Aridsha": ["Language_Junal", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira"], "Khem": ["Language_Apollen", "Language_Kleikan"], "Colswei": ["Language_Lib"], "Ceres": ["Language_Cert", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq"], "Special": ["Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan"], "Academics": ["LoreCategory_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology"], "Profession": ["LoreCategory_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining"], "Craftmanship": ["LoreCategory_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving"], "Geography": ["LoreCategory_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane"], "History": ["LoreCategory_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History"], "Culture": ["LoreCategory_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater"], "Religion": ["LoreCategory_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Athletics": ["Job_Rogue", "JobStyle_Rogue"], "Focus": ["Job_Scholar", "JobStyle_Scholar"], "Technical": ["Job_Physician", "JobStyle_Physician"], "Basic Movement": ["Technique_Break Free", "Technique_Dash", "Technique_Escape", "Technique_Reposition"], "Basic Attack": ["Technique_Grapple", "Technique_Unarmed Strike"], "Basic Action": ["Technique_Hide", "Technique_Mount", "Technique_Prepare", "Technique_Seach", "Technique_Skill Check", "Technique_Grab an Edge", "Technique_Interact"], "Basic Support": ["Technique_Aid", "Technique_Stabilize", "Technique_Encourage"], "Basic Social": ["Technique_Build Rapport", "Technique_Build Pressure", "Technique_Captivate", "Technique_Demand"], "Warrior": ["Technique_Second Wind", "Technique_Second Breath", "Technique_Undaunted"], "Interceptor": ["Technique_Preemptive Strike", "Technique_Preemptive Stagger", "Technique_Critical Maim"], "Spellslinger": ["Technique_Spellshot", "Technique_Follow-Up Spellshot", "Technique_Bursting Spellshot"], "Guardian": ["Technique_Savior", "Technique_Knock Away Savior", "Technique_Savior's Retaliation"], "Generalist": ["Technique_Generalist"], "Defender": ["Technique_Defender", "Technique_Defender II", "Technique_Defender's Will", "Technique_Defender's Taunt", "Technique_Defender's Recovery"], "Skirmisher": ["Technique_Skirmisher", "Technique_Skirmisher II", "Technique_Skirmisher's Step", "Technique_Skirmisher's Strike"], "Marksman": ["Technique_Marksman", "Technique_Marksman II", "Technique_Marksman's Longshot", "Technique_Marksman's Sight", "Technique_Marksman's Strike"], "Athlete": ["Technique_Athlete", "Technique_Athlete II", "Technique_Athlete's Sprint", "Technique_Athlete's Reach", "Technique_Bounding Sprint"], "Ki Extension": ["Technique_Extension Strike", "Technique_Step Extension", "Technique_Lasting Extension", "Technique_Far Strike", "Technique_Extension Strike +"], "Swordplay": ["Technique_Quick Slash", "Technique_Precision Blade", "Technique_Armor Piercer", "Technique_Quick Slash II"] }, "formulaMods": { "CR": ["Attribute", "Skill", "Job", "Technique", "HP", "WILL", "Initiative", "Combat_HV", "Combat_Chakra", "Social_Approval", "Social_Patience", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "AdvancementSkill": ["Skill"], "AdvancementJob": ["Job", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "": ["Role", "Language", "LoreCategory", "Lore", "StyleType", "PageSet", "Page", "Title", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Emotes", "Title_Outfits", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "Attribute_BOD", "Attribute_PRC", "Attribute_QCK", "Attribute_CNV", "Attribute_INT", "Attribute_RSN", "CombatDefense", "SocialSense", "WillBreak", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "EN", "Resistance", "Combat_ResistanceDesc", "Combat_WeaknessDesc", "Chakra", "Social_Patience", "Burn", "Cold", "Energy", "Force", "Piercing", "Shock", "Tension", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Status_Downed", "Status_Engaged", "Status_Ethereal", "Status_Grappled", "Status_Hidden", "Status_Initiative Penalty", "Status_Invisible", "Status_Restrained", "Status_Unconscious", "Condition_Aflame", "Condition_Angered", "Condition_Chilled", "Condition_Delayed", "Condition_Disgusted", "Condition_Dying", "Condition_Empowered", "Condition_Encouraged", "Condition_Encumbered", "Condition_Frightened", "Condition_Hasted", "Condition_Immobilized", "Condition_Impaired", "Condition_Joyful", "Condition_Launched", "Condition_Paralyzed", "Condition_Prone", "Condition_Saddened", "Condition_Sickened", "Condition_Staggered", "Condition_Stunned", "Condition_Surprised", "Skill_Command", "Skill_Concoct", "Skill_Flexibility", "Skill_Heal", "Skill_Maneuver", "Language_Minere", "Language_Junal", "Language_Apollen", "Language_Lib", "Language_Cert", "Language_Byric", "Language_Dustell", "Language_Muralic", "Language_Shira", "Language_Ciel", "Language_Citeq", "Language_Manstan", "Language_Salkan", "Language_Sansic", "Language_Silq", "Language_Kleikan", "Language_Crinere", "Language_Palmic", "Language_Shorespeak", "Language_Verdeni", "Language_Vulca", "Language_Emotion", "Language_Empathy", "Language_Wolfwarg", "Language_Jovean", "Language_Mytikan", "Role_Generalist", "Role_Defender", "Role_Athlete", "Role_Skirmisher", "Role_Marksman"], "TrainingKnowledge": ["Knowledge"], "AdvancementTechnique": ["Technique"], "TrainingTechniques": ["Technique"], "Level": ["Advancement", "HP", "WILL", "Social_Approval"], "Attribute_BOD": ["Defense_Brace", "Defense_Fortitude", "HP", "Carrying Capacity", "Skill_Grappling", "Skill_Might", "Skill_Physique", "Skill_Survival", "Skill_Traversal"], "Attribute_PRC": ["Defense_Disruption", "Defense_Hide", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker"], "Attribute_QCK": ["Defense_Reflex", "Defense_Evasion", "Initiative", "Skill_Acrobatics", "Skill_Agility", "Skill_Finesse", "Skill_Palming", "Skill_Pilot"], "Attribute_INT": ["Sense_Insight", "Sense_Notice", "Skill_Cook", "Skill_Disguise", "Skill_Empathy", "Skill_Leadership", "Skill_Search"], "Attribute_RSN": ["Sense_Scrutiny", "Sense_Detect", "Recall", "Skill_Analyze", "Skill_Build", "Skill_Deception", "Skill_Medicine", "Skill_Negotiation"], "Attribute_CNV": ["Sense_Resolve", "Sense_Freewill", "WILL", "Combat_HV", "Social_Approval", "Skill_Channel", "Skill_Charm", "Skill_Enchant", "Skill_Intimidation", "Skill_Resonance"], "Recall": ["LoreCategory_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCategory_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCategory_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCategory_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCategory_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCategory_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCategory_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"] }
 		},
 		_max = "_max",
 		_true = "_true",
@@ -21440,208 +22084,6 @@ var WuxDef = WuxDef || (function () {
 		_error: _error
 	};
 }());
-function GetEquipmentInfo(name) {
-	switch (name.toLowerCase()) {
-		case "battleaxe":
-			return { "name": "Battleaxe", "type": "Weapon", "group": "Axe", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 6, "value": 2, "abilities": "AP (2)", "skill": "Brawling", "dVal": "1", "dType": "6", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "club":
-			return { "name": "Club", "type": "Weapon", "group": "Hammer", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 4, "value": 2, "abilities": "", "skill": "Brawling", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Force", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "handaxe":
-			return { "name": "Handaxe", "type": "Weapon", "group": "Axe", "traits": "Arcing; Thrown", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 4, "value": 2, "abilities": "", "skill": "Brawling", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "3", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "longsword":
-			return { "name": "Longsword", "type": "Weapon", "group": "Blade", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "Brawling", "dVal": "2", "dType": "6", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "shield":
-			return { "name": "Shield", "type": "Weapon", "group": "Shield", "traits": "Shield", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 6, "value": 2, "abilities": "", "skill": "Brawling", "dVal": "1", "dType": "3", "dBonus": "Power", "damageType": "Force", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "dagger":
-			return { "name": "Dagger", "type": "Weapon", "group": "Blade", "traits": "Thrown", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 2, "value": 2, "abilities": "Quick", "skill": "Finesse", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "3", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "shortsword":
-			return { "name": "Shortsword", "type": "Weapon", "group": "Blade", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 3, "value": 2, "abilities": "Quick", "skill": "Finesse", "dVal": "3", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "warhammer":
-			return { "name": "Warhammer", "type": "Weapon", "group": "Hammer", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "Crushing", "skill": "Might", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Force", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "whip":
-			return { "name": "Whip", "type": "Weapon", "group": "Whip", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 3, "value": 3, "abilities": "", "skill": "Finesse", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "2", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "longbow":
-			return { "name": "Longbow", "type": "Weapon", "group": "Bow", "traits": "Arcing; Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "", "skill": "Marksmanship", "dVal": "3", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "4", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "pistol":
-			return { "name": "Pistol", "type": "Weapon", "group": "Handgun", "traits": "Loud", "description": "", "complexity": "15:Mechanical", "time": "1", "components": "Component", "bulk": 3, "value": 4, "abilities": "", "skill": "Marksmanship", "dVal": "2", "dType": "6", "dBonus": "", "damageType": "Piercing", "range": "4", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "revolver":
-			return { "name": "Revolver", "type": "Weapon", "group": "Handgun", "traits": "Loud", "description": "", "complexity": "15:Mechanical", "time": "2", "components": "Component", "bulk": 4, "value": 4, "abilities": "AP (2)", "skill": "Marksmanship", "dVal": "2", "dType": "6", "dBonus": "", "damageType": "Piercing", "range": "3", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "rifle":
-			return { "name": "Rifle", "type": "Weapon", "group": "Longarm", "traits": "Two-Handed; Loud", "description": "", "complexity": "15:Mechanical", "time": "1", "components": "Component", "bulk": 5, "value": 4, "abilities": "Impact (2d6)", "skill": "Marksmanship", "dVal": "1", "dType": "6", "dBonus": "", "damageType": "Piercing", "range": "5", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "shortbow":
-			return { "name": "Shortbow", "type": "Weapon", "group": "Bow", "traits": "Arcing; Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "Marksmanship", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "4", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "shotgun":
-			return { "name": "Shotgun", "type": "Weapon", "group": "Longarm", "traits": "Two-Handed; Loud", "description": "", "complexity": "15:Mechanical", "time": "2", "components": "Component", "bulk": 1, "value": 5, "abilities": "Cone (2)", "skill": "Marksmanship", "dVal": "2", "dType": "6", "dBonus": "", "damageType": "Piercing", "range": "2", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "sniper rifle":
-			return { "name": "Sniper Rifle", "type": "Weapon", "group": "Longarm", "traits": "Two-Handed; Loud", "description": "", "complexity": "15:Mechanical", "time": "2", "components": "2 Component", "bulk": 8, "value": 5, "abilities": "Impact (5d3)", "skill": "Marksmanship", "dVal": "0", "dType": "", "dBonus": "", "damageType": "Piercing", "range": "8", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "great axe":
-			return { "name": "Great Axe", "type": "Weapon", "group": "Axe", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "AP (2)", "skill": "Might", "dVal": "2", "dType": "6", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "great sword":
-			return { "name": "Great Sword", "type": "Weapon", "group": "Blade", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "", "skill": "Might", "dVal": "4", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "maul":
-			return { "name": "Maul", "type": "Weapon", "group": "Hammer", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "Crushing", "skill": "Might", "dVal": "2", "dType": "6", "dBonus": "Power", "damageType": "Force", "range": "", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "javelin":
-			return { "name": "Javelin", "type": "Weapon", "group": "Spear", "traits": "Arcing; Thrown", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "Lunge", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "3", "threat": "1", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "lance":
-			return { "name": "Lance", "type": "Weapon", "group": "Spear", "traits": "Two-Handed", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2, "abilities": "Line (2)", "skill": "Lunge", "dVal": "2", "dType": "6", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "2", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "spear":
-			return { "name": "Spear", "type": "Weapon", "group": "Spear", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "Line (2)", "skill": "Lunge", "dVal": "3", "dType": "3", "dBonus": "Power", "damageType": "Piercing", "range": "", "threat": "2", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "staff":
-			return { "name": "Staff", "type": "Weapon", "group": "Staff", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "Quick", "skill": "Lunge", "dVal": "2", "dType": "3", "dBonus": "Power", "damageType": "Force", "range": "", "threat": "2", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "blast bomb":
-			return { "name": "Blast Bomb", "type": "Weapon", "group": "Bomb", "traits": "Arcing", "description": "", "complexity": "0:Mechanical", "time": "1", "components": "Black Powder", "bulk": 2, "value": 3, "abilities": "Explosive (1/3d3)", "skill": "Throw", "dVal": "1", "dType": "3", "dBonus": "", "damageType": "Burn", "range": "3", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "impact bomb":
-			return { "name": "Impact Bomb", "type": "Weapon", "group": "Bomb", "traits": "Arcing", "description": "", "complexity": "0:Mechanical", "time": "1", "components": "Black Powder", "bulk": 2, "value": 3, "abilities": "Impact (3d6)", "skill": "Throw", "dVal": "1", "dType": "3", "dBonus": "", "damageType": "Force", "range": "3", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-		case "light breastplate":
-			return { "name": "Light Breastplate", "type": "Chest Armor", "group": "Basic", "traits": "", "description": "", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 15, "value": 3, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "2", "armor": "1", "reflexPen": "-2", "speedPen": "" }
-		case "heavy breastplate":
-			return { "name": "Heavy Breastplate", "type": "Chest Armor", "group": "Basic", "traits": "", "description": "", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 25, "value": 4, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "4", "armor": "2", "reflexPen": "-2", "speedPen": "-1" }
-		case "helmet":
-			return { "name": "Helmet", "type": "Head Armor", "group": "Basic", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "2", "armor": "", "reflexPen": "-1", "speedPen": "" }
-		case "vambraces":
-			return { "name": "Vambraces", "type": "Arms Armor", "group": "Basic", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "2", "armor": "", "reflexPen": "-1", "speedPen": "" }
-		case "light greaves":
-			return { "name": "Light Greaves", "type": "Legs Armor", "group": "Basic", "traits": "", "description": "", "complexity": "", "time": "1", "components": "", "bulk": 10, "value": 2, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "2", "armor": "", "reflexPen": "-1", "speedPen": "" }
-		case "heavy greaves":
-			return { "name": "Heavy Greaves", "type": "Legs Armor", "group": "Basic", "traits": "", "description": "", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 15, "value": 3, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "2", "armor": "1", "reflexPen": "-1", "speedPen": "-1" }
-		default:
-			return { "name": "", "type": "", "group": "", "traits": "", "description": "", "complexity": "", "time": "", "components": "", "bulk": 0, "value": 0, "abilities": "", "skill": "", "dVal": "", "dType": "", "dBonus": "", "damageType": "", "range": "", "threat": "", "block": "", "armor": "", "reflexPen": "", "speedPen": "" }
-
-	}
-}
-
-function GetGearInfo(name) {
-	switch (name.toLowerCase()) {
-		case "bedroll":
-			return { "name": "Bedroll", "type": "Gear", "group": "Camping", "traits": "", "description": "This consists of two woolen sheets sewn together along the bottom and one side to create a bag for sleeping in. Some have cloth straps along the open side so the bedroll can be tied closed while you are sleeping. It can be rolled and tied into a tight coil for storage or transport.", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2 }
-		case "blanket":
-			return { "name": "Blanket", "type": "Gear", "group": "Camping", "traits": "", "description": "This warm, woven blanket has straps so it can be rolled up and tied. Blankets are often used in conjunction with bedrolls to provide additional warmth or a ground cushion.", "complexity": "", "time": "1", "components": "", "bulk": 7, "value": 1 }
-		case "cot":
-			return { "name": "Cot", "type": "Gear", "group": "Camping", "traits": "", "description": "This elevated camp bed is made of wood and canvas, and is particularly useful when the ground is wet or rocky. It is large enough for a full-grown human, but folds down into a 4-foot-by-9-inch cylindrical bag.", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 15, "value": 2 }
-		case "hammock":
-			return { "name": "Hammock", "type": "Gear", "group": "Camping", "traits": "", "description": "This blanket or net is attached to strong ropes, allowing you to hang it from a heavy branch or two trees and sleep above the ground.", "complexity": "", "time": "1", "components": "", "bulk": 10, "value": 1 }
-		case "tent":
-			return { "name": "Tent", "type": "Gear", "group": "Camping", "traits": "", "description": "A tent holds two Medium creature and takes 10 minutes to assemble.", "complexity": "15:Artisan", "time": "2", "components": "", "bulk": 25, "value": 3 }
-		case "pavillion tent":
-			return { "name": "Pavillion Tent", "type": "Gear", "group": "Camping", "traits": "", "description": "A huge open-air canopy, plus stakes, poles, and ropes. A pavilion holds 10 creatures and takes 60 minutes to assemble. Pavilion tents are large enough to accommodate a small fire in the center.", "complexity": "15:Artisan", "time": "8", "components": "", "bulk": 40, "value": 5 }
-		case "compass":
-			return { "name": "Compass", "type": "Gear", "group": "Camping", "traits": "", "description": "An ordinary compass that points to the magnetic north pole grants you a +2 bonus on Navigate checks.", "complexity": "15:Mechanics", "time": "1", "components": "Magnet", "bulk": 1, "value": 3 }
-		case "mirror":
-			return { "name": "Mirror", "type": "Gear", "group": "Camping", "traits": "", "description": "A small mirror with a frame to hold it.", "complexity": "15:Artisan", "time": "1", "components": "Glass", "bulk": 1, "value": 2 }
-		case "rope (50 ft)":
-			return { "name": "Rope (50 ft)", "type": "Gear", "group": "Camping", "traits": "", "description": "Flexible material that can help you climb, tie things up, and other useful things.", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2 }
-		case "lanturn":
-			return { "name": "Lanturn", "type": "Gear", "group": "Camping", "traits": "", "description": "A common lanturn illuminates a small area, providing normal light in a 30-foot radius and increasing the light level by one step for an additional 30 feet beyond that area. A lanturn burns for 6 hours on 1 pint of oil. You can carry a lanturn in one hand.", "complexity": "15:Mechanics", "time": "2", "components": "", "bulk": 2, "value": 3 }
-		case "torch":
-			return { "name": "Torch", "type": "Gear", "group": "Camping", "traits": "", "description": "A torch burns for 1 hour, shedding normal light in a 20-foot radius and increasing the light level by one step for an additional 20 feet beyond that area", "complexity": "", "time": "1", "components": "", "bulk": 1, "value": 1 }
-		case "backpack, common":
-			return { "name": "Backpack, common", "type": "Gear", "group": "Container", "traits": "", "description": "This cloth knapsack has one large pocket that closes with a buckled strap and holds about 2 cubic feet of material. Some may have one or more smaller pockets on the sides.", "complexity": "15:Artisan", "time": "2", "components": "", "bulk": 8, "value": 2 }
-		case "bag, waterproof":
-			return { "name": "Bag, waterproof", "type": "Gear", "group": "Container", "traits": "", "description": "This sack sealed with tar or pitch keeps delicate items from being ruined by water. Items kept inside remain relatively dry, making the bag ideal for carrying maps, scrolls, spellbooks, and the like, although the bag is not impervious and can only be completely immersed for 10 rounds before enough water seeps in to ruin such items.", "complexity": "15:Artisan", "time": "2", "components": "Waterproof Material", "bulk": 8, "value": 1 }
-		case "pouch, waist":
-			return { "name": "Pouch, waist", "type": "Gear", "group": "Container", "traits": "", "description": "This pack is supported by two straps that can be loosened or tightened to fit most body types. It can be adjusted to any facing along its wearer’s waist. The pack can store up to 1/2 cubic foot of material.", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 1, "value": 1 }
-		case "sack":
-			return { "name": "Sack", "type": "Gear", "group": "Container", "traits": "", "description": "A sack is a cloth bag that weighs 1/2 lb. empty and holds 1 cubic ft. or 60 lbs. of contents full.", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 4, "value": 1 }
-		case "barrel":
-			return { "name": "Barrel", "type": "Gear", "group": "Container", "traits": "", "description": "A common barrel is constructed of wood with metal ring reinforcements and holds 10 cubic ft. or 650 lb. of materials. A barrel filled with liquid holds about 75 gallons.", "complexity": "15:Artisan", "time": "2", "components": "", "bulk": 25, "value": 2 }
-		case "basket":
-			return { "name": "Basket", "type": "Gear", "group": "Container", "traits": "", "description": "This large basket has a lid and holds about 2 cubic feet.", "complexity": "", "time": "1", "components": "", "bulk": 3, "value": 1 }
-		case "box, scroll":
-			return { "name": "Box, scroll", "type": "Gear", "group": "Container", "traits": "", "description": "This wooden box easily holds 10 scrolls and has small clips or bookmarks for easier indexing. Retrieving a scroll from a held scroll box is a move action.", "complexity": "", "time": "1", "components": "", "bulk": 1, "value": 2 }
-		case "bucket":
-			return { "name": "Bucket", "type": "Gear", "group": "Container", "traits": "", "description": "A simple bucket holds 1 cubic ft. or up to 65 lb. of liquid or material and when full. A bucket filled with liquid holds about 7 gallons.", "complexity": "", "time": "1", "components": "", "bulk": 1, "value": 2 }
-		case "case, scroll":
-			return { "name": "Case, scroll", "type": "Gear", "group": "Container", "traits": "", "description": "A leather or wooden scroll case easily holds four scrolls.", "complexity": "", "time": "1", "components": "", "bulk": 1, "value": 2 }
-		case "chest, small":
-			return { "name": "Chest, Small", "type": "Gear", "group": "Container", "traits": "", "description": "A common, wooden chest.", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 15, "value": 2 }
-		case "chest, medium":
-			return { "name": "Chest, Medium", "type": "Gear", "group": "Container", "traits": "", "description": "A common, wooden chest.", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 25, "value": 3 }
-		case "chest, large":
-			return { "name": "Chest, Large", "type": "Gear", "group": "Container", "traits": "", "description": "A common, wooden chest.", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 35, "value": 4 }
-		case "cooler":
-			return { "name": "Cooler", "type": "Gear", "group": "Container", "traits": "", "description": "This chest can contain up to 4 cubic feet of goods, and it has a lining of insulating material between two sheets of wood. As long as the chest is partially filled with a cold substance—such as cold water or ice—items stored within decompose at half their regular rate. Ice melts on a consistent basis (typically four to six times in a 24-hour period) and must be regularly replenished to maintain the effectiveness of this chest.", "complexity": "15:Artisan", "time": "3", "components": "Insulation", "bulk": 25, "value": 2 }
-		case "pot":
-			return { "name": "Pot", "type": "Gear", "group": "Container", "traits": "", "description": "Pots come in a variety of materials, but the most common is formed of iron.", "complexity": "", "time": "1", "components": "", "bulk": 2, "value": 1 }
-		case "bottle":
-			return { "name": "Bottle", "type": "Gear", "group": "Container", "traits": "", "description": "This glass bottle holds about a pint and includes a cork.", "complexity": "", "time": "1", "components": "", "bulk": 1, "value": 2 }
-		case "canteen":
-			return { "name": "Canteen", "type": "Gear", "group": "Container", "traits": "", "description": "This hollow container is made of wood, a gourd, or metal, and carries liquid.", "complexity": "", "time": "1", "components": "", "bulk": 1, "value": 2 }
-		case "cauldron":
-			return { "name": "Cauldron", "type": "Gear", "group": "Container", "traits": "", "description": "This larger version of an iron pot holds approximately 1 gallon—enough to fill the bellies of four hungry humans for one meal.", "complexity": "", "time": "1", "components": "", "bulk": 8, "value": 2 }
-		case "coffee pot":
-			return { "name": "Coffee pot", "type": "Gear", "group": "Container", "traits": "", "description": "This tall, teapot-like device contains a small chamber for coffee grounds and a large chamber for water, connected by a small tube. Heating the pot forces boiling water through the tube and into the grounds. A glass knob at the top of the tube allows you to see the color of the brew and stop when it is sufficiently strong. It can brew up to 4 cups of coffee at a time. It can also be used to make tea, steep medicinal herbs, or just boil water.", "complexity": "15:Artisan", "time": "2", "components": "", "bulk": 3, "value": 2 }
-		case "flask":
-			return { "name": "Flask", "type": "Gear", "group": "Container", "traits": "", "description": "A flask holds 1 pint of liquid and weighs 1 lb. when full.", "complexity": "", "time": "1", "components": "", "bulk": 1, "value": 1 }
-		case "jug":
-			return { "name": "Jug", "type": "Gear", "group": "Container", "traits": "", "description": "This basic jug is fitted with a stopper and holds 1 gallon of liquid.", "complexity": "", "time": "1", "components": "", "bulk": 1, "value": 1 }
-		case "pitcher":
-			return { "name": "Pitcher", "type": "Gear", "group": "Container", "traits": "", "description": "A clay pitcher.", "complexity": "", "time": "1", "components": "", "bulk": 3, "value": 1 }
-		case "vial":
-			return { "name": "Vial", "type": "Gear", "group": "Container", "traits": "", "description": "A vial is made out of glass or steel and holds 1 ounce of liquid.", "complexity": "", "time": "1", "components": "", "bulk": 1, "value": 2 }
-		case "canvas (1 sq. yd)":
-			return { "name": "Canvas (1 sq. yd)", "type": "Gear", "group": "Writing", "traits": "", "description": "This square yard of heavy cloth is suitable for painting, for covering items in a rainstorm, for creating a sail, or as an improvised bag. It is not waterproof but can be treated with oil, wax, or resin to make it water-resistant.", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 1, "value": 1 }
-		case "inkpen":
-			return { "name": "Inkpen", "type": "Gear", "group": "Writing", "traits": "", "description": "This is a wooden stylus with a metal tip that retains a small amount of ink after you dip it in a vial of ink.", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 1, "value": 1 }
-		case "paper (30 sheets)":
-			return { "name": "Paper (30 sheets)", "type": "Gear", "group": "Writing", "traits": "", "description": "A sheet of ordinary paper typically measures 9 inches by 6 inches and is unsuitable for making magical scrolls. ", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 1, "value": 1 }
-		case "chain (10 ft.)":
-			return { "name": "Chain (10 ft.)", "type": "Gear", "group": "Bindings", "traits": "", "description": "This is a 10 ft. length of standard chain.", "complexity": "15:Artisan", "time": "1", "components": "", "bulk": 3, "value": 5 }
-		case "magic restraints":
-			return { "name": "Magic Restraints", "type": "Gear", "group": "Bindings", "traits": "", "description": "These steel chain bindings wrap around the chest, arms, and legs. These chains are linked to metal bindings meant to clamp around the arms and legs that contain sealing stone. When worn properly, the sealing stone prevents the usage of ki on the wearer, preventing them from casting spells while retaining full body movement. Most magic restraints have locks that seal the chain on the back; add the cost of the lock you want to the cost of the restraints.", "complexity": "15:Mechanics", "time": "4", "components": "Sigillite", "bulk": 1, "value": 8 }
-		case "manacles, steel":
-			return { "name": "Manacles, steel", "type": "Gear", "group": "Bindings", "traits": "", "description": "Manacles can bind a Medium creature. ", "complexity": "15:Artisan", "time": "2", "components": "", "bulk": 1, "value": 4 }
-		case "lock, average":
-			return { "name": "Lock, average", "type": "Gear", "group": "Bindings", "traits": "", "description": "A simple lock can be unlocked with a standard Mechanical check.", "complexity": "15:Mechanics", "time": "2", "components": "", "bulk": 1, "value": 8 }
-		case "lock, good":
-			return { "name": "Lock, good", "type": "Gear", "group": "Bindings", "traits": "", "description": "A good lock can be unlocked with a difficult Mechanical check.", "complexity": "20:Mechanics", "time": "3", "components": "", "bulk": 1, "value": 12 }
-		case "lock, superior":
-			return { "name": "Lock, superior", "type": "Gear", "group": "Bindings", "traits": "", "description": "A superior lock can be unlocked with a risky Mechanical check.", "complexity": "30:Mechanics", "time": "4", "components": "", "bulk": 1, "value": 16 }
-		case "ladder":
-			return { "name": "Ladder", "type": "Gear", "group": "Tools", "traits": "", "description": "Ladders can be climbed. Most ladders are 40 feet tall.", "complexity": "", "time": "2", "components": "", "bulk": 10, "value": 5 }
-		case "ladder, folding":
-			return { "name": "Ladder, folding", "type": "Gear", "group": "Tools", "traits": "", "description": "Ladders can be climbed. Folding ladders are 30 feet tall.", "complexity": "", "time": "3", "components": "", "bulk": 8, "value": 6 }
-		case "shovel":
-			return { "name": "Shovel", "type": "Gear", "group": "Tools", "traits": "", "description": "A shovel helps with digging.", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2 }
-		case "spyglass":
-			return { "name": "Spyglass", "type": "Gear", "group": "Tools", "traits": "", "description": "Objects viewed through a spyglass are magnified to twice their size.", "complexity": "", "time": "1", "components": "", "bulk": 1, "value": 2 }
-		case "stretcher":
-			return { "name": "Stretcher", "type": "Gear", "group": "Tools", "traits": "", "description": "A stretcher allows two people to share the burden of carrying one heavy object. You can also use it to drag a load you couldn’t carry on your own. A stretcher holds up to 300 pounds.", "complexity": "", "time": "1", "components": "", "bulk": 15, "value": 2 }
-		case "umbrella":
-			return { "name": "Umbrella", "type": "Gear", "group": "Tools", "traits": "", "description": "An umbrella is a heavier, waterproof parasol made of oiled or waxed cloth. It is intended to keep you dry in the rain or snow, but can still protect against sunlight just like a standard parasol.", "complexity": "", "time": "1", "components": "", "bulk": 5, "value": 2 }
-		case "outfit, aristocrat’s":
-			return { "name": "Outfit, Aristocrat’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "These clothes are designed specifically to be expensive and gaudy. Precious metals and gems are worked into the clothing.", "complexity": "15:Artisan", "time": "", "components": "Gold", "bulk": 3, "value": 7 }
-		case "outfit, artisan’s":
-			return { "name": "Outfit, Artisan’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "This outfit includes a shirt with buttons, a skirt or pants with a drawstring, shoes, and perhaps a cap or hat. It may also include a belt or a leather or cloth apron for carrying tools.", "complexity": "", "time": "", "components": "", "bulk": 1, "value": 2 }
-		case "outfit, burglar’s":
-			return { "name": "Outfit, Burglar’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "This outfit consists of fitted pants, a shirt, a hooded reversible cloak, soft leather boots, and a face mask, all in dark or neutral colors. The outfit’s few buttons and rivets are wrapped in dull, dark cloth to avoid jingling or reflecting light. A number of loops and shallow pockets are also worked into the outfit, providing ample0aces for stashing small tools or weapons.", "complexity": "", "time": "", "components": "", "bulk": 1, "value": 2 }
-		case "outfit, cold-weather":
-			return { "name": "Outfit, Cold-Weather", "type": "Gear", "group": "Clothing", "traits": "", "description": "This vestment works just like a cold-weather outfit, granting advantage on Constitution saving throws against exposure to cold weather.", "complexity": "", "time": "", "components": "", "bulk": 2, "value": 3 }
-		case "outfit, courtesan’s":
-			return { "name": "Outfit, Courtesan’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "This outfit includes fine silk or satin garments tailored to complement your figure. In addition, the outfit contains a loose shawl or robe with several discreet pockets for items such as perfume, massage oils, or even a small dagger.", "complexity": "", "time": "", "components": "", "bulk": 1, "value": 3 }
-		case "outfit, courtier’s":
-			return { "name": "Outfit, Courtier’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "This outfit includes fancy, tailored clothes in whatever fashion happens to be the current style in the courts of the nobles. Anyone trying to influence nobles or courtiers while wearing street dress will have a hard time of it (–2 penalty on Charisma-based skill checks to influence such individuals).", "complexity": "15:Artisan", "time": "", "components": "", "bulk": 2, "value": 5 }
-		case "outfit, entertainer’s":
-			return { "name": "Outfit, Entertainer’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "This set of flashy—perhaps even gaudy—clothes is for entertaining. While the outfit looks whimsical, its practical design lets you tumble, dance, walk a tightrope, or just run (if the audience turns ugly).", "complexity": "", "time": "", "components": "", "bulk": 1, "value": 2 }
-		case "outfit, explorer’s":
-			return { "name": "Outfit, Explorer’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "This set of clothes is for someone who never knows what to expect. It includes sturdy boots, leather breeches or a skirt, a belt, a shirt (perhaps with a vest or jacket), gloves, and a cloak. Rather than a leather skirt, a leather overtunic may be worn over a cloth skirt. The clothes have plenty of pockets (especially the cloak). The outfit also includes any extra accessories you might need, such as a scarf or a wide-brimmed hat.", "complexity": "", "time": "", "components": "", "bulk": 2, "value": 3 }
-		case "outfit, hot weather":
-			return { "name": "Outfit, Hot Weather", "type": "Gear", "group": "Clothing", "traits": "", "description": "Covering your body from head to foot in light, airy cloth keeps you cooler than baring your skin to the sun. This outfit typically consists of a loose linen robe and either a turban or loose head covering and veil. The outfit provides advantage on Constitution saving throws to resist warm or hot weather.", "complexity": "", "time": "", "components": "", "bulk": 1, "value": 3 }
-		case "outfit, monk’s":
-			return { "name": "Outfit, Monk’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "This simple outfit includes sandals, loose breeches, and a loose shirt, and is bound together with sashes. The outfit is designed to give you maximum mobility, and it’s made of high-quality fabric. You can conceal small weapons in pockets hidden in the folds, and the sashes are strong enough to serve as short ropes.", "complexity": "", "time": "", "components": "", "bulk": 1, "value": 2 }
-		case "outfit, pauper’s":
-			return { "name": "Outfit, Pauper’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "This set of clothes consists of a loose shirt and baggy breeches, or a loose shirt and skirt or overdress.", "complexity": "", "time": "", "components": "", "bulk": 1, "value": 1 }
-		case "outfit, pickpocket’s":
-			return { "name": "Outfit, Pickpocket’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "Outfitted with concealed pockets, this clothing gives you a +2 bonus on Sleight of Hand (Conceal) checks.", "complexity": "", "time": "", "components": "", "bulk": 1, "value": 2 }
-		case "outfit, scholar’s":
-			return { "name": "Outfit, Scholar’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "Perfect for a scholar, this outfit includes a robe, a belt, a cap, soft shoes, and possibly a cloak.", "complexity": "", "time": "", "components": "", "bulk": 2, "value": 2 }
-		case "outfit, traveler’s":
-			return { "name": "Outfit, Traveler’s", "type": "Gear", "group": "Clothing", "traits": "", "description": "This set of clothes consists of boots, a wool skirt or breeches, a sturdy belt, a shirt (perhaps with a vest or jacket), and an ample cloak with a hood.", "complexity": "", "time": "", "components": "", "bulk": 2, "value": 2 }
-		default:
-			return { "name": "", "type": "", "group": "", "traits": "", "description": "", "complexity": "", "time": "", "components": "", "bulk": 0, "value": 0 }
-
-	}
-}
-
 </script><!-- ROLL TEMPLATES -->
 <div class="rolltemplates">
 

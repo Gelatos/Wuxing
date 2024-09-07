@@ -11678,12 +11678,12 @@
 											</div>
 										</div>
 										<input type="hidden" class="wuxInput" name="attr_chat-type" value="wuxInput" /><input type="hidden" class="wuxInput" name="attr_chat-target" value="wuxInput" /><input type="hidden" class="wuxInput" name="attr_chat-message" value="wuxInput" /><textarea class="wuxInput wuxHeight150" name="attr_chat-postcontent"></textarea>
-										<div class="wuxNoRepControl">
-											<fieldset class="repeating_emotesSet">
-												<button class="wuxEmoteButton" type="roll" value="&{template:@{chat-type}} {{url=@{url}}} {{title=@{chat-target}}} {{language=@{chat-language}}} {{message=@{chat-message}}} @{chat-languagetag}">
-													<span name="attr_emote_name">emote</span>
+										<div class="wuxNoRepControl wuxEmotePostGroup">
+											<fieldset class="repeating_activeemotes">
+												<button class="wuxEmoteButton" type="roll" value="&{template:@{chat-type}} {{url=@{chat-post_url}}} {{title=@{chat-target}}} {{language=@{chat-language}}} {{message=@{chat-message}}} @{chat-languagetag}">
+													<span name="attr_chat-post_name">emote</span>
 												</button>
-												<input type="hidden" name="attr_url">
+												<input type="hidden" name="attr_chat-post_url">
 											</fieldset>
 										</div>
 									</div>
@@ -12304,6 +12304,196 @@
 						</div>
 					</div>
 				</div>
+				<div class="wuxSegment">
+					<input type="checkbox" class="wuxTab-flag" name="attr_ttl-emotes_tab" checked="checked" />
+					<div class="wuxTabHeader">
+						<div class="wuxInteractiveInnerExpandBlock">
+							<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_ttl-emotes_tab" />
+							<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_ttl-emotes_tab" />
+							<span class="wuxInteractiveExpandIcon">&#9662;</span>
+							<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_ttl-emotes_tab" />
+							<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+						</div><span>Emotes</span>
+					</div>
+					<div class="wuxTab">
+						<div class="wuxSectionBlock wuxLayoutItem">
+							<div class="wuxTabContent">
+								<div class="wuxHeader">
+									<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-outfits_info"><span>?</span></div>Outfits
+								</div>
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-outfits_info" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxInfoContent">
+										<div class="wuxHeader2">Outfits</div>
+
+										<span class="wuxDescription">You can add in your character art from here to populate your character's emotes.</span>
+										<span class="wuxDescription">Press the Plus (+) button below to add a new instance of an outfit. From there you can populate the outfit data with emotes.</span>
+									</div>
+								</div>
+								<input type="hidden" class="wuxInput" name="attr_chat-emoteset_id" /><input type="hidden" class="wuxInput" name="attr_chat-emoteset" /><input type="hidden" class="wuxInput" name="attr_chat-default_emote" />
+								<div class="wuxRepeatingFlexSection">
+									<fieldset class="repeating_emotes">
+										<div class="wuxSectionBlock wuxMaxWidth220">
+											<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_chat-outfit_name_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_chat-outfit_name_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_chat-outfit_name_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_chat-outfit_name_learn" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_chat-outfit_name_learn" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_chat-outfit_name_learn" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_chat-outfit_name_learn" />
+														<div class="wuxHeader"><span name="attr_chat-outfit_name">New Outfit</span></div>
+													</div>
+												</div>
+												<div class="wuxSectionHeaderFooter"></div>
+												<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_chat-outfit_name_expand">
+												<div class="wuxInteractiveExpandingContent">
+													<div class="wuxSectionContent">
+														<input type="hidden" class="wuxInput" name="attr_chat-outfit_emotes_true" />
+														<div class="wuxHeader2">Outfit Name</div>
+														<input type="text" class="wuxInput" name="attr_chat-outfit_name" value="New Outfit" />
+														<div class="wuxHeader2">Outfit Emotes</div>
+														<textarea class="wuxInput wuxHeight60" name="attr_chat-outfit_emotes"></textarea>
+														<div class="wuxRow">&nbsp;</div>
+														<div class="wuxHeader2">Default Emote Name</div>
+														<input type="text" class="wuxInput" name="attr_chat-outfit_default_name" />
+														<div class="wuxHeader2">Default Emote URL</div>
+														<input type="text" class="wuxInput" name="attr_chat-outfit_default_url" value="" />
+														<div class="wuxRow">&nbsp;</div>
+														<div class="wuxHeader2">Emote Name 2</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name2" />
+														<div class="wuxHeader2">Emote URL 2</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url2" />
+														<div class="wuxHeader2">Emote Name 3</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name3" />
+														<div class="wuxHeader2">Emote URL 3</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url3" />
+														<div class="wuxHeader2">Emote Name 4</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name4" />
+														<div class="wuxHeader2">Emote URL 4</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url4" />
+														<div class="wuxHeader2">Emote Name 5</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name5" />
+														<div class="wuxHeader2">Emote URL 5</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url5" />
+														<div class="wuxHeader2">Emote Name 6</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name6" />
+														<div class="wuxHeader2">Emote URL 6</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url6" />
+														<div class="wuxHeader2">Emote Name 7</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name7" />
+														<div class="wuxHeader2">Emote URL 7</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url7" />
+														<div class="wuxHeader2">Emote Name 8</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name8" />
+														<div class="wuxHeader2">Emote URL 8</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url8" />
+														<div class="wuxHeader2">Emote Name 9</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name9" />
+														<div class="wuxHeader2">Emote URL 9</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url9" />
+														<div class="wuxHeader2">Emote Name 10</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name10" />
+														<div class="wuxHeader2">Emote URL 10</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url10" />
+														<div class="wuxHeader2">Emote Name 11</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name11" />
+														<div class="wuxHeader2">Emote URL 11</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url11" />
+														<div class="wuxHeader2">Emote Name 12</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name12" />
+														<div class="wuxHeader2">Emote URL 12</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url12" />
+														<div class="wuxHeader2">Emote Name 13</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name13" />
+														<div class="wuxHeader2">Emote URL 13</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url13" />
+														<div class="wuxHeader2">Emote Name 14</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name14" />
+														<div class="wuxHeader2">Emote URL 14</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url14" />
+														<div class="wuxHeader2">Emote Name 15</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name15" />
+														<div class="wuxHeader2">Emote URL 15</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url15" />
+														<div class="wuxHeader2">Emote Name 16</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name16" />
+														<div class="wuxHeader2">Emote URL 16</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url16" />
+														<div class="wuxHeader2">Emote Name 17</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name17" />
+														<div class="wuxHeader2">Emote URL 17</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url17" />
+														<div class="wuxHeader2">Emote Name 18</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name18" />
+														<div class="wuxHeader2">Emote URL 18</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url18" />
+														<div class="wuxHeader2">Emote Name 19</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name19" />
+														<div class="wuxHeader2">Emote URL 19</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url19" />
+														<div class="wuxHeader2">Emote Name 20</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name20" />
+														<div class="wuxHeader2">Emote URL 20</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url20" />
+														<div class="wuxHeader2">Emote Name 21</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name21" />
+														<div class="wuxHeader2">Emote URL 21</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url21" />
+														<div class="wuxHeader2">Emote Name 22</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name22" />
+														<div class="wuxHeader2">Emote URL 22</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url22" />
+														<div class="wuxHeader2">Emote Name 23</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name23" />
+														<div class="wuxHeader2">Emote URL 23</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url23" />
+														<div class="wuxHeader2">Emote Name 24</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name24" />
+														<div class="wuxHeader2">Emote URL 24</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url24" />
+														<div class="wuxHeader2">Emote Name 25</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name25" />
+														<div class="wuxHeader2">Emote URL 25</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url25" />
+														<div class="wuxHeader2">Emote Name 26</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name26" />
+														<div class="wuxHeader2">Emote URL 26</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url26" />
+														<div class="wuxHeader2">Emote Name 27</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name27" />
+														<div class="wuxHeader2">Emote URL 27</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url27" />
+														<div class="wuxHeader2">Emote Name 28</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name28" />
+														<div class="wuxHeader2">Emote URL 28</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url28" />
+														<div class="wuxHeader2">Emote Name 29</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name29" />
+														<div class="wuxHeader2">Emote URL 29</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url29" />
+														<div class="wuxHeader2">Emote Name 30</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_name30" />
+														<div class="wuxHeader2">Emote URL 30</div>
+														<input type="text" class="wuxInput" name="attr_chat-emote_url30" />
+													</div>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="wuxPageDisplay-Options">
@@ -12541,6 +12731,24 @@
 	});
 	on("change:atr-bod change:atr-prc change:atr-qck change:atr-cnv change:atr-int change:atr-rsn", function (eventinfo) {
 	WuxWorkerAttributes.UpdateBuildPoints(eventinfo)
+	});
+	on("change:repeating_emotes:chat-outfit_name_learn", function (eventinfo) {
+	WuxWorkerChat.SelectOutfit(eventinfo)
+	});
+	on("change:repeating_emotes:chat-outfit_name", function (eventinfo) {
+	WuxWorkerChat.UpdateNameOutfit(eventinfo)
+	});
+	on("change:repeating_emotes:chat-outfit_emotes", function (eventinfo) {
+	WuxWorkerChat.UpdateOutfitEmotesGroup(eventinfo)
+	});
+	on("change:repeating_emotes:chat-outfit_default_url", function (eventinfo) {
+	WuxWorkerChat.UpdateOutfitEmotesDefaultUrl(eventinfo)
+	});
+	on("change:repeating_emotes:chat-outfit_default_name change:repeating_emotes:chat-emote_name2 change:repeating_emotes:chat-emote_name3 change:repeating_emotes:chat-emote_name4 change:repeating_emotes:chat-emote_name5 change:repeating_emotes:chat-emote_name6 change:repeating_emotes:chat-emote_name7 change:repeating_emotes:chat-emote_name8 change:repeating_emotes:chat-emote_name9 change:repeating_emotes:chat-emote_name10 change:repeating_emotes:chat-emote_name11 change:repeating_emotes:chat-emote_name12 change:repeating_emotes:chat-emote_name13 change:repeating_emotes:chat-emote_name14 change:repeating_emotes:chat-emote_name15 change:repeating_emotes:chat-emote_name16 change:repeating_emotes:chat-emote_name17 change:repeating_emotes:chat-emote_name18 change:repeating_emotes:chat-emote_name19 change:repeating_emotes:chat-emote_name20 change:repeating_emotes:chat-emote_name21 change:repeating_emotes:chat-emote_name22 change:repeating_emotes:chat-emote_name23 change:repeating_emotes:chat-emote_name24 change:repeating_emotes:chat-emote_name25 change:repeating_emotes:chat-emote_name26 change:repeating_emotes:chat-emote_name27 change:repeating_emotes:chat-emote_name28 change:repeating_emotes:chat-emote_name29 change:repeating_emotes:chat-emote_name30", function (eventinfo) {
+	WuxWorkerChat.UpdateOutfitEmotesName(eventinfo)
+	});
+	on("change:repeating_emotes:chat-emote_url2 change:repeating_emotes:chat-emote_url3 change:repeating_emotes:chat-emote_url4 change:repeating_emotes:chat-emote_url5 change:repeating_emotes:chat-emote_url6 change:repeating_emotes:chat-emote_url7 change:repeating_emotes:chat-emote_url8 change:repeating_emotes:chat-emote_url9 change:repeating_emotes:chat-emote_url10 change:repeating_emotes:chat-emote_url11 change:repeating_emotes:chat-emote_url12 change:repeating_emotes:chat-emote_url13 change:repeating_emotes:chat-emote_url14 change:repeating_emotes:chat-emote_url15 change:repeating_emotes:chat-emote_url16 change:repeating_emotes:chat-emote_url17 change:repeating_emotes:chat-emote_url18 change:repeating_emotes:chat-emote_url19 change:repeating_emotes:chat-emote_url20 change:repeating_emotes:chat-emote_url21 change:repeating_emotes:chat-emote_url22 change:repeating_emotes:chat-emote_url23 change:repeating_emotes:chat-emote_url24 change:repeating_emotes:chat-emote_url25 change:repeating_emotes:chat-emote_url26 change:repeating_emotes:chat-emote_url27 change:repeating_emotes:chat-emote_url28 change:repeating_emotes:chat-emote_url29 change:repeating_emotes:chat-emote_url30", function (eventinfo) {
+	WuxWorkerChat.UpdateOutfitEmotesUrl(eventinfo)
 	});
 	
 	
