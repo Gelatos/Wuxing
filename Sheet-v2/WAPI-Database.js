@@ -177,16 +177,19 @@ class ExtendedTechniqueDatabase extends Database {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
             data = dataCreationCallback(dataArray[i]);
-            switch (data.name) {
-                case "-":
-                    this.get(data.linkedTech).importEffectTechnique(data);
-                    break;
-                case "!":
-                    this.get(data.linkedTech).importOngoingTechnique(data);
-                    break;
-                default:
-                    this.add(data.name, data);
-                    break;
+            if (this.has(data.name)) {
+                this.get(data.name).importEffectTechnique(data);
+                switch (data.techSet) {
+                    case "!":
+                        this.get(data.name).importOngoingTechnique(data);
+                        break;
+                    default:
+                        this.get(data.name).importEffectTechnique(data);
+                        break;
+                }
+            }
+            else {
+                this.add(data.name, data);
             }
         }
     }
@@ -285,7 +288,6 @@ class TechniqueData extends WuxDatabaseData {
         this.name = json.name;
         this.fieldName = Format.ToFieldName(this.name);
         this.techSet = json.techSet;
-        this.linkedTech = json.linkedTech;
         this.group = json.group;
         this.affinity = json.affinity;
         this.tier = json.tier;
@@ -313,7 +315,6 @@ class TechniqueData extends WuxDatabaseData {
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToFieldName(this.name);
         this.techSet = "" + dataArray[i]; i++;
-        this.linkedTech = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
         this.affinity = "" + dataArray[i]; i++;
         this.tier = parseInt(dataArray[i]) == NaN ? 1 : parseInt(dataArray[i]); i++;
@@ -340,7 +341,6 @@ class TechniqueData extends WuxDatabaseData {
         this.name = "";
         this.fieldName = "";
         this.techSet = "";
-        this.linkedTech = "";
         this.group = "";
         this.affinity = "";
         this.tier = 0;
@@ -376,7 +376,6 @@ class TechniqueData extends WuxDatabaseData {
             return baseTechnique;
         }
         this.techSet = this.setAugmentTechValue(this.techSet, baseTechnique.techSet);
-        this.linkedTech = this.setAugmentTechValue(this.linkedTech, baseTechnique.linkedTech);
         this.group = this.setAugmentTechValue(this.group, baseTechnique.group);
         this.tier = this.setAugmentTechValue(this.tier, baseTechnique.tier);
         this.action = this.setAugmentTechValue(this.action, baseTechnique.action);
