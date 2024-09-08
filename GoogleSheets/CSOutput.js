@@ -751,7 +751,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							let header = `${attributeDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(attributeDefinition))}`;
 							let output = WuxSheetMain.Table.FlexTableHeader(header);
 							output += WuxSheetMain.Table.FlexTableData(contents);
-							return WuxSheetMain.Table.FlexTableGroup(output, "wuxMinWidth150");
+							return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
 						}
 						;
 					return {
@@ -908,7 +908,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 						WuxSheetMain.SectionBlockContents(buildStyleContents(styleDef, techniqueDatabase, displayOptions)))}`;
 
 					return `${WuxSheetMain.CustomInput("hidden", styleDef.getAttribute(WuxDef._filter), "wuxFlexTableItemGroup-flag", ` value="0"`)}
-					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)))}`;
+					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)), "Half wuxMinWidth220")}`;
 				},
 
 				buildStyleContents = function (styleDef, techniqueDatabase, displayOptions) {
@@ -1155,7 +1155,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							let xpDefinition = WuxDef.Get("XP");
         			        contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.getFormulaValue()}</span>`);
 							
-							return WuxSheetMain.Table.FlexTableGroup(contents, "wuxMinWidth150");
+							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
         			    },
         			    
         			    training = function () {
@@ -1171,7 +1171,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							let ppDefinition = WuxDef.Get("PP");
         			        contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.getFormulaValue()}</span>`);
 							
-							return WuxSheetMain.Table.FlexTableGroup(contents, "wuxMinWidth150");
+							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
         			    }
         			    
         			    return {
@@ -1228,16 +1228,16 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
 							let output = WuxSheetMain.Table.FlexTableHeader(header);
 							output += WuxSheetMain.Table.FlexTableData(contents);
-							return WuxSheetMain.Table.FlexTableGroup(output, "wuxMinWidth150");
+							return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
 						},
 
 						createStatBlockValue = function (fieldName) {
-							return WuxSheetMain.Table.FlexTableGroup(`<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, "wuxMinWidth100");
+							return WuxSheetMain.Table.FlexTableGroup(`<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, " wuxMinWidth100");
 						},
 
 						createStatBlockValueWithHeader = function (name, fieldName) {
 							return WuxSheetMain.Table.FlexTableGroup(`${WuxSheetMain.Table.FlexTableSubheader(name)}
-							<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, "wuxMinWidth100");
+							<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, " wuxMinWidth100");
 						}
         			    
         			    return {
@@ -1257,7 +1257,8 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							let contents = WuxSheetMain.MultiRowGroup([buildOrigin(), buildOriginStats()], WuxSheetMain.Table.FlexTable, 2);
 							contents = WuxSheetMain.TabBlock(contents);
 							
-							return contents;
+							let definition = WuxDef.Get("Page_Origin");
+							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
 						},
 
 						buildOrigin = function () {
@@ -1268,9 +1269,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
 							contents += WuxDefinition.BuildTextarea(WuxDef.Get("Background"), WuxDef.GetAttribute("Background"), "wuxInput wuxHeight150");
 							contents = WuxSheetMain.Table.FlexTableGroup(contents);
-							
-							let definition = WuxDef.Get("Page_Origin");
-							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+							return WuxSheetMain.Table.FlexTableGroup(contents);
 						},
 
 						buildOriginStats = function () {
@@ -1333,7 +1332,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 								</fieldset>
 							</div>`;
 							
-							return WuxSheetMain.Table.FlexTableGroup(contents, "wuxMinWidth150");
+							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
 						},
 
 						languageSelect = function () {
@@ -1351,7 +1350,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 								);
 							}
 							
-							return WuxSheetMain.Table.FlexTableGroup(contents, "wuxMinWidth150");
+							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
 						},
 
 						languageTitle = function (languageDef) {

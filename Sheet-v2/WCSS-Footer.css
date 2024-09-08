@@ -37,6 +37,11 @@
     width: 300px;
 }
 
+.wuxWidth50Percent
+{
+    width: 50%;
+}
+
 .wuxMinWidth100
 {
     min-width: 100px;
@@ -50,6 +55,11 @@
 .wuxMinWidth200
 {
     min-width: 200px;
+}
+
+.wuxMinWidth220
+{
+    min-width: 220px;
 }
 
 .wuxMinWidth300

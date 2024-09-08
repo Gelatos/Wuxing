@@ -23,7 +23,8 @@
 .wuxFlexTableItemGroup,
 .wuxFlexTableItemGroup2,
 .wuxFlexTableItemGroup3,
-.wuxFlexTableItemGroup8
+.wuxFlexTableItemGroup8,
+.wuxFlexTableItemGroupHalf
 {
     position: relative;
     display: block;
@@ -50,7 +51,16 @@
 	flex: 8;
 }
 
-input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup 
+.wuxFlexTableItemGroupHalf
+{
+    width: calc(50% - 20px);
+}
+
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup,
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup2,
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup3,
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup8,
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroupHalf
 {
     display: none;
 }

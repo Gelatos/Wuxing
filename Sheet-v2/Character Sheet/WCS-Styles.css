@@ -854,7 +854,8 @@ textarea.wuxInput
 .wuxFlexTableItemGroup,
 .wuxFlexTableItemGroup2,
 .wuxFlexTableItemGroup3,
-.wuxFlexTableItemGroup8
+.wuxFlexTableItemGroup8,
+.wuxFlexTableItemGroupHalf
 {
     position: relative;
     display: block;
@@ -881,7 +882,16 @@ textarea.wuxInput
 	flex: 8;
 }
 
-input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup 
+.wuxFlexTableItemGroupHalf
+{
+    width: calc(50% - 20px);
+}
+
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup,
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup2,
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup3,
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroup8,
+input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroupHalf
 {
     display: none;
 }
@@ -5123,7 +5133,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-action .sheet-wuxTrait:hover .sheet-wuxTooltipContent,
 .sheet-rolltemplate-results .sheet-wuxTrait:hover .sheet-wuxTooltipContent
 {
-visibility: visible;
+    visibility: visible;
 }
 
 
@@ -5616,7 +5626,7 @@ visibility: visible;
 {
     border: 0px solid black; 
     margin: 0px -40px 0px -40px;
-    max-width: 280px;
+    max-width: 270px;
 }
 
 .sheet-rolltemplate-ctmsg .sheet-chatimage,
@@ -7381,6 +7391,11 @@ Quest Box
     width: 300px;
 }
 
+.wuxWidth50Percent
+{
+    width: 50%;
+}
+
 .wuxMinWidth100
 {
     min-width: 100px;
@@ -7394,6 +7409,11 @@ Quest Box
 .wuxMinWidth200
 {
     min-width: 200px;
+}
+
+.wuxMinWidth220
+{
+    min-width: 220px;
 }
 
 .wuxMinWidth300

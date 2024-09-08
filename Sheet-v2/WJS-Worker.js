@@ -816,7 +816,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		WuxWorkerAttributes.UpdateStats(attributeHandler);
 		WuxWorkerSkills.UpdateStats(attributeHandler);
 		WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
-		UpdateStats(attributeHandler);
+		updateStats(attributeHandler);
 
 		leavePageVariables(attributeHandler);
 		attributeHandler.run();
@@ -834,7 +834,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		WuxWorkerAttributes.UpdateStats(attributeHandler);
 		WuxWorkerSkills.UpdateStats(attributeHandler);
 		WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
-		UpdateStats(attributeHandler);
+		updateStats(attributeHandler);
 
 		leavePageVariables(attributeHandler);
 		attributeHandler.run();
