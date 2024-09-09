@@ -178,7 +178,6 @@ class ExtendedTechniqueDatabase extends Database {
         for (let i = 0; i < dataArray.length; i++) {
             data = dataCreationCallback(dataArray[i]);
             if (this.has(data.name)) {
-                this.get(data.name).importEffectTechnique(data);
                 switch (data.techSet) {
                     case "!":
                         this.get(data.name).importOngoingTechnique(data);
@@ -460,6 +459,31 @@ class TechniqueData extends WuxDatabaseData {
         if (!this.definitions.includes(definition)) {
             this.definitions.push(definition);
         }
+    }
+
+    getUseTech (sanitize) {
+        // add technique data for the api
+        this.username = `@{${WuxDef.GetVariable("Display Name")}}`;
+        let usedTechData = JSON.stringify(this);
+        if (sanitize) {
+            usedTechData = this.sanitizeSheetRollAction(usedTechData);
+        }
+        return `!ctech ${usedTechData}`;
+    }
+    sanitizeSheetRollAction(roll) {
+        var sheetRoll = roll;
+        sheetRoll = sheetRoll.replace(/%/g, "&#37;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+        sheetRoll = sheetRoll.replace(/"/g, "&#34;");
+        // sheetRoll = sheetRoll.replace(/:/g, "");
+        sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
+        sheetRoll = sheetRoll.replace(/@/g, "&#64;");
+        sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
+        sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+        sheetRoll = sheetRoll.replace(/\n/g, "&&");
+        return sheetRoll;
     }
 }
 class TechniqueEffect extends dbObj {
@@ -1186,6 +1210,29 @@ class TechniqueDisplayData {
         this.effects = new Dictionary();
         this.ongoingEffects = undefined;
     }
+
+    getRollTemplate() {
+        let output = "";
+
+        output += `{{Username=${this.username}}}{{Name=${this.name}}}{{SlotType=${this.slotFooter}}}{{Source=${this.slotSource}}}{{UsageInfo=${this.usageInfo}}}`;
+        output += `${this.traits.length > 0 ? this.rollTemplateTraits(this.traits, "Trait") : ""}${this.trigger ? `{{Trigger=${this.trigger}}}` : ""}`;
+        output += `${this.requirement ? `{{Requirement=${this.requirement}}}` : ""}${this.item ? `{{Item=${this.item}}}` : ""}`;
+        output += `${this.range ? `{{Range=${this.range}}}` : ""}${this.target ? `{{Target=${this.target}}}` : ""}`;
+        output += `${this.skill ? `{{SkillString=${this.skill}}}` : ""}${this.damage ? `{{DamageString=${this.damage}}}` : ""}`;
+        output += `${this.description ? `{{Desc=${this.description}}}` : ""}${this.onHit ? `{{OnHit=${this.onHit}}}` : ""}${this.conditions ? `{{Conditions=${this.conditions}}}` : ""}`;
+        output += ` {{type-${this.slotType}=1}} ${this.slotIsPath ? "{{isPath=1}} " : ""}{{type-${this.actionType}=1}}`;
+        output += ` ${this.isFunctionBlock ? "{{type-FunctionBlock=1}} " : ""}${this.isCheckBlock ? "{{type-CheckBlock=1}} " : ""}`;
+        output += `${this.isCheckBlock ? "{{type-CheckBlockTarget=1}} " : ""}${this.isDescBlock ? "{{type-DescBlock=1}} " : ""}`;
+
+        return `&{template:technique} ${output.trim()}`;
+    }
+    rollTemplateTraits(traitsDb, rtPrefix) {
+        let output = "";
+        for (var i = 0; i < traitsDb.length; i++) {
+            output += `{{${rtPrefix}${i}=${traitsDb[i].name}}} {{${rtPrefix}${i}Desc=${traitsDb[i].description}}} `;
+        }
+        return output;
+    }
 }
 
 var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
@@ -1266,8 +1313,11 @@ var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
         let bonusEffects = effect.dBonus.split(";");
         for(let i = 0; i < bonusEffects.length; i++) {
             bonusEffects[i] = bonusEffects[i].trim();
+            if (bonusEffects[i] == "") {
+                continue;
+            }
             if (output != "") {
-                output += "; ";
+                output += " + ";
             }
             if (isNaN(parseInt(bonusEffects[i]))) {
                 output += `${WuxDef.GetAbbreviation(bonusEffects[i])}`;
@@ -1492,68 +1542,6 @@ class WorkerFormula {
     }
 }
 
-class EmoteSetData {
-    constructor(json) {
-        this.createEmpty();
-        if (json != undefined) {
-            this.importJson(json);
-        }
-    }
-
-    importJson(json) {
-        if (json.name == undefined) {
-            console.log("EmoteSetData: No name found in json");
-            return;
-        }
-        if (json.defaultEmote == undefined) {
-            console.log("EmoteSetData: No defaultEmote found in json");
-            return;
-        }
-        if (json.emotes == undefined) {
-            console.log("EmoteSetData: No emotes found in json");
-            return;
-        }
-        this.name = json.name;
-        this.defaultEmote = json.defaultEmote;
-        this.emotes = json.emotes;
-    }
-
-    createEmpty() {
-        this.name = "";
-        this.defaultEmote = "";
-        this.emotes = [];
-    }
-
-    addEmote(name, url) {
-        this.emotes.push(new EmoteData({name: name, url: url}));
-    }
-
-    iterate(callback) {
-        for (let i = 0; i < this.emotes.length; i++) {
-            callback(this.emotes[i]);
-        }
-    }
-}
-
-class EmoteData {
-    constructor(json) {
-        this.createEmpty();
-        if (json != undefined) {
-            this.importJson(json);
-        }
-    }
-
-    importJson(json) {
-        this.name = json.name;
-        this.url = json.url;
-    }
-
-    createEmpty() {
-        this.name = "";
-        this.url = "";
-    }   
-}
-
 // ====== Formatters
 
 var FeatureService = FeatureService || (function () {
@@ -1565,11 +1553,9 @@ var FeatureService = FeatureService || (function () {
         // ------------------------,
 
         getRollTemplate = function (techDisplayData) {
-
             let output = "";
 
             output += `{{Username=${techDisplayData.username}}}{{Name=${techDisplayData.name}}}{{SlotType=${techDisplayData.slotFooter}}}{{Source=${techDisplayData.slotSource}}}{{UsageInfo=${techDisplayData.usageInfo}}}${techDisplayData.traits.length > 0 ? rollTemplateTraits(techDisplayData.traits, "Trait") : ""}${techDisplayData.trigger ? `{{Trigger=${techDisplayData.trigger}}}` : ""}${techDisplayData.requirement ? `{{Requirement=${techDisplayData.requirement}}}` : ""}${techDisplayData.item ? `{{Item=${techDisplayData.item}}}` : ""}${techDisplayData.range ? `{{Range=${techDisplayData.range}}}` : ""}${techDisplayData.target ? `{{Target=${techDisplayData.target}}}` : ""}${techDisplayData.skill ? `{{SkillString=${techDisplayData.skill}}}` : ""}${techDisplayData.damage ? `{{DamageString=${techDisplayData.damage}}}` : ""}${techDisplayData.description ? `{{Desc=${techDisplayData.description}}}` : ""}${techDisplayData.onHit ? `{{OnHit=${techDisplayData.onHit}}}` : ""}${techDisplayData.conditions ? `{{Conditions=${techDisplayData.conditions}}}` : ""}`;
-
             output += ` {{type-${techDisplayData.slotType}=1}} ${techDisplayData.slotIsPath ? "{{isPath=1}} " : ""}{{type-${techDisplayData.actionType}=1}} ${techDisplayData.isFunctionBlock ? "{{type-FunctionBlock=1}} " : ""}${techDisplayData.isCheckBlock ? "{{type-CheckBlock=1}} " : ""}${techDisplayData.isCheckBlock ? "{{type-CheckBlockTarget=1}} " : ""}${techDisplayData.isDescBlock ? "{{type-DescBlock=1}} " : ""}`;
 
             return `&{template:technique} ${output.trim()}`;

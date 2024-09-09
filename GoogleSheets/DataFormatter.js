@@ -291,21 +291,19 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
 
                 // add technique data for the api
                 techDisplayData.technique.username = "@{character_name}";
-                let usedTechData = JSON.stringify(techDisplayData.technique);
-                usedTechData = Format.SanitizeSheetRollAction(usedTechData);
                 let showDefinition = WuxDef.Get("Title_ShowTechnique");
                 let useDefinition = WuxDef.Get("Title_UseTechnique");
 
                 return `
                 ${WuxSheetMain.CustomInput("hidden", displayOptions.techniqueDefinition.getAttribute(WuxDef._subfilter), "wuxFeatureInteractionButton-flag", ` value="0"`)}
                 <div class="wuxFeatureHeaderInteractBlock">
-                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value=\`${FeatureService.GetRollTemplate(techDisplayData)}\`>
+                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='${techDisplayData.getRollTemplate()}'>
                         ?
                         <div class="wuxTooltipContent">
                             ${WuxDefinition.TooltipDescription(showDefinition)}
                         </div>
                     </button>
-                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value=\`!ctech ${usedTechData}\`>
+                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='${techDisplayData.technique.getUseTech(true)}'>
                         9
                         <div class="wuxTooltipContent">
                             ${WuxDefinition.TooltipDescription(useDefinition)}
@@ -695,7 +693,7 @@ var WuxDefinition = WuxDefinition || (function () {
         getAbbreviation = function (key) {
             let data = get(key);
             if (data.abbreviation == "") {
-                return data.name;
+                return data.title;
             }
             else {
                 return data.abbreviation;

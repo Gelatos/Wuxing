@@ -31,6 +31,67 @@ var WuxMessage = WuxMessage || (function () {
     };
 }());
 
+class EmoteSetData {
+    constructor(json) {
+        this.createEmpty();
+        if (json != undefined) {
+            this.importJson(json);
+        }
+    }
+
+    importJson(json) {
+        if (json.name == undefined) {
+            console.log("EmoteSetData: No name found in json");
+            return;
+        }
+        if (json.defaultEmote == undefined) {
+            console.log("EmoteSetData: No defaultEmote found in json");
+            return;
+        }
+        if (json.emotes == undefined) {
+            console.log("EmoteSetData: No emotes found in json");
+            return;
+        }
+        this.name = json.name;
+        this.defaultEmote = json.defaultEmote;
+        this.emotes = json.emotes;
+    }
+
+    createEmpty() {
+        this.name = "";
+        this.defaultEmote = "";
+        this.emotes = [];
+    }
+
+    addEmote(name, url) {
+        this.emotes.push(new EmoteData({name: name, url: url}));
+    }
+
+    iterate(callback) {
+        for (let i = 0; i < this.emotes.length; i++) {
+            callback(this.emotes[i]);
+        }
+    }
+}
+
+class EmoteData {
+    constructor(json) {
+        this.createEmpty();
+        if (json != undefined) {
+            this.importJson(json);
+        }
+    }
+
+    importJson(json) {
+        this.name = json.name;
+        this.url = json.url;
+    }
+
+    createEmpty() {
+        this.name = "";
+        this.url = "";
+    }   
+}
 
 class ChatMessage {
     constructor(msg) {

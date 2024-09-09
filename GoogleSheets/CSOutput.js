@@ -568,6 +568,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 								jobs.push(buildJob(job, techDictionary));
 							});
 							let output = WuxSheetMain.MultiRowGroup(jobs, WuxSheetMain.Table.FlexTable, 2);
+							output = WuxSheetMain.Table.FlexTable(output);
 							output = WuxSheetMain.TabBlock(output);
 
 							let definition = WuxDef.Get("Job");
@@ -575,15 +576,14 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						},
 
 						buildJob = function (job, techDictionary) {
-							let jobDefinition = WuxDef.Get("Job");
-							let jobDef = job.createDefinition(jobDefinition);
+							let jobDef = job.createDefinition(WuxDef.Get("Job"));
 
 							let contents = `${buildJobHeader(jobDef, job)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
 							${WuxSheetMain.InteractionElement.ExpandableBlockContents(jobDef.getAttribute(WuxDef._expand),
 								WuxSheetMain.SectionBlockContents(buildJobContents(job, jobDef, techDictionary)))}`;
 
-							return WuxSheetMain.SectionBlock(contents);
+							return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)), "Half wuxMinWidth220")}`;
 						},
 
 						buildJobHeader = function (jobDef, job) {
