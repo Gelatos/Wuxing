@@ -568,7 +568,6 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 								jobs.push(buildJob(job, techDictionary));
 							});
 							let output = WuxSheetMain.MultiRowGroup(jobs, WuxSheetMain.Table.FlexTable, 2);
-							output = WuxSheetMain.Table.FlexTable(output);
 							output = WuxSheetMain.TabBlock(output);
 
 							let definition = WuxDef.Get("Job");
@@ -583,7 +582,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							${WuxSheetMain.InteractionElement.ExpandableBlockContents(jobDef.getAttribute(WuxDef._expand),
 								WuxSheetMain.SectionBlockContents(buildJobContents(job, jobDef, techDictionary)))}`;
 
-							return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)), "Half wuxMinWidth220")}`;
+							return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
 						},
 
 						buildJobHeader = function (jobDef, job) {
@@ -620,7 +619,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							let techniques;
 							for (let i = 1; i <= 3; i++) {
 								output += `${WuxSheetMain.Header2(`Tier ${i} Techniques`)}\n`;
-								techniques = techDictionary.filter([new DatabaseFilterData("techSet", job.name), new DatabaseFilterData("tier", i)]);
+								techniques = techDictionary.filter([new DatabaseFilterData("style", job.name), new DatabaseFilterData("tier", i)]);
 								for (let j = 0; j < techniques.length; j++) {
 									output += WuxPrintTechnique.Get(techniques[j], displayOptions) + "\n";
 								}
@@ -908,7 +907,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 						WuxSheetMain.SectionBlockContents(buildStyleContents(styleDef, techniqueDatabase, displayOptions)))}`;
 
 					return `${WuxSheetMain.CustomInput("hidden", styleDef.getAttribute(WuxDef._filter), "wuxFlexTableItemGroup-flag", ` value="0"`)}
-					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)), "Half wuxMinWidth220")}`;
+					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
 				},
 
 				buildStyleContents = function (styleDef, techniqueDatabase, displayOptions) {
@@ -941,7 +940,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 				buildTechniques = function (styleDef, techniqueDatabase, displayOptions) {
 					let output = WuxSheetMain.Header(`<span>Techniques</span>`);
 
-					let filters = [new DatabaseFilterData("techSet", styleDef.title)];
+					let filters = [new DatabaseFilterData("style", styleDef.title)];
 					let filterFieldName = WuxDef.GetAttribute("Technique", WuxDef._filter);
 					let learnedTechs = createTechniquesByRequirements(techniqueDatabase.filter(filters), displayOptions);
 					let freeTechs = learnedTechs.get("Free");

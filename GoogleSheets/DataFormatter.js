@@ -132,7 +132,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createTechniques = function (arr) {
-            let filters = ["techSet", "linkedTech", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
+            let filters = ["style", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
             return new ExtendedTechniqueDatabase(filters, arr, function (arr) {
                 return new TechniqueData(arr);
             });

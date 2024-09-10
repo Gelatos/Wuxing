@@ -106,9 +106,8 @@ class Database extends Dictionary {
 
     add(key, value) {
         super.add(key, value);
-        let propertyValue = "";
         for (let property in this.sortingGroups) {
-            if (value.hasOwnProperty(property)) {
+            if (value != undefined && value.hasOwnProperty(property)) {
                 this.addSortingGroup(property, value[property], value.name);
             }
         }
@@ -173,6 +172,20 @@ class Database extends Dictionary {
     }
 }
 class ExtendedTechniqueDatabase extends Database {
+
+    constructor(sortingProperties, data, dataCreationCallback) {
+        super(sortingProperties, data, dataCreationCallback);
+    }
+
+    add(key, value) {
+        super.add(key, value);
+
+        let styles = value.techSet.split(";");
+        for (let i = 0; i < styles.length; i++) {
+            this.addSortingGroup("style", styles[i].trim(), value.name);
+        }
+    }
+
     importSheets(dataArray, dataCreationCallback) {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
