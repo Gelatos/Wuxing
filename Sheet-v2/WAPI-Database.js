@@ -278,7 +278,7 @@ class WuxDatabaseData extends dbObj {
     }
     createDefinition(baseDefinition) {
         let definition = new DefinitionData();
-        definition.name = baseDefinition.isResource ? `${this.name}` : `${baseDefinition.name}_${this.name}`;
+        definition.name = baseDefinition.isResource ? `${this.name}` : `${baseDefinition.abbreviation}_${this.name}`;
         definition.fieldName = this.fieldName;
         definition.variable = `${baseDefinition.getVariable(`-${this.variable == "" ? this.fieldName : this.variable}`)}{0}`;
         definition.title = this.name;
