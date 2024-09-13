@@ -5534,8 +5534,8 @@ var import_character_emote_data = function () {
 		let newrowid = "";
 
 		newrowid = generateRowID();
-		update[GetSectionIdName(repeatingEmoteOutfits, newrowid, "tempName")] = emoteData.outfit;
-		update[GetSectionIdName(repeatingEmoteOutfits, newrowid, "name")] = emoteData.outfit;
+		update[GetSectionIdName(repeatingEmoteOutfits, newrowid, "tempName")] = emoteData.name;
+		update[GetSectionIdName(repeatingEmoteOutfits, newrowid, "name")] = emoteData.name;
 		update[GetSectionIdName(repeatingEmoteOutfits, newrowid, "options-flag")] = "0";
 
 
@@ -5545,7 +5545,7 @@ var import_character_emote_data = function () {
 			update[GetSectionIdName(repeatingEmotes, newrowid, "emote_name")] = emote.name;
 			update[GetSectionIdName(repeatingEmotes, newrowid, "options-flag")] = "0";
 			update[GetSectionIdName(repeatingEmotes, newrowid, "url")] = emote.url;
-			update[GetSectionIdName(repeatingEmotes, newrowid, "emote_set")] = emoteData.outfit;
+			update[GetSectionIdName(repeatingEmotes, newrowid, "emote_set")] = emoteData.name;
 		});
 
 		setAttrs(update, {silent: true}, function() {
