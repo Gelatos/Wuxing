@@ -99,9 +99,10 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 	updateOutfitEmotesGroup = function (eventinfo) {
 		console.log(`Setting outfit emotes through a json submission`);
 		let outfitRepeatingSection = new WuxRepeatingSection("RepeatingOutfits");
+		let jsonData = "";
 
 		try {
-			JSON.parse(eventinfo.newValue);
+			jsonData = JSON.parse(eventinfo.newValue);
 		} catch (e) {
 			let attributeHandler  = new WorkerAttributeHandler();
 			attributeHandler.addUpdate(eventinfo.sourceAttribute, "Invalid JSON. This field could not be read as a JSON object.");
@@ -109,7 +110,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 			return;
 		}
 
-		let outfitEmotes = new EmoteSetData(JSON.parse(eventinfo.newValue));
+		let outfitEmotes = new EmoteSetData(jsonData);
 
 		if (outfitEmotes.name == "") {
 			let attributeHandler  = new WorkerAttributeHandler();

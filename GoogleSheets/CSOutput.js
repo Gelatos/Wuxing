@@ -253,7 +253,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 							contents +=  WuxDefinition.InfoHeader(titleDefinition);
 
 							let ppDefinition = WuxDef.Get("PP");
-							contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.getFormulaValue()}</span>`);
+							contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}</span>`);
 							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Convert To TP`));
 
 							return WuxSheetMain.Table.FlexTableGroup(contents);
@@ -525,7 +525,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						contents +=  WuxDefinition.InfoHeader(titleDefinition);
 
 						let xpDefinition = WuxDef.Get("XP");
-						contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.getFormulaValue()}</span>`);
+						contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}</span>`);
 						contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Convert To Levels`));
 
 						return WuxSheetMain.Table.FlexTableGroup(contents);
@@ -1152,7 +1152,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			        contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute()));
 
 							let xpDefinition = WuxDef.Get("XP");
-        			        contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.getFormulaValue()}</span>`);
+        			        contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}</span>`);
 							
 							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
         			    },
@@ -1168,7 +1168,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			        contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute(WuxDef._max)));
 
 							let ppDefinition = WuxDef.Get("PP");
-        			        contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.getFormulaValue()}</span>`);
+        			        contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}</span>`);
 							
 							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
         			    }

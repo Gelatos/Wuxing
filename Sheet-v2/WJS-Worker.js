@@ -1,40 +1,4 @@
-class WorkerAttributeHandler {
-	constructor(mods) {
-		if (Array.isArray(mods)) {
-			this.mods = mods;
-		}
-		else {
-			this.mods = [];
-			if (mods != undefined) {
-			    this.mods.push(mods);
-			}
-		}
-		this.current = {};
-		this.update = {};
-		this.getCallbacks = [];
-		this.finishCallbacks = [];
-	}
-	addMod(mods) {
-		if (Array.isArray(mods)) {
-			this.mods = this.mods.concat(mods);
-		}
-		else {
-			this.mods.push(mods);
-		}
-	}
-	addFormulaMods(definition) {
-		this.addMod(definition.modAttrs);
-	
-	}
-	addUpdate(attr, value) {
-		this.update[attr] = value;
-	}
-	addGetAttrCallback(callback) {
-		this.getCallbacks.push(callback);
-	}
-	addFinishCallback(callback) {
-		this.finishCallbacks.push(callback);
-	}
+class WorkerAttributeHandler extends AttributeHandler {
 	run() {
 		let attributeHandler = this;
 		getAttrs(attributeHandler.mods, function (v) {
@@ -48,54 +12,6 @@ class WorkerAttributeHandler {
 				});
 			});
 		})
-	}
-
-	parseString(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = "";
-		}
-		if (this.update[fieldName] != undefined) {
-			return this.update[fieldName] == undefined || this.update[fieldName] == "" ? defaultValue : this.update[fieldName];
-		}
-		else {
-			return this.current[fieldName] == undefined || this.current[fieldName] == "" ? defaultValue : this.current[fieldName];
-		}
-	}
-
-	parseInt(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = 0;
-		}
-		if (this.update[fieldName] != undefined) {
-			return isNaN(parseInt(this.update[fieldName])) ? defaultValue : parseInt(this.update[fieldName]);
-		}
-		else {
-			return isNaN(parseInt(this.current[fieldName])) ? defaultValue : parseInt(this.current[fieldName]);
-		}
-	}
-
-	parseFloat(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = 0;
-		}
-		if (this.update[fieldName] != undefined) {
-			return isNaN(parseFloat(this.update[fieldName])) ? defaultValue : parseFloat(this.update[fieldName]);
-		}
-		else {
-			return isNaN(parseFloat(this.current[fieldName])) ? defaultValue : parseFloat(this.current[fieldName]);
-		}
-	}
-
-	parseJSON(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = "";
-		}
-		if (this.update[fieldName] != undefined) {
-			return this.update[fieldName] == undefined || this.update[fieldName] == "" ? defaultValue : JSON.parse(this.update[fieldName]);
-		}
-		else {
-			return this.current[fieldName] == undefined || this.current[fieldName] == "" ? defaultValue : JSON.parse(this.current[fieldName]);
-		}
 	}
 }
 
@@ -173,7 +89,8 @@ class WuxWorkerBuild {
 		this.buildStats.import(attributeHandler.parseJSON(buildStatVersion));
 	}
 	setPointsMax(attributeHandler) {
-		attributeHandler.addUpdate(this.attrMax, this.definition.getFormulaValue(attributeHandler));
+		let max = this.definition.formula.getValue(attributeHandler, true);
+		attributeHandler.addUpdate(this.attrMax, max);
 	}
 	updatePoints(attributeHandler) {
 		let buildPoints = this.buildStats.getPointsTotal();
@@ -332,7 +249,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 			worker.setBuildStatsFinal(attrHandler);
 			let level = worker.buildStats.get(WuxDef.GetVariable("Level")).value;
 			let xp = attrHandler.parseInt(xpDefinition.getVariable());
-			let xpNeeded = xpDefinition.getFormulaValue(attrHandler);
+			let xpNeeded = xpDefinition.formula.getValue(attrHandler);
 
 			worker.setBuildStatsDraft(attrHandler);
 
@@ -429,7 +346,7 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 				trainingPoints = worker.buildStats.get(worker.attrMax).value;
 			}
 			let pp = attrHandler.parseInt(ppDefinition.getVariable());
-			let xpNeeded = ppDefinition.getFormulaValue(attrHandler);
+			let xpNeeded = ppDefinition.formula.getValue(attrHandler);
 
 			worker.setBuildStatsDraft(attrHandler);
 
@@ -517,10 +434,10 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			for (let i = 0; i < formulaDefinitions.length; i++) {
 				if (formulaDefinitions[i].isResource) {
-					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].getFormulaValue(attrHandler));
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
 				}
 				else {
-					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
 				}
 			}
 		});
@@ -579,12 +496,12 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 		console.log("Setting Innate Defense");
 		let attributeHandler  = new WorkerAttributeHandler();
 		let innateDefenseVariable = WuxDef.GetVariable("InnateDefense");
-		let braceDef = WuxDef.Get("Defense_Brace");
-		let fortitudeDef = WuxDef.Get("Defense_Fortitude");
-		let disruptionDef = WuxDef.Get("Defense_Disruption");
-		let hideDef = WuxDef.Get("Defense_Hide");
-		let reflexDef = WuxDef.Get("Defense_Reflex");
-		let evasionDef = WuxDef.Get("Defense_Evasion");
+		let braceDef = WuxDef.Get("Def_Brace");
+		let fortitudeDef = WuxDef.Get("Def_Fortitude");
+		let disruptionDef = WuxDef.Get("Def_Disruption");
+		let hideDef = WuxDef.Get("Def_Hide");
+		let reflexDef = WuxDef.Get("Def_Reflex");
+		let evasionDef = WuxDef.Get("Def_Evasion");
 		attributeHandler.addFormulaMods(braceDef);
 		attributeHandler.addFormulaMods(fortitudeDef);
 		attributeHandler.addFormulaMods(disruptionDef);
@@ -608,12 +525,12 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 				default: attrHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), "Choose an attribute"); break;
 			}
 
-			attrHandler.addUpdate(braceDef.getVariable(), braceDef.getFormulaValue(attrHandler));
-			attrHandler.addUpdate(fortitudeDef.getVariable(), fortitudeDef.getFormulaValue(attrHandler));
-			attrHandler.addUpdate(disruptionDef.getVariable(), disruptionDef.getFormulaValue(attrHandler));
-			attrHandler.addUpdate(hideDef.getVariable(), hideDef.getFormulaValue(attrHandler));
-			attrHandler.addUpdate(reflexDef.getVariable(), reflexDef.getFormulaValue(attrHandler));
-			attrHandler.addUpdate(evasionDef.getVariable(), evasionDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(braceDef.getVariable(), braceDef.formula.getValue(attrHandler));
+			attrHandler.addUpdate(fortitudeDef.getVariable(), fortitudeDef.formula.getValue(attrHandler));
+			attrHandler.addUpdate(disruptionDef.getVariable(), disruptionDef.formula.getValue(attrHandler));
+			attrHandler.addUpdate(hideDef.getVariable(), hideDef.formula.getValue(attrHandler));
+			attrHandler.addUpdate(reflexDef.getVariable(), reflexDef.formula.getValue(attrHandler));
+			attrHandler.addUpdate(evasionDef.getVariable(), evasionDef.formula.getValue(attrHandler));
 		});
 		attributeHandler.run();
 	},
@@ -621,12 +538,12 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 		console.log("Setting Innate Sense");
 		let attributeHandler  = new WorkerAttributeHandler();
 		let innateSenseVariable = WuxDef.GetVariable("InnateSense");
-		let senseResolveDef = WuxDef.Get("Sense_Resolve");
-		let senseFreewillDef = WuxDef.Get("Sense_Freewill");
-		let senseInsightDef = WuxDef.Get("Sense_Insight");
-		let senseNoticeDef = WuxDef.Get("Sense_Notice");
-		let senseScrutinyDef = WuxDef.Get("Sense_Scrutiny");
-		let senseDetectDef = WuxDef.Get("Sense_Detect");
+		let senseResolveDef = WuxDef.Get("Def_Resolve");
+		let senseFreewillDef = WuxDef.Get("Def_Freewill");
+		let senseInsightDef = WuxDef.Get("Def_Insight");
+		let senseNoticeDef = WuxDef.Get("Def_Notice");
+		let senseScrutinyDef = WuxDef.Get("Def_Scrutiny");
+		let senseDetectDef = WuxDef.Get("Def_Detect");
 		attributeHandler.addFormulaMods(senseResolveDef);
 		attributeHandler.addFormulaMods(senseFreewillDef);
 		attributeHandler.addFormulaMods(senseInsightDef);
@@ -650,12 +567,12 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 				default: attrHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), "Choose an attribute"); break;
 			}
 
-			attrHandler.addUpdate(senseResolveDef.getVariable(), senseResolveDef.getFormulaValue(attrHandler, true));
-			attrHandler.addUpdate(senseFreewillDef.getVariable(), senseFreewillDef.getFormulaValue(attrHandler));
-			attrHandler.addUpdate(senseInsightDef.getVariable(), senseInsightDef.getFormulaValue(attrHandler));
-			attrHandler.addUpdate(senseNoticeDef.getVariable(), senseNoticeDef.getFormulaValue(attrHandler));
-			attrHandler.addUpdate(senseScrutinyDef.getVariable(), senseScrutinyDef.getFormulaValue(attrHandler));
-			attrHandler.addUpdate(senseDetectDef.getVariable(), senseDetectDef.getFormulaValue(attrHandler));
+			attrHandler.addUpdate(senseResolveDef.getVariable(), senseResolveDef.formula.getValue(attrHandler, true));
+			attrHandler.addUpdate(senseFreewillDef.getVariable(), senseFreewillDef.formula.getValue(attrHandler));
+			attrHandler.addUpdate(senseInsightDef.getVariable(), senseInsightDef.formula.getValue(attrHandler));
+			attrHandler.addUpdate(senseNoticeDef.getVariable(), senseNoticeDef.formula.getValue(attrHandler));
+			attrHandler.addUpdate(senseScrutinyDef.getVariable(), senseScrutinyDef.formula.getValue(attrHandler));
+			attrHandler.addUpdate(senseDetectDef.getVariable(), senseDetectDef.formula.getValue(attrHandler));
 		});
 		attributeHandler.run();
 	},
@@ -934,10 +851,10 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			for (let i = 0; i < formulaDefinitions.length; i++) {
 				if (formulaDefinitions[i].isResource) {
-					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].getFormulaValue(attrHandler));
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
 				}
 				else {
-					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
 				}
 			}
 		});
@@ -1333,7 +1250,7 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 			attributeHandler.addMod(languageDefinitions[i].getVariable(WuxDef._rank));
 		}
 
-		attributeHandler.addFormulaMods(["CR", "Recall"]);
+		attributeHandler.addMod(["CR", "Recall"]);
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			let skillPointValue = 0;
 			let skillRank = 0;
@@ -1412,7 +1329,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 			let skillPointValue = 0;
 			let skillRank = 0;
 			for (let i = 0; i < skillDefinitions.length; i++) {
-				skillPointValue = skillDefinitions[i].getFormulaValue(attrHandler);
+				skillPointValue = skillDefinitions[i].formula.getValue(attrHandler);
 				skillRank = attrHandler.parseInt(skillDefinitions[i].getVariable(WuxDef._rank));
 				if (skillRank > 0) {
 					skillPointValue = skillPointValue + attrHandler.parseInt(WuxDef.GetVariable("CR"));
@@ -1454,10 +1371,10 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			for (let i = 0; i < formulaDefinitions.length; i++) {
 				if (formulaDefinitions[i].isResource) {
-					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].getFormulaValue(attrHandler));
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
 				}
 				else {
-					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].getFormulaValue(attrHandler));
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
 				}
 			}
 		});

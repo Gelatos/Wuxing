@@ -217,17 +217,22 @@ class ExtendedDescriptionDatabase extends Database {
             }
             else {
                 this.add(data.name, data);
-                formulaDefs = data.getFormulaDefinitions();
-                for (let i = 0; i < formulaDefs.length; i++) {
-                    this.addSortingGroup("formulaMods", formulaDefs[i], data.name);
-                }
             }
+        }
+    }
+
+    add(key, value) {
+        super.add(key, value);
+        let formulaDefs = value.formula.getDefinitions();
+        for (let i = 0; i < formulaDefs.length; i++) {
+            this.addSortingGroup("formulaMods", formulaDefs[i], value.name);
         }
     }
 }
 
 class dbObj {
     constructor(data) {
+        this.createEmpty();
         if (data != undefined) {
             if (Array.isArray(data)) {
                 this.importSheets(data);
@@ -238,9 +243,6 @@ class dbObj {
             else {
                 this.importJson(data);
             }
-        }
-        else {
-            this.createEmpty();
         }
     }
     importStringifiedJson(stringifiedJSON) {
@@ -286,10 +288,8 @@ class WuxDatabaseData extends dbObj {
         definition.subGroup = "";
         definition.descriptions = [this.description];
         definition.formula = baseDefinition.formula;
-        definition.modifiers = baseDefinition.modifiers;
         definition.linkedGroups = [];
         definition.isResource = baseDefinition.isResource;
-        definition.setFormulaData();
         return definition;
     }
 
@@ -376,8 +376,6 @@ class TechniqueData extends WuxDatabaseData {
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
         definition.subGroup = this.techSet;
-        definition.modAttrs = [];
-        definition.formulaCalculations = [];
         definition.extraData = {tier: this.tier, affinity: this.affinity, isFree: this.isFree};
         return definition;
     }
@@ -618,9 +616,8 @@ class SkillData extends WuxDatabaseData {
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
         definition.subGroup = `${this.group} Skill`;
-        definition.formula = `${this.abilityScore}`;
-        definition.modifiers = WuxDef._rank;
-        definition.setFormulaData();
+        definition.formula = new FormulaData(`${this.abilityScore}`);
+        definition.formula.addAttributes(definition.getFormulaMods(WuxDef._rank));
         return definition;
     }
 }
@@ -683,9 +680,8 @@ class LoreData extends WuxDatabaseData {
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
         definition.subGroup = this.group;
-        definition.formula = `Recall`;
-        definition.modifiers = WuxDef._rank;
-        definition.setFormulaData();
+        definition.formula = new FormulaData(`Recall`);
+        definition.formula.addAttributes(definition.getFormulaMods(WuxDef._rank));
         return definition;
     }
 }
@@ -888,7 +884,6 @@ class AttributeGroupData extends dbObj {
 }
 class DefinitionData extends WuxDatabaseData {
     importJson(json) {
-        this.createEmpty();
         this.name = json.name;
         this.fieldName = Format.ToFieldName(this.name);
         this.title = json.title;
@@ -897,16 +892,14 @@ class DefinitionData extends WuxDatabaseData {
         this.descriptions = json.descriptions;
         this.abbreviation = json.abbreviation;
         this.variable = json.variable;
-        this.formula = json.formula;
+        this.baseFormula = json.baseFormula;
         this.modifiers = json.modifiers;
+        this.formula = new FormulaData(json.formula);
         this.linkedGroups = json.linkedGroups;
         this.isResource = json.isResource;
-        this.modAttrs = json.modAttrs;
-        this.formulaCalculations = json.formulaCalculations;
         this.extraData = json.extraData;
     }
     importSheets(dataArray) {
-        this.createEmpty();
         let i = 0;
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToFieldName(this.name);
@@ -916,11 +909,12 @@ class DefinitionData extends WuxDatabaseData {
         this.descriptions = [("" + dataArray[i])]; i++;
         this.abbreviation = "" + dataArray[i]; i++;
         this.variable = "" + dataArray[i]; i++;
-        this.formula = "" + dataArray[i]; i++;
+        this.baseFormula = "" + dataArray[i]; i++;
         this.modifiers = "" + dataArray[i]; i++;
+        this.formula = new FormulaData(this.baseFormula);
+        this.formula.addAttributes(this.getFormulaMods(this.modifiers));
         this.linkedGroups = Format.StringToArray("" + dataArray[i]); i++;
         this.isResource = dataArray[i]; i++;
-        this.setFormulaData();
         this.extraData = {};
     }
     createEmpty() {
@@ -933,12 +927,11 @@ class DefinitionData extends WuxDatabaseData {
         this.descriptions = [];
         this.abbreviation = "";
         this.variable = "";
-        this.formula = "";
+        this.baseFormula = "";
         this.modifiers = "";
+        this.formula = new FormulaData();
         this.linkedGroups = [];
         this.isResource = false;
-        this.modAttrs = [];
-        this.formulaCalculations = [];
         this.extraData = {};
         
     }
@@ -949,11 +942,10 @@ class DefinitionData extends WuxDatabaseData {
         definition.subGroup = this.subGroup;
         definition.descriptions = this.descriptions;
         definition.abbreviation = this.abbreviation;
-        definition.formula = this.formula;
-        definition.modifiers = this.modifiers;
+        definition.formula = new FormulaData(this.baseFormula);
+        definition.formula.addAttributes(definition.getFormulaMods(this.modifiers));
         definition.linkedGroups = this.linkedGroups;
         definition.isResource = this.isResource;
-        definition.setFormulaData();
         definition.extraData = {};
 
         delete this.description;
@@ -998,93 +990,18 @@ class DefinitionData extends WuxDatabaseData {
         });
         return output;
     }
-    setFormulaData() {
-        let baseDefinition = this;
-        this.modAttrs = [];
-        this.formulaCalculations = [];
-        
-        if(this.formula == "") {
-            return;
-        }
-
-        let definition = {};
-        let modDefinition = {};
-        let formulaVar = "";
-        this.iterateFormulaComponents(function (definitionName, definitionNameModifier, multiplier) {
-            if (isNaN(parseInt(definitionName))) {
-                definition = WuxDef.Get(definitionName);
-                if (definitionNameModifier == "") {
-                    formulaVar = definition.getVariable();
-                }
-                else {
-                    modDefinition = WuxDef.Get(definitionNameModifier);
-                    formulaVar = definition.getVariable(modDefinition.getVariable());
-                }
-                baseDefinition.formulaCalculations.push(new WorkerFormula(formulaVar, 0, multiplier));
-                baseDefinition.modAttrs.push(formulaVar);
-            }
-            else {
-                baseDefinition.formulaCalculations.push(new WorkerFormula("", parseInt(definitionName), multiplier));
-            }
-        })
-
-        if (this.modifiers != "") {
-            let modArray = this.modifiers.split(";");
+    getFormulaMods(modifiers) {
+        let mods = [];
+        if (modifiers != "") {
+            let modArray = modifiers.split(";");
             modArray.forEach((mod) => {
                 mod = mod.trim();
-                this.formulaCalculations.push(new WorkerFormula(this.getVariable(mod), 0, 1));
-                this.modAttrs.push(this.getVariable(mod));
+                if (mod != "") {
+                    mods.push(this.getVariable(mod));
+                }
             });
         }
-    }
-    getFormulaDefinitions() {
-        let output = [];
-        
-        this.iterateFormulaComponents(function (definitionName) {
-            if (isNaN(parseInt(definitionName))) {
-                output.push(definitionName);
-            }
-        });
-        return output;
-    }
-    iterateFormulaComponents(callback) {
-        let definitionName = "";
-        let definitionNameModifier = "";
-        let multiplier = 1;
-
-        let formulaArray = this.formula.split(";");
-        formulaArray.forEach((formula) => {
-            definitionName = formula.trim();
-            
-            multiplier = 1;
-            if (formula.indexOf("*") > -1) {
-                let split = definitionName.split("*");
-                definitionName = split[0];
-                multiplier = split[1];
-            }
-            
-            definitionNameModifier = "";
-            if (formula.indexOf(":") > -1) {
-                let split = definitionName.split(":");
-                definitionName = split[0];
-                definitionNameModifier = split[1];
-            }
-
-            callback(definitionName, definitionNameModifier, multiplier);
-        });
-    }
-    getFormulaValue(attributeHandler, printBreakdown) {
-        let output = 0;
-        this.formulaCalculations.forEach((formula) => {
-            if (formula.modName != "") {
-                formula.value = attributeHandler.parseInt(formula.modName);
-                if (printBreakdown) {
-                    console.log(`Adding ${formula.modName}(${formula.value}) to ${this.name}`);
-                }
-            }
-            output += formula.value * formula.multiplier;
-        });
-        return output;
+        return mods;
     }
 }
 class TemplateData extends dbObj {
@@ -1490,6 +1407,261 @@ class WuxRepeatingSection {
     }
 }
 
+class FormulaData {
+
+    constructor(data) {
+        this.createEmpty();
+        if (data != undefined) {
+            if (data.workers == undefined) {
+                this.importFormula(data);
+            }
+            else {
+                this.importJson(data);
+            }
+        }
+    }
+
+    createEmpty() {
+        this.workers = [];
+    }
+
+    importJson(json) {
+        this.workers = json.workers;
+    }
+
+    importFormula(data) {
+        data = "" + data;
+        if (data == "" || data == undefined) {
+            return;
+        }
+
+        let formulaData = this;
+        let definition = {};
+        let modDefinition = {};
+        let formulaVar = "";
+        this.iterateFormulaComponents(data, function (definitionName, definitionNameModifier, multiplier) {
+            if (isNaN(parseInt(definitionName))) {
+                definition = WuxDef.Get(definitionName);
+                if (definitionNameModifier == "") {
+                    formulaVar = definition.getVariable();
+                }
+                else {
+                    modDefinition = WuxDef.Get(definitionNameModifier);
+                    formulaVar = definition.getVariable(modDefinition.getVariable());
+                }
+
+                formulaData.workers.push(formulaData.makeWorker(formulaVar, definitionName, 0, multiplier));
+            }
+            else {
+                formulaData.workers.push(formulaData.makeWorker("", "", parseInt(definitionName), multiplier));
+            }
+        })
+    }
+
+    iterateFormulaComponents(baseFormula, callback) {
+        let definitionName = "";
+        let definitionNameModifier = "";
+        let multiplier = 1;
+        let formulaArray = baseFormula.split(";");
+        formulaArray.forEach((formula) => {
+            definitionName = formula.trim();
+            
+            multiplier = 1;
+            if (formula.indexOf("*") > -1) {
+                let split = definitionName.split("*");
+                definitionName = split[0];
+                multiplier = split[1];
+            }
+            
+            definitionNameModifier = "";
+            if (formula.indexOf(":") > -1) {
+                let split = definitionName.split(":");
+                definitionName = split[0];
+                definitionNameModifier = split[1];
+            }
+
+            callback(definitionName, definitionNameModifier, multiplier);
+        });
+    }
+
+    addAttributes(attributes) {
+        for (let i = 0; i < attributes.length; i++) {
+            if (attributes[i] != "") {
+                this.workers.push(this.makeWorker(attributes[i], "", 0, 1));
+            }
+        }
+    }
+
+    makeWorker(variableName, definitionName, value, multiplier) {
+        return {
+            variableName: variableName,
+            definitionName: definitionName,
+            value: isNaN(parseInt(value)) ? 0 : parseInt(value),
+            multiplier: isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier)
+        }
+    }
+
+    getAttributes() {
+        let attributes = [];
+        for (let i = 0; i < this.workers.length; i++) {
+            if (this.workers[i].variableName != "") {
+                attributes.push(this.workers[i].variableName);
+            }
+        };
+        return attributes;
+    }
+
+    getDefinitions() {
+        let definitions = [];
+        for (let i = 0; i < this.workers.length; i++) {
+            if (this.workers[i].definitionName != "") {
+                definitions.push(this.workers[i].definitionName);
+            }
+        }
+        return definitions;
+    }
+
+    hasFormula() {
+        return this.workers.length > 0;
+    }
+
+    getValue(attributeHandler, printBreakdown) {
+        let output = 0;
+        this.workers.forEach((worker) => {
+            if (worker.variableName != "") {
+                worker.value = attributeHandler.parseInt(worker.variableName);
+                if (printBreakdown) {
+                    console.log(`Adding ${worker.variableName}(${worker.value}) * ${worker.multiplier}`);
+                }
+            }
+            else if (printBreakdown) {
+                console.log(`Adding ${worker.value} * ${worker.multiplier}`);
+            }
+            output += worker.value * worker.multiplier;
+        });
+        return output;
+    }
+
+    getString() {
+        let output = "";
+        let definition = {};
+        this.workers.forEach((worker) => {
+            if (worker.variableName != "") {
+                if (worker.definitionName != "") {
+                    definition = WuxDef.Get(worker.definitionName);
+                    if (definition != undefined) {
+                        if (output != "") {
+                            output += " + ";
+                        }
+                        if (worker.multiplier != 1) {
+                            output += `${definition.title} x ${worker.multiplier}`;
+                        }
+                        else {
+                            output += definition.title;
+                        }
+                    }
+                }
+            }
+            else {
+                if (output != "") {
+                    output += " + ";
+                }
+                output += worker.value;
+            }
+            
+        });
+        return output;
+    }
+}
+
+class AttributeHandler {
+	constructor(mods) {
+		if (Array.isArray(mods)) {
+			this.mods = mods;
+		}
+		else {
+			this.mods = [];
+			if (mods != undefined) {
+			    this.mods.push(mods);
+			}
+		}
+		this.current = {};
+		this.update = {};
+		this.getCallbacks = [];
+		this.finishCallbacks = [];
+	}
+	addMod(mods) {
+		if (Array.isArray(mods)) {
+			this.mods = this.mods.concat(mods);
+		}
+		else {
+			this.mods.push(mods);
+		}
+	}
+	addFormulaMods(definition) {
+        console.log(`Adding formula mods for ${definition.name}`);
+		this.addMod(definition.formula.getAttributes());
+	}
+	addUpdate(attr, value) {
+		this.update[attr] = value;
+	}
+	addGetAttrCallback(callback) {
+		this.getCallbacks.push(callback);
+	}
+	addFinishCallback(callback) {
+		this.finishCallbacks.push(callback);
+	}
+	run() {
+	}
+
+	parseString(fieldName, defaultValue) {
+		if (defaultValue == undefined) {
+			defaultValue = "";
+		}
+		if (this.update[fieldName] != undefined) {
+			return this.update[fieldName] == undefined || this.update[fieldName] == "" ? defaultValue : this.update[fieldName];
+		}
+		else {
+			return this.current[fieldName] == undefined || this.current[fieldName] == "" ? defaultValue : this.current[fieldName];
+		}
+	}
+
+	parseInt(fieldName, defaultValue) {
+		if (defaultValue == undefined) {
+			defaultValue = 0;
+		}
+		if (this.update[fieldName] != undefined) {
+			return isNaN(parseInt(this.update[fieldName])) ? defaultValue : parseInt(this.update[fieldName]);
+		}
+		else {
+			return isNaN(parseInt(this.current[fieldName])) ? defaultValue : parseInt(this.current[fieldName]);
+		}
+	}
+
+	parseFloat(fieldName, defaultValue) {
+		if (defaultValue == undefined) {
+			defaultValue = 0;
+		}
+		if (this.update[fieldName] != undefined) {
+			return isNaN(parseFloat(this.update[fieldName])) ? defaultValue : parseFloat(this.update[fieldName]);
+		}
+		else {
+			return isNaN(parseFloat(this.current[fieldName])) ? defaultValue : parseFloat(this.current[fieldName]);
+		}
+	}
+
+	parseJSON(fieldName, defaultValue) {
+		if (defaultValue == undefined) {
+			defaultValue = "";
+		}
+		if (this.update[fieldName] != undefined) {
+			return this.update[fieldName] == undefined || this.update[fieldName] == "" ? defaultValue : JSON.parse(this.update[fieldName]);
+		}
+		else {
+			return this.current[fieldName] == undefined || this.current[fieldName] == "" ? defaultValue : JSON.parse(this.current[fieldName]);
+		}
+	}
+}
 class WorkerBuildStat extends dbObj {
     importJson(json) {
         this.name = json.name;
@@ -1548,8 +1720,9 @@ class WorkerBuildStats extends Dictionary {
     }
 }
 class WorkerFormula {
-    constructor(modName, value, multiplier) {
-        this.modName = modName == undefined ? "" : modName;
+    constructor(variableName, definitionName, value, multiplier) {
+        this.variableName = variableName;
+        this.definitionName = definitionName;
         this.value = isNaN(parseInt(value)) ? 0 : parseInt(value);
         this.multiplier = isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier);
     }

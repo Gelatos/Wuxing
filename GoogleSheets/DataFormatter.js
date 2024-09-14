@@ -743,6 +743,9 @@ var WuxDefinition = WuxDefinition || (function () {
             for (let i = 0; i < definitionData.descriptions.length; i++) {
                 expandContents += "\n" + WuxSheetMain.Desc(definitionData.descriptions[i]);
             }
+            if (definitionData.formula.hasFormula()) {
+                expandContents += `\n${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`;
+            }
             return expandContents;
         },
         displayCollapsibleTitle = function (definitionData) {
