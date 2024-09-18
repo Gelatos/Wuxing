@@ -128,56 +128,47 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createTechniques = function (arr) {
-            let filters = ["style", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
-            return new ExtendedTechniqueDatabase(filters, arr, function (arr) {
-                return new TechniqueData(arr);
-            });
+            return new ExtendedTechniqueDatabase(arr);
         },
 
         createSkills = function (arr) {
-            return new Database(["group"], arr, function (arr) {
+            return new Database(arr, ["group"], function (arr) {
                 return new SkillData(arr);
             });
         },
         
         createStyles = function (arr) {
-            return new Database(["group", "cr"], arr, function (arr) {
+            return new Database(arr, ["group", "cr"], function (arr) {
                 return new TechniqueStyle(arr);
             });
         },
 
         createLanguages = function (arr) {
-            return new Database(["group"], arr, function (arr) {
+            return new Database(arr, ["group"], function (arr) {
                 return new LanguageData(arr);
             });
         },
 
         createLores = function (arr) {
-            return new Database(["group"], arr, function (arr) {
+            return new Database(arr, ["group"], function (arr) {
                 return new LoreData(arr);
             });
         },
 
         createJobs = function (arr) {
-            return new Database(["group"], arr, function (arr) {
+            return new Database(arr, ["group"], function (arr) {
                 return new JobData(arr);
             });
         },
 
         createRoles = function (arr) {
-            return new Database(["group"], arr, function (arr) {
+            return new Database(arr, ["group"], function (arr) {
                 return new RoleData(arr);
             });
         },
 
         createDefinitionTypes = function (arr) {
-            return new ExtendedDescriptionDatabase(["group", "subGroup", "formulaMods"], arr, function (arr) {
-                let definition = new DefinitionData(arr);
-                if (definition.group == "Type") {
-                    definition.variable += `{0}{1}`;
-                }
-                return definition;
-            });
+            return new ExtendedDescriptionDatabase(arr);
         }
         ;
     return {

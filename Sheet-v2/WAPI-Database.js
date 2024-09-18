@@ -90,11 +90,10 @@ class DatabaseFilterData {
     }
 }
 class Database extends Dictionary {
-    constructor(sortingProperties, data, dataCreationCallback) {
+    constructor(data, sortingProperties, dataCreationCallback) {
         super();
-        this.sortingGroups = {};
-        for (let i = 0; i < sortingProperties.length; i++) {
-            this.sortingGroups[sortingProperties[i]] = {};
+        if (sortingProperties != undefined) {
+            this.addSortingroperties(sortingProperties);
         }
 
         this.import(data, dataCreationCallback);
@@ -113,11 +112,19 @@ class Database extends Dictionary {
         }
     }
     
-    addSortingGroup(property, propertyValue, valueName) {
-        if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
-            this.sortingGroups[property][propertyValue] = [];
+    addSortingroperties(sortingProperties) {
+        this.sortingGroups = {};
+        for (let i = 0; i < sortingProperties.length; i++) {
+            this.sortingGroups[sortingProperties[i]] = {};
         }
-        this.sortingGroups[property][propertyValue].push(valueName);
+    }
+    addSortingGroup(property, propertyValue, valueName) {
+        if(this.sortingGroups != undefined) {
+            if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
+                this.sortingGroups[property][propertyValue] = [];
+            }
+            this.sortingGroups[property][propertyValue].push(valueName);
+        }
     }
 
     filter(filterData) {
@@ -173,8 +180,12 @@ class Database extends Dictionary {
 }
 class ExtendedTechniqueDatabase extends Database {
 
-    constructor(sortingProperties, data, dataCreationCallback) {
-        super(sortingProperties, data, dataCreationCallback);
+    constructor(data) {
+        let filters = ["style", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
+        let dataCreation = function(data) {
+            return new TechniqueData(data);
+        };
+        super(data, filters, dataCreation);
     }
 
     add(key, value) {
@@ -186,10 +197,10 @@ class ExtendedTechniqueDatabase extends Database {
         }
     }
 
-    importSheets(dataArray, dataCreationCallback) {
+    importSheets(dataArray) {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
-            data = dataCreationCallback(dataArray[i]);
+            data = new TechniqueData(dataArray[i]);
             if (this.has(data.name)) {
                 switch (data.techSet) {
                     case "!":
@@ -207,9 +218,19 @@ class ExtendedTechniqueDatabase extends Database {
     }
 }
 class ExtendedDescriptionDatabase extends Database {
+    constructor(data) {
+        let dataCreation = function(data) {
+            let definition = new DefinitionData(data);
+            if (definition.group == "Type") {
+                definition.variable += `{0}{1}`;
+            }
+            return definition;
+        };
+        super(data, ["group", "subGroup", "formulaMods"], dataCreation);
+    }
+
     importSheets(dataArray, dataCreationCallback) {
         let data = {};
-        let formulaDefs;
         for (let i = 0; i < dataArray.length; i++) {
             data = dataCreationCallback(dataArray[i]);
             if (this.has(data.name)) {
@@ -226,6 +247,27 @@ class ExtendedDescriptionDatabase extends Database {
         let formulaDefs = value.formula.getDefinitions();
         for (let i = 0; i < formulaDefs.length; i++) {
             this.addSortingGroup("formulaMods", formulaDefs[i], value.name);
+        }
+    }
+}
+class TechniqueEffectDatabase extends Database {
+    constructor(data) {
+        let dataCreation = function(data) {
+            return new TechniqueEffect(data);
+        };
+        super(data, ["defense"], dataCreation);
+    }
+
+    importSheets(dataArray) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = new TechniqueEffect(dataArray[i]);
+            if (this.has(data.name)) {
+                this.get(data.name).push(data);
+            }
+            else {
+                this.add(data.name, [data]);
+            }
         }
     }
 }
@@ -499,36 +541,37 @@ class TechniqueData extends WuxDatabaseData {
 }
 class TechniqueEffect extends dbObj {
     importJson(json) {
-        this.createEmpty();
+        this.defense = json.defense;
         this.target = json.target;
         this.type = json.type;
         this.subType = json.subType;
         this.dVal = json.dVal;
         this.dType = json.dType;
-        this.dBonus = json.dBonus;
+        this.formula = new FormulaData(json.formula);
         this.effect = json.effect;
         this.traits = json.traits;
     }
     importSheets(dataArray) {
-        this.createEmpty();
         let i = 0;
+        this.defense = "" + dataArray[i]; i++;
         this.target = "" + dataArray[i]; i++;
         this.type = "" + dataArray[i]; i++;
         this.subType = "" + dataArray[i]; i++;
         this.dVal = "" + dataArray[i]; i++;
         this.dType = "" + dataArray[i]; i++;
-        this.dBonus = "" + dataArray[i]; i++;
+        this.formula = new FormulaData("" + dataArray[i]); i++;
         this.effect = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
     }
     createEmpty() {
         super.createEmpty();
+        this.defense = "";
         this.target = "";
         this.type = "";
         this.subType = "";
         this.dVal = "";
         this.dType = "";
-        this.dBonus = "";
+        this.formula = new FormulaData();
         this.effect = "";
         this.traits = "";
     }
@@ -1193,7 +1236,11 @@ var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
             case "Condition":
                 output = formatConditionEffect(effect);
                 break;
+            case "Boost":
+                output = formatBoostEffect(effect);
+                break;
             case "Definition":
+                // Do nothing
                 break;
             case "":
                 output = formatDescriptionEffect(effect);
@@ -1213,6 +1260,10 @@ var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
 
     formatConditionEffect = function (effect) {
         return formatStateEffect(effect, `Condition_${effect.effect}`);
+    },
+
+    formatBoostEffect = function (effect) {
+        return `${WuxDef.GetTitle(effect.effect)} increases by ${formatCalcBonus(effect)}`;
     },
 
     formatStateEffect = function (effect, effectName) {
@@ -1240,23 +1291,17 @@ var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
 
     formatCalcBonus = function (effect) {
         let output = formatEffectDice(effect);
-        let bonusEffects = effect.dBonus.split(";");
-        for(let i = 0; i < bonusEffects.length; i++) {
-            bonusEffects[i] = bonusEffects[i].trim();
-            if (bonusEffects[i] == "") {
-                continue;
-            }
-            if (output != "") {
-                output += " + ";
-            }
-            if (isNaN(parseInt(bonusEffects[i]))) {
-                output += `${WuxDef.GetAbbreviation(bonusEffects[i])}`;
-            }
-            else {
-                output += `${bonusEffects[i]}`;
-            }
+        let formulaString = "";
+        try {
+            formulaString = effect.formula.getString();
         }
-        return output;
+        catch (e) {
+            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+        }
+        if (formulaString != "" && output != "") {
+            output += " + ";
+        }
+        return output + formulaString;
     },
 
     formatEffectDice = function (effect) {
