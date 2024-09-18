@@ -188,32 +188,31 @@ class ExtendedTechniqueDatabase extends Database {
         super(data, filters, dataCreation);
     }
 
+    importJson(json) {
+        let dataCreationCallback = function(data) {
+            return new TechniqueData(data);
+        }
+        super.importJson(json, dataCreationCallback);
+    }
+    importSheets(dataArray) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = new TechniqueData(dataArray[i]);
+            if (this.has(data.name)) {
+                this.get(data.name).importEffectTechnique(data);
+            }
+            else {
+                this.add(data.name, data);
+            }
+        }
+    }
+    
     add(key, value) {
         super.add(key, value);
 
         let styles = value.techSet.split(";");
         for (let i = 0; i < styles.length; i++) {
             this.addSortingGroup("style", styles[i].trim(), value.name);
-        }
-    }
-
-    importSheets(dataArray) {
-        let data = {};
-        for (let i = 0; i < dataArray.length; i++) {
-            data = new TechniqueData(dataArray[i]);
-            if (this.has(data.name)) {
-                switch (data.techSet) {
-                    case "!":
-                        this.get(data.name).importOngoingTechnique(data);
-                        break;
-                    default:
-                        this.get(data.name).importEffectTechnique(data);
-                        break;
-                }
-            }
-            else {
-                this.add(data.name, data);
-            }
         }
     }
 }
@@ -257,18 +256,18 @@ class TechniqueEffectDatabase extends Database {
         };
         super(data, ["defense"], dataCreation);
     }
-
-    importSheets(dataArray) {
-        let data = {};
-        for (let i = 0; i < dataArray.length; i++) {
-            data = new TechniqueEffect(dataArray[i]);
-            if (this.has(data.name)) {
-                this.get(data.name).push(data);
-            }
-            else {
-                this.add(data.name, [data]);
-            }
+    
+    importJson(json) {
+        let dataCreationCallback = function(data) {
+            return new TechniqueEffect(data);
         }
+        super.importJson(json, dataCreationCallback);
+    }
+    importSheets(dataArray) {
+        let dataCreationCallback = function(data) {
+            return new TechniqueEffect(data);
+        }
+        super.importSheets(json, dataCreationCallback);
     }
 }
 
@@ -358,10 +357,7 @@ class TechniqueData extends WuxDatabaseData {
         this.trigger = json.trigger;
         this.flavorText = json.flavorText;
         this.definitions = Array.isArray(json.definitions) ? json.definitions : [];
-        this.autoEffects = json.autoEffects;
-        this.effects = new Dictionary();
-        this.effects.importJson(json.effects);
-        this.onGoingTech = new TechniqueData(json.onGoingTech);
+        this.effects = new TechniqueEffectDatabase(json.effects);
     }
     importSheets(dataArray) {
         this.createEmpty();
@@ -385,10 +381,8 @@ class TechniqueData extends WuxDatabaseData {
         this.trigger = "" + dataArray[i]; i++;
         this.flavorText = "" + dataArray[i]; i++;
         this.definitions = [];
-        this.autoEffects = [];
-        this.effects = new Dictionary();
-        this.onGoingTech = undefined;
-        this.importEffectSheet(dataArray.slice(i));
+        this.effects = new TechniqueEffectDatabase();
+        this.addEffect(new TechniqueEffect(dataArray.slice(i)));
     }
     createEmpty() {
         super.createEmpty();
@@ -411,9 +405,7 @@ class TechniqueData extends WuxDatabaseData {
         this.trigger = "";
         this.flavorText = "";
         this.definitions = [];
-        this.autoEffects = [];
-        this.effects = new Dictionary();
-        this.onGoingTech = undefined;
+        this.effects = new TechniqueEffectDatabase();
     }
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
@@ -422,92 +414,27 @@ class TechniqueData extends WuxDatabaseData {
         return definition;
     }
 
-    setAugmentTechValues(baseTechnique) {
-
-        if (this.name == "") {
-            return baseTechnique;
-        }
-        this.techSet = this.setAugmentTechValue(this.techSet, baseTechnique.techSet);
-        this.group = this.setAugmentTechValue(this.group, baseTechnique.group);
-        this.tier = this.setAugmentTechValue(this.tier, baseTechnique.tier);
-        this.action = this.setAugmentTechValue(this.action, baseTechnique.action);
-        this.traits = this.setAugmentTechValue(this.traits, baseTechnique.traits);
-        this.resourceCost = this.setAugmentTechValue(this.resourceCost, baseTechnique.resourceCost);
-        this.limits = this.setAugmentTechValue(this.limits, baseTechnique.limits);
-        this.skill = this.setAugmentTechValue(this.skill, baseTechnique.skill);
-        this.range = this.setAugmentTechValue(this.range, baseTechnique.range);
-        this.target = this.setAugmentTechValue(this.target, baseTechnique.target);
-        this.requirement = this.setAugmentTechValue(this.requirement, baseTechnique.requirement);
-        this.itemTraits = this.setAugmentTechValue(this.itemTraits, baseTechnique.itemTraits);
-        this.trigger = this.setAugmentTechValue(this.trigger, baseTechnique.trigger);
-        this.flavorText = this.setAugmentTechValue(this.flavorText, baseTechnique.flavorText);
+    importEffectsFromTechnique(technique) {
+        let baseTechnique = this;
+        technique.effects.iterate(function(effect) {
+            baseTechnique.addEffect(effect);
+        });
     }
-    setAugmentTechValue (augmentValue, baseValue) {
-        if (augmentValue == "-") {
-            return "";
-        }
-        else if (augmentValue == "") {
-            return baseValue;
-        }
-        return augmentValue;
-    }
-
-    importEffectSheet(dataArray) {
-        let i = 0;
-        let defense = "" + dataArray[i]; i++;
-        let effect = new TechniqueEffect(dataArray.slice(i)); i++;
-
-        if (effect.type == "Definition") {
-            this.addDefinition(effect.effect);
-            return;
-        }
-
-        if (effect.type == "" && effect.effect == "") {
-            return;
-        }
-        
-        if (defense == "") {
-            this.autoEffects.push(effect);
-        }
-        else {
-            this.addEffect(defense, effect);
-        }
-
-        if (effect.type == "Condition") {
-            this.addDefinition(effect.effect);
+    addEffect(effect) {
+        switch (effect.type) {
+            case "Definition":
+                addDefinition(effect.effect);
+                break;
+            case "Status":
+            case "Condition":
+                this.effects.add(effect);
+                addDefinition(effect.effect);
+                break;
+            default:
+                this.effects.add(effect);
+                break;
         }
     }
-    importEffectTechnique(technique) {
-        if (technique.autoEffects.length > 0) {
-            this.autoEffects = this.autoEffects.concat(technique.autoEffects);
-        }
-        else {
-            let effect = technique.effects.getByIndex(0);
-            if (effect != undefined) {
-                this.addEffect(technique.effects.getkey(0), effect[0]);
-            }
-        }
-
-        if (technique.definitions.length > 0) {
-            this.addDefinition(technique.definitions[0]);
-        }
-    }
-    addEffect(defense, effect) {
-        if (!this.effects.has(defense)) {
-            this.effects.add(defense, []);
-        }
-        this.effects.get(defense).push(effect);
-    }
-
-    importOngoingTechnique(technique) {
-        if (this.onGoingTech == undefined) {
-            this.onGoingTech = technique;
-        }
-        else {
-            this.onGoingTech.importEffectTechnique(technique);
-        }
-    }
-
     addDefinition(definition) {
         if (!this.definitions.includes(definition)) {
             this.definitions.push(definition);
@@ -1059,6 +986,87 @@ class TemplateData extends dbObj {
 
     }
 }
+class ResistanceData {
+    constructor(json) {
+        if (json != undefined) {
+            this.importJson(json);
+        }
+        else {
+            this.createEmpty();
+        }
+    }
+
+    importJson(json) {
+        this.damageTypes = json.damageTypes;
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            this[this.damageTypes[i]] = json[this.damageTypes[i]];
+        }
+    }
+
+    createEmpty() {
+        let damageTypeDefs = WuxDef.Filter(new DatabaseFilterData("group", "DamageType"));
+        this.damageTypes = [];
+        for (let i = 0; i < damageTypeDefs.length; i++) {
+            this.damageTypes.push(damageTypeDefs[i].name);
+            this[damageTypeDefs[i].name] = 0;
+        }
+    }
+
+    addResistanceData(resistanceData) {
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            this[this.damageTypes[i]] += resistanceData[this.damageTypes[i]];
+        }
+    }
+
+    addResistanceValue(damageType, value) {
+        this[damageType] += value;
+    }
+
+    getResistanceValue(damageType) {
+        return this[damageType];
+    }
+
+    getResistanceString(damageType) {
+        if (this[damageType] == 0) {
+            return "";
+        }
+        else if (this[damageType] > 0) {
+            return `${damageType} Resistance: ${this[damageType]}`;
+        }
+        else {
+            return `${damageType} Weakness: ${Math.abs(this[damageType])}`;
+        }
+    }
+
+    getAllResistancesString() {
+        let output = "";
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            if (this[this.damageTypes[i]] > 0) {
+                if (output != "") {
+                    output += "\n";
+                }
+                output += `${damageType}: ${this[damageType]}`;
+            }
+        }
+        
+        return output;
+    }
+
+    getAllWeaknessesString() {
+        let output = "";
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            if (this[this.damageTypes[i]] < 0) {
+                if (output != "") {
+                    output += "\n";
+                }
+                output += `${damageType}: ${this[damageType]}`;
+            }
+        }
+        
+        return output;
+    }
+}
+
 class TechniqueDisplayData {
 
     constructor(technique) {
@@ -1152,11 +1160,10 @@ class TechniqueDisplayData {
     }
     setEffects(technique) {
         this.effects = new Dictionary();
-        technique.effects.iterate((effect, defense) => {
+        
+        technique.effects.iterate((effect, key) => {
             this.effects.add(defense, new TechniqueEffectDisplayData.Get(effect));
         });
-    }
-    setOngoingEffects(technique) {
     }
 
     createEmpty() {
@@ -1207,7 +1214,6 @@ class TechniqueDisplayData {
         return output;
     }
 }
-
 var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
     'use strict';
 
@@ -1315,86 +1321,6 @@ var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
         Get: get
     }
 }());
-class ResistanceData {
-    constructor(json) {
-        if (json != undefined) {
-            this.importJson(json);
-        }
-        else {
-            this.createEmpty();
-        }
-    }
-
-    importJson(json) {
-        this.damageTypes = json.damageTypes;
-        for (let i = 0; i < this.damageTypes.length; i++) {
-            this[this.damageTypes[i]] = json[this.damageTypes[i]];
-        }
-    }
-
-    createEmpty() {
-        let damageTypeDefs = WuxDef.Filter(new DatabaseFilterData("group", "DamageType"));
-        this.damageTypes = [];
-        for (let i = 0; i < damageTypeDefs.length; i++) {
-            this.damageTypes.push(damageTypeDefs[i].name);
-            this[damageTypeDefs[i].name] = 0;
-        }
-    }
-
-    addResistanceData(resistanceData) {
-        for (let i = 0; i < this.damageTypes.length; i++) {
-            this[this.damageTypes[i]] += resistanceData[this.damageTypes[i]];
-        }
-    }
-
-    addResistanceValue(damageType, value) {
-        this[damageType] += value;
-    }
-
-    getResistanceValue(damageType) {
-        return this[damageType];
-    }
-
-    getResistanceString(damageType) {
-        if (this[damageType] == 0) {
-            return "";
-        }
-        else if (this[damageType] > 0) {
-            return `${damageType} Resistance: ${this[damageType]}`;
-        }
-        else {
-            return `${damageType} Weakness: ${Math.abs(this[damageType])}`;
-        }
-    }
-
-    getAllResistancesString() {
-        let output = "";
-        for (let i = 0; i < this.damageTypes.length; i++) {
-            if (this[this.damageTypes[i]] > 0) {
-                if (output != "") {
-                    output += "\n";
-                }
-                output += `${damageType}: ${this[damageType]}`;
-            }
-        }
-        
-        return output;
-    }
-
-    getAllWeaknessesString() {
-        let output = "";
-        for (let i = 0; i < this.damageTypes.length; i++) {
-            if (this[this.damageTypes[i]] < 0) {
-                if (output != "") {
-                    output += "\n";
-                }
-                output += `${damageType}: ${this[damageType]}`;
-            }
-        }
-        
-        return output;
-    }
-}
 
 class WuxRepeatingSection {
 	constructor(definitionId) {
@@ -1451,7 +1377,6 @@ class WuxRepeatingSection {
         }
     }
 }
-
 class FormulaData {
 
     constructor(data) {
