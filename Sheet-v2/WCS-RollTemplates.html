@@ -24,50 +24,73 @@
 		{{#type-Other}}
 		<div class="wuxFeatureHeader">
 		{{/type-Other}}
-			{{#type-Active}}
-			<div class="wuxFeatureType wuxFeatureType-Active">
-			{{/type-Active}}
-			{{#type-Passive}}
-			<div class="wuxFeatureType wuxFeatureType-Passive">
-			{{/type-Passive}}
-			{{#type-Support}}
-			<div class="wuxFeatureType wuxFeatureType-Support">
-			{{/type-Support}}
-			{{#type-Job}}
-			<div class="wuxFeatureType wuxFeatureType-Job">
-			{{/type-Job}}
-			{{#type-Standard}}
-			<div class="wuxFeatureType wuxFeatureType-Standard">
-			{{/type-Standard}}
-				<span class="wuxFeatureTypeHeader">{{Source}}</span>
-				<span class="wuxFeatureTypeFooter">{{SlotType}}</span>
-			</div>
-
 			<div class="wuxFeatureHeaderDisplayBlock">
                 <span class="wuxFeatureHeaderInfoType">{{Username}}</span>
 				<span class="wuxFeatureHeaderName">{{Name}}</span>
+			    {{#Resources}}
 				<div class="wuxFeatureHeaderInfo">
-					
-					{{#type-base}}
-					<span class="wuxFeatureHeaderInfoType">Base </span>
-					{{/type-base}}
-					{{^type-base}}
-					<span class="wuxFeatureHeaderInfoType">Augment </span>
-					{{/type-base}}
-					{{#UsageInfo}}
-					<span>{{UsageInfo}}</span>
-					{{/UsageInfo}}
+					<span>{{Resources}}</span>
 				</div>
+				{{/Resources}}
+			    {{#Targeting}}
+				<div class="wuxFeatureHeaderInfo">
+					<span>{{Targeting}}</span>
+				</div>
+				{{/Targeting}}
 			</div>
+			{{#Trigger}}
+			<div class="wuxFeatureHeaderInfoTrigger">
+				<span><strong>Trigger: </strong></span>
+				<span>{{Trigger}}</span>
+			</div>
+			{{/Trigger}}
+			{{#Requirement}}
+			<div class="wuxFeatureHeaderInfoReq">
+				<span><strong>Requirement: </strong></span>
+				<span>{{Requirement}}</span>
+			</div>
+			{{/Requirement}}
+			{{#ItemTrait0}}
+			<div class="wuxFeatureHeaderInfoReq">
+				<span><strong>Item Traits: </strong></span>
+				
+				{{#ItemTrait0}}
+				<div class="wuxTrait wuxTooltip">
+					<span class="wuxTooltipText">{{ItemTrait0}}</span>
+					<span class="wuxTooltipContent">{{ItemTrait0Desc}}</span>
+				</div>
+				{{/ItemTrait0}}
+				{{#ItemTrait1}}
+				<span>; or </span>
+				<div class="wuxTrait wuxTooltip">
+					<span class="wuxTooltipText">{{ItemTrait1}}</span>
+					<span class="wuxTooltipContent">{{ItemTrait1Desc}}</span>
+				</div>
+				{{/ItemTrait1}}
+				{{#ItemTrait2}}
+				<span>; or </span>
+				<div class="wuxTrait wuxTooltip">
+					<span class="wuxTooltipText">{{ItemTrait2}}</span>
+					<span class="wuxTooltipContent">{{ItemTrait2Desc}}</span>
+				</div>
+				{{/ItemTrait2}}
+				{{#ItemTrait3}}
+				<span> or </span>
+				<div class="wuxTrait wuxTooltip">
+					<span class="wuxTooltipText">{{ItemTrait3}}</span>
+					<span class="wuxTooltipContent">{{ItemTrait3Desc}}</span>
+				</div>
+				{{/ItemTrait3}}
+			</div>
+			{{/ItemTrait0}}
 		</div>
 		{{#type-FunctionBlock}}
 		<div class="wuxFeatureFunctionBlock">
-			{{#Prerequisites}}
-			<div class="wuxFeatureFunctionBlockRow">
-				<span><strong>Prerequisites: </strong></span>
-				<span>{{Prerequisites}}</span>
+		    {{#FlavorText}}
+			<div class="wuxFeatureFunctionBlockFlavorText">
+				<span>{{FlavorText}}</span>
 			</div>
-			{{/Prerequisites}}
+			{{/FlavorText}}
 			{{#Trait0}}
 			<div class="wuxFeatureFunctionBlockRow">
 				<span><strong>Traits: </strong></span>
@@ -110,18 +133,6 @@
 				{{/Trait5}}
 			</div>
 			{{/Trait0}}
-			{{#Requirement}}
-			<div class="wuxFeatureFunctionBlockRow">
-				<span><strong>Requirement: </strong></span>
-				<span>{{Requirement}}</span>
-			</div>
-			{{/Requirement}}
-			{{#Trigger}}
-			<div class="wuxFeatureFunctionBlockRow">
-				<span><strong>Trigger: </strong></span>
-				<span>{{Trigger}}</span>
-			</div>
-			{{/Trigger}}
 		</div>
 		{{/type-FunctionBlock}}
 		
@@ -180,111 +191,6 @@
 			</div>
 		</div>
 		{{/type-DescBlock}}
-		{{#WpnName}}
-		<div class="wuxFeatureHeader wuxFeatureHeader-Equipment">
-
-            <span class="wuxFeatureHeaderName">{{WpnName}}</span>
-            <div class="wuxFeatureHeaderInfo">
-                <span><strong>Skill: </strong></span>
-                {{WpnSkill}}
-                <span>&nbsp;</span>
-
-                {{#WpnTrait0}}
-                <span><strong>Traits: </strong></span>
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnTrait0}}</span>
-                    <span class="wuxTooltipContent">{{WpnTrait0Desc}}</span>
-                </div>
-                {{/WpnTrait0}}
-                {{#WpnTrait1}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnTrait1}}</span>
-                    <span class="wuxTooltipContent">{{WpnTrait1Desc}}</span>
-                </div>
-                {{/WpnTrait1}}
-                {{#WpnTrait2}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnTrait2}}</span>
-                    <span class="wuxTooltipContent">{{WpnTrait2Desc}}</span>
-                </div>
-                {{/WpnTrait2}}
-                {{#WpnTrait3}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnTrait3}}</span>
-                    <span class="wuxTooltipContent">{{WpnTrait3Desc}}</span>
-                </div>
-                {{/WpnTrait3}}
-                {{#WpnTrait4}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnTrait4}}</span>
-                    <span class="wuxTooltipContent">{{WpnTrait4Desc}}</span>
-                </div>
-                {{/WpnTrait4}}
-                {{#WpnTrait5}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnTrait5}}</span>
-                    <span class="wuxTooltipContent">{{WpnTrait5Desc}}</span>
-                </div>
-                {{/WpnTrait5}}
-            </div>
-            {{#WpnAbility0}}
-            <div class="wuxFeatureHeaderInfo">
-                <span><strong>Abilities: </strong></span>
-                
-                {{#WpnAbility0}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnAbility0}}</span>
-                    <span class="wuxTooltipContent">{{WpnAbility0Desc}}</span>
-                </div>
-                {{/WpnAbility0}}
-                {{#WpnAbility1}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnAbility1}}</span>
-                    <span class="wuxTooltipContent">{{WpnAbility1Desc}}</span>
-                </div>
-                {{/WpnAbility1}}
-                {{#WpnAbility2}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnAbility2}}</span>
-                    <span class="wuxTooltipContent">{{WpnAbility2Desc}}</span>
-                </div>
-                {{/WpnAbility2}}
-                {{#WpnAbility3}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnAbility3}}</span>
-                    <span class="wuxTooltipContent">{{WpnAbility3Desc}}</span>
-                </div>
-                {{/WpnAbility3}}
-                {{#WpnAbility4}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnAbility4}}</span>
-                    <span class="wuxTooltipContent">{{WpnAbility4Desc}}</span>
-                </div>
-                {{/WpnAbility4}}
-                {{#WpnAbility5}}
-                <div class="wuxTrait wuxTooltip">
-                    <span class="wuxTraitText">{{WpnAbility5}}</span>
-                    <span class="wuxTooltipContent">{{WpnAbility5Desc}}</span>
-                </div>
-                {{/WpnAbility5}}
-            </div>
-            {{/WpnAbility0}}
-            <div class="wuxFeatureHeaderInfo">
-                {{#WpnThreat}}
-                <span><strong>Threat: </strong></span>
-                <span>{{WpnThreat}}</span>
-                <span>&nbsp;</span>
-                {{/WpnThreat}}
-                {{#WpnRange}}
-                <span><strong>Range: </strong></span>
-                <span>{{WpnRange}}</span>
-                <span>&nbsp;</span>
-                {{/WpnRange}}
-                <span><strong>Damage: </strong></span>
-                <span>{{WpnDamage}}</span>
-            </div>
-        </div>
-		{{/WpnName}}
 		{{#targetData}}
         <div>
             [Choose Targets]({{targetData}})
