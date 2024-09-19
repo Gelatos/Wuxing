@@ -1087,9 +1087,7 @@ class TechniqueDisplayData {
         this.setTraits(technique);
         this.setFlavorText(technique);
         this.setDefinitions(technique);
-        this.setAutoEffects(technique);
         this.setEffects(technique);
-        this.setOngoingEffects(technique);
     }
     
     setTechBasics(technique) {
@@ -1154,16 +1152,14 @@ class TechniqueDisplayData {
         //     }
         // }
     }
-
-    setAutoEffects(technique) {
-        this.autoEffects = new TechniqueEffectDisplayData.Get(technique.autoEffects);
-    }
     setEffects(technique) {
         this.effects = new Dictionary();
-        
-        technique.effects.iterate((effect, key) => {
-            this.effects.add(defense, new TechniqueEffectDisplayData.Get(effect));
-        });
+        let defenses = technique.effects.getPropertyValues("defense");
+        let filteredTechniques;
+        for(let i = 0; i < defenses.length; i++) {
+            filteredTechniques = technique.effects.filter(new DatabaseFilterData("defense", defenses[i]));
+            this.effects.add(defenses[i], new TechniqueEffectDisplayData.Get(filteredTechniques));
+        };
     }
 
     createEmpty() {
@@ -1218,8 +1214,8 @@ var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
     'use strict';
 
     var
-    get = function (techniqueEffect) {
-        return importEffectData(techniqueEffect);
+    get = function (techniqueEffects) {
+        return importEffectData(techniqueEffects);
     },
 
     importEffectData = function (effectData) {
