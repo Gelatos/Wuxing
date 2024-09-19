@@ -354,7 +354,6 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 output += setTechniqueDisplayFunctionBlockFlavorText(techDisplayData, displayOptions);
                 output += setTechniqueDisplayFunctionBlockTraits(techDisplayData, displayOptions);
                 output += setTechniqueDisplayFunctionBlockDefinitions(techDisplayData, displayOptions);
-                output += techniqueDisplayContentEffects.PrintAuto(techDisplayData, displayOptions);
 
                 if (output != "") {
                     return `<div ${setFeatureStyle("wuxFeatureFunctionBlock", displayOptions)}>\n${output}\n</div>\n`;
@@ -388,22 +387,18 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
 
                 var 
 
-                printAuto = function (techDisplayData, displayOptions) {
-                    let output = "";
-                    if (techDisplayData.autoEffects.length > 0) {
-                        output += setFeatureLine("wuxFeatureCheckHeader", "Effects", displayOptions);
-                        output += setTechniqueDisplayCheckBlock(techDisplayData.autoEffects, displayOptions);
-                    }
-                    return output;
-                },
-
                 printEffects = function (techDisplayData, displayOptions) {
                     let output = "";
                     let defenseDisplay = "";
                     techDisplayData.effects.iterate(function (effectData, key) {
                         if (isNaN(parseInt(key))) {
-                            let definition = WuxDef.Get(key);
-                            defenseDisplay = WuxSheetMain.Tooltip.Text(`vs. ${definition.title}`, WuxDefinition.TooltipDescription(definition));
+                            if (key == "") {
+                                defenseDisplay = WuxSheetMain.Header2("Effects");
+                            }
+                            else {
+                                let definition = WuxDef.Get(key);
+                                defenseDisplay = WuxSheetMain.Tooltip.Text(`vs. ${definition.title}`, WuxDefinition.TooltipDescription(definition));
+                            }
                         }
                         else {
                             defenseDisplay = `vs. DC ${key}`;
@@ -437,7 +432,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 }
 
                 return {
-                    PrintAuto: printAuto,
+                    
                     PrintEffects: printEffects
                 };
             })()
