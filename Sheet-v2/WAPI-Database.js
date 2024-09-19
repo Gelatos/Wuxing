@@ -1153,12 +1153,12 @@ class TechniqueDisplayData {
         // }
     }
     setEffects(technique) {
-        this.effects = new Dictionary();
+        this.effects = [];
         let defenses = technique.effects.getPropertyValues("defense");
         let filteredTechniques;
         for(let i = 0; i < defenses.length; i++) {
             filteredTechniques = technique.effects.filter(new DatabaseFilterData("defense", defenses[i]));
-            this.effects.add(defenses[i], new TechniqueEffectDisplayData.Get(filteredTechniques));
+            this.effects.push(defenses[i], new TechniqueEffectDisplayData.Get(filteredTechniques));
         };
     }
 
@@ -1181,10 +1181,7 @@ class TechniqueDisplayData {
         this.traits = [];
         this.flavorText = "";
         this.definitions = [];
-
-        this.autoEffects = [];
-        this.effects = new Dictionary();
-        this.ongoingEffects = undefined;
+        this.effects = [];
     }
 
     getRollTemplate() {
@@ -1210,18 +1207,23 @@ class TechniqueDisplayData {
         return output;
     }
 }
-var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
-    'use strict';
+class TechniqueEffectDisplayData {
+    
+    constructor(techniqueEffects) {
+        this.check = "";
+        this.checkDescription = "";
+        this.effects = "";
+        
+        this.importEffectData(techniqueEffects);
+    }
 
-    var
-    get = function (techniqueEffects) {
-        return importEffectData(techniqueEffects);
-    },
-
-    importEffectData = function (effectData) {
-        let data = [];
+    importEffectData(effectData) {
+        let data = "";
         for (let i = 0; i < effectData.length; i++) {
-            data.push(formatEffect(effectData[i]));
+            if (data != "") {
+                data += "\n";
+            }
+            data += formatEffect(effectData[i]);
         }
         return data;
     },
