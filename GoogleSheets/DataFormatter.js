@@ -389,19 +389,26 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
 
                 printEffects = function (techDisplayData, displayOptions) {
                     let output = "";
+                    let definition = {};
                     let defenseDisplay = "";
                     techDisplayData.effects.iterate(function (effectData, key) {
                         if (isNaN(parseInt(key))) {
                             if (key == "") {
-                                defenseDisplay = WuxSheetMain.Header2("Effects");
+                                definition = WuxDef.Get("Title_TechEffect");
+                                defenseDisplay = WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition));
                             }
                             else {
-                                let definition = WuxDef.Get(key);
-                                defenseDisplay = WuxSheetMain.Tooltip.Text(`vs. ${definition.title}`, WuxDefinition.TooltipDescription(definition));
+                                definition = WuxDef.Get(key);
+                                let definition2 = WuxDef.Get("Title_TechDefense");
+                                definition.title = `${definition2.title}${definition.title}`;
+                                definition.description = `${definition2.description}${definition.description}`;
+                                defenseDisplay = WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition));
                             }
                         }
                         else {
-                            defenseDisplay = `vs. DC ${key}`;
+                            definition = WuxDef.Get("Title_TechDC");
+                            definition.title = `${definition.title}${key}`;
+                            defenseDisplay = WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition));
                         }
                         output += setFeatureLine("wuxFeatureCheckHeader", defenseDisplay, displayOptions);
                         output += setTechniqueDisplayCheckBlock(effectData, displayOptions);
@@ -413,26 +420,13 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     return output;
                 },
 
-                setTechniqueDisplayCheckBlock = function (techEffectsArray, displayOptions) {
-
-                    if (techEffectsArray.length > 0) {
-                        let effectsOutput = "";
-                        for (let i = 0; i < techEffectsArray.length; i++) {
-                            if (effectsOutput != "") {
-                                effectsOutput += "\n";
-                            }
-                            effectsOutput += techEffectsArray[i];
-                        }
-
-                        return `<div ${setFeatureStyle("wuxFeatureCheckBlock", displayOptions)}>
-                        <span ${setFeatureStyle("wuxFeatureCheckBlockRow", displayOptions)}>${effectsOutput}</span>
-                        </div>\n`;
-                    }
-                    return "";
+                setTechniqueDisplayCheckBlock = function (effectsOutput, displayOptions) {
+                    return `<div ${setFeatureStyle("wuxFeatureCheckBlock", displayOptions)}>
+                    <span ${setFeatureStyle("wuxFeatureCheckBlockRow", displayOptions)}>${effectsOutput}</span>
+                    </div>\n`;
                 }
 
                 return {
-                    
                     PrintEffects: printEffects
                 };
             })()
