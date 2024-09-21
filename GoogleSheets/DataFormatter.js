@@ -277,7 +277,8 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             setTechniqueDisplayHeaderUseSection = function (techDisplayData, displayOptions) {
 
                 // add technique data for the api
-                techDisplayData.technique.username = "@{character_name}";
+                techDisplayData.username = "@{display_name}";
+                techDisplayData.technique.username = "@{display_name}";
                 let showDefinition = WuxDef.Get("Title_ShowTechnique");
                 let useDefinition = WuxDef.Get("Title_UseTechnique");
 
@@ -314,7 +315,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     output += setFeatureLineWithHeader("wuxFeatureHeaderInfoTrigger", "Trigger", techDisplayData.trigger, displayOptions);
                 }
                 if (techDisplayData.itemTraits.length > 0) {
-                    output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Item Traits", setTraits(techDisplayData.itemTraits, "<span> or </span>", displayOptions), displayOptions);
+                    output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Item Traits", setDefinitions(techDisplayData.itemTraits, "<span> or </span>", displayOptions), displayOptions);
                 }
                 if (techDisplayData.requirements != "") {
                     output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Requirements", techDisplayData.requirements, displayOptions);
@@ -336,6 +337,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
 
                 output += setTechniqueDisplayFunctionBlock(techDisplayData, displayOptions);
                 output += techniqueDisplayContentEffects.PrintEffects(techDisplayData, displayOptions);
+                output += setTechniqueDisplayFunctionBlockDefinitions(techDisplayData, displayOptions);
 
                 if (displayOptions.hasCSS) {
                     let attributeName = techDisplayData.definition.getAttribute(WuxDef._expand);
@@ -353,7 +355,6 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 let output = "";
                 output += setTechniqueDisplayFunctionBlockFlavorText(techDisplayData, displayOptions);
                 output += setTechniqueDisplayFunctionBlockTraits(techDisplayData, displayOptions);
-                output += setTechniqueDisplayFunctionBlockDefinitions(techDisplayData, displayOptions);
 
                 if (output != "") {
                     return `<div ${setFeatureStyle("wuxFeatureFunctionBlock", displayOptions)}>\n${output}\n</div>\n`;
@@ -370,14 +371,16 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
 
             setTechniqueDisplayFunctionBlockTraits = function (techDisplayData, displayOptions) {
                 if (techDisplayData.traits.length > 0) {
-                    return setFeatureLineWithHeader("wuxFeatureFunctionBlockRow", "Traits", setTraits(techDisplayData.traits, "; ", displayOptions), displayOptions);
+                    return setFeatureLineWithHeader("wuxFeatureFunctionBlockRow", "Traits", setDefinitions(techDisplayData.traits, "; ", displayOptions), displayOptions);
                 }
                 return "";
             },
 
             setTechniqueDisplayFunctionBlockDefinitions = function (techDisplayData, displayOptions) {
-                if (techDisplayData.traits.length > 0) {
-                    return setFeatureLineWithHeader("wuxFeatureFunctionBlockRow", "Definitions", setTraits(techDisplayData.definitions, "; ", displayOptions), displayOptions);
+                if (techDisplayData.definitions.length > 0) {
+                    return `<div ${setFeatureStyle("wuxFeatureFunctionBlock", displayOptions)}>
+                    ${setFeatureLineWithHeader("wuxFeatureFunctionBlockRow", "Definitions", setDefinitions(techDisplayData.definitions, "<span>, </span>", displayOptions), displayOptions)}
+                    </div>\n`;
                 }
                 return "";
             },
@@ -389,29 +392,16 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
 
                 printEffects = function (techDisplayData, displayOptions) {
                     let output = "";
-                    let definition = {};
                     let defenseDisplay = "";
-                    techDisplayData.effects.iterate(function (effectData, key) {
-                        if (isNaN(parseInt(key))) {
-                            if (key == "") {
-                                definition = WuxDef.Get("Title_TechEffect");
-                                defenseDisplay = WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition));
-                            }
-                            else {
-                                definition = WuxDef.Get(key);
-                                let definition2 = WuxDef.Get("Title_TechDefense");
-                                definition.title = `${definition2.title}${definition.title}`;
-                                definition.description = `${definition2.description}${definition.description}`;
-                                defenseDisplay = WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition));
-                            }
+                    techDisplayData.effects.forEach(function (effectData) {
+                        if (effectData.check != undefined) {
+                            defenseDisplay = WuxSheetMain.Tooltip.Text(effectData.check, WuxSheetMain.Header2(effectData.check) + WuxSheetMain.Desc(effectData.checkDescription));
+
+                            output += setFeatureLine("wuxFeatureCheckHeader", defenseDisplay, displayOptions);
+                            effectData.effects.forEach(function (effect) {
+                                output += setTechniqueDisplayCheckBlock(effect, displayOptions);
+                            });
                         }
-                        else {
-                            definition = WuxDef.Get("Title_TechDC");
-                            definition.title = `${definition.title}${key}`;
-                            defenseDisplay = WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition));
-                        }
-                        output += setFeatureLine("wuxFeatureCheckHeader", defenseDisplay, displayOptions);
-                        output += setTechniqueDisplayCheckBlock(effectData, displayOptions);
                     });
 
                     if (output != "") {
@@ -450,26 +440,20 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             return "";
         },
 
-        setTraits = function (traits, delimeter, displayOptions) {
-            if (traits.length > 0) {
+        setDefinitions = function (definitions, delimeter, displayOptions) {
+            if (definitions.length > 0) {
                 let output = "";
-                let description = "";
-                for (var i = 0; i < traits.length; i++) {
+                for (var i = 0; i < definitions.length; i++) {
                     if (output != "") {
                         output += delimeter;
                     }
-                    description = "";
-                    for (let j = 0; j < traits[i].descriptions.length; j++) {
-                        description += traits[i].descriptions[j] + " ";
-                    }
                     if (displayOptions.hasCSS) {
-                        output += `<div class="wuxTrait wuxTooltip">\n<span class="wuxTraitText">${traits[i].name}</span>\n<span class="wuxTooltipContent">${description}</span>\n</div>`;
-                    }
+                        output += WuxSheetMain.Tooltip.Text(definitions[i].title, WuxDefinition.TooltipDescription(definitions[i]));                    }
                     else {
-                        output += `<a style="margin-right: 10px; text-decoration: underline dotted;" title="${description}">${traits[i].name}</a>`;
+                        output += `<a style="margin-right: 10px; text-decoration: underline dotted;" title="${description}">${definitions[i].name}</a>`;
                     }
                 }
-                return `<span class="wuxShownTraits">\n${output}\n</span>`;
+                return output;
             }
             return "";
         },
@@ -1120,10 +1104,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
             },
 
             text = function (text, contents) {
-                return `<div class="wuxTooltip">
-                <div class="wuxTooltipText">\n${text}\n</div>
+                return `<span class="wuxTooltip">
+                <span class="wuxTooltipText">\n${text}\n</span>
                 <div class="wuxTooltipContent">\n${contents}\n</div>
-                </div>`;
+                </span>`;
             }
 
             return {

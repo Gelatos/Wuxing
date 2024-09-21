@@ -716,8 +716,11 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoType,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoType
 {
-    position: relative;
-    font-weight: bold;
+    position: absolute;
+    display: inline-block;
+    font-style: italic;
+    text-align: right;
+    right: 10px;
 }
 
 .wuxFeatureHeaderInfoReq,
@@ -1134,7 +1137,6 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent
 {
     position: absolute;
-    top: 24px;
     width: 240px;
     padding: 5px;
     z-index: 9999;
@@ -1145,6 +1147,17 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     visibility: hidden;
     border-radius: 6px;
     border: 2px solid black;
+}
+.wuxTooltip .wuxTooltipContent,
+.wuxTooltipButton .wuxTooltipContent
+{
+    top: 24px;
+}
+
+.sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent
+{
+    bottom: 24px;
 }
 
 .wuxTooltip .wuxTooltipContent,
@@ -1165,8 +1178,8 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .wuxTooltip .wuxTooltipContent .wuxDescription,
 .wuxTooltipButton .wuxTooltipContent .wuxDescription,
-.sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxDescription,
-.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxDescription
+.sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription
 {
     color: #3e3e3e;
     font-size: 11px;
@@ -1176,11 +1189,15 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 }
 .wuxTooltip .wuxTooltipContent .wuxHeader2,
 .wuxTooltipButton .wuxTooltipContent .wuxHeader2,
-.sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxHeader2,
-.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent .wuxHeader2
+.sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2
 {
+    font-size: 12px;
     font-weight: bold;
     color: #3e3e3e;
+
+    border-bottom: 1px solid #d0d0d0;
+    border-image: linear-gradient(to right, #A0A0A0 0%, #A0A0A0 50%, #A0A0A0 100%) 1;
 }
   
 .wuxTooltip:hover .wuxTooltipContent,

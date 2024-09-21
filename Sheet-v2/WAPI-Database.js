@@ -199,7 +199,7 @@ class ExtendedTechniqueDatabase extends Database {
         for (let i = 0; i < dataArray.length; i++) {
             data = new TechniqueData(dataArray[i]);
             if (this.has(data.name)) {
-                this.get(data.name).importEffectTechnique(data);
+                this.get(data.name).importEffectsFromTechnique(data);
             }
             else {
                 this.add(data.name, data);
@@ -356,7 +356,7 @@ class TechniqueData extends WuxDatabaseData {
         this.itemTraits = json.itemTraits;
         this.trigger = json.trigger;
         this.flavorText = json.flavorText;
-        this.definitions = Array.isArray(json.definitions) ? json.definitions : [];
+        this.definitions = json.definitions;
         this.effects = new TechniqueEffectDatabase(json.effects);
     }
     importSheets(dataArray) {
@@ -419,19 +419,25 @@ class TechniqueData extends WuxDatabaseData {
         technique.effects.iterate(function(effect) {
             baseTechnique.addEffect(effect);
         });
+        technique.definitions.forEach(function(definition) {
+            baseTechnique.addDefinition(definition);
+        });
     }
     addEffect(effect) {
         switch (effect.type) {
             case "Definition":
-                addDefinition(effect.effect);
+                effect.setName(`D${this.definitions.length}`);
+                this.addDefinition(effect.effect);
                 break;
             case "Status":
             case "Condition":
-                this.effects.add(effect);
-                addDefinition(effect.effect);
+                effect.setName(`T${this.effects.keys.length}`);
+                this.effects.add(effect.name, effect);
+                this.addDefinition(effect.effect);
                 break;
             default:
-                this.effects.add(effect);
+                effect.setName(`T${this.effects.keys.length}`);
+                this.effects.add(effect.name, effect);
                 break;
         }
     }
@@ -468,6 +474,7 @@ class TechniqueData extends WuxDatabaseData {
 }
 class TechniqueEffect extends dbObj {
     importJson(json) {
+        this.name = json.name;
         this.defense = json.defense;
         this.target = json.target;
         this.type = json.type;
@@ -480,6 +487,7 @@ class TechniqueEffect extends dbObj {
     }
     importSheets(dataArray) {
         let i = 0;
+        this.name = "";
         this.defense = "" + dataArray[i]; i++;
         this.target = "" + dataArray[i]; i++;
         this.type = "" + dataArray[i]; i++;
@@ -492,6 +500,7 @@ class TechniqueEffect extends dbObj {
     }
     createEmpty() {
         super.createEmpty();
+        this.name = "";
         this.defense = "";
         this.target = "";
         this.type = "";
@@ -501,6 +510,9 @@ class TechniqueEffect extends dbObj {
         this.formula = new FormulaData();
         this.effect = "";
         this.traits = "";
+    }
+    setName(name) {
+        this.name = name;
     }
 }
 class TechniqueStyle extends WuxDatabaseData {
@@ -1070,16 +1082,13 @@ class ResistanceData {
 class TechniqueDisplayData {
 
     constructor(technique) {
+        this.createEmpty();
         if (technique != undefined) {
             this.importTechnique(technique);
-        }
-        else {
-            this.createEmpty();
         }
     }
 
     importTechnique(technique) {
-        this.createEmpty();
         this.setTechBasics(technique);
         this.setTechSetResourceData(technique);
         this.setTechTargetData(technique);
@@ -1141,24 +1150,17 @@ class TechniqueDisplayData {
         this.flavorText = technique.flavorText;
     }
     setDefinitions(technique) {
-        this.definitions = WuxDef.GetValues(technique.definitions, ";");
-        // if (technique.definitions.length > 0) {
-        //     let conditionDefinition = "";
-        //     let description = "";
-        //     for (let i = 0; i < technique.definitions.length; i++) {
-        //         conditionDefinition = WuxDef.Get(technique.definitions[i]);
-        //         description = conditionDefinition.descriptions.join("\n");
-        //         this.definitions.push(`[${conditionDefinition.group}: ${conditionDefinition.name}] ${description}`);
-        //     }
-        // }
+        for (let i = 0; i < technique.definitions.length; i++) {
+            this.definitions.push(WuxDef.Get(technique.definitions[i]));
+        }
     }
     setEffects(technique) {
         this.effects = [];
         let defenses = technique.effects.getPropertyValues("defense");
-        let filteredTechniques;
+        let filteredTechniqueEffects;
         for(let i = 0; i < defenses.length; i++) {
-            filteredTechniques = technique.effects.filter(new DatabaseFilterData("defense", defenses[i]));
-            this.effects.push(defenses[i], new TechniqueEffectDisplayData.Get(filteredTechniques));
+            filteredTechniqueEffects = technique.effects.filter(new DatabaseFilterData("defense", defenses[i]));
+            this.effects.push(defenses[i], new TechniqueEffectDisplayData(filteredTechniqueEffects));
         };
     }
 
@@ -1178,33 +1180,88 @@ class TechniqueDisplayData {
         this.requirements = "";
         this.itemTraits = [];
 
-        this.traits = [];
         this.flavorText = "";
-        this.definitions = [];
+        this.traits = [];
         this.effects = [];
+        this.definitions = [];
     }
 
     getRollTemplate() {
         let output = "";
 
-        output += `{{Username=${this.username}}}{{Name=${this.name}}}{{SlotType=${this.slotFooter}}}{{Source=${this.slotSource}}}{{UsageInfo=${this.usageInfo}}}`;
-        output += `${this.traits.length > 0 ? this.rollTemplateTraits(this.traits, "Trait") : ""}${this.trigger ? `{{Trigger=${this.trigger}}}` : ""}`;
-        output += `${this.requirement ? `{{Requirement=${this.requirement}}}` : ""}${this.item ? `{{Item=${this.item}}}` : ""}`;
-        output += `${this.range ? `{{Range=${this.range}}}` : ""}${this.target ? `{{Target=${this.target}}}` : ""}`;
-        output += `${this.skill ? `{{SkillString=${this.skill}}}` : ""}${this.damage ? `{{DamageString=${this.damage}}}` : ""}`;
-        output += `${this.description ? `{{Desc=${this.description}}}` : ""}${this.onHit ? `{{OnHit=${this.onHit}}}` : ""}${this.conditions ? `{{Conditions=${this.conditions}}}` : ""}`;
-        output += ` {{type-${this.slotType}=1}} ${this.slotIsPath ? "{{isPath=1}} " : ""}{{type-${this.actionType}=1}}`;
-        output += ` ${this.isFunctionBlock ? "{{type-FunctionBlock=1}} " : ""}${this.isCheckBlock ? "{{type-CheckBlock=1}} " : ""}`;
-        output += `${this.isCheckBlock ? "{{type-CheckBlockTarget=1}} " : ""}${this.isDescBlock ? "{{type-DescBlock=1}} " : ""}`;
+        output += `{{Username=${this.username}}}{{Name=${this.name}}}{{type-${this.actionType}=1}}`;
+        if (this.resourceData != "") {
+            output += `{{Resources=${this.resourceData}}}`;
+        }
+        if (this.targetData != "") {
+            output += `{{Targeting=${this.targetData}}}`;
+        }
+        if (this.trigger != "") {
+            output += `{{Trigger=${this.trigger}}}`;
+        }
+        if (this.requirements != "") {
+            output += `{{Requirement=${this.requirements}}}`;
+        }
+        if (this.itemTraits.length > 0) {
+            output += this.rollTemplateDefinitions(this.itemTraits, "ItemTrait");
+        }
+        if (this.flavorText != "") {
+            output += `{{FlavorText=${this.flavorText}}}`;
+        }
+        if (this.traits.length > 0) {
+            output += this.rollTemplateDefinitions(this.traits, "Trait");
+        }
+        if (this.effects.length > 0) {
+            output += this.rollTemplateEffects();
+        }
+        if (this.definitions.length > 0) {
+            output += this.rollTemplateDefinitions(this.definitions, "Def");
+        }
 
-        return `&{template:technique} ${output.trim()}`;
+        return `&{template:technique} ${this.sanitizeSheetRollAction(output.trim())}`;
     }
-    rollTemplateTraits(traitsDb, rtPrefix) {
+    rollTemplateDefinitions(definition, traitType) {
         let output = "";
-        for (var i = 0; i < traitsDb.length; i++) {
-            output += `{{${rtPrefix}${i}=${traitsDb[i].name}}} {{${rtPrefix}${i}Desc=${traitsDb[i].description}}} `;
+        for (let i = 0; i < definition.length; i++) {
+            output += `{{${traitType}${i}=${definition[i].title}}} {{${traitType}${i}Desc=${definition[i].getDescription()}}} `;
         }
         return output;
+    }
+    rollTemplateEffects() {
+        let output = "";
+        let incrementer = 0;
+        this.effects.forEach(function(effect) {
+            if(effect.check != undefined) {
+                output += `{{Effect${incrementer}Name=${effect.check}}}{{Effect${incrementer}Desc=${effect.checkDescription}}}`;
+                if (effect.effects == undefined) {
+                    output += `{{Effect${incrementer}=Error! No effects found!}}`;
+                }
+                else {
+                    effect.effects.forEach(function(desc) {
+                        output += `{{Effect${incrementer}=${desc}}}`;
+                        incrementer++;
+                    });
+                }
+                incrementer++;
+            }
+        });
+        return output;
+    }
+    sanitizeSheetRollAction(roll) {
+        var sheetRoll = roll;
+        sheetRoll = sheetRoll.replace(/'/g, "&#39;");
+        // sheetRoll = sheetRoll.replace(/%/g, "&#37;");
+        // sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        // sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        // sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+        // sheetRoll = sheetRoll.replace(/"/g, "&#34;");
+        // sheetRoll = sheetRoll.replace(/:/g, "");
+        // sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
+        // sheetRoll = sheetRoll.replace(/@/g, "&#64;");
+        // sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
+        // sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+        // sheetRoll = sheetRoll.replace(/\n/g, "&&");
+        return sheetRoll;
     }
 }
 class TechniqueEffectDisplayData {
@@ -1212,65 +1269,79 @@ class TechniqueEffectDisplayData {
     constructor(techniqueEffects) {
         this.check = "";
         this.checkDescription = "";
-        this.effects = "";
+        this.effects = [];
         
+        this.importDefenseData(techniqueEffects[0]);
         this.importEffectData(techniqueEffects);
     }
 
-    importEffectData(effectData) {
-        let data = "";
-        for (let i = 0; i < effectData.length; i++) {
-            if (data != "") {
-                data += "\n";
-            }
-            data += formatEffect(effectData[i]);
-        }
-        return data;
-    },
+    importDefenseData(techniqueEffect) {
+        let defense = techniqueEffect.defense;
+        let definition;
 
-    formatEffect = function (effect) {
+        if (isNaN(parseInt(defense))) {
+            if (defense == "") {
+                definition = WuxDef.Get("Title_TechEffect");
+                this.check = definition.title;
+                this.checkDescription = definition.getDescription();
+            }
+            else {
+                definition = WuxDef.Get(defense);
+                let definition2 = WuxDef.Get("Title_TechDefense");
+                this.check = `${definition2.title}${definition.title}`;
+                this.checkDescription = `${definition2.getDescription()}\n${definition.getDescription()}`;
+            }
+        }
+        else {
+            definition = WuxDef.Get("Title_TechDC");
+            this.check = `${definition.title}${defense}`;
+            this.checkDescription = definition.getDescription();
+        }
+    }
+    importEffectData(effectData) {
+        for (let i = 0; i < effectData.length; i++) {
+            this.effects.push(this.formatEffect(effectData[i]));
+        }
+    }
+
+    formatEffect(effect) {
         let output = "";
         switch (effect.type) {
             case "Damage":
-                output = formatDamageEffect(effect);
+                output = this.formatDamageEffect(effect);
                 break;
             case "Status":
-                output = formatStatusEffect(effect);
+                output = this.formatStatusEffect(effect);
                 break;
             case "Condition":
-                output = formatConditionEffect(effect);
+                output = this.formatConditionEffect(effect);
                 break;
             case "Boost":
-                output = formatBoostEffect(effect);
+                output = this.formatBoostEffect(effect);
                 break;
             case "Definition":
                 // Do nothing
                 break;
             case "":
-                output = formatDescriptionEffect(effect);
+                output = this.formatDescriptionEffect(effect);
                 break;
         }
         
         return output;
-    },
-
-    formatDamageEffect = function (effect) {
-        return `[${formatCalcBonus(effect)}] ${effect.effect} damage`;
-    },
-
-    formatStatusEffect = function (effect) {
-        return formatStateEffect(effect, `Status_${effect.effect}`);
-    },
-
-    formatConditionEffect = function (effect) {
-        return formatStateEffect(effect, `Condition_${effect.effect}`);
-    },
-
-    formatBoostEffect = function (effect) {
-        return `${WuxDef.GetTitle(effect.effect)} increases by ${formatCalcBonus(effect)}`;
-    },
-
-    formatStateEffect = function (effect, effectName) {
+    }
+    formatDamageEffect(effect) {
+        return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+    }
+    formatStatusEffect(effect) {
+        return this.formatStateEffect(effect, effect.effect);
+    }
+    formatConditionEffect(effect) {
+        return this.formatStateEffect(effect, effect.effect);
+    }
+    formatBoostEffect(effect) {
+        return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
+    }
+    formatStateEffect(effect, effectName) {
         let state = WuxDef.Get(effectName);
         let target = "Target";
         let plural = "s";
@@ -1278,7 +1349,7 @@ class TechniqueEffectDisplayData {
             target = "You";
             plural = "";
         }
-        let ranks = formatCalcBonus(effect);
+        let ranks = this.formatCalcBonus(effect);
         switch (effect.subType) {
             case "Add": return `${target} gain${plural} the ${state.title} ${state.group}`;
             case "Remove": return `${target} lose${plural} the ${state.title} ${state.group}`;
@@ -1287,14 +1358,13 @@ class TechniqueEffectDisplayData {
             case "Rank Down": return `${target} lose${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
             default: return `${target} gain${plural} the ${state.title} ${state.group}`;
         }
-    },
-    
-    formatDescriptionEffect = function (effect) {
+    }
+    formatDescriptionEffect(effect) {
         return effect.effect;
-    },
+    }
 
-    formatCalcBonus = function (effect) {
-        let output = formatEffectDice(effect);
+    formatCalcBonus(effect) {
+        let output = this.formatEffectDice(effect);
         let formulaString = "";
         try {
             formulaString = effect.formula.getString();
@@ -1306,19 +1376,14 @@ class TechniqueEffectDisplayData {
             output += " + ";
         }
         return output + formulaString;
-    },
-
-    formatEffectDice = function (effect) {
+    }
+    formatEffectDice(effect) {
         if (effect.dVal != "" && effect.dVal > 0) {
             return `${effect.dVal}d${effect.dType}`;
         }
         return "";
     }
-
-    return {
-        Get: get
-    }
-}());
+}
 
 class WuxRepeatingSection {
 	constructor(definitionId) {
@@ -1522,10 +1587,10 @@ class FormulaData {
                             output += " + ";
                         }
                         if (worker.multiplier != 1) {
-                            output += `${definition.title} x ${worker.multiplier}`;
+                            output += `[${definition.title} x ${worker.multiplier}]`;
                         }
                         else {
-                            output += definition.title;
+                            output += `[${definition.title}]`;
                         }
                     }
                 }

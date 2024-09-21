@@ -4155,11 +4155,10 @@ class DatabaseFilterData {
     }
 }
 class Database extends Dictionary {
-    constructor(sortingProperties, data, dataCreationCallback) {
+    constructor(data, sortingProperties, dataCreationCallback) {
         super();
-        this.sortingGroups = {};
-        for (let i = 0; i < sortingProperties.length; i++) {
-            this.sortingGroups[sortingProperties[i]] = {};
+        if (sortingProperties != undefined) {
+            this.addSortingroperties(sortingProperties);
         }
 
         this.import(data, dataCreationCallback);
@@ -4178,11 +4177,19 @@ class Database extends Dictionary {
         }
     }
     
-    addSortingGroup(property, propertyValue, valueName) {
-        if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
-            this.sortingGroups[property][propertyValue] = [];
+    addSortingroperties(sortingProperties) {
+        this.sortingGroups = {};
+        for (let i = 0; i < sortingProperties.length; i++) {
+            this.sortingGroups[sortingProperties[i]] = {};
         }
-        this.sortingGroups[property][propertyValue].push(valueName);
+    }
+    addSortingGroup(property, propertyValue, valueName) {
+        if(this.sortingGroups != undefined) {
+            if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
+                this.sortingGroups[property][propertyValue] = [];
+            }
+            this.sortingGroups[property][propertyValue].push(valueName);
+        }
     }
 
     filter(filterData) {
@@ -4238,10 +4245,33 @@ class Database extends Dictionary {
 }
 class ExtendedTechniqueDatabase extends Database {
 
-    constructor(sortingProperties, data, dataCreationCallback) {
-        super(sortingProperties, data, dataCreationCallback);
+    constructor(data) {
+        let filters = ["style", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
+        let dataCreation = function(data) {
+            return new TechniqueData(data);
+        };
+        super(data, filters, dataCreation);
     }
 
+    importJson(json) {
+        let dataCreationCallback = function(data) {
+            return new TechniqueData(data);
+        }
+        super.importJson(json, dataCreationCallback);
+    }
+    importSheets(dataArray) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = new TechniqueData(dataArray[i]);
+            if (this.has(data.name)) {
+                this.get(data.name).importEffectsFromTechnique(data);
+            }
+            else {
+                this.add(data.name, data);
+            }
+        }
+    }
+    
     add(key, value) {
         super.add(key, value);
 
@@ -4250,31 +4280,21 @@ class ExtendedTechniqueDatabase extends Database {
             this.addSortingGroup("style", styles[i].trim(), value.name);
         }
     }
+}
+class ExtendedDescriptionDatabase extends Database {
+    constructor(data) {
+        let dataCreation = function(data) {
+            let definition = new DefinitionData(data);
+            if (definition.group == "Type") {
+                definition.variable += `{0}{1}`;
+            }
+            return definition;
+        };
+        super(data, ["group", "subGroup", "formulaMods"], dataCreation);
+    }
 
     importSheets(dataArray, dataCreationCallback) {
         let data = {};
-        for (let i = 0; i < dataArray.length; i++) {
-            data = dataCreationCallback(dataArray[i]);
-            if (this.has(data.name)) {
-                switch (data.techSet) {
-                    case "!":
-                        this.get(data.name).importOngoingTechnique(data);
-                        break;
-                    default:
-                        this.get(data.name).importEffectTechnique(data);
-                        break;
-                }
-            }
-            else {
-                this.add(data.name, data);
-            }
-        }
-    }
-}
-class ExtendedDescriptionDatabase extends Database {
-    importSheets(dataArray, dataCreationCallback) {
-        let data = {};
-        let formulaDefs;
         for (let i = 0; i < dataArray.length; i++) {
             data = dataCreationCallback(dataArray[i]);
             if (this.has(data.name)) {
@@ -4292,6 +4312,27 @@ class ExtendedDescriptionDatabase extends Database {
         for (let i = 0; i < formulaDefs.length; i++) {
             this.addSortingGroup("formulaMods", formulaDefs[i], value.name);
         }
+    }
+}
+class TechniqueEffectDatabase extends Database {
+    constructor(data) {
+        let dataCreation = function(data) {
+            return new TechniqueEffect(data);
+        };
+        super(data, ["defense"], dataCreation);
+    }
+    
+    importJson(json) {
+        let dataCreationCallback = function(data) {
+            return new TechniqueEffect(data);
+        }
+        super.importJson(json, dataCreationCallback);
+    }
+    importSheets(dataArray) {
+        let dataCreationCallback = function(data) {
+            return new TechniqueEffect(data);
+        }
+        super.importSheets(json, dataCreationCallback);
     }
 }
 
@@ -4380,11 +4421,8 @@ class TechniqueData extends WuxDatabaseData {
         this.itemTraits = json.itemTraits;
         this.trigger = json.trigger;
         this.flavorText = json.flavorText;
-        this.definitions = Array.isArray(json.definitions) ? json.definitions : [];
-        this.autoEffects = json.autoEffects;
-        this.effects = new Dictionary();
-        this.effects.importJson(json.effects);
-        this.onGoingTech = new TechniqueData(json.onGoingTech);
+        this.definitions = json.definitions;
+        this.effects = new TechniqueEffectDatabase(json.effects);
     }
     importSheets(dataArray) {
         this.createEmpty();
@@ -4408,10 +4446,8 @@ class TechniqueData extends WuxDatabaseData {
         this.trigger = "" + dataArray[i]; i++;
         this.flavorText = "" + dataArray[i]; i++;
         this.definitions = [];
-        this.autoEffects = [];
-        this.effects = new Dictionary();
-        this.onGoingTech = undefined;
-        this.importEffectSheet(dataArray.slice(i));
+        this.effects = new TechniqueEffectDatabase();
+        this.addEffect(new TechniqueEffect(dataArray.slice(i)));
     }
     createEmpty() {
         super.createEmpty();
@@ -4434,9 +4470,7 @@ class TechniqueData extends WuxDatabaseData {
         this.trigger = "";
         this.flavorText = "";
         this.definitions = [];
-        this.autoEffects = [];
-        this.effects = new Dictionary();
-        this.onGoingTech = undefined;
+        this.effects = new TechniqueEffectDatabase();
     }
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
@@ -4445,92 +4479,33 @@ class TechniqueData extends WuxDatabaseData {
         return definition;
     }
 
-    setAugmentTechValues(baseTechnique) {
-
-        if (this.name == "") {
-            return baseTechnique;
-        }
-        this.techSet = this.setAugmentTechValue(this.techSet, baseTechnique.techSet);
-        this.group = this.setAugmentTechValue(this.group, baseTechnique.group);
-        this.tier = this.setAugmentTechValue(this.tier, baseTechnique.tier);
-        this.action = this.setAugmentTechValue(this.action, baseTechnique.action);
-        this.traits = this.setAugmentTechValue(this.traits, baseTechnique.traits);
-        this.resourceCost = this.setAugmentTechValue(this.resourceCost, baseTechnique.resourceCost);
-        this.limits = this.setAugmentTechValue(this.limits, baseTechnique.limits);
-        this.skill = this.setAugmentTechValue(this.skill, baseTechnique.skill);
-        this.range = this.setAugmentTechValue(this.range, baseTechnique.range);
-        this.target = this.setAugmentTechValue(this.target, baseTechnique.target);
-        this.requirement = this.setAugmentTechValue(this.requirement, baseTechnique.requirement);
-        this.itemTraits = this.setAugmentTechValue(this.itemTraits, baseTechnique.itemTraits);
-        this.trigger = this.setAugmentTechValue(this.trigger, baseTechnique.trigger);
-        this.flavorText = this.setAugmentTechValue(this.flavorText, baseTechnique.flavorText);
+    importEffectsFromTechnique(technique) {
+        let baseTechnique = this;
+        technique.effects.iterate(function(effect) {
+            baseTechnique.addEffect(effect);
+        });
+        technique.definitions.forEach(function(definition) {
+            baseTechnique.addDefinition(definition);
+        });
     }
-    setAugmentTechValue (augmentValue, baseValue) {
-        if (augmentValue == "-") {
-            return "";
-        }
-        else if (augmentValue == "") {
-            return baseValue;
-        }
-        return augmentValue;
-    }
-
-    importEffectSheet(dataArray) {
-        let i = 0;
-        let defense = "" + dataArray[i]; i++;
-        let effect = new TechniqueEffect(dataArray.slice(i)); i++;
-
-        if (effect.type == "Definition") {
-            this.addDefinition(effect.effect);
-            return;
-        }
-
-        if (effect.type == "" && effect.effect == "") {
-            return;
-        }
-        
-        if (defense == "") {
-            this.autoEffects.push(effect);
-        }
-        else {
-            this.addEffect(defense, effect);
-        }
-
-        if (effect.type == "Condition") {
-            this.addDefinition(effect.effect);
+    addEffect(effect) {
+        switch (effect.type) {
+            case "Definition":
+                effect.setName(`D${this.definitions.length}`);
+                this.addDefinition(effect.effect);
+                break;
+            case "Status":
+            case "Condition":
+                effect.setName(`T${this.effects.keys.length}`);
+                this.effects.add(effect.name, effect);
+                this.addDefinition(effect.effect);
+                break;
+            default:
+                effect.setName(`T${this.effects.keys.length}`);
+                this.effects.add(effect.name, effect);
+                break;
         }
     }
-    importEffectTechnique(technique) {
-        if (technique.autoEffects.length > 0) {
-            this.autoEffects = this.autoEffects.concat(technique.autoEffects);
-        }
-        else {
-            let effect = technique.effects.getByIndex(0);
-            if (effect != undefined) {
-                this.addEffect(technique.effects.getkey(0), effect[0]);
-            }
-        }
-
-        if (technique.definitions.length > 0) {
-            this.addDefinition(technique.definitions[0]);
-        }
-    }
-    addEffect(defense, effect) {
-        if (!this.effects.has(defense)) {
-            this.effects.add(defense, []);
-        }
-        this.effects.get(defense).push(effect);
-    }
-
-    importOngoingTechnique(technique) {
-        if (this.onGoingTech == undefined) {
-            this.onGoingTech = technique;
-        }
-        else {
-            this.onGoingTech.importEffectTechnique(technique);
-        }
-    }
-
     addDefinition(definition) {
         if (!this.definitions.includes(definition)) {
             this.definitions.push(definition);
@@ -4564,38 +4539,45 @@ class TechniqueData extends WuxDatabaseData {
 }
 class TechniqueEffect extends dbObj {
     importJson(json) {
-        this.createEmpty();
+        this.name = json.name;
+        this.defense = json.defense;
         this.target = json.target;
         this.type = json.type;
         this.subType = json.subType;
         this.dVal = json.dVal;
         this.dType = json.dType;
-        this.dBonus = json.dBonus;
+        this.formula = new FormulaData(json.formula);
         this.effect = json.effect;
         this.traits = json.traits;
     }
     importSheets(dataArray) {
-        this.createEmpty();
         let i = 0;
+        this.name = "";
+        this.defense = "" + dataArray[i]; i++;
         this.target = "" + dataArray[i]; i++;
         this.type = "" + dataArray[i]; i++;
         this.subType = "" + dataArray[i]; i++;
         this.dVal = "" + dataArray[i]; i++;
         this.dType = "" + dataArray[i]; i++;
-        this.dBonus = "" + dataArray[i]; i++;
+        this.formula = new FormulaData("" + dataArray[i]); i++;
         this.effect = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
     }
     createEmpty() {
         super.createEmpty();
+        this.name = "";
+        this.defense = "";
         this.target = "";
         this.type = "";
         this.subType = "";
         this.dVal = "";
         this.dType = "";
-        this.dBonus = "";
+        this.formula = new FormulaData();
         this.effect = "";
         this.traits = "";
+    }
+    setName(name) {
+        this.name = name;
     }
 }
 class TechniqueStyle extends WuxDatabaseData {
@@ -5081,260 +5063,6 @@ class TemplateData extends dbObj {
 
     }
 }
-class TechniqueDisplayData {
-
-    constructor(technique) {
-        if (technique != undefined) {
-            this.importTechnique(technique);
-        }
-        else {
-            this.createEmpty();
-        }
-    }
-
-    importTechnique(technique) {
-        this.createEmpty();
-        this.setTechBasics(technique);
-        this.setTechSetResourceData(technique);
-        this.setTechTargetData(technique);
-        this.setExtentionEffects(technique);
-        this.setTraits(technique);
-        this.setFlavorText(technique);
-        this.setDefinitions(technique);
-        this.setAutoEffects(technique);
-        this.setEffects(technique);
-        this.setOngoingEffects(technique);
-    }
-    
-    setTechBasics(technique) {
-        this.technique = technique;
-        this.name = technique.name;
-        this.username = technique.username;
-        this.definition = technique.createDefinition(WuxDef.Get("Technique"));
-        this.fieldName = Format.ToFieldName(technique.name);
-        this.actionType = technique.action;
-        this.isFree = technique.isFree;
-    }
-    setTechSetResourceData(technique) {
-        this.resourceData = technique.action;
-        if (technique.limits != "") {
-            if (this.resourceData != "") {
-                this.resourceData += "; ";
-            }
-            this.resourceData += technique.limits;
-        }
-        if (technique.resourceCost != "") {
-            if (this.resourceData != "") {
-                this.resourceData += "; ";
-            }
-            this.resourceData += technique.resourceCost;
-        }
-    }
-    setTechTargetData(technique) {
-        this.targetData = technique.skill == "" ? "No Check" : technique.skill;
-        if (technique.range != "") {
-            if (this.targetData != "") {
-                this.targetData += "; ";
-            }
-            this.targetData += `Range: ${technique.range}`;
-        }
-        if (technique.target != "") {
-            if (this.targetData != "") {
-                this.targetData += "; ";
-            }
-            this.targetData += `${technique.target}`;
-        }
-    }
-    setExtentionEffects(technique) {
-        this.requirements = technique.requirement;
-        this.itemTraits = WuxDef.GetValues(technique.itemTraits, ";");
-        this.trigger = technique.trigger;
-    }
-    setTraits(technique) {
-        this.traits = WuxDef.GetValues(technique.traits, ";");
-    }
-    setFlavorText(technique) {
-        this.flavorText = technique.flavorText;
-    }
-    setDefinitions(technique) {
-        this.definitions = WuxDef.GetValues(technique.definitions, ";");
-        // if (technique.definitions.length > 0) {
-        //     let conditionDefinition = "";
-        //     let description = "";
-        //     for (let i = 0; i < technique.definitions.length; i++) {
-        //         conditionDefinition = WuxDef.Get(technique.definitions[i]);
-        //         description = conditionDefinition.descriptions.join("\n");
-        //         this.definitions.push(`[${conditionDefinition.group}: ${conditionDefinition.name}] ${description}`);
-        //     }
-        // }
-    }
-
-    setAutoEffects(technique) {
-        this.autoEffects = new TechniqueEffectDisplayData.Get(technique.autoEffects);
-    }
-    setEffects(technique) {
-        this.effects = new Dictionary();
-        technique.effects.iterate((effect, defense) => {
-            this.effects.add(defense, new TechniqueEffectDisplayData.Get(effect));
-        });
-    }
-    setOngoingEffects(technique) {
-    }
-
-    createEmpty() {
-        this.technique = {};
-        this.name = "";
-        this.actionType = "";
-        this.username = "";
-        this.definition = {};
-        this.fieldName = "";
-        this.isFree = false;
-        
-        this.resourceData = "";
-        this.targetData = "";
-
-        this.trigger = "";
-        this.requirements = "";
-        this.itemTraits = [];
-
-        this.traits = [];
-        this.flavorText = "";
-        this.definitions = [];
-
-        this.autoEffects = [];
-        this.effects = new Dictionary();
-        this.ongoingEffects = undefined;
-    }
-
-    getRollTemplate() {
-        let output = "";
-
-        output += `{{Username=${this.username}}}{{Name=${this.name}}}{{SlotType=${this.slotFooter}}}{{Source=${this.slotSource}}}{{UsageInfo=${this.usageInfo}}}`;
-        output += `${this.traits.length > 0 ? this.rollTemplateTraits(this.traits, "Trait") : ""}${this.trigger ? `{{Trigger=${this.trigger}}}` : ""}`;
-        output += `${this.requirement ? `{{Requirement=${this.requirement}}}` : ""}${this.item ? `{{Item=${this.item}}}` : ""}`;
-        output += `${this.range ? `{{Range=${this.range}}}` : ""}${this.target ? `{{Target=${this.target}}}` : ""}`;
-        output += `${this.skill ? `{{SkillString=${this.skill}}}` : ""}${this.damage ? `{{DamageString=${this.damage}}}` : ""}`;
-        output += `${this.description ? `{{Desc=${this.description}}}` : ""}${this.onHit ? `{{OnHit=${this.onHit}}}` : ""}${this.conditions ? `{{Conditions=${this.conditions}}}` : ""}`;
-        output += ` {{type-${this.slotType}=1}} ${this.slotIsPath ? "{{isPath=1}} " : ""}{{type-${this.actionType}=1}}`;
-        output += ` ${this.isFunctionBlock ? "{{type-FunctionBlock=1}} " : ""}${this.isCheckBlock ? "{{type-CheckBlock=1}} " : ""}`;
-        output += `${this.isCheckBlock ? "{{type-CheckBlockTarget=1}} " : ""}${this.isDescBlock ? "{{type-DescBlock=1}} " : ""}`;
-
-        return `&{template:technique} ${output.trim()}`;
-    }
-    rollTemplateTraits(traitsDb, rtPrefix) {
-        let output = "";
-        for (var i = 0; i < traitsDb.length; i++) {
-            output += `{{${rtPrefix}${i}=${traitsDb[i].name}}} {{${rtPrefix}${i}Desc=${traitsDb[i].description}}} `;
-        }
-        return output;
-    }
-}
-
-var TechniqueEffectDisplayData = TechniqueEffectDisplayData || (function () {
-    'use strict';
-
-    var
-    get = function (techniqueEffect) {
-        return importEffectData(techniqueEffect);
-    },
-
-    importEffectData = function (effectData) {
-        let data = [];
-        for (let i = 0; i < effectData.length; i++) {
-            data.push(formatEffect(effectData[i]));
-        }
-        return data;
-    },
-
-    formatEffect = function (effect) {
-        let output = "";
-        switch (effect.type) {
-            case "Damage":
-                output = formatDamageEffect(effect);
-                break;
-            case "Status":
-                output = formatStatusEffect(effect);
-                break;
-            case "Condition":
-                output = formatConditionEffect(effect);
-                break;
-            case "Definition":
-                break;
-            case "":
-                output = formatDescriptionEffect(effect);
-                break;
-        }
-        
-        return output;
-    },
-
-    formatDamageEffect = function (effect) {
-        return `[${formatCalcBonus(effect)}] ${effect.effect} damage`;
-    },
-
-    formatStatusEffect = function (effect) {
-        return formatStateEffect(effect, `Status_${effect.effect}`);
-    },
-
-    formatConditionEffect = function (effect) {
-        return formatStateEffect(effect, `Condition_${effect.effect}`);
-    },
-
-    formatStateEffect = function (effect, effectName) {
-        let state = WuxDef.Get(effectName);
-        let target = "Target";
-        let plural = "s";
-        if (effect.target == "Self") {
-            target = "You";
-            plural = "";
-        }
-        let ranks = formatCalcBonus(effect);
-        switch (effect.subType) {
-            case "Add": return `${target} gain${plural} the ${state.title} ${state.group}`;
-            case "Remove": return `${target} lose${plural} the ${state.title} ${state.group}`;
-            case "Remove Any": return `${target} lose${plural} any condition of your choice`;
-            case "Rank Up": return `${target} gain${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
-            case "Rank Down": return `${target} lose${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
-            default: return `${target} gain${plural} the ${state.title} ${state.group}`;
-        }
-    },
-    
-    formatDescriptionEffect = function (effect) {
-        return effect.effect;
-    },
-
-    formatCalcBonus = function (effect) {
-        let output = formatEffectDice(effect);
-        let bonusEffects = effect.dBonus.split(";");
-        for(let i = 0; i < bonusEffects.length; i++) {
-            bonusEffects[i] = bonusEffects[i].trim();
-            if (bonusEffects[i] == "") {
-                continue;
-            }
-            if (output != "") {
-                output += " + ";
-            }
-            if (isNaN(parseInt(bonusEffects[i]))) {
-                output += `${WuxDef.GetAbbreviation(bonusEffects[i])}`;
-            }
-            else {
-                output += `${bonusEffects[i]}`;
-            }
-        }
-        return output;
-    },
-
-    formatEffectDice = function (effect) {
-        if (effect.dVal != "" && effect.dVal > 0) {
-            return `${effect.dVal}d${effect.dType}`;
-        }
-        return "";
-    }
-
-    return {
-        Get: get
-    }
-}());
 class ResistanceData {
     constructor(json) {
         if (json != undefined) {
@@ -5416,6 +5144,312 @@ class ResistanceData {
     }
 }
 
+class TechniqueDisplayData {
+
+    constructor(technique) {
+        this.createEmpty();
+        if (technique != undefined) {
+            this.importTechnique(technique);
+        }
+    }
+
+    importTechnique(technique) {
+        this.setTechBasics(technique);
+        this.setTechSetResourceData(technique);
+        this.setTechTargetData(technique);
+        this.setExtentionEffects(technique);
+        this.setTraits(technique);
+        this.setFlavorText(technique);
+        this.setDefinitions(technique);
+        this.setEffects(technique);
+    }
+    
+    setTechBasics(technique) {
+        this.technique = technique;
+        this.name = technique.name;
+        this.username = technique.username;
+        this.definition = technique.createDefinition(WuxDef.Get("Technique"));
+        this.fieldName = Format.ToFieldName(technique.name);
+        this.actionType = technique.action;
+        this.isFree = technique.isFree;
+    }
+    setTechSetResourceData(technique) {
+        this.resourceData = technique.action;
+        if (technique.limits != "") {
+            if (this.resourceData != "") {
+                this.resourceData += "; ";
+            }
+            this.resourceData += technique.limits;
+        }
+        if (technique.resourceCost != "") {
+            if (this.resourceData != "") {
+                this.resourceData += "; ";
+            }
+            this.resourceData += technique.resourceCost;
+        }
+    }
+    setTechTargetData(technique) {
+        this.targetData = technique.skill == "" ? "No Check" : technique.skill;
+        if (technique.range != "") {
+            if (this.targetData != "") {
+                this.targetData += "; ";
+            }
+            this.targetData += `Range: ${technique.range}`;
+        }
+        if (technique.target != "") {
+            if (this.targetData != "") {
+                this.targetData += "; ";
+            }
+            this.targetData += `${technique.target}`;
+        }
+    }
+    setExtentionEffects(technique) {
+        this.requirements = technique.requirement;
+        this.itemTraits = WuxDef.GetValues(technique.itemTraits, ";");
+        this.trigger = technique.trigger;
+    }
+    setTraits(technique) {
+        this.traits = WuxDef.GetValues(technique.traits, ";");
+    }
+    setFlavorText(technique) {
+        this.flavorText = technique.flavorText;
+    }
+    setDefinitions(technique) {
+        for (let i = 0; i < technique.definitions.length; i++) {
+            this.definitions.push(WuxDef.Get(technique.definitions[i]));
+        }
+    }
+    setEffects(technique) {
+        this.effects = [];
+        let defenses = technique.effects.getPropertyValues("defense");
+        let filteredTechniqueEffects;
+        for(let i = 0; i < defenses.length; i++) {
+            filteredTechniqueEffects = technique.effects.filter(new DatabaseFilterData("defense", defenses[i]));
+            this.effects.push(defenses[i], new TechniqueEffectDisplayData(filteredTechniqueEffects));
+        };
+    }
+
+    createEmpty() {
+        this.technique = {};
+        this.name = "";
+        this.actionType = "";
+        this.username = "";
+        this.definition = {};
+        this.fieldName = "";
+        this.isFree = false;
+        
+        this.resourceData = "";
+        this.targetData = "";
+
+        this.trigger = "";
+        this.requirements = "";
+        this.itemTraits = [];
+
+        this.flavorText = "";
+        this.traits = [];
+        this.effects = [];
+        this.definitions = [];
+    }
+
+    getRollTemplate() {
+        let output = "";
+
+        output += `{{Username=${this.username}}}{{Name=${this.name}}}{{type-${this.actionType}=1}}`;
+        if (this.resourceData != "") {
+            output += `{{Resources=${this.resourceData}}}`;
+        }
+        if (this.targetData != "") {
+            output += `{{Targeting=${this.targetData}}}`;
+        }
+        if (this.trigger != "") {
+            output += `{{Trigger=${this.trigger}}}`;
+        }
+        if (this.requirements != "") {
+            output += `{{Requirement=${this.requirements}}}`;
+        }
+        if (this.itemTraits.length > 0) {
+            output += this.rollTemplateDefinitions(this.itemTraits, "ItemTrait");
+        }
+        if (this.flavorText != "") {
+            output += `{{FlavorText=${this.flavorText}}}`;
+        }
+        if (this.traits.length > 0) {
+            output += this.rollTemplateDefinitions(this.traits, "Trait");
+        }
+        if (this.effects.length > 0) {
+            output += this.rollTemplateEffects();
+        }
+        if (this.definitions.length > 0) {
+            output += this.rollTemplateDefinitions(this.definitions, "Def");
+        }
+
+        return `&{template:technique} ${this.sanitizeSheetRollAction(output.trim())}`;
+    }
+    rollTemplateDefinitions(definition, traitType) {
+        let output = "";
+        for (let i = 0; i < definition.length; i++) {
+            output += `{{${traitType}${i}=${definition[i].title}}} {{${traitType}${i}Desc=${definition[i].getDescription()}}} `;
+        }
+        return output;
+    }
+    rollTemplateEffects() {
+        let output = "";
+        let incrementer = 0;
+        this.effects.forEach(function(effect) {
+            if(effect.check != undefined) {
+                output += `{{Effect${incrementer}Name=${effect.check}}}{{Effect${incrementer}Desc=${effect.checkDescription}}}`;
+                if (effect.effects == undefined) {
+                    output += `{{Effect${incrementer}=Error! No effects found!}}`;
+                }
+                else {
+                    effect.effects.forEach(function(desc) {
+                        output += `{{Effect${incrementer}=${desc}}}`;
+                        incrementer++;
+                    });
+                }
+                incrementer++;
+            }
+        });
+        return output;
+    }
+    sanitizeSheetRollAction(roll) {
+        var sheetRoll = roll;
+        sheetRoll = sheetRoll.replace(/'/g, "&#39;");
+        // sheetRoll = sheetRoll.replace(/%/g, "&#37;");
+        // sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        // sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        // sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+        // sheetRoll = sheetRoll.replace(/"/g, "&#34;");
+        // sheetRoll = sheetRoll.replace(/:/g, "");
+        // sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
+        // sheetRoll = sheetRoll.replace(/@/g, "&#64;");
+        // sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
+        // sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+        // sheetRoll = sheetRoll.replace(/\n/g, "&&");
+        return sheetRoll;
+    }
+}
+class TechniqueEffectDisplayData {
+    
+    constructor(techniqueEffects) {
+        this.check = "";
+        this.checkDescription = "";
+        this.effects = [];
+        
+        this.importDefenseData(techniqueEffects[0]);
+        this.importEffectData(techniqueEffects);
+    }
+
+    importDefenseData(techniqueEffect) {
+        let defense = techniqueEffect.defense;
+        let definition;
+
+        if (isNaN(parseInt(defense))) {
+            if (defense == "") {
+                definition = WuxDef.Get("Title_TechEffect");
+                this.check = definition.title;
+                this.checkDescription = definition.getDescription();
+            }
+            else {
+                definition = WuxDef.Get(defense);
+                let definition2 = WuxDef.Get("Title_TechDefense");
+                this.check = `${definition2.title}${definition.title}`;
+                this.checkDescription = `${definition2.getDescription()}\n${definition.getDescription()}`;
+            }
+        }
+        else {
+            definition = WuxDef.Get("Title_TechDC");
+            this.check = `${definition.title}${defense}`;
+            this.checkDescription = definition.getDescription();
+        }
+    }
+    importEffectData(effectData) {
+        for (let i = 0; i < effectData.length; i++) {
+            this.effects.push(this.formatEffect(effectData[i]));
+        }
+    }
+
+    formatEffect(effect) {
+        let output = "";
+        switch (effect.type) {
+            case "Damage":
+                output = this.formatDamageEffect(effect);
+                break;
+            case "Status":
+                output = this.formatStatusEffect(effect);
+                break;
+            case "Condition":
+                output = this.formatConditionEffect(effect);
+                break;
+            case "Boost":
+                output = this.formatBoostEffect(effect);
+                break;
+            case "Definition":
+                // Do nothing
+                break;
+            case "":
+                output = this.formatDescriptionEffect(effect);
+                break;
+        }
+        
+        return output;
+    }
+    formatDamageEffect(effect) {
+        return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+    }
+    formatStatusEffect(effect) {
+        return this.formatStateEffect(effect, effect.effect);
+    }
+    formatConditionEffect(effect) {
+        return this.formatStateEffect(effect, effect.effect);
+    }
+    formatBoostEffect(effect) {
+        return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
+    }
+    formatStateEffect(effect, effectName) {
+        let state = WuxDef.Get(effectName);
+        let target = "Target";
+        let plural = "s";
+        if (effect.target == "Self") {
+            target = "You";
+            plural = "";
+        }
+        let ranks = this.formatCalcBonus(effect);
+        switch (effect.subType) {
+            case "Add": return `${target} gain${plural} the ${state.title} ${state.group}`;
+            case "Remove": return `${target} lose${plural} the ${state.title} ${state.group}`;
+            case "Remove Any": return `${target} lose${plural} any condition of your choice`;
+            case "Rank Up": return `${target} gain${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
+            case "Rank Down": return `${target} lose${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
+            default: return `${target} gain${plural} the ${state.title} ${state.group}`;
+        }
+    }
+    formatDescriptionEffect(effect) {
+        return effect.effect;
+    }
+
+    formatCalcBonus(effect) {
+        let output = this.formatEffectDice(effect);
+        let formulaString = "";
+        try {
+            formulaString = effect.formula.getString();
+        }
+        catch (e) {
+            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+        }
+        if (formulaString != "" && output != "") {
+            output += " + ";
+        }
+        return output + formulaString;
+    }
+    formatEffectDice(effect) {
+        if (effect.dVal != "" && effect.dVal > 0) {
+            return `${effect.dVal}d${effect.dType}`;
+        }
+        return "";
+    }
+}
+
 class WuxRepeatingSection {
 	constructor(definitionId) {
 		this.definition = WuxDef.Get(definitionId);
@@ -5471,7 +5505,6 @@ class WuxRepeatingSection {
         }
     }
 }
-
 class FormulaData {
 
     constructor(data) {
@@ -5619,10 +5652,10 @@ class FormulaData {
                             output += " + ";
                         }
                         if (worker.multiplier != 1) {
-                            output += `${definition.title} x ${worker.multiplier}`;
+                            output += `[${definition.title} x ${worker.multiplier}]`;
                         }
                         else {
-                            output += definition.title;
+                            output += `[${definition.title}]`;
                         }
                     }
                 }
@@ -6583,7 +6616,7 @@ var WuxDef = WuxDef || (function () {
 	'use strict';
 
 	var
-		keys = ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Emotes", "Title_Outfits", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN", "Def_Brace", "Def_Fortitude", "Def_Disruption", "Def_Hide", "Def_Reflex", "Def_Evasion", "Def_Insight", "Def_Notice", "Def_Scrutiny", "Def_Detect", "Def_Resolve", "Def_Freewill", "CombatDefense", "SocialSense", "WillBreak", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity", "Cmb_HV", "Cmb_Armor", "Resistance", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "Cmb_Chakra", "Chakra", "Cmb_MoveSpd", "Cmb_MovePot", "Cmb_MartialForce", "Cmb_SpellForce", "Soc_Approval", "Soc_Patience", "Burn", "Cold", "Energy", "Force", "Patience", "Piercing", "Shock", "Tension", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent", "Stat_Downed", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Initiative Penalty", "Stat_Invisible", "Stat_Restrained", "Stat_Unconscious", "Stat_Aflame", "Stat_Angered", "Stat_Chilled", "Stat_Delayed", "Stat_Disgusted", "Stat_Dying", "Stat_Empowered", "Stat_Encouraged", "Stat_Encumbered", "Stat_Frightened", "Stat_Hasted", "Stat_Immobilized", "Stat_Impaired", "Stat_Joyful", "Stat_Launched", "Stat_Paralyzed", "Stat_Prone", "Stat_Saddened", "Stat_Sickened", "Stat_Staggered", "Stat_Stunned", "Stat_Surprised", "Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support", "Style_Swordplay", "Style_Ki Extension", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Lang_Minere", "Lang_Junal", "Lang_Apollen", "Lang_Lib", "Lang_Cert", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq", "Lang_Kleikan", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca", "Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan", "LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician", "JStyle_Interceptor", "JStyle_Guardian", "JStyle_Spellslinger", "JStyle_Warrior", "JStyle_Rogue", "JStyle_Scholar", "JStyle_Physician", "Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact", "Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition", "Tech_Aid", "Tech_Stabilize", "Tech_Encourage", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike", "Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand", "Tech_Defender", "Tech_Defender II", "Tech_Athlete", "Tech_Athlete II", "Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted", "Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim", "Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot", "Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Generalist", "Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery", "Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike", "Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"],
+		keys = ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Emotes", "Title_Outfits", "Title_TechEffect", "Title_TechDC", "Title_TechDefense", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN", "Def_Brace", "Def_Fortitude", "Def_Disruption", "Def_Hide", "Def_Reflex", "Def_Evasion", "Def_Insight", "Def_Notice", "Def_Scrutiny", "Def_Detect", "Def_Resolve", "Def_Freewill", "CombatDefense", "SocialSense", "WillBreak", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity", "Cmb_HV", "Cmb_Armor", "Resistance", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "Cmb_Chakra", "Chakra", "Cmb_MoveSpd", "Cmb_MovePot", "Cmb_MartialForce", "Cmb_SpellForce", "Soc_Approval", "Soc_Patience", "Dmg_Burn", "Dmg_Cold", "Dmg_Energy", "Dmg_Fire", "Dmg_Force", "Dmg_Patience", "Dmg_Piercing", "Dmg_Shock", "Dmg_Tension", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Light", "Trait_Sharp", "Trait_Sturdy", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Transparent", "Stat_Downed", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Initiative Penalty", "Stat_Invisible", "Stat_Restrained", "Stat_Unconscious", "Stat_Aflame", "Stat_Angered", "Stat_Chilled", "Stat_Delayed", "Stat_Disgusted", "Stat_Dying", "Stat_Empowered", "Stat_Encouraged", "Stat_Encumbered", "Stat_Frightened", "Stat_Hasted", "Stat_Immobilized", "Stat_Impaired", "Stat_Joyful", "Stat_Launched", "Stat_Paralyzed", "Stat_Prone", "Stat_Saddened", "Stat_Sickened", "Stat_Staggered", "Stat_Stunned", "Stat_Surprised", "Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support", "Style_Swordplay", "Style_Ki Extension", "Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Lang_Minere", "Lang_Junal", "Lang_Apollen", "Lang_Lib", "Lang_Cert", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq", "Lang_Kleikan", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca", "Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan", "LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician", "JStyle_Interceptor", "JStyle_Guardian", "JStyle_Spellslinger", "JStyle_Warrior", "JStyle_Rogue", "JStyle_Scholar", "JStyle_Physician", "Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact", "Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition", "Tech_Aid", "Tech_Stabilize", "Tech_Encourage", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike", "Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand", "Tech_Defender", "Tech_Defender II", "Tech_Athlete", "Tech_Athlete II", "Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted", "Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim", "Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot", "Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Generalist", "Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery", "Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike", "Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"],
 		values = {
 			"Attribute": {
 				"name": "Attribute", "fieldName": "attribute", "group": "Type", "description": "", "variable": "atr{0}{1}", "title": "Attributes", "subGroup": "", "descriptions": [""],
@@ -6757,7 +6790,7 @@ var WuxDef = WuxDef || (function () {
 				"name": "DamageType", "fieldName": "damagetype", "group": "Type", "description": "", "variable": "dmg{0}{1}", "title": "Damage Type", "subGroup": "", "descriptions": [""],
 				"abbreviation": "Dmg", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
-				"isResource": true, "extraData": {}
+				"isResource": "", "extraData": {}
 			},
 			"Trait": {
 				"name": "Trait", "fieldName": "trait", "group": "Type", "description": "", "variable": "trt{0}{1}", "title": "Traits", "subGroup": "", "descriptions": [""],
@@ -6904,7 +6937,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Fire": {
-				"name": "Fire", "fieldName": "fire", "group": "AffinityType", "description": "", "variable": "Fire", "title": "Fire", "subGroup": "", "descriptions": ["Fire is the element of expansion, spontaneity, and vigor. Magical techniques of the fire element tend to spread fire swiftly in a variety of impact areas.", "A Fire affinity grants the following:\nInitiative bonus equal to your Character Rank.\nBurn Resistance bonus equal to your Character Rank.\nFire Resistance bonus equal to your Character Rank x 2.", ""],
+				"name": "Fire", "fieldName": "fire", "group": "AffinityType", "description": "", "variable": "Fire", "title": "Fire", "subGroup": "", "descriptions": ["Fire is the element of expansion, spontaneity, and vigor. Magical techniques of the fire element tend to spread fire swiftly in a variety of impact areas.", "A Fire affinity grants the following:\nInitiative bonus equal to your Character Rank.\nBurn Resistance bonus equal to your Character Rank.\nFire Resistance bonus equal to your Character Rank x 2."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
@@ -7186,10 +7219,10 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Page_Details": {
-				"name": "Page_Details", "fieldName": "details", "group": "Page", "description": "", "variable": "pag-details{0}", "title": "Details", "subGroup": "", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
-				"linkedGroups": []
+				"name": "Page_Details", "fieldName": "details", "group": "Page", "description": "", "variable": "pag-details{0}", "title": "Details", "subGroup": "", "descriptions": [""]
 				,
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
+				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
 			"Page_Chat": {
@@ -7308,6 +7341,24 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Title_Outfits": {
 				"name": "Title_Outfits", "fieldName": "outfits", "group": "Title", "description": "", "variable": "ttl-outfits{0}", "title": "Outfits", "subGroup": "", "descriptions": ["You can add in your character art from here to populate your character's emotes.", "Press the Plus (+) button below to add a new instance of an outfit. From there you can populate the outfit data with emotes."],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
+				"linkedGroups": [],
+				"isResource": "", "extraData": {}
+			},
+			"Title_TechEffect": {
+				"name": "Title_TechEffect", "fieldName": "techeffect", "group": "Title", "description": "", "variable": "ttl-techeffect{0}", "title": "Effects", "subGroup": "", "descriptions": ["This contains the effects that will occur when this technique is used. There is no skill check necessary. "],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
+				"linkedGroups": [],
+				"isResource": "", "extraData": {}
+			},
+			"Title_TechDC": {
+				"name": "Title_TechDC", "fieldName": "techdc", "group": "Title", "description": "", "variable": "ttl-techdc{0}", "title": "DC ", "subGroup": "", "descriptions": ["Your skill check must meet or exceed this value for the following effects to occur. "],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
+				"linkedGroups": [],
+				"isResource": "", "extraData": {}
+			},
+			"Title_TechDefense": {
+				"name": "Title_TechDefense", "fieldName": "techdefense", "group": "Title", "description": "", "variable": "ttl-techdefense{0}", "title": "vs. ", "subGroup": "", "descriptions": ["Your skill check must meet or exceed the target's Defense value listed. "],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
@@ -7857,7 +7908,8 @@ var WuxDef = WuxDef || (function () {
 			"Cmb_WeaknessDesc": {
 				"name": "Cmb_WeaknessDesc", "fieldName": "weaknessdesc", "group": "Combat", "description": "", "variable": "cmb-weaknessdesc{0}", "title": "Weakness", "subGroup": "", "descriptions": ["Weakness is the opposite of Resistance, increasing damage against you when hit by specific damage types by a value equal to the weakness' type. The weakness calculation happens after armor is applied."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
-				"linkedGroups": [],
+				"linkedGroups": []
+				,
 				"isResource": "", "extraData": {}
 			},
 			"Cmb_Vitality": {
@@ -7876,8 +7928,7 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "cmb-surge_tech", "definitionName": "", "value": 0, "multiplier": 1 },
 					{ "variableName": "cmb-surge_affinity", "definitionName": "", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": []
-				,
+				"linkedGroups": [],
 				"isResource": true, "extraData": {}
 			},
 			"Cmb_Chakra": {
@@ -7952,50 +8003,56 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
-			"Burn": {
-				"name": "Burn", "fieldName": "burn", "group": "DamageType", "description": "", "variable": "dmg-burn{0}", "title": "Burn", "subGroup": "", "descriptions": [""],
+			"Dmg_Burn": {
+				"name": "Dmg_Burn", "fieldName": "burn", "group": "DamageType", "description": "", "variable": "dmg-burn{0}", "title": "Burn", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
-			"Cold": {
-				"name": "Cold", "fieldName": "cold", "group": "DamageType", "description": "", "variable": "dmg-cold{0}", "title": "Cold", "subGroup": "", "descriptions": [""],
+			"Dmg_Cold": {
+				"name": "Dmg_Cold", "fieldName": "cold", "group": "DamageType", "description": "", "variable": "dmg-cold{0}", "title": "Cold", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
-			"Energy": {
-				"name": "Energy", "fieldName": "energy", "group": "DamageType", "description": "", "variable": "dmg-energy{0}", "title": "Energy", "subGroup": "", "descriptions": [""],
+			"Dmg_Energy": {
+				"name": "Dmg_Energy", "fieldName": "energy", "group": "DamageType", "description": "", "variable": "dmg-energy{0}", "title": "Energy", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
-			"Force": {
-				"name": "Force", "fieldName": "force", "group": "DamageType", "description": "", "variable": "dmg-force{0}", "title": "Force", "subGroup": "", "descriptions": [""],
+			"Dmg_Fire": {
+				"name": "Dmg_Fire", "fieldName": "fire", "group": "DamageType", "description": "", "variable": "dmg-fire{0}", "title": "Fire", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
-			"Patience": {
-				"name": "Patience", "fieldName": "patience", "group": "DamageType", "description": "", "variable": "dmg-patience{0}", "title": "Patience", "subGroup": "", "descriptions": [""],
+			"Dmg_Force": {
+				"name": "Dmg_Force", "fieldName": "force", "group": "DamageType", "description": "", "variable": "dmg-force{0}", "title": "Force", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
-			"Piercing": {
-				"name": "Piercing", "fieldName": "piercing", "group": "DamageType", "description": "", "variable": "dmg-piercing{0}", "title": "Piercing", "subGroup": "", "descriptions": [""],
+			"Dmg_Patience": {
+				"name": "Dmg_Patience", "fieldName": "patience", "group": "DamageType", "description": "", "variable": "dmg-patience{0}", "title": "Patience", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
-			"Shock": {
-				"name": "Shock", "fieldName": "shock", "group": "DamageType", "description": "", "variable": "dmg-shock{0}", "title": "Shock", "subGroup": "", "descriptions": [""],
+			"Dmg_Piercing": {
+				"name": "Dmg_Piercing", "fieldName": "piercing", "group": "DamageType", "description": "", "variable": "dmg-piercing{0}", "title": "Piercing", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
-			"Tension": {
-				"name": "Tension", "fieldName": "tension", "group": "DamageType", "description": "", "variable": "dmg-tension{0}", "title": "Tension", "subGroup": "", "descriptions": [""],
+			"Dmg_Shock": {
+				"name": "Dmg_Shock", "fieldName": "shock", "group": "DamageType", "description": "", "variable": "dmg-shock{0}", "title": "Shock", "subGroup": "", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
+				"linkedGroups": [],
+				"isResource": "", "extraData": {}
+			},
+			"Dmg_Tension": {
+				"name": "Dmg_Tension", "fieldName": "tension", "group": "DamageType", "description": "", "variable": "dmg-tension{0}", "title": "Tension", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
@@ -8114,6 +8171,24 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
+			"Trait_Light": {
+				"name": "Trait_Light", "fieldName": "light", "group": "Trait", "description": "", "variable": "trt-light{0}", "title": "Light", "subGroup": "Item Trait", "descriptions": ["A light item is 10 lbs or less. This is usually a required quality to use some techniques."],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
+				"linkedGroups": [],
+				"isResource": "", "extraData": {}
+			},
+			"Trait_Sharp": {
+				"name": "Trait_Sharp", "fieldName": "sharp", "group": "Trait", "description": "", "variable": "trt-sharp{0}", "title": "Sharp", "subGroup": "Item Trait", "descriptions": ["Sharp items usually have a bladed edge and are durable enough to cut through a soft material. This is usually a required quality to use some techniques."],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
+				"linkedGroups": [],
+				"isResource": "", "extraData": {}
+			},
+			"Trait_Sturdy": {
+				"name": "Trait_Sturdy", "fieldName": "sturdy", "group": "Trait", "description": "", "variable": "trt-sturdy{0}", "title": "Sturdy", "subGroup": "Item Trait", "descriptions": ["Sturdy items are especially durable and resilient. This is usually a required quality to use some techniques."],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
+				"linkedGroups": [],
+				"isResource": "", "extraData": {}
+			},
 			"Trait_Flammable": {
 				"name": "Trait_Flammable", "fieldName": "flammable", "group": "Trait", "description": "", "variable": "trt-flammable{0}", "title": "Flammable", "subGroup": "Material Trait", "descriptions": ["This material will gain the aflame condition when exposed to fire."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
@@ -8128,18 +8203,6 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Trait_Frozen": {
 				"name": "Trait_Frozen", "fieldName": "frozen", "group": "Trait", "description": "", "variable": "trt-frozen{0}", "title": "Frozen", "subGroup": "Material Trait", "descriptions": ["Frozen items in temperatures between 32°F (0°C) and 70°F (21°C) melt, losing 10 lb. of material within 4 hours - becoming worthless. In temperatures above 70°F they melt within 1 hour."],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
-				"linkedGroups": [],
-				"isResource": "", "extraData": {}
-			},
-			"Trait_Sharp": {
-				"name": "Trait_Sharp", "fieldName": "sharp", "group": "Trait", "description": "", "variable": "trt-sharp{0}", "title": "Sharp", "subGroup": "Material Trait", "descriptions": ["Sharp materials can maintain durability even when reduced to a thin edge. Sharp materials are appropriate for slashing weapons and anything that needs to retain form when made especially thin."],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
-				"linkedGroups": [],
-				"isResource": "", "extraData": {}
-			},
-			"Trait_Sturdy": {
-				"name": "Trait_Sturdy", "fieldName": "sturdy", "group": "Trait", "description": "", "variable": "trt-sturdy{0}", "title": "Sturdy", "subGroup": "Material Trait", "descriptions": ["Sturdy materials are especially durable and resilient. Sturdy material is resistant to all damage types except force."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
@@ -8175,7 +8238,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Stat_Hidden": {
-				"name": "Stat_Hidden", "fieldName": "hidden", "group": "Status", "description": "", "variable": "sts-hidden{0}", "title": "Hidden", "subGroup": "", "descriptions": ["Hidden characters can’t be targeted by hostile attacks or actions, don’t cause engagement, and enemies only know their approximate location. Attacking, forcing saves, taking reactions, using Dash, and losing cover all remove Hidden after they resolve. Characters can find Hidden characters with Search."],
+				"name": "Stat_Hidden", "fieldName": "hidden", "group": "Status", "description": "", "variable": "sts-hidden{0}", "title": "Hidden", "subGroup": "", "descriptions": ["Hidden characters can’t be targeted by hostile attacks or actions, don’t cause engagement, and enemies only know their approximate location. Attacking, forcing saves, taking reactions, using Dash, and losing cover all remove Hidden after they resolve. Characters can find Hidden characters with Search.\nTo remain hidden, you must not be Engaged and you must either be outside of any enemies’ line of sight, obscured by sufficient cover, or invisible. If you Hide while meeting one of these criteria, you gain the Hidden status.\nHard cover is sufficient to Hide as long as it is large enough to totally conceal you, but soft cover is only sufficient if you are completely inside an area or zone that grants soft cover."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
@@ -8495,7 +8558,8 @@ var WuxDef = WuxDef || (function () {
 					"workers": [{ "variableName": "", "definitionName": "Attribute_QCK", "value": 0, "multiplier": 1 },
 					{ "variableName": "skl-finesse_rank", "definitionName": "", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": [],
+				"linkedGroups": []
+				,
 				"isResource": "", "extraData": {}
 			},
 			"Skill_Flexibility": {
@@ -8520,8 +8584,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Skill_Intimidation": {
-				"name": "Skill_Intimidation", "fieldName": "intimidation", "group": "Skill", "description": "", "variable": "skl-intimidation{0}", "title": "Intimidation", "subGroup": "Social Skill", "descriptions": ["When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision. When intimidating others you target their resolve."]
-				,
+				"name": "Skill_Intimidation", "fieldName": "intimidation", "group": "Skill", "description": "", "variable": "skl-intimidation{0}", "title": "Intimidation", "subGroup": "Social Skill", "descriptions": ["When you attempt to influence someone through overt threats, hostile actions, and physical violence, you make an Intimidation check. Examples include trying to pry information out of a prisoner, convincing street thugs to back down from a confrontation, or using the edge of a broken bottle to convince a sneering vizier to reconsider a decision. When intimidating others you target their resolve."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "Attribute_CNV", "value": 0, "multiplier": 1 },
 					{ "variableName": "skl-intimidation_rank", "definitionName": "", "value": 0, "multiplier": 1 }]
@@ -9174,7 +9237,8 @@ var WuxDef = WuxDef || (function () {
 					"workers": [{ "variableName": "gen-recall", "definitionName": "Recall", "value": 0, "multiplier": 1 },
 					{ "variableName": "lor-aridsha_history_rank", "definitionName": "", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": [],
+				"linkedGroups": []
+				,
 				"isResource": "", "extraData": {}
 			},
 			"Lore_Ceres History": {
@@ -9210,8 +9274,7 @@ var WuxDef = WuxDef || (function () {
 					"workers": [{ "variableName": "gen-recall", "definitionName": "Recall", "value": 0, "multiplier": 1 },
 					{ "variableName": "lor-novus_history_rank", "definitionName": "", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": []
-				,
+				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
 			"Lore_Walthair History": {
@@ -9898,7 +9961,8 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": [],
+				"linkedGroups": []
+				,
 				"isResource": "", "extraData": { "tier": 3, "affinity": "", "isFree": false }
 			},
 			"Tech_Spellstrike": {
@@ -9935,8 +9999,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": { "tier": 1, "affinity": "", "isFree": true }
 			},
 			"Tech_Sneaky Follow-Up": {
-				"name": "Tech_Sneaky Follow-Up", "fieldName": "sneaky_follow-up", "group": "Technique", "description": "", "variable": "tch-sneaky_follow-up{0}", "title": "Sneaky Follow-Up", "subGroup": "", "descriptions": [""]
-				,
+				"name": "Tech_Sneaky Follow-Up", "fieldName": "sneaky_follow-up", "group": "Technique", "description": "", "variable": "tch-sneaky_follow-up{0}", "title": "Sneaky Follow-Up", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 6, "multiplier": 1 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 2 },
@@ -10662,7 +10725,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Sickening Cloud": {
-				"name": "Tech_Sickening Cloud", "fieldName": "sickening_cloud", "group": "Technique", "description": "", "variable": "tch-sickening_cloud{0}", "title": "Sickening Cloud", "subGroup": "", "descriptions": [""],
+				"name": "Tech_Sickening Cloud", "fieldName": "sickening_cloud", "group": "Technique", "description": "", "variable": "tch-sickening_cloud{0}", "title": "Sickening Cloud", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 6, "multiplier": 1 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 2 },
@@ -10702,8 +10766,7 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": []
-				,
+				"linkedGroups": [],
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Fireball": {
@@ -11444,7 +11507,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Dustcraft": {
-				"name": "Tech_Dustcraft", "fieldName": "dustcraft", "group": "Technique", "description": "", "variable": "tch-dustcraft{0}", "title": "Dustcraft", "subGroup": "", "descriptions": [""],
+				"name": "Tech_Dustcraft", "fieldName": "dustcraft", "group": "Technique", "description": "", "variable": "tch-dustcraft{0}", "title": "Dustcraft", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 6, "multiplier": 1 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 2 },
@@ -11488,8 +11552,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Greater Shaping": {
-				"name": "Tech_Greater Shaping", "fieldName": "greater_shaping", "group": "Technique", "description": "", "variable": "tch-greater_shaping{0}", "title": "Greater Shaping", "subGroup": "", "descriptions": [""]
-				,
+				"name": "Tech_Greater Shaping", "fieldName": "greater_shaping", "group": "Technique", "description": "", "variable": "tch-greater_shaping{0}", "title": "Greater Shaping", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 6, "multiplier": 1 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 2 },
@@ -12211,7 +12274,8 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": [],
+				"linkedGroups": []
+				,
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Ki Control ++": {
@@ -12255,8 +12319,7 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": []
-				,
+				"linkedGroups": [],
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Channel Training +": {
@@ -12547,10 +12610,9 @@ var WuxDef = WuxDef || (function () {
 			}
 		},
 		sortingGroups = {
-			"group": { "Type": ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition"], "VariableMod": ["_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error"], "AffinityType": ["Wood", "Fire", "Earth", "Metal", "Water"], "InnateDefenseType": ["BOD", "PRC", "QCK"], "InnateSenseType": ["CNV", "INT", "RSN"], "AttributeValue": ["AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad"], "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3"], "LoreTier": ["LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3"], "GeneralLoreTier": ["GeneralLoreTier0", "GeneralLoreTier1"], "LoreCategory": ["Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "LoreCat_Academics", "LoreCat_Profession", "LoreCat_Craftmanship", "LoreCat_Geography", "LoreCat_History", "LoreCat_Culture", "LoreCat_Religion"], "PageSet": ["PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training"], "Page": ["Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement"], "Title": ["Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Emotes", "Title_Outfits"], "Chat": ["Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "Chat_OutfitDefault", "Chat_OutfitDefaultURL"], "Untyped": ["RepeatingActiveEmotes", "RepeatingOutfits", "Resistance"], "Advancement": ["Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques"], "Training": ["TrainingKnowledge", "TrainingTechniques", "PP"], "Attribute": ["Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN"], "Defense": ["Def_Brace", "Def_Fortitude", "Def_Disruption", "Def_Hide", "Def_Reflex", "Def_Evasion"], "Sense": ["Def_Insight", "Def_Notice", "Def_Scrutiny", "Def_Detect", "Def_Resolve", "Def_Freewill"], "Special Defense": ["CombatDefense", "SocialSense", "WillBreak"], "Origin": ["Full Name", "Display Name", "Background", "Age", "Gender", "Homeland"], "OriginStat": ["Affinity", "InnateDefense", "InnateSense"], "General": ["HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity"], "Combat": ["Cmb_HV", "Cmb_Armor", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "Cmb_Chakra", "Cmb_MoveSpd", "Cmb_MovePot", "Cmb_MartialForce", "Cmb_SpellForce"], "": ["Chakra"], "Social": ["Soc_Approval", "Soc_Patience"], "DamageType": ["Burn", "Cold", "Energy", "Force", "Patience", "Piercing", "Shock", "Tension"], "Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent"], "Status": ["Stat_Downed", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Initiative Penalty", "Stat_Invisible", "Stat_Restrained", "Stat_Unconscious"], "Condition": ["Stat_Aflame", "Stat_Angered", "Stat_Chilled", "Stat_Delayed", "Stat_Disgusted", "Stat_Dying", "Stat_Empowered", "Stat_Encouraged", "Stat_Encumbered", "Stat_Frightened", "Stat_Hasted", "Stat_Immobilized", "Stat_Impaired", "Stat_Joyful", "Stat_Launched", "Stat_Paralyzed", "Stat_Prone", "Stat_Saddened", "Stat_Sickened", "Stat_Staggered", "Stat_Stunned", "Stat_Surprised"], "Style": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support", "Style_Swordplay", "Style_Ki Extension"], "Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "Language": ["Lang_Minere", "Lang_Junal", "Lang_Apollen", "Lang_Lib", "Lang_Cert", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq", "Lang_Kleikan", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca", "Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan"], "Lore": ["Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "JobStyle": ["JStyle_Interceptor", "JStyle_Guardian", "JStyle_Spellslinger", "JStyle_Warrior", "JStyle_Rogue", "JStyle_Scholar", "JStyle_Physician"], "Technique": ["Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact", "Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition", "Tech_Aid", "Tech_Stabilize", "Tech_Encourage", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike", "Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand", "Tech_Defender", "Tech_Defender II", "Tech_Athlete", "Tech_Athlete II", "Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted", "Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim", "Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot", "Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Generalist", "Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery", "Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike", "Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"] }, "subGroup": { "": ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Emotes", "Title_Outfits", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "WillBreak", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity", "Cmb_HV", "Cmb_Armor", "Resistance", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "Cmb_Chakra", "Chakra", "Cmb_MoveSpd", "Cmb_MovePot", "Cmb_MartialForce", "Cmb_SpellForce", "Soc_Approval", "Soc_Patience", "Burn", "Cold", "Energy", "Force", "Patience", "Piercing", "Shock", "Tension", "Stat_Downed", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Initiative Penalty", "Stat_Invisible", "Stat_Restrained", "Stat_Unconscious", "Stat_Aflame", "Stat_Angered", "Stat_Chilled", "Stat_Delayed", "Stat_Disgusted", "Stat_Dying", "Stat_Empowered", "Stat_Encouraged", "Stat_Encumbered", "Stat_Frightened", "Stat_Hasted", "Stat_Immobilized", "Stat_Impaired", "Stat_Joyful", "Stat_Launched", "Stat_Paralyzed", "Stat_Prone", "Stat_Saddened", "Stat_Sickened", "Stat_Staggered", "Stat_Stunned", "Stat_Surprised", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "JStyle_Interceptor", "JStyle_Guardian", "JStyle_Spellslinger", "JStyle_Warrior", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "Attribute": ["Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN"], "Combat Defense": ["Def_Brace", "Def_Disruption", "Def_Reflex"], "Defense": ["Def_Fortitude", "Def_Hide", "Def_Evasion"], "Social Sense": ["Def_Insight", "Def_Scrutiny", "Def_Resolve"], "Sense": ["Def_Notice", "Def_Detect", "Def_Freewill"], "Special Defense": ["CombatDefense", "SocialSense"], "Technique Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall"], "Item Trait": ["Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud"], "Material Trait": ["Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Sharp", "Trait_Sturdy", "Trait_Transparent"], "Basic": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support"], "Standard": ["Style_Swordplay", "Style_Ki Extension"], "Athletics Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Physique", "Skill_Sneak", "Skill_Traversal"], "Sensing Skill": ["Skill_Analyze", "Skill_Empathy", "Skill_Resonance", "Skill_Search", "Skill_Survival"], "Creation Skill": ["Skill_Build", "Skill_Channel", "Skill_Cook", "Skill_Disguise", "Skill_Medicine"], "Social Skill": ["Skill_Charm", "Skill_Deception", "Skill_Intimidation", "Skill_Leadership", "Skill_Negotiation"], " Skill": ["Skill_Command", "Skill_Concoct", "Skill_Flexibility", "Skill_Heal", "Skill_Maneuver"], "Manipulate Skill": ["Skill_Enchant", "Skill_Palming", "Skill_Pilot", "Skill_Throw", "Skill_Tinker"], "Combat Skill": ["Skill_Finesse", "Skill_Grappling", "Skill_Might", "Skill_Shoot", "Skill_Skirmish"], "Walthair": ["Lang_Minere", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca"], "Aridsha": ["Lang_Junal", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira"], "Khem": ["Lang_Apollen", "Lang_Kleikan"], "Colswei": ["Lang_Lib"], "Ceres": ["Lang_Cert", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq"], "Special": ["Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan"], "Academics": ["LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology"], "Profession": ["LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining"], "Craftmanship": ["LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving"], "Geography": ["LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane"], "History": ["LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History"], "Culture": ["LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater"], "Religion": ["LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Athletics": ["Job_Rogue", "JStyle_Rogue"], "Focus": ["Job_Scholar", "JStyle_Scholar"], "Technical": ["Job_Physician", "JStyle_Physician"], "Basic Action": ["Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact"], "Basic Movement": ["Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition"], "Basic Support": ["Tech_Aid", "Tech_Stabilize", "Tech_Encourage"], "Basic Attack": ["Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike"], "Basic Social": ["Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand"], "Warrior; Guardian": ["Tech_Defender", "Tech_Defender II"], "Rogue": ["Tech_Athlete", "Tech_Athlete II"], "Warrior": ["Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted"], "Interceptor": ["Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim"], "Spellslinger": ["Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot"], "Guardian": ["Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation"], "Generalist": ["Tech_Generalist"], "Defender": ["Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery"], "Skirmisher": ["Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike"], "Marksman": ["Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike"], "Athlete": ["Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint"], "Ki Extension": ["Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +"], "Swordplay": ["Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II"] }, "formulaMods": {
-				"CR": ["Attribute", "Skill", "Job", "Technique", "HP", "WILL", "Initiative", "Cmb_HV", "Cmb_Chakra", "Soc_Approval", "Soc_Patience", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician", "Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact", "Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition", "Tech_Aid", "Tech_Stabilize", "Tech_Encourage", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike", "Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand", "Tech_Defender", "Tech_Defender II", "Tech_Athlete", "Tech_Athlete II", "Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted", "Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim", "Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot", "Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Generalist", "Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery", "Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike", "Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "AdvancementSkill": ["Skill"], "AdvancementJob": ["Job", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "TrainingKnowledge": ["Knowledge"]
-				, "AdvancementTechnique": ["Technique", "Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact", "Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition", "Tech_Aid", "Tech_Stabilize", "Tech_Encourage", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike", "Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand", "Tech_Defender", "Tech_Defender II", "Tech_Athlete", "Tech_Athlete II", "Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted", "Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim", "Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot", "Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Generalist", "Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery", "Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike", "Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "TrainingTechniques": ["Technique", "Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact", "Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition", "Tech_Aid", "Tech_Stabilize", "Tech_Encourage", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike", "Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand", "Tech_Defender", "Tech_Defender II", "Tech_Athlete", "Tech_Athlete II", "Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted", "Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim", "Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot", "Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Generalist", "Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery", "Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike", "Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "Level": ["Advancement", "HP", "WILL", "Soc_Approval"], "Attr_BOD": ["Def_Brace", "Def_Fortitude", "HP", "Carrying Capacity", "Cmb_MartialForce"], "Attr_PRC": ["Def_Disruption", "Def_Hide", "Cmb_SpellForce"], "Attr_QCK": ["Def_Reflex", "Def_Evasion", "Initiative"], "Attr_INT": ["Def_Insight", "Def_Notice"], "Attr_RSN": ["Def_Scrutiny", "Def_Detect", "Recall"], "Attr_CNV": ["Def_Resolve", "Def_Freewill", "WILL", "Cmb_HV", "Soc_Approval"], "Attribute_QCK": ["Skill_Acrobatics", "Skill_Agility", "Skill_Finesse", "Skill_Palming", "Skill_Pilot"], "Attribute_RSN": ["Skill_Analyze", "Skill_Build", "Skill_Deception", "Skill_Medicine", "Skill_Negotiation"], "Attribute_CNV": ["Skill_Channel", "Skill_Enchant", "Skill_Intimidation", "Skill_Leadership", "Skill_Resonance"], "Attribute_INT": ["Skill_Charm", "Skill_Cook", "Skill_Disguise", "Skill_Empathy", "Skill_Search"], "Attribute_BOD": ["Skill_Grappling", "Skill_Might", "Skill_Physique", "Skill_Survival", "Skill_Traversal"], "Attribute_PRC": ["Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker"], "Recall": ["LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"]
-			}
+			"group": { "Type": ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition"], "VariableMod": ["_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error"], "AffinityType": ["Wood", "Fire", "Earth", "Metal", "Water"], "InnateDefenseType": ["BOD", "PRC", "QCK"], "InnateSenseType": ["CNV", "INT", "RSN"], "AttributeValue": ["AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad"], "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3"], "LoreTier": ["LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3"], "GeneralLoreTier": ["GeneralLoreTier0", "GeneralLoreTier1"], "LoreCategory": ["Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "LoreCat_Academics", "LoreCat_Profession", "LoreCat_Craftmanship", "LoreCat_Geography", "LoreCat_History", "LoreCat_Culture", "LoreCat_Religion"], "PageSet": ["PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training"], "Page": ["Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement"], "Title": ["Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Emotes", "Title_Outfits", "Title_TechEffect", "Title_TechDC", "Title_TechDefense"], "Chat": ["Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "Chat_OutfitDefault", "Chat_OutfitDefaultURL"], "Untyped": ["RepeatingActiveEmotes", "RepeatingOutfits", "Resistance"], "Advancement": ["Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques"], "Training": ["TrainingKnowledge", "TrainingTechniques", "PP"], "Attribute": ["Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN"], "Defense": ["Def_Brace", "Def_Fortitude", "Def_Disruption", "Def_Hide", "Def_Reflex", "Def_Evasion"], "Sense": ["Def_Insight", "Def_Notice", "Def_Scrutiny", "Def_Detect", "Def_Resolve", "Def_Freewill"], "Special Defense": ["CombatDefense", "SocialSense", "WillBreak"], "Origin": ["Full Name", "Display Name", "Background", "Age", "Gender", "Homeland"], "OriginStat": ["Affinity", "InnateDefense", "InnateSense"], "General": ["HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity"], "Combat": ["Cmb_HV", "Cmb_Armor", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "Cmb_Chakra", "Cmb_MoveSpd", "Cmb_MovePot", "Cmb_MartialForce", "Cmb_SpellForce"], "": ["Chakra"], "Social": ["Soc_Approval", "Soc_Patience"], "DamageType": ["Dmg_Burn", "Dmg_Cold", "Dmg_Energy", "Dmg_Fire", "Dmg_Force", "Dmg_Patience", "Dmg_Piercing", "Dmg_Shock", "Dmg_Tension"], "Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Light", "Trait_Sharp", "Trait_Sturdy", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Transparent"], "Status": ["Stat_Downed", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Initiative Penalty", "Stat_Invisible", "Stat_Restrained", "Stat_Unconscious"], "Condition": ["Stat_Aflame", "Stat_Angered", "Stat_Chilled", "Stat_Delayed", "Stat_Disgusted", "Stat_Dying", "Stat_Empowered", "Stat_Encouraged", "Stat_Encumbered", "Stat_Frightened", "Stat_Hasted", "Stat_Immobilized", "Stat_Impaired", "Stat_Joyful", "Stat_Launched", "Stat_Paralyzed", "Stat_Prone", "Stat_Saddened", "Stat_Sickened", "Stat_Staggered", "Stat_Stunned", "Stat_Surprised"], "Style": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support", "Style_Swordplay", "Style_Ki Extension"], "Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Command", "Skill_Concoct", "Skill_Cook", "Skill_Deception", "Skill_Disguise", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Flexibility", "Skill_Grappling", "Skill_Heal", "Skill_Intimidation", "Skill_Leadership", "Skill_Maneuver", "Skill_Medicine", "Skill_Might", "Skill_Negotiation", "Skill_Palming", "Skill_Physique", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Survival", "Skill_Throw", "Skill_Tinker", "Skill_Traversal"], "Language": ["Lang_Minere", "Lang_Junal", "Lang_Apollen", "Lang_Lib", "Lang_Cert", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq", "Lang_Kleikan", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca", "Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan"], "Lore": ["Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "JobStyle": ["JStyle_Interceptor", "JStyle_Guardian", "JStyle_Spellslinger", "JStyle_Warrior", "JStyle_Rogue", "JStyle_Scholar", "JStyle_Physician"], "Technique": ["Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact", "Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition", "Tech_Aid", "Tech_Stabilize", "Tech_Encourage", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike", "Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand", "Tech_Defender", "Tech_Defender II", "Tech_Athlete", "Tech_Athlete II", "Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted", "Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim", "Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot", "Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Generalist", "Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery", "Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike", "Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"] }, "subGroup": {
+				"": ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "DamageType", "Trait", "Status", "Condition", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Emotes", "Title_Outfits", "Title_TechEffect", "Title_TechDC", "Title_TechDefense", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "WillBreak", "Full Name", "Display Name", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "HP", "WILL", "EN", "Initiative", "Recall", "Carrying Capacity", "Cmb_HV", "Cmb_Armor", "Resistance", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "Cmb_Chakra", "Chakra", "Cmb_MoveSpd", "Cmb_MovePot", "Cmb_MartialForce", "Cmb_SpellForce", "Soc_Approval", "Soc_Patience", "Dmg_Burn", "Dmg_Cold", "Dmg_Energy", "Dmg_Fire", "Dmg_Force", "Dmg_Patience", "Dmg_Piercing", "Dmg_Shock", "Dmg_Tension", "Stat_Downed", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Initiative Penalty", "Stat_Invisible", "Stat_Restrained", "Stat_Unconscious", "Stat_Aflame", "Stat_Angered", "Stat_Chilled", "Stat_Delayed", "Stat_Disgusted", "Stat_Dying", "Stat_Empowered", "Stat_Encouraged", "Stat_Encumbered", "Stat_Frightened", "Stat_Hasted", "Stat_Immobilized", "Stat_Impaired", "Stat_Joyful", "Stat_Launched", "Stat_Paralyzed", "Stat_Prone", "Stat_Saddened", "Stat_Sickened", "Stat_Staggered", "Stat_Stunned", "Stat_Surprised", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "JStyle_Interceptor", "JStyle_Guardian", "JStyle_Spellslinger", "JStyle_Warrior", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "Attribute": ["Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN"], "Combat Defense": ["Def_Brace", "Def_Disruption", "Def_Reflex"], "Defense": ["Def_Fortitude", "Def_Hide", "Def_Evasion"], "Social Sense": ["Def_Insight", "Def_Scrutiny", "Def_Resolve"], "Sense": ["Def_Notice", "Def_Detect", "Def_Freewill"], "Special Defense": ["CombatDefense", "SocialSense"], "Technique Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall"], "Item Trait": ["Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Light", "Trait_Sharp", "Trait_Sturdy"], "Material Trait": ["Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Transparent"], "Basic": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Movement", "Style_Basic Social", "Style_Basic Support"], "Standard": ["Style_Swordplay", "Style_Ki Extension"], "Athletics Skill": ["Skill_Acrobatics", "Skill_Agility", "Skill_Physique", "Skill_Sneak", "Skill_Traversal"], "Sensing Skill": ["Skill_Analyze", "Skill_Empathy", "Skill_Resonance", "Skill_Search", "Skill_Survival"], "Creation Skill": ["Skill_Build", "Skill_Channel", "Skill_Cook", "Skill_Disguise", "Skill_Medicine"], "Social Skill": ["Skill_Charm", "Skill_Deception", "Skill_Intimidation", "Skill_Leadership", "Skill_Negotiation"], " Skill": ["Skill_Command", "Skill_Concoct", "Skill_Flexibility", "Skill_Heal", "Skill_Maneuver"], "Manipulate Skill": ["Skill_Enchant", "Skill_Palming", "Skill_Pilot", "Skill_Throw", "Skill_Tinker"], "Combat Skill": ["Skill_Finesse", "Skill_Grappling", "Skill_Might", "Skill_Shoot", "Skill_Skirmish"], "Walthair": ["Lang_Minere", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca"], "Aridsha": ["Lang_Junal", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira"], "Khem": ["Lang_Apollen", "Lang_Kleikan"], "Colswei": ["Lang_Lib"], "Ceres": ["Lang_Cert", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq"], "Special": ["Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan"], "Academics": ["LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology"], "Profession": ["LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining"], "Craftmanship": ["LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving"], "Geography": ["LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane"], "History": ["LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History"], "Culture": ["LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater"], "Religion": ["LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Athletics": ["Job_Rogue", "JStyle_Rogue"], "Focus": ["Job_Scholar", "JStyle_Scholar"], "Technical": ["Job_Physician", "JStyle_Physician"], "Basic Action": ["Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact"], "Basic Movement": ["Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition"], "Basic Support": ["Tech_Aid", "Tech_Stabilize", "Tech_Encourage"], "Basic Attack": ["Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike"], "Basic Social": ["Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand"], "Warrior; Guardian": ["Tech_Defender", "Tech_Defender II"], "Rogue": ["Tech_Athlete", "Tech_Athlete II"], "Warrior": ["Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted"], "Interceptor": ["Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim"], "Spellslinger": ["Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot"], "Guardian": ["Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation"], "Generalist": ["Tech_Generalist"], "Defender": ["Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery"], "Skirmisher": ["Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike"], "Marksman": ["Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike"], "Athlete": ["Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint"], "Ki Extension": ["Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +"], "Swordplay": ["Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II"]
+			}, "formulaMods": { "CR": ["Attribute", "Skill", "Job", "Technique", "HP", "WILL", "Initiative", "Cmb_HV", "Cmb_Chakra", "Soc_Approval", "Soc_Patience", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician", "Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact", "Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition", "Tech_Aid", "Tech_Stabilize", "Tech_Encourage", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike", "Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand", "Tech_Defender", "Tech_Defender II", "Tech_Athlete", "Tech_Athlete II", "Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted", "Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim", "Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot", "Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Generalist", "Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery", "Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike", "Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "AdvancementSkill": ["Skill"], "AdvancementJob": ["Job", "Job_Interceptor", "Job_Guardian", "Job_Spellslinger", "Job_Warrior", "Job_Rogue", "Job_Scholar", "Job_Physician"], "TrainingKnowledge": ["Knowledge"], "AdvancementTechnique": ["Technique", "Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact", "Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition", "Tech_Aid", "Tech_Stabilize", "Tech_Encourage", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike", "Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand", "Tech_Defender", "Tech_Defender II", "Tech_Athlete", "Tech_Athlete II", "Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted", "Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim", "Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot", "Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Generalist", "Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery", "Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike", "Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "TrainingTechniques": ["Technique", "Tech_Hide", "Tech_Mount", "Tech_Prepare", "Tech_Seach", "Tech_Skill Check", "Tech_Grab an Edge", "Tech_Interact", "Tech_Break Free", "Tech_Dash", "Tech_Escape", "Tech_Reposition", "Tech_Aid", "Tech_Stabilize", "Tech_Encourage", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Slash", "Tech_Throw", "Tech_Heavy Strike", "Tech_Build Rapport", "Tech_Build Pressure", "Tech_Captivate", "Tech_Demand", "Tech_Defender", "Tech_Defender II", "Tech_Athlete", "Tech_Athlete II", "Tech_Second Wind", "Tech_Second Breath", "Tech_Undaunted", "Tech_Preemptive Strike", "Tech_Preemptive Stagger", "Tech_Critical Maim", "Tech_Spellshot", "Tech_Follow-Up Spellshot", "Tech_Bursting Spellshot", "Tech_Savior", "Tech_Knock Away Savior", "Tech_Savior's Retaliation", "Tech_Spellstrike", "Tech_Power Skirmish", "Tech_Sneak Attack", "Tech_Sneaky Follow-Up", "Tech_Assassinate", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Metamagic", "Tech_Strategize", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Generalist", "Tech_Defender's Will", "Tech_Defender's Taunt", "Tech_Defender's Recovery", "Tech_Skirmisher", "Tech_Skirmisher II", "Tech_Skirmisher's Step", "Tech_Skirmisher's Strike", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Longshot", "Tech_Marksman's Sight", "Tech_Marksman's Strike", "Tech_Athlete's Sprint", "Tech_Athlete's Reach", "Tech_Bounding Sprint", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "Level": ["Advancement", "HP", "WILL", "Soc_Approval"], "Attr_BOD": ["Def_Brace", "Def_Fortitude", "HP", "Carrying Capacity", "Cmb_MartialForce"], "Attr_PRC": ["Def_Disruption", "Def_Hide", "Cmb_SpellForce"], "Attr_QCK": ["Def_Reflex", "Def_Evasion", "Initiative"], "Attr_INT": ["Def_Insight", "Def_Notice"], "Attr_RSN": ["Def_Scrutiny", "Def_Detect", "Recall"], "Attr_CNV": ["Def_Resolve", "Def_Freewill", "WILL", "Cmb_HV", "Soc_Approval"], "Attribute_QCK": ["Skill_Acrobatics", "Skill_Agility", "Skill_Finesse", "Skill_Palming", "Skill_Pilot"], "Attribute_RSN": ["Skill_Analyze", "Skill_Build", "Skill_Deception", "Skill_Medicine", "Skill_Negotiation"], "Attribute_CNV": ["Skill_Channel", "Skill_Enchant", "Skill_Intimidation", "Skill_Leadership", "Skill_Resonance"], "Attribute_INT": ["Skill_Charm", "Skill_Cook", "Skill_Disguise", "Skill_Empathy", "Skill_Search"], "Attribute_BOD": ["Skill_Grappling", "Skill_Might", "Skill_Physique", "Skill_Survival", "Skill_Traversal"], "Attribute_PRC": ["Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker"], "Recall": ["LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"] }
 		},
 		_max = "_max",
 		_true = "_true",
