@@ -708,6 +708,21 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     border-image: linear-gradient(to right, #ffffffff 0%, #ffffff00 40%) 1;
 }
 
+
+.wuxInlineRow,
+.sheet-rolltemplate-action .sheet-wuxInlineRow,
+.sheet-rolltemplate-results .sheet-wuxInlineRow,
+.sheet-rolltemplate-ctmsg .sheet-wuxInlineRow,
+.sheet-rolltemplate-ctwsp .sheet-wuxInlineRow,
+.sheet-rolltemplate-ctyell .sheet-wuxInlineRow,
+.sheet-rolltemplate-ctthk .sheet-wuxInlineRow,
+.sheet-rolltemplate-ctdesc .sheet-wuxInlineRow,
+.sheet-rolltemplate-ctinteract .sheet-wuxInlineRow,
+.sheet-rolltemplate-ctintro .sheet-wuxInlineRow
+{
+    white-space: nowrap;
+}
+
 /*========================================
     Text Inputs and Labels
 ========================================*/

@@ -61,7 +61,7 @@ var WuxMessage = WuxMessage || (function () {
             outfitEmoteSetData.iterate(function(emoteData) {
                 if (emoteData.url != "") {
                     messageObject.setUrl(emoteData.url);
-                    output += `<span>[${emoteData.name}](!&#13;${Format.SanitizeMacroRollTemplate(messageObject.printMacro())})${createImagePreview(emoteData.url)}</span> `;
+                    output += `<span class="sheet-wuxInlineRow">[${emoteData.name}](!&#13;${Format.SanitizeMacroRollTemplate(messageObject.printMacro())})${createImagePreview(emoteData.url)}</span> `;
                 }
             });
 
@@ -76,7 +76,7 @@ var WuxMessage = WuxMessage || (function () {
                     languageObj.language = languageList[i];
                     objdata = languageObj.stringify();
                     log(`objdata[${i}]: ${objdata}`);
-                    output += `<span>[${languageList[i]}](!setlang ${objdata}) </span> `;
+                    output += `[${languageList[i]}](!setlang ${objdata}) `;
                 }
             }
 
