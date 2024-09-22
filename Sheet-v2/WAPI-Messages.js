@@ -75,7 +75,6 @@ var WuxMessage = WuxMessage || (function () {
                     languageList[i] = languageList[i].trim();
                     languageObj.language = languageList[i];
                     objdata = languageObj.stringify();
-                    log(`objdata[${i}]: ${objdata}`);
                     output += `[${languageList[i]}](!setlang ${objdata}) `;
                 }
             }

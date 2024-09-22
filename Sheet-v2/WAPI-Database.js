@@ -1775,9 +1775,7 @@ class SandboxAttributeHandler extends AttributeHandler {
         for (const property in attributeHandler.update) {
             attribute = attributeHandler.attributes[property];
             updateData = attributeHandler.update[property];
-            log (property + " " + JSON.stringify(attribute) + " " + JSON.stringify(updateData));
             if (attribute != undefined && updateData != undefined) {
-                log("Setting " + property + "'s " + updateData.type + " to " + updateData.value);
                 attribute.set(updateData.type, updateData.value);
             }
         };
