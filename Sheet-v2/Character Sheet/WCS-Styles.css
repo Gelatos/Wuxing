@@ -2501,6 +2501,18 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     box-shadow: none;
 }
 
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-technique .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltipButton .sheet-wuxTooltipText
+{
+    color: #5b5b5b;
+}
+
 .wuxTooltipButtonContainer .wuxTooltipButton .wuxTooltipText,
 .wuxInteractiveBlock .wuxTooltipButton .wuxTooltipText
 {
