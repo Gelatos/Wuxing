@@ -2,32 +2,149 @@ var WuxMessage = WuxMessage || (function () {
     'use strict';
 
     var
-    parse = function (msgContent) {
+    parse = function (messageType, textMessage) {
+        switch (messageType) {
+            case "!m": return new SpeakEmoteMessage(textMessage);
+            case "!w": return new WhisperEmoteMessage(textMessage);
+            case "!y": return new YellEmoteMessage(textMessage);
+            case "!t": return new ThinkEmoteMessage(textMessage);
+            case "!d": return new DescEmoteMessage(textMessage);
+            case "!intro": return new IntroEmoteMessage(textMessage);
+            case "!a": return new AttackMessage(textMessage);
+            case "!r": return new ResponseMessage(textMessage);
+            case "!ry": return new ResponseYellMessage(textMessage);
+            case "!i": return new InfoMessage(textMessage);
+            case "!s": return new SystemInfoMessage(textMessage);
+            case "!sa": return new SystemInfoAuxMessage(textMessage);
+        }
+        return undefined;
+    },
+
+    parseInput = function (msgContent) {
         let contentIndex = msgContent.indexOf(" ");
         if (contentIndex > 0) {
-            let messageType = msgContent.substring(0, contentIndex);
-            let textMessage = msgContent.substring(contentIndex + 1);
+            return parse(msgContent.substring(0, contentIndex), msgContent.substring(contentIndex + 1));
+        }
+        return undefined;
+    },
 
-            switch (messageType) {
-                case "!m": return new SpeakEmoteMessage(textMessage);
-                case "!w": return new WhisperEmoteMessage(textMessage);
-                case "!y": return new YellEmoteMessage(textMessage);
-                case "!t": return new ThinkEmoteMessage(textMessage);
-                case "!d": return new DescEmoteMessage(textMessage);
-                case "!intro": return new IntroEmoteMessage(textMessage);
-                case "!a": return new AttackMessage(textMessage);
-                case "!r": return new ResponseMessage(textMessage);
-                case "!ry": return new ResponseYellMessage(textMessage);
-                case "!i": return new InfoMessage(textMessage);
-                case "!s": return new SystemInfoMessage(textMessage);
-                case "!sa": return new SystemInfoAuxMessage(textMessage);
+    handleMessageInput = function (msg, tag, content) {
+        let messageObject = parse(tag, content);
+        if (messageObject != undefined) {
+            let targetData = new TargetData(msg);
+            createEmoteOptions(msg.who, targetData, messageObject);
+        }
+        else {
+            switch (tag) {
+                case "!setlang": 
+                    let languageObj = new setLanguageObj(content);
+                    languageObj.setCharacterLanguage(msg.who);
+                break;
             }
         }
-        return new SimpleMessage(msgContent);
+    },
+
+    createEmoteOptions = function (sender, targetData, messageObject) {
+        let attributeHandler = new SandboxAttributeHandler(targetData.charId);
+		let emotesVar = WuxDef.GetVariable("Chat_Emotes");
+        let languageVar = WuxDef.GetVariable("Language", WuxDef._true);
+        let affinityVar = WuxDef.GetVariable("Affinity");
+
+        attributeHandler.addMod([emotesVar, languageVar, affinityVar]);
+        attributeHandler.addFinishCallback(function(attrHandler) {
+            messageObject.setTitle(targetData.displayName);
+            messageObject.setLanguageByTarget(targetData);
+            messageObject.setAffinity(attrHandler.parseString(affinityVar));
+
+            let output = "<div style='font-weight: bold'>Emotes</div>";
+            let outfitEmoteSetData = new EmoteSetData(attrHandler.parseJSON(emotesVar));
+            outfitEmoteSetData.iterate(function(emoteData) {
+                if (emoteData.url != "") {
+                    messageObject.setUrl(emoteData.url);
+                    output += `<span>[${emoteData.name}](!&#13;${Format.SanitizeMacroRollTemplate(messageObject.printMacro())})${createImagePreview(emoteData.url)}</span> `;
+                }
+            });
+
+            let languageList = attrHandler.parseJSON(languageVar);
+            if (languageList != "" && languageList.length > 0) {
+                output += `<div style='font-weight: bold'>Languages</div>`;
+
+                let languageObj = new setLanguageObj(targetData);
+                let objdata = "";
+                for (let i = 0; i < languageList.length; i++) {
+                    languageList[i] = languageList[i].trim();
+                    languageObj.language = languageList[i];
+                    objdata = languageObj.stringify();
+                    log(`objdata[${i}]: ${objdata}`);
+                    output += `<span>[${languageList[i]}](!setlang ${objdata}) </span> `;
+                }
+            }
+
+            messageObject.setSub(output);
+            messageObject.url = outfitEmoteSetData.defaultEmote;
+
+            let message = `/w ${sender.split(" ")[0]} ${messageObject.printRollTemplate()}`;
+            sendChat("Emote Manager", message, null, {noarchive:true});
+        });
+        attributeHandler.run();
+    },
+
+    createImagePreview = function (url) {
+        return `<div class="sheet-wuxTooltipButton"><div class="sheet-wuxTooltipText">i</div><img class="sheet-wuxTooltipImagePreview" src="${url}"/></div>`;
+    },
+
+    setLanguageObj = class {
+        constructor(data) {
+            this.createEmpty();
+            if (data != undefined) {
+                if (data instanceof TargetData) {
+                    this.importTargetData(data);
+                }
+                else if (typeof(data == "string")) {
+                    this.importJson(Format.ParseMacroJSON(data));
+                }
+                else {
+                    this.importJson(data);
+                }
+            }
+        }
+        createEmpty() {
+            this.charId = "";
+            this.charName = "";
+            this.language = "";
+        }
+        importTargetData(data) {
+            this.charId = data.charId;
+            this.charName = data.charName;
+        }
+        importJson(json) {
+            this.charId = json.charId;
+            this.charName = json.charName;
+            this.language = json.language;
+        }
+
+        stringify() {
+            return Format.SanitizeMacroJSON(JSON.stringify(this));
+        }
+
+        setCharacterLanguage(sender) {
+            let messageObject = new EmoteMessage();
+            messageObject.setLanguage(this.language);
+    
+            let attributeHandler = new SandboxAttributeHandler(this.charId);
+            attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Language"), messageObject.language);
+            attributeHandler.addUpdate(WuxDef.GetVariable("Chat_LanguageTag"), messageObject.languageTag);
+            attributeHandler.run();
+                
+            let message = `/w ${sender.split(" ")[0]} Set ${this.charName}'s language to ${this.language}`;
+            sendChat("Emote Manager", message, null, {noarchive:true});
+        }
     }
     
     return {
-        Parse: parse
+        Parse: parse,
+        ParseInput: parseInput,
+        HandleMessageInput: handleMessageInput
     };
 }());
 
@@ -105,6 +222,14 @@ class ChatMessage {
     }
 
     printRollTemplate() {
+        return `&{template:${this.template}} ${this.printTemplateData()}`;
+    }
+
+    printMacro() {
+        return `#${this.template} ${this.printTemplateData()}`;
+    }
+
+    printTemplateData() {
         return "";
     }
 
@@ -121,7 +246,15 @@ class SimpleMessage extends ChatMessage {
     }
 
     printRollTemplate() {
-        return `&{template:${this.template}} {{message=${this.message}}}`;
+        return `{template:${this.template}} ${this.printTemplateData()}`;
+    }
+
+    printMacro() {
+        return `#${this.template} ${this.printTemplateData()}`;
+    }
+
+    printTemplateData() {
+        return `{{message=${this.message}}}`;
     }
 
     printHtml() {
@@ -195,18 +328,22 @@ class EmoteMessage extends ChatMessage {
         this.language = "";
         this.affinity = "";
         this.languageTag = "";
+        this.sub = "";
     }
 
-    printRollTemplate() {
-        let template = `&{template:${this.template}} {{url=${this.url}}} {{message=${this.message}}}`;
+    printTemplateData() {
+        let template = `{{url=${this.url}}} {{message=${this.message}}} {{title=${this.title}}}`;
         if (this.language) {
             template += ` {{language=${this.language}}}`;
+            if (this.languageTag) {
+                template += ` ${this.languageTag}`;
+            }
         }
         if (this.affinity) {
             template += ` {{${this.affinity}}}`;
         }
-        if (this.languageTag) {
-            template += ` ${this.languageTag}`;
+        if (this.sub) {
+            template += ` {{sub=${this.sub}}}`;
         }
         return template;
     }
@@ -290,6 +427,23 @@ class EmoteMessage extends ChatMessage {
             default:
                 this.languageTag = "{{language-default=1}}";
         }
+    }
+
+    setLanguageByTarget(targetData) {
+        this.language = `@{${targetData.charName}|chat-language}`;
+        this.languageTag = `@{${targetData.charName}|chat-languagetag}`;
+    }
+
+    setUrl(url) {
+        this.url = url;
+    }
+
+    setAffinity(affinity) {
+        this.affinity = affinity.toLowerCase();
+    }
+
+    setSub(sub) {
+        this.sub = sub;
     }
 }
 

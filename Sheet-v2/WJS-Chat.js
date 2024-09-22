@@ -42,8 +42,8 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 		console.log(`Updating post content`);
 		let attributeHandler  = new WorkerAttributeHandler();
 		
-		let messageObj = WuxMessage.Parse(eventinfo.newValue);
-		if (messageObj.constructor.name == "SimpleMessage") {
+		let messageObj = WuxMessage.ParseInput(eventinfo.newValue);
+		if (messageObj == undefined) {
 			messageObj = new SpeakEmoteMessage(eventinfo.newValue);
 		}
 		

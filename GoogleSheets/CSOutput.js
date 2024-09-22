@@ -119,8 +119,8 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 						buildOrigin = function () {
 							let contents = "";
         			        contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"));
-							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
-							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Display Name"), WuxDef.GetAttribute("Display Name"));
+							contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
+							contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), WuxDef.GetAttribute("DisplayName"));
 							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
 							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
 							contents += WuxDefinition.BuildTextarea(WuxDef.Get("Background"), WuxDef.GetAttribute("Background"), "wuxInput wuxHeight150");
@@ -1137,7 +1137,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			    
         			    basics = function () {
         			        let contents = "";
-        			        contents += WuxDefinition.BuildText(WuxDef.Get("Full Name"), WuxSheetMain.Span(WuxDef.GetAttribute("Full Name")));
+        			        contents += WuxDefinition.BuildText(WuxDef.Get("FullName"), WuxSheetMain.Span(WuxDef.GetAttribute("FullName")));
         			        return contents;
         			    },
         			    
@@ -1263,7 +1263,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 						buildOrigin = function () {
 							let contents = "";
 							contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"));
-							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Full Name"), WuxDef.GetAttribute("Full Name"));
+							contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
 							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
 							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
 							contents += WuxDefinition.BuildTextarea(WuxDef.Get("Background"), WuxDef.GetAttribute("Background"), "wuxInput wuxHeight150");
@@ -1317,7 +1317,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
 
 							let buttonContents = `&{template:@{${WuxDef.GetVariable("Chat_Type")}}} {{url=@{${WuxDef.GetVariable("Chat_PostURL")}}}} `;
-							buttonContents += `{{title=@{${WuxDef.GetVariable("Display Name")}}@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} `;
+							buttonContents += `{{title=@{${WuxDef.GetVariable("DisplayName")}}@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} `;
 							buttonContents += `{{message=@{${WuxDef.GetVariable("Chat_Message")}}}} @{${WuxDef.GetVariable("Chat_LanguageTag")}}`;
 
 							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Message"));

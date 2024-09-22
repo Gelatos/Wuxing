@@ -1086,7 +1086,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
             var
             button = function (fieldName, contents) {
                 return `<div class="wuxTooltipButtonContainer">
-                <div class="wuxTooltipButton">
+                <div class="wuxTooltipButton wuxFloatRight">
                 <input type="checkbox" name="${fieldName}">
                 <div class="wuxTooltipText">i</div>
                 <div class="wuxTooltipContent">\n${contents}\n</div>
@@ -1096,7 +1096,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
 
             icon = function (contents) {
                 return `<div class="wuxTooltipButtonContainer">
-                <div class="wuxTooltipButton">
+                <div class="wuxTooltipButton wuxFloatRight">
                 <div class="wuxTooltipText">i</div>
                 <div class="wuxTooltipContent">\n${contents}\n</div>
                 </div>
@@ -1408,7 +1408,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildMainSheetHeader = function (subheader, infoFieldName) {
-            let header = `<input type="text" name="${WuxDef.GetAttribute("Display Name")}" placeholder="Display Name" />`;
+            let header = `<input type="text" name="${WuxDef.GetAttribute("DisplayName")}" placeholder="Display Name" />`;
             return buildHeader(header, subheader, infoFieldName);
         },
 

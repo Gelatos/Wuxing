@@ -2384,13 +2384,6 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
    Tooltip
 ========================================*/
 
-.wuxTooltip,
-.sheet-rolltemplate-technique .sheet-wuxTooltip,
-.sheet-rolltemplate-usetechnique .sheet-wuxTooltip
-{
-    position: relative;
-}
-
 .wuxTooltipButtonContainer 
 {
     position: absolute;
@@ -2401,17 +2394,30 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     height: 100%;
 }
 
-.wuxTooltipButton 
+.wuxTooltipButton,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltipButton,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltipButton,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton,
+.sheet-rolltemplate-technique .sheet-wuxTooltipButton,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltipButton
 {
-    float: right;
+    display: inline-block;
     width: 18px;
     height: 18px;
     margin: 0px;
     padding: 0px;
-    padding-right: 10px;
     z-index: 900;
 
     border-width: 0px;
+}
+
+.wuxTooltipButton.wuxFloatRight
+{
+    float: right;
+    padding-right: 10px;
 }
 
 .wuxTooltipButton input[type=radio],
@@ -2442,6 +2448,12 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 }
 
 .wuxTooltipText,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltipText,
 .sheet-rolltemplate-technique .sheet-wuxTooltipText,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltipText
 {
@@ -2449,7 +2461,15 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     text-decoration: underline dotted;
 }
 
-.wuxTooltipButton .wuxTooltipText
+.wuxTooltipButton .wuxTooltipText,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-technique .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltipButton .sheet-wuxTooltipText
 {
     display: block;
     width: 100%;
@@ -2480,8 +2500,22 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 
 .wuxTooltip .wuxTooltipContent,
 .wuxTooltipButton .wuxTooltipContent,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent,
-.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent
+.sheet-rolltemplate-technique .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltipButton .sheet-wuxTooltipContent
 {
     position: absolute;
     width: 240px;
@@ -2495,36 +2529,78 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     border-radius: 6px;
     border: 2px solid black;
 }
+
 .wuxTooltip .wuxTooltipContent,
 .wuxTooltipButton .wuxTooltipContent
 {
     top: 24px;
 }
 
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent,
-.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent
+.sheet-rolltemplate-technique .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltipButton .sheet-wuxTooltipContent
 {
     bottom: 24px;
 }
 
 .wuxTooltip .wuxTooltipContent,
+.wuxTooltipButton .wuxTooltipContent
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent,
-.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent
+.sheet-rolltemplate-technique .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-usetechnique .sheet-wuxTooltipButton .sheet-wuxTooltipContent
 {
     left: 0px;
 }
 
-.wuxTooltipButton .wuxTooltipContent
+.wuxTooltipButton.wuxFloatRight .wuxTooltipContent
 {
     right: 0px;
 }
 
 .wuxTooltip .wuxTooltipContent,
 .wuxTooltipButton .wuxTooltipContent,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .wuxTooltip .wuxTooltipContent .wuxDescription,
 .wuxTooltipButton .wuxTooltipContent .wuxDescription,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
 .sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription
 {
@@ -2536,6 +2612,12 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 }
 .wuxTooltip .wuxTooltipContent .wuxHeader2,
 .wuxTooltipButton .wuxTooltipContent .wuxHeader2,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
 .sheet-rolltemplate-technique .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2
 {
@@ -2546,10 +2628,46 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     border-bottom: 1px solid #d0d0d0;
     border-image: linear-gradient(to right, #A0A0A0 0%, #A0A0A0 50%, #A0A0A0 100%) 1;
 }
+
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview
+{
+    position: absolute;
+    padding: 5px;
+    z-index: 9999;
+    top: 30px;
+    left: 0px;
+
+    background: #fff;
+    visibility: hidden;
+}
   
 .wuxTooltip:hover .wuxTooltipContent,
 .wuxTooltipButton:hover .wuxTooltipContent,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton:hover .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton:hover .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctyell .sheet-wuxTooltipButton:hover .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctthk .sheet-wuxTooltipButton:hover .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton:hover .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton:hover .sheet-wuxTooltipImagePreview,
 .sheet-rolltemplate-technique .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-technique .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip:hover .sheet-wuxTooltipContent
 {
   visibility: visible;
@@ -2557,7 +2675,26 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
   
 .wuxTooltip .wuxTooltipContent:hover,
 .wuxTooltipButton .wuxTooltipContent:hover,
+.sheet-rolltemplate-ctmsg .wuxTooltip .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctmsg .wuxTooltipButton .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctmsg .wuxTooltipButton .sheet-wuxTooltipImagePreview:hover,
+.sheet-rolltemplate-ctwsp .wuxTooltip .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctwsp .wuxTooltipButton .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctwsp .wuxTooltipButton .sheet-wuxTooltipImagePreview:hover,
+.sheet-rolltemplate-ctyell .wuxTooltip .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctyell .wuxTooltipButton .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctyell .wuxTooltipButton .sheet-wuxTooltipImagePreview:hover,
+.sheet-rolltemplate-ctthk .wuxTooltip .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctthk .wuxTooltipButton .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctthk .wuxTooltipButton .sheet-wuxTooltipImagePreview:hover,
+.sheet-rolltemplate-ctdesc .wuxTooltip .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctdesc .wuxTooltipButton .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctdesc .wuxTooltipButton .sheet-wuxTooltipImagePreview:hover,
+.sheet-rolltemplate-ctinteract .wuxTooltip .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctinteract .wuxTooltipButton .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctinteract .wuxTooltipButton .sheet-wuxTooltipImagePreview:hover,
 .sheet-rolltemplate-technique .wuxTooltip .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-technique .wuxTooltipButton .sheet-wuxTooltipContent:hover,
 .sheet-rolltemplate-usetechnique .wuxTooltip .sheet-wuxTooltipContent:hover
 {
   visibility: hidden;
@@ -5779,13 +5916,14 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctdesc .sheet-chatsub, 
 .sheet-rolltemplate-ctintro .sheet-chatsub
 {
+    /* position: relative;  */
+
     padding: 5px 10px 5px 10px; 
     min-width: 30px; 
     border-radius: 15px; 
     border: 2px solid #000; 
     background-color: #DDD;
 
-    position: relative; 
     margin: 0px 10px 0px -40px; 
     display: inline-block; 
     font-size: 12px; 
@@ -7476,6 +7614,11 @@ Quest Box
 .wuxTextCenter
 {
     text-align: center;
+}
+
+.wuxFloatRight
+{
+    float: right;
 }
 
 /*========================================

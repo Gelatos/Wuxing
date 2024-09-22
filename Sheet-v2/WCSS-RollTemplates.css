@@ -673,13 +673,14 @@
 .sheet-rolltemplate-ctdesc .sheet-chatsub, 
 .sheet-rolltemplate-ctintro .sheet-chatsub
 {
+    /* position: relative;  */
+
     padding: 5px 10px 5px 10px; 
     min-width: 30px; 
     border-radius: 15px; 
     border: 2px solid #000; 
     background-color: #DDD;
 
-    position: relative; 
     margin: 0px 10px 0px -40px; 
     display: inline-block; 
     font-size: 12px; 

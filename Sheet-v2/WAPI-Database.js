@@ -449,7 +449,7 @@ class TechniqueData extends WuxDatabaseData {
 
     getUseTech (sanitize) {
         // add technique data for the api
-        this.username = `@{${WuxDef.GetVariable("Display Name")}}`;
+        this.username = `@{${WuxDef.GetVariable("DisplayName")}}`;
         let usedTechData = JSON.stringify(this);
         if (sanitize) {
             usedTechData = this.sanitizeSheetRollAction(usedTechData);
@@ -1647,53 +1647,156 @@ class AttributeHandler {
 	run() {
 	}
 
+    getCurrentValue(fieldName) {
+        return this.current[fieldName];
+    }
+
+    getUpdateValue(fieldName) {
+        return this.update[fieldName];
+    }
+
 	parseString(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = "";
 		}
+        let output = "";
 		if (this.update[fieldName] != undefined) {
-			return this.update[fieldName] == undefined || this.update[fieldName] == "" ? defaultValue : this.update[fieldName];
+            output = this.getUpdateValue(fieldName);
 		}
 		else {
-			return this.current[fieldName] == undefined || this.current[fieldName] == "" ? defaultValue : this.current[fieldName];
+            output = this.getCurrentValue(fieldName);
 		}
+        if (output == undefined || output == "") {
+            output = defaultValue;
+        }
+        return output;
 	}
 
 	parseInt(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = 0;
 		}
+        let output = "";
 		if (this.update[fieldName] != undefined) {
-			return isNaN(parseInt(this.update[fieldName])) ? defaultValue : parseInt(this.update[fieldName]);
+            output = parseInt(this.getUpdateValue(fieldName));
 		}
 		else {
-			return isNaN(parseInt(this.current[fieldName])) ? defaultValue : parseInt(this.current[fieldName]);
+            output = parseInt(this.getCurrentValue(fieldName));
 		}
+        if (output == undefined || isNaN(output)) {
+            output = defaultValue;
+        }
+        return output;
 	}
 
 	parseFloat(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = 0;
 		}
+        let output = "";
 		if (this.update[fieldName] != undefined) {
-			return isNaN(parseFloat(this.update[fieldName])) ? defaultValue : parseFloat(this.update[fieldName]);
+            output = parseFloat(this.getUpdateValue(fieldName));
 		}
 		else {
-			return isNaN(parseFloat(this.current[fieldName])) ? defaultValue : parseFloat(this.current[fieldName]);
+            output = parseFloat(this.getCurrentValue(fieldName));
 		}
+        if (output == undefined || isNaN(output)) {
+            output = defaultValue;
+        }
+        return output;
 	}
 
 	parseJSON(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = "";
 		}
+        let output = "";
 		if (this.update[fieldName] != undefined) {
-			return this.update[fieldName] == undefined || this.update[fieldName] == "" ? defaultValue : JSON.parse(this.update[fieldName]);
+            output = JSON.parse(this.getUpdateValue(fieldName));
 		}
 		else {
-			return this.current[fieldName] == undefined || this.current[fieldName] == "" ? defaultValue : JSON.parse(this.current[fieldName]);
+            output = JSON.parse(this.getCurrentValue(fieldName));
 		}
+        if (output == undefined || output == "") {
+            output = defaultValue;
+        }
+        return output;
 	}
+}
+class SandboxAttributeHandler extends AttributeHandler {
+    constructor(characterId, mods) {
+        super(mods);
+        this.characterId = characterId;
+        this.attributes = {};
+        this.maxCheck = false;
+    }
+    getUpdateValue(fieldName) {
+        return this.update[fieldName].get(this.maxCheck ? "max" : "current");
+    }
+    parseString(fieldName, defaultValue, isMax) {
+        this.maxCheck = isMax != undefined;
+        return super.parseString(fieldName, defaultValue);
+    }
+    parseInt(fieldName, defaultValue, isMax) {
+        this.maxCheck = isMax != undefined;
+        return super.parseInt(fieldName, defaultValue);
+    }
+    parseFloat(fieldName, defaultValue, isMax) {
+        this.maxCheck = isMax != undefined;
+        return super.parseFloat(fieldName, defaultValue);
+    }
+    parseJSON(fieldName, defaultValue, isMax) {
+        this.maxCheck = isMax != undefined;
+        return super.parseJSON(fieldName, defaultValue);
+    }
+
+    addAttribute(attr) {
+        this.attributes[attr] = this.getCharacterAttribute(attr);
+    }
+	addUpdate(attr, value, type) {
+        if (this.attributes[attr] == undefined) {
+            this.addAttribute(attr);
+        }
+        super.addUpdate(attr, {type: type != undefined ? type : "current", value: value});
+	}
+	run() {
+		let attributeHandler = this;
+        attributeHandler.mods.forEach((property) => {
+            attributeHandler.current[property] = getAttrByName(this.characterId, property);
+        });
+
+        attributeHandler.finishCallbacks.forEach((callback) => {
+            callback(attributeHandler);
+        });
+
+        // set the update changes
+        let attribute = {};
+        let updateData = {};
+        for (const property in attributeHandler.update) {
+            attribute = attributeHandler.attributes[property];
+            updateData = attributeHandler.update[property];
+            log (property + " " + JSON.stringify(attribute) + " " + JSON.stringify(updateData));
+            if (attribute != undefined && updateData != undefined) {
+                log("Setting " + property + "'s " + updateData.type + " to " + updateData.value);
+                attribute.set(updateData.type, updateData.value);
+            }
+        };
+	}
+
+    getCharacterAttribute (attrName) {
+        var returnVal = undefined;
+        var chracterAttributes = findObjs({
+            _characterid: this.characterId,
+            _type: "attribute",
+            name: attrName
+        }, {caseInsensitive: true});
+    
+        if (chracterAttributes.length > 0) {
+            returnVal = chracterAttributes[0];
+        }
+    
+        return returnVal;
+    }
 }
 class WorkerBuildStat extends dbObj {
     importJson(json) {
@@ -2075,6 +2178,25 @@ var Format = Format || (function () {
         // Chat Formatting
         // ------------------------
 
+        sanitizeMacroJSON = function (macro) {
+            macro = macro.replace(/"/g, "%#");
+            macro = macro.replace(/\{/gi, "&#123;");
+            macro = macro.replace(/\}/gi, "&#125;");
+            return macro;
+        },
+
+        parseMacroJSON = function (macro) {
+            macro = macro.replace(/%#/g, '"');
+            return JSON.parse(macro);
+        },
+
+        sanitizeMacroRollTemplate = function (roll) {
+            var sheetRoll = roll;
+            sheetRoll = sheetRoll.replace(/\{/gi, "&#123;");
+            sheetRoll = sheetRoll.replace(/\}/gi, "&#125;");
+            return sheetRoll;
+        },
+
         sanitizeSheetRoll = function (roll) {
             var sheetRoll = roll;
             sheetRoll = sheetRoll.replace(/%/g, "&#37;");
@@ -2115,6 +2237,9 @@ var Format = Format || (function () {
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,
         ShowTooltip: showTooltip,
+        SanitizeMacroJSON: sanitizeMacroJSON,
+        ParseMacroJSON: parseMacroJSON,
+        SanitizeMacroRollTemplate: sanitizeMacroRollTemplate,
         SanitizeSheetRoll: sanitizeSheetRoll,
         SanitizeSheetRollAction: sanitizeSheetRollAction
     };
