@@ -28,6 +28,27 @@ var WuxMessage = WuxMessage || (function () {
         return undefined;
     },
 
+    parseType = function (type, textMessage) {
+        if (textMessage == undefined) {
+            textMessage = "";
+        }
+        switch (type) {
+            case "ctmsg": return new SpeakEmoteMessage(textMessage);
+            case "ctwsp": return new WhisperEmoteMessage(textMessage);
+            case "ctyell": return new YellEmoteMessage(textMessage);
+            case "ctthk": return new ThinkEmoteMessage(textMessage);
+            case "ctdesc": return new DescEmoteMessage(textMessage);
+            case "ctintro": return new IntroEmoteMessage(textMessage);
+            case "attackBox": return new AttackMessage(textMessage);
+            case "responseBox": return new ResponseMessage(textMessage);
+            case "responseYellBox": return new ResponseYellMessage(textMessage);
+            case "infoBox": return new InfoMessage(textMessage);
+            case "systemInfoBox": return new SystemInfoMessage(textMessage);
+            case "systemInfoAuxBox": return new SystemInfoAuxMessage(textMessage);
+        }
+        return undefined;
+    },
+
     handleMessageInput = function (msg, tag, content) {
         let messageObject = parse(tag, content);
         if (messageObject != undefined) {
@@ -143,6 +164,7 @@ var WuxMessage = WuxMessage || (function () {
     return {
         Parse: parse,
         ParseInput: parseInput,
+        ParseType: parseType,
         HandleMessageInput: handleMessageInput
     };
 }());

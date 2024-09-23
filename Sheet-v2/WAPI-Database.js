@@ -1734,7 +1734,7 @@ class SandboxAttributeHandler extends AttributeHandler {
         return this.update[fieldName].get(this.maxCheck ? "max" : "current");
     }
     parseString(fieldName, defaultValue, isMax) {
-        this.maxCheck = isMax != undefined;
+        this.maxCheck = isMax;
         return super.parseString(fieldName, defaultValue);
     }
     parseInt(fieldName, defaultValue, isMax) {
@@ -1753,11 +1753,11 @@ class SandboxAttributeHandler extends AttributeHandler {
     addAttribute(attr) {
         this.attributes[attr] = this.getCharacterAttribute(attr);
     }
-	addUpdate(attr, value, type) {
+	addUpdate(attr, value, isMax) {
         if (this.attributes[attr] == undefined) {
             this.addAttribute(attr);
         }
-        super.addUpdate(attr, {type: type != undefined ? type : "current", value: value});
+        super.addUpdate(attr, {type: isMax ? "max" : "current", value: value});
 	}
 	run() {
 		let attributeHandler = this;

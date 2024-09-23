@@ -40,20 +40,34 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 
 	updatePostContent = function (eventinfo) {
 		console.log(`Updating post content`);
-		let attributeHandler  = new WorkerAttributeHandler();
 		
 		let messageObj = WuxMessage.ParseInput(eventinfo.newValue);
-		if (messageObj == undefined) {
-			messageObj = new SpeakEmoteMessage(eventinfo.newValue);
+		
+		if (messageObj != undefined) {
+			let attributeHandler  = new WorkerAttributeHandler();
+			attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Message"), messageObj.message);
+			attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Type"), messageObj.template);
+			if (messageObj instanceof EmoteMessage) {
+				messageObj.setTitle("");
+				attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Target"), messageObj.title);
+			}
+			attributeHandler.run();
 		}
 		
-		attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Type"), messageObj.template);
-		attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Message"), messageObj.message);
+		
+	},
+
+	updatePostType = function (eventinfo) {
+
+		let attributeHandler  = new WorkerAttributeHandler();
+		let messageObj = WuxMessage.ParseType(eventinfo.newValue);
+		if (messageObj == undefined) {
+			messageObj = new SpeakEmoteMessage("");
+		}
 		if (messageObj instanceof EmoteMessage) {
 			messageObj.setTitle("");
 			attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Target"), messageObj.title);
 		}
-		
 		attributeHandler.run();
 	},
 
@@ -236,6 +250,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 	return {
 		SelectOutfit: selectOutfit,
 		UpdatePostContent: updatePostContent,
+		UpdatePostType: updatePostType,
 		UpdateSelectedLanguage: updateSelectedLanguage,
 		UpdateNameOutfit: updateNameOutfit,
 		UpdateOutfitEmotesGroup: updateOutfitEmotesGroup,

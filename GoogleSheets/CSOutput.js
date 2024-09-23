@@ -1320,8 +1320,10 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							buttonContents += `{{title=@{${WuxDef.GetVariable("DisplayName")}}@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} `;
 							buttonContents += `{{message=@{${WuxDef.GetVariable("Chat_Message")}}}} @{${WuxDef.GetVariable("Chat_LanguageTag")}}`;
 
-							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Message"));
-							contents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Chat_PostContent"), "wuxInput wuxHeight150");
+							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Target"));
+							contents += WuxSheetMain.Row(WuxSheetMain.Select(WuxDef.GetAttribute("Chat_Type"), WuxDef.Filter([new DatabaseFilterData("group", "ChatType")]), false));
+							contents += WuxSheetMain.Row("&nbsp;");
+							contents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Chat_Message"), "wuxInput wuxHeight150");
 							contents += `<div class="wuxNoRepControl wuxEmotePostGroup">
 								<fieldset class="${WuxDef.GetVariable("RepeatingActiveEmotes")}">
 									<button class="wuxEmoteButton" type="roll" value="${buttonContents}">
@@ -1751,6 +1753,7 @@ var ChatBuilder = ChatBuilder || (function () {
 		print = function () {
 			let output = "";
 			output += listenerUpdatePostContent();
+			output += listenerUpdatePostType();
 			output += listenerUpdateLanguage();
 			output += listenerUpdateRepeatingChatSelection();
 			output += listenerUpdateRepeatingChatEmoteSetName();
@@ -1761,11 +1764,18 @@ var ChatBuilder = ChatBuilder || (function () {
 			return output;
 		},
 		listenerUpdatePostContent = function() {
-			let groupVariableNames = [`${WuxDef.GetVariable("Chat_PostContent")}`];
+			let groupVariableNames = [`${WuxDef.GetVariable("Chat_Message")}`];
 			let output = `WuxWorkerChat.UpdatePostContent(eventinfo)`;
 
 			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 		},
+		listenerUpdatePostType = function() {
+			let groupVariableNames = [`${WuxDef.GetVariable("Chat_Type")}`];
+			let output = `WuxWorkerChat.UpdatePostType(eventinfo)`;
+
+			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+		},
+		
 		listenerUpdateLanguage = function() {
 			let groupVariableNames = [`${WuxDef.GetVariable("Chat_Language")}`];
 			let output = `WuxWorkerChat.UpdateSelectedLanguage(eventinfo)`;
