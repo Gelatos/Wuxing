@@ -1472,7 +1472,7 @@ class FormulaData {
         let definition = {};
         let modDefinition = {};
         let formulaVar = "";
-        this.iterateFormulaComponents(data, function (definitionName, definitionNameModifier, multiplier) {
+        this.iterateFormulaComponents(data, function (definitionName, definitionNameModifier, multiplier, max) {
             if (isNaN(parseInt(definitionName))) {
                 definition = WuxDef.Get(definitionName);
                 if (definitionNameModifier == "") {
@@ -1483,10 +1483,10 @@ class FormulaData {
                     formulaVar = definition.getVariable(modDefinition.getVariable());
                 }
 
-                formulaData.workers.push(formulaData.makeWorker(formulaVar, definitionName, 0, multiplier));
+                formulaData.workers.push(formulaData.makeWorker(formulaVar, definitionName, 0, multiplier, max));
             }
             else {
-                formulaData.workers.push(formulaData.makeWorker("", "", parseInt(definitionName), multiplier));
+                formulaData.workers.push(formulaData.makeWorker("", "", parseInt(definitionName), multiplier, max));
             }
         })
     }
@@ -1495,11 +1495,17 @@ class FormulaData {
         let definitionName = "";
         let definitionNameModifier = "";
         let multiplier = 1;
+        let max = 0;
         let formulaArray = baseFormula.split(";");
         formulaArray.forEach((formula) => {
             definitionName = formula.trim();
-            
+            max = 0;
             multiplier = 1;
+            if (formula.indexOf("$") > -1) {
+                let split = definitionName.split("$");
+                definitionName = split[0];
+                max = parseInt(split[1]);
+            }
             if (formula.indexOf("*") > -1) {
                 let split = definitionName.split("*");
                 definitionName = split[0];
@@ -1513,24 +1519,25 @@ class FormulaData {
                 definitionNameModifier = split[1];
             }
 
-            callback(definitionName, definitionNameModifier, multiplier);
+            callback(definitionName, definitionNameModifier, multiplier, max);
         });
     }
 
     addAttributes(attributes) {
         for (let i = 0; i < attributes.length; i++) {
             if (attributes[i] != "") {
-                this.workers.push(this.makeWorker(attributes[i], "", 0, 1));
+                this.workers.push(this.makeWorker(attributes[i], "", 0, 1, 0));
             }
         }
     }
 
-    makeWorker(variableName, definitionName, value, multiplier) {
+    makeWorker(variableName, definitionName, value, multiplier, max) {
         return {
             variableName: variableName,
             definitionName: definitionName,
             value: isNaN(parseInt(value)) ? 0 : parseInt(value),
-            multiplier: isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier)
+            multiplier: isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier),
+            max: max
         }
     }
 
