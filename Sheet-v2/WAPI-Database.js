@@ -1567,6 +1567,7 @@ class FormulaData {
 
     getValue(attributeHandler, printBreakdown) {
         let output = 0;
+        let mod = 0;
         this.workers.forEach((worker) => {
             if (worker.variableName != "") {
                 worker.value = attributeHandler.parseInt(worker.variableName);
@@ -1577,7 +1578,11 @@ class FormulaData {
             else if (printBreakdown) {
                 console.log(`Adding ${worker.value} * ${worker.multiplier}`);
             }
-            output += worker.value * worker.multiplier;
+            mod = worker.value * worker.multiplier;
+            if(worker.max > 0 && mod > worker.max) {
+                mod = worker.max;
+            }
+            output += mod;
         });
         return output;
     }
@@ -1598,6 +1603,10 @@ class FormulaData {
                         }
                         else {
                             output += `[${definition.title}]`;
+                        }
+                        
+                        if (worker.max > 0) {
+                            output += `(max:${worker.max}`;
                         }
                     }
                 }
