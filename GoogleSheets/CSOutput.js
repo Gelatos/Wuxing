@@ -832,9 +832,9 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					displayOptions.hasSelect = false;
 					output += buildJobStyle(jobDatabase, techniqueDatabase, displayOptions);
 					displayOptions.hasSelect = true;
-					output += buildStyle(stylesDatabase, techniqueDatabase, "Standard", displayOptions);
+					output += buildStyleGroup(stylesDatabase, techniqueDatabase, "Standard", displayOptions);
 					displayOptions.hasSelect = false;
-					output += buildStyle(stylesDatabase, techniqueDatabase, "Basic", displayOptions);
+					output += buildStyleGroup(stylesDatabase, techniqueDatabase, "Basic", displayOptions);
 					return output;
 				},
 
@@ -874,7 +874,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)))}`;
 				},
 
-				buildStyle = function (stylesDatabase, techniqueDatabase, groupName, displayOptions) {
+				buildStyleGroup = function (stylesDatabase, techniqueDatabase, groupName, displayOptions) {
 					let filters = [new DatabaseFilterData("group", groupName)];
 					let filteredData = stylesDatabase.filter(filters);
 
@@ -907,7 +907,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 						WuxSheetMain.SectionBlockContents(buildStyleContents(styleDef, techniqueDatabase, displayOptions)))}`;
 
 					return `${WuxSheetMain.CustomInput("hidden", styleDef.getAttribute(WuxDef._filter), "wuxFlexTableItemGroup-flag", ` value="0"`)}
-					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
+					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)), "Half wuxMinWidth220")}`;
 				},
 
 				buildStyleContents = function (styleDef, techniqueDatabase, displayOptions) {

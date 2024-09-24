@@ -5191,7 +5191,18 @@ class DefinitionData extends WuxDatabaseData {
         this.formula.addAttributes(this.getFormulaMods(this.modifiers));
         this.linkedGroups = Format.StringToArray("" + dataArray[i]); i++;
         this.isResource = dataArray[i]; i++;
+        
+        // extraData setting
         this.extraData = {};
+        let extraDataValues = ("" + dataArray[i]).split(";"); i++;
+        let dataSplit;
+        let definition = this;
+        extraDataValues.forEach(function(data) {
+            if (data.trim() != "") {
+                dataSplit = data.split(":");
+                definition.extraData[dataSplit[0].trim()] = dataSplit[1].trim();
+            }
+        });
     }
     createEmpty() {
         super.createEmpty();
@@ -5766,7 +5777,7 @@ class FormulaData {
         let definition = {};
         let modDefinition = {};
         let formulaVar = "";
-        this.iterateFormulaComponents(data, function (definitionName, definitionNameModifier, multiplier) {
+        this.iterateFormulaComponents(data, function (definitionName, definitionNameModifier, multiplier, max) {
             if (isNaN(parseInt(definitionName))) {
                 definition = WuxDef.Get(definitionName);
                 if (definitionNameModifier == "") {
@@ -5777,10 +5788,10 @@ class FormulaData {
                     formulaVar = definition.getVariable(modDefinition.getVariable());
                 }
 
-                formulaData.workers.push(formulaData.makeWorker(formulaVar, definitionName, 0, multiplier));
+                formulaData.workers.push(formulaData.makeWorker(formulaVar, definitionName, 0, multiplier, max));
             }
             else {
-                formulaData.workers.push(formulaData.makeWorker("", "", parseInt(definitionName), multiplier));
+                formulaData.workers.push(formulaData.makeWorker("", "", parseInt(definitionName), multiplier, max));
             }
         })
     }
@@ -5789,11 +5800,17 @@ class FormulaData {
         let definitionName = "";
         let definitionNameModifier = "";
         let multiplier = 1;
+        let max = 0;
         let formulaArray = baseFormula.split(";");
         formulaArray.forEach((formula) => {
             definitionName = formula.trim();
-            
+            max = 0;
             multiplier = 1;
+            if (formula.indexOf("$") > -1) {
+                let split = definitionName.split("$");
+                definitionName = split[0];
+                max = parseInt(split[1]);
+            }
             if (formula.indexOf("*") > -1) {
                 let split = definitionName.split("*");
                 definitionName = split[0];
@@ -5807,24 +5824,25 @@ class FormulaData {
                 definitionNameModifier = split[1];
             }
 
-            callback(definitionName, definitionNameModifier, multiplier);
+            callback(definitionName, definitionNameModifier, multiplier, max);
         });
     }
 
     addAttributes(attributes) {
         for (let i = 0; i < attributes.length; i++) {
             if (attributes[i] != "") {
-                this.workers.push(this.makeWorker(attributes[i], "", 0, 1));
+                this.workers.push(this.makeWorker(attributes[i], "", 0, 1, 0));
             }
         }
     }
 
-    makeWorker(variableName, definitionName, value, multiplier) {
+    makeWorker(variableName, definitionName, value, multiplier, max) {
         return {
             variableName: variableName,
             definitionName: definitionName,
             value: isNaN(parseInt(value)) ? 0 : parseInt(value),
-            multiplier: isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier)
+            multiplier: isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier),
+            max: max
         }
     }
 
@@ -5854,6 +5872,7 @@ class FormulaData {
 
     getValue(attributeHandler, printBreakdown) {
         let output = 0;
+        let mod = 0;
         this.workers.forEach((worker) => {
             if (worker.variableName != "") {
                 worker.value = attributeHandler.parseInt(worker.variableName);
@@ -5864,7 +5883,11 @@ class FormulaData {
             else if (printBreakdown) {
                 console.log(`Adding ${worker.value} * ${worker.multiplier}`);
             }
-            output += worker.value * worker.multiplier;
+            mod = worker.value * worker.multiplier;
+            if(worker.max > 0 && mod > worker.max) {
+                mod = worker.max;
+            }
+            output += mod;
         });
         return output;
     }
@@ -5885,6 +5908,10 @@ class FormulaData {
                         }
                         else {
                             output += `[${definition.title}]`;
+                        }
+                        
+                        if (worker.max > 0) {
+                            output += `(max:${worker.max})`;
                         }
                     }
                 }
@@ -7596,25 +7623,25 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Page_Overview": {
-				"name": "Page_Overview", "fieldName": "overview", "group": "Page", "description": "", "variable": "pag-overview{0}", "title": "Overview", "subGroup": "", "descriptions": [""],
+				"name": "Page_Overview", "fieldName": "overview", "group": "Page", "description": "", "variable": "pag-overview{0}", "title": "Overview", "subGroup": "", "descriptions": ["The Overview section shows quick information about your character. In addition, this is where you access both Advancement and Training to improve or change your character's build."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
 			"Page_Details": {
-				"name": "Page_Details", "fieldName": "details", "group": "Page", "description": "", "variable": "pag-details{0}", "title": "Details", "subGroup": "", "descriptions": [""],
+				"name": "Page_Details", "fieldName": "details", "group": "Page", "description": "", "variable": "pag-details{0}", "title": "Details", "subGroup": "", "descriptions": ["The Details section contains all of your character's vital statistics. You can use this page to see exact numbers of each of their stats."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
 			"Page_Chat": {
-				"name": "Page_Chat", "fieldName": "chat", "group": "Page", "description": "", "variable": "pag-chat{0}", "title": "Chat", "subGroup": "", "descriptions": [""],
+				"name": "Page_Chat", "fieldName": "chat", "group": "Page", "description": "", "variable": "pag-chat{0}", "title": "Chat", "subGroup": "", "descriptions": ["This is the Chat section. Here you can set your character emotes for the chat's messaging system. You can also use the Chat Post Box to send messages to the chat and select which language you are speaking from the language selection."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
 			"Page_Options": {
-				"name": "Page_Options", "fieldName": "options", "group": "Page", "description": "", "variable": "pag-options{0}", "title": "Options", "subGroup": "", "descriptions": [""],
+				"name": "Page_Options", "fieldName": "options", "group": "Page", "description": "", "variable": "pag-options{0}", "title": "Options", "subGroup": "", "descriptions": ["This is the Options section. Here you will find various display options in the character sheet."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
@@ -7626,13 +7653,13 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Page_Actions": {
-				"name": "Page_Actions", "fieldName": "actions", "group": "Page", "description": "", "variable": "pag-actions{0}", "title": "Actions", "subGroup": "", "descriptions": [""],
+				"name": "Page_Actions", "fieldName": "actions", "group": "Page", "description": "", "variable": "pag-actions{0}", "title": "Actions", "subGroup": "", "descriptions": ["This is the Actions section. Here you can use any action available to your character."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
 			"Page_Training": {
-				"name": "Page_Training", "fieldName": "training", "group": "Page", "description": "", "variable": "pag-training{0}", "title": "Training", "subGroup": "", "descriptions": [""],
+				"name": "Page_Training", "fieldName": "training", "group": "Page", "description": "", "variable": "pag-training{0}", "title": "Training", "subGroup": "", "descriptions": ["Characters can spend time learning new skills in their own free time. In this page you can track your progress learning and potentially gain ranks in knowledge or learn new techniques."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
@@ -7704,13 +7731,13 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Title_Chat": {
-				"name": "Title_Chat", "fieldName": "chat", "group": "Title", "description": "", "variable": "ttl-chat{0}", "title": "Chat", "subGroup": "", "descriptions": ["You can use the chat messaging system from here."],
+				"name": "Title_Chat", "fieldName": "chat", "group": "Title", "description": "", "variable": "ttl-chat{0}", "title": "Chat", "subGroup": "", "descriptions": ["This is the chat post box system. Here you can write posts for your character to say and then send the messages to chat.", "To use the post box, first select the type of message you would like to send. You have access to all the standard emote messages of Speak, Whisper, Yell, Think, and Describe.", "You may then write what you wish to be included in your message in the large textarea below. Once your message is complete, you may press one of the emote buttons below to send your message. If you do not see any emote buttons, be sure to select an outfit first.", "If you would rather use the standard keyword system as used in the chat, you may also begin your chat message with !m, !w, and the like. The system will detect your tag and then change the emote message type accordingly."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
 			"Title_LanguageSelect": {
-				"name": "Title_LanguageSelect", "fieldName": "languageselect", "group": "Title", "description": "", "variable": "ttl-languageselect{0}", "title": "Language Select", "subGroup": "", "descriptions": ["Select your language from the options below."],
+				"name": "Title_LanguageSelect", "fieldName": "languageselect", "group": "Title", "description": "", "variable": "ttl-languageselect{0}", "title": "Language Select", "subGroup": "", "descriptions": ["Select your language from the options below. This will change how your message is displayed in chat and also show what language you are using."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "extraData": {}
@@ -8239,7 +8266,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Carrying Capacity": {
-				"name": "Carrying Capacity", "fieldName": "carrying_capacity", "group": "General", "description": "", "variable": "gen-capacity{0}{0}", "title": "Carrying Capacity", "subGroup": "", "descriptions": ["Carrying capacity is the total amount of Bulk a character can carry without penalty. Going over this amount will force the character to gain the Encumbered condition. "],
+				"name": "Carrying Capacity", "fieldName": "carrying_capacity", "group": "General", "description": "", "variable": "gen-capacity{0}{0}", "title": "Carrying Capacity", "subGroup": "", "descriptions": ["Carrying capacity is the total amount of Bulk a character can carry without penalty. Going over this amount will force the character to gain the Encumbered condition. "]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 40, "multiplier": 1 },
 					{ "variableName": "atr-bod", "definitionName": "Attr_BOD", "value": 0, "multiplier": 20 },
@@ -8261,8 +8289,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Cmb_Armor": {
-				"name": "Cmb_Armor", "fieldName": "armor", "group": "Combat", "description": "", "variable": "cmb-armor{0}", "title": "Armor", "subGroup": "", "descriptions": ["Armor reduces up to half of incoming HP damage from a single source by an amount equal to its rating. Armor is typically gained from gear, but techniques can grant armor temporarily."]
-				,
+				"name": "Cmb_Armor", "fieldName": "armor", "group": "Combat", "description": "", "variable": "cmb-armor{0}", "title": "Armor", "subGroup": "", "descriptions": ["Armor reduces up to half of incoming HP damage from a single source by an amount equal to its rating. Armor is typically gained from gear, but techniques can grant armor temporarily."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 0, "multiplier": 1 },
 					{ "variableName": "cmb-armor_tech", "definitionName": "", "value": 0, "multiplier": 1 },
@@ -8890,7 +8917,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Skill_Cook": {
-				"name": "Skill_Cook", "fieldName": "cook", "group": "Skill", "description": "", "variable": "skl-cook{0}", "title": "Cook", "subGroup": "Creation Skill", "descriptions": ["Cook allows one to create food and drinks from ingredients. Food is an important fuel to sustain life but also well made food improves mood and allows one to push themselves."],
+				"name": "Skill_Cook", "fieldName": "cook", "group": "Skill", "description": "", "variable": "skl-cook{0}", "title": "Cook", "subGroup": "Creation Skill", "descriptions": ["Cook allows one to create food and drinks from ingredients. Food is an important fuel to sustain life but also well made food improves mood and allows one to push themselves."]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "Attribute_INT", "value": 0, "multiplier": 1 },
 					{ "variableName": "skl-cook_rank", "definitionName": "", "value": 0, "multiplier": 1 }]
@@ -8913,8 +8941,7 @@ var WuxDef = WuxDef || (function () {
 					"workers": [{ "variableName": "", "definitionName": "Attribute_INT", "value": 0, "multiplier": 1 },
 					{ "variableName": "skl-disguise_rank", "definitionName": "", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": []
-				,
+				"linkedGroups": [],
 				"isResource": "", "extraData": {}
 			},
 			"Skill_Empathy": {
@@ -9565,7 +9592,8 @@ var WuxDef = WuxDef || (function () {
 					"workers": [{ "variableName": "gen-recall", "definitionName": "Recall", "value": 0, "multiplier": 1 },
 					{ "variableName": "lor-khem_rank", "definitionName": "", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": [],
+				"linkedGroups": []
+				,
 				"isResource": "", "extraData": {}
 			},
 			"Lore_Novus": {
@@ -9587,8 +9615,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": {}
 			},
 			"Lore_Wayling": {
-				"name": "Lore_Wayling", "fieldName": "wayling", "group": "Lore", "description": "", "variable": "lor-wayling{0}", "title": "Wayling", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of the central grasslands and marsh of Wayling."]
-				,
+				"name": "Lore_Wayling", "fieldName": "wayling", "group": "Lore", "description": "", "variable": "lor-wayling{0}", "title": "Wayling", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of the central grasslands and marsh of Wayling."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "gen-recall", "definitionName": "Recall", "value": 0, "multiplier": 1 },
 					{ "variableName": "lor-wayling_rank", "definitionName": "", "value": 0, "multiplier": 1 }]
@@ -10288,7 +10315,8 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": [],
+				"linkedGroups": []
+				,
 				"isResource": "", "extraData": { "tier": 1, "affinity": "", "isFree": true }
 			},
 			"Tech_Follow-Up Spellshot": {
@@ -10314,8 +10342,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": { "tier": 3, "affinity": "", "isFree": false }
 			},
 			"Tech_Savior": {
-				"name": "Tech_Savior", "fieldName": "savior", "group": "Technique", "description": "", "variable": "tch-savior{0}", "title": "Savior", "subGroup": "Guardian", "descriptions": [""]
-				,
+				"name": "Tech_Savior", "fieldName": "savior", "group": "Technique", "description": "", "variable": "tch-savior{0}", "title": "Savior", "subGroup": "Guardian", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 6, "multiplier": 1 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 2 },
@@ -11052,7 +11079,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Sand Spout": {
-				"name": "Tech_Sand Spout", "fieldName": "sand_spout", "group": "Technique", "description": "", "variable": "tch-sand_spout{0}", "title": "Sand Spout", "subGroup": "", "descriptions": [""],
+				"name": "Tech_Sand Spout", "fieldName": "sand_spout", "group": "Technique", "description": "", "variable": "tch-sand_spout{0}", "title": "Sand Spout", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 6, "multiplier": 1 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 2 },
@@ -11081,8 +11109,7 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": []
-				,
+				"linkedGroups": [],
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Sicken": {
@@ -11834,7 +11861,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Fascinate": {
-				"name": "Tech_Fascinate", "fieldName": "fascinate", "group": "Technique", "description": "", "variable": "tch-fascinate{0}", "title": "Fascinate", "subGroup": "", "descriptions": [""],
+				"name": "Tech_Fascinate", "fieldName": "fascinate", "group": "Technique", "description": "", "variable": "tch-fascinate{0}", "title": "Fascinate", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 6, "multiplier": 1 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 2 },
@@ -11867,8 +11895,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Spirit Sense": {
-				"name": "Tech_Spirit Sense", "fieldName": "spirit_sense", "group": "Technique", "description": "", "variable": "tch-spirit_sense{0}", "title": "Spirit Sense", "subGroup": "", "descriptions": [""]
-				,
+				"name": "Tech_Spirit Sense", "fieldName": "spirit_sense", "group": "Technique", "description": "", "variable": "tch-spirit_sense{0}", "title": "Spirit Sense", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 6, "multiplier": 1 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 2 },
@@ -12605,7 +12632,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Refocus +": {
-				"name": "Tech_Refocus +", "fieldName": "refocus_+", "group": "Technique", "description": "", "variable": "tch-refocus_+{0}", "title": "Refocus +", "subGroup": "", "descriptions": [""],
+				"name": "Tech_Refocus +", "fieldName": "refocus_+", "group": "Technique", "description": "", "variable": "tch-refocus_+{0}", "title": "Refocus +", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "", "definitionName": "", "value": 6, "multiplier": 1 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 2 },
@@ -12634,8 +12662,7 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1 }]
 				},
-				"linkedGroups": []
-				,
+				"linkedGroups": [],
 				"isResource": "", "extraData": { "tier": null, "affinity": "", "isFree": true }
 			},
 			"Tech_Ki Control": {
