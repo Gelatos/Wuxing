@@ -897,7 +897,18 @@ class DefinitionData extends WuxDatabaseData {
         this.formula.addAttributes(this.getFormulaMods(this.modifiers));
         this.linkedGroups = Format.StringToArray("" + dataArray[i]); i++;
         this.isResource = dataArray[i]; i++;
+        
+        // extraData setting
         this.extraData = {};
+        let extraDataValues = ("" + dataArray[i]).split(";"); i++;
+        let dataSplit;
+        let definition = this;
+        extraDataValues.forEach(function(data) {
+            if (data.trim() != "") {
+                dataSplit = data.split(":");
+                definition.extraData[dataSplit[0].trim()] = dataSplit[1].trim();
+            }
+        });
     }
     createEmpty() {
         super.createEmpty();
@@ -1606,7 +1617,7 @@ class FormulaData {
                         }
                         
                         if (worker.max > 0) {
-                            output += `(max:${worker.max}`;
+                            output += `(max:${worker.max})`;
                         }
                     }
                 }
