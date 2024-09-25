@@ -654,6 +654,8 @@ var WuxDefinition = WuxDefinition || (function () {
                     return new LanguageDefinitionData(values[key]);
                 case "Job":
                     return new JobDefinitionData(values[key]);
+                case "Status":
+                    return new StatusDefinitionData(values[key]);
                 default:
                     return new DefinitionData(values[key]);
             }
