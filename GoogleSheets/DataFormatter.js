@@ -640,7 +640,23 @@ var WuxDefinition = WuxDefinition || (function () {
 
     var
         get = function (key) {
-            return new DefinitionData(values[key]);
+			if (values[key] == undefined) {
+				let definition = new DefinitionData();
+				definition.name = `${key} Not Found`;
+				return definition;
+			}
+            switch (values[key]["group"]) {
+                case "Technique":
+                    return new TechniqueDefinitionData(values[key]);
+                case "Style":
+                    return new TechniqueStyleDefinitionData(values[key]);
+                case "Language":
+                    return new LanguageDefinitionData(values[key]);
+                case "Job":
+                    return new JobDefinitionData(values[key]);
+                default:
+                    return new DefinitionData(values[key]);
+            }
         },
         getAttribute = function (key, mod, mod1) {
             let data = get(key);

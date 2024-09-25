@@ -967,19 +967,19 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 	filterStyleTechniquesForLearn = function(styleDefinition, styleStatus, cr, affinities, attrHandler, techniqueWorker) {
 		let workerVariableName = styleDefinition.getVariable();
 		attrHandler.addUpdate(styleDefinition.getVariable(WuxDef._filter), "0");
-		let tier = styleDefinition.extraData.tier;
+		let tier = styleDefinition.tier;
 		tier = isNaN(tier) ? 0 : tier;
-		let affinity = styleDefinition.extraData.affinity;
-		let isLearnable = styleDefinition.extraData.tier <= cr && (affinity == "" || affinities.includes(affinity));
+		let affinity = styleDefinition.affinity;
+		let isLearnable = styleDefinition.tier <= cr && (affinity == "" || affinities.includes(affinity));
 		attrHandler.addUpdate(styleDefinition.getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
 		attrHandler.addUpdate(styleDefinition.getVariable(), styleStatus);
 
 		let techDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Technique"), new DatabaseFilterData("subGroup", styleDefinition.title)]);
 		for (let i = 0; i < techDefinitions.length; i++) {
-			tier = parseInt(techDefinitions[i].extraData.tier);
+			tier = parseInt(techDefinitions[i].tier);
 			tier = isNaN(tier) ? 0 : tier;
-			affinity = techDefinitions[i].extraData.affinity;
-			isLearnable = !techDefinitions[i].extraData.isFree && styleStatus != "0" && tier <= cr && (affinity == "" || affinities.includes(affinity));
+			affinity = techDefinitions[i].affinity;
+			isLearnable = !techDefinitions[i].isFree && styleStatus != "0" && tier <= cr && (affinity == "" || affinities.includes(affinity));
 			attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
 
 			workerVariableName = techDefinitions[i].getVariable();
@@ -1033,7 +1033,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 					techDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Technique"), new DatabaseFilterData("subGroup", styleDefinitions[i].title)]);
 					for (let j = 0; j < techDefinitions.length; j++) {
 						workerVariableName = techDefinitions[j].getVariable();
-						isVisible = techDefinitions[j].extraData.isFree || techniqueWorker.buildStats.has(workerVariableName);
+						isVisible = techDefinitions[j].isFree || techniqueWorker.buildStats.has(workerVariableName);
 						attrHandler.addUpdate(techDefinitions[j].getVariable(WuxDef._filter), isVisible ? "0" : "1");
 						attrHandler.addUpdate(techDefinitions[j].getVariable(WuxDef._subfilter), "1");
 						attrHandler.addUpdate(workerVariableName, "0");
@@ -1049,7 +1049,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 				if (jobWorker.buildStats.has(workerVariableName)) {
 					techDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Technique"), new DatabaseFilterData("subGroup", jobDefinitions[i].title)]);
 					for (let j = 0; j < techDefinitions.length; j++) {
-						isVisible = techDefinitions[j].extraData.tier <= jobWorker.buildStats.get(workerVariableName).value;
+						isVisible = techDefinitions[j].tier <= jobWorker.buildStats.get(workerVariableName).value;
 						attrHandler.addUpdate(techDefinitions[j].getVariable(WuxDef._filter), isVisible ? "0" : "1");
 						attrHandler.addUpdate(techDefinitions[j].getVariable(WuxDef._subfilter), "1");
 						attrHandler.addUpdate(techDefinitions[j].getVariable(), "0");

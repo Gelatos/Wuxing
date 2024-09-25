@@ -930,7 +930,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					let learnStyle = WuxSheetMain.HiddenAuxField(filterFieldName,
 						WuxSheetMain.Header2(WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDef.getAttribute(), "Learn Style") + tooltip))
 						+ WuxSheetMain.HiddenField(filterFieldName, WuxSheetMain.Header2("Learn Style" + tooltip))
-						+ WuxSheetMain.Desc(`<strong>Requirements</strong>\n${styleDef.extraData.requirements}`);
+						+ WuxSheetMain.Desc(`<strong>Requirements</strong>\n${styleDef.requirements}`);
 					
 					let tabFieldName = WuxDef.GetAttribute("Page");
 					return `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
@@ -995,10 +995,10 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 						}
 						else {
 							techDef = technique.createDefinition(WuxDef.Get("Technique"));
-							if (!techniquesByRequrements.get(techDef.extraData.tier).has(techDef.extraData.affinity)) {
-								techniquesByRequrements.get(techDef.extraData.tier).add(techDef.extraData.affinity, []);
+							if (!techniquesByRequrements.get(techDef.tier).has(techDef.affinity)) {
+								techniquesByRequrements.get(techDef.tier).add(techDef.affinity, []);
 							}
-							techniquesByRequrements.get(techDef.extraData.tier).get(techDef.extraData.affinity).push(buildTechnique(technique, displayOptions));
+							techniquesByRequrements.get(techDef.tier).get(techDef.affinity).push(buildTechnique(technique, displayOptions));
 						}
 					}
 
@@ -1355,7 +1355,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 						},
 
 						languageTitle = function (languageDef) {
-							return `<span class="wuxHeader2">${languageDef.title}</span><span class="wuxSubheader"> - ${languageDef.extraData.location}</span>`;
+							return `<span class="wuxHeader2">${languageDef.title}</span><span class="wuxSubheader"> - ${languageDef.location}</span>`;
 						},
 
 						createOutfitDisplay = function () {
