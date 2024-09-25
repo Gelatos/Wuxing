@@ -2513,14 +2513,12 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     color: #5b5b5b;
 }
 
-.wuxTooltipButtonContainer .wuxTooltipButton .wuxTooltipText,
-.wuxInteractiveBlock .wuxTooltipButton .wuxTooltipText
+.wuxTooltipButtonContainer .wuxTooltipButton .wuxTooltipText
 {
     visibility: hidden;
 }
 
-.wuxTooltipButtonContainer:hover .wuxTooltipButton .wuxTooltipText,
-.wuxInteractiveBlock:hover .wuxTooltipButton .wuxTooltipText
+.wuxTooltipButtonContainer:hover .wuxTooltipButton .wuxTooltipText
 {
     visibility: visible;
 }

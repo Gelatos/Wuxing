@@ -918,23 +918,23 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					return contents;
 				},
 
-				buildStyleDescription = function (styleDef) {
-					return `${WuxSheetMain.Header2(`Description`)}
-					${WuxSheetMain.Desc(styleDef.getDescription())}`;
-				},
-
 				buildStyleLearn = function (styleDef) {
 					let filterFieldName = styleDef.getAttribute(WuxDef._subfilter);
 					let tooltip = WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(WuxDef.Get("LearnStyle")));
 
 					let learnStyle = WuxSheetMain.HiddenAuxField(filterFieldName,
-						WuxSheetMain.Header2(WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDef.getAttribute(), "Learn Style") + tooltip))
-						+ WuxSheetMain.HiddenField(filterFieldName, WuxSheetMain.Header2("Learn Style" + tooltip))
+						WuxSheetMain.Row(WuxSheetMain.Header2(WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDef.getAttribute(), "Learn Style")) + tooltip))
+						+ WuxSheetMain.HiddenField(filterFieldName, WuxSheetMain.Row(WuxSheetMain.Header2("Learn Style") + tooltip))
 						+ WuxSheetMain.Desc(`<strong>Requirements</strong>\n${styleDef.requirements}`);
 					
 					let tabFieldName = WuxDef.GetAttribute("Page");
 					return `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
 						${WuxSheet.PageDisplay("Techniques", learnStyle)}`;
+				},
+
+				buildStyleDescription = function (styleDef) {
+					return `${WuxSheetMain.Header2(`Description`)}
+					${WuxSheetMain.Desc(styleDef.getDescription())}`;
 				},
 
 				buildTechniques = function (styleDef, techniqueDatabase, displayOptions) {
@@ -944,7 +944,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					let filterFieldName = WuxDef.GetAttribute("Technique", WuxDef._filter);
 					let learnedTechs = createTechniquesByRequirements(techniqueDatabase.filter(filters), displayOptions);
 					let freeTechs = learnedTechs.get("Free");
-					let techHeader = WuxSheetMain.Header2(`Free Techniques ${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(WuxDef.Get("StyleFreeTechniques")))}`);
+					let techHeader = WuxSheetMain.Row(WuxSheetMain.Header2(`Free Techniques`) + WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(WuxDef.Get("StyleFreeTechniques"))));
 					if (freeTechs.length > 0) {
 						output += WuxSheetMain.HiddenField(filterFieldName, techHeader);
 						for (let i = 0; i < freeTechs.length; i++) {
@@ -969,7 +969,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 							if (techHeader == "") {
 								techHeader = "Nothing";
 							}
-							output += `${WuxSheetMain.HiddenField(filterFieldName, WuxSheetMain.Header2(`${techHeader} ${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(WuxDef.Get("StyleTechniques")))}`))}`;
+							output += `${WuxSheetMain.HiddenField(filterFieldName, WuxSheetMain.Row(WuxSheetMain.Header2(techHeader) + WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(WuxDef.Get("StyleTechniques")))))}`;
 							for (let i = 0; i < affinityData.length; i++) {
 								output += `\n${affinityData[i]}`;
 							}
