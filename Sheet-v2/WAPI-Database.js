@@ -1788,7 +1788,7 @@ class AttributeHandler {
 		if (this.update[fieldName] != undefined) {
             output = this.getUpdateValue(fieldName);
 		}
-		else {
+		else if (this.current[fieldName] != undefined) {
             output = this.getCurrentValue(fieldName);
 		}
         if (output == undefined || output == "") {
@@ -1805,7 +1805,7 @@ class AttributeHandler {
 		if (this.update[fieldName] != undefined) {
             output = parseInt(this.getUpdateValue(fieldName));
 		}
-		else {
+		else if (this.current[fieldName] != undefined) {
             output = parseInt(this.getCurrentValue(fieldName));
 		}
         if (output == undefined || isNaN(output)) {
@@ -1822,7 +1822,7 @@ class AttributeHandler {
 		if (this.update[fieldName] != undefined) {
             output = parseFloat(this.getUpdateValue(fieldName));
 		}
-		else {
+		else if (this.current[fieldName] != undefined) {
             output = parseFloat(this.getCurrentValue(fieldName));
 		}
         if (output == undefined || isNaN(output)) {
@@ -1839,7 +1839,7 @@ class AttributeHandler {
 		if (this.update[fieldName] != undefined) {
             output = JSON.parse(this.getUpdateValue(fieldName));
 		}
-		else {
+		else if (this.current[fieldName] != undefined) {
             output = JSON.parse(this.getCurrentValue(fieldName));
 		}
         if (output == undefined || output == "") {
