@@ -1440,8 +1440,17 @@ class TechniqueEffectDisplayData {
     formatEffect(effect) {
         let output = "";
         switch (effect.type) {
-            case "Damage":
-                output = this.formatDamageEffect(effect);
+            case "HP":
+                output = this.formatHpEffect(effect);
+                break;
+            case "Pressure":
+                output = this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Pressure"));
+                break;
+            case "Rapport":
+                output = this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Rapport"));
+                break;
+            case "Influence":
+                output = this.formatInfluenceEffect(effect);
                 break;
             case "Status":
                 output = this.formatStatusEffect(effect);
@@ -1459,8 +1468,24 @@ class TechniqueEffectDisplayData {
         
         return output;
     }
-    formatDamageEffect(effect) {
-        return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+    formatHpEffect(effect) {
+        switch (effect.subType) {
+            case "Heal":
+                return `Heal ${this.formatCalcBonus(effect)} HP damage`;
+            default:
+                return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+        }
+    }
+    formatSocialMeterEffect(effect, type) {
+        switch (effect.subType) {
+            case "Heal":
+                return `Reduce ${type} by ${this.formatCalcBonus(effect)}`;
+            default:
+                return `Increase ${type} by ${this.formatCalcBonus(effect)}`;
+        }
+    }
+    formatInfluenceEffect(effect) {
+        return ``;
     }
     formatStatusEffect(effect) {
         let state = WuxDef.Get(effect.effect);
