@@ -1443,6 +1443,9 @@ class TechniqueEffectDisplayData {
             case "HP":
                 output = this.formatHpEffect(effect);
                 break;
+            case "Patience":
+                output = this.formatPatienceMeterEffect(effect);
+                break;
             case "Pressure":
                 output = this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Pressure"));
                 break;
@@ -1471,7 +1474,8 @@ class TechniqueEffectDisplayData {
     formatHpEffect(effect) {
         switch (effect.subType) {
             case "Heal":
-                return `Heal ${this.formatCalcBonus(effect)} HP damage`;
+                let hp = WuxDef.GetTitle("HP");
+                return `Heal ${this.formatCalcBonus(effect)} ${hp}`;
             default:
                 return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
         }
@@ -1479,13 +1483,22 @@ class TechniqueEffectDisplayData {
     formatSocialMeterEffect(effect, type) {
         switch (effect.subType) {
             case "Heal":
-                return `Reduce ${type} by ${this.formatCalcBonus(effect)}`;
+                return `Reduce target's ${type} by ${this.formatCalcBonus(effect)}`;
             default:
-                return `Increase ${type} by ${this.formatCalcBonus(effect)}`;
+                return `Increase target's ${type} by ${this.formatCalcBonus(effect)}`;
+        }
+    }
+    formatPatienceMeterEffect(effect) {
+        let patience = WuxDef.GetTitle("Soc_Patience");
+        switch (effect.subType) {
+            case "Heal":
+                return `Increase target's ${patience} by ${this.formatCalcBonus(effect)}`;
+            default:
+                return `Reduce target's ${patience} by ${this.formatCalcBonus(effect)}`;
         }
     }
     formatInfluenceEffect(effect) {
-        return ``;
+        return `Influence target with ${this.formatCalcBonus(effect)}`;
     }
     formatStatusEffect(effect) {
         let state = WuxDef.Get(effect.effect);

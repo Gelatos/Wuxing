@@ -5950,10 +5950,7 @@
 												10 + [Character Rank x 5] + [Character Level] + [Conviction]<span class="wuxHeader2">Heal Value</span><br />
 												<span class="wuxDescription">This value is a standard amount of HP you recover from some healing abilities.</span>
 												Heal Value is calculated as:
-												5 + [Character Rank x 4] + [Conviction]<span class="wuxHeader2">Approval Resistance</span><br />
-												<span class="wuxDescription">Approval is a character's resistance to place their trust in another. In social conflict it acts similarly to HP, representing a character's threshold before allowing another to have their favor. </span>
-												Approval Resistance is calculated as:
-												20 + [Character Rank x 15] + [Character Level] + [Conviction]
+												5 + [Character Rank x 4] + [Conviction]
 											</div>
 										</div>
 									</span>
@@ -6226,7 +6223,6 @@
 
 								<span class="wuxDescription">All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style.</span>
 								<span class="wuxDescription">On this page you can set which styles are currently active on the character, allowing them to be used in the Actions Page. You can set both job styles and general styles. Basic styles are always set. </span>
-								<span class="wuxDescription"></span>
 							</div>
 							<div class="wuxPageDisplay-Actions">
 								<div class="wuxHeader2">Actions</div>
@@ -10500,7 +10496,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Unarmed Strike&#34;,&#34;fieldName&#34;:&#34;unarmed_strike&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Attack&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Grappling&#34;,&#34;range&#34;:&#34;1&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You strike at a target with your body such as a fist or a kick.&#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Damage&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;cmb-martialforce&#34;,&#34;definitionName&#34;:&#34;Cmb_MartialForce&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;CombatDefense&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Damage&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;3&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;&#93;,&#34;CombatDefense&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Unarmed Strike&#34;,&#34;fieldName&#34;:&#34;unarmed_strike&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Attack&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Grappling&#34;,&#34;range&#34;:&#34;1&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You strike at a target with your body such as a fist or a kick.&#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;HP&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;cmb-martialforce&#34;,&#34;definitionName&#34;:&#34;Cmb_MartialForce&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;CombatDefense&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;HP&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;3&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;&#93;,&#34;CombatDefense&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -10588,7 +10584,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Basic Slash&#34;,&#34;fieldName&#34;:&#34;basic_slash&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Attack&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Skirmish&#34;,&#34;range&#34;:&#34;1&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;Trait_Sharp&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You swing a bladed weapon at a target.&#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Damage&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;cmb-martialforce&#34;,&#34;definitionName&#34;:&#34;Cmb_MartialForce&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0},{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Dmg_Piercing&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;CombatDefense&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Damage&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;Dmg_Piercing&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;&#93;,&#34;CombatDefense&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Basic Slash&#34;,&#34;fieldName&#34;:&#34;basic_slash&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Attack&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Skirmish&#34;,&#34;range&#34;:&#34;1&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;Trait_Sharp&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You swing a bladed weapon at a target.&#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;HP&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;cmb-martialforce&#34;,&#34;definitionName&#34;:&#34;Cmb_MartialForce&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0},{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Dmg_Piercing&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;CombatDefense&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;HP&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;Dmg_Piercing&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;&#93;,&#34;CombatDefense&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -10689,7 +10685,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Throw&#34;,&#34;fieldName&#34;:&#34;throw&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Attack&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Throw&#34;,&#34;range&#34;:&#34;3&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;Trait_Light&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You throw an object at a target. You may choose whether this action deals damage.&#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Damage&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;cmb-martialforce&#34;,&#34;definitionName&#34;:&#34;Cmb_MartialForce&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;CombatDefense&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Damage&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;3&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;&#93;,&#34;CombatDefense&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Throw&#34;,&#34;fieldName&#34;:&#34;throw&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Attack&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Quick&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Throw&#34;,&#34;range&#34;:&#34;3&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;Trait_Light&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You throw an object at a target. You may choose whether this action deals damage.&#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;HP&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;cmb-martialforce&#34;,&#34;definitionName&#34;:&#34;Cmb_MartialForce&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;CombatDefense&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;HP&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;3&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;&#93;,&#34;CombatDefense&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -10789,7 +10785,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Heavy Strike&#34;,&#34;fieldName&#34;:&#34;heavy_strike&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Attack&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Might&#34;,&#34;range&#34;:&#34;1&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You swing an object with all your might at a foe.&#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Damage&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;cmb-martialforce&#34;,&#34;definitionName&#34;:&#34;Cmb_MartialForce&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0},{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:3,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;CombatDefense&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Damage&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;2&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;&#93;,&#34;CombatDefense&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Heavy Strike&#34;,&#34;fieldName&#34;:&#34;heavy_strike&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Attack&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Might&#34;,&#34;range&#34;:&#34;1&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You swing an object with all your might at a foe.&#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;HP&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;cmb-martialforce&#34;,&#34;definitionName&#34;:&#34;Cmb_MartialForce&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0},{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:3,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;CombatDefense&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;HP&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;2&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;Dmg_Force&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;&#93;,&#34;CombatDefense&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -11464,10 +11460,10 @@
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
 																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Build Rapport}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Charm; Range: 5; One target}}{{FlavorText=You attempt to make a good impression with a specific person. }}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
-	}}{{Effect0=}}{{Effect1=}}{{Effect3Name=vs. Insight}}{{Effect3Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
+	}}{{Effect0=Increase target&#39;s Rapport by 2}}{{Effect1=Reduce target&#39;s Patience by 1}}{{Effect3Name=vs. Insight}}{{Effect3Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
 	
 	Insight represents a character&#39;s ability to sense emotional state and sudden changes in behaviour. It is useful when detecting someone is trying to charm or deceive you. 
-	}}{{Effect3=}}'>
+	}}{{Effect3=Increase target&#39;s Rapport by 1d6}}'>
 																	?
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Show Technique</div>
@@ -11476,7 +11472,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Build Rapport&#34;,&#34;fieldName&#34;:&#34;build_rapport&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Charm&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You attempt to make a good impression with a specific person. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;,&#34;T2&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Rapport&#34;,&#34;subType&#34;:&#34;Damage&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:2,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience &#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T2&#34;:{&#34;name&#34;:&#34;T2&#34;,&#34;defense&#34;:&#34;Def_Insight&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Rapport&#34;,&#34;subType&#34;:&#34;Damage&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;Def_Insight&#34;:&#91;&#34;T2&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Build Rapport&#34;,&#34;fieldName&#34;:&#34;build_rapport&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Charm&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You attempt to make a good impression with a specific person. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;,&#34;T2&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Rapport&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:2,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T2&#34;:{&#34;name&#34;:&#34;T2&#34;,&#34;defense&#34;:&#34;Def_Insight&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Rapport&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;Def_Insight&#34;:&#91;&#34;T2&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -11512,10 +11508,10 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow"></span>
+																	<span class="wuxFeatureCheckBlockRow">Increase target's Rapport by 2</span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow"></span>
+																	<span class="wuxFeatureCheckBlockRow">Reduce target's Patience by 1</span>
 																</div>
 																<div class="wuxFeatureCheckHeader">
 																	<span><span class="wuxTooltip">
@@ -11531,7 +11527,7 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow"></span>
+																	<span class="wuxFeatureCheckBlockRow">Increase target's Rapport by 1d6</span>
 																</div>
 
 															</div>
@@ -11554,10 +11550,10 @@
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
 																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Build Pressure}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Negotiation; Range: 5; One target}}{{FlavorText=You make an effort to explain why your argument is the correct path forward. }}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
-	}}{{Effect0=}}{{Effect1=}}{{Effect3Name=vs. Resolve}}{{Effect3Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
+	}}{{Effect0=Increase target&#39;s Pressure by 2}}{{Effect1=Reduce target&#39;s Patience by 1}}{{Effect3Name=vs. Resolve}}{{Effect3Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
 	
 	Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in.
-	}}{{Effect3=}}'>
+	}}{{Effect3=Increase target&#39;s Pressure by 1d6}}'>
 																	?
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Show Technique</div>
@@ -11566,7 +11562,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Build Pressure&#34;,&#34;fieldName&#34;:&#34;build_pressure&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Negotiation&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You make an effort to explain why your argument is the correct path forward. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;,&#34;T2&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Pressure&#34;,&#34;subType&#34;:&#34;Damage&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:2,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience &#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T2&#34;:{&#34;name&#34;:&#34;T2&#34;,&#34;defense&#34;:&#34;Def_Resolve&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Pressure&#34;,&#34;subType&#34;:&#34;Damage&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;Def_Resolve&#34;:&#91;&#34;T2&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Build Pressure&#34;,&#34;fieldName&#34;:&#34;build_pressure&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Negotiation&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You make an effort to explain why your argument is the correct path forward. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;,&#34;T2&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Pressure&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:2,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T2&#34;:{&#34;name&#34;:&#34;T2&#34;,&#34;defense&#34;:&#34;Def_Resolve&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Pressure&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;Def_Resolve&#34;:&#91;&#34;T2&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -11602,10 +11598,10 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow"></span>
+																	<span class="wuxFeatureCheckBlockRow">Increase target's Pressure by 2</span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow"></span>
+																	<span class="wuxFeatureCheckBlockRow">Reduce target's Patience by 1</span>
 																</div>
 																<div class="wuxFeatureCheckHeader">
 																	<span><span class="wuxTooltip">
@@ -11621,7 +11617,7 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow"></span>
+																	<span class="wuxFeatureCheckBlockRow">Increase target's Pressure by 1d6</span>
 																</div>
 
 															</div>
@@ -11629,25 +11625,22 @@
 														</div>
 													</div>
 
-													<input type="hidden" class="wuxFilterFeature-flag" name="attr_tch-captivate_filter" value="0">
+													<input type="hidden" class="wuxFilterFeature-flag" name="attr_tch-request_filter" value="0">
 													<div class="wuxFeature">
 														<div class="wuxFeatureHeader wuxFeatureHeader-Full">
 															<div class="wuxFeatureHeaderInteractBlock">
 																<div class="wuxFeatureHeaderInteractInnerBlock">
-																	<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_tch-captivate_expand">
-																	<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_tch-captivate_expand">
+																	<input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="attr_tch-request_expand">
+																	<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_tch-request_expand">
 																	<span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-																	<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_tch-captivate_expand">
+																	<input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="attr_tch-request_expand">
 																	<span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
 																</div>
 															</div>
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Captivate}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Charm; Range: 5; One target}}{{FlavorText=You request a resolution from an opponent, leveraging the rapport you&#39;ve built. }}{{Effect0Name=vs. Insight}}{{Effect0Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
-	
-	Insight represents a character&#39;s ability to sense emotional state and sudden changes in behaviour. It is useful when detecting someone is trying to charm or deceive you. 
-	}}{{Effect0=}}{{Effect2Name=Effects}}{{Effect2Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
-	}}{{Effect2=}}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Request}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Charm; Range: 5; One target}}{{FlavorText=You request a resolution from an opponent, leveraging the rapport you&#39;ve built. }}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
+	}}{{Effect0=Influence target with 2d6 + [Rapport]}}{{Effect1=Reduce target&#39;s Patience by 3}}'>
 																	?
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Show Technique</div>
@@ -11656,7 +11649,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Captivate&#34;,&#34;fieldName&#34;:&#34;captivate&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Charm&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You request a resolution from an opponent, leveraging the rapport you' ve built. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;Def_Insight&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Influence&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;Soc_Rapport&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience &#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;Def_Insight&#34;:&#91;&#34;T0&#34;&#93;,&#34;&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Request&#34;,&#34;fieldName&#34;:&#34;request&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Charm&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You request a resolution from an opponent, leveraging the rapport you' ve built. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Influence&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;2&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;soc-rapport&#34;,&#34;definitionName&#34;:&#34;Soc_Rapport&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:3,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -11666,12 +11659,12 @@
 																</button>
 															</div>
 															<div class="wuxFeatureHeaderDisplayBlock">
-																<span class="wuxFeatureHeaderName">Captivate</span>
+																<span class="wuxFeatureHeaderName">Request</span>
 																<div class="wuxFeatureHeaderInfo">Full</div>
 																<div class="wuxFeatureHeaderInfo">Charm; Range: 5; One target</div>
 															</div>
 														</div>
-														<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_tch-captivate_expand">
+														<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_tch-request_expand">
 														<div class="wuxFeatureExpandingContent">
 															<div class="wuxFeatureFunctionBlock">
 																<div class="wuxFeatureFunctionBlockFlavorText">
@@ -11680,22 +11673,6 @@
 
 															</div>
 															<div class="wuxFeatureEffectsBlock">
-																<div class="wuxFeatureCheckHeader">
-																	<span><span class="wuxTooltip">
-																			<span class="wuxTooltipText">
-																				vs. Insight
-																			</span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2">vs. Insight</div><span class="wuxDescription">Your skill check must meet or exceed the target's Defense value listed.
-
-																					Insight represents a character's ability to sense emotional state and sudden changes in behaviour. It is useful when detecting someone is trying to charm or deceive you.
-																				</span>
-																			</div>
-																		</span></span>
-																</div>
-																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow"></span>
-																</div>
 																<div class="wuxFeatureCheckHeader">
 																	<span><span class="wuxTooltip">
 																			<span class="wuxTooltipText">
@@ -11708,7 +11685,10 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow"></span>
+																	<span class="wuxFeatureCheckBlockRow">Influence target with 2d6 + [Rapport]</span>
+																</div>
+																<div class="wuxFeatureCheckBlock">
+																	<span class="wuxFeatureCheckBlockRow">Reduce target's Patience by 3</span>
 																</div>
 
 															</div>
@@ -11730,11 +11710,8 @@
 															</div>
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Demand}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Negotiation; Range: 5; One target}}{{FlavorText=You demand a resolution from an opponent, leveraging the pressure you&#39;ve built. }}{{Effect0Name=vs. Resolve}}{{Effect0Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
-	
-	Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in.
-	}}{{Effect0=}}{{Effect2Name=Effects}}{{Effect2Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
-	}}{{Effect2=}}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Demand}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Negotiation; Range: 5; One target}}{{FlavorText=You demand a resolution from an opponent, leveraging the pressure you&#39;ve built. }}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
+	}}{{Effect0=Influence target with 2d6 + [Pressure]}}{{Effect1=Reduce target&#39;s Patience by 3}}'>
 																	?
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Show Technique</div>
@@ -11743,7 +11720,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Demand&#34;,&#34;fieldName&#34;:&#34;demand&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Negotiation&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You demand a resolution from an opponent, leveraging the pressure you' ve built. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;Def_Resolve&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Influence&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;Soc_Pressure&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience &#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;Def_Resolve&#34;:&#91;&#34;T0&#34;&#93;,&#34;&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Demand&#34;,&#34;fieldName&#34;:&#34;demand&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Negotiation&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You demand a resolution from an opponent, leveraging the pressure you' ve built. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Influence&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;2&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;soc-pressure&#34;,&#34;definitionName&#34;:&#34;Soc_Pressure&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:3,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -11770,22 +11747,6 @@
 																<div class="wuxFeatureCheckHeader">
 																	<span><span class="wuxTooltip">
 																			<span class="wuxTooltipText">
-																				vs. Resolve
-																			</span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2">vs. Resolve</div><span class="wuxDescription">Your skill check must meet or exceed the target's Defense value listed.
-
-																					Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in.
-																				</span>
-																			</div>
-																		</span></span>
-																</div>
-																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow"></span>
-																</div>
-																<div class="wuxFeatureCheckHeader">
-																	<span><span class="wuxTooltip">
-																			<span class="wuxTooltipText">
 																				Effects
 																			</span>
 																			<div class="wuxTooltipContent">
@@ -11795,7 +11756,10 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow"></span>
+																	<span class="wuxFeatureCheckBlockRow">Influence target with 2d6 + [Pressure]</span>
+																</div>
+																<div class="wuxFeatureCheckBlock">
+																	<span class="wuxFeatureCheckBlockRow">Reduce target's Patience by 3</span>
 																</div>
 
 															</div>
@@ -11943,7 +11907,7 @@
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
 																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Aid}}{{type-Full=1}}{{Resources=Full}}{{Targeting=No Check; Range: 1; One target (inc. Self)}}{{FlavorText=You try to remove a condition afffecting you or an ally. }}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
-	}}{{Effect0=Target loses any condition of your choice}}{{Def0=}} {{Def0Desc=}}'>
+	}}{{Effect0=}}{{Def0=}} {{Def0Desc=}}'>
 																	?
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Show Technique</div>
@@ -11988,7 +11952,7 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow">Target loses any condition of your choice</span>
+																	<span class="wuxFeatureCheckBlockRow"></span>
 																</div>
 
 															</div>
@@ -12026,7 +11990,7 @@
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
 																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Stabilize}}{{type-Full=1}}{{Resources=Full; 1 Surge}}{{Targeting=No Check; Range: 1; Self}}{{FlavorText=You take a moment to address your wounds.}}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
-	}}{{Effect0=}}{{Effect1=Target loses any condition of your choice}}{{Def0=}} {{Def0Desc=}}'>
+	}}{{Effect0=}}{{Effect1=}}{{Def0=}} {{Def0Desc=}}'>
 																	?
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Show Technique</div>
@@ -12074,7 +12038,7 @@
 																	<span class="wuxFeatureCheckBlockRow"></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow">Target loses any condition of your choice</span>
+																	<span class="wuxFeatureCheckBlockRow"></span>
 																</div>
 
 															</div>
@@ -12112,7 +12076,7 @@
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
 																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Encourage}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Charm; Range: 5; One target}}{{FlavorText=You offer words of inspiration to a character. }}{{Effect0Name=DC 12}}{{Effect0Desc=Your skill check must meet or exceed this value for the following effects to occur. 
-	}}{{Effect0=Target gains the Encouraged Condition}}{{Def0=Encouraged}} {{Def0Desc=An encouraged character is motivated to persevere. As a swift action, a character with the encouraged condition may end the condition to end one other condition affecting them. 
+	}}{{Effect0=}}{{Def0=Encouraged}} {{Def0Desc=An encouraged character is motivated to persevere. As a swift action, a character with the encouraged condition may end the condition to end one other condition affecting them. 
 	}}'>
 																	?
 																	<div class="wuxTooltipContent">
@@ -12158,7 +12122,7 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow">Target gains the Encouraged Condition</span>
+																	<span class="wuxFeatureCheckBlockRow"></span>
 																</div>
 
 															</div>
@@ -13269,15 +13233,56 @@
 							<div class="wuxTabContent">
 								<div class="wuxFlexTable">
 									<div class="wuxFlexTableItemGroup wuxMinWidth150">
-										<span class="wuxFlexTableItemHeader">Approval Resistance<div class="wuxTooltipButtonContainer">
+										<span class="wuxFlexTableItemHeader">Pressure<div class="wuxTooltipButtonContainer">
 												<div class="wuxTooltipButton wuxFloatRight">
 													<div class="wuxTooltipText">i</div>
 													<div class="wuxTooltipContent">
-														<div class="wuxHeader2">Approval Resistance</div>
+														<div class="wuxHeader2">Pressure</div>
+
+														<span class="wuxDescription">Pressure is your character’s stress over the current social situation. Characters in a social conflict can leverage pressure to make your character come to a decision more quickly. </span>
+														<span class="wuxDescription">When pressure is used for an influence check, you add the target's pressure value to your influence check. </span>
+													</div>
+												</div>
+											</div></span><span class="wuxFlexTableItemData">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup wuxMinWidth100">
+													<span class="wuxFlexTableItemData wuxTextCenter" name="attr_soc-pressure">0</span>
+												</div>
+											</div>
+										</span>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxMinWidth150">
+										<span class="wuxFlexTableItemHeader">Rapport<div class="wuxTooltipButtonContainer">
+												<div class="wuxTooltipButton wuxFloatRight">
+													<div class="wuxTooltipText">i</div>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Rapport</div>
+
+														<span class="wuxDescription">Rapport is how much your social opponent(s) are being likeable to you. Rapport can be leveraged by opponents to create a more favorable decision for them. </span>
+														<span class="wuxDescription">When rapport is used for an influence check, you add the target's rapport value to your influence check. </span>
+													</div>
+												</div>
+											</div></span><span class="wuxFlexTableItemData">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup wuxMinWidth100">
+													<span class="wuxFlexTableItemData wuxTextCenter" name="attr_soc-rapport">0</span>
+												</div>
+											</div>
+										</span>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxMinWidth150">
+										<span class="wuxFlexTableItemHeader">Approval<div class="wuxTooltipButtonContainer">
+												<div class="wuxTooltipButton wuxFloatRight">
+													<div class="wuxTooltipText">i</div>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Approval</div>
 
 														<span class="wuxDescription">Approval is a character's resistance to place their trust in another. In social conflict it acts similarly to HP, representing a character's threshold before allowing another to have their favor. </span>
-														Approval Resistance is calculated as:
-														20 + [Character Rank x 15] + [Character Level] + [Conviction]
+														<span class="wuxDescription">Approval should be set based on the argument made during an Influence check. </span>
+														<span class="wuxDescription">5-15. This is a low approval rating. It is very easy to persuade this character with the argument put forth.</span>
+														<span class="wuxDescription">16-30. The character is unwilling to immediately budge on the subject but a little persuasion should work them over.</span>
+														<span class="wuxDescription">31-45. This is a subject the character will be difficult to persuade to change.</span>
+														<span class="wuxDescription">46+. A very difficult ask to make from the character.</span>
 													</div>
 												</div>
 											</div></span><span class="wuxFlexTableItemData">
@@ -13295,9 +13300,14 @@
 													<div class="wuxTooltipContent">
 														<div class="wuxHeader2">Patience</div>
 
-														<span class="wuxDescription">Patience is a measure of how long a character can last in social combat before they become frustrated and unable to participate meaningfully. </span>
-														Patience is calculated as:
-														[Character Rank x 10] + 0
+														<span class="wuxDescription">Patience is a measure of how much a character will tolerate another's attempts at socializing before removing themselves.</span>
+														<span class="wuxDescription">This value is unique to NPCs and is adjusted based on a character's hostility towards the party and conviction towards their stance in the argument. Having any patience at all implies the character can be convinced to change their opinion. If a character will not change their stance, their patience should be 0.</span>
+														<span class="wuxDescription">Some guidelines for setting patience.</span>
+														<span class="wuxDescription">3 - 5. Reserved for hostile characters or those that are unlikely to budge from their opinion.</span>
+														<span class="wuxDescription">6-10. Characters that can be persuaded but with some difficulty. One will need to be efficient and effective with their techniques to persuade this person.</span>
+														<span class="wuxDescription">11-20. These characters are willing to hear an argument but will not tolerate stalling. </span>
+														<span class="wuxDescription">21+ These characters are willing to hear every point made and are unlikely to end a social conflict by running out of patience.</span>
+														<span class="wuxDescription">When a character's patience runs out, that character is no longer willing to participate in a social conflict and can no longer be persuaded. </span>
 													</div>
 												</div>
 											</div></span><span class="wuxFlexTableItemData">
@@ -15341,7 +15351,7 @@
 	WuxWorkerCharacterCreation.SetInnateSense();
 	
 	});
-	on("change:tch-hide change:tch-mount change:tch-prepare change:tch-seach change:tch-skill_check change:tch-grab_an_edge change:tch-interact change:tch-break_free change:tch-dash change:tch-escape change:tch-reposition change:tch-aid change:tch-stabilize change:tch-encourage change:tch-grapple change:tch-unarmed_strike change:tch-basic_slash change:tch-throw change:tch-heavy_strike change:tch-build_rapport change:tch-build_pressure change:tch-captivate change:tch-demand change:tch-defender change:tch-defender_ii change:tch-athlete change:tch-athlete_ii change:tch-second_wind change:tch-second_breath change:tch-undaunted change:tch-preemptive_strike change:tch-preemptive_stagger change:tch-critical_maim change:tch-spellshot change:tch-follow-up_spellshot change:tch-bursting_spellshot change:tch-savior change:tch-knock_away_savior change:tch-savior's_retaliation change:tch-spellstrike change:tch-power_skirmish change:tch-sneak_attack change:tch-sneaky_follow-up change:tch-assassinate change:tch-emergency_care change:tch-nightingale change:tch-rhapsody change:tch-metamagic change:tch-strategize change:tch-foresight change:tch-saw_that_coming change:tch-as_you_may_recall change:tch-generalist change:tch-defender's_will change:tch-defender's_taunt change:tch-defender's_recovery change:tch-skirmisher change:tch-skirmisher_ii change:tch-skirmisher's_step change:tch-skirmisher's_strike change:tch-marksman change:tch-marksman_ii change:tch-marksman's_longshot change:tch-marksman's_sight change:tch-marksman's_strike change:tch-athlete's_sprint change:tch-athlete's_reach change:tch-bounding_sprint change:tch-skulk_away change:tch-skulk_then_hide change:tch-first_aid change:tch-cleansing_aid change:tch-environmental_awareness change:tch-eclectic_knowledge change:tch-point_of_clarity change:tch-pole_vault change:tch-quick_draw change:tch-extension_strike change:tch-step_extension change:tch-lasting_extension change:tch-far_strike change:tch-extension_strike_+ change:tch-quick_slash change:tch-precision_blade change:tch-armor_piercer change:tch-quick_slash_ii change:tch-cleave change:tch-crushing_blade change:tch-great_cleave change:tch-cleave_+ change:tch-sudden_cleave change:tch-great_cleave_ii change:tch-power_flex change:tch-crush_knuckle change:tch-impact_knuckle change:tch-knuckle_flurry change:tch-water_blast change:tch-geyser change:tch-geyser_line change:tch-surf change:tch-great_geyser_line change:tch-tidal_wave change:tch-sand_surge change:tch-sand_spout change:tch-sand_wave change:tch-sand_launcher change:tch-sicken change:tch-spores change:tch-sickening_cloud change:tch-virulent_spores change:tch-firebolt change:tch-flame_arrow change:tch-fireball change:tch-fireblast change:tch-ragnarok change:tch-bonfire change:tch-wall_of_fire change:tch-field_of_flame change:tch-lightning_shaft change:tch-shock change:tch-lightning_bolt change:tch-plasma_arc change:tch-fulgor change:tch-cold_snap change:tch-frostbite change:tch-freezebind change:tch-cold_burst change:tch-cold_front change:tch-diamond_dust change:tch-wind_bullet change:tch-gust change:tch-windsweep change:tch-gale change:tch-darkness change:tch-shadow_wall change:tch-nightfall change:tch-fog_cloud change:tch-sleet change:tch-freezing_sleet change:tch-hail change:tch-binding_sleet change:tch-ice_storm change:tch-fimbulwinter change:tch-smoke_cloud change:tch-burning_smoke change:tch-choking_smoke change:tch-acceleration change:tch-power_vault change:tch-expeditious change:tch-quick_climb change:tch-quick_swim change:tch-poise change:tch-cat_fall change:tch-kip_up change:tch-silent_stride change:tch-shove change:tch-knockdown change:tch-tumble change:tch-field_medic change:tch-camoflauge change:tch-blurred_light change:tch-light_refraction change:tch-shadow_steps change:tch-shadow_walker change:tch-wind_step change:tch-updraft change:tch-clouded_updraft change:tch-wind_fall change:tch-walk_on_air change:tch-fire_step change:tch-liftoff change:tch-jet change:tch-cunning_action change:tch-demoralize change:tch-fascinate change:tch-impersonator change:tch-ether_sense change:tch-spirit_sense change:tch-tremorsense change:tch-dustcraft change:tch-shape_material change:tch-quickcraft change:tch-improved_shaping change:tch-greater_shaping change:tch-legendary_shaping change:tch-dust_material change:tch-dust_area change:tch-improved_dusting change:tch-greater_dusting change:tch-legendary_dusting change:tch-form_path change:tch-form_pillar change:tch-stepping_path change:tch-form_wall change:tch-scattered_pillars change:tch-great_wall change:tch-cultivate change:tch-entangle change:tch-wildwood change:tch-distortion change:tch-lasting_distortion change:tch-heat_field change:tch-burn_guard change:tch-cold_field change:tch-chill_guard change:tch-kinesis change:tch-distant_kinesis change:tch-kinetic_strike change:tch-kinetic_throw change:tch-heavy_kinesis change:tch-burden change:tch-pressure change:tch-restrain change:tch-wide_pressure change:tch-prostration change:tch-deep_pressure change:tch-gravity_well change:tch-shield_block change:tch-glancing_block change:tch-aegis change:tch-light change:tch-dancing_lights change:tch-flash change:tch-sunlight change:tch-stress_release change:tch-stress_release_+ change:tch-stress_release_++ change:tch-sensory_training change:tch-sensory_training_+ change:tch-broad_study change:tch-experienced_tracker change:tch-multilingual change:tch-multilingual_+ change:tch-specialized_lore change:tch-specialized_lore_+ change:tch-specialized_lore_++ change:tch-improved_initiative change:tch-knowledge_training change:tch-knowledge_training_+ change:tch-knowledge_training_++ change:tch-social_training change:tch-social_training_+ change:tch-social_training_++ change:tch-refocus change:tch-refocus_+ change:tch-sustained_channel change:tch-sustained_channel_+ change:tch-ki_control change:tch-ki_control_+ change:tch-ki_control_++ change:tch-surge_value change:tch-surge_value_+ change:tch-channel_training change:tch-channel_training_+ change:tch-channel_training_++ change:tch-physical_training change:tch-physical_training_+ change:tch-body_training change:tch-body_training_+ change:tch-body_training_++ change:tch-technical_training change:tch-technical_training_+ change:tch-technical_training_++ change:tch-martial_training change:tch-martial_training_+ change:tch-martial_training_++ change:tch-hp_up change:tch-hp_up+ change:tch-hp_up++ change:tch-vitality_boost change:tch-vitality_boost_+ change:tch-vitality_boost_++ change:tch-undying change:tch-undying_+ change:tch-extra_follow-up_attack change:tch-extra_follow-up_attack_+ change:tch-change_tech_slots change:tch-hold_out change:tch-overdrive", function (eventinfo) {
+	on("change:tch-hide change:tch-mount change:tch-prepare change:tch-seach change:tch-skill_check change:tch-grab_an_edge change:tch-interact change:tch-break_free change:tch-dash change:tch-escape change:tch-reposition change:tch-aid change:tch-stabilize change:tch-encourage change:tch-grapple change:tch-unarmed_strike change:tch-basic_slash change:tch-throw change:tch-heavy_strike change:tch-build_rapport change:tch-build_pressure change:tch-request change:tch-demand change:tch-defender change:tch-defender_ii change:tch-athlete change:tch-athlete_ii change:tch-second_wind change:tch-second_breath change:tch-undaunted change:tch-preemptive_strike change:tch-preemptive_stagger change:tch-critical_maim change:tch-spellshot change:tch-follow-up_spellshot change:tch-bursting_spellshot change:tch-savior change:tch-knock_away_savior change:tch-savior's_retaliation change:tch-spellstrike change:tch-power_skirmish change:tch-sneak_attack change:tch-sneaky_follow-up change:tch-assassinate change:tch-emergency_care change:tch-nightingale change:tch-rhapsody change:tch-metamagic change:tch-strategize change:tch-foresight change:tch-saw_that_coming change:tch-as_you_may_recall change:tch-generalist change:tch-defender's_will change:tch-defender's_taunt change:tch-defender's_recovery change:tch-skirmisher change:tch-skirmisher_ii change:tch-skirmisher's_step change:tch-skirmisher's_strike change:tch-marksman change:tch-marksman_ii change:tch-marksman's_longshot change:tch-marksman's_sight change:tch-marksman's_strike change:tch-athlete's_sprint change:tch-athlete's_reach change:tch-bounding_sprint change:tch-skulk_away change:tch-skulk_then_hide change:tch-first_aid change:tch-cleansing_aid change:tch-environmental_awareness change:tch-eclectic_knowledge change:tch-point_of_clarity change:tch-pole_vault change:tch-quick_draw change:tch-extension_strike change:tch-step_extension change:tch-lasting_extension change:tch-far_strike change:tch-extension_strike_+ change:tch-quick_slash change:tch-precision_blade change:tch-armor_piercer change:tch-quick_slash_ii change:tch-cleave change:tch-crushing_blade change:tch-great_cleave change:tch-cleave_+ change:tch-sudden_cleave change:tch-great_cleave_ii change:tch-power_flex change:tch-crush_knuckle change:tch-impact_knuckle change:tch-knuckle_flurry change:tch-water_blast change:tch-geyser change:tch-geyser_line change:tch-surf change:tch-great_geyser_line change:tch-tidal_wave change:tch-sand_surge change:tch-sand_spout change:tch-sand_wave change:tch-sand_launcher change:tch-sicken change:tch-spores change:tch-sickening_cloud change:tch-virulent_spores change:tch-firebolt change:tch-flame_arrow change:tch-fireball change:tch-fireblast change:tch-ragnarok change:tch-bonfire change:tch-wall_of_fire change:tch-field_of_flame change:tch-lightning_shaft change:tch-shock change:tch-lightning_bolt change:tch-plasma_arc change:tch-fulgor change:tch-cold_snap change:tch-frostbite change:tch-freezebind change:tch-cold_burst change:tch-cold_front change:tch-diamond_dust change:tch-wind_bullet change:tch-gust change:tch-windsweep change:tch-gale change:tch-darkness change:tch-shadow_wall change:tch-nightfall change:tch-fog_cloud change:tch-sleet change:tch-freezing_sleet change:tch-hail change:tch-binding_sleet change:tch-ice_storm change:tch-fimbulwinter change:tch-smoke_cloud change:tch-burning_smoke change:tch-choking_smoke change:tch-acceleration change:tch-power_vault change:tch-expeditious change:tch-quick_climb change:tch-quick_swim change:tch-poise change:tch-cat_fall change:tch-kip_up change:tch-silent_stride change:tch-shove change:tch-knockdown change:tch-tumble change:tch-field_medic change:tch-camoflauge change:tch-blurred_light change:tch-light_refraction change:tch-shadow_steps change:tch-shadow_walker change:tch-wind_step change:tch-updraft change:tch-clouded_updraft change:tch-wind_fall change:tch-walk_on_air change:tch-fire_step change:tch-liftoff change:tch-jet change:tch-cunning_action change:tch-demoralize change:tch-fascinate change:tch-impersonator change:tch-ether_sense change:tch-spirit_sense change:tch-tremorsense change:tch-dustcraft change:tch-shape_material change:tch-quickcraft change:tch-improved_shaping change:tch-greater_shaping change:tch-legendary_shaping change:tch-dust_material change:tch-dust_area change:tch-improved_dusting change:tch-greater_dusting change:tch-legendary_dusting change:tch-form_path change:tch-form_pillar change:tch-stepping_path change:tch-form_wall change:tch-scattered_pillars change:tch-great_wall change:tch-cultivate change:tch-entangle change:tch-wildwood change:tch-distortion change:tch-lasting_distortion change:tch-heat_field change:tch-burn_guard change:tch-cold_field change:tch-chill_guard change:tch-kinesis change:tch-distant_kinesis change:tch-kinetic_strike change:tch-kinetic_throw change:tch-heavy_kinesis change:tch-burden change:tch-pressure change:tch-restrain change:tch-wide_pressure change:tch-prostration change:tch-deep_pressure change:tch-gravity_well change:tch-shield_block change:tch-glancing_block change:tch-aegis change:tch-light change:tch-dancing_lights change:tch-flash change:tch-sunlight change:tch-stress_release change:tch-stress_release_+ change:tch-stress_release_++ change:tch-sensory_training change:tch-sensory_training_+ change:tch-broad_study change:tch-experienced_tracker change:tch-multilingual change:tch-multilingual_+ change:tch-specialized_lore change:tch-specialized_lore_+ change:tch-specialized_lore_++ change:tch-improved_initiative change:tch-knowledge_training change:tch-knowledge_training_+ change:tch-knowledge_training_++ change:tch-social_training change:tch-social_training_+ change:tch-social_training_++ change:tch-refocus change:tch-refocus_+ change:tch-sustained_channel change:tch-sustained_channel_+ change:tch-ki_control change:tch-ki_control_+ change:tch-ki_control_++ change:tch-surge_value change:tch-surge_value_+ change:tch-channel_training change:tch-channel_training_+ change:tch-channel_training_++ change:tch-physical_training change:tch-physical_training_+ change:tch-body_training change:tch-body_training_+ change:tch-body_training_++ change:tch-technical_training change:tch-technical_training_+ change:tch-technical_training_++ change:tch-martial_training change:tch-martial_training_+ change:tch-martial_training_++ change:tch-hp_up change:tch-hp_up+ change:tch-hp_up++ change:tch-vitality_boost change:tch-vitality_boost_+ change:tch-vitality_boost_++ change:tch-undying change:tch-undying_+ change:tch-extra_follow-up_attack change:tch-extra_follow-up_attack_+ change:tch-change_tech_slots change:tch-hold_out change:tch-overdrive", function (eventinfo) {
 	WuxWorkerTechniques.UpdateTechniqueBuildPoints(eventinfo)
 	});
 	on("change:sty-basic_action change:sty-basic_attack change:sty-basic_movement change:sty-basic_social change:sty-basic_support change:sty-swordplay change:sty-ki_extension", function (eventinfo) {
