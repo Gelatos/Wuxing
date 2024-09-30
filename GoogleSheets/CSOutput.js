@@ -863,9 +863,16 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 				buildJobStyleSection = function (job, techniqueDatabase, displayOptions) {
 					let jobDef = job.createDefinition(WuxDef.Get("Job"));
+					let tabFieldName = WuxDef.GetAttribute("Page");
 
-					let contents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDef.getAttribute(WuxDef._expand))}
-					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(jobDef.getAttribute(), WuxSheetMain.Header(job.name))}
+					let interactionHeader = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDef.getAttribute(WuxDef._expand))}
+					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(jobDef.getAttribute(), WuxSheetMain.Header(job.name))}`;
+					let normalHeader = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDef.getAttribute(WuxDef._expand))} ${WuxSheetMain.Header(job.name)}`;
+
+					let contents = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
+					${WuxSheet.PageDisplay("Techniques", normalHeader)}
+					${WuxSheet.PageDisplay("Styles", interactionHeader)}
+					${WuxSheet.PageDisplay("Actions", normalHeader)}
 					${WuxSheetMain.SectionBlockHeaderFooter()}
 					${WuxSheetMain.InteractionElement.ExpandableBlockContents(jobDef.getAttribute(WuxDef._expand),
 						WuxSheetMain.SectionBlockContents(buildStyleContents(jobDef, techniqueDatabase, displayOptions)))}`;

@@ -6165,7 +6165,7 @@
 
 						</div>
 						<div class="wuxHeader2">
-							<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-setstyles_info"><span>?</span></div>Styles
+							<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-learntechniques_info"><span>?</span></div>Styles
 						</div>
 						<div class="wuxHeader"><input type="text" name="attr_display_name" placeholder="Display Name" /></div>
 					</div>
@@ -6183,7 +6183,7 @@
 
 						</div>
 						<div class="wuxHeader2">
-							<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-actions_info"><span>?</span></div>Actions
+							<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-learntechniques_info"><span>?</span></div>Actions
 						</div>
 						<div class="wuxHeader"><input type="text" name="attr_display_name" placeholder="Display Name" /></div>
 					</div>
@@ -6191,7 +6191,7 @@
 				<input type="hidden" class="wuxHiddenField-flag" name="attr_pag-learntechniques_info" value="0">
 				<div class="wuxHiddenField">
 					<div class="wuxInfoContent">
-						<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Overview" />
+						<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
 						<div class="wuxPageDisplay-Builder">
 							<div class="wuxHeader2">Techniques</div>
 
@@ -6220,11 +6220,19 @@
 							<span class="wuxDescription">You begin play with 4 technique points and gain an additional point at 2nd, 3rd, and 4th level. You gain an additional 3 technique points whenever you increase in Character Rank. You may choose to gain additional technique points by spending advancement points on level up. You may also choose to gain additional technique points by spending training points through training on level up.</span>
 						</div>
 						<div class="wuxPageDisplay-Core">
-							<div class="wuxHeader2">Styles</div>
+							<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Styles" />
+							<div class="wuxPageDisplay-Styles">
+								<div class="wuxHeader2">Styles</div>
 
-							<span class="wuxDescription">All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style.</span>
-							<span class="wuxDescription">On this page you can set which styles are currently active on the character, allowing them to be used in the Actions Page. You can set both job styles and general styles. Basic styles are always set. </span>
-							<span class="wuxDescription"></span>
+								<span class="wuxDescription">All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style.</span>
+								<span class="wuxDescription">On this page you can set which styles are currently active on the character, allowing them to be used in the Actions Page. You can set both job styles and general styles. Basic styles are always set. </span>
+								<span class="wuxDescription"></span>
+							</div>
+							<div class="wuxPageDisplay-Actions">
+								<div class="wuxHeader2">Actions</div>
+
+								<span class="wuxDescription">This is the Actions section. Here you can use any action available to your character.</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -6297,23 +6305,46 @@
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxSectionBlock">
 										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-											<div class="wuxInteractiveInnerExpandBlock">
-												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-interceptor_expand" />
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-interceptor_expand" />
-												<span class="wuxInteractiveExpandIcon">&#9662;</span>
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-interceptor_expand" />
-												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-											</div>
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-interceptor" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-interceptor" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-interceptor" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-interceptor" />
-													<div class="wuxHeader">Interceptor</div>
+											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
+											<div class="wuxPageDisplay-Techniques">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-interceptor_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-interceptor_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-interceptor_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 												</div>
+												<div class="wuxHeader">Interceptor</div>
+											</div>
+											<div class="wuxPageDisplay-Styles">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-interceptor_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-interceptor_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-interceptor_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-interceptor" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-interceptor" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-interceptor" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-interceptor" />
+														<div class="wuxHeader">Interceptor</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxPageDisplay-Actions">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-interceptor_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-interceptor_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-interceptor_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxHeader">Interceptor</div>
 											</div>
 											<div class="wuxSectionHeaderFooter"></div>
 											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_job-interceptor_expand">
@@ -6627,23 +6658,46 @@
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxSectionBlock">
 										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-											<div class="wuxInteractiveInnerExpandBlock">
-												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-guardian_expand" />
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-guardian_expand" />
-												<span class="wuxInteractiveExpandIcon">&#9662;</span>
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-guardian_expand" />
-												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-											</div>
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-guardian" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-guardian" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-guardian" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-guardian" />
-													<div class="wuxHeader">Guardian</div>
+											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
+											<div class="wuxPageDisplay-Techniques">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-guardian_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-guardian_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-guardian_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 												</div>
+												<div class="wuxHeader">Guardian</div>
+											</div>
+											<div class="wuxPageDisplay-Styles">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-guardian_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-guardian_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-guardian_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-guardian" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-guardian" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-guardian" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-guardian" />
+														<div class="wuxHeader">Guardian</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxPageDisplay-Actions">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-guardian_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-guardian_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-guardian_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxHeader">Guardian</div>
 											</div>
 											<div class="wuxSectionHeaderFooter"></div>
 											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_job-guardian_expand">
@@ -7092,23 +7146,46 @@
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxSectionBlock">
 										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-											<div class="wuxInteractiveInnerExpandBlock">
-												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-spellslinger_expand" />
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-spellslinger_expand" />
-												<span class="wuxInteractiveExpandIcon">&#9662;</span>
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-spellslinger_expand" />
-												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-											</div>
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-spellslinger" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-spellslinger" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-spellslinger" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-spellslinger" />
-													<div class="wuxHeader">Spellslinger</div>
+											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
+											<div class="wuxPageDisplay-Techniques">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-spellslinger_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-spellslinger_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-spellslinger_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 												</div>
+												<div class="wuxHeader">Spellslinger</div>
+											</div>
+											<div class="wuxPageDisplay-Styles">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-spellslinger_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-spellslinger_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-spellslinger_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-spellslinger" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-spellslinger" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-spellslinger" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-spellslinger" />
+														<div class="wuxHeader">Spellslinger</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxPageDisplay-Actions">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-spellslinger_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-spellslinger_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-spellslinger_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxHeader">Spellslinger</div>
 											</div>
 											<div class="wuxSectionHeaderFooter"></div>
 											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_job-spellslinger_expand">
@@ -7428,23 +7505,46 @@
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxSectionBlock">
 										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-											<div class="wuxInteractiveInnerExpandBlock">
-												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-warrior_expand" />
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-warrior_expand" />
-												<span class="wuxInteractiveExpandIcon">&#9662;</span>
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-warrior_expand" />
-												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-											</div>
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-warrior" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-warrior" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-warrior" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-warrior" />
-													<div class="wuxHeader">Warrior</div>
+											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
+											<div class="wuxPageDisplay-Techniques">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-warrior_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-warrior_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-warrior_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 												</div>
+												<div class="wuxHeader">Warrior</div>
+											</div>
+											<div class="wuxPageDisplay-Styles">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-warrior_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-warrior_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-warrior_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-warrior" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-warrior" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-warrior" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-warrior" />
+														<div class="wuxHeader">Warrior</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxPageDisplay-Actions">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-warrior_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-warrior_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-warrior_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxHeader">Warrior</div>
 											</div>
 											<div class="wuxSectionHeaderFooter"></div>
 											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_job-warrior_expand">
@@ -7909,23 +8009,46 @@
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxSectionBlock">
 										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-											<div class="wuxInteractiveInnerExpandBlock">
-												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-rogue_expand" />
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-rogue_expand" />
-												<span class="wuxInteractiveExpandIcon">&#9662;</span>
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-rogue_expand" />
-												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-											</div>
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-rogue" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-rogue" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-rogue" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-rogue" />
-													<div class="wuxHeader">Rogue</div>
+											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
+											<div class="wuxPageDisplay-Techniques">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-rogue_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-rogue_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-rogue_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 												</div>
+												<div class="wuxHeader">Rogue</div>
+											</div>
+											<div class="wuxPageDisplay-Styles">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-rogue_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-rogue_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-rogue_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-rogue" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-rogue" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-rogue" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-rogue" />
+														<div class="wuxHeader">Rogue</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxPageDisplay-Actions">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-rogue_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-rogue_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-rogue_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxHeader">Rogue</div>
 											</div>
 											<div class="wuxSectionHeaderFooter"></div>
 											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_job-rogue_expand">
@@ -8176,23 +8299,46 @@
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxSectionBlock">
 										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-											<div class="wuxInteractiveInnerExpandBlock">
-												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-scholar_expand" />
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-scholar_expand" />
-												<span class="wuxInteractiveExpandIcon">&#9662;</span>
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-scholar_expand" />
-												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-											</div>
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-scholar" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-scholar" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-scholar" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-scholar" />
-													<div class="wuxHeader">Scholar</div>
+											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
+											<div class="wuxPageDisplay-Techniques">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-scholar_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-scholar_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-scholar_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 												</div>
+												<div class="wuxHeader">Scholar</div>
+											</div>
+											<div class="wuxPageDisplay-Styles">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-scholar_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-scholar_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-scholar_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-scholar" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-scholar" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-scholar" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-scholar" />
+														<div class="wuxHeader">Scholar</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxPageDisplay-Actions">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-scholar_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-scholar_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-scholar_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxHeader">Scholar</div>
 											</div>
 											<div class="wuxSectionHeaderFooter"></div>
 											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_job-scholar_expand">
@@ -8279,23 +8425,46 @@
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxSectionBlock">
 										<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
-											<div class="wuxInteractiveInnerExpandBlock">
-												<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-physician_expand" />
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-physician_expand" />
-												<span class="wuxInteractiveExpandIcon">&#9662;</span>
-												<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-physician_expand" />
-												<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-											</div>
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-physician" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-physician" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-physician" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-physician" />
-													<div class="wuxHeader">Physician</div>
+											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Builder" />
+											<div class="wuxPageDisplay-Techniques">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-physician_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-physician_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-physician_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
 												</div>
+												<div class="wuxHeader">Physician</div>
+											</div>
+											<div class="wuxPageDisplay-Styles">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-physician_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-physician_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-physician_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-physician" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-physician" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-physician" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-physician" />
+														<div class="wuxHeader">Physician</div>
+													</div>
+												</div>
+											</div>
+											<div class="wuxPageDisplay-Actions">
+												<div class="wuxInteractiveInnerExpandBlock">
+													<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_job-physician_expand" />
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-physician_expand" />
+													<span class="wuxInteractiveExpandIcon">&#9662;</span>
+													<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_job-physician_expand" />
+													<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+												</div>
+												<div class="wuxHeader">Physician</div>
 											</div>
 											<div class="wuxSectionHeaderFooter"></div>
 											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_job-physician_expand">
@@ -11295,10 +11464,10 @@
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
 																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Build Rapport}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Charm; Range: 5; One target}}{{FlavorText=You attempt to make a good impression with a specific person. }}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
-	}}{{Effect0=Target gains [2] rank in the }}{{Effect1=1 damage}}{{Effect3Name=vs. Insight}}{{Effect3Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
+	}}{{Effect0=}}{{Effect1=}}{{Effect3Name=vs. Insight}}{{Effect3Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
 	
 	Insight represents a character&#39;s ability to sense emotional state and sudden changes in behaviour. It is useful when detecting someone is trying to charm or deceive you. 
-	}}{{Effect3=Target gains [1d6] rank in the }}{{Def0=}} {{Def0Desc=}}'>
+	}}{{Effect3=}}'>
 																	?
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Show Technique</div>
@@ -11307,7 +11476,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Build Rapport&#34;,&#34;fieldName&#34;:&#34;build_rapport&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Charm&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You attempt to make a good impression with a specific person. &#34;,&#34;definitions&#34;:&#91;&#34;Stat_Rapport&#34;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;,&#34;T2&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Status&#34;,&#34;subType&#34;:&#34;Rank Up&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:2,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Stat_Rapport&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Damage&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Stat_Patience&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T2&#34;:{&#34;name&#34;:&#34;T2&#34;,&#34;defense&#34;:&#34;Def_Insight&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Status&#34;,&#34;subType&#34;:&#34;Rank Up&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;Stat_Rapport&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;Def_Insight&#34;:&#91;&#34;T2&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Build Rapport&#34;,&#34;fieldName&#34;:&#34;build_rapport&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Charm&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You attempt to make a good impression with a specific person. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;,&#34;T2&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Rapport&#34;,&#34;subType&#34;:&#34;Damage&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:2,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience &#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T2&#34;:{&#34;name&#34;:&#34;T2&#34;,&#34;defense&#34;:&#34;Def_Insight&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Rapport&#34;,&#34;subType&#34;:&#34;Damage&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;Def_Insight&#34;:&#91;&#34;T2&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -11343,10 +11512,10 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow">Target gains [2] rank in the </span>
+																	<span class="wuxFeatureCheckBlockRow"></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow">1 damage</span>
+																	<span class="wuxFeatureCheckBlockRow"></span>
 																</div>
 																<div class="wuxFeatureCheckHeader">
 																	<span><span class="wuxTooltip">
@@ -11362,22 +11531,7 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow">Target gains [1d6] rank in the </span>
-																</div>
-
-															</div>
-															<div class="wuxFeatureFunctionBlock">
-																<div class="wuxFeatureFunctionBlockRow">
-																	<span><strong>Definitions: </strong></span>
-																	<span><span class="wuxTooltip">
-																			<span class="wuxTooltipText">
-
-																			</span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"></div>
-
-																			</div>
-																		</span></span>
+																	<span class="wuxFeatureCheckBlockRow"></span>
 																</div>
 
 															</div>
@@ -11400,10 +11554,10 @@
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
 																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Build Pressure}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Negotiation; Range: 5; One target}}{{FlavorText=You make an effort to explain why your argument is the correct path forward. }}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
-	}}{{Effect0=Target gains [2] rank in the }}{{Effect1=1 damage}}{{Effect3Name=vs. Resolve}}{{Effect3Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
+	}}{{Effect0=}}{{Effect1=}}{{Effect3Name=vs. Resolve}}{{Effect3Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
 	
 	Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in.
-	}}{{Effect3=Target gains [1d6] rank in the }}{{Def0=}} {{Def0Desc=}}'>
+	}}{{Effect3=}}'>
 																	?
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Show Technique</div>
@@ -11412,7 +11566,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Build Pressure&#34;,&#34;fieldName&#34;:&#34;build_pressure&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Negotiation&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You make an effort to explain why your argument is the correct path forward. &#34;,&#34;definitions&#34;:&#91;&#34;Stat_Pressure&#34;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;,&#34;T2&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Status&#34;,&#34;subType&#34;:&#34;Rank Up&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:2,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Stat_Pressure&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Damage&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;Stat_Patience&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T2&#34;:{&#34;name&#34;:&#34;T2&#34;,&#34;defense&#34;:&#34;Def_Resolve&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Status&#34;,&#34;subType&#34;:&#34;Rank Up&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;Stat_Pressure&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;Def_Resolve&#34;:&#91;&#34;T2&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Build Pressure&#34;,&#34;fieldName&#34;:&#34;build_pressure&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Negotiation&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You make an effort to explain why your argument is the correct path forward. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;,&#34;T2&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Pressure&#34;,&#34;subType&#34;:&#34;Damage&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:2,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience &#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T2&#34;:{&#34;name&#34;:&#34;T2&#34;,&#34;defense&#34;:&#34;Def_Resolve&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Pressure&#34;,&#34;subType&#34;:&#34;Damage&#34;,&#34;dVal&#34;:&#34;1&#34;,&#34;dType&#34;:&#34;6&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;Def_Resolve&#34;:&#91;&#34;T2&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -11448,10 +11602,10 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow">Target gains [2] rank in the </span>
+																	<span class="wuxFeatureCheckBlockRow"></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow">1 damage</span>
+																	<span class="wuxFeatureCheckBlockRow"></span>
 																</div>
 																<div class="wuxFeatureCheckHeader">
 																	<span><span class="wuxTooltip">
@@ -11467,22 +11621,7 @@
 																		</span></span>
 																</div>
 																<div class="wuxFeatureCheckBlock">
-																	<span class="wuxFeatureCheckBlockRow">Target gains [1d6] rank in the </span>
-																</div>
-
-															</div>
-															<div class="wuxFeatureFunctionBlock">
-																<div class="wuxFeatureFunctionBlockRow">
-																	<span><strong>Definitions: </strong></span>
-																	<span><span class="wuxTooltip">
-																			<span class="wuxTooltipText">
-
-																			</span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"></div>
-
-																			</div>
-																		</span></span>
+																	<span class="wuxFeatureCheckBlockRow"></span>
 																</div>
 
 															</div>
@@ -11504,10 +11643,11 @@
 															</div>
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Captivate}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Charm; Range: 5; One target}}{{Effect0Name=vs. Insight}}{{Effect0Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Captivate}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Charm; Range: 5; One target}}{{FlavorText=You request a resolution from an opponent, leveraging the rapport you&#39;ve built. }}{{Effect0Name=vs. Insight}}{{Effect0Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
 	
 	Insight represents a character&#39;s ability to sense emotional state and sudden changes in behaviour. It is useful when detecting someone is trying to charm or deceive you. 
-	}}{{Effect0=}}'>
+	}}{{Effect0=}}{{Effect2Name=Effects}}{{Effect2Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
+	}}{{Effect2=}}'>
 																	?
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Show Technique</div>
@@ -11516,7 +11656,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Captivate&#34;,&#34;fieldName&#34;:&#34;captivate&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Charm&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;&#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;Def_Insight&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Influence&#34;,&#34;subType&#34;:&#34;Approval&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;Rapport&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;Def_Insight&#34;:&#91;&#34;T0&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Captivate&#34;,&#34;fieldName&#34;:&#34;captivate&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Charm&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You request a resolution from an opponent, leveraging the rapport you' ve built. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;Def_Insight&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Influence&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;Soc_Rapport&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience &#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;Def_Insight&#34;:&#91;&#34;T0&#34;&#93;,&#34;&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -11533,6 +11673,12 @@
 														</div>
 														<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_tch-captivate_expand">
 														<div class="wuxFeatureExpandingContent">
+															<div class="wuxFeatureFunctionBlock">
+																<div class="wuxFeatureFunctionBlockFlavorText">
+																	<span>You request a resolution from an opponent, leveraging the rapport you've built. </span>
+																</div>
+
+															</div>
 															<div class="wuxFeatureEffectsBlock">
 																<div class="wuxFeatureCheckHeader">
 																	<span><span class="wuxTooltip">
@@ -11543,6 +11689,20 @@
 																				<div class="wuxHeader2">vs. Insight</div><span class="wuxDescription">Your skill check must meet or exceed the target's Defense value listed.
 
 																					Insight represents a character's ability to sense emotional state and sudden changes in behaviour. It is useful when detecting someone is trying to charm or deceive you.
+																				</span>
+																			</div>
+																		</span></span>
+																</div>
+																<div class="wuxFeatureCheckBlock">
+																	<span class="wuxFeatureCheckBlockRow"></span>
+																</div>
+																<div class="wuxFeatureCheckHeader">
+																	<span><span class="wuxTooltip">
+																			<span class="wuxTooltipText">
+																				Effects
+																			</span>
+																			<div class="wuxTooltipContent">
+																				<div class="wuxHeader2">Effects</div><span class="wuxDescription">This contains the effects that will occur when this technique is used. There is no skill check necessary.
 																				</span>
 																			</div>
 																		</span></span>
@@ -11570,10 +11730,11 @@
 															</div>
 															<input type="hidden" class="wuxFeatureInteractionButton-flag" name="attr_tch_subfilter" value="0" />
 															<div class="wuxFeatureHeaderInteractBlock">
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Demand}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Negotiation; Range: 5; One target}}{{Effect0Name=vs. Resolve}}{{Effect0Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='&{template:technique} {{Username=@{display_name}}}{{Name=Demand}}{{type-Full=1}}{{Resources=Full}}{{Targeting=Negotiation; Range: 5; One target}}{{FlavorText=You demand a resolution from an opponent, leveraging the pressure you&#39;ve built. }}{{Effect0Name=vs. Resolve}}{{Effect0Desc=Your skill check must meet or exceed the target&#39;s Defense value listed. 
 	
 	Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in.
-	}}{{Effect0=}}'>
+	}}{{Effect0=}}{{Effect2Name=Effects}}{{Effect2Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
+	}}{{Effect2=}}'>
 																	?
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Show Technique</div>
@@ -11582,7 +11743,7 @@
 																		<span class="wuxDescription">Showing the technique in this way does not consume any resources. It is purely for display.</span>
 																	</div>
 																</button>
-																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Demand&#34;,&#34;fieldName&#34;:&#34;demand&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Negotiation&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;&#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;Def_Resolve&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Influence&#34;,&#34;subType&#34;:&#34;Approval&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;Pressure&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;Def_Resolve&#34;:&#91;&#34;T0&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
+																<button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='!ctech {&#34;name&#34;:&#34;Demand&#34;,&#34;fieldName&#34;:&#34;demand&#34;,&#34;group&#34;:&#34;Standard&#34;,&#34;description&#34;:&#34;&#34;,&#34;variable&#34;:&#34;&#34;,&#34;techSet&#34;:&#34;Basic Social&#34;,&#34;affinity&#34;:&#34;&#34;,&#34;tier&#34;:null,&#34;isFree&#34;:true,&#34;action&#34;:&#34;Full&#34;,&#34;traits&#34;:&#34;&#34;,&#34;resourceCost&#34;:&#34;&#34;,&#34;limits&#34;:&#34;&#34;,&#34;skill&#34;:&#34;Negotiation&#34;,&#34;range&#34;:&#34;5&#34;,&#34;target&#34;:&#34;One target&#34;,&#34;requirement&#34;:&#34;&#34;,&#34;itemTraits&#34;:&#34;&#34;,&#34;trigger&#34;:&#34;&#34;,&#34;flavorText&#34;:&#34;You demand a resolution from an opponent, leveraging the pressure you' ve built. &#34;,&#34;definitions&#34;:&#91;&#93;,&#34;effects&#34;:{&#34;keys&#34;:&#91;&#34;T0&#34;,&#34;T1&#34;&#93;,&#34;values&#34;:{&#34;T0&#34;:{&#34;name&#34;:&#34;T0&#34;,&#34;defense&#34;:&#34;Def_Resolve&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Influence&#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;Soc_Pressure&#34;,&#34;value&#34;:0,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;},&#34;T1&#34;:{&#34;name&#34;:&#34;T1&#34;,&#34;defense&#34;:&#34;&#34;,&#34;target&#34;:&#34;&#34;,&#34;type&#34;:&#34;Patience &#34;,&#34;subType&#34;:&#34;&#34;,&#34;dVal&#34;:&#34;&#34;,&#34;dType&#34;:&#34;&#34;,&#34;formula&#34;:{&#34;workers&#34;:&#91;{&#34;variableName&#34;:&#34;&#34;,&#34;definitionName&#34;:&#34;&#34;,&#34;value&#34;:1,&#34;multiplier&#34;:1,&#34;max&#34;:0}&#93;},&#34;effect&#34;:&#34;&#34;,&#34;traits&#34;:&#34;&#34;}},&#34;sortingGroups&#34;:{&#34;defense&#34;:{&#34;Def_Resolve&#34;:&#91;&#34;T0&#34;&#93;,&#34;&#34;:&#91;&#34;T1&#34;&#93;}}},&#34;username&#34;:&#34;&#64;{display_name}&#34;}'>
 																	9
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Use Technique</div>
@@ -11599,6 +11760,12 @@
 														</div>
 														<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="attr_tch-demand_expand">
 														<div class="wuxFeatureExpandingContent">
+															<div class="wuxFeatureFunctionBlock">
+																<div class="wuxFeatureFunctionBlockFlavorText">
+																	<span>You demand a resolution from an opponent, leveraging the pressure you've built. </span>
+																</div>
+
+															</div>
 															<div class="wuxFeatureEffectsBlock">
 																<div class="wuxFeatureCheckHeader">
 																	<span><span class="wuxTooltip">
@@ -11609,6 +11776,20 @@
 																				<div class="wuxHeader2">vs. Resolve</div><span class="wuxDescription">Your skill check must meet or exceed the target's Defense value listed.
 
 																					Resolve is the ability to persevere when your will is attacked. It is used to defend against intimidation and to stay motivated when desperation sets in.
+																				</span>
+																			</div>
+																		</span></span>
+																</div>
+																<div class="wuxFeatureCheckBlock">
+																	<span class="wuxFeatureCheckBlockRow"></span>
+																</div>
+																<div class="wuxFeatureCheckHeader">
+																	<span><span class="wuxTooltip">
+																			<span class="wuxTooltipText">
+																				Effects
+																			</span>
+																			<div class="wuxTooltipContent">
+																				<div class="wuxHeader2">Effects</div><span class="wuxDescription">This contains the effects that will occur when this technique is used. There is no skill check necessary.
 																				</span>
 																			</div>
 																		</span></span>
@@ -14181,15 +14362,13 @@
 											</div>
 										</div>
 										<input type="hidden" class="wuxInput" name="attr_chat-target" />
-										<div class="wuxRow">
-											<select class="wuxInput" name="attr_chat-type" value="0">
+										<div class="wuxRow"><select class="wuxInput" name="attr_chat-type" value="0">
 												<option value="ctmsg">Speak</option>
 												<option value="ctwsp">Whisper</option>
 												<option value="ctyell">Yell</option>
 												<option value="ctthk">Think</option>
 												<option value="ctdesc">Describe</option>
-											</select>
-										</div>
+											</select></div>
 										<div class="wuxRow">&nbsp;</div><textarea class="wuxInput wuxHeight150" name="attr_chat-message"></textarea>
 										<div class="wuxNoRepControl wuxEmotePostGroup">
 											<fieldset class="repeating_activeemotes">

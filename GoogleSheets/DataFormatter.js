@@ -1390,7 +1390,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", selectedTab == "Overview", "") + "\n";
 
             let definition = WuxDef.Get("Page_Character");
-            return buildSection(mainPageNavigation(definition, WuxDef.GetTitle(`Page_${selectedTab}`), buildStickySideTab(buildTabButtonRow(sideBarButtons))), 
+            return buildSection(mainPageNavigation(definition.title, WuxDef.GetTitle(`Page_${selectedTab}`), definition.getAttribute(WuxDef._info), buildStickySideTab(buildTabButtonRow(sideBarButtons))), 
                 overviewInfoContents(definition.getAttribute(WuxDef._info), tabFieldName));
         },
 
@@ -1407,20 +1407,20 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         
         buildGearPageNavigation = function () {
             let definition = WuxDef.Get("Page_Gear");
-            return buildSection(mainPageNavigation(definition, definition.title, ""), WuxSheetMain.Info.DefaultContents(definition));
+            return buildSection(mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
         },
         
         buildActionsPageNavigation = function () {
             let definition = WuxDef.Get("Page_Actions");
-            return buildSection(mainPageNavigation(definition, definition.title, ""), WuxSheetMain.Info.DefaultContents(definition));
+            return buildSection(mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
         },
 
-        mainPageNavigation = function (definition, subheader, sideBarButtons) {
+        mainPageNavigation = function (tabTitle, subheader, infoAttribute, sideBarButtons) {
             let mainContents = "";
-            mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Actions", "Styles", "Character"]);
-            // mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Styles", "Character"]);
+            mainContents += buildTabs(tabTitle, WuxDef.GetAttribute("Page"), ["Actions", "Styles", "Character"]);
+            // mainContents += buildTabs(tabTitle, WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Styles", "Character"]);
             mainContents += sideBarButtons;
-            mainContents += buildMainSheetHeader(subheader, definition.getAttribute(WuxDef._info));
+            mainContents += buildMainSheetHeader(subheader, infoAttribute);
 
             return mainContents;
         },
@@ -1466,32 +1466,39 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         buildTechniquesNavigation = function () {
             let learnDefinition = WuxDef.Get("Page_LearnTechniques");
             let tabFieldName = WuxDef.GetAttribute("PageSet");
-            let learnSubtitle = WuxDef.GetTitle("Page_LearnTechniques");
+            let pageFieldName = WuxDef.GetAttribute("Page");
+            let learnSubtitle = learnDefinition.title;
             let output = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
             ${WuxSheet.PageDisplay("Builder", characterCreationNavigation(learnDefinition, learnSubtitle))}
             ${WuxSheet.PageDisplay("Training", trainingPageNavigation(learnDefinition, learnSubtitle))}
             ${WuxSheet.PageDisplay("Advancement", advancementPageNavigation(learnDefinition, learnSubtitle))}
             ${WuxSheet.PageDisplay("Core", techniquesCorePageNavigation())}`;
 
-            return buildSection(output, techniquesInfoContents(learnDefinition.getAttribute(WuxDef._info), tabFieldName));
+            return buildSection(output, techniquesInfoContents(learnDefinition.getAttribute(WuxDef._info), tabFieldName, pageFieldName));
         },
 
         techniquesCorePageNavigation = function () {
             let tabFieldName = WuxDef.GetAttribute("Page");
+            let learnDefinition = WuxDef.Get("Page_LearnTechniques");
             let setStyleDefinition = WuxDef.Get("Page_SetStyles");
             let actionsDefinition = WuxDef.Get("Page_Actions");
             return `${WuxSheet.PageDisplayInput(tabFieldName, "Styles")}
-            ${WuxSheet.PageDisplay("Styles", mainPageNavigation(setStyleDefinition, setStyleDefinition.title, ""))}
-            ${WuxSheet.PageDisplay("Actions", mainPageNavigation(actionsDefinition, actionsDefinition.title, ""))}`;
+            ${WuxSheet.PageDisplay("Styles", mainPageNavigation(setStyleDefinition.title, setStyleDefinition.title, learnDefinition.getAttribute(WuxDef._info), ""))}
+            ${WuxSheet.PageDisplay("Actions", mainPageNavigation(actionsDefinition.title, actionsDefinition.title, learnDefinition.getAttribute(WuxDef._info), ""))}`;
         },
 
-        techniquesInfoContents = function (infoFieldName, tabFieldName) {
+        techniquesInfoContents = function (infoFieldName, tabFieldName, pageFieldName) {
+            let coreOutput = "";
+            coreOutput += WuxSheet.PageDisplayInput(pageFieldName, "Styles");
+            coreOutput += WuxSheet.PageDisplay("Styles", WuxDefinition.TooltipDescription(WuxDef.Get("Page_SetStyles")));
+            coreOutput += WuxSheet.PageDisplay("Actions", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Actions")));
+
             let output = "";
-            output += WuxSheet.PageDisplayInput(tabFieldName, "Overview");
+            output += WuxSheet.PageDisplayInput(tabFieldName, "Builder");
             output += WuxSheet.PageDisplay("Builder", WuxDefinition.TooltipDescription(WuxDef.Get("Page_LearnTechniques")));
             output += WuxSheet.PageDisplay("Training", WuxDefinition.TooltipDescription(WuxDef.Get("Page_LearnTechniques")));
             output += WuxSheet.PageDisplay("Advancement", WuxDefinition.TooltipDescription(WuxDef.Get("Page_LearnTechniques")));
-            output += WuxSheet.PageDisplay("Core", WuxDefinition.TooltipDescription(WuxDef.Get("Page_SetStyles")));
+            output += WuxSheet.PageDisplay("Core", coreOutput);
             return WuxSheetMain.Info.Contents(infoFieldName, output);
         },
 
