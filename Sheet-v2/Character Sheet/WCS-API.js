@@ -5481,6 +5481,30 @@ class JobDefinitionData extends DefinitionData {
         this.requirements = "";
     }
 }
+class StatusDefinitionData extends DefinitionData {
+    importJson(json) {
+        super.importJson(json);
+        this.endsOnRoundStart = json.endsOnRoundStart;
+        this.hasRanks = json.hasRanks;
+    }
+
+    setImportSheetExtraData(property, value) {
+        switch (property) {
+            case "endsOnRoundStart":
+                this.endsOnRoundStart = value.toLowerCase() == "true" ? true : false;
+                break;
+            case "hasRanks":
+                this.hasRanks = value.toLowerCase() == "true" ? true : false;
+                break;
+        }
+    }
+
+    createEmpty() {
+        super.createEmpty();
+        this.endsOnRoundStart = false;
+        this.hasRanks = false;
+    }
+}
 
 class TechniqueDisplayData {
 
@@ -5716,9 +5740,6 @@ class TechniqueEffectDisplayData {
             case "Status":
                 output = this.formatStatusEffect(effect);
                 break;
-            case "Condition":
-                output = this.formatConditionEffect(effect);
-                break;
             case "Boost":
                 output = this.formatBoostEffect(effect);
                 break;
@@ -5736,16 +5757,7 @@ class TechniqueEffectDisplayData {
         return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
     }
     formatStatusEffect(effect) {
-        return this.formatStateEffect(effect, effect.effect);
-    }
-    formatConditionEffect(effect) {
-        return this.formatStateEffect(effect, effect.effect);
-    }
-    formatBoostEffect(effect) {
-        return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
-    }
-    formatStateEffect(effect, effectName) {
-        let state = WuxDef.Get(effectName);
+        let state = WuxDef.Get(effect.effect);
         let target = "Target";
         let plural = "s";
         if (effect.target == "Self") {
@@ -5757,10 +5769,14 @@ class TechniqueEffectDisplayData {
             case "Add": return `${target} gain${plural} the ${state.title} ${state.group}`;
             case "Remove": return `${target} lose${plural} the ${state.title} ${state.group}`;
             case "Remove Any": return `${target} lose${plural} any condition of your choice`;
+            case "Remove All": return `${target} lose${plural} all conditions of your choice`;
             case "Rank Up": return `${target} gain${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
             case "Rank Down": return `${target} lose${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
             default: return `${target} gain${plural} the ${state.title} ${state.group}`;
         }
+    }
+    formatBoostEffect(effect) {
+        return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
     }
     formatDescriptionEffect(effect) {
         return effect.effect;
@@ -6069,7 +6085,6 @@ class AttributeHandler {
     getCurrentValue(fieldName) {
         return this.current[fieldName];
     }
-
     getUpdateValue(fieldName) {
         return this.update[fieldName];
     }
@@ -6090,7 +6105,6 @@ class AttributeHandler {
         }
         return output;
 	}
-
 	parseInt(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = 0;
@@ -6107,7 +6121,6 @@ class AttributeHandler {
         }
         return output;
 	}
-
 	parseFloat(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = 0;
@@ -6124,7 +6137,6 @@ class AttributeHandler {
         }
         return output;
 	}
-
 	parseJSON(fieldName, defaultValue) {
 		if (defaultValue == undefined) {
 			defaultValue = "";

@@ -8737,20 +8737,28 @@ You can't Step into difficult terrain, and you can't Step using a Speed other th
 			</div>
 			<div class="chat-chatBox wuxSectionBlock wuxLayoutItem">
 				<div class="wuxSectionContent wuxEmotePostGroup">
-					<input type="hidden" name="attr_emotePostType">
 					<input type="hidden" name="attr_emotePostTarget">
-					<input type="hidden" name="attr_emotePostMessage">
 
 					<div class="wuxFieldSet">
+
 						<input class="options-flag" type="checkbox" name="attr_options-flag" checked="checked"><span>w</span>
 						<span class='wuxHeader'>Post Area</span>
+						<div class="wuxRow">
+							<select class="wuxInput" name="attr_emotePostType" value="ctmsg">
+								<option value="ctmsg">Speak</option>
+								<option value="ctwsp">Whisper</option>
+								<option value="ctyell">Yell</option>
+								<option value="ctthk">Think</option>
+								<option value="ctdesc">Describe</option>
+							</select>
+						</div>
 						<div class="options" style="border: 0px;">
 							<div class="wuxMultiRow">
-								<textarea class="wuxFormInput" name="attr_emotePostContent" placeholder="Type your post here then select an emote to use from the options below"></textarea>
+								<textarea class="wuxFormInput" name="attr_emotePostMessage" placeholder="Type your post here then select an emote to use from the options below"></textarea>
 							</div>
 						</div>
 						<div class="display">
-							<input type="text" class="wuxFormInput wuxSizeHuge" name="attr_emotePostContent" placeholder="Type your post here then select an emote to use from the options below">
+							<input type="text" class="wuxFormInput wuxSizeHuge" name="attr_emotePostMessage" placeholder="Type your post here then select an emote to use from the options below">
 						</div>
 
 						<fieldset class="repeating_emotesSet2">

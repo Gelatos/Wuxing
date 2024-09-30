@@ -791,12 +791,21 @@ on("change:repeating_skilllanguages:isSelected", function (eventinfo) {
 	update_selected_language(GetSectionIdName(repeatingSection, id, "language"));
 });
 
-on("change:emotePostContent", function (eventinfo) {
+on("change:emotePostMessage", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
 		return;
 	};
 	update_emote_post();
 });
+
+on("change:emotePostType", function (eventinfo) {
+	if (eventinfo.sourceType === "sheetworker") {
+		return;
+	};
+	update_emote_post_type(eventinfo.newValue);
+});
+
+
 
 on("change:repeating_chararecast", function (eventinfo) {
 	if (eventinfo.sourceType === "sheetworker") {
@@ -5016,85 +5025,83 @@ var make_action_from_feature = function (featureId) {
 var update_emote_post = function () {
 	console.log("UPDATING EMOTE POST");
 	var update = {};
-	var attr_fields = ["emotePostContent", "character_name", "nickname"];
+	var attr_fields = ["emotePostMessage", "character_name", "nickname"];
 
 	getAttrs(attr_fields, function (v) {
 
 		update = {};
-		var message = v["emotePostContent"];
+		var message = v["emotePostMessage"];
 
 		// get the chat type
-		var chatType = "m";
+		var chatType = "";
+
 		if (message.indexOf("!m ") == 0) {
-			chatType = "m";
+			chatType = "ctmsg";
 			message = message.replace("!m ", "");
 		} else if (message.indexOf("!w ") == 0) {
-			chatType = "w";
+			chatType = "ctwsp";
 			message = message.replace("!w ", "");
 		} else if (message.indexOf("!y ") == 0) {
-			chatType = "y";
+			chatType = "ctyell";
 			message = message.replace("!y ", "");
 		} else if (message.indexOf("!t ") == 0) {
-			chatType = "t";
+			chatType = "ctthk";
 			message = message.replace("!t ", "");
 		} else if (message.indexOf("!d ") == 0) {
-			chatType = "d";
+			chatType = "ctdesc";
 			message = message.replace("!d ", "");
 		} else if (message.indexOf("!de ") == 0) {
-			chatType = "de";
+			chatType = "ctdesc";
 			message = message.replace("!de ", "");
 		}
 
-		// see if there's a target for the message
-		var messageTarget = "";
-		var messageTargetCheck = message.indexOf("/");
-		if (messageTargetCheck != -1) {
-			var messageTargetSubStr = message.substr(messageTargetCheck + 1);
-			var endOfMessage = messageTargetSubStr.indexOf("/");
-			messageTarget = messageTargetSubStr.substr(0, endOfMessage);
-			if (messageTarget.toLowerCase().indexOf("to") != 0) {
-				messageTarget = "to " + messageTarget;
-			}
-			messageTarget = " " + messageTarget;
-			message = message.substr(messageTargetCheck + endOfMessage + 2).trim();
+		if (chatType == "") {
+			return;
 		}
 
-		// format the output
-		var chattemplateTitle = v["nickname"];
-
-		switch (chatType) {
-			case "m":
-				update["emotePostType"] = "ctmsg";
-				chattemplateTitle += " says";
-				break;
-			case "w":
-				update["emotePostType"] = "ctwsp";
-				chattemplateTitle += " whispers";
-				break;
-			case "y":
-				update["emotePostType"] = "ctyell";
-				chattemplateTitle += " yells";
-				break;
-			case "t":
-				update["emotePostType"] = "ctthk";
-				break;
-			case "d":
-				update["emotePostType"] = "ctdesc";
-				message = v["character_name"] + " " + message;
-				break;
-			case "de":
-				update["emotePostType"] = "ctdesc";
-				break;
-		}
-		chattemplateTitle += messageTarget;
-
-		update["emotePostTarget"] = chattemplateTitle;
+		update["emotePostType"] = chatType;
 		update["emotePostMessage"] = message.trim();
+
+		update_emote_post_target(update, v, chatType);
 
 		setAttrs(update, {
 			silent: true
 		});
 	});
+}
+
+var update_emote_post_type = function (chatType) {
+	console.log("UPDATING EMOTE POST TYPE");
+	let attr_fields = ["emotePostMessage", "character_name", "nickname"];
+
+	getAttrs(attr_fields, function (v) {
+		let update = {};
+		update_emote_post_target(update, v, chatType);
+
+		setAttrs(update, {
+			silent: true
+		});
+	});
+	
+}
+
+var update_emote_post_target = function (update, v, chatType) {
+	var chattemplateTitle = v["nickname"];
+	switch (chatType) {
+		case "ctmsg":
+			chattemplateTitle += " says";
+			break;
+		case "ctwsp":
+			chattemplateTitle += " whispers";
+			break;
+		case "ctyell":
+			chattemplateTitle += " yells";
+			break;
+		case "ctthk":
+		case "ctdesc":
+			break;
+	}
+	update["emotePostTarget"] = chattemplateTitle;
 }
 
 var update_emotes = function () {

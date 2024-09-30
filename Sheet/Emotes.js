@@ -252,10 +252,14 @@ function SetLanguage(sendingPlayerName, target, language) {
         language = "None";
     }
     language = GetLanguageName(language);
+    let languageTag = GetLanguageTag(language);
 
     let languageObj = GetCharacterAttribute(target.charId, "speaking_language");
-    if (languageObj != null) {
+    let languageTagObj = GetCharacterAttribute(target.charId, "speaking_language_tag");
+
+    if (languageObj != null && languageTagObj != null) {
         languageObj.set("current", language);
+        languageTagObj.set("current", languageTag);
         sendChat("Emote Manager", "/w " + sendingPlayerName + " Language set to " + language, null, {noarchive:true});
     }
     else {
@@ -462,10 +466,6 @@ function GetPMNoteMessage(target, chatType, message, imageName, chatTitle) {
 
 function GetEmoteMessage(target, chatType, message, imageUrl, useTemplate, element, chatTitle) {
 
-    // get the language
-    let language = GetSelectedLanguage(target.charId);
-    let languageTag = GetLanguageTag(language);
-
     // format the output
     let messageData = FormatChatMessageData(chatType, chatTitle == undefined ? target.displayName : chatTitle, message);
     
@@ -477,7 +477,7 @@ function GetEmoteMessage(target, chatType, message, imageUrl, useTemplate, eleme
     else {
         sendMessage += "#" + messageData.template + " ";
     }
-    return sendMessage + `{{url=${imageUrl}}} {{title=${messageData.title}}} {{message=${messageData.message}}} {{language=${language}}} ${languageTag} ${element != "" ? `{{spirit=1}}{{${element.toLowerCase()}=1}}` : ""}`;
+    return sendMessage + `{{url=${imageUrl}}} {{title=${messageData.title}}} {{message=${messageData.message}}} {{language=@{${target.charName}|speaking_language}}} @{${target.charName}|speaking_language_tag} ${element != "" ? `{{spirit=1}}{{${element.toLowerCase()}=1}}` : ""}`;
 }
 
 function SendFormattedMessage(sender, chatType, message, noarchive) {
