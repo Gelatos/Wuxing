@@ -5613,7 +5613,7 @@ class TechniqueDisplayData {
         this.definitions = [];
     }
 
-    getRollTemplate() {
+    getRollTemplate(addTechnique) {
         let output = "";
 
         output += `{{Username=${this.username}}}{{Name=${this.name}}}{{type-${this.actionType}=1}}`;
@@ -5643,6 +5643,9 @@ class TechniqueDisplayData {
         }
         if (this.definitions.length > 0) {
             output += this.rollTemplateDefinitions(this.definitions, "Def");
+        }
+        if (addTechnique) {
+            output += `{{targetData=${this.technique.getUseTech(true)}}`;
         }
 
         return `&{template:technique} ${this.sanitizeSheetRollAction(output.trim())}`;

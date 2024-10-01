@@ -460,18 +460,22 @@ class TechniqueData extends WuxDatabaseData {
     }
     sanitizeSheetRollAction(roll) {
         var sheetRoll = roll;
+        sheetRoll = sheetRoll.replace(/\"/g, "&#34;");
         sheetRoll = sheetRoll.replace(/%/g, "&#37;");
         sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
         sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-        sheetRoll = sheetRoll.replace(/"/g, "&#34;");
-        // sheetRoll = sheetRoll.replace(/:/g, "");
+        sheetRoll = sheetRoll.replace(/:/g, "COLON");
         sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
         sheetRoll = sheetRoll.replace(/@/g, "&#64;");
         sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
         sheetRoll = sheetRoll.replace(/]/g, "&#93;");
         sheetRoll = sheetRoll.replace(/\n/g, "&&");
         return sheetRoll;
+    }
+    importSandboxJson(jsonString) {
+        jsonString = jsonString.replace(/COLON/g, ":");
+        importJson(JSON.parse(jsonString));
     }
 }
 class TechniqueEffect extends dbObj {
@@ -1319,7 +1323,7 @@ class TechniqueDisplayData {
         this.definitions = [];
     }
 
-    getRollTemplate() {
+    getRollTemplate(addTechnique) {
         let output = "";
 
         output += `{{Username=${this.username}}}{{Name=${this.name}}}{{type-${this.actionType}=1}}`;
@@ -1349,6 +1353,9 @@ class TechniqueDisplayData {
         }
         if (this.definitions.length > 0) {
             output += this.rollTemplateDefinitions(this.definitions, "Def");
+        }
+        if (addTechnique) {
+            output += `{{targetData=${this.technique.getUseTech(true)}}`;
         }
 
         return `&{template:technique} ${this.sanitizeSheetRollAction(output.trim())}`;
