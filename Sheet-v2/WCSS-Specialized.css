@@ -777,11 +777,6 @@ input[type=hidden].wuxFeatureHeaderInteractBlock-flag[value="on"] + .wuxFeatureE
     display: block;
 }
 
-input[type=hidden].wuxFeatureHeaderInteractiveIcon-flag:not([value="0"]) + input.wuxFeatureHeaderInteractBlock-flag
-{
-    pointer-events: none;
-}
-
 .wuxFeatureTypeEquipSlot-Weapon, 
 .wuxFeatureTypeEquipSlot-Chest, 
 .wuxFeatureTypeEquipSlot-Armor, 

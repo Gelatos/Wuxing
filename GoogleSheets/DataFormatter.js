@@ -232,7 +232,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 let output = "";
                 output += setTechniqueDisplayHeaderExpandSection(techDisplayData, displayOptions);
                 output += setTechniqueDisplayHeaderSelectSection(techDisplayData, displayOptions);
-                output += setTechniqueDisplayHeaderUseSection(techDisplayData, displayOptions);
+                // output += setTechniqueDisplayHeaderUseSection(techDisplayData, displayOptions);
                 output += setTechniqueDisplayHeaderNameFields(techDisplayData, displayOptions);
 
                 output = `<div ${setFeatureStyle(["wuxFeatureHeader", `wuxFeatureHeader-${techDisplayData.actionType}`], displayOptions)}>\n${output}\n</div>\n`;
@@ -247,13 +247,14 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     let isChecked = displayOptions.autoExpand ? `checked value="on"` : "";
 
                     return `<div class="wuxFeatureHeaderInteractBlock">
-                    <div class="wuxFeatureHeaderInteractInnerBlock">
-                    <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${attributeName}" ${isChecked}>
-                    <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
-                    <span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-                    <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
-                    <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
-                    </div>
+                        <div class="wuxFeatureHeaderInteractInnerBlock">
+                        <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${attributeName}" ${isChecked}>
+                        <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
+                        <span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
+                        <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
+                        <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
+                        </div>
+                        ${setTechniqueDisplayHeaderUseSection(techDisplayData, displayOptions)}
                     </div>`;
                 }
                 return "";
@@ -279,19 +280,12 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 // add technique data for the api
                 techDisplayData.username = "@{display_name}";
                 techDisplayData.technique.username = "@{display_name}";
-                let showDefinition = WuxDef.Get("Title_ShowTechnique");
                 let useDefinition = WuxDef.Get("Title_UseTechnique");
 
                 return `
-                ${WuxSheetMain.CustomInput("hidden", displayOptions.techniqueDefinition.getAttribute(WuxDef._subfilter), "wuxFeatureInteractionButton-flag", ` value="0"`)}
-                <div class="wuxFeatureHeaderInteractBlock">
-                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='${techDisplayData.getRollTemplate()}'>
-                        ?
-                        <div class="wuxTooltipContent">
-                            ${WuxDefinition.TooltipDescription(showDefinition)}
-                        </div>
-                    </button>
-                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='${techDisplayData.technique.getUseTech(true)}'>
+                ${WuxSheetMain.CustomInput("hidden", displayOptions.techniqueDefinition.getAttribute(WuxDef._subfilter), "wuxHiddenField-flag", ` value="0"`)}
+                <div class="wuxHiddenAuxField">
+                    <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='${techDisplayData.getRollTemplate(true)}'>
                         9
                         <div class="wuxTooltipContent">
                             ${WuxDefinition.TooltipDescription(useDefinition)}

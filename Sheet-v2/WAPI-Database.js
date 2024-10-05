@@ -449,18 +449,20 @@ class TechniqueData extends WuxDatabaseData {
         }
     }
 
-    getUseTech (sanitize) {
-        // add technique data for the api
+    getUseTech () {
+        return `!ctech ${this.formatTechniqueForSandbox()}`;
+    }
+    getUseTechRolltemplate () {
+        return `!ctech ${this.formatTechniqueForSandbox()}`;
+    }
+    formatTechniqueForSandbox() {
         this.username = `@{${WuxDef.GetVariable("DisplayName")}}`;
         let usedTechData = JSON.stringify(this);
-        if (sanitize) {
-            usedTechData = this.sanitizeSheetRollAction(usedTechData);
-        }
-        return `!ctech ${usedTechData}`;
+        return this.sanitizeSheetRollAction(usedTechData);
     }
     sanitizeSheetRollAction(roll) {
         var sheetRoll = roll;
-        sheetRoll = sheetRoll.replace(/\"/g, "&#34;");
+        sheetRoll = sheetRoll.replace(/"/g, "QTE");
         sheetRoll = sheetRoll.replace(/%/g, "&#37;");
         sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -474,7 +476,9 @@ class TechniqueData extends WuxDatabaseData {
         return sheetRoll;
     }
     importSandboxJson(jsonString) {
+        jsonString = jsonString.replace(/QTE/g, '"');
         jsonString = jsonString.replace(/COLON/g, ":");
+        jsonString = jsonString.replace(/&&/g, "\n");
         importJson(JSON.parse(jsonString));
     }
 }
@@ -1355,7 +1359,7 @@ class TechniqueDisplayData {
             output += this.rollTemplateDefinitions(this.definitions, "Def");
         }
         if (addTechnique) {
-            output += `{{targetData=${this.technique.getUseTech(true)}}`;
+            output += `{{targetData=${this.technique.getUseTechRolltemplate()}}`;
         }
 
         return `&{template:technique} ${this.sanitizeSheetRollAction(output.trim())}`;
