@@ -89,7 +89,7 @@ class WuxWorkerBuild {
 		this.buildStats.import(attributeHandler.parseJSON(buildStatVersion));
 	}
 	setPointsMax(attributeHandler) {
-		let max = this.definition.formula.getValue(attributeHandler, true);
+		let max = this.definition.formula.getValue(attributeHandler);
 		attributeHandler.addUpdate(this.attrMax, max);
 	}
 	updatePoints(attributeHandler) {
@@ -567,7 +567,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 				default: attrHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), "Choose an attribute"); break;
 			}
 
-			attrHandler.addUpdate(senseResolveDef.getVariable(), senseResolveDef.formula.getValue(attrHandler, true));
+			attrHandler.addUpdate(senseResolveDef.getVariable(), senseResolveDef.formula.getValue(attrHandler));
 			attrHandler.addUpdate(senseFreewillDef.getVariable(), senseFreewillDef.formula.getValue(attrHandler));
 			attrHandler.addUpdate(senseInsightDef.getVariable(), senseInsightDef.formula.getValue(attrHandler));
 			attrHandler.addUpdate(senseNoticeDef.getVariable(), senseNoticeDef.formula.getValue(attrHandler));
@@ -883,6 +883,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 		attributeHandler.run();
 	},
 	updateStyleBuildPoints = function(eventinfo) {
+		console.log(`Update Style Build Points for ${eventinfo.sourceAttribute}`);
 		let attributeHandler  = new WorkerAttributeHandler();
 		attributeHandler.addMod(WuxDef.GetVariable("Page"));
 
@@ -969,8 +970,8 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 		attrHandler.addUpdate(styleDefinition.getVariable(WuxDef._filter), "0");
 		let tier = styleDefinition.tier;
 		tier = isNaN(tier) ? 0 : tier;
-		let affinity = styleDefinition.affinity;
-		let isLearnable = styleDefinition.tier <= cr && (affinity == "" || affinities.includes(affinity));
+		let affinity = styleDefinition.affinity.trim();
+		let isLearnable = tier <= cr && (affinity == "" || affinities.includes(affinity));
 		attrHandler.addUpdate(styleDefinition.getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
 		attrHandler.addUpdate(styleDefinition.getVariable(), styleStatus);
 
@@ -980,6 +981,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 			tier = isNaN(tier) ? 0 : tier;
 			affinity = techDefinitions[i].affinity;
 			isLearnable = !techDefinitions[i].isFree && styleStatus != "0" && tier <= cr && (affinity == "" || affinities.includes(affinity));
+			// console.log(`Technique ${techDefinitions[i].title} is${isLearnable ? "" : " not"} learnable: from styleStatus ${styleStatus}, tier ${tier} <= ${cr}, and affinity ${affinity} in ${affinities}`);
 			attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
 
 			workerVariableName = techDefinitions[i].getVariable();

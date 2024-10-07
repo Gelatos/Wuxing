@@ -344,7 +344,7 @@ class TechniqueData extends WuxDatabaseData {
         this.group = json.group;
         this.affinity = json.affinity;
         this.tier = json.tier;
-        this.isFree = this.affinity == "" && this.tier <= 1;
+        this.isFree = this.affinity == "" && this.tier <= 0;
         this.action = json.action;
         this.traits = json.traits;
         this.resourceCost = json.resourceCost;
@@ -368,7 +368,7 @@ class TechniqueData extends WuxDatabaseData {
         this.group = "" + dataArray[i]; i++;
         this.affinity = "" + dataArray[i]; i++;
         this.tier = parseInt(dataArray[i]) == NaN ? 1 : parseInt(dataArray[i]); i++;
-        this.isFree = this.affinity == "" && this.tier <= 1;
+        this.isFree = this.affinity == "" && this.tier <= 0;
         this.action = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
         this.resourceCost = "" + dataArray[i]; i++;
@@ -432,10 +432,11 @@ class TechniqueData extends WuxDatabaseData {
                 this.addDefinition(effect.effect);
                 break;
             case "Status":
-            case "Condition":
                 effect.setName(`T${this.effects.keys.length}`);
                 this.effects.add(effect.name, effect);
-                this.addDefinition(effect.effect);
+                if (effect.effect != "") {
+                    this.addDefinition(effect.effect);
+                }
                 break;
             default:
                 effect.setName(`T${this.effects.keys.length}`);
@@ -450,9 +451,6 @@ class TechniqueData extends WuxDatabaseData {
     }
 
     getUseTech () {
-        return `!ctech ${this.formatTechniqueForSandbox()}`;
-    }
-    getUseTechRolltemplate () {
         return `!ctech ${this.formatTechniqueForSandbox()}`;
     }
     formatTechniqueForSandbox() {
@@ -472,6 +470,8 @@ class TechniqueData extends WuxDatabaseData {
         sheetRoll = sheetRoll.replace(/@/g, "&#64;");
         sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
         sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
         sheetRoll = sheetRoll.replace(/\n/g, "&&");
         return sheetRoll;
     }
@@ -1359,7 +1359,10 @@ class TechniqueDisplayData {
             output += this.rollTemplateDefinitions(this.definitions, "Def");
         }
         if (addTechnique) {
-            output += `{{targetData=${this.technique.getUseTechRolltemplate()}}`;
+            if (this.technique.resourceCost != "") {
+                output += `{{consumeData=!rtech ${this.name}|${this.technique.resourceCost}}}`;
+            }
+            output += `{{targetData=${this.technique.getUseTech()}}}`;
         }
 
         return `&{template:technique} ${this.sanitizeSheetRollAction(output.trim())}`;
@@ -1454,17 +1457,17 @@ class TechniqueEffectDisplayData {
             case "HP":
                 output = this.formatHpEffect(effect);
                 break;
+            case "WILL":
+                output = this.formatWillEffect(effect);
+                break;
             case "Patience":
                 output = this.formatPatienceMeterEffect(effect);
                 break;
-            case "Pressure":
-                output = this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Pressure"));
+            case "Favor":
+                output = this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Favor"));
                 break;
-            case "Rapport":
-                output = this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Rapport"));
-                break;
-            case "Influence":
-                output = this.formatInfluenceEffect(effect);
+            case "Persuade":
+                output = this.formatPersuadeEffect(effect);
                 break;
             case "Status":
                 output = this.formatStatusEffect(effect);
@@ -1483,12 +1486,23 @@ class TechniqueEffectDisplayData {
         return output;
     }
     formatHpEffect(effect) {
+        let willpower = WuxDef.GetTitle("HP");
         switch (effect.subType) {
             case "Heal":
-                let hp = WuxDef.GetTitle("HP");
-                return `Heal ${this.formatCalcBonus(effect)} ${hp}`;
+                return `Heal ${this.formatCalcBonus(effect)} ${willpower}`;
+            case "Surge":
+                return `If target has a surge, spend one and heal ${this.formatCalcBonus(effect)} ${willpower}`;
             default:
                 return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+        }
+    }
+    formatWillEffect(effect) {
+        let willpower = WuxDef.GetTitle("WILL");
+        switch (effect.subType) {
+            case "Heal":
+                return `Heal ${this.formatCalcBonus(effect)} ${willpower}`;
+            default:
+                return `${this.formatCalcBonus(effect)} ${willpower} damage`;
         }
     }
     formatSocialMeterEffect(effect, type) {
@@ -1508,8 +1522,8 @@ class TechniqueEffectDisplayData {
                 return `Reduce target's ${patience} by ${this.formatCalcBonus(effect)}`;
         }
     }
-    formatInfluenceEffect(effect) {
-        return `Influence target with ${this.formatCalcBonus(effect)}`;
+    formatPersuadeEffect(effect) {
+        return `Persuade target with ${this.formatCalcBonus(effect)}`;
     }
     formatStatusEffect(effect) {
         let state = WuxDef.Get(effect.effect);

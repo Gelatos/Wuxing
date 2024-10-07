@@ -927,11 +927,12 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 				buildStyleLearn = function (styleDef) {
 					let filterFieldName = styleDef.getAttribute(WuxDef._subfilter);
-					let tooltip = WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(WuxDef.Get("LearnStyle")));
+					let tooltipDesc = WuxDefinition.TooltipDescription(WuxDef.Get("LearnStyle"));
+					let tooltip = WuxSheetMain.Tooltip.Icon(tooltipDesc);
 
-					let learnStyle = WuxSheetMain.HiddenAuxField(filterFieldName,
-						WuxSheetMain.Row(WuxSheetMain.Header2(WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDef.getAttribute(), "Learn Style")) + tooltip))
-						+ WuxSheetMain.HiddenField(filterFieldName, WuxSheetMain.Row(WuxSheetMain.Header2("Learn Style") + tooltip))
+					let learnStyle = WuxSheetMain.HiddenAuxField(filterFieldName, 
+						WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(styleDef.getAttribute(), WuxSheetMain.Header2("Learn Style"), tooltipDesc))
+						+ WuxSheetMain.HiddenField(filterFieldName, WuxSheetMain.Header2("Learn Style") + tooltip)
 						+ WuxSheetMain.Desc(`<strong>Requirements</strong>\n${styleDef.requirements}`);
 					
 					let tabFieldName = WuxDef.GetAttribute("Page");

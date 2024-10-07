@@ -2139,12 +2139,10 @@ input[type=hidden].wuxFeatureHeaderInteractBlock-flag[value="on"] + .wuxFeatureE
     display: block;
 }
 
-input[type=checkbox]:hover + span.wuxFeatureHeaderInteractiveIcon
-input[type=checkbox]:hover + span.wuxFeatureHeaderInteractiveAuxIcon
+input[type=hidden].wuxFeatureHeaderInteractiveIcon-flag:not([value="0"]) + input.wuxFeatureHeaderInteractBlock-flag
 {
-    color: #FFF;
+    pointer-events: none;
 }
-
 
 .wuxFeatureTypeEquipSlot-Weapon, 
 .wuxFeatureTypeEquipSlot-Chest, 
