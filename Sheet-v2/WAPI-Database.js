@@ -1539,6 +1539,7 @@ class TechniqueEffectDisplayData {
             case "Remove": return `${target} lose${plural} the ${state.title} ${state.group}`;
             case "Remove Any": return `${target} lose${plural} any condition of your choice`;
             case "Remove All": return `${target} lose${plural} all conditions of your choice`;
+            case "Remove Will": return `${target} lose${plural} all wills of your choice`;
             case "Rank Up": return `${target} gain${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
             case "Rank Down": return `${target} lose${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
             default: return `${target} gain${plural} the ${state.title} ${state.group}`;
