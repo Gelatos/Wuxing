@@ -1201,7 +1201,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							contents += createStatGroup("Sense");
 							contents += createStatGroup("General");
 							contents += createStatGroup("Combat");
-							contents += createStatGroup("Social");
 							contents += createStatGroup("Skill");
         				    return contents;
         			    },

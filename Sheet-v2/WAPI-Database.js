@@ -1251,6 +1251,13 @@ class TechniqueDisplayData {
     }
     setTechSetResourceData(technique) {
         this.resourceData = technique.action;
+        let skillData = WuxDef.Get(technique.skill);
+        if (skillData != undefined) {
+            this.resourceData += ` ${skillData.group}`;
+        }
+        else {
+            this.resourceData += ` Action`;
+        }
         if (technique.limits != "") {
             if (this.resourceData != "") {
                 this.resourceData += "; ";
@@ -1291,8 +1298,16 @@ class TechniqueDisplayData {
         this.flavorText = technique.flavorText;
     }
     setDefinitions(technique) {
-        for (let i = 0; i < technique.definitions.length; i++) {
-            this.definitions.push(WuxDef.Get(technique.definitions[i]));
+        if (technique.definitions == undefined) {
+            this.definitions = [];
+            let definition = new DefinitionData();
+            definition.title = "Error! No definitions found!";
+            this.definitions.push(definition);
+        }
+        else {
+            for (let i = 0; i < technique.definitions.length; i++) {
+                this.definitions.push(WuxDef.Get(technique.definitions[i]));
+            }
         }
     }
     setEffects(technique) {
@@ -1434,9 +1449,15 @@ class TechniqueEffectDisplayData {
             }
             else {
                 definition = WuxDef.Get(defense);
-                let definition2 = WuxDef.Get("Title_TechDefense");
-                this.check = `${definition2.title}${definition.title}`;
-                this.checkDescription = `${definition2.getDescription()}\n${definition.getDescription()}`;
+                if (definition.group == "Result") {
+                    this.check = `${definition.title}`;
+                    this.checkDescription = `${definition.getDescription()}`;
+                }
+                else {
+                    let definition2 = WuxDef.Get("Title_TechDefense");
+                    this.check = `${definition2.title}${definition.title}`;
+                    this.checkDescription = `${definition2.getDescription()}\n${definition.getDescription()}`;
+                }
             }
         }
         else {
@@ -1539,9 +1560,9 @@ class TechniqueEffectDisplayData {
             case "Remove": return `${target} lose${plural} the ${state.title} ${state.group}`;
             case "Remove Any": return `${target} lose${plural} any condition of your choice`;
             case "Remove All": return `${target} lose${plural} all conditions of your choice`;
-            case "Remove Will": return `${target} lose${plural} all wills of your choice`;
-            case "Rank Up": return `${target} gain${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
-            case "Rank Down": return `${target} lose${plural} [${ranks}] rank in the ${state.title} ${state.group}`;
+            case "Remove Will": return `${target} lose${plural} all emotions of your choice`;
+            case "Self": return `${target} gain${plural} the ${state.title} ${state.group} targeted towards the caster`;
+            case "Choose": return `${target} gain${plural} the ${state.title} ${state.group} targeted towards a character of your choice`;
             default: return `${target} gain${plural} the ${state.title} ${state.group}`;
         }
     }
