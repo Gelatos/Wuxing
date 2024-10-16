@@ -136,7 +136,7 @@ var WuxingCombat = WuxingCombat || (function () {
         setStartRoundTokens = function() {
             WuxingTarget.IterateOverActiveTargetData(function (tokenData) {
                 WuxingToken.ResetTempHp(tokenData);
-                WuxingToken.AddKi(tokenData, 10, true);
+                WuxingToken.AddEnergy(tokenData, 10, true);
                 WuxingToken.SetTurnIcon(tokenData, true);
             });
         },
@@ -304,7 +304,7 @@ var TechniqueConsume = TechniqueConsume || (function () {
         consumeResourceData = function(targetData, resourceDatas) {
             _.each(resourceDatas, function (obj) {
                 if (obj.resourceName == "ki") {
-                    WuxingToken.AddKi(targetData, obj.cost * -1, false);
+                    WuxingToken.AddEnergy(targetData, obj.cost * -1, false);
                 }
                 else {
                     obj.resource.set("current", obj.newVal);

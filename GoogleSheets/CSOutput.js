@@ -32,6 +32,11 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
 			let output = "";
 			output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Technique", WuxDef._page, WuxDef._learn));
 
+			let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", "Social")]);
+			for (let i = 0; i < filteredStats.length; i++) {
+				output += WuxSheetMain.Input("hidden", filteredStats.getAttribute());
+			}
+
 			return `<div class="wuxHiddenFields">
 			${output}
 			</div>`;

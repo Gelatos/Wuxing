@@ -44,7 +44,9 @@ var WuxingTarget = WuxingTarget || (function () {
                 }
             });
             message = `${message} added as ${isAlly ? "ally" : "enemy"} unit(s)`;
-            WuxingMessages.SendSystemMessage(message, ["GM"]);
+            let systemMessage = new SystemInfoMessage(message);
+            systemMessage.setSender("System");
+            WuxMessage.Send(systemMessage, "GM");
 
         },
 
@@ -155,9 +157,9 @@ var WuxingTarget = WuxingTarget || (function () {
                     name: character.get("name"),
                     charId: charId,
                     tokenId: token.get("id"),
-                    displayName: getAttrByName(charId, "nickname"),
+                    displayName: getAttrByName(charId, WuxDef.GetVariable("DisplayName")),
                     owner: ownerName,
-                    elem: getAttrByName(charId, "token_element"),
+                    elem: getAttrByName(charId, WuxDef.GetVariable("Affinity")),
                     isAlly: isAlly
                 };
                 WuxingToken.AddToken(token, targetData);
@@ -255,20 +257,21 @@ var WuxingToken = WuxingToken || (function () {
             }
 
             // set vitals
-            let hp = GetCharacterAttribute(targetData.charId, "hp");
+            let hp = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("HP"));
             token.set("bar1_link", hp.get("_id"));
-            token.set("bar1_value", hp.get("max"));
+            token.set("bar1_value", hp.get("current"));
             token.set("bar1_max", hp.get("max"));
             token.set("showplayers_bar1", true);
             token.set("showplayers_bar1text", "2");
-            let tempHp = GetCharacterAttribute(targetData.charId, "tempHp");
-            token.set("bar2_link", tempHp.get("_id"));
-            token.set("bar2_max", "0");
+            let willpower = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("WILL"));
+            token.set("bar2_link", willpower.get("_id"));
+            token.set("bar2_value", willpower.get("current"));
+            token.set("bar2_max", willpower.get("max"));
             token.set("showplayers_bar2", true);
             token.set("showplayers_bar2text", "2");
 
             // set token name
-            token.set("name", getAttrByName(targetData.charId, "nickname"));
+            token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
             token.set("showname", true);
             token.set("showplayers_name", true);
             token.set("bar_location", "overlap_bottom");
@@ -279,6 +282,38 @@ var WuxingToken = WuxingToken || (function () {
             // set tooltip
             token.set("show_tooltip", true);
             //token.set("tooltip", getAttrByName(tokenData.charId, "scan-summary"));
+        },
+
+        setTokenForSocialBattle = function (targetData, token) {
+            if (token == undefined) {
+                token = getTargetToken(targetData);
+            }
+
+            // set vitals
+            let hp = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("HP"));
+            token.set("bar1_link", hp.get("_id"));
+            token.set("bar1_value", hp.get("current"));
+            token.set("bar1_max", hp.get("max"));
+            token.set("showplayers_bar1", true);
+            token.set("showplayers_bar1text", "2");
+            let willpower = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("WILL"));
+            token.set("bar2_link", willpower.get("_id"));
+            token.set("bar2_value", willpower.get("current"));
+            token.set("bar2_max", willpower.get("max"));
+            token.set("showplayers_bar2", true);
+            token.set("showplayers_bar2text", "2");
+
+            // set token name
+            token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
+            token.set("showname", true);
+            token.set("showplayers_name", true);
+            token.set("bar_location", "overlap_bottom");
+
+            // set the token element
+            token.set(getAttrByName(targetData.charId, "token_element"), true);
+
+            // set tooltip
+            token.set("show_tooltip", true);
         },
 
         setTokenForNarative = function (targetData, token) {
@@ -393,7 +428,7 @@ var WuxingToken = WuxingToken || (function () {
             }
         },
 
-        addKi = function (tokenData, value, cap) {
+        addEnergy = function (tokenData, value, cap) {
             let token = getTargetToken(tokenData);
             if (token == undefined) {
                 return;
@@ -423,12 +458,13 @@ var WuxingToken = WuxingToken || (function () {
         IterateOverSelectedTokens: iterateOverSelectedTokens,
         AddToken: addToken,
         SetTokenForBattle: setTokenForBattle,
+        SetTokenForSocialBattle: setTokenForSocialBattle,
         SetTokenForNarative: setTokenForNarative,
         AddHp: addHp,
         ResetTempHp: resetTempHp,
         AddTempHp: addTempHp,
         AddDamage: addDamage,
-        AddKi: addKi,
+        AddEnergy: addEnergy,
         SetTurnIcon: setTurnIcon
     };
 

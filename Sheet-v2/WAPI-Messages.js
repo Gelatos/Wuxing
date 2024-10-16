@@ -102,9 +102,9 @@ var WuxMessage = WuxMessage || (function () {
 
             messageObject.setSub(output);
             messageObject.url = outfitEmoteSetData.defaultEmote;
+            messageObject.setSender("Emote Manager");
 
-            let message = `/w ${sender.split(" ")[0]} ${messageObject.printRollTemplate()}`;
-            sendChat("Emote Manager", message, null, {noarchive:true});
+            send(messageObject, sender.split(" ")[0]);
         });
         attributeHandler.run();
     },
@@ -112,6 +112,36 @@ var WuxMessage = WuxMessage || (function () {
     createImagePreview = function (url) {
         return `<div class="sheet-wuxTooltipButton"><div class="sheet-wuxTooltipText">i</div><img class="sheet-wuxTooltipImagePreview" src="${url}"/></div>`;
     },
+
+    send = function (messageObject, targets, archive) {
+        if (targets == undefined || targets == "") {
+            sendToChat(messageObject.sender, messageObject.printRollTemplate(), archive);
+            return;
+        }
+
+        let message = messageObject.printRollTemplate();
+
+        if (Array.isArray(targets)) {
+            if (targets.length > 0) {
+                for (let i = 0; i < targets.length; i++) {
+                    sendToChat(messageObject.sender, `/w ${targets[i]} ${message}`, archive);
+                }
+            }
+        }
+        else {
+            sendToChat(messageObject.sender, `/w ${targets} ${message}`, archive);
+        }
+    },
+
+    sendToChat = function (sender, message, archive) {
+        if (archive) {
+            sendChat(sender, message);
+        }
+        else {
+            sendChat(sender, message, null, {noarchive:true});
+        }
+    }
+
 
     setLanguageObj = class {
         constructor(data) {
@@ -165,7 +195,8 @@ var WuxMessage = WuxMessage || (function () {
         Parse: parse,
         ParseInput: parseInput,
         ParseType: parseType,
-        HandleMessageInput: handleMessageInput
+        HandleMessageInput: handleMessageInput,
+        Send: send
     };
 }());
 
@@ -239,7 +270,12 @@ class ChatMessage {
         }
     }
     createEmpty() {
+        this.sender = "";
         this.message = "";
+    }
+
+    setSender(sender) {
+        this.sender = sender;
     }
 
     printRollTemplate() {
@@ -267,7 +303,7 @@ class SimpleMessage extends ChatMessage {
     }
 
     printRollTemplate() {
-        return `{template:${this.template}} ${this.printTemplateData()}`;
+        return `&{template:${this.template}} ${this.printTemplateData()}`;
     }
 
     printMacro() {

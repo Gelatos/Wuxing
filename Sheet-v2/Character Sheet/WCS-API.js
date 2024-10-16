@@ -1008,7 +1008,7 @@ var WuxingCombat = WuxingCombat || (function () {
         setStartRoundTokens = function() {
             WuxingTarget.IterateOverActiveTargetData(function (tokenData) {
                 WuxingToken.ResetTempHp(tokenData);
-                WuxingToken.AddKi(tokenData, 10, true);
+                WuxingToken.AddEnergy(tokenData, 10, true);
                 WuxingToken.SetTurnIcon(tokenData, true);
             });
         },
@@ -1176,7 +1176,7 @@ var TechniqueConsume = TechniqueConsume || (function () {
         consumeResourceData = function(targetData, resourceDatas) {
             _.each(resourceDatas, function (obj) {
                 if (obj.resourceName == "ki") {
-                    WuxingToken.AddKi(targetData, obj.cost * -1, false);
+                    WuxingToken.AddEnergy(targetData, obj.cost * -1, false);
                 }
                 else {
                     obj.resource.set("current", obj.newVal);
@@ -1620,9 +1620,9 @@ var WuxMessage = WuxMessage || (function () {
 
             messageObject.setSub(output);
             messageObject.url = outfitEmoteSetData.defaultEmote;
+            messageObject.setSender("Emote Manager");
 
-            let message = `/w ${sender.split(" ")[0]} ${messageObject.printRollTemplate()}`;
-            sendChat("Emote Manager", message, null, {noarchive:true});
+            send(messageObject, sender.split(" ")[0]);
         });
         attributeHandler.run();
     },
@@ -1630,6 +1630,36 @@ var WuxMessage = WuxMessage || (function () {
     createImagePreview = function (url) {
         return `<div class="sheet-wuxTooltipButton"><div class="sheet-wuxTooltipText">i</div><img class="sheet-wuxTooltipImagePreview" src="${url}"/></div>`;
     },
+
+    send = function (messageObject, targets, archive) {
+        if (targets == undefined || targets == "") {
+            sendToChat(messageObject.sender, messageObject.printRollTemplate(), archive);
+            return;
+        }
+
+        let message = messageObject.printRollTemplate();
+
+        if (Array.isArray(targets)) {
+            if (targets.length > 0) {
+                for (let i = 0; i < targets.length; i++) {
+                    sendToChat(messageObject.sender, `/w ${targets[i]} ${message}`, archive);
+                }
+            }
+        }
+        else {
+            sendToChat(messageObject.sender, `/w ${targets} ${message}`, archive);
+        }
+    },
+
+    sendToChat = function (sender, message, archive) {
+        if (archive) {
+            sendChat(sender, message);
+        }
+        else {
+            sendChat(sender, message, null, {noarchive:true});
+        }
+    }
+
 
     setLanguageObj = class {
         constructor(data) {
@@ -1683,7 +1713,8 @@ var WuxMessage = WuxMessage || (function () {
         Parse: parse,
         ParseInput: parseInput,
         ParseType: parseType,
-        HandleMessageInput: handleMessageInput
+        HandleMessageInput: handleMessageInput,
+        Send: send
     };
 }());
 
@@ -1757,7 +1788,12 @@ class ChatMessage {
         }
     }
     createEmpty() {
+        this.sender = "";
         this.message = "";
+    }
+
+    setSender(sender) {
+        this.sender = sender;
     }
 
     printRollTemplate() {
@@ -1785,7 +1821,7 @@ class SimpleMessage extends ChatMessage {
     }
 
     printRollTemplate() {
-        return `{template:${this.template}} ${this.printTemplateData()}`;
+        return `&{template:${this.template}} ${this.printTemplateData()}`;
     }
 
     printMacro() {
@@ -2088,7 +2124,9 @@ class IntroEmoteMessage extends EmoteMessage {
                 }
             });
             message = `${message} added as ${isAlly ? "ally" : "enemy"} unit(s)`;
-            WuxingMessages.SendSystemMessage(message, ["GM"]);
+            let systemMessage = new SystemInfoMessage(message);
+            systemMessage.setSender("System");
+            WuxMessage.Send(systemMessage, "GM");
 
         },
 
@@ -2199,9 +2237,9 @@ class IntroEmoteMessage extends EmoteMessage {
                     name: character.get("name"),
                     charId: charId,
                     tokenId: token.get("id"),
-                    displayName: getAttrByName(charId, "nickname"),
+                    displayName: getAttrByName(charId, WuxDef.GetVariable("DisplayName")),
                     owner: ownerName,
-                    elem: getAttrByName(charId, "token_element"),
+                    elem: getAttrByName(charId, WuxDef.GetVariable("Affinity")),
                     isAlly: isAlly
                 };
                 WuxingToken.AddToken(token, targetData);
@@ -2299,20 +2337,21 @@ var WuxingToken = WuxingToken || (function () {
             }
 
             // set vitals
-            let hp = GetCharacterAttribute(targetData.charId, "hp");
+            let hp = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("HP"));
             token.set("bar1_link", hp.get("_id"));
-            token.set("bar1_value", hp.get("max"));
+            token.set("bar1_value", hp.get("current"));
             token.set("bar1_max", hp.get("max"));
             token.set("showplayers_bar1", true);
             token.set("showplayers_bar1text", "2");
-            let tempHp = GetCharacterAttribute(targetData.charId, "tempHp");
-            token.set("bar2_link", tempHp.get("_id"));
-            token.set("bar2_max", "0");
+            let willpower = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("WILL"));
+            token.set("bar2_link", willpower.get("_id"));
+            token.set("bar2_value", willpower.get("current"));
+            token.set("bar2_max", willpower.get("max"));
             token.set("showplayers_bar2", true);
             token.set("showplayers_bar2text", "2");
 
             // set token name
-            token.set("name", getAttrByName(targetData.charId, "nickname"));
+            token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
             token.set("showname", true);
             token.set("showplayers_name", true);
             token.set("bar_location", "overlap_bottom");
@@ -2323,6 +2362,38 @@ var WuxingToken = WuxingToken || (function () {
             // set tooltip
             token.set("show_tooltip", true);
             //token.set("tooltip", getAttrByName(tokenData.charId, "scan-summary"));
+        },
+
+        setTokenForSocialBattle = function (targetData, token) {
+            if (token == undefined) {
+                token = getTargetToken(targetData);
+            }
+
+            // set vitals
+            let hp = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("HP"));
+            token.set("bar1_link", hp.get("_id"));
+            token.set("bar1_value", hp.get("current"));
+            token.set("bar1_max", hp.get("max"));
+            token.set("showplayers_bar1", true);
+            token.set("showplayers_bar1text", "2");
+            let willpower = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("WILL"));
+            token.set("bar2_link", willpower.get("_id"));
+            token.set("bar2_value", willpower.get("current"));
+            token.set("bar2_max", willpower.get("max"));
+            token.set("showplayers_bar2", true);
+            token.set("showplayers_bar2text", "2");
+
+            // set token name
+            token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
+            token.set("showname", true);
+            token.set("showplayers_name", true);
+            token.set("bar_location", "overlap_bottom");
+
+            // set the token element
+            token.set(getAttrByName(targetData.charId, "token_element"), true);
+
+            // set tooltip
+            token.set("show_tooltip", true);
         },
 
         setTokenForNarative = function (targetData, token) {
@@ -2437,7 +2508,7 @@ var WuxingToken = WuxingToken || (function () {
             }
         },
 
-        addKi = function (tokenData, value, cap) {
+        addEnergy = function (tokenData, value, cap) {
             let token = getTargetToken(tokenData);
             if (token == undefined) {
                 return;
@@ -2467,12 +2538,13 @@ var WuxingToken = WuxingToken || (function () {
         IterateOverSelectedTokens: iterateOverSelectedTokens,
         AddToken: addToken,
         SetTokenForBattle: setTokenForBattle,
+        SetTokenForSocialBattle: setTokenForSocialBattle,
         SetTokenForNarative: setTokenForNarative,
         AddHp: addHp,
         ResetTempHp: resetTempHp,
         AddTempHp: addTempHp,
         AddDamage: addDamage,
-        AddKi: addKi,
+        AddEnergy: addEnergy,
         SetTurnIcon: setTurnIcon
     };
 
@@ -6495,7 +6567,7 @@ var FeatureService = FeatureService || (function () {
                 case "SR": actionEffectsObj.addStatusRemoval(effect, targetSelf); break;
                 case "H": actionEffectsObj.addHeal(effect, targetSelf); break;
                 case "T": actionEffectsObj.addTempHeal(effect, targetSelf); break;
-                case "K": actionEffectsObj.addKiRecovery(effect, targetSelf); break;
+                case "K": actionEffectsObj.addEnergyRecovery(effect, targetSelf); break;
             }
         },
 
@@ -6537,7 +6609,7 @@ var FeatureService = FeatureService || (function () {
                     this.tempHeals.push(this.createTargetData(name, targetSelf));
                 },
 
-                addKiRecovery: function (name, targetSelf) {
+                addEnergyRecovery: function (name, targetSelf) {
                     this.kiRecoveries.push(this.createTargetData(name, targetSelf));
                 }
             };
@@ -6880,85 +6952,6 @@ function GetRepeatingSectionFromFieldName(fieldName) {
 function GetRepeatingSectionIdFromId(id, repeatingSection) {
     var len = repeatingSection.length + 1;
     return id.substr(len, 20);
-}
-
-// ====== Language
-
-function GetLanguageName(language) {
-
-    switch (language.toLowerCase()) {
-        case "minere":
-        case "min":
-        case "m":
-            return "Minere";
-        case "apollen":
-        case "apo":
-        case "apol":
-        case "a":
-            return "Apollen";
-        case "junal":
-        case "jun":
-        case "j":
-            return "Junal";
-        case "cert":
-        case "cer":
-        case "c":
-            return "Cert";
-        case "lib":
-        case "l":
-            return "Lib";
-        case "jovean":
-        case "novan":
-            return "Jovean";
-
-        case "byric":
-            return "Byric";
-        case "ciel":
-            return "Ciel";
-        case "citeq":
-            return "Citeq";
-        case "crinere":
-            return "Crinere";
-        case "dustell":
-            return "Dustell";
-        case "kleikan":
-            return "Kleikan";
-        case "manstan":
-            return "Manstan";
-        case "muralic":
-            return "Muralic";
-        case "mytikan":
-            return "Mytikan";
-        case "palmic":
-            return "Palmic";
-        case "salkan":
-            return "Salkan";
-        case "sansic":
-            return "Sansic";
-        case "shira":
-            return "Shira";
-        case "shorespeak":
-            return "Shorespeak";
-        case "silq":
-            return "Silq";
-        case "spirit":
-            return "Spirit";
-        case "verdeni":
-            return "Verdeni";
-        case "vulca":
-            return "Vulca";
-        case "wolfwarg":
-            return "Wolfwarg";
-        case "beast":
-            return "Beast";
-        case "emotion":
-            return "Emotion";
-        case "empathy":
-            return "Empathy";
-
-        default:
-            return "";
-    }
 }
 
 // ===== Generators

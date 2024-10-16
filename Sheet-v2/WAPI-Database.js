@@ -2201,7 +2201,7 @@ var FeatureService = FeatureService || (function () {
                 case "SR": actionEffectsObj.addStatusRemoval(effect, targetSelf); break;
                 case "H": actionEffectsObj.addHeal(effect, targetSelf); break;
                 case "T": actionEffectsObj.addTempHeal(effect, targetSelf); break;
-                case "K": actionEffectsObj.addKiRecovery(effect, targetSelf); break;
+                case "K": actionEffectsObj.addEnergyRecovery(effect, targetSelf); break;
             }
         },
 
@@ -2243,7 +2243,7 @@ var FeatureService = FeatureService || (function () {
                     this.tempHeals.push(this.createTargetData(name, targetSelf));
                 },
 
-                addKiRecovery: function (name, targetSelf) {
+                addEnergyRecovery: function (name, targetSelf) {
                     this.kiRecoveries.push(this.createTargetData(name, targetSelf));
                 }
             };
@@ -2586,85 +2586,6 @@ function GetRepeatingSectionFromFieldName(fieldName) {
 function GetRepeatingSectionIdFromId(id, repeatingSection) {
     var len = repeatingSection.length + 1;
     return id.substr(len, 20);
-}
-
-// ====== Language
-
-function GetLanguageName(language) {
-
-    switch (language.toLowerCase()) {
-        case "minere":
-        case "min":
-        case "m":
-            return "Minere";
-        case "apollen":
-        case "apo":
-        case "apol":
-        case "a":
-            return "Apollen";
-        case "junal":
-        case "jun":
-        case "j":
-            return "Junal";
-        case "cert":
-        case "cer":
-        case "c":
-            return "Cert";
-        case "lib":
-        case "l":
-            return "Lib";
-        case "jovean":
-        case "novan":
-            return "Jovean";
-
-        case "byric":
-            return "Byric";
-        case "ciel":
-            return "Ciel";
-        case "citeq":
-            return "Citeq";
-        case "crinere":
-            return "Crinere";
-        case "dustell":
-            return "Dustell";
-        case "kleikan":
-            return "Kleikan";
-        case "manstan":
-            return "Manstan";
-        case "muralic":
-            return "Muralic";
-        case "mytikan":
-            return "Mytikan";
-        case "palmic":
-            return "Palmic";
-        case "salkan":
-            return "Salkan";
-        case "sansic":
-            return "Sansic";
-        case "shira":
-            return "Shira";
-        case "shorespeak":
-            return "Shorespeak";
-        case "silq":
-            return "Silq";
-        case "spirit":
-            return "Spirit";
-        case "verdeni":
-            return "Verdeni";
-        case "vulca":
-            return "Vulca";
-        case "wolfwarg":
-            return "Wolfwarg";
-        case "beast":
-            return "Beast";
-        case "emotion":
-            return "Emotion";
-        case "empathy":
-            return "Empathy";
-
-        default:
-            return "";
-    }
 }
 
 // ===== Generators
