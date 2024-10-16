@@ -255,26 +255,14 @@ var WuxingToken = WuxingToken || (function () {
             if (token == undefined) {
                 token = getTargetToken(targetData);
             }
+            token.set("bar_location", "overlap_bottom");
 
             // set vitals
             let hp = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("HP"));
-            token.set("bar1_link", hp.get("_id"));
-            token.set("bar1_value", hp.get("current"));
-            token.set("bar1_max", hp.get("max"));
-            token.set("showplayers_bar1", true);
-            token.set("showplayers_bar1text", "2");
             let willpower = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("WILL"));
-            token.set("bar2_link", willpower.get("_id"));
-            token.set("bar2_value", willpower.get("current"));
-            token.set("bar2_max", willpower.get("max"));
-            token.set("showplayers_bar2", true);
-            token.set("showplayers_bar2text", "2");
-
-            // set token name
-            token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
-            token.set("showname", true);
-            token.set("showplayers_name", true);
-            token.set("bar_location", "overlap_bottom");
+            setBar(1, token, hp, true, true);
+            setBar(2, token, willpower, true, true);
+            showTokenName(token, tokenData);
 
             // set the token element
             token.set(getAttrByName(targetData.charId, "token_element"), true);
@@ -291,17 +279,9 @@ var WuxingToken = WuxingToken || (function () {
 
             // set vitals
             let hp = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("HP"));
-            token.set("bar1_link", hp.get("_id"));
-            token.set("bar1_value", hp.get("current"));
-            token.set("bar1_max", hp.get("max"));
-            token.set("showplayers_bar1", true);
-            token.set("showplayers_bar1text", "2");
             let willpower = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("WILL"));
-            token.set("bar2_link", willpower.get("_id"));
-            token.set("bar2_value", willpower.get("current"));
-            token.set("bar2_max", willpower.get("max"));
-            token.set("showplayers_bar2", true);
-            token.set("showplayers_bar2text", "2");
+            setBar(1, token, hp, true, true);
+            setBar(2, token, willpower, true, true);
 
             // set token name
             token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
@@ -314,6 +294,20 @@ var WuxingToken = WuxingToken || (function () {
 
             // set tooltip
             token.set("show_tooltip", true);
+        },
+        
+        setBar = function(barIndex, token, variableObj, showBar, showText) {
+            token.set(`bar${barIndex}_link`, variableObj.get("_id"));
+            token.set(`bar${barIndex}_value`, variableObj.get("current"));
+            token.set(`bar${barIndex}_max`, variableObj.get("max"));
+            token.set(`showplayers_bar${barIndex}`, showBar);
+            token.set(`showplayers_bar${barIndex}text`, showText ? "2" : "0");
+        },
+        
+        showTokenName = function (token, targetData) {
+            token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
+            token.set("showname", true);
+            token.set("showplayers_name", true);
         },
 
         setTokenForNarative = function (targetData, token) {
