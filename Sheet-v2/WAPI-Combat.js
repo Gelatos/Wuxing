@@ -40,50 +40,51 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 commandEndTurn(msg);
                 break;
             case "!endcombat":
-                commandEndCombat();
+                commandEndConflict();
                 break;
         };
     },
 
     commandStartBattle = function () {
-        state.WuxConflictManager.round = 0;
-        rollInitiative();
-        setActiveTokensForBattle();
-        startRound();
+        state.WuxConflictManager.conflictType = "Battle";
+        startConflict();
     },
-
     commandStartSocial = function () {
-        rollInitiative();
+        state.WuxConflictManager.conflictType = "Social";
+        startConflict();
     },
-
     commandStartRound = function () {
         startRound();
     },
-
     commandEndTurn = function (msg) {
         endTurn(msg);
     },
-
-    commandEndCombat = function () {
-        endCombat();
+    commandEndConflict = function () {
+        endConflict();
     },
-
-    // Combat State
 
     setDefaultTeams = function() {
         state.WuxConflictManager.teams = [];
         state.WuxConflictManager.teams.push(new TeamData("Ally", 0, true, ""));
         state.WuxConflictManager.teams.push(new TeamData("Enemy", 1, false, ""));
-    }
-
-    setActiveTokensForBattle = function() {
-        TargetReference.IterateOverActiveTargetData(function (tokenTargetData) {
-            let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-            setTokenForBattle(tokenTargetData, attributeHandler);
-            attributeHandler.run();
+    },
+    
+    startConflict = function() {
+        state.WuxConflictManager.round = 0;
+        rollInitiative();
+        setActiveTokensForConflict();
+        startRound();
+    },
+    endConflict = function() {
+        TargetReference.IterateOverActiveTargetData(function(tokenTargetData) {
+            setTokenForNarative(tokenTargetData);
         });
-    }
-
+        resetCombatStateVariables();
+        
+        let systemMessage = new SystemInfoMessage("Conflict Has Finished");
+        systemMessage.setSender("System");
+        WuxMessage.Send(systemMessage, "GM");
+    },
     rollInitiative = function() {
         let initDef = WuxDef.Get("Initiative");
         let tableData = new TableMessage(["Name", initDef.title]);
@@ -93,79 +94,114 @@ var WuxConflictManager = WuxConflictManager || (function () {
         });
         let results = tableData.addTargetModifierTable(tokenTargetDataArray, initDef.getVariable());
         state.WuxConflictManager.startRoundTeamIndex = results[0].tokenTargetData.teamIndex;
-        state.WuxConflictManager.teams[results[0].tokenTargetData.teamIndex].lastActiveOwner = results[0].tokenTargetData.owner;
+        
+        let setTeams = [];
+        let teamsToSet = state.WuxConflictManager.teams.length;
+        for (let i = 0; i < teamsToSet; i++) {
+            setTeams[i] = false;
+        }
+        results.forEach(result => {
+            if (!setTeams[result.tokenTargetData.teamIndex]) {
+                state.WuxConflictManager.teams[result.tokenTargetData.teamIndex].lastActiveOwner = result.tokenTargetData.owner;
+                setTeams[result.tokenTargetData.teamIndex] = true;
+                teamsToSet--;
+                if (teamsToSet <= 0) {
+                    break;
+                }
+            }
+        });
 
         let systemMessage = new SystemInfoMessage(tableData.print());
         systemMessage.setSender("System");
         WuxMessage.Send(systemMessage);
     },
-
-    setCombatStartLastActivePlayer = function(initiativeData) {
-        if (state.WuxConflictManager.lastActivePlayer == "" && initiativeData.targetData.owner != "") {
-        }
+    resetCombatStateVariables = function() {
+        TargetReference.ClearActiveTargetData();
+        state.WuxConflictManager.round = 0;
+        setDefaultTeams();
     },
-
+    
+    // round start
     startRound = function() {
         state.WuxConflictManager.round++;
         setStartRoundTokens();
         sendStartRoundMessage();
     },
-
     setStartRoundTokens = function() {
         TargetReference.IterateOverActiveTargetData(function (tokenTargetData) {
             let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
             tokenTargetData.addEnergy(attributeHandler, 1);
-            tokenTargetData.setTurnIcon(true);
+            switch (state.WuxConflictManager.conflictType) {
+                case "Battle":
+                    setTokenForBattle(tokenTargetData, attributeHandler);
+                    tokenTargetData.setDash(attributeHandler);
+                    break;
+                case "Social":
+                    tokenTargetData.addPatience(attributeHandler, -1);
+                    tokenTargetData.setTurnIcon(true);
+                    break;
+            }
+            
             attributeHandler.run();
         });
     },
-
     sendStartRoundMessage = function() {
         let message = `Round ${state.WuxConflictManager.round} Begins!\n`;
-        message += getPhaseStartMessage(state.WuxConflictManager.startRoundTeamIndex);
-        WuxingMessages.SendSystemMessage(message, ["GM"]);
+        state.WuxConflictManager.activeTeamIndex = state.WuxConflictManager.startRoundTeamIndex;
+        message += getPhaseStartMessage();
+        let systemMessage = new SystemInfoMessage(message);
+        systemMessage.setSender("System");
+        WuxMessage.Send(systemMessage);
     },
 
+    // end turn
     endTurn = function(msg) {
-        let targetData;
+        setNextActiveTeam();
         TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
             TokenReference.SetTurnIcon(tokenTargetData, false);
             sendEndTurnMessage(tokenTargetData);
         });
     },
-
+    setNextActiveTeam = function() {
+        let activeTeam = state.WuxConflictManager.activeTeamIndex;
+        activeTeam++;
+        if (activeTeam >= state.WuxConflictManager.teams.length) {
+            activeTeam == 0;
+        }
+        state.WuxConflictManager.activeTeamIndex = activeTeam;
+    },
     sendEndTurnMessage = function(targetData) {
         let message = `${targetData.displayName} Ends Turn\n`;
-        message += getPhaseStartMessage(!targetData.teamIndex);
-        WuxingMessages.SendSystemMessage(message);
+        message += getPhaseStartMessage();
+        let systemMessage = new SystemInfoMessage(message);
+        systemMessage.setSender("System");
+        WuxMessage.Send(systemMessage);
     },
-
-    getPhaseStartMessage = function(enteringAllyPhase) {
-
-        if (enteringAllyPhase) {
-            return `Ally Phase Start!\n${state.WuxConflictManager.lastActivePlayer == "" ? "GM" : state.WuxConflictManager.lastActivePlayer}, select the next character to have a turn`;
+    getPhaseStartMessage = function() {
+        let team = state.WuxConflictManager.teams[state.WuxConflictManager.activeTeamIndex];
+        if (team.isPlayer && team.lastActiveOwner != "") {
+            return `${team.name} Phase Start!\n${team.lastActiveOwner}, select the next character to have a turn`;
         }
         else {
-            return "Enemy Phase Start!";
+            return " Phase Start!";
         }
-    },
-
-    endCombat = function() {
-        TargetReference.IterateOverActiveTargetData(function(tokenTargetData) {
-            setTokenForNarative(tokenTargetData);
-        });
-        resetCombatStateVariables();
-        WuxingMessages.SendSystemMessage("Combat Has Finished", ["GM"]);
-    },
-
-    resetCombatStateVariables = function() {
-        TargetReference.ClearActiveTargetData();
-        state.WuxConflictManager.lastActivePlayer = "";
-        state.WuxConflictManager.round = 0;
     },
 
     // Token State
-    // ---------------------------
+    setActiveTokensForConflict = function() {
+        TargetReference.IterateOverActiveTargetData(function (tokenTargetData) {
+            let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+            switch (state.WuxConflictManager.conflictType) {
+                case "Battle":
+                    setTokenForBattle(tokenTargetData, attributeHandler);
+                    break;
+                case "Social":
+                    setTokenForSocialBattle(tokenTargetData, attributeHandler);
+                    break;
+            }
+            attributeHandler.run();
+        });
+    },
     setTokenForBattle = function (tokenTargetData, attributeHandler) {
 
         tokenTargetData.initToken();
@@ -185,7 +221,6 @@ var WuxConflictManager = WuxConflictManager || (function () {
             tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
         });
     },
-
     setTokenForSocialBattle = function (tokenTargetData, attributeHandler) {
 
         tokenTargetData.initToken();
@@ -207,7 +242,6 @@ var WuxConflictManager = WuxConflictManager || (function () {
             tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
         });
     },
-
     setTokenForNarative = function (tokenTargetData) {
         tokenTargetData.setBar(1, undefined, true, true);
         tokenTargetData.setBar(2, undefined, true, true);
