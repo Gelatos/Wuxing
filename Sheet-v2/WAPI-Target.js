@@ -108,23 +108,19 @@ class TokenTargetData extends TargetData {
             super(token);
         }
     }
-
     createEmpty() {
         super.createEmpty();
         this.token = undefined;
     }
-
-    // token bar
-    
     importTokenData(token) {
         this.token = token;
         super.importTokenData(token);
     }
 
+    // token bar
     initToken() {
         this.token.set("bar_location", "overlap_bottom");
     }
-        
     setBar(barIndex, variableObj, showBar, showText) {
         if (variableObj == undefined) {
             this.token.set(`bar${barIndex}_link`, "");
@@ -139,13 +135,11 @@ class TokenTargetData extends TargetData {
         this.token.set(`showplayers_bar${barIndex}`, showBar);
         this.token.set(`showplayers_bar${barIndex}text`, showText ? "2" : "0");
     }
-
     setBarValue(barIndex, value) {
         this.token.set(`bar${barIndex}_value`, value);
     }
 
     // nameplate
-    
     showTokenName(isShown) {
         if (isShown) {
             this.token.set("name", this.displayName);
@@ -158,27 +152,22 @@ class TokenTargetData extends TargetData {
     }
 
     // tooltip
-
     showTooltip(isShown) { 
         token.set("show_tooltip", isShown);
     }
-    
     setTooltip(value) {
         this.token.set("tooltip", value);
     }
 
     // status settings
-
     setEnergy(value) {
         this.token.set(this.elem, value);
     }
-
     setTurnIcon(value) {
         this.token.set("status_yellow", value);
     }
 
     // Modifiers
-
     setDisplayName() {
         let attributeHandler = new SandboxAttributeHandler(this.charId);
         let tokenData = this;
@@ -189,14 +178,12 @@ class TokenTargetData extends TargetData {
         });
         attributeHandler.run();
     }
-
     addPatience(attributeHandler, value) {
         this.modifyResourceAttribute(attributeHandler, "Patience", value, this.addModifierToAttribute, function(results) {
             this.setBarValue(1, results.newValue);
             return results;
         });
     }
-
     addHp(attributeHandler, value) {
         this.modifyResourceAttribute(attributeHandler, "HP", value, 
             function(results, value) {
@@ -217,17 +204,28 @@ class TokenTargetData extends TargetData {
                 return results;
         });
     }
-
     addVitality(attributeHandler, value) {
         this.modifyResourceAttribute(attributeHandler, "Vitality", value, this.addModifierToAttribute, function(results) {
             return results;
         });
     }
-
     addEnergy(attributeHandler, value) {
         this.modifyResourceAttribute(attributeHandler, "EN", value, this.addModifierToAttribute, function(results) {
             this.setEnergy(results.newValue);
             return results;
+        });
+    }
+    setDash(attributeHandler) {
+        let tokenTargetData = this;
+        let baseSpeedVar = WuxDef.GetVariable("Cmb_Mv");
+        let maxSpeedVar = WuxDef.GetVariable("Cmb_MvPotency");
+        attributeHandler.addMod(baseSpeedVar);
+        attributeHandler.addMod(maxSpeedVar);
+        attributeHandler.addFinishCallback(function(attrHandler) {
+            let move = Math.Ceil(attrHandler.parseInt(baseSpeedVar, 0, false), 
+                Dice.RollDice(1, attrHandler.parseInt(maxSpeedVar, 0, false))
+            );
+            tokenTargetData.setTurnIcon(move);
         });
     }
 
@@ -248,7 +246,6 @@ class TokenTargetData extends TargetData {
             finishCallback(results);
         });
     }
-
     addModifierToAttribute(results, value) {
         if (value == "max") {
             results.newValue = max;
