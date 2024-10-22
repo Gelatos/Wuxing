@@ -11,10 +11,11 @@ on("chat:message", function(msg) {
              content = msg.content.substring(firstSpace).trim();
         }
 
-        WuxingCombat.HandleInput(msg, tag, content);
+        WuxConflictManager.HandleInput(msg, tag, content);
+        WuxTechniqueResolver.HandleInput(msg, tag, content);
         WuxMessage.HandleMessageInput(msg, tag, content);
-        WuxingTarget.HandleInput(msg, tag, content);
-        WuxingToken.HandleInput(msg, tag, content);
+        TargetReference.HandleInput(msg, tag, content);
+        TokenReference.HandleInput(msg, tag, content);
 
         switch(tag) {
             case "!markernames":
@@ -285,6 +286,10 @@ on("chat:message", function(msg) {
         }
     }
 });
+
+DebugLog = function (msg) {
+    log(msg);
+}
 
 class TargetData {
     constructor(data) {
@@ -870,18 +875,201 @@ function FormTargetData(charId, charName, tokenId, displayName) {
     };
 }
 
-var WuxingCombat = WuxingCombat || (function () {
+var WuxConflictManager = WuxConflictManager || (function () {
+    'use strict';
+
+    var schemaVersion = "0.1.1",
+
+    checkInstall = function () {
+        if (!state.hasOwnProperty('WuxConflict') || state.WuxingCombat.version !== schemaVersion) {
+            state.WuxingCombat = {
+                version: schemaVersion,
+                conflictType: "",
+                lastActivePlayer: "",
+                round: 0,
+                startSideIsAlly: "",
+            };
+        }
+    },
+    handleInput = function (msg, tag, content) {
+        switch (tag) {
+            case "!cmbstartbattle":
+                commandStartBattle();
+                break;
+            case "!cmbstartsocial":
+                commandStartSocial();
+                break;
+            case "!startround":
+                commandStartRound();
+                break;
+            case "!endturn":
+                commandEndTurn(msg);
+                break;
+            case "!endcombat":
+                commandEndCombat();
+                break;
+        };
+    },
+
+    commandStartBattle = function () {
+        rollInitiative();
+    },
+
+    commandStartSocial = function () {
+        rollInitiative();
+    },
+
+    commandStartRound = function () {
+        startRound();
+    },
+
+    commandEndTurn = function (msg) {
+        endTurn(msg);
+    },
+
+    commandEndCombat = function () {
+        endCombat();
+    },
+
+    // Combat State
+    // ---------------------------
+
+    rollInitiative = function() {
+
+        let initiativeData = getInitiativeFromActiveTargets();
+        setCombatStartingPhase(initiativeData);
+
+        // create the table data
+        let tableData = [];
+        let data;
+
+        for (let i = 0; i < initiativeData.length; i++) {
+            data = parseInitiativeData(initiativeData[i]);
+            tableData.push([data.targetData.displayName, data.value]);
+            setCombatStartLastActivePlayer(data);
+        }
+        WuxingMessages.SendTableMessage(["Name", "Initiative"], tableData, ["GM"], undefined, true);
+        startRound();
+    },
+
+    
+
+    setCombatStartingPhase = function(initiativeData) {
+        let obj = initiativeData[0].split("@");
+        let targetData = TargetReference.FindActiveTargetDataByCharName(obj[1]);
+        state.WuxingCombat.startSideIsAlly = targetData.isAlly;
+    },
+
+    setCombatStartLastActivePlayer = function(initiativeData) {
+        if (state.WuxingCombat.lastActivePlayer == "" && initiativeData.targetData.owner != "") {
+            state.WuxingCombat.lastActivePlayer = initiativeData.targetData.owner;
+        }
+    },
+
+    startRound = function() {
+        state.WuxingCombat.round++;
+        setStartRoundTokens();
+        sendStartRoundMessage();
+    },
+
+    setStartRoundTokens = function() {
+        TargetReference.IterateOverActiveTargetData(function (tokenData) {
+            TokenReference.ResetTempHp(tokenData);
+            TokenReference.AddEnergy(tokenData, 10, true);
+            TokenReference.SetTurnIcon(tokenData, true);
+        });
+    },
+
+    sendStartRoundMessage = function() {
+        let message = `Round ${state.WuxingCombat.round} Begins!\n`;
+        message += getPhaseStartMessage(state.WuxingCombat.startSideIsAlly);
+        WuxingMessages.SendSystemMessage(message, ["GM"]);
+    },
+
+    endTurn = function(msg) {
+        let targetData;
+        TokenReference.IterateOverSelectedTokens(msg, function (token) {
+            targetData = TargetReference.FindActiveTargetDataByTokenId(token.get("_id"));
+            TokenReference.SetTurnIcon(targetData, false);
+            sendEndTurnMessage(targetData);
+        });
+    },
+
+    sendEndTurnMessage = function(targetData) {
+        let message = `${targetData.displayName} Ends Turn\n`;
+        message += getPhaseStartMessage(!targetData.isAlly);
+        WuxingMessages.SendSystemMessage(message);
+    },
+
+    getPhaseStartMessage = function(enteringAllyPhase) {
+
+        if (enteringAllyPhase) {
+            return `Ally Phase Start!\n${state.WuxingCombat.lastActivePlayer == "" ? "GM" : state.WuxingCombat.lastActivePlayer}, select the next character to have a turn`;
+        }
+        else {
+            return "Enemy Phase Start!";
+        }
+    },
+
+    endCombat = function() {
+        TargetReference.IterateOverActiveTargetData(function(targetData) {
+            TokenReference.SetTokenForNarative(targetData);
+        });
+        resetCombatStateVariables();
+        WuxingMessages.SendSystemMessage("Combat Has Finished", ["GM"]);
+    },
+
+    resetCombatStateVariables = function() {
+        TargetReference.ClearActiveTargetData();
+        state.WuxingCombat.lastActivePlayer = "";
+        state.WuxingCombat.round = 0;
+    },
+
+    // Initiative Handling
+    // ---------------------------
+
+    createInitiativeData = function(targetData) {
+        let value = parseInt(getAttrByName(targetData.charId, "initiative"));
+        let roll = randomInteger(20) + value;
+        return `${roll < 10 ? "0" : ""}${roll}.${value < 10 ? "0" : ""}${value < 0 ? "0" : value}@${targetData.name}`;
+    },
+
+    parseInitiativeData = function(initiativeData) {
+        let obj = initiativeData.split("@");
+        return {
+            targetData: TargetReference.FindActiveTargetDataByCharName(obj[1]),
+            value: obj[0]
+        }
+    },
+
+    getInitiativeFromActiveTargets = function() {
+        let initiativeData = [];
+        TargetReference.IterateOverActiveTargetData(function (targetData) {
+            initiativeData.push(createInitiativeData(targetData));
+            TokenReference.SetTokenForBattle(targetData);
+        });
+
+        // sort the initiative data
+        return Format.SortArrayDecrementing(initiativeData);
+    }
+    ;
+
+    return {
+        CheckInstall: checkInstall,
+        HandleInput: handleInput
+    };
+
+}());
+
+var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
     'use strict';
 
     var schemaVersion = "0.1.1",
 
         checkInstall = function () {
-            if (!state.hasOwnProperty('WuxingCombat') || state.WuxingCombat.version !== schemaVersion) {
-                state.WuxingCombat = {
-                    version: schemaVersion,
-                    lastActivePlayer: "",
-                    round: 0,
-                    startSideIsAlly: ""
+            if (!state.hasOwnProperty('WuxTechniqueResolver') || state.WuxTechniqueResolver.version !== schemaVersion) {
+                state.WuxTechniqueResolver = {
+                    version: schemaVersion
                 };
             }
         },
@@ -902,18 +1090,6 @@ var WuxingCombat = WuxingCombat || (function () {
                     break;
                 case "!adv":
                     commandRollAdvantage(msg, content);
-                    break;
-                case "!cmbstartcombat":
-                    commandStartBattle();
-                    break;
-                case "!startround":
-                    commandStartRound();
-                    break;
-                case "!endturn":
-                    commandEndTurn(msg);
-                    break;
-                case "!endcombat":
-                    commandEndCombat();
                     break;
             };
         },
@@ -943,147 +1119,15 @@ var WuxingCombat = WuxingCombat || (function () {
             rollAdvantage(msg, ParseIntValue(content));
         },
 
-        commandStartBattle = function () {
-            startCombat();
-        },
-
-        commandStartRound = function () {
-            startRound();
-        },
-
-        commandEndTurn = function (msg) {
-            endTurn(msg);
-        },
-
-        commandEndCombat = function () {
-            endCombat();
-        },
-
-        // Combat State
-        // ---------------------------
-
-        startCombat = function() {
-
-            let initiativeData = [];
-            WuxingTarget.IterateOverActiveTargetData(function (targetData) {
-                initiativeData.push(createInitiativeData(targetData));
-                WuxingToken.SetTokenForBattle(targetData);
-            });
-
-            // sort the initiative data
-            initiativeData = Format.SortArrayDecrementing(initiativeData);
-            setCombatStartingPhase(initiativeData);
-
-            // create the table data
-            let tableData = [];
-            let data;
-
-            for (let i = 0; i < initiativeData.length; i++) {
-                data = parseInitiativeData(initiativeData[i]);
-                tableData.push([data.targetData.displayName, data.value]);
-                setCombatStartLastActivePlayer(data);
-            }
-            WuxingMessages.SendTableMessage(["Name", "Initiative"], tableData, ["GM"], undefined, true);
-            startRound();
-        },
-
-        setCombatStartingPhase = function(initiativeData) {
-            let obj = initiativeData[0].split("@");
-            let targetData = WuxingTarget.FindActiveTargetDataByCharName(obj[1]);
-            state.WuxingCombat.startSideIsAlly = targetData.isAlly;
-        },
-
-        setCombatStartLastActivePlayer = function(initiativeData) {
-            if (state.WuxingCombat.lastActivePlayer == "" && initiativeData.targetData.owner != "") {
-                state.WuxingCombat.lastActivePlayer = initiativeData.targetData.owner;
-            }
-        },
-
-        startRound = function() {
-            state.WuxingCombat.round++;
-            setStartRoundTokens();
-            sendStartRoundMessage();
-        },
-
-        setStartRoundTokens = function() {
-            WuxingTarget.IterateOverActiveTargetData(function (tokenData) {
-                WuxingToken.ResetTempHp(tokenData);
-                WuxingToken.AddEnergy(tokenData, 10, true);
-                WuxingToken.SetTurnIcon(tokenData, true);
-            });
-        },
-
-        sendStartRoundMessage = function() {
-            let message = `Round ${state.WuxingCombat.round} Begins!\n`;
-            message += getPhaseStartMessage(state.WuxingCombat.startSideIsAlly);
-            WuxingMessages.SendSystemMessage(message, ["GM"]);
-        },
-
-        endTurn = function(msg) {
-            let targetData;
-            WuxingToken.IterateOverSelectedTokens(msg, function (token) {
-                targetData = WuxingTarget.FindActiveTargetDataByTokenId(token.get("_id"));
-                WuxingToken.SetTurnIcon(targetData, false);
-                sendEndTurnMessage(targetData);
-            });
-        },
-
-        sendEndTurnMessage = function(targetData) {
-            let message = `${targetData.displayName} Ends Turn\n`;
-            message += getPhaseStartMessage(!targetData.isAlly);
-            WuxingMessages.SendSystemMessage(message);
-        },
-
-        getPhaseStartMessage = function(enteringAllyPhase) {
-
-            if (enteringAllyPhase) {
-                return `Ally Phase Start!\n${state.WuxingCombat.lastActivePlayer == "" ? "GM" : state.WuxingCombat.lastActivePlayer}, select the next character to have a turn`;
-            }
-            else {
-                return "Enemy Phase Start!";
-            }
-        },
-
-        endCombat = function() {
-            WuxingTarget.IterateOverActiveTargetData(function(targetData) {
-                WuxingToken.SetTokenForNarative(targetData);
-            });
-            resetCombatStateVariables();
-            WuxingMessages.SendSystemMessage("Combat Has Finished", ["GM"]);
-        },
-
-        resetCombatStateVariables = function() {
-            WuxingTarget.ClearActiveTargetData();
-            state.WuxingCombat.lastActivePlayer = "";
-            state.WuxingCombat.round = 0;
-        },
-
-        // Initiative Handling
-        // ---------------------------
-
-        createInitiativeData = function(targetData) {
-            let value = parseInt(getAttrByName(targetData.charId, "initiative"));
-            let roll = randomInteger(20) + value;
-            return `${roll < 10 ? "0" : ""}${roll}.${value < 10 ? "0" : ""}${value < 0 ? "0" : value}@${targetData.name}`;
-        },
-
-        parseInitiativeData = function(initiativeData) {
-            let obj = initiativeData.split("@");
-            return {
-                targetData: WuxingTarget.FindActiveTargetDataByCharName(obj[1]),
-                value: obj[0]
-            }
-        },
-
         // Technique Handling
         // ---------------------------
         
         getUserTargetDataFromTechnique = function (technique) {
-            return WuxingTarget.FindActiveTargetDataByCharName(technique.username);
+            return TargetReference.FindActiveTargetDataByCharName(technique.username);
         },
         
         getDefenderTargetDataFromTechnique = function (technique) {
-            return WuxingTarget.FindActiveTargetDataByTokenId(technique.target);
+            return TargetReference.FindActiveTargetDataByTokenId(technique.target);
         },
 
         // Math
@@ -1176,7 +1220,7 @@ var TechniqueConsume = TechniqueConsume || (function () {
         consumeResourceData = function(targetData, resourceDatas) {
             _.each(resourceDatas, function (obj) {
                 if (obj.resourceName == "ki") {
-                    WuxingToken.AddEnergy(targetData, obj.cost * -1, false);
+                    TokenReference.AddEnergy(targetData, obj.cost * -1, false);
                 }
                 else {
                     obj.resource.set("current", obj.newVal);
@@ -1513,7 +1557,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
 on("ready", function () {
     'use strict';
 
-    WuxingCombat.CheckInstall();
+    WuxTechniqueResolver.CheckInstall();
 });
 
 var WuxMessage = WuxMessage || (function () {
@@ -2078,14 +2122,14 @@ class IntroEmoteMessage extends EmoteMessage {
         super.createEmpty();
         this.template = "ctintro";
     }
-}var WuxingTarget = WuxingTarget || (function () {
+}var TargetReference = TargetReference || (function () {
     'use strict';
 
     var schemaVersion = "0.1.0",
 
         checkInstall = function () {
             if (!state.hasOwnProperty('WuxingTarget') || state.WuxingTarget.version != schemaVersion) {
-                log (`Setting Wuxing Target version to v${WuxingTarget.schemaVersion}`);
+                log (`Setting Wuxing Target version to v${TargetReference.schemaVersion}`);
                 state.WuxingTarget = {
                     version: schemaVersion,
                     activeCharacters: getDefaultActiveCharacters()
@@ -2114,7 +2158,7 @@ class IntroEmoteMessage extends EmoteMessage {
             let isAlly = content == "true" ? true : false;
             let tokenData;
             let message = "";
-            WuxingToken.IterateOverSelectedTokens(msg, function (token) {
+            TokenReference.IterateOverSelectedTokens(msg, function (token) {
                 tokenData = addCombatTokenToActiveTargets(token, isAlly);
                 if (tokenData != undefined) {
                     if (message != "") {
@@ -2131,7 +2175,7 @@ class IntroEmoteMessage extends EmoteMessage {
         },
 
         commandRemoveCharacter = function (msg) {
-            WuxingToken.IterateOverSelectedTokens(msg, function (token) {
+            TokenReference.IterateOverSelectedTokens(msg, function (token) {
                 removeActiveTargetData(token.get("id"));
             });
         },
@@ -2242,7 +2286,7 @@ class IntroEmoteMessage extends EmoteMessage {
                     elem: getAttrByName(charId, WuxDef.GetVariable("Affinity")),
                     isAlly: isAlly
                 };
-                WuxingToken.AddToken(token, targetData);
+                TokenReference.AddToken(token, targetData);
                 return targetData;
             }
             return undefined;
@@ -2263,7 +2307,7 @@ class IntroEmoteMessage extends EmoteMessage {
 
 }());
 
-var WuxingToken = WuxingToken || (function () {
+var TokenReference = TokenReference || (function () {
     'use strict';
 
     var schemaVersion = "0.1.0",
@@ -2292,7 +2336,7 @@ var WuxingToken = WuxingToken || (function () {
         commandDealDamage = function (msg, content) {
             let targetData;
             iterateOverSelectedTokens(msg, function (token) {
-                targetData = WuxingTarget.GetTargetDataByToken(token);
+                targetData = TargetReference.GetTargetDataByToken(token);
                 addDamage(targetData, token, parseInt(content));
             });
         }, 
@@ -2303,6 +2347,10 @@ var WuxingToken = WuxingToken || (function () {
         getTargetToken = function (targetData) {
             if (state.WuxingToken.tokens[targetData.tokenId] == undefined) {
                 let token = getObj('graphic', targetData.tokenId);
+                if (token == undefined) {
+                    DebugLog(`Token for ${targetData.charName} not found`);
+                    return undefined;
+                }
                 addToken(token, targetData);
             }
             return state.WuxingToken.tokens[targetData.tokenId];
@@ -2334,27 +2382,18 @@ var WuxingToken = WuxingToken || (function () {
         setTokenForBattle = function (targetData, token) {
             if (token == undefined) {
                 token = getTargetToken(targetData);
+                if (token == undefined) {
+                    return;
+                }
             }
+            token.set("bar_location", "overlap_bottom");
 
             // set vitals
             let hp = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("HP"));
-            token.set("bar1_link", hp.get("_id"));
-            token.set("bar1_value", hp.get("current"));
-            token.set("bar1_max", hp.get("max"));
-            token.set("showplayers_bar1", true);
-            token.set("showplayers_bar1text", "2");
             let willpower = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("WILL"));
-            token.set("bar2_link", willpower.get("_id"));
-            token.set("bar2_value", willpower.get("current"));
-            token.set("bar2_max", willpower.get("max"));
-            token.set("showplayers_bar2", true);
-            token.set("showplayers_bar2text", "2");
-
-            // set token name
-            token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
-            token.set("showname", true);
-            token.set("showplayers_name", true);
-            token.set("bar_location", "overlap_bottom");
+            setBar(1, token, hp, true, true);
+            setBar(2, token, willpower, true, true);
+            showTokenName(token, tokenData);
 
             // set the token element
             token.set(getAttrByName(targetData.charId, "token_element"), true);
@@ -2371,17 +2410,9 @@ var WuxingToken = WuxingToken || (function () {
 
             // set vitals
             let hp = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("HP"));
-            token.set("bar1_link", hp.get("_id"));
-            token.set("bar1_value", hp.get("current"));
-            token.set("bar1_max", hp.get("max"));
-            token.set("showplayers_bar1", true);
-            token.set("showplayers_bar1text", "2");
             let willpower = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("WILL"));
-            token.set("bar2_link", willpower.get("_id"));
-            token.set("bar2_value", willpower.get("current"));
-            token.set("bar2_max", willpower.get("max"));
-            token.set("showplayers_bar2", true);
-            token.set("showplayers_bar2text", "2");
+            setBar(1, token, hp, true, true);
+            setBar(2, token, willpower, true, true);
 
             // set token name
             token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
@@ -2394,6 +2425,20 @@ var WuxingToken = WuxingToken || (function () {
 
             // set tooltip
             token.set("show_tooltip", true);
+        },
+        
+        setBar = function(barIndex, token, variableObj, showBar, showText) {
+            token.set(`bar${barIndex}_link`, variableObj.get("_id"));
+            token.set(`bar${barIndex}_value`, variableObj.get("current"));
+            token.set(`bar${barIndex}_max`, variableObj.get("max"));
+            token.set(`showplayers_bar${barIndex}`, showBar);
+            token.set(`showplayers_bar${barIndex}text`, showText ? "2" : "0");
+        },
+        
+        showTokenName = function (token, targetData) {
+            token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
+            token.set("showname", true);
+            token.set("showplayers_name", true);
         },
 
         setTokenForNarative = function (targetData, token) {
@@ -2553,8 +2598,8 @@ var WuxingToken = WuxingToken || (function () {
 on("ready", function () {
     'use strict';
 
-    WuxingTarget.CheckInstall();
-    WuxingToken.CheckInstall();
+    TargetReference.CheckInstall();
+    TokenReference.CheckInstall();
 });
 
 

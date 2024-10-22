@@ -142,7 +142,6 @@ var WuxMessage = WuxMessage || (function () {
         }
     }
 
-
     setLanguageObj = class {
         constructor(data) {
             this.createEmpty();
@@ -199,6 +198,59 @@ var WuxMessage = WuxMessage || (function () {
         Send: send
     };
 }());
+
+class TableMessage {
+    constructor(headers) {
+        this.headers = headers;
+        this.rows = [];
+    }
+
+    addRow(row) {
+        this.rows.push(row);
+    }
+
+    print() {
+        let tableHeader = "";
+        for (let i = 0; i < this.headers.length; i++) {
+            tableHeader += `<th class="sheet-wuxTableHeader">${this.headers[i]}</th>`;
+        }
+
+        let tableRow = "";
+        let tableRows = "";
+        for (let i = 0; i < this.rows.length; i++) {
+            tableRow = "";
+            for (let j = 0; j < this.rows[i].length; j++) {
+                tableRow += `<td class="sheet-wuxTableData">${tableData[i][j]}</td>`;
+            }
+            tableRows += `<tr>${tableRow}</tr>`;
+        }
+
+        return `<table class="sheet-wuxTable"><tr>${tableHeader}</tr>${tableRows}</table>`;
+    }
+
+    addTargetModifierTable(tokenTargetDataArray, variableName) {
+        
+        let data = [];
+        tokenTargetDataArray.forEach(tokenTargetData => {
+            let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+            let results;
+            attributeHandler.addMod(variableName);
+            
+            attributeHandler.addFinishCallback(function(attrHandler) {
+                let value = attrHandler.parseInt(variableName, 0, false);
+                results = Dice.RollSkillCheck(0, value);
+            });
+            attributeHandler.run();
+            results.tokenTargetData = tokenTargetData;
+            data.push(results);
+        });
+        data.sort((a, b) => a.total - b.total);
+        data.forEach(results => {
+            this.addRow([results.tokenTargetData.displayName, `${Format.ShowTooltip(`${results.total}`, Format.ArrayToString(results.rolls))}`]);
+        });
+        return data;
+    }
+}
 
 class EmoteSetData {
     constructor(json) {

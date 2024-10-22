@@ -11,10 +11,11 @@ on("chat:message", function(msg) {
              content = msg.content.substring(firstSpace).trim();
         }
 
-        WuxingCombat.HandleInput(msg, tag, content);
+        WuxConflictManager.HandleInput(msg, tag, content);
+        WuxTechniqueResolver.HandleInput(msg, tag, content);
         WuxMessage.HandleMessageInput(msg, tag, content);
-        WuxingTarget.HandleInput(msg, tag, content);
-        WuxingToken.HandleInput(msg, tag, content);
+        TargetReference.HandleInput(msg, tag, content);
+        TokenReference.HandleInput(msg, tag, content);
 
         switch(tag) {
             case "!markernames":
@@ -286,81 +287,8 @@ on("chat:message", function(msg) {
     }
 });
 
-class TargetData {
-    constructor(data) {
-        this.createEmpty();
-        if (data != undefined) {
-            if (data.type != undefined) {
-                if (data.type == "api") {
-                    this.importMessage(data);
-                }
-                if (data.type == "graphic") {
-                    this.importTokenData(data);
-                }
-            }
-            else if (data.charId != undefined) {
-                this.importJSON(data);
-            }
-        }
-    }
-
-    createEmpty() {
-        this.charId = "";
-        this.charName = "";
-        this.tokenId = "";
-        this.displayName = "";
-        this.token = undefined;
-    }
-
-    importJSON(json) {
-        this.charId = json.charId;
-        this.charName = json.charName;
-        this.tokenId = json.tokenId;
-        this.displayName = json.displayName;
-    }
-
-    importMessage(msg) {
-        if (msg.selected && msg.selected.length > 0) {
-            this.importTokenData(this.getToken(msg.selected[0]._id));
-        }
-    }
-
-    importTokenData(token) {
-        if (token != undefined) {
-            this.charId = token.get('represents');
-            this.token = token;
-            this.tokenId = token.get("_id");
-            if (this.charId != undefined && this.charId != "") {
-                let tokenData = this;
-                let attributeHandler = new SandboxAttributeHandler(this.charId);
-                let displayNameVar = WuxDef.GetVariable("DisplayName");
-                attributeHandler.addMod(displayNameVar);
-                attributeHandler.addFinishCallback(function(attrHandler) {
-                    tokenData.displayName = attrHandler.parseString(displayNameVar);
-                });
-                attributeHandler.run();
-
-                let characterObj = getObj("character", this.charId);
-                if (characterObj != undefined) {
-                    this.charName = characterObj.get("name");
-                }
-                return;
-            }
-            else {
-                log (`[TokenData] (${this.token.name}) has no representative character.`);
-            }
-        }
-        log (`[TokenData] No token exists.`);
-    }
-
-    getToken(tokenId) {
-        let token = getObj('graphic', tokenId);
-        if (token != undefined) {
-            return token;
-        }
-        log (`[TargetData] No token with id ${tokenId} exists.`);
-        return undefined;
-    }
+DebugLog = function (msg) {
+    log(msg);
 }
 
 // Data Retrieval

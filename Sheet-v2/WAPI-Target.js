@@ -1,12 +1,281 @@
-var WuxingTarget = WuxingTarget || (function () {
+class TargetData {
+    constructor(data) {
+        this.createEmpty();
+        if (data != undefined) {
+            if (data.type != undefined) {
+                if (data.type == "api") {
+                    this.importMessage(data);
+                }
+                if (data.type == "graphic") {
+                    this.importTokenData(data);
+                }
+            }
+            else if (data.charId != undefined) {
+                this.importJSON(data);
+            }
+        }
+    }
+
+    createEmpty() {
+        this.charId = "";
+        this.charName = "";
+        this.tokenId = "";
+        this.displayName = "";
+        this.owner = "";
+        this.elem = "";
+        this.teamIndex = 0;
+    }
+
+    importJSON(json) {
+        this.charId = json.charId;
+        this.charName = json.charName;
+        this.tokenId = json.tokenId;
+        this.displayName = json.displayName;
+        this.owner = json.owner;
+        this.elem = json.elem;
+        this.teamIndex = json.teamIndex;
+    }
+
+    importMessage(msg) {
+        if (msg.selected && msg.selected.length > 0) {
+            this.importTokenData(TokenReference.GetToken(msg.selected[0]._id));
+        }
+    }
+
+    importTokenData(token) {
+        if (token == undefined) {
+            DebugLog(`[TokenData] No token exists.`);
+            return;
+        }
+
+        this.token = token;
+        this.charId = this.token.get('represents');
+        if (this.charId == undefined || this.charId == "") {
+            DebugLog(`[TokenData] (${this.token.name}) has no representative character.`);
+            return;
+        }
+
+        let character = getObj('character', charId);
+
+        this.charName = character.get("name");
+        this.tokenId = token.get("_id");
+
+        let ownerId = character.get("controlledby").split(",")[0];
+        if (ownerId != "") {
+            this.owner = getObj("player", ownerId).get("_displayname");
+        }
+
+        let attributeHandler = new SandboxAttributeHandler(this.charId);
+        let tokenData = this;
+        let displayNameVar = WuxDef.GetVariable("DisplayName");
+        let affinityVar = WuxDef.GetVariable("Affinity");
+        attributeHandler.addMod(displayNameVar);
+        attributeHandler.addMod(affinityVar);
+        attributeHandler.addFinishCallback(function(attrHandler) {
+            tokenData.displayName = attrHandler.parseString(displayNameVar);
+            tokenData.elem = getElementStatus(attrHandler.parseString(affinityVar));
+        });
+        attributeHandler.run();
+    }
+
+    getElementStatus (affinity) {
+        switch (affinity) {
+            case "Wood":
+                return "status_green";
+            case "Fire":
+                return "status_red";
+            case "Earth":
+                return "status_brown";
+            case "Metal":
+                return "status_purple";
+            case "Water":
+                return "status_blue";
+        }
+    }
+
+    setTeamIndex(index) {
+        this.teamIndex = index;
+    }
+}
+class TokenTargetData extends TargetData {
+
+    constructor(token, targetData) {
+        if (targetData != undefined) {
+            this.importJSON(data);
+            this.token  = token;
+        }
+        else {
+            super(token);
+        }
+    }
+
+    createEmpty() {
+        super.createEmpty();
+        this.token = undefined;
+    }
+
+    // token bar
+    
+    importTokenData(token) {
+        this.token = token;
+        super.importTokenData(token);
+    }
+
+    initToken() {
+        this.token.set("bar_location", "overlap_bottom");
+    }
+        
+    setBar(barIndex, variableObj, showBar, showText) {
+        if (variableObj == undefined) {
+            this.token.set(`bar${barIndex}_link`, "");
+            this.token.set(`bar${barIndex}_value`, 0);
+            this.token.set(`bar${barIndex}_max`, 0);
+        }
+        else {
+            this.token.set(`bar${barIndex}_link`, variableObj.get("_id"));
+            this.token.set(`bar${barIndex}_value`, variableObj.get("current"));
+            this.token.set(`bar${barIndex}_max`, variableObj.get("max"));
+        }
+        this.token.set(`showplayers_bar${barIndex}`, showBar);
+        this.token.set(`showplayers_bar${barIndex}text`, showText ? "2" : "0");
+    }
+
+    setBarValue(barIndex, value) {
+        this.token.set(`bar${barIndex}_value`, value);
+    }
+
+    // nameplate
+    
+    showTokenName(isShown) {
+        if (isShown) {
+            this.token.set("name", this.displayName);
+            this.token.set("showname", true);
+            this.token.set("showplayers_name", true);
+        }
+        else {
+            this.token.set("showname", false);
+        }
+    }
+
+    // tooltip
+
+    showTooltip(isShown) { 
+        token.set("show_tooltip", isShown);
+    }
+    
+    setTooltip(value) {
+        this.token.set("tooltip", value);
+    }
+
+    // status settings
+
+    setEnergy(value) {
+        this.token.set(this.elem, value);
+    }
+
+    setTurnIcon(value) {
+        this.token.set("status_yellow", value);
+    }
+
+    // Modifiers
+
+    setDisplayName() {
+        let attributeHandler = new SandboxAttributeHandler(this.charId);
+        let tokenData = this;
+        let displayNameVar = WuxDef.GetVariable("DisplayName");
+        attributeHandler.addMod(displayNameVar);
+        attributeHandler.addFinishCallback(function(attrHandler) {
+            tokenData.displayName = attrHandler.parseString(displayNameVar);
+        });
+        attributeHandler.run();
+    }
+
+    addPatience(attributeHandler, value) {
+        this.modifyResourceAttribute(attributeHandler, "Patience", value, this.addModifierToAttribute, function(results) {
+            this.setBarValue(1, results.newValue);
+            return results;
+        });
+    }
+
+    addHp(attributeHandler, value) {
+        this.modifyResourceAttribute(attributeHandler, "HP", value, 
+            function(results, value) {
+                this.addModifierToAttribute(results, value);
+                if (!isNaN(parseInt(value)) && parseInt(value) < 0 && results.remainder < 0) {
+                    while (results.remainder < 0) {
+                        results.current = results.max;
+                        let vitalityResult = this.addVitality(attributeHandler, -1);
+                        if (vitalityResult.current == 0) {
+                            // TODO: add the downed status
+                        }
+                        this.addModifierToAttribute(results, results.remainder);
+                    }
+                }
+            }, 
+            function(results) {
+                this.setBarValue(1, results.newValue);
+                return results;
+        });
+    }
+
+    addVitality(attributeHandler, value) {
+        this.modifyResourceAttribute(attributeHandler, "Vitality", value, this.addModifierToAttribute, function(results) {
+            return results;
+        });
+    }
+
+    addEnergy(attributeHandler, value) {
+        this.modifyResourceAttribute(attributeHandler, "EN", value, this.addModifierToAttribute, function(results) {
+            this.setEnergy(results.newValue);
+            return results;
+        });
+    }
+
+    modifyResourceAttribute(attributeHandler, attribute, value, modCallback, finishCallback) {
+        let results = {
+            current: 0,
+            max: 0,
+            newValue: 0,
+            remainder: 0
+        };
+        let attributeVar = WuxDef.GetVariable(attribute);
+        attributeHandler.addAttribute(attributeVar);
+        attributeHandler.addFinishCallback(function(attrHandler) {
+            results.current = attrHandler.parseInt(attributeVar, 0, false);
+            results.max = attrHandler.parseInt(attributeVar, 0, true);
+            modCallback(results, value);
+            attrHandler.addUpdate(attributeVar, results.newValue, false);
+            finishCallback(results);
+        });
+    }
+
+    addModifierToAttribute(results, value) {
+        if (value == "max") {
+            results.newValue = max;
+        }
+        else {
+            results.newValue = current + parseInt(value);
+            if (results.newValue < 0) {
+                results.remainder = results.newValue;
+                results.newValue = 0;
+            }
+            else if (results.newValue > max) {
+                results.remainder = results.newValue - max;
+                results.newValue = max;
+            }
+        }
+    }
+}
+
+var TargetReference = TargetReference || (function () {
     'use strict';
 
     var schemaVersion = "0.1.0",
 
         checkInstall = function () {
-            if (!state.hasOwnProperty('WuxingTarget') || state.WuxingTarget.version != schemaVersion) {
-                log (`Setting Wuxing Target version to v${WuxingTarget.schemaVersion}`);
-                state.WuxingTarget = {
+            if (!state.hasOwnProperty('TargetReference') || state.TargetReference.version != schemaVersion) {
+                log (`Setting Wuxing Target version to v${TargetReference.schemaVersion}`);
+                state.TargetReference = {
                     version: schemaVersion,
                     activeCharacters: getDefaultActiveCharacters()
                 };
@@ -30,20 +299,19 @@ var WuxingTarget = WuxingTarget || (function () {
             };
         },
 
-        commandAddCharacter = function (msg, content) {
-            let isAlly = content == "true" ? true : false;
-            let tokenData;
+        commandAddCharacter = function (msg, teamIndex) {
             let message = "";
-            WuxingToken.IterateOverSelectedTokens(msg, function (token) {
-                tokenData = addCombatTokenToActiveTargets(token, isAlly);
-                if (tokenData != undefined) {
+            TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
+                tokenTargetData.setTeamIndex(teamIndex);
+                addToActiveCharacters(tokenTargetData);
+                if (tokenTargetData != undefined) {
                     if (message != "") {
                         message += ", ";
                     }
-                    message += `${tokenData.displayName}`;
+                    message += `${tokenTargetData.displayName}`;
                 }
             });
-            message = `${message} added as ${isAlly ? "ally" : "enemy"} unit(s)`;
+            message = `${message} added as ${state.WuxConflictManager.teams[teamIndex].name} unit(s)`;
             let systemMessage = new SystemInfoMessage(message);
             systemMessage.setSender("System");
             WuxMessage.Send(systemMessage, "GM");
@@ -51,8 +319,8 @@ var WuxingTarget = WuxingTarget || (function () {
         },
 
         commandRemoveCharacter = function (msg) {
-            WuxingToken.IterateOverSelectedTokens(msg, function (token) {
-                removeActiveTargetData(token.get("id"));
+            TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
+                removeActiveTargetData(tokenTargetData.tokenId);
             });
         },
 
@@ -65,137 +333,81 @@ var WuxingTarget = WuxingTarget || (function () {
 
         getDefaultActiveCharacters = function () {
             return {
-                charNames: [],
-                tokenIds: [],
-                targetData: []
+                targetData: {},
+                names: {}
             };
         },
 
         iterateOverActiveTargetData = function (callback) {
-            _.each(state.WuxingTarget.activeCharacters.targetData, function (obj) {
-                callback(obj);
-            });
-        },
-
-        addToActiveCharacters = function (targetData) {
-            if (targetData != undefined) {
-                if (state.WuxingTarget.activeCharacters.tokenIds.includes(targetData.tokenId)) {
-                    let index = state.WuxingTarget.activeCharacters.tokenIds.indexOf(targetData.tokenId);
-                    state.WuxingTarget.activeCharacters.targetData[index] = targetData;
-                }
-                else {
-                    state.WuxingTarget.activeCharacters.charNames.push(targetData.name);
-                    state.WuxingTarget.activeCharacters.tokenIds.push(targetData.tokenId);
-                    state.WuxingTarget.activeCharacters.targetData.push(targetData);
-                }
+            for (let targetData in state.TargetReference.activeCharacters.targetData) {
+                callback(TokenReference.GetTokenData(targetData));
             }
         },
 
-        addCombatTokenToActiveTargets = function (token, isAlly) {
-            let targetData = createTargetData(token, isAlly);
-            addToActiveCharacters(targetData);
-            return targetData;
+        addToActiveCharacters = function (tokenTargetData) {
+            if (tokenTargetData == undefined) {
+                DebugLog(`[TargetReference][addToActiveCharacters] No target data exists.`);
+                return;
+            }
+            if (state.TargetReference.activeCharacters.targetData.includes(tokenTargetData.tokenId)) {
+                state.TargetReference.activeCharacters.targetData[tokenTargetData.tokenId] = tokenTargetData;
+            }
+            else {
+                state.TargetReference.activeCharacters.targetData[tokenTargetData.tokenId] = tokenTargetData;
+                state.TargetReference.activeCharacters.names[tokenTargetData.charName] = tokenTargetData.tokenId;
+            }
         },
 
         removeActiveTargetData = function (tokenId) {
-            for (var i = 0; i < state.WuxingTarget.activeCharacters.tokenId.length; i++) {
-                if (state.WuxingTarget.activeCharacters.tokenId[i] == tokenId) {
-                    state.WuxingTarget.activeCharacters.charNames[i].splice(i, 1);
-                    state.WuxingTarget.activeCharacters.tokenIds[i].splice(i, 1);
-                    state.WuxingTarget.activeCharacters.targetData[i].splice(i, 1);
-                    break;
-                }
+            if (state.TargetReference.activeCharacters.targetData[tokenId] != undefined) {
+                let targetData = state.TargetReference.activeCharacters.targetData[tokenId];
+                delete state.TargetReference.activeCharacters.names[targetData.charName];
+                delete state.TargetReference.activeCharacters.targetData[tokenId];
             }
         },
 
         clearActiveTargetData = function () {
-            state.WuxingTarget.activeCharacters = getDefaultActiveCharacters();
+            state.TargetReference.activeCharacters = getDefaultActiveCharacters();
         },
 
-        // Token Data Search
-        // ---------------------------
-
-        findActiveTargetDataByCharName = function (characterName) {
-            let index = state.WuxingTarget.activeCharacters.charNames.indexOf(characterName);
-            if (index >= 0) {
-                return state.WuxingTarget.activeCharacters.targetData[index];
+        getTokenTargetData = function (tokenId) {
+            if (state.TargetReference.activeCharacters.targetData[tokenId] == undefined) {
+                return TokenReference.GetTokenData(tokenId);
             }
-            return undefined;
+            return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[tokenId]);
         },
 
-        findActiveTargetDataByTokenId = function (tokenId) {
-            let index = state.WuxingTarget.activeCharacters.tokenIds.indexOf(tokenId);
-            if (index >= 0) {
-                return state.WuxingTarget.activeCharacters.targetData[index];
+        getTokenTargetDataByName = function (characterName) {
+            if (state.TargetReference.activeCharacters.names[characterName] == undefined) {
+                return undefined;
             }
-            return undefined;
-        },
-
-        getTargetDataByToken = function (token) {
-            let index = state.WuxingTarget.activeCharacters.tokenIds.indexOf(token.get("_id"));
-            if (index >= 0) {
-                return state.WuxingTarget.activeCharacters.targetData[index];
-            }
-            else {
-                return createTargetData(token, false);
-            }
-        },
-
-        // Target Data Creation
-        // ---------------------------
-
-        createTargetData = function (token, isAlly) {
-            let charId = token.get("represents");
-            if (charId != "") {
-                let character = getObj('character', charId);
-                let ownerId = character.get("controlledby").split(",")[0];
-                let ownerName = "";
-                if (ownerId != "") {
-                    ownerName = getObj("player", ownerId).get("_displayname");
-                }
-                let targetData = {
-                    name: character.get("name"),
-                    charId: charId,
-                    tokenId: token.get("id"),
-                    displayName: getAttrByName(charId, WuxDef.GetVariable("DisplayName")),
-                    owner: ownerName,
-                    elem: getAttrByName(charId, WuxDef.GetVariable("Affinity")),
-                    isAlly: isAlly
-                };
-                WuxingToken.AddToken(token, targetData);
-                return targetData;
-            }
-            return undefined;
+            return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.names[characterName]]);
         }
-
-
         ;
     return {
         CheckInstall: checkInstall,
         HandleInput: handleInput,
         IterateOverActiveTargetData: iterateOverActiveTargetData,
         ClearActiveTargetData: clearActiveTargetData,
-        FindActiveTargetDataByCharName: findActiveTargetDataByCharName,
-        FindActiveTargetDataByTokenId: findActiveTargetDataByTokenId,
-        GetTargetDataByToken: getTargetDataByToken
-
+        GetTokenTargetData: getTokenTargetData,
+        GetTokenTargetDataByName: getTokenTargetDataByName
     };
 
 }());
 
-var WuxingToken = WuxingToken || (function () {
+var TokenReference = TokenReference || (function () {
     'use strict';
 
     var schemaVersion = "0.1.0",
 
         checkInstall = function () {
-            if (!state.hasOwnProperty('WuxingToken') || state.WuxingToken.version !== schemaVersion) {
-                state.WuxingToken = {
+            if (!state.hasOwnProperty('TokenReference') || state.TokenReference.version !== schemaVersion) {
+                state.TokenReference = {
                     version: schemaVersion,
                     tokens: {}
                 };
             }
-            state.WuxingToken.tokens = {};
+            state.TokenReference.tokens = {};
         },
 
         // Input Commands
@@ -212,7 +424,7 @@ var WuxingToken = WuxingToken || (function () {
         commandDealDamage = function (msg, content) {
             let targetData;
             iterateOverSelectedTokens(msg, function (token) {
-                targetData = WuxingTarget.GetTargetDataByToken(token);
+                targetData = TargetReference.GetTokenTargetData(token.get("_id"));
                 addDamage(targetData, token, parseInt(content));
             });
         }, 
@@ -220,246 +432,66 @@ var WuxingToken = WuxingToken || (function () {
         // State Token Getters
         // ---------------------------
 
-        getTargetToken = function (targetData) {
-            if (state.WuxingToken.tokens[targetData.tokenId] == undefined) {
-                let token = getObj('graphic', targetData.tokenId);
-                addToken(token, targetData);
+        getToken = function (tokenId) {
+            let token = getObj('graphic', tokenId);
+            if (token == undefined) {
+                DebugLog(`[TokenReference][getToken] Token for ${data.charName} not found`);
+                return undefined;
             }
-            return state.WuxingToken.tokens[targetData.tokenId];
+            return token;
         },
 
-        addToken = function(token, targetData) {
-            state.WuxingToken.tokens[targetData.tokenId] = token;
+        getTokenData = function (data) {
+            let tokenData;
+            if (data.tokenId != undefined) {
+                if (state.TokenReference.tokens[data.tokenId] == undefined) {
+                    let token = getToken(data.tokenId);
+                    tokenData = new TokenTargetData(token, data);
+                    tokenData.setDisplayName();
+                    addToken(tokenData, data);
+                }
+                else {
+                    tokenData = state.TokenReference.tokens[data.tokenId];
+                    tokenData.setDisplayName();
+                }
+            }
+            else {
+                if (state.TokenReference.tokens[data] == undefined) {
+                    let token = getToken(data.tokenId);
+                    tokenData = new TokenTargetData(token);
+                    addToken(tokenData, data);
+                }
+                else {
+                    tokenData = state.TokenReference.tokens[data];
+                    tokenData.setDisplayName();
+                }
+            }
+            return tokenData;
+        },
+
+        addToken = function(tokenData, targetData) {
+            state.TokenReference.tokens[targetData.tokenId] = tokenData;
         },
 
         // Data Helper
         // ---------------------------
 
         iterateOverSelectedTokens = function (msg, callback) {
-            let token;
             _.each(msg.selected, function (obj) {
-
-                // set token variables
-                token = getObj('graphic', obj._id);
-
+                let token = getTokenData(obj._id);
                 if (token != undefined) {
                     callback(token);
                 }
             });
-        },
-
-        // Token State
-        // ---------------------------
-
-        setTokenForBattle = function (targetData, token) {
-            if (token == undefined) {
-                token = getTargetToken(targetData);
-            }
-            token.set("bar_location", "overlap_bottom");
-
-            // set vitals
-            let hp = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("HP"));
-            let willpower = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("WILL"));
-            setBar(1, token, hp, true, true);
-            setBar(2, token, willpower, true, true);
-            showTokenName(token, tokenData);
-
-            // set the token element
-            token.set(getAttrByName(targetData.charId, "token_element"), true);
-
-            // set tooltip
-            token.set("show_tooltip", true);
-            //token.set("tooltip", getAttrByName(tokenData.charId, "scan-summary"));
-        },
-
-        setTokenForSocialBattle = function (targetData, token) {
-            if (token == undefined) {
-                token = getTargetToken(targetData);
-            }
-
-            // set vitals
-            let hp = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("HP"));
-            let willpower = GetCharacterAttribute(targetData.charId, WuxDef.GetVariable("WILL"));
-            setBar(1, token, hp, true, true);
-            setBar(2, token, willpower, true, true);
-
-            // set token name
-            token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
-            token.set("showname", true);
-            token.set("showplayers_name", true);
-            token.set("bar_location", "overlap_bottom");
-
-            // set the token element
-            token.set(getAttrByName(targetData.charId, "token_element"), true);
-
-            // set tooltip
-            token.set("show_tooltip", true);
-        },
-        
-        setBar = function(barIndex, token, variableObj, showBar, showText) {
-            token.set(`bar${barIndex}_link`, variableObj.get("_id"));
-            token.set(`bar${barIndex}_value`, variableObj.get("current"));
-            token.set(`bar${barIndex}_max`, variableObj.get("max"));
-            token.set(`showplayers_bar${barIndex}`, showBar);
-            token.set(`showplayers_bar${barIndex}text`, showText ? "2" : "0");
-        },
-        
-        showTokenName = function (token, targetData) {
-            token.set("name", getAttrByName(targetData.charId, WuxDef.GetVariable("DisplayName")));
-            token.set("showname", true);
-            token.set("showplayers_name", true);
-        },
-
-        setTokenForNarative = function (targetData, token) {
-            if (token == undefined) {
-                token = getTargetToken(targetData);
-                if (token == undefined) {
-                    return;
-                }
-            }
-            token.set("bar1_link", "");
-            token.set("bar1_value", "");
-            token.set("bar1_max", "");
-            token.set("showplayers_bar1", false);
-            token.set("bar2_link", "");
-            token.set("bar2_value", "");
-            token.set("bar2_max", "");
-            token.set("showplayers_bar2", false);
-            token.set("showname", false);
-            token.set(getAttrByName(targetData.charId, "token_element"), false);
-            token.set("show_tooltip", false);
-            token.set("status_yellow", false);
-        },
-
-        addHp = function (targetData, token, value) {
-            if (token == undefined) {
-                token = getTargetToken(targetData);
-                if (token == undefined) {
-                    return;
-                }
-            }
-
-            let total = parseInt(getAttrByName(targetData.charId, "hp")) + value;
-            let remainder = 0;
-            if (total < 0) {
-                remainder = total;
-                total = 0;
-            }
-            token.set("bar1_value", total);
-            return remainder;
-        },
-
-        resetTempHp = function (targetData, token) {
-            if (token == undefined) {
-                token = getTargetToken(targetData);
-                if (token == undefined) {
-                    return;
-                }
-            }
-            token.set("bar2_value", getAttrByName(targetData.charId, "tempHpTotal"));
-        },
-
-        addTempHp = function (targetData, value) {
-            if (token == undefined) {
-                token = getTargetToken(targetData);
-                if (token == undefined) {
-                    return;
-                }
-            }
-            let total = parseInt(token.get("bar2_value")) + value;
-            let remainder = 0;
-            if (total < 0) {
-                remainder = total;
-                total = 0;
-            }
-            token.set("bar2_value", total);
-            return remainder;
-        },
-
-        addDamage = function (targetData, token, value, stopAtTempHp) {
-            if (token == undefined) {
-                token = getTargetToken(targetData);
-                if (token == undefined) {
-                    return;
-                }
-            }
-
-            // make the damage value negative
-            value *= -1;
-
-            // first deal any damage to tempHp
-            value = addTempHp(targetData, value);
-
-            // if damage remains, go to health damage
-            if (!stopAtTempHp && value < 0) {
-                let currentHp = parseInt(token.get("bar2_value"));
-                let maxHp = parseInt(token.get("bar2_max"));
-                let trauma = GetCharacterAttribute(targetData.charId, "trauma");
-                let woundDamage = 0;
-
-                while (value < 0) {
-                    currentHp += value;
-                    value = 0;
-                    if (currentHp <= 0) {
-                        woundDamage++;
-                        if (parseInt(trauma.get("current")) + woundDamage < parseInt(trauma.get("max"))) {
-                            value = currentHp;
-                            currentHp = maxHp;
-                        }
-                        else {
-                            currentHp = 0;
-                        }
-                    }
-                }
-
-                // set damage
-                token.set("bar2_value", currentHp);
-                if (woundDamage > 0) {
-                    let wounds = GetCharacterAttribute(targetData.charId, "wounds");
-                    wounds.set("current", parseInt(wounds.get("current")) + woundDamage);
-                    trauma.set("current", parseInt(trauma.get("current")) + woundDamage);
-                }
-            }
-        },
-
-        addEnergy = function (tokenData, value, cap) {
-            let token = getTargetToken(tokenData);
-            if (token == undefined) {
-                return;
-            }
-            let ki = GetCharacterAttribute(tokenData.charId, "ki");
-            let newValue = parseInt(ki.get("current")) + value;
-            if (cap && newValue > parseInt(ki.get("max"))) {
-                newValue = parseInt(ki.get("max"));
-            }
-            ki.set("current", newValue);
-            token.set(tokenData.elem, newValue);
-        },
-
-        setTurnIcon = function (tokenData, value) {
-            let token = getTargetToken(tokenData);
-            if (token == undefined) {
-                return;
-            }
-            token.set("status_yellow", value);
         }
-
 
         ;
     return {
         CheckInstall: checkInstall,
-        HandleInput: handleInput,
         IterateOverSelectedTokens: iterateOverSelectedTokens,
-        AddToken: addToken,
-        SetTokenForBattle: setTokenForBattle,
-        SetTokenForSocialBattle: setTokenForSocialBattle,
-        SetTokenForNarative: setTokenForNarative,
-        AddHp: addHp,
-        ResetTempHp: resetTempHp,
-        AddTempHp: addTempHp,
-        AddDamage: addDamage,
-        AddEnergy: addEnergy,
-        SetTurnIcon: setTurnIcon
+        GetToken: getToken,
+        GetTokenData: getTokenData,
+        AddToken: addToken
     };
 
 }());
@@ -467,8 +499,8 @@ var WuxingToken = WuxingToken || (function () {
 on("ready", function () {
     'use strict';
 
-    WuxingTarget.CheckInstall();
-    WuxingToken.CheckInstall();
+    TargetReference.CheckInstall();
+    TokenReference.CheckInstall();
 });
 
 
@@ -1022,7 +1054,6 @@ function TargetSetBriefRested(sendTargets, targets) {
     _.each(targets, function (target) {
 
         // recover their barrier
-        target.getToken().set("bar2_value", target.getToken().get("bar2_max"));
 
         // restore their short rest recovery values
         briefrestResources = getAttrByName(target.charId, "briefRestResources");

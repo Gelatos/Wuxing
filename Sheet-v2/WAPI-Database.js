@@ -1975,6 +1975,9 @@ class SandboxAttributeHandler extends AttributeHandler {
     addAttribute(attr) {
         this.attributes[attr] = this.getCharacterAttribute(attr);
     }
+    getAttribute(attr) {
+        return this.attributes[attr];
+    }
 	addUpdate(attr, value, isMax) {
         if (this.attributes[attr] == undefined) {
             this.addAttribute(attr);
@@ -2486,26 +2489,44 @@ var Dice = Dice || (function () {
             return total;
         },
 
-        getHighRolls = function (dieValue, dieType, keepCount) {
+        dropRollDice = function (dieCount, dieType, keepCount, keepHigh) {
             let output = {
                 rolls: [],
                 keeps: []
             }
-            output.rolls = rollDice(dieValue, dieType);
-            output.rolls = Format.SortArrayDecrementing(output.rolls);
+            output.rolls = rollDice(dieCount, dieType);
+            if (keepHigh) {
+                output.rolls = Format.SortArrayDecrementing(output.rolls);
+            }
+            else {
+                output.rolls.sort();
+            }
             for (let i = 0; i < keepCount; i++) {
                 if (keepCount <= output.rolls.length) {
                     output.keeps.push(output.rolls[i]);
                 }
             }
             return output;
+        },
+
+        rollSkillCheck = function(advantages, mod) {
+            let dieCount = 2 + Math.abs(advantages);
+            let dieType = 6;
+            let roll = dropRollDice(dieCount, dieType, 2, advantages > 0);
+            let total = totalDice(roll.keeps) + mod;
+            return {
+                rolls: roll.rolls,
+                keeps: roll.keeps,
+                total: total
+            };
         }
 
         ;
     return {
         RollDice: rollDice,
         TotalDice: totalDice,
-        GetHighRolls: getHighRolls
+        DropRollDice: dropRollDice,
+        RollSkillCheck: rollSkillCheck
     };
 }());
 
