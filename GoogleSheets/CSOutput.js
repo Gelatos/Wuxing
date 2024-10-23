@@ -1,6 +1,6 @@
-function CreateCharacterSheet(stylesArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
+function CreateCharacterSheet(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueDatabaseString) {
 	let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
-		stylesArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString
+		stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueDatabaseString
 	);
 	return PrintLargeEntry(BuildCharacterSheet.Print(sheetsDb));
 }
@@ -447,7 +447,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 			let definition = WuxDef.Get("Page_Jobs");
 			let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
 				SideBarData.PrintJobs() +
-				MainContentData.PrintJobs(sheetsDb.job, sheetsDb.role, sheetsDb.techniques);
+				MainContentData.PrintJobs(sheetsDb.job, sheetsDb.techniques);
 			return WuxSheet.PageDisplay("Jobs", output);
 		},
 
@@ -555,7 +555,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 					}
 				}()),
 
-				printJobs = function (jobsDictionary, rolesDictionary, techDictionary) {
+				printJobs = function (jobsDictionary, techDictionary) {
 					let contents = "";
 
 					contents += buildJobs.Build(jobsDictionary, techDictionary);
