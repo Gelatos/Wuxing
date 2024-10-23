@@ -287,21 +287,15 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 case "!rtech":
                     commandResolveTechnique(msg, content);
                     break;
-                case "!adv":
-                    commandRollAdvantage(msg, content);
+                case "!roll":
+                    commandRollSkillCheck(msg, content);
                     break;
             };
         },
         
         commandConsumeTechnique = function (msg, content) {
-            let components = content.split("##");
-            log (DesanitizeSheetRollAction(components[0]));
-            let technique = ParseSheetRollTechniqueJSON(components[0]);
-            let weaponData = components.length > 1 ? JSON.parse(DesanitizeSheetRollAction(components[1])) : undefined;
-            let targetData = getUserTargetDataFromTechnique(technique);
-            TechniqueConsume.ConsumeTechnique(msg, targetData, technique, weaponData);
+            let components = content.split("|");
         },
-
         commandUseTechnique = function (msg, content) {
             let components = content.split("##");
             let technique = ParseSheetRollTechniqueJSON(components[0]);
@@ -310,28 +304,21 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
             let defenderTargetData = getDefenderTargetDataFromTechnique(technique);
             TechniqueUseResults.UseTechnique(msg, technique, weaponData, userTargetData, defenderTargetData);
         },
-
         commandResolveTechnique = function (msg, content) {
         },
-
-        commandRollAdvantage = function (msg, content) {
+        commandRollSkillCheck = function (msg, content) {
             rollSkillCheck(msg, ParseIntValue(content));
         },
 
         // Technique Handling
-        // ---------------------------
-        
         getUserTargetDataFromTechnique = function (technique) {
             return TargetReference.GetTokenTargetDataByName(technique.username);
         },
-        
         getDefenderTargetDataFromTechnique = function (technique) {
             return TargetReference.GetTokenTargetData(technique.target);
         },
 
         // Math
-        // ---------------------------
-
         rollSkillCheck = function(msg, count) {
             let results = Dice.RollSkillCheck(count, 0);
             let message = `${Format.ShowTooltip(`Rolling Skill Check ${results.total}`, Format.ArrayToString(results.rolls))}`;
