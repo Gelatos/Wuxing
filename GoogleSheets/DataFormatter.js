@@ -4,7 +4,7 @@ function SetTechniquesDatabaseJson(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr
     return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
 }
 
-function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, techniqueDatabaseString) {
+function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueDatabaseString) {
     let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
 
     definitionDatabase.importSheets(definitionArray, function (arr) {
@@ -43,6 +43,10 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArra
     definitionDatabase.importSheets(jobsArray, function (arr) {
         let job = new JobData(arr);
         return job.createDefinition(definitionDatabase.get("JobStyle"));
+    });
+    definitionDatabase.importSheets(statusArray, function (arr) {
+        let status = new StatusData(arr);
+        return status.createDefinition(definitionDatabase.get("Status"));
     });
     let techDb = SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString));
     techDb.iterate(function (technique) {
@@ -113,7 +117,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
     'use strict';
 
     var
-        createDatabaseCollection = function (stylesArray, skillsArray, languageArray, loreArray, jobsArray, rolesArray, techniqueDatabaseString) {
+        createDatabaseCollection = function (stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueDatabaseString) {
 
             let techDb = createTechniques(JSON.parse(techniqueDatabaseString));
             return {
@@ -122,8 +126,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
                 skills: createSkills(skillsArray),
                 language: createLanguages(languageArray),
                 lore: createLores(loreArray),
-                job: createJobs(jobsArray),
-                role: createRoles(rolesArray)
+                job: createJobs(jobsArray)
             }
         },
 
@@ -158,12 +161,6 @@ var SheetsDatabase = SheetsDatabase || (function () {
         createJobs = function (arr) {
             return new Database(arr, ["group"], function (arr) {
                 return new JobData(arr);
-            });
-        },
-
-        createRoles = function (arr) {
-            return new Database(arr, ["group"], function (arr) {
-                return new RoleData(arr);
             });
         },
 
