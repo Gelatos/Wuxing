@@ -451,7 +451,7 @@ class TechniqueData extends WuxDatabaseData {
     }
 
     getUseTech () {
-        return `!ctech ${this.formatTechniqueForSandbox()}`;
+        return `!utech ${this.formatTechniqueForSandbox()}`;
     }
     formatTechniqueForSandbox() {
         this.username = `@{${WuxDef.GetVariable("DisplayName")}}`;
@@ -769,6 +769,39 @@ class JobData extends WuxDatabaseData {
             i++;
         }
         return output;
+    }
+}
+class StatusData extends WuxDatabaseData {
+    importJson(json) {
+        this.createEmpty();
+        this.name = json.name;
+        this.fieldName = json.fieldName;
+        this.group = json.group;
+        this.description = json.description;
+        this.endsOnRoundStart = json.endsOnRoundStart;
+    }
+    importSheets(dataArray) {
+        this.createEmpty();
+        let i = 0;
+        this.name = "" + dataArray[i]; i++;
+        this.fieldName = Format.ToFieldName(this.name);
+        this.group = "" + dataArray[i]; i++;
+        this.description = "" + dataArray[i]; i++;
+        this.endsOnRoundStart = ("" + dataArray[i]) != ""; i++;
+    }
+    createEmpty() {
+        super.createEmpty();
+        this.name = "";
+        this.fieldName = "";
+        this.group = "";
+        this.description = "";
+        this.endsOnRoundStart = false;
+    }
+    createDefinition(baseDefinition) {
+        let definition = new StatusDefinitionData(super.createDefinition(baseDefinition));
+        definition.subGroup = this.group;
+        definition.endsOnRoundStart = this.endsOnRoundStart;
+        return definition;
     }
 }
 class RoleData extends WuxDatabaseData {
@@ -1199,7 +1232,6 @@ class StatusDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
         this.endsOnRoundStart = json.endsOnRoundStart;
-        this.hasRanks = json.hasRanks;
     }
 
     setImportSheetExtraData(property, value) {
@@ -1207,16 +1239,12 @@ class StatusDefinitionData extends DefinitionData {
             case "endsOnRoundStart":
                 this.endsOnRoundStart = value.toLowerCase() == "true" ? true : false;
                 break;
-            case "hasRanks":
-                this.hasRanks = value.toLowerCase() == "true" ? true : false;
-                break;
         }
     }
 
     createEmpty() {
         super.createEmpty();
         this.endsOnRoundStart = false;
-        this.hasRanks = false;
     }
 }
 
@@ -1375,7 +1403,12 @@ class TechniqueDisplayData {
         }
         if (addTechnique) {
             if (this.technique.resourceCost != "") {
-                output += `{{consumeData=!rtech ${this.name}|${this.technique.resourceCost}}}`;
+                let consumeData = {
+                    username: this.username,
+                    name: this.name,
+                    resourceCost: this.resourceCost
+                };
+                output += `{{consumeData=!ctech ${this.technique.sanitizeSheetRollAction(JSON.stringify(consumeData)}}}`;
             }
             output += `{{targetData=${this.technique.getUseTech()}}}`;
         }
