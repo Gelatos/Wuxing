@@ -687,7 +687,6 @@ class JobData extends WuxDatabaseData {
         this.group = "";
         this.description = "";
         this.attributes = new AttributeGroupData();
-        this.roles = this.createRolesArray();
         this.prereq = "";
         this.techniques = [];
     }
@@ -698,7 +697,6 @@ class JobData extends WuxDatabaseData {
         this.group = json.group;
         this.description = json.description;
         this.attributes = json.attributes;
-        this.roles = json.roles;
         this.prereq = json.prereq;
         this.techniques = json.techniques;
     }
@@ -710,7 +708,6 @@ class JobData extends WuxDatabaseData {
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
         this.attributes = new AttributeGroupData(dataArray.slice(i)); i += 7;
-        this.roles = this.createRolesArray(dataArray.slice(i)); i += 5;
         this.prereq = "" + dataArray[i]; i++;
         this.techniques = this.createJobTechnique(dataArray.slice(i)); i++;
     }
@@ -733,27 +730,6 @@ class JobData extends WuxDatabaseData {
         return requirements;
     }
 
-    createRolesArray(modArray) {
-
-        var output = {
-            generalist: 0,
-            athlete: 0,
-            defender: 0,
-            marksman: 0,
-            skirmisher: 0
-        };
-
-        if (modArray != undefined) {
-            let i = 0;
-            output.generalist = parseInt(modArray[i]); i++;
-            output.athlete = parseInt(modArray[i]); i++;
-            output.defender = parseInt(modArray[i]); i++;
-            output.marksman = parseInt(modArray[i]); i++;
-            output.skirmisher = parseInt(modArray[i]); i++;
-        };
-
-        return output;
-    }
     createJobTechnique(modArray) {
         var output = [];
         let i = 0;
@@ -1408,7 +1384,7 @@ class TechniqueDisplayData {
                     name: this.name,
                     resourceCost: this.resourceCost
                 };
-                output += `{{consumeData=!ctech ${this.technique.sanitizeSheetRollAction(JSON.stringify(consumeData)}}}`;
+                output += `{{consumeData=!ctech ${this.technique.sanitizeSheetRollAction(JSON.stringify(consumeData))}}}`;
             }
             output += `{{targetData=${this.technique.getUseTech()}}}`;
         }

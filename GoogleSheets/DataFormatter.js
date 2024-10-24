@@ -164,6 +164,12 @@ var SheetsDatabase = SheetsDatabase || (function () {
             });
         },
 
+        createStatus = function (arr) {
+            return new Database(arr, ["group"], function (arr) {
+                return new StatusData(arr);
+            });
+        },
+
         createDefinitionTypes = function (arr) {
             return new ExtendedDescriptionDatabase(arr);
         }
@@ -176,7 +182,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         CreateLanguages: createLanguages,
         CreateLores: createLores,
         CreateJobs: createJobs,
-        CreateRoles: createRoles,
+        CreateStatus: createStatus,
         CreateDefinitionTypes: createDefinitionTypes
     }
 }());

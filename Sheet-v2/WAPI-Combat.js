@@ -100,7 +100,8 @@ var WuxConflictManager = WuxConflictManager || (function () {
         for (let i = 0; i < teamsToSet; i++) {
             setTeams[i] = false;
         }
-        results.forEach(result => {
+        for (let i = 0; i < results.length; i++) {
+            let result = results[i];
             if (!setTeams[result.tokenTargetData.teamIndex]) {
                 state.WuxConflictManager.teams[result.tokenTargetData.teamIndex].lastActiveOwner = result.tokenTargetData.owner;
                 setTeams[result.tokenTargetData.teamIndex] = true;
@@ -109,7 +110,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     break;
                 }
             }
-        });
+        };
 
         let systemMessage = new SystemInfoMessage(tableData.print());
         systemMessage.setSender("System");
@@ -741,6 +742,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
 on("ready", function () {
     'use strict';
 
+    WuxConflictManager.CheckInstall();
     WuxTechniqueResolver.CheckInstall();
 });
 

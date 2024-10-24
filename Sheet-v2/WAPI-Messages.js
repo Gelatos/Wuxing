@@ -141,54 +141,6 @@ var WuxMessage = WuxMessage || (function () {
             sendChat(sender, message, null, {noarchive:true});
         }
     }
-
-    setLanguageObj = class {
-        constructor(data) {
-            this.createEmpty();
-            if (data != undefined) {
-                if (data instanceof TargetData) {
-                    this.importTargetData(data);
-                }
-                else if (typeof(data == "string")) {
-                    this.importJson(Format.ParseMacroJSON(data));
-                }
-                else {
-                    this.importJson(data);
-                }
-            }
-        }
-        createEmpty() {
-            this.charId = "";
-            this.charName = "";
-            this.language = "";
-        }
-        importTargetData(data) {
-            this.charId = data.charId;
-            this.charName = data.charName;
-        }
-        importJson(json) {
-            this.charId = json.charId;
-            this.charName = json.charName;
-            this.language = json.language;
-        }
-
-        stringify() {
-            return Format.SanitizeMacroJSON(JSON.stringify(this));
-        }
-
-        setCharacterLanguage(sender) {
-            let messageObject = new EmoteMessage();
-            messageObject.setLanguage(this.language);
-    
-            let attributeHandler = new SandboxAttributeHandler(this.charId);
-            attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Language"), messageObject.language);
-            attributeHandler.addUpdate(WuxDef.GetVariable("Chat_LanguageTag"), messageObject.languageTag);
-            attributeHandler.run();
-                
-            let message = `/w ${sender.split(" ")[0]} Set ${this.charName}'s language to ${this.language}`;
-            sendChat("Emote Manager", message, null, {noarchive:true});
-        }
-    }
     
     return {
         Parse: parse,
@@ -198,6 +150,54 @@ var WuxMessage = WuxMessage || (function () {
         Send: send
     };
 }());
+
+class setLanguageObj {
+    constructor(data) {
+        this.createEmpty();
+        if (data != undefined) {
+            if (data instanceof TargetData) {
+                this.importTargetData(data);
+            }
+            else if (typeof(data == "string")) {
+                this.importJson(Format.ParseMacroJSON(data));
+            }
+            else {
+                this.importJson(data);
+            }
+        }
+    }
+    createEmpty() {
+        this.charId = "";
+        this.charName = "";
+        this.language = "";
+    }
+    importTargetData(data) {
+        this.charId = data.charId;
+        this.charName = data.charName;
+    }
+    importJson(json) {
+        this.charId = json.charId;
+        this.charName = json.charName;
+        this.language = json.language;
+    }
+
+    stringify() {
+        return Format.SanitizeMacroJSON(JSON.stringify(this));
+    }
+
+    setCharacterLanguage(sender) {
+        let messageObject = new EmoteMessage();
+        messageObject.setLanguage(this.language);
+
+        let attributeHandler = new SandboxAttributeHandler(this.charId);
+        attributeHandler.addUpdate(WuxDef.GetVariable("Chat_Language"), messageObject.language);
+        attributeHandler.addUpdate(WuxDef.GetVariable("Chat_LanguageTag"), messageObject.languageTag);
+        attributeHandler.run();
+            
+        let message = `/w ${sender.split(" ")[0]} Set ${this.charName}'s language to ${this.language}`;
+        sendChat("Emote Manager", message, null, {noarchive:true});
+    }
+}
 
 class TableMessage {
     constructor(headers) {
