@@ -267,7 +267,7 @@ class TokenTargetData extends TargetData {
 var TargetReference = TargetReference || (function () {
     'use strict';
 
-    var schemaVersion = "0.1.0",
+    var schemaVersion = "0.1.1",
 
         checkInstall = function () {
             if (!state.hasOwnProperty('TargetReference') || state.TargetReference.version != schemaVersion) {
