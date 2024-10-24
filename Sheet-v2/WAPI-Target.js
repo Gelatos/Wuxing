@@ -228,6 +228,37 @@ class TokenTargetData extends TargetData {
             tokenTargetData.setTurnIcon(move);
         });
     }
+    resetBattleTracks(attributeHandler) {
+        let tokenTargetData = this;
+        let hpVar = WuxDef.GetVariable("HP");
+        let willpowerVar = WuxDef.GetVariable("WILL");
+        let enVar = WuxDef.GetVariable("EN");
+        attributeHandler.addAttribute(hpVar);
+        attributeHandler.addAttribute(willpowerVar);
+        attributeHandler.addAttribute(enVar);
+        attributeHandler.addFinishCallback(function(attrHandler) {
+            attrHandler.addUpdate(hpVar, attrHandler.parseInt(hpVar, 0, true), false);
+            attrHandler.addUpdate(willpowerVar, attrHandler.parseInt(willpowerVar, 0, true), false);
+            attrHandler.addUpdate(enVar, 0, true);
+        });
+    }
+    resetSocialTracks(attributeHandler, patienceVal) {
+        let tokenTargetData = this;
+        let favorVar = WuxDef.GetVariable("Soc_Favor");
+        let patienceVar = WuxDef.GetVariable("Soc_Patience");
+        let willpowerVar = WuxDef.GetVariable("WILL");
+        let enVar = WuxDef.GetVariable("EN");
+        attributeHandler.addAttribute(favorVar);
+        attributeHandler.addAttribute(patienceVar);
+        attributeHandler.addAttribute(willpowerVar);
+        attributeHandler.addAttribute(enVar);
+        attributeHandler.addFinishCallback(function(attrHandler) {
+            attrHandler.addUpdate(favorVar, 0, false);
+            attrHandler.addUpdate(willpowerVar, attrHandler.parseInt(willpowerVar, 0, true), false);
+            attrHandler.addUpdate(patienceVal, patienceVal, false);
+            attrHandler.addUpdate(enVar, 0, true);
+        });
+    }
 
     modifyResourceAttribute(attributeHandler, attribute, value, modCallback, finishCallback) {
         let results = {
