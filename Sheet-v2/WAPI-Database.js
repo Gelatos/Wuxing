@@ -107,7 +107,7 @@ class Database extends Dictionary {
         super.add(key, value);
         for (let property in this.sortingGroups) {
             if (value != undefined && value.hasOwnProperty(property)) {
-                this.addSortingGroup(property, value[property], value.name);
+                this.addSortingGroup(property, value[property], value);
             }
         }
     }
@@ -118,12 +118,12 @@ class Database extends Dictionary {
             this.sortingGroups[sortingProperties[i]] = {};
         }
     }
-    addSortingGroup(property, propertyValue, valueName) {
+    addSortingGroup(property, propertyValue, newEntry) {
         if(this.sortingGroups != undefined) {
             if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
                 this.sortingGroups[property][propertyValue] = [];
             }
-            this.sortingGroups[property][propertyValue].push(valueName);
+            this.sortingGroups[property][propertyValue].push(newEntry.name);
         }
     }
 
@@ -212,7 +212,7 @@ class ExtendedTechniqueDatabase extends Database {
 
         let styles = value.techSet.split(";");
         for (let i = 0; i < styles.length; i++) {
-            this.addSortingGroup("style", styles[i].trim(), value.name);
+            this.addSortingGroup("style", styles[i].trim(), value);
         }
     }
 }
@@ -245,7 +245,7 @@ class ExtendedDescriptionDatabase extends Database {
         super.add(key, value);
         let formulaDefs = value.formula.getDefinitions();
         for (let i = 0; i < formulaDefs.length; i++) {
-            this.addSortingGroup("formulaMods", formulaDefs[i], value.name);
+            this.addSortingGroup("formulaMods", formulaDefs[i], value);
         }
     }
 }
@@ -1916,7 +1916,7 @@ class AttributeHandler {
 		else if (this.current[fieldName] != undefined) {
             output = parseInt(this.getCurrentValue(fieldName));
 		}
-        if (output == undefined || isNaN(output)) {
+        if (output == undefined || isNaN(output) || output == "") {
             output = defaultValue;
         }
         return output;
@@ -1932,7 +1932,7 @@ class AttributeHandler {
 		else if (this.current[fieldName] != undefined) {
             output = parseFloat(this.getCurrentValue(fieldName));
 		}
-        if (output == undefined || isNaN(output)) {
+        if (output == undefined || isNaN(output) || output == "") {
             output = defaultValue;
         }
         return output;
@@ -1982,9 +1982,16 @@ class SandboxAttributeHandler extends AttributeHandler {
     }
 
     addAttribute(attr) {
+        if (this.attributes.hasOwnProperty(attr)) {
+            return;
+        }
+        DebugLog(`Adding attribute ${attr}`);
         this.attributes[attr] = this.getCharacterAttribute(attr);
     }
     getAttribute(attr) {
+        if (!this.attributes.hasOwnProperty(attr)) {
+            return undefined;
+        }
         return this.attributes[attr];
     }
 	addUpdate(attr, value, isMax) {
@@ -2501,7 +2508,8 @@ var Dice = Dice || (function () {
         dropRollDice = function (dieCount, dieType, keepCount, keepHigh) {
             let output = {
                 rolls: [],
-                keeps: []
+                keeps: [],
+                message: ""
             }
             output.rolls = rollDice(dieCount, dieType);
             if (keepHigh) {
@@ -2510,22 +2518,35 @@ var Dice = Dice || (function () {
             else {
                 output.rolls.sort();
             }
-            for (let i = 0; i < keepCount; i++) {
-                if (keepCount <= output.rolls.length) {
+
+            output.message = "Rolls(";
+            for (let i = 0; i < output.rolls.length; i++) {
+                if (i < keepCount) {
                     output.keeps.push(output.rolls[i]);
+                    output.message += `[${output.rolls[i]}]`;
+                }
+                else {
+                    output.message += `${output.rolls[i]}`;
+                }
+                if (i < output.rolls.length - 1) {
+                    output.message += `, `;
                 }
             }
+            output.message += `)`;
+            
             return output;
         },
 
         rollSkillCheck = function(advantages, mod) {
             let dieCount = 2 + Math.abs(advantages);
             let dieType = 6;
-            let roll = dropRollDice(dieCount, dieType, 2, advantages > 0);
+            let roll = dropRollDice(dieCount, dieType, 2, advantages >= 0);
             let total = totalDice(roll.keeps) + mod;
+            let message = `${roll.message} + Mod[${mod}]`;
             return {
                 rolls: roll.rolls,
                 keeps: roll.keeps,
+                message: message,
                 total: total
             };
         }

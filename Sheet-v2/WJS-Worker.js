@@ -434,6 +434,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			for (let i = 0; i < formulaDefinitions.length; i++) {
 				if (formulaDefinitions[i].isResource) {
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
 					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
 				}
 				else {
@@ -851,6 +852,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			for (let i = 0; i < formulaDefinitions.length; i++) {
 				if (formulaDefinitions[i].isResource) {
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
 					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
 				}
 				else {
@@ -1373,6 +1375,7 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			for (let i = 0; i < formulaDefinitions.length; i++) {
 				if (formulaDefinitions[i].isResource) {
+					attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
 					attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
 				}
 				else {

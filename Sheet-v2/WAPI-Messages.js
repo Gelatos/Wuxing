@@ -212,7 +212,12 @@ class TableMessage {
     print() {
         let tableHeader = "";
         for (let i = 0; i < this.headers.length; i++) {
-            tableHeader += `<th class="sheet-wuxTableHeader">${this.headers[i]}</th>`;
+            if (i == 0) {
+                tableHeader += `<th>${this.headers[i]}</th>`;
+            }
+            else {
+                tableHeader += `<th style="margin-left: 5px; text-align: right">${this.headers[i]}</th>`;
+            }
         }
 
         let tableRow = "";
@@ -220,12 +225,17 @@ class TableMessage {
         for (let i = 0; i < this.rows.length; i++) {
             tableRow = "";
             for (let j = 0; j < this.rows[i].length; j++) {
-                tableRow += `<td class="sheet-wuxTableData">${tableData[i][j]}</td>`;
+                if (j == 0) {
+                    tableRow += `<td>${this.rows[i][j]}</td>`;
+                }
+                else {
+                    tableRow += `<td style="text-align: right>${this.rows[i][j]}</td>`;
+                }
             }
             tableRows += `<tr>${tableRow}</tr>`;
         }
 
-        return `<table class="sheet-wuxTable"><tr>${tableHeader}</tr>${tableRows}</table>`;
+        return `<table class="sheet-wuxFlexTable"><tr>${tableHeader}</tr>${tableRows}</table>`;
     }
 
     addTargetModifierTable(tokenTargetDataArray, variableName) {
@@ -246,7 +256,7 @@ class TableMessage {
         });
         data.sort((a, b) => a.total - b.total);
         data.forEach(results => {
-            this.addRow([results.tokenTargetData.displayName, `${Format.ShowTooltip(`${results.total}`, Format.ArrayToString(results.rolls))}`]);
+            this.addRow([results.tokenTargetData.displayName, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
         });
         return data;
     }

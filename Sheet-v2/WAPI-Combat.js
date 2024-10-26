@@ -134,7 +134,6 @@ var WuxConflictManager = WuxConflictManager || (function () {
             tokenTargetData.addEnergy(attributeHandler, 1);
             switch (state.WuxConflictManager.conflictType) {
                 case "Battle":
-                    setTokenForBattle(tokenTargetData, attributeHandler);
                     tokenTargetData.setDash(attributeHandler);
                     break;
                 case "Social":
@@ -322,7 +321,7 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
         // Math
         rollSkillCheck = function(msg, count) {
             let results = Dice.RollSkillCheck(count, 0);
-            let message = `${Format.ShowTooltip(`Rolling Skill Check ${results.total}`, Format.ArrayToString(results.rolls))}`;
+            let message = `${Format.ShowTooltip(`Rolling Skill Check ${results.total}`, results.message)}`;
             WuxingMessages.SendSystemMessage(message, "",  msg.who);
         }
     ;

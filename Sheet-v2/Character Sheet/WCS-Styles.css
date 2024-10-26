@@ -727,7 +727,8 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     Text Inputs and Labels
 ========================================*/
 
-.wuxHeader
+.wuxHeader,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxHeader
 {
     position: relative;
     display: inline-block;
@@ -849,6 +850,7 @@ textarea.wuxInput
 ========================================*/
 
 .wuxFlexTable,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxFlexTable,
 .wuxFlexTableNoWrap
 {
 	position: relative;
@@ -856,7 +858,8 @@ textarea.wuxInput
     align-content: flex-start;
 }
 
-.wuxFlexTable
+.wuxFlexTable,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxFlexTable
 {
     flex-flow: row wrap;
 }
@@ -867,6 +870,7 @@ textarea.wuxInput
 }
 
 .wuxFlexTableItemGroup,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxFlexTableItemGroup,
 .wuxFlexTableItemGroup2,
 .wuxFlexTableItemGroup3,
 .wuxFlexTableItemGroup8,
@@ -877,7 +881,8 @@ textarea.wuxInput
 	padding: 5px;
 }
 
-.wuxFlexTableItemGroup
+.wuxFlexTableItemGroup,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxFlexTableItemGroup
 {
 	flex: 1;
 }
@@ -7566,7 +7571,8 @@ Quest Box
     width: 70px;
 }
 
-.wuxWidth300
+.wuxWidth300,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxWidth300
 {
     width: 300px;
 }

@@ -32,7 +32,8 @@
     width: 70px;
 }
 
-.wuxWidth300
+.wuxWidth300,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxWidth300
 {
     width: 300px;
 }

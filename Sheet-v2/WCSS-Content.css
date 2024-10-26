@@ -3,6 +3,7 @@
 ========================================*/
 
 .wuxFlexTable,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxFlexTable,
 .wuxFlexTableNoWrap
 {
 	position: relative;
@@ -10,7 +11,8 @@
     align-content: flex-start;
 }
 
-.wuxFlexTable
+.wuxFlexTable,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxFlexTable
 {
     flex-flow: row wrap;
 }
@@ -21,6 +23,7 @@
 }
 
 .wuxFlexTableItemGroup,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxFlexTableItemGroup,
 .wuxFlexTableItemGroup2,
 .wuxFlexTableItemGroup3,
 .wuxFlexTableItemGroup8,
@@ -31,7 +34,8 @@
 	padding: 5px;
 }
 
-.wuxFlexTableItemGroup
+.wuxFlexTableItemGroup,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxFlexTableItemGroup
 {
 	flex: 1;
 }

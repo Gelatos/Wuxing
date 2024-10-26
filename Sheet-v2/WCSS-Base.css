@@ -727,7 +727,8 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     Text Inputs and Labels
 ========================================*/
 
-.wuxHeader
+.wuxHeader,
+.sheet-rolltemplate-systemInfoBox .sheet-wuxHeader
 {
     position: relative;
     display: inline-block;
