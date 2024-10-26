@@ -21,6 +21,9 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArra
     });
     definitionDatabase.importSheets(skillsArray, function (arr) {
         let skill = new SkillData(arr);
+        if (skill.group == "") {
+            return undefined;
+        }
         return skill.createDefinition(definitionDatabase.get("Skill"));
     });
     definitionDatabase.importSheets(languageArray, function (arr) {

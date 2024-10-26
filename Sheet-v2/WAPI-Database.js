@@ -44,7 +44,9 @@ class Dictionary {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
             data = dataCreationCallback(dataArray[i]);
-            this.add(data.name, data);
+            if (data != undefined) {
+                this.add(data.name, data);
+            }
         }
     }
     add(key, value) {
@@ -232,6 +234,9 @@ class ExtendedDescriptionDatabase extends Database {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
             data = dataCreationCallback(dataArray[i]);
+            if (data == undefined) {
+                continue;
+            }
             if (this.has(data.name)) {
                 this.values[data.name].descriptions.push(data.descriptions[0]);
             }

@@ -44,7 +44,6 @@ class TargetData {
     }
 
     importTokenData(token) {
-        DebugLog(`[TargetData] Importing token data for ${token.get("name")}`);
         if (token == undefined) {
             DebugLog(`[TokenData] No token exists.`);
             return;
@@ -127,8 +126,8 @@ class TokenTargetData extends TargetData {
     setBar(barIndex, variableObj, showBar, showText) {
         if (variableObj == undefined) {
             this.token.set(`bar${barIndex}_link`, "");
-            this.token.set(`bar${barIndex}_value`, 0);
-            this.token.set(`bar${barIndex}_max`, 0);
+            this.token.set(`bar${barIndex}_value`, "");
+            this.token.set(`bar${barIndex}_max`, "");
         }
         else {
             this.token.set(`bar${barIndex}_link`, variableObj.get("_id"));
@@ -181,9 +180,19 @@ class TokenTargetData extends TargetData {
         });
         attributeHandler.run();
     }
+    setPatience(attributeHandler, value) {
+        let patienceVar = WuxDef.GetVariable("Soc_Patience");
+        attributeHandler.addUpdate(patienceVar);
+        attributeHandler.addUpdate(patienceVar, value, false);
+        attributeHandler.addUpdate(patienceVar, value, true);
+
+        this.token.set(`bar1_value`, value);
+        this.token.set(`bar1_max`, value);
+    }
     addPatience(attributeHandler, value) {
-        this.modifyResourceAttribute(attributeHandler, "Patience", value, this.addModifierToAttribute, function(results) {
-            this.setBarValue(1, results.newValue);
+        let tokenTargetData = this;
+        this.modifyResourceAttribute(attributeHandler, "Soc_Patience", value, this.addModifierToAttribute, function(results) {
+            tokenTargetData.setBarValue(1, results.newValue);
             return results;
         });
     }
@@ -381,7 +390,6 @@ var TargetReference = TargetReference || (function () {
         },
 
         iterateOverActiveTargetData = function (callback) {
-            DebugLog(`[TargetReference][iterateOverActiveTargetData] Iterating over active target data.`);
             for (let targetData in state.TargetReference.activeCharacters.targetData) {
                 callback(TokenReference.GetTokenData(targetData));
             }
@@ -462,17 +470,17 @@ var TokenReference = TokenReference || (function () {
 
         handleInput = function (msg, tag, content) {
             switch (tag) {
-                case "!dmg":
-                    commandDealDamage(msg, content);
+                case "!cpt":
+                    commandSetPatience(msg, content);
                     break;
             };
         },
 
-        commandDealDamage = function (msg, content) {
-            let targetData;
-            iterateOverSelectedTokens(msg, function (token) {
-                targetData = TargetReference.GetTokenTargetData(token.get("_id"));
-                addDamage(targetData, token, parseInt(content));
+        commandSetPatience = function (msg, content) {
+            iterateOverSelectedTokens(msg, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.setPatience(attributeHandler, content);
+                attributeHandler.run();
             });
         }, 
 
