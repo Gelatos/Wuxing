@@ -2398,7 +2398,7 @@ class TokenTargetData extends TargetData {
         this.modifyResourceAttribute(attributeHandler, "EN", value, 
             function(results, value, attrHandler) {
                 results.max = attrHandler.parseInt(chakraVar, 0, false);
-                tokenTargetData.addModifierToAttribute(attrHandler, results, value);
+                tokenTargetData.addModifierToAttribute(results, value);
             }, 
             function(results) {
                 tokenTargetData.setEnergy(results.newValue);
