@@ -691,7 +691,6 @@ class JobData extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.description = "";
-        this.attributes = new AttributeGroupData();
         this.prereq = "";
         this.techniques = [];
     }
@@ -701,7 +700,6 @@ class JobData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.description = json.description;
-        this.attributes = json.attributes;
         this.prereq = json.prereq;
         this.techniques = json.techniques;
     }
@@ -712,7 +710,6 @@ class JobData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
-        this.attributes = new AttributeGroupData(dataArray.slice(i)); i += 7;
         this.prereq = "" + dataArray[i]; i++;
         this.techniques = this.createJobTechnique(dataArray.slice(i)); i++;
     }
@@ -1893,71 +1890,81 @@ class AttributeHandler {
     getUpdateValue(fieldName) {
         return this.update[fieldName];
     }
+    validateDefaultValue(defaultValue, newDefaultValue) {
+		if (defaultValue == undefined) {
+			return newDefaultValue;
+		}
+        return defaultValue;
+    }
 
 	parseString(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = "";
-		}
-        let output = "";
-		if (this.update[fieldName] != undefined) {
-            output = this.getUpdateValue(fieldName);
-		}
-		else if (this.current[fieldName] != undefined) {
-            output = this.getCurrentValue(fieldName);
-		}
+		defaultValue = this.validateDefaultValue(defaultValue, "");
+        let output = this.databaseParseString(fieldName);
         if (output == undefined || output == "") {
             output = defaultValue;
         }
         return output;
 	}
+    databaseParseString(fieldName) {
+        if (this.update[fieldName] != undefined) {
+            return this.getUpdateValue(fieldName);
+        }
+        else if (this.current[fieldName] != undefined) {
+            return this.getCurrentValue(fieldName);
+        }
+        return undefined;
+    }
 	parseInt(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = 0;
-		}
-        let output = "";
-		if (this.update[fieldName] != undefined) {
-            output = parseInt(this.getUpdateValue(fieldName));
-		}
-		else if (this.current[fieldName] != undefined) {
-            output = parseInt(this.getCurrentValue(fieldName));
-		}
+		defaultValue = this.validateDefaultValue(defaultValue, 0);
+        let output = this.databaseParseInt(fieldName);
         if (output == undefined || isNaN(output) || output == "") {
             output = defaultValue;
         }
         return output;
 	}
+    databaseParseInt(fieldName) {
+        if (this.update[fieldName] != undefined) {
+            return parseInt(this.getUpdateValue(fieldName));
+		}
+		else if (this.current[fieldName] != undefined) {
+            return parseInt(this.getCurrentValue(fieldName));
+		}
+        return undefined;
+    }
 	parseFloat(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = 0;
-		}
-        let output = "";
-		if (this.update[fieldName] != undefined) {
-            output = parseFloat(this.getUpdateValue(fieldName));
-		}
-		else if (this.current[fieldName] != undefined) {
-            output = parseFloat(this.getCurrentValue(fieldName));
-		}
+		defaultValue = this.validateDefaultValue(defaultValue, 0);
+        let output = this.databaseParseFloat(fieldName);
         if (output == undefined || isNaN(output) || output == "") {
             output = defaultValue;
         }
         return output;
 	}
+    databaseParseFloat(fieldName) {
+        if (this.update[fieldName] != undefined) {
+            return parseFloat(this.getUpdateValue(fieldName));
+        }
+        else if (this.current[fieldName] != undefined) {
+            return parseFloat(this.getCurrentValue(fieldName));
+        }
+        return undefined;
+    }
 	parseJSON(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = "";
-		}
-        let output = "";
-		if (this.update[fieldName] != undefined) {
-            output = JSON.parse(this.getUpdateValue(fieldName));
-		}
-		else if (this.current[fieldName] != undefined) {
-            output = JSON.parse(this.getCurrentValue(fieldName));
-		}
+		defaultValue = this.validateDefaultValue(defaultValue, "");
+        let output = this.databaseParseJSON(fieldName);
         if (output == undefined || output == "") {
             output = defaultValue;
         }
         return output;
 	}
+    databaseParseJSON(fieldName) {
+        if (this.update[fieldName] != undefined) {
+            return JSON.parse(this.getUpdateValue(fieldName));
+        }
+        else if (this.current[fieldName] != undefined) {
+            return JSON.parse(this.getCurrentValue(fieldName));
+        }
+        return undefined;
+    }
 }
 class SandboxAttributeHandler extends AttributeHandler {
     constructor(characterId, mods) {
@@ -1966,24 +1973,59 @@ class SandboxAttributeHandler extends AttributeHandler {
         this.attributes = {};
         this.maxCheck = false;
     }
+    setMaxCheck(isMax) {
+        if (isMax == undefined) {
+            this.maxCheck = false;
+        }
+        this.maxCheck = isMax;
+    }
     getUpdateValue(fieldName) {
         return this.update[fieldName].get(this.maxCheck ? "max" : "current");
     }
     parseString(fieldName, defaultValue, isMax) {
-        this.maxCheck = isMax;
+        this.setMaxCheck(isMax);
         return super.parseString(fieldName, defaultValue);
     }
+    databaseParseString(fieldName) {
+        let output = super.databaseParseString(fieldName);
+        if (output == undefined && this.attributes[fieldName] != undefined) {
+            return this.attributes[fieldName].get(this.maxCheck ? "max" : "current");
+        }
+        return output;
+    }
+            
     parseInt(fieldName, defaultValue, isMax) {
-        this.maxCheck = isMax != undefined;
+        this.setMaxCheck(isMax);
         return super.parseInt(fieldName, defaultValue);
     }
+    databaseParseInt(fieldName) {
+        let output = super.databaseParseInt(fieldName);
+        if (output == undefined && this.attributes[fieldName] != undefined) {
+            return parseInt(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        }
+        return output;
+    }
     parseFloat(fieldName, defaultValue, isMax) {
-        this.maxCheck = isMax != undefined;
+        this.setMaxCheck(isMax);
         return super.parseFloat(fieldName, defaultValue);
     }
+    databaseParseFloat(fieldName) {
+        let output = super.databaseParseFloat(fieldName);
+        if (output == undefined && this.attributes[fieldName] != undefined) {
+            return parseFloat(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        }
+        return output;
+    }
     parseJSON(fieldName, defaultValue, isMax) {
-        this.maxCheck = isMax != undefined;
+        this.setMaxCheck(isMax);
         return super.parseJSON(fieldName, defaultValue);
+    }
+    databaseParseJSON(fieldName) {
+        let output = super.databaseParseJSON(fieldName);
+        if (output == undefined && this.attributes[fieldName] != undefined) {
+            return JSON.parse(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        }
+        return output;
     }
 
     addAttribute(attr) {

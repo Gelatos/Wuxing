@@ -192,6 +192,7 @@ class TokenTargetData extends TargetData {
     addPatience(attributeHandler, value) {
         let tokenTargetData = this;
         this.modifyResourceAttribute(attributeHandler, "Soc_Patience", value, this.addModifierToAttribute, function(results) {
+            DebugLog(`[TokenTargetData][addPatience] ${results.current}/${results.max} + ${value} = ${results.newValue}`);
             tokenTargetData.setBarValue(1, results.newValue);
             return results;
         });
@@ -225,14 +226,16 @@ class TokenTargetData extends TargetData {
         let tokenTargetData = this;
         let chakraVar = WuxDef.GetVariable("Cmb_Chakra");
         attributeHandler.addMod(chakraVar);
-        this.modifyResourceAttribute(attributeHandler, "EN", value, function(attrHandler, results, value) {
-            results.max = attrHandler.parseInt(chakraVar, 0, false);
-            tokenTargetData.addModifierToAttribute(attrHandler, results, value);
-        }, 
-        function(results) {
-            tokenTargetData.setEnergy(results.newValue);
-            return results;
-        });
+        this.modifyResourceAttribute(attributeHandler, "EN", value, 
+            function(results, value, attrHandler) {
+                results.max = attrHandler.parseInt(chakraVar, 0, false);
+                tokenTargetData.addModifierToAttribute(attrHandler, results, value);
+            }, 
+            function(results) {
+                tokenTargetData.setEnergy(results.newValue);
+                return results;
+            }
+        );
     }
     setDash(attributeHandler) {
         let tokenTargetData = this;
@@ -277,25 +280,25 @@ class TokenTargetData extends TargetData {
         });
     }
 
-    modifyResourceAttribute(attributeHandler, attribute, value, modCallback, finishCallback) {
+    modifyResourceAttribute(attributeHandler, attributeName, value, modCallback, finishCallback) {
         let results = {
-            name: attribute,
+            name: attributeName,
             current: 0,
             max: 0,
             newValue: 0,
             remainder: 0
         };
-        let attributeVar = WuxDef.GetVariable(attribute);
+        let attributeVar = WuxDef.GetVariable(attributeName);
         attributeHandler.addAttribute(attributeVar);
         attributeHandler.addFinishCallback(function(attrHandler) {
             results.current = attrHandler.parseInt(attributeVar, 0, false);
             results.max = attrHandler.parseInt(attributeVar, 0, true);
-            modCallback(attrHandler, results, value);
+            modCallback(results, value, attrHandler);
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             finishCallback(results);
         });
     }
-    addModifierToAttribute(attrHandler, results, value) {
+    addModifierToAttribute(results, value) {
         if (value == "max") {
             results.newValue = results.max;
         }

@@ -2361,6 +2361,7 @@ class TokenTargetData extends TargetData {
     addPatience(attributeHandler, value) {
         let tokenTargetData = this;
         this.modifyResourceAttribute(attributeHandler, "Soc_Patience", value, this.addModifierToAttribute, function(results) {
+            DebugLog(`[TokenTargetData][addPatience] ${results.current}/${results.max} + ${value} = ${results.newValue}`);
             tokenTargetData.setBarValue(1, results.newValue);
             return results;
         });
@@ -2394,14 +2395,16 @@ class TokenTargetData extends TargetData {
         let tokenTargetData = this;
         let chakraVar = WuxDef.GetVariable("Cmb_Chakra");
         attributeHandler.addMod(chakraVar);
-        this.modifyResourceAttribute(attributeHandler, "EN", value, function(attrHandler, results, value) {
-            results.max = attrHandler.parseInt(chakraVar, 0, false);
-            tokenTargetData.addModifierToAttribute(attrHandler, results, value);
-        }, 
-        function(results) {
-            tokenTargetData.setEnergy(results.newValue);
-            return results;
-        });
+        this.modifyResourceAttribute(attributeHandler, "EN", value, 
+            function(results, value, attrHandler) {
+                results.max = attrHandler.parseInt(chakraVar, 0, false);
+                tokenTargetData.addModifierToAttribute(attrHandler, results, value);
+            }, 
+            function(results) {
+                tokenTargetData.setEnergy(results.newValue);
+                return results;
+            }
+        );
     }
     setDash(attributeHandler) {
         let tokenTargetData = this;
@@ -2446,25 +2449,25 @@ class TokenTargetData extends TargetData {
         });
     }
 
-    modifyResourceAttribute(attributeHandler, attribute, value, modCallback, finishCallback) {
+    modifyResourceAttribute(attributeHandler, attributeName, value, modCallback, finishCallback) {
         let results = {
-            name: attribute,
+            name: attributeName,
             current: 0,
             max: 0,
             newValue: 0,
             remainder: 0
         };
-        let attributeVar = WuxDef.GetVariable(attribute);
+        let attributeVar = WuxDef.GetVariable(attributeName);
         attributeHandler.addAttribute(attributeVar);
         attributeHandler.addFinishCallback(function(attrHandler) {
             results.current = attrHandler.parseInt(attributeVar, 0, false);
             results.max = attrHandler.parseInt(attributeVar, 0, true);
-            modCallback(attrHandler, results, value);
+            modCallback(results, value, attrHandler);
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             finishCallback(results);
         });
     }
-    addModifierToAttribute(attrHandler, results, value) {
+    addModifierToAttribute(results, value) {
         if (value == "max") {
             results.newValue = results.max;
         }
@@ -5235,7 +5238,6 @@ class JobData extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.description = "";
-        this.attributes = new AttributeGroupData();
         this.prereq = "";
         this.techniques = [];
     }
@@ -5245,7 +5247,6 @@ class JobData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.description = json.description;
-        this.attributes = json.attributes;
         this.prereq = json.prereq;
         this.techniques = json.techniques;
     }
@@ -5256,7 +5257,6 @@ class JobData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
-        this.attributes = new AttributeGroupData(dataArray.slice(i)); i += 7;
         this.prereq = "" + dataArray[i]; i++;
         this.techniques = this.createJobTechnique(dataArray.slice(i)); i++;
     }
@@ -6437,71 +6437,81 @@ class AttributeHandler {
     getUpdateValue(fieldName) {
         return this.update[fieldName];
     }
+    validateDefaultValue(defaultValue, newDefaultValue) {
+		if (defaultValue == undefined) {
+			return newDefaultValue;
+		}
+        return defaultValue;
+    }
 
 	parseString(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = "";
-		}
-        let output = "";
-		if (this.update[fieldName] != undefined) {
-            output = this.getUpdateValue(fieldName);
-		}
-		else if (this.current[fieldName] != undefined) {
-            output = this.getCurrentValue(fieldName);
-		}
+		defaultValue = this.validateDefaultValue(defaultValue, "");
+        let output = this.databaseParseString(fieldName);
         if (output == undefined || output == "") {
             output = defaultValue;
         }
         return output;
 	}
+    databaseParseString(fieldName) {
+        if (this.update[fieldName] != undefined) {
+            return this.getUpdateValue(fieldName);
+        }
+        else if (this.current[fieldName] != undefined) {
+            return this.getCurrentValue(fieldName);
+        }
+        return undefined;
+    }
 	parseInt(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = 0;
-		}
-        let output = "";
-		if (this.update[fieldName] != undefined) {
-            output = parseInt(this.getUpdateValue(fieldName));
-		}
-		else if (this.current[fieldName] != undefined) {
-            output = parseInt(this.getCurrentValue(fieldName));
-		}
+		defaultValue = this.validateDefaultValue(defaultValue, 0);
+        let output = this.databaseParseInt(fieldName);
         if (output == undefined || isNaN(output) || output == "") {
             output = defaultValue;
         }
         return output;
 	}
+    databaseParseInt(fieldName) {
+        if (this.update[fieldName] != undefined) {
+            return parseInt(this.getUpdateValue(fieldName));
+		}
+		else if (this.current[fieldName] != undefined) {
+            return parseInt(this.getCurrentValue(fieldName));
+		}
+        return undefined;
+    }
 	parseFloat(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = 0;
-		}
-        let output = "";
-		if (this.update[fieldName] != undefined) {
-            output = parseFloat(this.getUpdateValue(fieldName));
-		}
-		else if (this.current[fieldName] != undefined) {
-            output = parseFloat(this.getCurrentValue(fieldName));
-		}
+		defaultValue = this.validateDefaultValue(defaultValue, 0);
+        let output = this.databaseParseFloat(fieldName);
         if (output == undefined || isNaN(output) || output == "") {
             output = defaultValue;
         }
         return output;
 	}
+    databaseParseFloat(fieldName) {
+        if (this.update[fieldName] != undefined) {
+            return parseFloat(this.getUpdateValue(fieldName));
+        }
+        else if (this.current[fieldName] != undefined) {
+            return parseFloat(this.getCurrentValue(fieldName));
+        }
+        return undefined;
+    }
 	parseJSON(fieldName, defaultValue) {
-		if (defaultValue == undefined) {
-			defaultValue = "";
-		}
-        let output = "";
-		if (this.update[fieldName] != undefined) {
-            output = JSON.parse(this.getUpdateValue(fieldName));
-		}
-		else if (this.current[fieldName] != undefined) {
-            output = JSON.parse(this.getCurrentValue(fieldName));
-		}
+		defaultValue = this.validateDefaultValue(defaultValue, "");
+        let output = this.databaseParseJSON(fieldName);
         if (output == undefined || output == "") {
             output = defaultValue;
         }
         return output;
 	}
+    databaseParseJSON(fieldName) {
+        if (this.update[fieldName] != undefined) {
+            return JSON.parse(this.getUpdateValue(fieldName));
+        }
+        else if (this.current[fieldName] != undefined) {
+            return JSON.parse(this.getCurrentValue(fieldName));
+        }
+        return undefined;
+    }
 }
 class SandboxAttributeHandler extends AttributeHandler {
     constructor(characterId, mods) {
@@ -6510,24 +6520,59 @@ class SandboxAttributeHandler extends AttributeHandler {
         this.attributes = {};
         this.maxCheck = false;
     }
+    setMaxCheck(isMax) {
+        if (isMax == undefined) {
+            this.maxCheck = false;
+        }
+        this.maxCheck = isMax;
+    }
     getUpdateValue(fieldName) {
         return this.update[fieldName].get(this.maxCheck ? "max" : "current");
     }
     parseString(fieldName, defaultValue, isMax) {
-        this.maxCheck = isMax;
+        this.setMaxCheck(isMax);
         return super.parseString(fieldName, defaultValue);
     }
+    databaseParseString(fieldName) {
+        let output = super.databaseParseString(fieldName);
+        if (output == undefined && this.attributes[fieldName] != undefined) {
+            return this.attributes[fieldName].get(this.maxCheck ? "max" : "current");
+        }
+        return output;
+    }
+            
     parseInt(fieldName, defaultValue, isMax) {
-        this.maxCheck = isMax != undefined;
+        this.setMaxCheck(isMax);
         return super.parseInt(fieldName, defaultValue);
     }
+    databaseParseInt(fieldName) {
+        let output = super.databaseParseInt(fieldName);
+        if (output == undefined && this.attributes[fieldName] != undefined) {
+            return parseInt(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        }
+        return output;
+    }
     parseFloat(fieldName, defaultValue, isMax) {
-        this.maxCheck = isMax != undefined;
+        this.setMaxCheck(isMax);
         return super.parseFloat(fieldName, defaultValue);
     }
+    databaseParseFloat(fieldName) {
+        let output = super.databaseParseFloat(fieldName);
+        if (output == undefined && this.attributes[fieldName] != undefined) {
+            return parseFloat(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        }
+        return output;
+    }
     parseJSON(fieldName, defaultValue, isMax) {
-        this.maxCheck = isMax != undefined;
+        this.setMaxCheck(isMax);
         return super.parseJSON(fieldName, defaultValue);
+    }
+    databaseParseJSON(fieldName) {
+        let output = super.databaseParseJSON(fieldName);
+        if (output == undefined && this.attributes[fieldName] != undefined) {
+            return JSON.parse(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        }
+        return output;
     }
 
     addAttribute(attr) {
