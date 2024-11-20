@@ -77,7 +77,9 @@ var WuxConflictManager = WuxConflictManager || (function () {
     },
     endConflict = function() {
         TargetReference.IterateOverActiveTargetData(function(tokenTargetData) {
-            setTokenForNarative(tokenTargetData);
+            if (tokenTargetData != undefined) {
+                TokenReference.ResetTokenDisplay(tokenTargetData);
+            }
         });
         resetCombatStateVariables();
         
@@ -191,63 +193,9 @@ var WuxConflictManager = WuxConflictManager || (function () {
     setActiveTokensForConflict = function() {
         TargetReference.IterateOverActiveTargetData(function (tokenTargetData) {
             let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-            setTokenForConflict(tokenTargetData, attributeHandler);
+            TokenReference.SetTokenForConflict(state.WuxConflictManager.conflictType, tokenTargetData, attributeHandler);
             attributeHandler.run();
         });
-    },
-    setTokenForConflict = function(tokenTargetData, attributeHandler) {
-        tokenTargetData.initToken();
-        tokenTargetData.showTokenName(true);
-        tokenTargetData.showTooltip(true);
-
-        switch (state.WuxConflictManager.conflictType) {
-            case "Battle":
-                setTokenForBattle(tokenTargetData, attributeHandler);
-                break;
-            case "Social":
-                setTokenForSocialBattle(tokenTargetData, attributeHandler);
-                break;
-        }
-    },
-    setTokenForBattle = function (tokenTargetData, attributeHandler) {
-        let hpVar = WuxDef.GetVariable("HP");
-        let willpowerVar = WuxDef.GetVariable("WILL");
-        let enVar = WuxDef.GetVariable("EN");
-        attributeHandler.addAttribute(hpVar);
-        attributeHandler.addAttribute(willpowerVar);
-        attributeHandler.addAttribute(enVar);
-
-        attributeHandler.addFinishCallback(function(attrHandler) {
-            tokenTargetData.setBar(1, attrHandler.getAttribute(hpVar), true, true);
-            tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
-            tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
-        });
-    },
-    setTokenForSocialBattle = function (tokenTargetData, attributeHandler) {
-        let patienceVar = WuxDef.GetVariable("Soc_Patience");
-        let willpowerVar = WuxDef.GetVariable("WILL");
-        let favorVar = WuxDef.GetVariable("Soc_Favor");
-        let enVar = WuxDef.GetVariable("EN");
-        attributeHandler.addAttribute(patienceVar);
-        attributeHandler.addAttribute(willpowerVar);
-        attributeHandler.addAttribute(favorVar);
-        attributeHandler.addAttribute(enVar);
-
-        attributeHandler.addFinishCallback(function(attrHandler) {
-            tokenTargetData.setBar(1, attrHandler.getAttribute(patienceVar), true, true);
-            tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
-            tokenTargetData.setBar(3, attrHandler.getAttribute(favorVar), true, true);
-            tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
-        });
-    },
-    setTokenForNarative = function (tokenTargetData) {
-        tokenTargetData.setBar(1, undefined, true, true);
-        tokenTargetData.setBar(2, undefined, true, true);
-        tokenTargetData.setBar(3, undefined, true, true);
-        tokenTargetData.showTokenName(false);
-        tokenTargetData.showTooltip(false);
-        tokenTargetData.setEnergy(false);
-        tokenTargetData.setTurnIcon(false);
     }
     ;
 

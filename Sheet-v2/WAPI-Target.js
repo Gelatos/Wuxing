@@ -2,7 +2,10 @@ class TargetData {
     constructor(data) {
         this.createEmpty();
         if (data != undefined) {
-            let dataType = data.get("_type");
+            let dataType = data.type;
+            if (dataType == undefined) {
+                dataType = data.get("_type");
+            }
             if (dataType != undefined) {
                 if (dataType == "api") {
                     this.importMessage(data);
@@ -192,8 +195,20 @@ class TokenTargetData extends TargetData {
     addPatience(attributeHandler, value) {
         let tokenTargetData = this;
         this.modifyResourceAttribute(attributeHandler, "Soc_Patience", value, this.addModifierToAttribute, function(results) {
-            DebugLog(`[TokenTargetData][addPatience] ${results.current}/${results.max} + ${value} = ${results.newValue}`);
             tokenTargetData.setBarValue(1, results.newValue);
+            return results;
+        });
+    }
+    setFavor(attributeHandler, value) {
+        let patienceVar = WuxDef.GetVariable("Soc_Favor");
+        attributeHandler.addUpdate(patienceVar);
+        attributeHandler.addUpdate(patienceVar, value, true);
+        this.token.set(`bar3_max`, value);
+    }
+    addFavor(attributeHandler, value) {
+        let tokenTargetData = this;
+        this.modifyResourceAttribute(attributeHandler, "Soc_Favor", value, this.addModifierToAttribute, function(results) {
+            tokenTargetData.setBarValue(3, results.newValue);
             return results;
         });
     }
@@ -394,7 +409,10 @@ var TargetReference = TargetReference || (function () {
 
         iterateOverActiveTargetData = function (callback) {
             for (let targetData in state.TargetReference.activeCharacters.targetData) {
-                callback(TokenReference.GetTokenData(targetData));
+                let tokenTargetData = TokenReference.GetTokenData(targetData);
+                if (tokenTargetData != undefined) {
+                    callback(tokenTargetData);
+                }
             }
         },
 
@@ -473,19 +491,30 @@ var TokenReference = TokenReference || (function () {
 
         handleInput = function (msg, tag, content) {
             switch (tag) {
-                case "!cpt":
-                    commandSetPatience(msg, content);
-                    break;
+                case "!css":
+                    commandSetSocialData(msg, content);
+                break;
+                case "!creset":
+                    commandResetToken(msg);
+                break;
             };
         },
 
-        commandSetPatience = function (msg, content) {
+        commandSetSocialData = function (msg, content) {
+            let contents = content.split(",");
             iterateOverSelectedTokens(msg, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                tokenTargetData.setPatience(attributeHandler, content);
+                tokenTargetData.setPatience(attributeHandler, contents[0]);
+                tokenTargetData.setFavor(attributeHandler, contents[1]);
                 attributeHandler.run();
             });
         }, 
+
+        commandResetToken = function (msg) {
+            iterateOverSelectedTokens(msg, function (tokenTargetData) {
+                resetTokenDisplay(tokenTargetData);
+            });
+        },
 
         // State Token Getters
         // ---------------------------
@@ -549,6 +578,64 @@ var TokenReference = TokenReference || (function () {
                     callback(tokenTargetData);
                 }
             });
+        },
+
+        // Token States
+        // ---------------------------
+
+        setTokenForConflict = function(conflictType, tokenTargetData, attributeHandler) {
+            tokenTargetData.initToken();
+            tokenTargetData.showTokenName(true);
+            tokenTargetData.showTooltip(true);
+    
+            switch (conflictType) {
+                case "Battle":
+                    setTokenForBattle(tokenTargetData, attributeHandler);
+                    break;
+                case "Social":
+                    setTokenForSocialBattle(tokenTargetData, attributeHandler);
+                    break;
+            }
+        },
+        setTokenForBattle = function (tokenTargetData, attributeHandler) {
+            let hpVar = WuxDef.GetVariable("HP");
+            let willpowerVar = WuxDef.GetVariable("WILL");
+            let enVar = WuxDef.GetVariable("EN");
+            attributeHandler.addAttribute(hpVar);
+            attributeHandler.addAttribute(willpowerVar);
+            attributeHandler.addAttribute(enVar);
+    
+            attributeHandler.addFinishCallback(function(attrHandler) {
+                tokenTargetData.setBar(1, attrHandler.getAttribute(hpVar), true, true);
+                tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
+                tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
+            });
+        },
+        setTokenForSocialBattle = function (tokenTargetData, attributeHandler) {
+            let patienceVar = WuxDef.GetVariable("Soc_Patience");
+            let willpowerVar = WuxDef.GetVariable("WILL");
+            let favorVar = WuxDef.GetVariable("Soc_Favor");
+            let enVar = WuxDef.GetVariable("EN");
+            attributeHandler.addAttribute(patienceVar);
+            attributeHandler.addAttribute(willpowerVar);
+            attributeHandler.addAttribute(favorVar);
+            attributeHandler.addAttribute(enVar);
+    
+            attributeHandler.addFinishCallback(function(attrHandler) {
+                tokenTargetData.setBar(1, attrHandler.getAttribute(patienceVar), true, true);
+                tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
+                tokenTargetData.setBar(3, attrHandler.getAttribute(favorVar), true, true);
+                tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
+            });
+        },
+        resetTokenDisplay = function (tokenTargetData) {
+            tokenTargetData.setBar(1, undefined, true, true);
+            tokenTargetData.setBar(2, undefined, true, true);
+            tokenTargetData.setBar(3, undefined, true, true);
+            tokenTargetData.showTokenName(false);
+            tokenTargetData.showTooltip(false);
+            tokenTargetData.setEnergy(false);
+            tokenTargetData.setTurnIcon(false);
         }
 
         ;
@@ -558,7 +645,9 @@ var TokenReference = TokenReference || (function () {
         IterateOverSelectedTokens: iterateOverSelectedTokens,
         GetToken: getToken,
         GetTokenData: getTokenData,
-        AddToken: addToken
+        AddToken: addToken,
+        SetTokenForConflict: setTokenForConflict,
+        ResetTokenDisplay: resetTokenDisplay
     };
 
 }());

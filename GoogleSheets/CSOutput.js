@@ -1140,6 +1140,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			    build = function () {
         			        let contents = "";
         			        contents += basics();
+        			        contents += influences();
 							contents += WuxSheetMain.MultiRowGroup([advancement(), training()], WuxSheetMain.Table.FlexTable, 2);
         			        
         			        contents = WuxSheetMain.TabBlock(contents);
@@ -1184,7 +1185,31 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			        contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}</span>`);
 							
 							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-        			    }
+        			    },
+
+						influences = function () {
+        			        let contents = "";
+							let influenceDef = WuxDef.Get("Soc_Influence");
+        			        contents +=  WuxDefinition.InfoHeader(influenceDef);
+
+							let severityDef = WuxDef.Get("Soc_Severity");
+							let influenceContents = ``;
+						
+							influenceContents += WuxSheetMain.Header2(influenceDef.title) + "\n" +
+							WuxSheetMain.Input("text", influenceDef.getAttribute(), "A type of influence");
+						
+							influenceContents += WuxSheetMain.Header2(influenceDef.title) + "\n" +
+							WuxSheetMain.Input("text", influenceDef.getAttribute(), "Severity");
+							
+							influenceContents = `<div class="wuxSectionBlock wuxMaxWidth220">\n${WuxSheetMain.InteractionElement.Build(true, influenceContents)}\n</div>`;
+
+							contents += `<div>
+								<fieldset class="${WuxDef.GetVariable("RepeatingInfluences")}">
+									${influenceContents}
+								</fieldset>
+							</div>`;
+							return contents;
+						}
         			    
         			    return {
         			        Build : build

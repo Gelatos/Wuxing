@@ -1507,6 +1507,9 @@ class TechniqueEffectDisplayData {
             case "Boost":
                 output = this.formatBoostEffect(effect);
                 break;
+            case "Dash":
+                output = this.formatDashEffect(effect);
+                break;
             case "Definition":
                 // Do nothing
                 break;
@@ -1578,7 +1581,13 @@ class TechniqueEffectDisplayData {
         }
     }
     formatBoostEffect(effect) {
-        return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
+        switch (effect.subType) {
+            case "Set": return `${WuxDef.GetTitle(effect.effect)} is set to ${this.formatCalcBonus(effect)}`;
+            default: return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
+        }
+    }
+    formatDashEffect(effect) {
+        return `You dash, rolling your Move Potency die to determine how many spaces you can move.`;
     }
     formatDescriptionEffect(effect) {
         return effect.effect;
