@@ -1317,7 +1317,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 
 	var
 	updateBuildPoints = function(eventinfo) {
-		console.log("Update Skills");
+		DebugLog("Update Skills");
 		let attributeHandler  = new WorkerAttributeHandler();
 		let worker = new WuxWorkerBuildManager("Skill");
 		worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
@@ -1334,9 +1334,9 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 			let skillRank = 0;
 			for (let i = 0; i < skillDefinitions.length; i++) {
 				skillPointValue = skillDefinitions[i].formula.getValue(attrHandler);
-				skillRank = attrHandler.parseInt(skillDefinitions[i].getVariable(WuxDef._rank));
-				if (skillRank > 0) {
-					skillPointValue = skillPointValue + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+				skillRank = attrHandler.parseString(skillDefinitions[i].getVariable(WuxDef._rank));
+				if (skillRank == "on") {
+					skillPointValue = skillPointValue + 1 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
 				}
 				attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);
 			}

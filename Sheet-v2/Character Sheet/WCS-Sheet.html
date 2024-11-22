@@ -21662,7 +21662,10 @@ class TechniqueEffectDisplayData {
         }
     }
     formatBoostEffect(effect) {
-        return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
+        switch (effect.subType) {
+            case "Set": return `${WuxDef.GetTitle(effect.effect)} is set to ${this.formatCalcBonus(effect)}`;
+            default: return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
+        }
     }
     formatDashEffect(effect) {
         return `You dash, rolling your Move Potency die to determine how many spaces you can move.`;
@@ -32126,7 +32129,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 
 	var
 	updateBuildPoints = function(eventinfo) {
-		console.log("Update Skills");
+		DebugLog("Update Skills");
 		let attributeHandler  = new WorkerAttributeHandler();
 		let worker = new WuxWorkerBuildManager("Skill");
 		worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
@@ -32143,9 +32146,10 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 			let skillRank = 0;
 			for (let i = 0; i < skillDefinitions.length; i++) {
 				skillPointValue = skillDefinitions[i].formula.getValue(attrHandler);
-				skillRank = attrHandler.parseInt(skillDefinitions[i].getVariable(WuxDef._rank));
-				if (skillRank > 0) {
-					skillPointValue = skillPointValue + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+				skillRank = attrHandler.parseString(skillDefinitions[i].getVariable(WuxDef._rank));
+				DebugLog(skillDefinitions[i].title + "(" + skillPointValue + ") trained: " + skillRank);
+				if (skillRank == "on") {
+					skillPointValue = skillPointValue + 1 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
 				}
 				attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);
 			}
