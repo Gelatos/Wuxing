@@ -114,7 +114,9 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
 					var
 						build = function () {
-        			        let contents = WuxSheetMain.MultiRowGroup([buildOrigin(), buildOriginStats(), buildAdvancement(), buildTraining()], WuxSheetMain.Table.FlexTable, 2);
+        			        let contents = WuxSheetMain.MultiRowGroup([buildOrigin(), buildOriginStats()], WuxSheetMain.Table.FlexTable, 2);
+							contents += influences();
+							contents += WuxSheetMain.MultiRowGroup([buildAdvancement(), buildTraining()], WuxSheetMain.Table.FlexTable, 2);
         			        contents = WuxSheetMain.TabBlock(contents);
 							
         			        let definition = WuxDef.Get("Page_Origin");
@@ -123,7 +125,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
 						buildOrigin = function () {
 							let contents = "";
-        			        contents +=  WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"));
+        			        contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"));
 							contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
 							contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), WuxDef.GetAttribute("DisplayName"));
 							contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
@@ -141,7 +143,39 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("InnateDefense", WuxDef._learn));
 							contents += WuxDefinition.BuildSelect(WuxDef.Get("InnateSense"), WuxDef.GetAttribute("InnateSense"), WuxDef.Filter([new DatabaseFilterData("group", "InnateSenseType")]));
 							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("InnateSense", WuxDef._learn));
+
 							return WuxSheetMain.Table.FlexTableGroup(contents);
+						},
+
+						influences = function () {
+        			        let contents = "";
+							let influenceDef = WuxDef.Get("Soc_Influence");
+							let severityDef = WuxDef.Get("Soc_Severity");
+
+							let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
+							influenceInfo += WuxDefinition.TooltipDescription(severityDef);
+							influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_LowSeverity"));
+							influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_ModerateSeverity"));
+							influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_HighSeverity"));
+							influenceInfo = WuxSheetMain.Info.Contents(influenceDef.getAttribute(WuxDef._info), influenceInfo);
+
+        			        contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(influenceDef.getAttribute(WuxDef._info))}${influenceDef.title}`)}
+							${influenceInfo}`;
+
+							let influenceContents = WuxSheetMain.MultiRow(
+								WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "InfluenceType")]), false, "wuxInfluenceType") + 
+								WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]), false, "wuxInfluenceType") + 
+								WuxSheetMain.CustomInput("text", influenceDef.getAttribute(), "wuxInput wuxInfluenceDescription", ` placeholder="Influence Description"`)
+							);
+							let influenceHeaders = WuxSheetMain.Header2(`<div class="wuxInfluenceType">Type</div><div class="wuxInfluenceType">Severity</div><div class="wuxInfluenceType">Description</div>`);
+
+							contents += `<div>
+								${influenceHeaders}
+								<fieldset class="${WuxDef.GetVariable("RepeatingInfluences")}">
+									${influenceContents}
+								</fieldset>
+							</div>`;
+							return contents;
 						},
 
 						buildAdvancement = function () {
@@ -1190,20 +1224,27 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 						influences = function () {
         			        let contents = "";
 							let influenceDef = WuxDef.Get("Soc_Influence");
-        			        contents +=  WuxDefinition.InfoHeader(influenceDef);
-
 							let severityDef = WuxDef.Get("Soc_Severity");
-							let influenceContents = ``;
-						
-							influenceContents += WuxSheetMain.Header2(influenceDef.title) + "\n" +
-							WuxSheetMain.Input("text", influenceDef.getAttribute(), "A type of influence");
-						
-							influenceContents += WuxSheetMain.Header2(influenceDef.title) + "\n" +
-							WuxSheetMain.Input("text", influenceDef.getAttribute(), "Severity");
-							
-							influenceContents = `<div class="wuxSectionBlock wuxMaxWidth220">\n${WuxSheetMain.InteractionElement.Build(true, influenceContents)}\n</div>`;
+
+							let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
+							influenceInfo += WuxDefinition.TooltipDescription(severityDef);
+							influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_LowSeverity"));
+							influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_ModerateSeverity"));
+							influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_HighSeverity"));
+							influenceInfo = WuxSheetMain.Info.Contents(influenceDef.getAttribute(WuxDef._info), influenceInfo);
+
+        			        contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(influenceDef.getAttribute(WuxDef._info))}${influenceDef.title}`)}
+							${influenceInfo}`;
+
+							let influenceContents = WuxSheetMain.MultiRow(
+								WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "InfluenceType")]), false, "wuxInfluenceType") + 
+								WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]), false, "wuxInfluenceType") + 
+								WuxSheetMain.CustomInput("text", influenceDef.getAttribute(), "wuxInput wuxInfluenceDescription", ` placeholder="Influence Description"`)
+							);
+							let influenceHeaders = WuxSheetMain.Header2(`<div class="wuxInfluenceType">Type</div><div class="wuxInfluenceType">Severity</div><div class="wuxInfluenceType">Description</div>`);
 
 							contents += `<div>
+								${influenceHeaders}
 								<fieldset class="${WuxDef.GetVariable("RepeatingInfluences")}">
 									${influenceContents}
 								</fieldset>

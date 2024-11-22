@@ -578,9 +578,9 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 		attributeHandler.run();
 	},
 	setDefenseVariables = function(attrHandler, type, attribute, defense1, defense2) {
-		let attrDefinition = WuxDef.Get(`Attribute_${attribute}`);
-		let def1Definition = WuxDef.Get(`${type}_${defense1}`);
-		let def2Definition = WuxDef.Get(`${type}_${defense2}`);
+		let attrDefinition = WuxDef.Get(`Attr_${attribute}`);
+		let def1Definition = WuxDef.Get(`Def_${defense1}`);
+		let def2Definition = WuxDef.Get(`Def_${defense2}`);
 
 		attrHandler.addUpdate(WuxDef.GetVariable(`Innate${type}`, WuxDef._learn), getDefenseDescription(type, attrDefinition, def1Definition, def2Definition));
 		attrHandler.addUpdate(def1Definition.getVariable(WuxDef._expertise), 2);

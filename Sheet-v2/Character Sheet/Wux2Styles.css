@@ -1630,6 +1630,23 @@ input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-P
 }
 
 /*========================================
+    Influences
+========================================*/
+
+.wuxInfluenceType
+{
+    display: inline-block;
+    width: 100px;
+}
+
+.wuxInfluenceDescription
+{
+    display: inline-block;
+    margin-left: 5px;
+    width: calc(95% - 205px);
+}
+
+/*========================================
     Emote Post
 ========================================*/
 

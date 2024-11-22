@@ -748,33 +748,37 @@ var WuxDefinition = WuxDefinition || (function () {
             ${WuxSheetMain.Info.DefaultContents(definition)}`;
         },
 
+        buildHeader = function (definition) {
+            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`);
+        },
+
         buildText = function (definition, textContents) {
-            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
+            return buildHeader(definition) + "\n" +
                 WuxSheetMain.Desc(textContents);
         },
 
         buildTextInput = function (definition, fieldName) {
-            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
+            return buildHeader(definition) + "\n" +
                 WuxSheetMain.Input("text", fieldName);
         },
 
         buildTextarea = function (definition, fieldName, className, placeholder) {
-            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
+            return buildHeader(definition) + "\n" +
                 WuxSheetMain.Textarea(fieldName, className, placeholder);
         },
 
         buildNumberInput = function (definition, fieldName) {
-            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
+            return buildHeader(definition) + "\n" +
                 WuxSheetMain.Input("number", fieldName);
         },
 
         buildNumberLabelInput = function (definition, fieldName, labelContent) {
-            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
-            WuxSheetMain.MultiRow(WuxSheetMain.Input("number", fieldName, "", "0") + WuxSheetMain.InputLabel(labelContent));
+            return buildHeader(definition) + "\n" +
+                WuxSheetMain.MultiRow(WuxSheetMain.Input("number", fieldName, "", "0") + WuxSheetMain.InputLabel(labelContent));
         },
 
         buildSelect = function (definition, fieldName, definitionGroup, showEmpty) {
-            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`) + "\n" +
+            return buildHeader(definition) + "\n" +
                 WuxSheetMain.Select(fieldName, definitionGroup, showEmpty);
         }
         ;
@@ -792,6 +796,7 @@ var WuxDefinition = WuxDefinition || (function () {
         DefinitionContents: definitionContents,
         DisplayCollapsibleTitle: displayCollapsibleTitle,
         InfoHeader: infoHeader,
+        BuildHeader: buildHeader,
         BuildText: buildText,
         BuildTextInput: buildTextInput,
         BuildTextarea: buildTextarea,
