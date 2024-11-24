@@ -252,6 +252,13 @@ class TokenTargetData extends TargetData {
             }
         );
     }
+    addMoveCharge(value) {
+        let current = parseInt(this.token.get("status_yellow"));
+        DebugLog(`[TokenTargetData][addMoveCharge] Current: ${current}`);
+        let newValue = (isNaN(current) ? 0 : current) + parseInt(value);
+        DebugLog(`[TokenTargetData][addMoveCharge] New Value: ${newValue}`);
+        this.setTurnIcon(newValue);
+    }
     setDash(attributeHandler) {
         let tokenTargetData = this;
         let baseSpeedVar = WuxDef.GetVariable("Cmb_Mv");
@@ -494,6 +501,12 @@ var TokenReference = TokenReference || (function () {
                 case "!css":
                     commandSetSocialData(msg, content);
                 break;
+                case "!cen":
+                    commandAddEnergy(msg, content);
+                break;
+                case "!cmove":
+                    commandAddMoveCharge(msg, content);
+                break;
                 case "!creset":
                     commandResetToken(msg);
                 break;
@@ -508,7 +521,23 @@ var TokenReference = TokenReference || (function () {
                 tokenTargetData.setFavor(attributeHandler, contents[1]);
                 attributeHandler.run();
             });
-        }, 
+        },
+
+        commandAddEnergy = function (msg, content) {
+            iterateOverSelectedTokens(msg, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.addEnergy(attributeHandler, content);
+                attributeHandler.run();
+            });
+        },
+
+        commandAddMoveCharge = function (msg, content) {
+            iterateOverSelectedTokens(msg, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.addMoveCharge(content);
+                attributeHandler.run();
+            });
+        },
 
         commandResetToken = function (msg) {
             iterateOverSelectedTokens(msg, function (tokenTargetData) {

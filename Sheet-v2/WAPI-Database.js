@@ -32,7 +32,7 @@ class Dictionary {
         this.keys = json.keys;
         if (dataCreationCallback != undefined) {
             this.values = {};
-            for(let i = 0; i < json.keys.length; i++) {
+            for (let i = 0; i < json.keys.length; i++) {
                 this.values[json.keys[i]] = dataCreationCallback(json.values[json.keys[i]]);
             }
         }
@@ -113,7 +113,7 @@ class Database extends Dictionary {
             }
         }
     }
-    
+
     addSortingroperties(sortingProperties) {
         this.sortingGroups = {};
         for (let i = 0; i < sortingProperties.length; i++) {
@@ -121,7 +121,7 @@ class Database extends Dictionary {
         }
     }
     addSortingGroup(property, propertyValue, newEntry) {
-        if(this.sortingGroups != undefined) {
+        if (this.sortingGroups != undefined) {
             if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
                 this.sortingGroups[property][propertyValue] = [];
             }
@@ -130,9 +130,9 @@ class Database extends Dictionary {
     }
 
     filter(filterData) {
-        
+
         let filteredGroup;
-        if(Array.isArray(filterData)) {
+        if (Array.isArray(filterData)) {
             filteredGroup = this.getSortedGroup(filterData[0].property, filterData[0].value);
             let nextFilter = [];
             for (let i = 1; i < filterData.length; i++) {
@@ -184,14 +184,14 @@ class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
         let filters = ["style", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
-        let dataCreation = function(data) {
+        let dataCreation = function (data) {
             return new TechniqueData(data);
         };
         super(data, filters, dataCreation);
     }
 
     importJson(json) {
-        let dataCreationCallback = function(data) {
+        let dataCreationCallback = function (data) {
             return new TechniqueData(data);
         }
         super.importJson(json, dataCreationCallback);
@@ -208,7 +208,7 @@ class ExtendedTechniqueDatabase extends Database {
             }
         }
     }
-    
+
     add(key, value) {
         super.add(key, value);
 
@@ -220,7 +220,7 @@ class ExtendedTechniqueDatabase extends Database {
 }
 class ExtendedDescriptionDatabase extends Database {
     constructor(data) {
-        let dataCreation = function(data) {
+        let dataCreation = function (data) {
             let definition = new DefinitionData(data);
             if (definition.group == "Type") {
                 definition.variable += `{0}{1}`;
@@ -256,20 +256,20 @@ class ExtendedDescriptionDatabase extends Database {
 }
 class TechniqueEffectDatabase extends Database {
     constructor(data) {
-        let dataCreation = function(data) {
+        let dataCreation = function (data) {
             return new TechniqueEffect(data);
         };
         super(data, ["defense"], dataCreation);
     }
-    
+
     importJson(json) {
-        let dataCreationCallback = function(data) {
+        let dataCreationCallback = function (data) {
             return new TechniqueEffect(data);
         }
         super.importJson(json, dataCreationCallback);
     }
     importSheets(dataArray) {
-        let dataCreationCallback = function(data) {
+        let dataCreationCallback = function (data) {
             return new TechniqueEffect(data);
         }
         super.importSheets(json, dataCreationCallback);
@@ -423,10 +423,10 @@ class TechniqueData extends WuxDatabaseData {
 
     importEffectsFromTechnique(technique) {
         let baseTechnique = this;
-        technique.effects.iterate(function(effect) {
+        technique.effects.iterate(function (effect) {
             baseTechnique.addEffect(effect);
         });
-        technique.definitions.forEach(function(definition) {
+        technique.definitions.forEach(function (definition) {
             baseTechnique.addDefinition(definition);
         });
     }
@@ -455,7 +455,7 @@ class TechniqueData extends WuxDatabaseData {
         }
     }
 
-    getUseTech () {
+    getUseTech() {
         return `!utech ${this.formatTechniqueForSandbox()}`;
     }
     formatTechniqueForSandbox() {
@@ -961,7 +961,7 @@ class ResistanceData {
                 output += `${damageType}: ${this[damageType]}`;
             }
         }
-        
+
         return output;
     }
 
@@ -975,7 +975,7 @@ class ResistanceData {
                 output += `${damageType}: ${this[damageType]}`;
             }
         }
-        
+
         return output;
     }
 }
@@ -1029,7 +1029,7 @@ class DefinitionData extends WuxDatabaseData {
         this.formula = new FormulaData();
         this.linkedGroups = [];
         this.isResource = false;
-        
+
     }
     createDefinition(baseDefinition) {
         this.definition = "";
@@ -1044,12 +1044,12 @@ class DefinitionData extends WuxDatabaseData {
         definition.isResource = this.isResource;
 
         delete this.description;
-        
+
         return definition;
     }
     getVariables(array, mod1) {
         let output = [];
-        for(let i = 0; i < array.length; i++) {
+        for (let i = 0; i < array.length; i++) {
             output.push(this.getVariable(array[i], mod1));
         }
         return output;
@@ -1058,13 +1058,13 @@ class DefinitionData extends WuxDatabaseData {
         if (mod == undefined) {
             mod = "";
         }
-        
+
         if (mod1 != undefined) {
             mod = [mod, mod1];
         }
-        
+
         let i = 0;
-        return this.variable.replace(/{(\d+)}/g, function(_,m) {
+        return this.variable.replace(/{(\d+)}/g, function (_, m) {
             i = parseInt(m);
             if (Array.isArray(mod) && i < mod.length && mod[i] != undefined) {
                 return mod[i];
@@ -1101,14 +1101,14 @@ class DefinitionData extends WuxDatabaseData {
     iterateExtraData(extraDataValues) {
         let dataSplit;
         let definition = this;
-        extraDataValues.forEach(function(data) {
+        extraDataValues.forEach(function (data) {
             if (data.trim().indexOf(":") != -1) {
                 dataSplit = data.split(":");
                 definition.setImportSheetExtraData(dataSplit[0].trim(), dataSplit[1].trim());
             }
         });
     }
-    setImportSheetExtraData(property, value) {}
+    setImportSheetExtraData(property, value) { }
 }
 class TechniqueDefinitionData extends DefinitionData {
     importJson(json) {
@@ -1245,7 +1245,7 @@ class TechniqueDisplayData {
         this.setDefinitions(technique);
         this.setEffects(technique);
     }
-    
+
     setTechBasics(technique) {
         this.technique = technique;
         this.name = technique.name;
@@ -1320,7 +1320,7 @@ class TechniqueDisplayData {
         this.effects = [];
         let defenses = technique.effects.getPropertyValues("defense");
         let filteredTechniqueEffects;
-        for(let i = 0; i < defenses.length; i++) {
+        for (let i = 0; i < defenses.length; i++) {
             filteredTechniqueEffects = technique.effects.filter(new DatabaseFilterData("defense", defenses[i]));
             this.effects.push(defenses[i], new TechniqueEffectDisplayData(filteredTechniqueEffects));
         };
@@ -1334,7 +1334,7 @@ class TechniqueDisplayData {
         this.definition = {};
         this.fieldName = "";
         this.isFree = false;
-        
+
         this.resourceData = "";
         this.targetData = "";
 
@@ -1403,14 +1403,14 @@ class TechniqueDisplayData {
     rollTemplateEffects() {
         let output = "";
         let incrementer = 0;
-        this.effects.forEach(function(effect) {
-            if(effect.check != undefined) {
+        this.effects.forEach(function (effect) {
+            if (effect.check != undefined) {
                 output += `{{Effect${incrementer}Name=${effect.check}}}{{Effect${incrementer}Desc=${effect.checkDescription}}}`;
                 if (effect.effects == undefined) {
                     output += `{{Effect${incrementer}=Error! No effects found!}}`;
                 }
                 else {
-                    effect.effects.forEach(function(desc) {
+                    effect.effects.forEach(function (desc) {
                         output += `{{Effect${incrementer}=${desc}}}`;
                         incrementer++;
                     });
@@ -1438,12 +1438,12 @@ class TechniqueDisplayData {
     }
 }
 class TechniqueEffectDisplayData {
-    
+
     constructor(techniqueEffects) {
         this.check = "";
         this.checkDescription = "";
         this.effects = [];
-        
+
         this.importDefenseData(techniqueEffects[0]);
         this.importEffectData(techniqueEffects);
     }
@@ -1510,14 +1510,18 @@ class TechniqueEffectDisplayData {
             case "Dash":
                 output = this.formatDashEffect(effect);
                 break;
+            case "EN":
+                output = this.formatEnEffect(effect);
+                break;
             case "Definition":
                 // Do nothing
                 break;
+            case "Desc":
             case "":
                 output = this.formatDescriptionEffect(effect);
                 break;
         }
-        
+
         return output;
     }
     formatHpEffect(effect) {
@@ -1568,7 +1572,7 @@ class TechniqueEffectDisplayData {
             target = "You";
             plural = "";
         }
-        let ranks = this.formatCalcBonus(effect);
+
         switch (effect.subType) {
             case "Add": return `${target} gain${plural} the ${state.title} ${state.group}`;
             case "Remove": return `${target} lose${plural} the ${state.title} ${state.group}`;
@@ -1587,12 +1591,41 @@ class TechniqueEffectDisplayData {
         }
     }
     formatDashEffect(effect) {
-        return `You dash, rolling your Move Potency die to determine how many spaces you can move.`;
+        if (effect.target == "Self") {
+            return `You roll your Move Potency die to gain Move Charge.`;
+        }
+        else {
+            return `Target rolls their Move Potency die to gain Move Charge.`;
+        }
+    }
+    formatEnEffect(effect) {
+        let effectTotal = this.formatCalcBonus(effect);
+        if (effect.target == "Self") {
+            return `You gain ${effectTotal} ${WuxDef.GetTitle("EN")}`;
+        }
+        else {
+            return `Target gains ${effectTotal} ${WuxDef.GetTitle("EN")}`;
+        }
     }
     formatDescriptionEffect(effect) {
         return effect.effect;
     }
 
+    getTargetString(effect, plural) {
+        let output = {
+            target: "",
+            plural: ""
+        };
+        if (effect.target == "Self") {
+            output.target = "You";
+            output.plural = "";
+        }
+        else {
+            output.target = "Target";
+            output.plural = plural;
+        }
+        return output;
+    }
     formatCalcBonus(effect) {
         let output = this.formatEffectDice(effect);
         let formulaString = "";
@@ -1616,20 +1649,20 @@ class TechniqueEffectDisplayData {
 }
 
 class WuxRepeatingSection {
-	constructor(definitionId) {
-		this.definition = WuxDef.Get(definitionId);
+    constructor(definitionId) {
+        this.definition = WuxDef.Get(definitionId);
         this.repeatingSection = this.definition.getVariable();
         this.ids = [];
-	}
+    }
 
     getIds(callback) {
-		let repeater = this;
-		getSectionIDs(this.repeatingSection, function (ids) {
-			ids.forEach(function (id) {
+        let repeater = this;
+        getSectionIDs(this.repeatingSection, function (ids) {
+            ids.forEach(function (id) {
                 repeater.ids.push(id);
-			});
+            });
             callback(repeater);
-		});
+        });
     }
 
     addIds(ids) {
@@ -1741,7 +1774,7 @@ class FormulaData {
                 definitionName = split[0];
                 multiplier = split[1];
             }
-            
+
             definitionNameModifier = "";
             if (formula.indexOf(":") > -1) {
                 let split = definitionName.split(":");
@@ -1809,7 +1842,7 @@ class FormulaData {
                 console.log(`Adding ${worker.value} * ${worker.multiplier}`);
             }
             mod = worker.value * worker.multiplier;
-            if(worker.max > 0 && mod > worker.max) {
+            if (worker.max > 0 && mod > worker.max) {
                 mod = worker.max;
             }
             output += mod;
@@ -1834,7 +1867,7 @@ class FormulaData {
                         else {
                             output += `[${definition.title}]`;
                         }
-                        
+
                         if (worker.max > 0) {
                             output += `(max:${worker.max})`;
                         }
@@ -1847,51 +1880,51 @@ class FormulaData {
                 }
                 output += worker.value;
             }
-            
+
         });
         return output;
     }
 }
 
 class AttributeHandler {
-	constructor(mods) {
-		if (Array.isArray(mods)) {
-			this.mods = mods;
-		}
-		else {
-			this.mods = [];
-			if (mods != undefined) {
-			    this.mods.push(mods);
-			}
-		}
-		this.current = {};
-		this.update = {};
-		this.getCallbacks = [];
-		this.finishCallbacks = [];
-	}
-	addMod(mods) {
-		if (Array.isArray(mods)) {
-			this.mods = this.mods.concat(mods);
-		}
-		else {
-			this.mods.push(mods);
-		}
-	}
-	addFormulaMods(definition) {
+    constructor(mods) {
+        if (Array.isArray(mods)) {
+            this.mods = mods;
+        }
+        else {
+            this.mods = [];
+            if (mods != undefined) {
+                this.mods.push(mods);
+            }
+        }
+        this.current = {};
+        this.update = {};
+        this.getCallbacks = [];
+        this.finishCallbacks = [];
+    }
+    addMod(mods) {
+        if (Array.isArray(mods)) {
+            this.mods = this.mods.concat(mods);
+        }
+        else {
+            this.mods.push(mods);
+        }
+    }
+    addFormulaMods(definition) {
         console.log(`Adding formula mods for ${definition.name}`);
-		this.addMod(definition.formula.getAttributes());
-	}
-	addUpdate(attr, value) {
-		this.update[attr] = value;
-	}
-	addGetAttrCallback(callback) {
-		this.getCallbacks.push(callback);
-	}
-	addFinishCallback(callback) {
-		this.finishCallbacks.push(callback);
-	}
-	run() {
-	}
+        this.addMod(definition.formula.getAttributes());
+    }
+    addUpdate(attr, value) {
+        this.update[attr] = value;
+    }
+    addGetAttrCallback(callback) {
+        this.getCallbacks.push(callback);
+    }
+    addFinishCallback(callback) {
+        this.finishCallbacks.push(callback);
+    }
+    run() {
+    }
 
     getCurrentValue(fieldName) {
         return this.current[fieldName];
@@ -1900,20 +1933,20 @@ class AttributeHandler {
         return this.update[fieldName];
     }
     validateDefaultValue(defaultValue, newDefaultValue) {
-		if (defaultValue == undefined) {
-			return newDefaultValue;
-		}
+        if (defaultValue == undefined) {
+            return newDefaultValue;
+        }
         return defaultValue;
     }
 
-	parseString(fieldName, defaultValue) {
-		defaultValue = this.validateDefaultValue(defaultValue, "");
+    parseString(fieldName, defaultValue) {
+        defaultValue = this.validateDefaultValue(defaultValue, "");
         let output = this.databaseParseString(fieldName);
         if (output == undefined || output == "") {
             output = defaultValue;
         }
         return output;
-	}
+    }
     databaseParseString(fieldName) {
         if (this.update[fieldName] != undefined) {
             return this.getUpdateValue(fieldName);
@@ -1923,31 +1956,31 @@ class AttributeHandler {
         }
         return undefined;
     }
-	parseInt(fieldName, defaultValue) {
-		defaultValue = this.validateDefaultValue(defaultValue, 0);
+    parseInt(fieldName, defaultValue) {
+        defaultValue = this.validateDefaultValue(defaultValue, 0);
         let output = this.databaseParseInt(fieldName);
         if (output == undefined || isNaN(output) || output == "") {
             output = defaultValue;
         }
         return output;
-	}
+    }
     databaseParseInt(fieldName) {
         if (this.update[fieldName] != undefined) {
             return parseInt(this.getUpdateValue(fieldName));
-		}
-		else if (this.current[fieldName] != undefined) {
+        }
+        else if (this.current[fieldName] != undefined) {
             return parseInt(this.getCurrentValue(fieldName));
-		}
+        }
         return undefined;
     }
-	parseFloat(fieldName, defaultValue) {
-		defaultValue = this.validateDefaultValue(defaultValue, 0);
+    parseFloat(fieldName, defaultValue) {
+        defaultValue = this.validateDefaultValue(defaultValue, 0);
         let output = this.databaseParseFloat(fieldName);
         if (output == undefined || isNaN(output) || output == "") {
             output = defaultValue;
         }
         return output;
-	}
+    }
     databaseParseFloat(fieldName) {
         if (this.update[fieldName] != undefined) {
             return parseFloat(this.getUpdateValue(fieldName));
@@ -1957,14 +1990,14 @@ class AttributeHandler {
         }
         return undefined;
     }
-	parseJSON(fieldName, defaultValue) {
-		defaultValue = this.validateDefaultValue(defaultValue, "");
+    parseJSON(fieldName, defaultValue) {
+        defaultValue = this.validateDefaultValue(defaultValue, "");
         let output = this.databaseParseJSON(fieldName);
         if (output == undefined || output == "") {
             output = defaultValue;
         }
         return output;
-	}
+    }
     databaseParseJSON(fieldName) {
         if (this.update[fieldName] != undefined) {
             return JSON.parse(this.getUpdateValue(fieldName));
@@ -2002,7 +2035,7 @@ class SandboxAttributeHandler extends AttributeHandler {
         }
         return output;
     }
-            
+
     parseInt(fieldName, defaultValue, isMax) {
         this.setMaxCheck(isMax);
         return super.parseInt(fieldName, defaultValue);
@@ -2050,14 +2083,14 @@ class SandboxAttributeHandler extends AttributeHandler {
         }
         return this.attributes[attr];
     }
-	addUpdate(attr, value, isMax) {
+    addUpdate(attr, value, isMax) {
         if (this.attributes[attr] == undefined) {
             this.addAttribute(attr);
         }
-        super.addUpdate(attr, {type: isMax ? "max" : "current", value: value});
-	}
-	run() {
-		let attributeHandler = this;
+        super.addUpdate(attr, { type: isMax ? "max" : "current", value: value });
+    }
+    run() {
+        let attributeHandler = this;
         attributeHandler.mods.forEach((property) => {
             attributeHandler.current[property] = getAttrByName(this.characterId, property);
         });
@@ -2076,20 +2109,20 @@ class SandboxAttributeHandler extends AttributeHandler {
                 attribute.set(updateData.type, updateData.value);
             }
         };
-	}
+    }
 
-    getCharacterAttribute (attrName) {
+    getCharacterAttribute(attrName) {
         var returnVal = undefined;
         var chracterAttributes = findObjs({
             _characterid: this.characterId,
             _type: "attribute",
             name: attrName
-        }, {caseInsensitive: true});
-    
+        }, { caseInsensitive: true });
+
         if (chracterAttributes.length > 0) {
             returnVal = chracterAttributes[0];
         }
-    
+
         return returnVal;
     }
 }
@@ -2414,9 +2447,9 @@ var Format = Format || (function () {
             if (isNaN(num))
                 return NaN;
             var digits = String(+num).split(""),
-                key = ["","C","CC","CCC","CD","D","DC","DCC","DCCC","CM",
-                       "","X","XX","XXX","XL","L","LX","LXX","LXXX","XC",
-                       "","I","II","III","IV","V","VI","VII","VIII","IX"],
+                key = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
+                    "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
+                    "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"],
                 roman = "",
                 i = 3;
             while (i--)
@@ -2589,11 +2622,11 @@ var Dice = Dice || (function () {
                 }
             }
             output.message += `)`;
-            
+
             return output;
         },
 
-        rollSkillCheck = function(advantages, mod) {
+        rollSkillCheck = function (advantages, mod) {
             let dieCount = 2 + Math.abs(advantages);
             let dieType = 6;
             let roll = dropRollDice(dieCount, dieType, 2, advantages >= 0);
