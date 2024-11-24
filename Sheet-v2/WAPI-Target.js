@@ -254,9 +254,7 @@ class TokenTargetData extends TargetData {
     }
     addMoveCharge(value) {
         let current = parseInt(this.token.get("status_yellow"));
-        DebugLog(`[TokenTargetData][addMoveCharge] Current: ${current}`);
         let newValue = (isNaN(current) ? 0 : current) + parseInt(value);
-        DebugLog(`[TokenTargetData][addMoveCharge] New Value: ${newValue}`);
         this.setTurnIcon(newValue);
     }
     setDash(attributeHandler) {
