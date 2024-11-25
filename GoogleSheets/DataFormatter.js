@@ -284,8 +284,9 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             setTechniqueDisplayHeaderUseSection = function (techDisplayData, displayOptions) {
 
                 // add technique data for the api
-                techDisplayData.username = "@{display_name}";
-                techDisplayData.technique.username = "@{display_name}";
+                techDisplayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
+                techDisplayData.technique.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
+                techDisplayData.technique.displayname = techDisplayData.displayname;
                 let useDefinition = WuxDef.Get("Title_UseTechnique");
 
                 return `

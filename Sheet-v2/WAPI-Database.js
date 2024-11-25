@@ -459,32 +459,36 @@ class TechniqueData extends WuxDatabaseData {
         return `!utech ${this.formatTechniqueForSandbox()}`;
     }
     formatTechniqueForSandbox() {
-        this.username = `@{${WuxDef.GetVariable("DisplayName")}}`;
+        this.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
+        this.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
         let usedTechData = JSON.stringify(this);
         return this.sanitizeSheetRollAction(usedTechData);
     }
     sanitizeSheetRollAction(roll) {
         var sheetRoll = roll;
         sheetRoll = sheetRoll.replace(/"/g, "QTE");
+        sheetRoll = sheetRoll.replace(/:/g, "COLON");
+        sheetRoll = sheetRoll.replace(/\n/g, "&&");
         sheetRoll = sheetRoll.replace(/%/g, "&#37;");
         sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
         sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-        sheetRoll = sheetRoll.replace(/:/g, "COLON");
         sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
         sheetRoll = sheetRoll.replace(/@/g, "&#64;");
         sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
         sheetRoll = sheetRoll.replace(/]/g, "&#93;");
         sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-        sheetRoll = sheetRoll.replace(/\n/g, "&&");
         return sheetRoll;
     }
-    importSandboxJson(jsonString) {
+    unsanitizeSheetRollAction(jsonString) {
         jsonString = jsonString.replace(/QTE/g, '"');
         jsonString = jsonString.replace(/COLON/g, ":");
         jsonString = jsonString.replace(/&&/g, "\n");
-        importJson(JSON.parse(jsonString));
+        return JSON.parse(jsonString);
+    }
+    importSandboxJson(jsonString) {
+        this.importJson(this.unsanitizeSheetRollAction(jsonString));
     }
 }
 class TechniqueEffect extends dbObj {
@@ -528,6 +532,51 @@ class TechniqueEffect extends dbObj {
     }
     setName(name) {
         this.name = name;
+    }
+}
+class TechniqueResources extends dbObj {
+    importJson(json) {
+        this.sheetname = json.sheetname;
+        this.name = json.name;
+        this.resourceCost = json.resourceCost;
+    }
+    importSheets(dataArray) {
+        let i = 0;
+        this.sheetname = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i]; i++;
+        this.resourceCost = "" + dataArray[i]; i++;
+    }
+    createEmpty() {
+        super.createEmpty();
+        this.sheetname = "";
+        this.name = "";
+        this.resourceCost = "";
+    }
+    sanitizeSheetRollAction(roll) {
+        var sheetRoll = roll;
+        sheetRoll = sheetRoll.replace(/"/g, "QTE");
+        sheetRoll = sheetRoll.replace(/:/g, "COLON");
+        sheetRoll = sheetRoll.replace(/\n/g, "&&");
+        sheetRoll = sheetRoll.replace(/%/g, "&#37;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+        sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
+        sheetRoll = sheetRoll.replace(/@/g, "&#64;");
+        sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
+        sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        return sheetRoll;
+    }
+    unsanitizeSheetRollAction(jsonString) {
+        jsonString = jsonString.replace(/QTE/g, '"');
+        jsonString = jsonString.replace(/COLON/g, ":");
+        jsonString = jsonString.replace(/&&/g, "\n");
+        return JSON.parse(jsonString);
+    }
+    importSandboxJson(jsonString) {
+        this.importJson(this.unsanitizeSheetRollAction(jsonString));
     }
 }
 class TechniqueStyle extends WuxDatabaseData {
@@ -1249,7 +1298,8 @@ class TechniqueDisplayData {
     setTechBasics(technique) {
         this.technique = technique;
         this.name = technique.name;
-        this.username = technique.username;
+        this.displayname = technique.displayname;
+        this.sheetname = technique.sheetname;
         this.definition = technique.createDefinition(WuxDef.Get("Technique"));
         this.fieldName = Format.ToFieldName(technique.name);
         this.actionType = technique.action;
@@ -1271,10 +1321,16 @@ class TechniqueDisplayData {
             this.resourceData += technique.limits;
         }
         if (technique.resourceCost != "") {
-            if (this.resourceData != "") {
-                this.resourceData += "; ";
+            let resourceNames = technique.resourceCost.split(";");
+            for (let i = 0; i < resourceNames.length; i++) {
+                let resource = resourceNames[i].trim().split(" ", 2);
+                let resourceName = WuxDef.GetTitle(resource[1]);
+
+                if (this.resourceData != "") {
+                    this.resourceData += "; ";
+                }
+                this.resourceData += `${resource[0]} ${resourceName}`
             }
-            this.resourceData += technique.resourceCost;
         }
     }
     setTechTargetData(technique) {
@@ -1330,7 +1386,8 @@ class TechniqueDisplayData {
         this.technique = {};
         this.name = "";
         this.actionType = "";
-        this.username = "";
+        this.displayname = "";
+        this.sheetname = "";
         this.definition = {};
         this.fieldName = "";
         this.isFree = false;
@@ -1351,7 +1408,7 @@ class TechniqueDisplayData {
     getRollTemplate(addTechnique) {
         let output = "";
 
-        output += `{{Username=${this.username}}}{{Name=${this.name}}}{{type-${this.actionType}=1}}`;
+        output += `{{Displayname=${this.displayname}}}{{Name=${this.name}}}{{type-${this.actionType}=1}}`;
         if (this.resourceData != "") {
             output += `{{Resources=${this.resourceData}}}`;
         }
@@ -1381,12 +1438,8 @@ class TechniqueDisplayData {
         }
         if (addTechnique) {
             if (this.technique.resourceCost != "") {
-                let consumeData = {
-                    username: this.username,
-                    name: this.name,
-                    resourceCost: this.resourceCost
-                };
-                output += `{{consumeData=!ctech ${this.technique.sanitizeSheetRollAction(JSON.stringify(consumeData))}}}`;
+                let consumeData = new TechniqueResources([this.technique.sheetname, this.technique.name, this.technique.resourceCost]);
+                output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}}}`;
             }
             output += `{{targetData=${this.technique.getUseTech()}}}`;
         }
@@ -2074,7 +2127,7 @@ class SandboxAttributeHandler extends AttributeHandler {
         if (this.attributes.hasOwnProperty(attr)) {
             return;
         }
-        DebugLog(`Adding attribute ${attr}`);
+        DebugLog(`[SandboxAttributeHandler][addAttribute] Adding attribute ${attr}`);
         this.attributes[attr] = this.getCharacterAttribute(attr);
     }
     getAttribute(attr) {
@@ -2205,7 +2258,7 @@ var FeatureService = FeatureService || (function () {
         getRollTemplate = function (techDisplayData) {
             let output = "";
 
-            output += `{{Username=${techDisplayData.username}}}{{Name=${techDisplayData.name}}}{{SlotType=${techDisplayData.slotFooter}}}{{Source=${techDisplayData.slotSource}}}{{UsageInfo=${techDisplayData.usageInfo}}}${techDisplayData.traits.length > 0 ? rollTemplateTraits(techDisplayData.traits, "Trait") : ""}${techDisplayData.trigger ? `{{Trigger=${techDisplayData.trigger}}}` : ""}${techDisplayData.requirement ? `{{Requirement=${techDisplayData.requirement}}}` : ""}${techDisplayData.item ? `{{Item=${techDisplayData.item}}}` : ""}${techDisplayData.range ? `{{Range=${techDisplayData.range}}}` : ""}${techDisplayData.target ? `{{Target=${techDisplayData.target}}}` : ""}${techDisplayData.skill ? `{{SkillString=${techDisplayData.skill}}}` : ""}${techDisplayData.damage ? `{{DamageString=${techDisplayData.damage}}}` : ""}${techDisplayData.description ? `{{Desc=${techDisplayData.description}}}` : ""}${techDisplayData.onHit ? `{{OnHit=${techDisplayData.onHit}}}` : ""}${techDisplayData.conditions ? `{{Conditions=${techDisplayData.conditions}}}` : ""}`;
+            output += `{{Displayname=${techDisplayData.displayname}}}{{Name=${techDisplayData.name}}}{{SlotType=${techDisplayData.slotFooter}}}{{Source=${techDisplayData.slotSource}}}{{UsageInfo=${techDisplayData.usageInfo}}}${techDisplayData.traits.length > 0 ? rollTemplateTraits(techDisplayData.traits, "Trait") : ""}${techDisplayData.trigger ? `{{Trigger=${techDisplayData.trigger}}}` : ""}${techDisplayData.requirement ? `{{Requirement=${techDisplayData.requirement}}}` : ""}${techDisplayData.item ? `{{Item=${techDisplayData.item}}}` : ""}${techDisplayData.range ? `{{Range=${techDisplayData.range}}}` : ""}${techDisplayData.target ? `{{Target=${techDisplayData.target}}}` : ""}${techDisplayData.skill ? `{{SkillString=${techDisplayData.skill}}}` : ""}${techDisplayData.damage ? `{{DamageString=${techDisplayData.damage}}}` : ""}${techDisplayData.description ? `{{Desc=${techDisplayData.description}}}` : ""}${techDisplayData.onHit ? `{{OnHit=${techDisplayData.onHit}}}` : ""}${techDisplayData.conditions ? `{{Conditions=${techDisplayData.conditions}}}` : ""}`;
             output += ` {{type-${techDisplayData.slotType}=1}} ${techDisplayData.slotIsPath ? "{{isPath=1}} " : ""}{{type-${techDisplayData.actionType}=1}} ${techDisplayData.isFunctionBlock ? "{{type-FunctionBlock=1}} " : ""}${techDisplayData.isCheckBlock ? "{{type-CheckBlock=1}} " : ""}${techDisplayData.isCheckBlock ? "{{type-CheckBlockTarget=1}} " : ""}${techDisplayData.isDescBlock ? "{{type-DescBlock=1}} " : ""}`;
 
             return `&{template:technique} ${output.trim()}`;
@@ -2213,20 +2266,6 @@ var FeatureService = FeatureService || (function () {
 
         getRollTemplateFromTechnique = function (technique) {
             return getRollTemplate(new TechniqueDisplayData(technique));
-        },
-
-        getConsumeUsePost = function (technique) {
-
-            // add technique data for the api
-            technique.username = "@{character_name}";
-            let usedTechData = JSON.stringify(technique);
-
-            // add the equopped action at the end
-            if (technique.traits != "" && (technique.traits.indexOf("Armament") >= 0 || technique.traits.indexOf("Arsenal") >= 0)) {
-                usedTechData += "##@{technique-equippedWeapon}";
-            }
-
-            return `!ctech ${usedTechData}`;
         },
 
         // Formatting
@@ -2361,7 +2400,6 @@ var FeatureService = FeatureService || (function () {
     return {
         GetRollTemplate: getRollTemplate,
         GetRollTemplateFromTechnique: getRollTemplateFromTechnique,
-        GetConsumeUsePost: getConsumeUsePost,
         RollTemplateTraits: rollTemplateTraits,
         GetDamageString: getDamageString,
         GetPrerequisiteString: getPrerequisiteString,

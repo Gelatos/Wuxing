@@ -1,5 +1,9 @@
 class TargetData {
     constructor(data) {
+        this.baseConstructor(data);
+    }
+
+    baseConstructor(data) {
         this.createEmpty();
         if (data != undefined) {
             let dataType = data.type;
@@ -103,14 +107,14 @@ class TargetData {
     }
 }
 class TokenTargetData extends TargetData {
-
     constructor(token, targetData) {
+        super(undefined);
         if (targetData != undefined) {
-            this.importJSON(data);
+            this.importJSON(targetData);
             this.token  = token;
         }
         else {
-            super(token);
+            this.baseConstructor(token);
         }
     }
     createEmpty() {
@@ -166,6 +170,8 @@ class TokenTargetData extends TargetData {
 
     // status settings
     setEnergy(value) {
+        DebugLog(`[TokenTargetData][setEnergy] ${this.token} Setting energy to ${value}`);
+        DebugLog(`[TokenTargetData][setEnergy] ${JSON.stringify(this.token)}`);
         this.token.set(this.elem, value);
     }
     setTurnIcon(value) {
@@ -194,7 +200,8 @@ class TokenTargetData extends TargetData {
     }
     addPatience(attributeHandler, value) {
         let tokenTargetData = this;
-        this.modifyResourceAttribute(attributeHandler, "Soc_Patience", value, this.addModifierToAttribute, function(results) {
+        this.modifyResourceAttribute(attributeHandler, "Soc_Patience", value, this.addModifierToAttribute, function(results, attrHandler, attributeVar) {
+            attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.setBarValue(1, results.newValue);
             return results;
         });
@@ -207,7 +214,8 @@ class TokenTargetData extends TargetData {
     }
     addFavor(attributeHandler, value) {
         let tokenTargetData = this;
-        this.modifyResourceAttribute(attributeHandler, "Soc_Favor", value, this.addModifierToAttribute, function(results) {
+        this.modifyResourceAttribute(attributeHandler, "Soc_Favor", value, this.addModifierToAttribute, function(results, attrHandler, attributeVar) {
+            attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.setBarValue(3, results.newValue);
             return results;
         });
@@ -227,17 +235,19 @@ class TokenTargetData extends TargetData {
                     }
                 }
             }, 
-            function(results) {
+            function(results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
                 this.setBarValue(1, results.newValue);
                 return results;
         });
     }
     addVitality(attributeHandler, value) {
-        this.modifyResourceAttribute(attributeHandler, "Vitality", value, this.addModifierToAttribute, function(results) {
+        this.modifyResourceAttribute(attributeHandler, "Vitality", value, this.addModifierToAttribute, function(results, attrHandler, attributeVar) {
+            attrHandler.addUpdate(attributeVar, results.newValue, false);
             return results;
         });
     }
-    addEnergy(attributeHandler, value) {
+    addEnergy(attributeHandler, value, resultsCallback) {
         let tokenTargetData = this;
         let chakraVar = WuxDef.GetVariable("Cmb_Chakra");
         attributeHandler.addMod(chakraVar);
@@ -246,8 +256,14 @@ class TokenTargetData extends TargetData {
                 results.max = attrHandler.parseInt(chakraVar, 0, false);
                 tokenTargetData.addModifierToAttribute(results, value);
             }, 
-            function(results) {
-                tokenTargetData.setEnergy(results.newValue);
+            function(results, attrHandler, attributeVar) {
+                if (resultsCallback != undefined) {
+                    resultsCallback(results, attrHandler, attributeVar);
+                }
+                else {
+                    attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    tokenTargetData.setEnergy(results.newValue);
+                }
                 return results;
             }
         );
@@ -314,8 +330,7 @@ class TokenTargetData extends TargetData {
             results.current = attrHandler.parseInt(attributeVar, 0, false);
             results.max = attrHandler.parseInt(attributeVar, 0, true);
             modCallback(results, value, attrHandler);
-            attrHandler.addUpdate(attributeVar, results.newValue, false);
-            finishCallback(results);
+            finishCallback(results, attrHandler, attributeVar);
         });
     }
     addModifierToAttribute(results, value) {
@@ -460,6 +475,7 @@ var TargetReference = TargetReference || (function () {
 
         getTokenTargetDataByName = function (characterName) {
             if (state.TargetReference.activeCharacters.names[characterName] == undefined) {
+                DebugLog(`[TargetReference][getTokenTargetDataByName] No target data exists for ${characterName}`);
                 return undefined;
             }
             return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.names[characterName]]);
@@ -565,7 +581,7 @@ var TokenReference = TokenReference || (function () {
                     }
                     tokenData = new TokenTargetData(token, data);
                     tokenData.setDisplayName();
-                    addToken(tokenData, data);
+                    addToken(tokenData, data.tokenId);
                 }
                 else {
                     tokenData = state.TokenReference.tokens[data.tokenId];
@@ -580,6 +596,7 @@ var TokenReference = TokenReference || (function () {
                         return undefined;
                     }
                     tokenData = new TokenTargetData(token);
+                    tokenData.setDisplayName();
                     addToken(tokenData, data);
                 }
                 else {
@@ -590,8 +607,8 @@ var TokenReference = TokenReference || (function () {
             return tokenData;
         },
 
-        addToken = function(tokenData, targetData) {
-            state.TokenReference.tokens[targetData.tokenId] = tokenData;
+        addToken = function(tokenData, tokenId) {
+            state.TokenReference.tokens[tokenId] = tokenData;
         },
 
         // Data Helper
