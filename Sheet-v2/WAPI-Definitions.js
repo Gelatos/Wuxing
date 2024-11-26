@@ -1295,7 +1295,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": true
 			},
 			"EN": {
-				"name": "EN", "fieldName": "en", "group": "General", "description": "", "variable": "gen-en{0}", "title": "Energy", "subGroup": "", "descriptions": ["Energy is a resource used to power techniques. "],
+				"name": "EN", "fieldName": "en", "group": "General", "description": "", "variable": "gen-en{0}", "title": "EN", "subGroup": "", "descriptions": ["EN is a resource used to power techniques. "],
 				"abbreviation": "EN", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": true

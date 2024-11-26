@@ -1081,7 +1081,6 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 resources = {};
                 let resourceNames = resourceData.resourceCost.split(";");
                 for (let i = 0; i < resourceNames.length; i++) {
-                    DebugLog(`[ResourceConsumption] Adding ${resourceNames[i]} as a resource`);
                     let resource = resourceNames[i].trim().split(" ", 2);
                     resources[resource[1]] = parseInt(resource[0]);
                 }
@@ -1100,7 +1099,6 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                             break;
                         case "EN":
                             tokenTargetData.addEnergy(attributeHandler, resourceValue * -1, function (results, attrHandler, attributeVar) {
-                                DebugLog(`[ResourceConsumption] Consumed ${resourceValue} energy ${JSON.stringify(results)}`);
                                 if (results.remainder < 0) {
                                     failure = true;
                                     messages = [];
@@ -1139,10 +1137,8 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 }
                 if (!failure) {
                     attributeHandler.run();
-                    DebugLog(`[ResourceConsumption] Consumed resources for ${resourceData.sheetname} (${enChange})`);
                     if (enChange != 999) {
                         tokenTargetData.setEnergy(enChange);
-                        DebugLog(`[ResourceConsumption] En change ${enChange}`);
                     }
                 }
             },
@@ -1164,8 +1160,28 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
         }()),
 
         CheckTechnique = CheckTechnique || (function () {
-            use = function (msg, content) {
+            var techniqueData = {},
+            userTokenTargetData = {},
+            targetTokenTargetData = {},
+            resources = {},
+            messages = [],
 
+            use = function (msg, content) {
+                initializeData(content);
+                if (userTokenTargetData == undefined || targetTokenTargetData == undefined) {
+                    DebugLog(`[ResourceConsumption] tokenData not found`);
+                    return;
+                }
+                DebugLog(`[ResourceConsumption] got ${JSON.stringify(techniqueData)}`);
+            },
+
+            initializeData = function (content) {
+                let contentData = content.split("$$");
+                techniqueData = new TechniqueData();
+                techniqueData.importSandboxJson(contentData[0]);
+                userTokenTargetData = TargetReference.GetTokenTargetDataByName(contentData[1]);
+                targetTokenTargetData = TargetReference.GetTokenTargetData(contentData[2]);
+                messages = [];
             }
 
             return {
@@ -2808,9 +2824,7 @@ var TokenReference = TokenReference || (function () {
         getTokenData = function (data) {
             let tokenData;
             if (data.tokenId != undefined) {
-                DebugLog(`[TokenReference][getToken] getting token by with tokenid: ${data.tokenId}`);
                 if (state.TokenReference.tokens[data.tokenId] == undefined) {
-                    DebugLog(`[TokenReference][getToken] getting token by search`);
                     let token = getToken(data.tokenId);
                     if (token == undefined) {
                         DebugLog(`[TokenReference][getToken] Token for ${data.charName} not found`);
@@ -2821,15 +2835,12 @@ var TokenReference = TokenReference || (function () {
                     addToken(tokenData, data.tokenId);
                 }
                 else {
-                    DebugLog(`[TokenReference][getToken] getting token from dictionary`);
                     tokenData = state.TokenReference.tokens[data.tokenId];
                     tokenData.setDisplayName();
                 }
             }
             else {
-                DebugLog(`[TokenReference][getToken] getting token by with data: ${data}`);
                 if (state.TokenReference.tokens[data] == undefined) {
-                    DebugLog(`[TokenReference][getToken] getting token by search 2`);
                     let token = getToken(data);
                     if (token == undefined) {
                         DebugLog(`[TokenReference][getToken] Token for id ${data} not found`);
@@ -2840,7 +2851,6 @@ var TokenReference = TokenReference || (function () {
                     addToken(tokenData, data);
                 }
                 else {
-                    DebugLog(`[TokenReference][getToken] getting token from dictionary 2`);
                     tokenData = state.TokenReference.tokens[data];
                     tokenData.setDisplayName();
                 }
@@ -5211,16 +5221,15 @@ class TechniqueData extends WuxDatabaseData {
         return `!utech ${this.formatTechniqueForSandbox()}`;
     }
     formatTechniqueForSandbox() {
-        this.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
-        this.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
-        let usedTechData = JSON.stringify(this);
-        return this.sanitizeSheetRollAction(usedTechData);
+        this.displayname = ``;
+        this.sheetname = ``;
+        return `${this.sanitizeSheetRollAction(JSON.stringify(this))}$$@{${WuxDef.GetVariable("SheetName")}}`;
     }
-    sanitizeSheetRollAction(roll) {
-        var sheetRoll = roll;
-        sheetRoll = sheetRoll.replace(/"/g, "QTE");
-        sheetRoll = sheetRoll.replace(/:/g, "COLON");
-        sheetRoll = sheetRoll.replace(/\n/g, "&&");
+    sanitizeSheetRollAction(sheetRoll) {
+        sheetRoll = sheetRoll.replace(/"/g, "%%");
+        sheetRoll = sheetRoll.replace(/:/g, "&&");
+        sheetRoll = sheetRoll.replace(/{/g, "<<");
+        sheetRoll = sheetRoll.replace(/}/g, ">>");
         sheetRoll = sheetRoll.replace(/%/g, "&#37;");
         sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -5234,9 +5243,10 @@ class TechniqueData extends WuxDatabaseData {
         return sheetRoll;
     }
     unsanitizeSheetRollAction(jsonString) {
-        jsonString = jsonString.replace(/QTE/g, '"');
-        jsonString = jsonString.replace(/COLON/g, ":");
-        jsonString = jsonString.replace(/&&/g, "\n");
+        jsonString = jsonString.replace(/%%/g, '"');
+        jsonString = jsonString.replace(/&&/g, ":");
+        jsonString = jsonString.replace(/<</g, "{");
+        jsonString = jsonString.replace(/>>/g, "}");
         return JSON.parse(jsonString);
     }
     importSandboxJson(jsonString) {
@@ -5304,11 +5314,10 @@ class TechniqueResources extends dbObj {
         this.name = "";
         this.resourceCost = "";
     }
-    sanitizeSheetRollAction(roll) {
-        var sheetRoll = roll;
-        sheetRoll = sheetRoll.replace(/"/g, "QTE");
-        sheetRoll = sheetRoll.replace(/:/g, "COLON");
-        sheetRoll = sheetRoll.replace(/\n/g, "&&");
+    
+    sanitizeSheetRollAction(sheetRoll) {
+        sheetRoll = sheetRoll.replace(/"/g, "%%");
+        sheetRoll = sheetRoll.replace(/:/g, "&&");
         sheetRoll = sheetRoll.replace(/%/g, "&#37;");
         sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -5322,9 +5331,8 @@ class TechniqueResources extends dbObj {
         return sheetRoll;
     }
     unsanitizeSheetRollAction(jsonString) {
-        jsonString = jsonString.replace(/QTE/g, '"');
-        jsonString = jsonString.replace(/COLON/g, ":");
-        jsonString = jsonString.replace(/&&/g, "\n");
+        jsonString = jsonString.replace(/%%/g, '"');
+        jsonString = jsonString.replace(/&&/g, ":");
         return JSON.parse(jsonString);
     }
     importSandboxJson(jsonString) {
@@ -9039,7 +9047,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": true
 			},
 			"EN": {
-				"name": "EN", "fieldName": "en", "group": "General", "description": "", "variable": "gen-en{0}", "title": "Energy", "subGroup": "", "descriptions": ["Energy is a resource used to power techniques. "],
+				"name": "EN", "fieldName": "en", "group": "General", "description": "", "variable": "gen-en{0}", "title": "EN", "subGroup": "", "descriptions": ["EN is a resource used to power techniques. "],
 				"abbreviation": "EN", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": true

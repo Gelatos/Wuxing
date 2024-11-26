@@ -459,16 +459,15 @@ class TechniqueData extends WuxDatabaseData {
         return `!utech ${this.formatTechniqueForSandbox()}`;
     }
     formatTechniqueForSandbox() {
-        this.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
-        this.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
-        let usedTechData = JSON.stringify(this);
-        return this.sanitizeSheetRollAction(usedTechData);
+        this.displayname = ``;
+        this.sheetname = ``;
+        return `${this.sanitizeSheetRollAction(JSON.stringify(this))}$$@{${WuxDef.GetVariable("SheetName")}}`;
     }
-    sanitizeSheetRollAction(roll) {
-        var sheetRoll = roll;
-        sheetRoll = sheetRoll.replace(/"/g, "QTE");
-        sheetRoll = sheetRoll.replace(/:/g, "COLON");
-        sheetRoll = sheetRoll.replace(/\n/g, "&&");
+    sanitizeSheetRollAction(sheetRoll) {
+        sheetRoll = sheetRoll.replace(/"/g, "%%");
+        sheetRoll = sheetRoll.replace(/:/g, "&&");
+        sheetRoll = sheetRoll.replace(/{/g, "<<");
+        sheetRoll = sheetRoll.replace(/}/g, ">>");
         sheetRoll = sheetRoll.replace(/%/g, "&#37;");
         sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -482,9 +481,10 @@ class TechniqueData extends WuxDatabaseData {
         return sheetRoll;
     }
     unsanitizeSheetRollAction(jsonString) {
-        jsonString = jsonString.replace(/QTE/g, '"');
-        jsonString = jsonString.replace(/COLON/g, ":");
-        jsonString = jsonString.replace(/&&/g, "\n");
+        jsonString = jsonString.replace(/%%/g, '"');
+        jsonString = jsonString.replace(/&&/g, ":");
+        jsonString = jsonString.replace(/<</g, "{");
+        jsonString = jsonString.replace(/>>/g, "}");
         return JSON.parse(jsonString);
     }
     importSandboxJson(jsonString) {
@@ -552,11 +552,10 @@ class TechniqueResources extends dbObj {
         this.name = "";
         this.resourceCost = "";
     }
-    sanitizeSheetRollAction(roll) {
-        var sheetRoll = roll;
-        sheetRoll = sheetRoll.replace(/"/g, "QTE");
-        sheetRoll = sheetRoll.replace(/:/g, "COLON");
-        sheetRoll = sheetRoll.replace(/\n/g, "&&");
+    
+    sanitizeSheetRollAction(sheetRoll) {
+        sheetRoll = sheetRoll.replace(/"/g, "%%");
+        sheetRoll = sheetRoll.replace(/:/g, "&&");
         sheetRoll = sheetRoll.replace(/%/g, "&#37;");
         sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -570,9 +569,8 @@ class TechniqueResources extends dbObj {
         return sheetRoll;
     }
     unsanitizeSheetRollAction(jsonString) {
-        jsonString = jsonString.replace(/QTE/g, '"');
-        jsonString = jsonString.replace(/COLON/g, ":");
-        jsonString = jsonString.replace(/&&/g, "\n");
+        jsonString = jsonString.replace(/%%/g, '"');
+        jsonString = jsonString.replace(/&&/g, ":");
         return JSON.parse(jsonString);
     }
     importSandboxJson(jsonString) {

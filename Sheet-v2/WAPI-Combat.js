@@ -360,8 +360,28 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
         }()),
 
         CheckTechnique = CheckTechnique || (function () {
-            use = function (msg, content) {
+            var techniqueData = {},
+            userTokenTargetData = {},
+            targetTokenTargetData = {},
+            resources = {},
+            messages = [],
 
+            use = function (msg, content) {
+                initializeData(content);
+                if (userTokenTargetData == undefined || targetTokenTargetData == undefined) {
+                    DebugLog(`[CheckTechnique] tokenData not found`);
+                    return;
+                }
+                DebugLog(`[CheckTechnique] got ${JSON.stringify(techniqueData)}`);
+            },
+
+            initializeData = function (content) {
+                let contentData = content.split("$$");
+                techniqueData = new TechniqueData();
+                techniqueData.importSandboxJson(contentData[0]);
+                userTokenTargetData = TargetReference.GetTokenTargetDataByName(contentData[1]);
+                targetTokenTargetData = TargetReference.GetTokenTargetData(contentData[2]);
+                messages = [];
             }
 
             return {
