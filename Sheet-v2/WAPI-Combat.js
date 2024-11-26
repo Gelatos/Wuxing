@@ -363,7 +363,6 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
             var techniqueData = {},
             userTokenTargetData = {},
             targetTokenTargetData = {},
-            resources = {},
             messages = [],
 
             use = function (msg, content) {
@@ -382,6 +381,17 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 userTokenTargetData = TargetReference.GetTokenTargetDataByName(contentData[1]);
                 targetTokenTargetData = TargetReference.GetTokenTargetData(contentData[2]);
                 messages = [];
+            },
+
+            printMessages = function () {
+                let message = `${resourceData.sheetname} uses ${resourceData.name}`;
+                for (let i = 0; i < messages.length; i++) {
+                    message += `\n${messages[i]}`;
+                }
+
+                let systemMessage = new SystemInfoMessage(message);
+                systemMessage.setSender("System");
+                WuxMessage.Send(systemMessage, "GM");
             }
 
             return {
