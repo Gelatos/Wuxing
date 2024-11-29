@@ -78,14 +78,14 @@ class TargetData {
         let affinityVar = WuxDef.GetVariable("Affinity");
         attributeHandler.addMod(displayNameVar);
         attributeHandler.addMod(affinityVar);
-        attributeHandler.addFinishCallback(function(attrHandler) {
+        attributeHandler.addFinishCallback(function (attrHandler) {
             tokenData.displayName = attrHandler.parseString(displayNameVar);
             tokenData.elem = tokenData.getElementStatus(attrHandler.parseString(affinityVar));
         });
         attributeHandler.run();
     }
 
-    getElementStatus (affinity) {
+    getElementStatus(affinity) {
         switch (affinity) {
             case "Wood":
                 return "status_green";
@@ -111,7 +111,7 @@ class TokenTargetData extends TargetData {
         super(undefined);
         if (targetData != undefined) {
             this.importJSON(targetData);
-            this.token  = token;
+            this.token = token;
         }
         else {
             this.baseConstructor(token);
@@ -161,7 +161,7 @@ class TokenTargetData extends TargetData {
     }
 
     // tooltip
-    showTooltip(isShown) { 
+    showTooltip(isShown) {
         this.token.set("show_tooltip", isShown);
     }
     setTooltip(value) {
@@ -184,7 +184,7 @@ class TokenTargetData extends TargetData {
         let tokenData = this;
         let displayNameVar = WuxDef.GetVariable("DisplayName");
         attributeHandler.addMod(displayNameVar);
-        attributeHandler.addFinishCallback(function(attrHandler) {
+        attributeHandler.addFinishCallback(function (attrHandler) {
             tokenData.displayName = attrHandler.parseString(displayNameVar);
         });
         attributeHandler.run();
@@ -200,7 +200,7 @@ class TokenTargetData extends TargetData {
     }
     addPatience(attributeHandler, value) {
         let tokenTargetData = this;
-        this.modifyResourceAttribute(attributeHandler, "Soc_Patience", value, this.addModifierToAttribute, function(results, attrHandler, attributeVar) {
+        this.modifyResourceAttribute(attributeHandler, "Soc_Patience", value, this.addModifierToAttribute, function (results, attrHandler, attributeVar) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.setBarValue(1, results.newValue);
             return results;
@@ -214,15 +214,15 @@ class TokenTargetData extends TargetData {
     }
     addFavor(attributeHandler, value) {
         let tokenTargetData = this;
-        this.modifyResourceAttribute(attributeHandler, "Soc_Favor", value, this.addModifierToAttribute, function(results, attrHandler, attributeVar) {
+        this.modifyResourceAttribute(attributeHandler, "Soc_Favor", value, this.addModifierToAttribute, function (results, attrHandler, attributeVar) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.setBarValue(3, results.newValue);
             return results;
         });
     }
     addHp(attributeHandler, value) {
-        this.modifyResourceAttribute(attributeHandler, "HP", value, 
-            function(results, value) {
+        this.modifyResourceAttribute(attributeHandler, "HP", value,
+            function (results, value) {
                 this.addModifierToAttribute(results, value);
                 if (!isNaN(parseInt(value)) && parseInt(value) < 0 && results.remainder < 0) {
                     while (results.remainder < 0) {
@@ -234,15 +234,15 @@ class TokenTargetData extends TargetData {
                         this.addModifierToAttribute(results, results.remainder);
                     }
                 }
-            }, 
-            function(results, attrHandler, attributeVar) {
+            },
+            function (results, attrHandler, attributeVar) {
                 attrHandler.addUpdate(attributeVar, results.newValue, false);
                 this.setBarValue(1, results.newValue);
                 return results;
-        });
+            });
     }
     addVitality(attributeHandler, value) {
-        this.modifyResourceAttribute(attributeHandler, "Vitality", value, this.addModifierToAttribute, function(results, attrHandler, attributeVar) {
+        this.modifyResourceAttribute(attributeHandler, "Vitality", value, this.addModifierToAttribute, function (results, attrHandler, attributeVar) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             return results;
         });
@@ -251,12 +251,12 @@ class TokenTargetData extends TargetData {
         let tokenTargetData = this;
         let chakraVar = WuxDef.GetVariable("Cmb_Chakra");
         attributeHandler.addMod(chakraVar);
-        this.modifyResourceAttribute(attributeHandler, "EN", value, 
-            function(results, value, attrHandler) {
+        this.modifyResourceAttribute(attributeHandler, "EN", value,
+            function (results, value, attrHandler) {
                 results.max = attrHandler.parseInt(chakraVar, 0, false);
                 tokenTargetData.addModifierToAttribute(results, value);
-            }, 
-            function(results, attrHandler, attributeVar) {
+            },
+            function (results, attrHandler, attributeVar) {
                 if (resultsCallback != undefined) {
                     resultsCallback(results, attrHandler, attributeVar);
                 }
@@ -279,8 +279,8 @@ class TokenTargetData extends TargetData {
         let maxSpeedVar = WuxDef.GetVariable("Cmb_MvPotency");
         attributeHandler.addMod(baseSpeedVar);
         attributeHandler.addMod(maxSpeedVar);
-        attributeHandler.addFinishCallback(function(attrHandler) {
-            let move = Math.ceil(attrHandler.parseInt(baseSpeedVar, 0, false), 
+        attributeHandler.addFinishCallback(function (attrHandler) {
+            let move = Math.ceil(attrHandler.parseInt(baseSpeedVar, 0, false),
                 Dice.RollDice(1, attrHandler.parseInt(maxSpeedVar, 0, false))
             );
             tokenTargetData.setTurnIcon(move);
@@ -293,7 +293,7 @@ class TokenTargetData extends TargetData {
         attributeHandler.addAttribute(hpVar);
         attributeHandler.addAttribute(willpowerVar);
         attributeHandler.addAttribute(enVar);
-        attributeHandler.addFinishCallback(function(attrHandler) {
+        attributeHandler.addFinishCallback(function (attrHandler) {
             attrHandler.addUpdate(hpVar, attrHandler.parseInt(hpVar, 0, true), false);
             attrHandler.addUpdate(willpowerVar, attrHandler.parseInt(willpowerVar, 0, true), false);
             attrHandler.addUpdate(enVar, 0, true);
@@ -308,7 +308,7 @@ class TokenTargetData extends TargetData {
         attributeHandler.addAttribute(patienceVar);
         attributeHandler.addAttribute(willpowerVar);
         attributeHandler.addAttribute(enVar);
-        attributeHandler.addFinishCallback(function(attrHandler) {
+        attributeHandler.addFinishCallback(function (attrHandler) {
             attrHandler.addUpdate(favorVar, 0, false);
             attrHandler.addUpdate(willpowerVar, attrHandler.parseInt(willpowerVar, 0, true), false);
             attrHandler.addUpdate(patienceVal, patienceVal, false);
@@ -326,7 +326,7 @@ class TokenTargetData extends TargetData {
         };
         let attributeVar = WuxDef.GetVariable(attributeName);
         attributeHandler.addAttribute(attributeVar);
-        attributeHandler.addFinishCallback(function(attrHandler) {
+        attributeHandler.addFinishCallback(function (attrHandler) {
             results.current = attrHandler.parseInt(attributeVar, 0, false);
             results.max = attrHandler.parseInt(attributeVar, 0, true);
             modCallback(results, value, attrHandler);
@@ -358,7 +358,7 @@ var TargetReference = TargetReference || (function () {
 
         checkInstall = function () {
             if (!state.hasOwnProperty('TargetReference') || state.TargetReference.version != schemaVersion) {
-                log (`Setting Wuxing Target version to v${schemaVersion}`);
+                log(`Setting Wuxing Target version to v${schemaVersion}`);
                 state.TargetReference = {
                     version: schemaVersion,
                     activeCharacters: getDefaultActiveCharacters()
@@ -441,7 +441,7 @@ var TargetReference = TargetReference || (function () {
                 DebugLog(`[TargetReference][addToActiveCharacters] No target data exists.`);
                 return;
             }
-            delete(tokenTargetData.token);
+            delete (tokenTargetData.token);
             if (state.TargetReference.activeCharacters.targetData.hasOwnProperty(tokenTargetData.tokenId)) {
                 state.TargetReference.activeCharacters.targetData[tokenTargetData.tokenId] = tokenTargetData;
             }
@@ -514,16 +514,25 @@ var TokenReference = TokenReference || (function () {
             switch (tag) {
                 case "!css":
                     commandSetSocialData(msg, content);
-                break;
+                    break;
                 case "!cen":
                     commandAddEnergy(msg, content);
-                break;
+                    break;
                 case "!cmove":
                     commandAddMoveCharge(msg, content);
-                break;
+                    break;
                 case "!creset":
                     commandResetToken(msg);
-                break;
+                    break;
+                case "!cdefenses":
+                    commandShowDefenses(msg);
+                    break;
+                case "!csenses":
+                    commandShowSenses(msg);
+                    break;
+                case "!cskill":
+                    commandRollSkillCheck(msg, content);
+                    break;
             };
         },
 
@@ -557,6 +566,58 @@ var TokenReference = TokenReference || (function () {
             iterateOverSelectedTokens(msg, function (tokenTargetData) {
                 resetTokenDisplay(tokenTargetData);
             });
+        },
+
+        commandShowDefenses = function (msg) {
+            let tableName = "Defenses";
+            let defensesArray = WuxDef.Filter(new DatabaseFilterData("group", "Defense"));
+            iterateOverSelectedTokens(msg, function (tokenTargetData) {
+                checkModifiers(tableName, tokenTargetData, defensesArray);
+            });
+        },
+
+        commandShowSenses = function (msg) {
+            let tableName = "Senses";
+            let defensesArray = WuxDef.Filter(new DatabaseFilterData("group", "Sense"));
+            iterateOverSelectedTokens(msg, function (tokenTargetData) {
+                checkModifiers(tableName, tokenTargetData, defensesArray);
+            });
+        },
+
+        commandRollSkillCheck = function (msg, content) {
+            rollCheck(msg, `Skill_${content}`);
+        },
+
+        // Token Setting
+
+        checkModifiers = function (tableName, tokenTargetData, definitions) {
+            let tableData = new TableMessage([tokenTargetData.displayName, tableName]);
+            let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+            _.each(definitions, function (modDefinition) {
+                let variable = modDefinition.getVariable();
+                attributeHandler.addMod(variable);
+                attributeHandler.addFinishCallback(function (attrHandler) {
+                    let value = attrHandler.parseString(variable, "0", false);
+                    tableData.addRow([modDefinition.title, value]);
+                });
+            });
+            attributeHandler.run();
+
+            let message = tableData.print();
+            DebugLog(`[TokenReference][checkModifiers] ${message}`);
+            let systemMessage = new SystemInfoMessage(message);
+            systemMessage.setSender("System");
+            WuxMessage.Send(systemMessage);
+        },
+
+        rollCheck = function (msg, definitionName) {
+            let skillDefinition = WuxDef.Get(definitionName);
+            let tableData = new TableMessage(["", skillDefinition.title]);
+            tableData.addTargetModifierTable(getTokenTargetDataArray(msg), skillDefinition.getVariable());
+
+            let systemMessage = new SystemInfoMessage(tableData.print());
+            systemMessage.setSender("System");
+            WuxMessage.Send(systemMessage);
         },
 
         // State Token Getters
@@ -607,7 +668,7 @@ var TokenReference = TokenReference || (function () {
             return tokenData;
         },
 
-        addToken = function(tokenData, tokenId) {
+        addToken = function (tokenData, tokenId) {
             state.TokenReference.tokens[tokenId] = tokenData;
         },
 
@@ -624,14 +685,35 @@ var TokenReference = TokenReference || (function () {
             });
         },
 
+        getFirstSelectedToken = function (msg) {
+            if (msg.selected.length == 0) {
+                DebugLog(`[TokenReference][commandShowDefenses] No token selected`);
+                return undefined;
+            }
+            let tokenId = msg.selected[0]._id;
+            if (tokenId == undefined) {
+                DebugLog(`[TokenReference][commandShowDefenses] No token selected`);
+                return undefined;
+            }
+            return getTokenData(msg.selected[0]);
+        },
+
+        getTokenTargetDataArray = function (msg) {
+            let tokenTargetDataArray = [];
+            iterateOverSelectedTokens(msg, function (tokenTargetData) {
+                tokenTargetDataArray.push(tokenTargetData);
+            });
+            return tokenTargetDataArray;
+        },
+
         // Token States
         // ---------------------------
 
-        setTokenForConflict = function(conflictType, tokenTargetData, attributeHandler) {
+        setTokenForConflict = function (conflictType, tokenTargetData, attributeHandler) {
             tokenTargetData.initToken();
             tokenTargetData.showTokenName(true);
             tokenTargetData.showTooltip(true);
-    
+
             switch (conflictType) {
                 case "Battle":
                     setTokenForBattle(tokenTargetData, attributeHandler);
@@ -648,8 +730,8 @@ var TokenReference = TokenReference || (function () {
             attributeHandler.addAttribute(hpVar);
             attributeHandler.addAttribute(willpowerVar);
             attributeHandler.addAttribute(enVar);
-    
-            attributeHandler.addFinishCallback(function(attrHandler) {
+
+            attributeHandler.addFinishCallback(function (attrHandler) {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(hpVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
                 tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
@@ -664,8 +746,8 @@ var TokenReference = TokenReference || (function () {
             attributeHandler.addAttribute(willpowerVar);
             attributeHandler.addAttribute(favorVar);
             attributeHandler.addAttribute(enVar);
-    
-            attributeHandler.addFinishCallback(function(attrHandler) {
+
+            attributeHandler.addFinishCallback(function (attrHandler) {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(patienceVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
                 tokenTargetData.setBar(3, attrHandler.getAttribute(favorVar), true, true);
@@ -687,6 +769,7 @@ var TokenReference = TokenReference || (function () {
         CheckInstall: checkInstall,
         HandleInput: handleInput,
         IterateOverSelectedTokens: iterateOverSelectedTokens,
+        GetTokenTargetDataArray: getTokenTargetDataArray,
         GetToken: getToken,
         GetTokenData: getTokenData,
         AddToken: addToken,
