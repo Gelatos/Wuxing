@@ -226,7 +226,7 @@ class TableMessage {
                 tableHeader += `<th>${this.headers[i]}</th>`;
             }
             else {
-                tableHeader += `<th style="margin-left: 5px; text-align: right">${this.headers[i]}</th>`;
+                tableHeader += `<th style="margin-left: 15px; text-align: right">${this.headers[i]}</th>`;
             }
         }
 
@@ -239,7 +239,7 @@ class TableMessage {
                     tableRow += `<td>${this.rows[i][j]}</td>`;
                 }
                 else {
-                    tableRow += `<td style="text-align: right>${this.rows[i][j]}</td>`;
+                    tableRow += `<td style="text-align: right">${this.rows[i][j]}</td>`;
                 }
             }
             tableRows += `<tr>${tableRow}</tr>`;
@@ -264,7 +264,7 @@ class TableMessage {
             results.tokenTargetData = tokenTargetData;
             data.push(results);
         });
-        data.sort((a, b) => a.total - b.total);
+        data.sort((a, b) => b.total - a.total);
         data.forEach(results => {
             this.addRow([results.tokenTargetData.displayName, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
         });
