@@ -78,7 +78,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
 			var
 				print = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Advancement"))
+					return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Advancement"))
 					+ buildTechPointsSection(WuxDef.GetAttribute("Training")));
 				},
 
@@ -252,10 +252,10 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 			var
 				printTraining = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Training")));
+					return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Training")));
 				},
 				printKnowledge = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Knowledge")));
+					return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Knowledge")));
 				},
 
 				buildTechPointsSection = function (fieldName) {
@@ -509,19 +509,19 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
 			var
 				printAdvancement = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Advancement")));
+					return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Advancement")));
 				},
 
 				printJobs = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Job")));
+					return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Job")));
 				},
 
 				printSkills = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Skill")));
+					return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Skill")));
 				},
 
 				printAttributes = function () {
-					return WuxSheetSidebar.Build(buildTechPointsSection(WuxDef.GetAttribute("Attribute")));
+					return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Attribute")));
 				},
 
 				buildTechPointsSection = function (fieldName) {
@@ -846,7 +846,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					${WuxSheet.PageDisplay("Styles", buildTechPointsSection(WuxDef.GetAttribute("JobStyle"), "Job") + buildTechPointsSection(WuxDef.GetAttribute("Style"), "Standard"))}
 					${WuxSheet.PageDisplay("Actions", "<div>&nbsp;</div>")}`;
 					
-					return WuxSheetSidebar.Build(output);
+					return WuxSheetSidebar.Build("", output);
 				},
 
 				buildTechPointsSection = function (fieldName, header) {
@@ -1093,35 +1093,35 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
 		printOverview = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Overview") +
-				SideBarData.PrintOverview() +
+				SideBarData.PrintSidebar() +
 				MainContentData.PrintOverview();
 			return WuxSheet.PageDisplay("Overview", output);
 		},
 
 		printDetails = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Details") +
-				SideBarData.PrintDetails() +
+				SideBarData.PrintSidebar() +
 				MainContentData.PrintDetails();
 			return WuxSheet.PageDisplay("Details", output);
 		},
 
 		printOrigin = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Origin") +
-				SideBarData.PrintOrigin() +
+				SideBarData.PrintSidebar() +
 				MainContentData.PrintOrigin();
 			return WuxSheet.PageDisplay("Origin", output);
 		},
 
 		printChat = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Chat") +
-				SideBarData.PrintChat() +
+				SideBarData.PrintSidebar() +
 				MainContentData.PrintChat();
 			return WuxSheet.PageDisplay("Chat", output);
 		},
 
 		printOptions = function (sheetsDb) {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Options") +
-				SideBarData.PrintOptions() +
+				SideBarData.PrintSidebar() +
 				MainContentData.PrintOptions();
 			return WuxSheet.PageDisplay("Options", output);
 		},
@@ -1130,33 +1130,13 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 			'use strict';
 
 			var
-				printOverview = function () {
+				printSidebar = function () {
 					
-					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
-				},
-				printDetails = function () {
-					
-					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
-				},
-				printOrigin = function () {
-					
-					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
-				},
-				printChat = function () {
-					
-					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
-				},
-				printOptions = function () {
-					
-					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
+					return WuxSheetSidebar.Build("", "<div>&nbsp;</div>");
 				}
 
 			return {
-				PrintOverview: printOverview,
-				PrintDetails: printDetails,
-				PrintOrigin: printOrigin,
-				PrintChat: printChat,
-				PrintOptions: printOptions
+				PrintSidebar: printSidebar
 			};
 
 		}()),
@@ -1572,7 +1552,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
 			var
 				printEquipment = function () {
-					return WuxSheetSidebar.Build("<div>&nbsp;</div>");
+					return WuxSheetSidebar.Build("", "<div>&nbsp;</div>");
 				}
 
 			return {

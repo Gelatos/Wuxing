@@ -173,11 +173,13 @@ input[type=number]::-webkit-inner-spin-button
 {
     display: inline-block;
     flex: 5;
+    
+    width: calc(100% - 90px);
 }
 
-.wuxFloatSidebar + .wuxMainContent
+input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent
 {
-    width: calc(100% - 90px);
+    width: calc(100% - 210px);
 }
 
 .wuxSegment
@@ -260,8 +262,7 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
     flex: 1;
     top: 80px;
 
-    min-width: 80px;
-    max-width: 80px;
+    width: 80px;
     max-height: calc(100vh - 100px);
     margin-right: 10px;
 	padding: 0px;
@@ -273,10 +274,35 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
     scrollbar-width: none;  /* Firefox */
 }
 
+input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
+{
+    width: 200px;
+}
+
+.wuxSideBarExtend
+{
+    opacity: 0;    
+    position: absolute;
+    top: 0px;
+    right: -3px;
+    left: 0px;
+    width: 18px;
+    min-height: 25px;
+    z-index: 100;
+}
+
+
+.wuxSideBarExtend:hover + .wuxTabHeader
+{
+    background: #deaf72;
+}
+
 .wuxFloatSidebar::-webkit-scrollbar 
 {
     display: none;
 }
+
+.wuxSideBarTitle
 
 /*========================================
   Tabs

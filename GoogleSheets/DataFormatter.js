@@ -811,8 +811,19 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
     'use strict';
 
     var
-        build = function (contents) {
-            return `<div class="wuxFloatSidebar">${contents}</div>`;
+        build = function (title, contents) {
+            return `<input type="hidden" class="wuxSideBarExtend-flag" name="${WuxDef.GetAttribute("Page_Sidebar")}" />
+            <div class="wuxFloatSidebar">
+            ${expandableTab(title, contents)}
+            </div>`;
+        },
+
+        expandableTab = function (title, contents) {
+            return `<div class="wuxSegment">
+            ${WuxSheetMain.CustomInput("checkbox", WuxDef.GetAttribute("Page_Sidebar"), "wuxSideBarExtend", ` checked="checked"`)}
+            ${WuxSheetMain.TabHeader(`<span>&#10217&#10217 ${title}</span>`)}
+            ${WuxSheetMain.Tab(contents)}
+            </div>`;
         },
 
         attributeSection = function (name, contents) {
@@ -890,9 +901,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
 
     var
         build = function (contents) {
-            return `<div class="wuxMainContent">
-  ${contents}
-  </div>`;
+            return `<input type="hidden" class="wuxSideBarExtend-flag" name="${WuxDef.GetAttribute("Page_Sidebar")}" />
+            <div class="wuxMainContent">
+            ${contents}
+            </div>`;
         },
 
         tab = function (contents) {
