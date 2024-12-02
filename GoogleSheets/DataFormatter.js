@@ -821,9 +821,13 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         expandableTab = function (title, contents) {
             return `<div class="wuxSegment">
             ${WuxSheetMain.CustomInput("checkbox", WuxDef.GetAttribute("Page_Sidebar"), "wuxSideBarExtend", ` checked="checked"`)}
-            ${WuxSheetMain.TabHeader(`<span>&#10217&#10217 ${title}</span>`)}
-            ${WuxSheetMain.Tab(contents)}
+            ${tabHeader(`<span>&#10217&#10217 ${title}</span>`)}
+            ${WuxSheetMain.Tab(`<div class="wuxFloatSidebarContents">${contents}</div>`)}
             </div>`;
+        },
+
+        tabHeader = function (contents) {
+            return `<div class="wuxFloatSidebarHeader">\n${contents}\n</div>`;
         },
 
         attributeSection = function (name, contents) {
@@ -841,37 +845,35 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             </div>\n</div>`;
         },
 
-        collapsibleHeader = function (categoryName, sectionName, contents, defaultOpen) {
-            return collapsibleSection(`<div class="wuxHeader">${categoryName}</div>`, sectionName, contents, defaultOpen);
+        collapsibleHeader = function (header, fieldName, contents, defaultOpen) {
+            return collapsibleSection(`<div class="wuxHeader">${header}</div>`, fieldName, contents, defaultOpen);
         },
 
-        collapsibleSubheader = function (categoryName, sectionName, contents, defaultOpen) {
-            return collapsibleSection(`<div class="wuxSubheader">${categoryName}</div>`, sectionName, contents, defaultOpen);
+        collapsibleSubheader = function (header, fieldName, contents, defaultOpen) {
+            return collapsibleSection(`<div class="wuxSubheader">${header}</div>`, fieldName, contents, defaultOpen);
         },
 
-        collapsibleSection = function (titleContent, sectionName, contents, defaultOpen) {
+        collapsibleSection = function (header, fieldName, contents, defaultOpen) {
             return `<div class="wuxInteractiveBlock wuxSizeTiny">
-            ${collapsibleSectionTitle(titleContent, sectionName)}
-            ${collapsibleSectionContent(contents, sectionName, defaultOpen)}
+            ${collapsibleSectionTitle(header, fieldName)}
+            ${collapsibleSectionContent(contents, fieldName, defaultOpen)}
             </div>`;
         },
 
-        collapsibleSectionTitle = function (titleContent, sectionName) {
+        collapsibleSectionTitle = function (titleContent, fieldName) {
             return `<div class="wuxInteractiveInnerBlock">
-                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_${sectionName}-expandButton">
-                <div class="wuxInteractiveContent">
-                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_${sectionName}-expandButton">
-                <span class="wuxInteractiveIcon">&#9662;</span>
-                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_${sectionName}-expandButton">
-                <span class="wuxInteractiveAuxIcon">&#9656;</span>
+                <input class="wuxInteractiveContent-flag" type="checkbox" name="${fieldName}">
+                <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
+                <span class="wuxInteractiveIcon">&#9656;</span>
+                <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
+                <span class="wuxInteractiveAuxIcon">&#9662;</span>
                 
                 ${titleContent}
-                </div>
             </div>`;
         },
 
-        collapsibleSectionContent = function (contents, sectionName, defaultOpen) {
-            return `<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_${sectionName}-expandButton">
+        collapsibleSectionContent = function (contents, fieldName, defaultOpen) {
+            return `<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="${fieldName}">
                 <div class="${defaultOpen ? "wuxInteractiveExpandingAuxContent" : "wuxInteractiveExpandingContent"}">
                 ${contents}
             </div>`;
@@ -884,6 +886,16 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             let name = `Pts`;
             let output = `<span name='${attrName}' value="0">0</span>\n<span class="wuxFontSize7">/ </span>\n<span class="wuxFontSize7" name='${attrName}_max' value="0">0</span>`;
             return `<div class="wuxHeader">&nbsp;${header}</div>\n${attributeSectionWithError(name, output, `${attrName}_error`)}`;
+        },
+
+        buildChatSection = function () {
+            let definition = WuxDef.Get("Page_Chat");
+            return collapsibleHeader(definition.getTitle(), definition.getAttribute(), WuxSheetMain.Chat.Build(), true);
+        },
+
+        buildLanguageSection = function () {
+            let definition = WuxDef.Get("Title_LanguageSelect");
+            return collapsibleHeader(definition.getTitle(), definition.getAttribute(), WuxSheetMain.Language.Build(), true);
         }
 
         ;
@@ -892,7 +904,9 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         AttributeSection: attributeSection,
         CollapsibleHeader: collapsibleHeader,
         CollapsibleSubheader: collapsibleSubheader,
-        BuildPointsSection: buildPointsSection
+        BuildPointsSection: buildPointsSection,
+        BuildChatSection: buildChatSection,
+        BuildLanguageSection: buildLanguageSection
     };
 }());
 
@@ -1312,6 +1326,86 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 ExpandableBlockContents: expandableBlockContents,
                 CheckboxBlockIcon: checkboxBlockIcon
             }
+        }()),
+
+        chat = chat || (function () {
+            'use strict';
+            var
+                build = function () {
+                    let contents = "";
+
+                    contents += tags();
+                    contents += chatType();
+                    contents += WuxSheetMain.Row("&nbsp;");
+                    contents += textArea();
+                    contents += repeatingEmoteButtons();
+
+                    return contents;
+                },
+
+                tags = function () {
+                    return WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Target"));
+                },
+
+                chatType = function () {
+                    return WuxSheetMain.Row(WuxSheetMain.Select(WuxDef.GetAttribute("Chat_Type"), WuxDef.Filter([new DatabaseFilterData("group", "ChatType")]), false));
+                },
+
+                textArea = function () {
+                    return WuxSheetMain.Textarea(WuxDef.GetAttribute("Chat_Message"), "wuxInput wuxHeight150");
+                },
+
+                repeatingEmoteButtons = function () {
+                    return `<div class="wuxNoRepControl wuxEmotePostGroup">
+                        <fieldset class="${WuxDef.GetVariable("RepeatingActiveEmotes")}">
+                            ${emotePostButton()}
+                            <input type="hidden" name="${WuxDef.GetAttribute("Chat_PostURL")}">
+                        </fieldset>
+                    </div>`;
+                },
+                
+                emotePostButton = function () {
+                    return `<button class="wuxEmoteButton" type="roll" value="${senderPostMessage()}">
+                    <span name="${WuxDef.GetAttribute("Chat_PostName")}">emote</span>
+                    </button>`;
+                },
+
+                senderPostMessage = function () {
+                    let chatMessage = `&{template:@{${WuxDef.GetVariable("Chat_Type")}}} {{url=@{${WuxDef.GetVariable("Chat_PostURL")}}}} `;
+                    chatMessage += `{{title=@{${WuxDef.GetVariable("DisplayName")}}@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} `;
+                    chatMessage += `{{message=@{${WuxDef.GetVariable("Chat_Message")}}}} @{${WuxDef.GetVariable("Chat_LanguageTag")}}`;
+                    return chatMessage;
+                }
+            return {
+                Build: build
+            }
+        }()),
+
+        language = language || (function () {
+            'use strict';
+            var
+                build = function () {
+                    let contents = "";
+                    contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_LanguageTag"), "wuxInput");
+
+                    let languageAttr = WuxDef.GetAttribute("Chat_Language");
+                    let languageFilters = WuxDef.Filter([new DatabaseFilterData("group", "Language")]);
+                    for (let i = 0; i < languageFilters.length; i++) {
+                        contents += WuxSheetMain.HiddenField(languageFilters[i].getAttribute(WuxDef._filter), 
+                        WuxSheetMain.InteractionElement.BuildTooltipRadioInput(languageAttr, languageFilters[i].title, 
+                            languageTitle(languageFilters[i]), WuxDefinition.TooltipDescription(languageFilters[i]))
+                        );
+                    }
+                    return contents;
+                },
+
+                languageTitle = function (languageDef) {
+                    return `<span class="wuxHeader2">${languageDef.title}</span><span class="wuxSubheader"> - ${languageDef.location}</span>`;
+                }
+            return {
+                Build: build
+            }
+
         }())
 
         ;
@@ -1348,7 +1442,9 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Tooltip: tooltip,
         Table: table,
         DistinctSection: distinctSection,
-        InteractionElement: interactionElement
+        InteractionElement: interactionElement,
+        Chat: chat,
+        Language: language
     };
 }());
 

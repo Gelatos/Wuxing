@@ -844,7 +844,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					let output = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
 					${WuxSheet.PageDisplay("Techniques", buildTechPointsSection(WuxDef.GetAttribute("Technique")))}
 					${WuxSheet.PageDisplay("Styles", buildTechPointsSection(WuxDef.GetAttribute("JobStyle"), "Job") + buildTechPointsSection(WuxDef.GetAttribute("Style"), "Standard"))}
-					${WuxSheet.PageDisplay("Actions", "<div>&nbsp;</div>")}`;
+					${WuxSheet.PageDisplay("Actions", WuxSheetSidebar.BuildChatSection())}`;
 					
 					return WuxSheetSidebar.Build("", output);
 				},
@@ -1131,8 +1131,10 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
 			var
 				printSidebar = function () {
-					
-					return WuxSheetSidebar.Build("", "<div>&nbsp;</div>");
+					let contents = "";
+					contents += WuxSheetSidebar.BuildChatSection();
+					// contents += WuxSheetSidebar.BuildLanguageSection();
+					return WuxSheetSidebar.Build("", contents);
 				}
 
 			return {
@@ -1379,23 +1381,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			        let contents = "";
 							let titleDefinition = WuxDef.Get("Title_Chat");
         			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
-
-							let buttonContents = `&{template:@{${WuxDef.GetVariable("Chat_Type")}}} {{url=@{${WuxDef.GetVariable("Chat_PostURL")}}}} `;
-							buttonContents += `{{title=@{${WuxDef.GetVariable("DisplayName")}}@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} `;
-							buttonContents += `{{message=@{${WuxDef.GetVariable("Chat_Message")}}}} @{${WuxDef.GetVariable("Chat_LanguageTag")}}`;
-
-							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Target"));
-							contents += WuxSheetMain.Row(WuxSheetMain.Select(WuxDef.GetAttribute("Chat_Type"), WuxDef.Filter([new DatabaseFilterData("group", "ChatType")]), false));
-							contents += WuxSheetMain.Row("&nbsp;");
-							contents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Chat_Message"), "wuxInput wuxHeight150");
-							contents += `<div class="wuxNoRepControl wuxEmotePostGroup">
-								<fieldset class="${WuxDef.GetVariable("RepeatingActiveEmotes")}">
-									<button class="wuxEmoteButton" type="roll" value="${buttonContents}">
-										<span name="${WuxDef.GetAttribute("Chat_PostName")}">emote</span>
-									</button>
-									<input type="hidden" name="${WuxDef.GetAttribute("Chat_PostURL")}">
-								</fieldset>
-							</div>`;
+							contents += WuxSheetMain.Chat.Build();
 							
 							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
 						},

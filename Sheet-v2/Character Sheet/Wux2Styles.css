@@ -179,7 +179,7 @@ input[type=number]::-webkit-inner-spin-button
 
 input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent
 {
-    width: calc(100% - 210px);
+    width: calc(100% - 250px);
 }
 
 .wuxSegment
@@ -263,20 +263,67 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
     top: 80px;
 
     width: 80px;
+    height: calc(100vh - 100px);
     max-height: calc(100vh - 100px);
     margin-right: 10px;
 	padding: 0px;
 
-    /* background: #FFF; */
+	background: #1d1e1f;
+    background-image: linear-gradient(to bottom, #222425 0%, #3A3D3E 30%, #222425 100%);
+    border-radius: 0px 10px 0px 0px;
+    /* border-style: solid; */
+    /* border-width: 0px 3px 3px 0px;
+    border-radius: 0px 0px 5px 0px; */
+    
     z-index: 9998;
     overflow-x: hidden;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
 
+.wuxFloatSidebarHeader {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+    width: 100%;
+    height: 22px;
+    padding: 3px;
+    padding-left: 6px;
+    z-index: 1;
+
+    color: #f4f6f8;
+    font-family: "Candal";
+    font-size: 16px;
+    line-height: 22px;
+    vertical-align: bottom;
+    text-transform: capitalize;
+
+	background: #1d1e1f;
+    border-bottom: 3px solid;
+    border-color: transparent transparent #71B9DE transparent;
+    border-radius: 0px 10px 0px 0px;
+}
+
+.wuxFloatSidebarContents
+{
+    position: relative;
+    left: 0px;
+    display: inherit;
+
+    width: calc(100% - 5px);
+    min-height: 100%;
+    padding: 5px;
+
+	/* background: #1d1e1f;
+    background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 30%, #3A3D3E 100%);
+    border-style: solid;
+    border-width: 0px 3px 3px 0px;
+    border-radius: 0px 0px 5px 0px; */
+}
+
 input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
 {
-    width: 200px;
+    width: 240px;
 }
 
 .wuxSideBarExtend
@@ -292,7 +339,7 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
 }
 
 
-.wuxSideBarExtend:hover + .wuxTabHeader
+.wuxSideBarExtend:hover + .wuxFloatSidebarHeader
 {
     background: #deaf72;
 }

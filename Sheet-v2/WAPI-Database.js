@@ -1094,6 +1094,9 @@ class DefinitionData extends WuxDatabaseData {
 
         return definition;
     }
+    getTitle() {
+        return this.title;
+    }
     getVariables(array, mod1) {
         let output = [];
         for (let i = 0; i < array.length; i++) {
@@ -1549,8 +1552,8 @@ class TechniqueEffectDisplayData {
             case "Favor":
                 output = this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Favor"));
                 break;
-            case "Persuade":
-                output = this.formatPersuadeEffect(effect);
+            case "Request":
+                output = this.formatRequestEffect(effect);
                 break;
             case "Status":
                 output = this.formatStatusEffect(effect);
@@ -1612,8 +1615,8 @@ class TechniqueEffectDisplayData {
                 return `Reduce target's ${patience} by ${this.formatCalcBonus(effect)}`;
         }
     }
-    formatPersuadeEffect(effect) {
-        return `Persuade target with ${this.formatCalcBonus(effect)}`;
+    formatRequestEffect(effect) {
+        return `Make a request check on the target with ${this.formatCalcBonus(effect)}`;
     }
     formatStatusEffect(effect) {
         let state = WuxDef.Get(effect.effect);

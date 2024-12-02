@@ -5959,6 +5959,9 @@ class DefinitionData extends WuxDatabaseData {
 
         return definition;
     }
+    getTitle() {
+        return this.title;
+    }
     getVariables(array, mod1) {
         let output = [];
         for (let i = 0; i < array.length; i++) {
