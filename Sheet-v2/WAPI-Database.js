@@ -638,6 +638,7 @@ class SkillData extends WuxDatabaseData {
         this.name = json.name;
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
+        this.subGroup = json.subGroup;
         this.abilityScore = json.abilityScore;
         this.description = json.description;
     }
@@ -647,6 +648,7 @@ class SkillData extends WuxDatabaseData {
         this.name = "" + dataArray[i]; i++;
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
+        this.subGroup = "" + dataArray[i]; i++;
         this.abilityScore = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
 
@@ -656,12 +658,13 @@ class SkillData extends WuxDatabaseData {
         this.name = "";
         this.fieldName = "";
         this.group = "";
+        this.subGroup = "";
         this.abilityScore = "";
         this.description = "";
     }
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
-        definition.subGroup = `${this.group} Skill`;
+        definition.subGroup = this.subGroup;
         definition.formula = new FormulaData(`${this.abilityScore}`);
         definition.formula.addAttributes(definition.getFormulaMods(WuxDef._rank));
         return definition;
