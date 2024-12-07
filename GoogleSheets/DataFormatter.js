@@ -896,6 +896,21 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         buildLanguageSection = function () {
             let definition = WuxDef.Get("Title_LanguageSelect");
             return collapsibleHeader(definition.getTitle(), definition.getAttribute(), WuxSheetMain.Language.Build(), true);
+        },
+
+        buildChecksSection = function () {
+            let definition = WuxDef.Get("Title_Skills");
+            let definitiionFilter = WuxDef.Filter([new DatabaseFilterData("group", "Skill")]);
+            let contents = "";
+
+            for (let i = 0; i < definitiionFilter.length; i++) {
+                contents += WuxSheetMain.CustomInput();
+            }
+
+            return collapsibleHeader(definition.getTitle(), definition.getAttribute(), contents, true);
+        },
+
+        skillButton = function () {
         }
 
         ;
@@ -906,7 +921,8 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         CollapsibleSubheader: collapsibleSubheader,
         BuildPointsSection: buildPointsSection,
         BuildChatSection: buildChatSection,
-        BuildLanguageSection: buildLanguageSection
+        BuildLanguageSection: buildLanguageSection,
+        BuildSkillsSection: buildSkillsSection
     };
 }());
 

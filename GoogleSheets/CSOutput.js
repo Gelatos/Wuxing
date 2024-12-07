@@ -1365,12 +1365,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			    build = function () {
         			        let contents = "";
 							contents += createChatDisplay();
-							contents += createOutfitDisplay();
 							return contents;
         			    },
 
 						createChatDisplay = function () {
-							let contents = WuxSheetMain.MultiRowGroup([chatBox(), languageSelect()], WuxSheetMain.Table.FlexTable, 2);
+							let contents = WuxSheetMain.MultiRowGroup([outfitCollection(), languageSelect()], WuxSheetMain.Table.FlexTable, 2);
         			        contents = WuxSheetMain.TabBlock(contents);
 
 							let definition = WuxDef.Get("Page_Chat");
@@ -1439,7 +1438,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 									${emoteContents}
 								</fieldset>
 							</div>`;
-							return contents;
+							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
 						},
 
 						buildOutfitContents = function () {
