@@ -1602,7 +1602,7 @@ class TechniqueEffectDisplayData {
             case "Heal":
                 return `Heal ${this.formatCalcBonus(effect)} ${hp}`;
             case "Surge":
-                return `If target has a surge, spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
+                return `If target has a surge, they must spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
             default:
                 return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
         }
