@@ -259,7 +259,7 @@ class TechniqueEffectDatabase extends Database {
         let dataCreation = function (data) {
             return new TechniqueEffect(data);
         };
-        super(data, ["defense"], dataCreation);
+        super(data, ["defense", "type"], dataCreation);
     }
 
     importJson(json) {
@@ -273,6 +273,9 @@ class TechniqueEffectDatabase extends Database {
             return new TechniqueEffect(data);
         }
         super.importSheets(json, dataCreationCallback);
+    }
+    getBoostEffects() {
+        return this.filter(new DatabaseFilterData("type", "Boost"));
     }
 }
 
@@ -418,6 +421,9 @@ class TechniqueData extends WuxDatabaseData {
         definition.tier = this.tier;
         definition.affinity = this.affinity;
         definition.isFree = this.isFree;
+        if (this.action == "Passive") {
+            definition.passiveBoosts = this.effects.getBoostEffects();
+        }
         return definition;
     }
 
@@ -1169,8 +1175,8 @@ class TechniqueDefinitionData extends DefinitionData {
         this.tier = json.tier;
         this.affinity = json.affinity;
         this.isFree = json.isFree;
+        this.passiveBoosts = json.passiveBoosts;
     }
-
     setImportSheetExtraData(property, value) {
         switch (property) {
             case "tier":
@@ -1182,14 +1188,20 @@ class TechniqueDefinitionData extends DefinitionData {
             case "isFree":
                 this.isFree = value.toLowerCase() == "true" ? true : false;
                 break;
+            case "passiveBoosts":
+                this.passiveBoosts = value;
+                break;
         }
     }
-
     createEmpty() {
         super.createEmpty();
         this.tier = 0;
         this.affinity = "";
         this.isFree = false;
+        this.passiveBoosts = []:
+    }
+    isPassive() {
+        return this.passiveBoosts.length > 0;
     }
 }
 class TechniqueStyleDefinitionData extends DefinitionData {
