@@ -1549,6 +1549,9 @@ class TechniqueEffectDisplayData {
             case "WILL":
                 output = this.formatWillEffect(effect);
                 break;
+            case "Vitality":
+                output = this.formatVitalityEffect(effect);
+                break;
             case "Patience":
                 output = this.formatPatienceMeterEffect(effect);
                 break;
@@ -1582,12 +1585,12 @@ class TechniqueEffectDisplayData {
         return output;
     }
     formatHpEffect(effect) {
-        let willpower = WuxDef.GetTitle("HP");
+        let hp = WuxDef.GetTitle("HP");
         switch (effect.subType) {
             case "Heal":
-                return `Heal ${this.formatCalcBonus(effect)} ${willpower}`;
+                return `Heal ${this.formatCalcBonus(effect)} ${hp}`;
             case "Surge":
-                return `If target has a surge, spend one and heal ${this.formatCalcBonus(effect)} ${willpower}`;
+                return `If target has a surge, spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
             default:
                 return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
         }
@@ -1599,6 +1602,15 @@ class TechniqueEffectDisplayData {
                 return `Heal ${this.formatCalcBonus(effect)} ${willpower}`;
             default:
                 return `${this.formatCalcBonus(effect)} ${willpower} damage`;
+        }
+    }
+    formatVitalityEffect(effect) {
+        let vitality = WuxDef.GetTitle("Cmb_Vitality");
+        switch (effect.subType) {
+            case "Heal":
+                return `Gain ${this.formatCalcBonus(effect)} ${vitality}`;
+            default:
+                return `Lose ${this.formatCalcBonus(effect)} ${vitality}`;
         }
     }
     formatSocialMeterEffect(effect, type) {
