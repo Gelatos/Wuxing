@@ -1198,7 +1198,7 @@ class TechniqueDefinitionData extends DefinitionData {
         this.tier = 0;
         this.affinity = "";
         this.isFree = false;
-        this.passiveBoosts = []:
+        this.passiveBoosts = [];
     }
     isPassive() {
         return this.passiveBoosts.length > 0;
