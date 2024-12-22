@@ -1576,6 +1576,9 @@ class TechniqueEffectDisplayData {
             case "Status":
                 output = this.formatStatusEffect(effect);
                 break;
+            case "Temp":
+                output = this.formatTemporaryEffect(effect);
+                break;
             case "Boost":
                 output = this.formatBoostEffect(effect);
                 break;
@@ -1664,6 +1667,21 @@ class TechniqueEffectDisplayData {
             case "Choose": return `${target} gain${plural} the ${state.title} ${state.group} targeted towards a character of your choice`;
             default: return `${target} gain${plural} the ${state.title} ${state.group}`;
         }
+    }
+    formatTemporaryEffect(effect) {
+        let target = "Target";
+        let plural = "s";
+        if (effect.target == "Self") {
+            target = "You";
+            plural = "";
+        }
+        switch (effect.subType) {
+            case "Resistance":
+                let resistance = WuxDef.GetTitle("Resistance");
+                let damageType = WuxDef.GetTitle(effect.effect);
+                return `${effect.description}, ${target} gain${plural} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
+        }
+        
     }
     formatBoostEffect(effect) {
         switch (effect.subType) {
@@ -1943,7 +1961,25 @@ class FormulaData {
                             output += " + ";
                         }
                         if (worker.multiplier != 1) {
-                            output += `[${definition.title} x ${worker.multiplier}]`;
+                            if (multiplier > 1) {
+                                output += `[${definition.title} x ${worker.multiplier}]`;
+                            }
+                            else {
+                                switch (worker.multiplier) {
+                                    case 0.5:
+                                        output += `[1/2 x ${definition.title}]`;
+                                        break;
+                                    case 0.33:
+                                        output += `[1/3 x ${definition.title}]`;
+                                        break;
+                                    case 0.25:
+                                        output += `[1/4 x ${definition.title}]`;
+                                        break;
+                                    case 0.2:
+                                        output += `[1/5 x ${definition.title}]`;
+                                        break;
+                                }
+                            }
                         }
                         else {
                             output += `[${definition.title}]`;
