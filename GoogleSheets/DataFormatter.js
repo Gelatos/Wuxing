@@ -120,11 +120,11 @@ var SheetsDatabase = SheetsDatabase || (function () {
     'use strict';
 
     var
-        createDatabaseCollection = function (stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueDatabaseString) {
+        createDatabaseCollection = function (stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
 
-            let techDb = createTechniques(JSON.parse(techniqueDatabaseString));
+            // let techDb = createTechniques(JSON.parse(techniqueDatabaseString));
             return {
-                techniques: techDb,
+                techniques: createTechniques(techniqueArray),
                 styles: createStyles(stylesArray),
                 skills: createSkills(skillsArray),
                 language: createLanguages(languageArray),
@@ -922,7 +922,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         BuildPointsSection: buildPointsSection,
         BuildChatSection: buildChatSection,
         BuildLanguageSection: buildLanguageSection,
-        BuildSkillsSection: buildSkillsSection
+        BuildChecksSection: buildChecksSection
     };
 }());
 

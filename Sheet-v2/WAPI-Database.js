@@ -375,7 +375,8 @@ class TechniqueData extends WuxDatabaseData {
         this.techSet = "" + dataArray[i]; i++;
         this.group = "" + dataArray[i]; i++;
         this.affinity = "" + dataArray[i]; i++;
-        this.tier = parseInt(dataArray[i]) == NaN ? 1 : parseInt(dataArray[i]); i++;
+        this.tier = parseInt(dataArray[i]);
+        this.tier = isNaN(this.tier) ? 0 : this.tier; i++;
         this.isFree = this.affinity == "" && this.tier <= 0;
         this.action = "" + dataArray[i]; i++;
         this.traits = "" + dataArray[i]; i++;
@@ -1961,7 +1962,7 @@ class FormulaData {
                             output += " + ";
                         }
                         if (worker.multiplier != 1) {
-                            if (multiplier > 1) {
+                            if (worker.multiplier > 1) {
                                 output += `[${definition.title} x ${worker.multiplier}]`;
                             }
                             else {

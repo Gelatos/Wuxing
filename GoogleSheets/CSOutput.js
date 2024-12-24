@@ -1,6 +1,6 @@
-function CreateCharacterSheet(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueDatabaseString) {
+function CreateCharacterSheet(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
 	let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
-		stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueDatabaseString
+		stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray
 	);
 	return PrintLargeEntry(BuildCharacterSheet.Print(sheetsDb));
 }
@@ -1030,7 +1030,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 				createTechniquesByRequirements = function (techniques, displayOptions) {
 					let technique = {};
-					let techDef;
+					let techniqueDefinition;
 
 					let techniquesByRequrements = new Dictionary();
 					techniquesByRequrements.add("Free", []);
@@ -1044,11 +1044,17 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 							techniquesByRequrements.get("Free").push(buildTechnique(technique, displayOptions));
 						}
 						else {
-							techDef = technique.createDefinition(WuxDef.Get("Technique"));
-							if (!techniquesByRequrements.get(techDef.tier).has(techDef.affinity)) {
-								techniquesByRequrements.get(techDef.tier).add(techDef.affinity, []);
+							techniqueDefinition = technique.createDefinition(WuxDef.Get("Technique"));
+							let techniqueTierArray = techniquesByRequrements.get(techniqueDefinition.tier);
+							if (techniqueTierArray == undefined) {
+								
 							}
-							techniquesByRequrements.get(techDef.tier).get(techDef.affinity).push(buildTechnique(technique, displayOptions));
+							else {
+								if (!techniqueTierArray.has(techniqueDefinition.affinity)) {
+									techniqueTierArray.add(techniqueDefinition.affinity, []);
+								}
+								techniqueTierArray.get(techniqueDefinition.affinity).push(buildTechnique(technique, displayOptions));
+							}
 						}
 					}
 
