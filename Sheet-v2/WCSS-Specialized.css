@@ -471,14 +471,14 @@ input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Reaction,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction
 {
-    background-color: #e5eafb;
+    background-color: #96a4d3;
 }
 
 input.wuxFeatureHeader-flag[value="Swift"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Swift,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Swift
 {
-    background-color: #e5fbf1;
+    background-color: #97ceb5;
 }
 
 input.wuxFeatureHeader-flag[value="Free"] + .wuxFeatureHeader,
@@ -492,7 +492,8 @@ input.wuxFeatureHeader-flag[value="Passive"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Passive,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Passive
 {
-    background-color: #f1f1f1;
+    background-color: #6b6b6b;
+    color: #f0e5fb;
 }
 
 input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeader,
