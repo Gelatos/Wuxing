@@ -559,7 +559,7 @@ class TechniqueResources extends dbObj {
         this.name = "";
         this.resourceCost = "";
     }
-    
+
     sanitizeSheetRollAction(sheetRoll) {
         sheetRoll = sheetRoll.replace(/"/g, "%%");
         sheetRoll = sheetRoll.replace(/:/g, "&&");
@@ -1676,13 +1676,33 @@ class TechniqueEffectDisplayData {
             target = "You";
             plural = "";
         }
-        switch (effect.subType) {
+        let effectSubs = effect.subType.split(":");
+
+        if (effectSubs.length != 2) {
+            return "Error! Effect not formatted correctly";
+        }
+
+        let effectTarget = effectSubs[1].trim();
+        switch (effectTarget) {
+            case "Trigger":
+                effectTarget = "Against the triggering effect";
+                break;
+            case "Turn":
+                effectTarget = "Until the end of the turn";
+                break;
+            case "Round":
+                effectTarget = "Until the end of the round";
+                break;
+        }
+
+        let effectSubType = effectSubs[0].trim();
+        switch (effectSubType) {
             case "Resistance":
                 let resistance = WuxDef.GetTitle("Resistance");
                 let damageType = WuxDef.GetTitle(effect.effect);
-                return `${effect.description}, ${target} gain${plural} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
+                return `${effectTarget}, ${target} gain${plural} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
         }
-        
+
     }
     formatBoostEffect(effect) {
         switch (effect.subType) {

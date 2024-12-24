@@ -2,7 +2,7 @@ var WuxDef = WuxDef || (function () {
 	'use strict';
 
 	var
-		keys = ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "SeverityRank", "DamageType", "Trait", "Status", "Condition", "Emotion", "Boon", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "Speak", "Whisper", "Yell", "Think", "Describe", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Page_Sidebar", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Skills", "Title_Emotes", "Title_Outfits", "Title_TechEffect", "Title_TechDC", "Title_TechDefense", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN", "Def_Brace", "Def_Fortitude", "Def_Disruption", "Def_Hide", "Def_Reflex", "Def_Evasion", "Def_Insight", "Def_Notice", "Def_Guile", "Def_Scrutiny", "Def_Resolve", "Def_Freewill", "CombatDefense", "SocialSense", "WillBreak", "SheetName", "FullName", "DisplayName", "IntroName", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "Title_Boon", "Boon_Rest", "Boon_Nourishment", "Boon_Inspiration", "HP", "WILL", "EN", "Cmb_Chakra", "Chakra", "Initiative", "Recall", "Power", "Accuracy", "Artistry", "Charisma", "Carrying Capacity", "Cmb_HV", "Cmb_Armor", "Resistance", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "WeaponDamage", "Cmb_Mv", "Cmb_MvPotency", "MvCharge", "Dash", "MaxDash", "Soc_Favor", "RepeatingInfluences", "Soc_Influence", "InfluenceTrait", "InfluenceIdeal", "InfluenceBond", "InfluenceGoal", "Soc_Severity", "Svr_LowSeverity", "Svr_ModerateSeverity", "Svr_HighSeverity", "Soc_RequestCheck", "Soc_SupportInfluence", "Soc_OpposeInfluence", "Soc_Patience", "Dmg_Burn", "Dmg_Cold", "Dmg_Energy", "Dmg_Fire", "Dmg_Force", "Dmg_Piercing", "Dmg_Shock", "Dmg_Tension", "Dmg_Weapon", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Light", "Trait_Sharp", "Trait_Sturdy", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Transparent", "Style_Basic Action", "Style_Basic Attack", "Style_Basic Maneuver", "Style_Basic Social", "Style_Charm Unrestrained", "Style_Inspiring Presence", "Style_Deft Negotiator", "Style_Abrasive Wit", "Style_Tyrannical Voice", "Style_Calming Empathy", "Skill_Acrobatics", "Skill_Alchemy", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Cook", "Skill_Demoralize", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Inspire", "Skill_Might", "Skill_Persuade", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Skill_Warding", "Lang_Minere", "Lang_Junal", "Lang_Apollen", "Lang_Lib", "Lang_Cert", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq", "Lang_Kleikan", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca", "Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan", "LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Job_Warrior", "Job_Guardian", "Job_Brawler", "Job_Rogue", "Job_Hunter", "Job_Kineticist", "Job_Medic", "Job_Scholar", "Job_Investigator", "Job_Bard", "Job_Orator", "Job_Artisan", "Job_Waymaker", "Job_Physician", "JStyle_Warrior", "JStyle_Guardian", "JStyle_Brawler", "JStyle_Rogue", "JStyle_Hunter", "JStyle_Kineticist", "JStyle_Medic", "JStyle_Scholar", "JStyle_Investigator", "JStyle_Bard", "JStyle_Orator", "JStyle_Artisan", "JStyle_Waymaker", "JStyle_Physician", "Stat_Downed", "Stat_Dying", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Invisible", "Stat_Multiact", "Stat_Restrained", "Stat_Unconscious", "Stat_Aflame", "Stat_Chilled", "Stat_Delayed", "Stat_Empowered", "Stat_Encumbered", "Stat_Hasted", "Stat_Hindered", "Stat_Immobilized", "Stat_Impaired", "Stat_Launched", "Stat_Paralyzed", "Stat_Persevering", "Stat_Prone", "Stat_Sickened", "Stat_Stunned", "Stat_Angered", "Stat_Disgusted", "Stat_Doubt", "Stat_Encouraged", "Stat_Frightened", "Stat_Flustered", "Stat_Receptive", "Stat_Joyful", "Stat_Saddened", "Stat_Surprised", "Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Rogue", "Tech_Sneak Attack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Bard", "Tech_Orator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Artisan ", "Tech_Waymaker", "Tech_Journeyman", "Tech_Journeyman II", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"],
+		keys = ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "SeverityRank", "DamageType", "Trait", "Status", "Condition", "Emotion", "Boon", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "Speak", "Whisper", "Yell", "Think", "Describe", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Page_Sidebar", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Skills", "Title_Emotes", "Title_Outfits", "Title_TechEffect", "Title_TechDC", "Title_TechDefense", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN", "Def_Brace", "Def_Fortitude", "Def_Disruption", "Def_Hide", "Def_Reflex", "Def_Evasion", "Def_Insight", "Def_Notice", "Def_Guile", "Def_Scrutiny", "Def_Resolve", "Def_Freewill", "CombatDefense", "SocialSense", "WillBreak", "SheetName", "FullName", "DisplayName", "IntroName", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "Title_Boon", "Boon_Rest", "Boon_Nourishment", "Boon_Inspiration", "HP", "WILL", "EN", "Cmb_Chakra", "Chakra", "Initiative", "Recall", "Power", "Accuracy", "Artistry", "Charisma", "Carrying Capacity", "Cmb_HV", "Cmb_Armor", "Resistance", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "WeaponDamage", "Cmb_Mv", "Cmb_MvPotency", "MvCharge", "Dash", "MaxDash", "Soc_Favor", "RepeatingInfluences", "Soc_Influence", "Soc_InfluenceType", "InfluenceTrait", "InfluenceIdeal", "InfluenceBond", "InfluenceGoal", "Soc_Severity", "Svr_LowSeverity", "Svr_ModerateSeverity", "Svr_HighSeverity", "Soc_RequestCheck", "Soc_SupportInfluence", "Soc_OpposeInfluence", "Soc_Patience", "Dmg_Burn", "Dmg_Cold", "Dmg_Energy", "Dmg_Fire", "Dmg_Force", "Dmg_Piercing", "Dmg_Shock", "Dmg_Tension", "Dmg_Weapon", "Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Light", "Trait_Sharp", "Trait_Sturdy", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Transparent", "Style_Basic Action", "Style_Basic Attack", "Style_Basic Maneuver", "Style_Basic Social", "Style_Charm Unrestrained", "Style_Inspiring Presence", "Style_Deft Negotiator", "Style_Abrasive Wit", "Style_Tyrannical Voice", "Style_Calming Empathy", "Skill_Acrobatics", "Skill_Alchemy", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Cook", "Skill_Deception", "Skill_Demoralize", "Skill_Endurance", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Grappling", "Skill_Heal", "Skill_Inspire", "Skill_Jump", "Skill_Might", "Skill_Palming", "Skill_Pilot", "Skill_Rationalize", "Skill_Resonance", "Skill_Search", "Skill_Shape", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker", "Skill_Warding", "Lang_Minere", "Lang_Junal", "Lang_Apollen", "Lang_Lib", "Lang_Cert", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq", "Lang_Kleikan", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca", "Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan", "LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon", "Job_Warrior", "Job_Guardian", "Job_Brawler", "Job_Rogue", "Job_Hunter", "Job_Kineticist", "Job_Medic", "Job_Scholar", "Job_Investigator", "Job_Bard", "Job_Orator", "Job_Artisan", "Job_Waymaker", "Job_Physician", "JStyle_Warrior", "JStyle_Guardian", "JStyle_Brawler", "JStyle_Rogue", "JStyle_Hunter", "JStyle_Kineticist", "JStyle_Medic", "JStyle_Scholar", "JStyle_Investigator", "JStyle_Bard", "JStyle_Orator", "JStyle_Artisan", "JStyle_Waymaker", "JStyle_Physician", "Stat_Downed", "Stat_Dying", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Invisible", "Stat_Multiact", "Stat_Restrained", "Stat_Unconscious", "Stat_Aflame", "Stat_Chilled", "Stat_Delayed", "Stat_Empowered", "Stat_Encumbered", "Stat_Hasted", "Stat_Hindered", "Stat_Immobilized", "Stat_Impaired", "Stat_Launched", "Stat_Paralyzed", "Stat_Persevering", "Stat_Prone", "Stat_Sickened", "Stat_Stunned", "Stat_Angered", "Stat_Disgusted", "Stat_Doubt", "Stat_Encouraged", "Stat_Frightened", "Stat_Flustered", "Stat_Receptive", "Stat_Joyful", "Stat_Saddened", "Stat_Surprised", "Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Rogue", "Tech_Sneak Att,ack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Bard", "Tech_Orator", "Tech_Waymaker", "Tech_Waymaker II", "Tech_Artisan ", "Tech_Journeyman", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"],
 		values = {
 			"Attribute": {
 				"name": "Attribute", "fieldName": "attribute", "group": "Type", "description": "", "variable": "atr{0}{1}", "title": "Attributes", "subGroup": "", "descriptions": [""],
@@ -1530,6 +1530,12 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": ""
 			},
+			"Soc_InfluenceType": {
+				"name": "Soc_InfluenceType", "fieldName": "influencetype", "group": "Social", "description": "", "variable": "soc-influencetype{0}", "title": "Influence Type", "subGroup": "", "descriptions": ["Influences tend to fit into one of four categories, Traits, Ideals, Bonds, or Goals. This is a way to categorize the influence."],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
+				"linkedGroups": [],
+				"isResource": ""
+			},
 			"InfluenceTrait": {
 				"name": "InfluenceTrait", "fieldName": "influencetrait", "group": "InfluenceType", "description": "", "variable": "trait", "title": "Trait", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
@@ -1855,10 +1861,10 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "affinity": "", "requirements": "None", "tier": 0
 			},
 			"Style_Abrasive Wit": {
-				"name": "Style_Abrasive Wit", "fieldName": "style_abrasive_wit", "group": "Style", "description": "", "variable": "sty-abrasive_wit{0}", "title": "Abrasive Wit", "subGroup": "Standard", "descriptions": ["Manipulators rub you the wrong way, especially if they try to use their charms on your or your friends. You use your tongue to stave them off and taunt them into giving up."],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-				"linkedGroups": []
+				"name": "Style_Abrasive Wit", "fieldName": "style_abrasive_wit", "group": "Style", "description": "", "variable": "sty-abrasive_wit{0}", "title": "Abrasive Wit", "subGroup": "Standard", "descriptions": ["Manipulators rub you the wrong way, especially if they try to use their charms on your or your friends. You use your tongue to stave them off and taunt them into giving up."]
 				,
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
+				"linkedGroups": [],
 				"isResource": "", "affinity": "", "requirements": "None", "tier": 0
 			},
 			"Style_Tyrannical Voice": {
@@ -1874,7 +1880,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "affinity": "", "requirements": "None", "tier": 0
 			},
 			"Skill_Acrobatics": {
-				"name": "Skill_Acrobatics", "fieldName": "acrobatics", "group": "Skill", "description": "", "variable": "skl-acrobatics{0}", "title": "Acrobatics", "subGroup": "Movement", "descriptions": ["Acrobatics is an active skill used in feats of balance and quick motion. "],
+				"name": "Skill_Acrobatics", "fieldName": "acrobatics", "group": "Skill", "description": "", "variable": "skl-acrobatics{0}", "title": "Acrobatics", "subGroup": "Traversal", "descriptions": ["Acrobatics is an active skill used in feats of balance and quick motion. "],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-qck", "definitionName": "Attr_QCK", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-acrobatics_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
@@ -1901,7 +1907,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": ""
 			},
 			"Skill_Build": {
-				"name": "Skill_Build", "fieldName": "build", "group": "Skill", "description": "", "variable": "skl-build{0}", "title": "Build", "subGroup": "Craft", "descriptions": ["Build is an active skill used whenever you are creating an object. This skill is used both when you wish to create through the use of tools or creating through magic by manipulating dust or ether."],
+				"name": "Skill_Build", "fieldName": "build", "group": "Skill", "description": "", "variable": "skl-build{0}", "title": "Build", "subGroup": "Craft", "descriptions": ["Build is an active skill used whenever you are creating an object through precise technique. This skill is used mostly when you wish to create through the use of tools but some complicated items will require build to represent the precision required in the object being created."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-rsn", "definitionName": "Attr_RSN", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-build_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
@@ -1919,7 +1925,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": ""
 			},
 			"Skill_Charm": {
-				"name": "Skill_Charm", "fieldName": "charm", "group": "Skill", "description": "", "variable": "skl-charm{0}", "title": "Charm", "subGroup": "Social", "descriptions": ["Charm is a social skill used when attempting to meet another emotionally. This can be done through empathy, support, romance, and allure. Charm is used both for persuasion and deception, as long as the attempt is meant to appeal emotionally. "],
+				"name": "Skill_Charm", "fieldName": "charm", "group": "Skill", "description": "", "variable": "skl-charm{0}", "title": "Charm", "subGroup": "Persuade", "descriptions": ["Charm is a social skill used when attempting to meet another emotionally. This can be done through empathy, support, romance, and allure. Charm is used for persuasion when appealing emotionally. "],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-int", "definitionName": "Attr_INT", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-charm_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
@@ -1936,8 +1942,17 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": ""
 			},
+			"Skill_Deception": {
+				"name": "Skill_Deception", "fieldName": "deception", "group": "Skill", "description": "", "variable": "skl-deception{0}", "title": "Deception", "subGroup": "Cunning", "descriptions": ["Deception is a social skill used to tell convincing lies and hide information. Deception can encompass everything from misleading others through ambiguity to telling outright lies. "],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "atr-cnv", "definitionName": "Attr_CNV", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "skl-deception_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": ""
+			},
 			"Skill_Demoralize": {
-				"name": "Skill_Demoralize", "fieldName": "demoralize", "group": "Skill", "description": "", "variable": "skl-demoralize{0}", "title": "Demoralize", "subGroup": "Social", "descriptions": ["Demoralize is a social skill associated with negativity and intimidating behaviour. Techniques that key off this skill usually attack willpower and invoke many negative emotions to control others' behaviour. "],
+				"name": "Skill_Demoralize", "fieldName": "demoralize", "group": "Skill", "description": "", "variable": "skl-demoralize{0}", "title": "Demoralize", "subGroup": "Cunning", "descriptions": ["Demoralize is a social skill associated with negativity and intimidating behaviour. Techniques that key off this skill usually attack willpower and invoke many negative emotions to control others' behaviour. "],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-cnv", "definitionName": "Attr_CNV", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-demoralize_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
@@ -1945,8 +1960,17 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": ""
 			},
+			"Skill_Endurance": {
+				"name": "Skill_Endurance", "fieldName": "endurance", "group": "Skill", "description": "", "variable": "skl-endurance{0}", "title": "Endurance", "subGroup": "Traversal", "descriptions": ["Endurance is an active skill used when an activity requires sustained effort such as climbing, swimming, or flying. It is also often used when a task has been performed for a long time such as long distance running or when lifting or dragging for a prolonged time."],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "atr-bod", "definitionName": "Attr_BOD", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "skl-endurance_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": ""
+			},
 			"Skill_Empathy": {
-				"name": "Skill_Empathy", "fieldName": "empathy", "group": "Skill", "description": "", "variable": "skl-empathy{0}", "title": "Empathy", "subGroup": "Social", "descriptions": ["Empathy is a social skill used to actively detect another's emotional state. Empathy will often be used to sense another's convictions and influences. It can also see use when seeing through emotional deception. "],
+				"name": "Skill_Empathy", "fieldName": "empathy", "group": "Skill", "description": "", "variable": "skl-empathy{0}", "title": "Empathy", "subGroup": "Cunning", "descriptions": ["Empathy is a social skill used to actively detect another's emotional state. Empathy will often be used to sense another's convictions and influences. It can also see use when seeing through emotional deception. "],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-int", "definitionName": "Attr_INT", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-empathy_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
@@ -1955,7 +1979,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": ""
 			},
 			"Skill_Enchant": {
-				"name": "Skill_Enchant", "fieldName": "enchant", "group": "Skill", "description": "", "variable": "skl-enchant{0}", "title": "Enchant", "subGroup": "Cast", "descriptions": ["Enchant is an active skill that gathers ki from the body and concentrates it to a single point. This is most often used to heal wounds or create temporary enhancements to one's own body or another's. Sometimes Enchant is used to surround an object with one's own ki to provide unique effects. "],
+				"name": "Skill_Enchant", "fieldName": "enchant", "group": "Skill", "description": "", "variable": "skl-enchant{0}", "title": "Enchant", "subGroup": "Cast", "descriptions": ["Enchant is an active skill that gathers ki from the body and concentrates it to a single point. This is most often used to create temporary enhancements to one's own body or another's. Sometimes Enchant is used to surround an object with one's own ki to provide unique effects. "],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-bod", "definitionName": "Attr_BOD", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-enchant_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
@@ -1972,11 +1996,38 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": ""
 			},
+			"Skill_Grappling": {
+				"name": "Skill_Grappling", "fieldName": "grappling", "group": "Skill", "description": "", "variable": "skl-grappling{0}", "title": "Grappling", "subGroup": "Athletics", "descriptions": ["Grappling is an active skill that represents attacking with one's own body. Wrestling and forcing movement are always grapple skill checks. In addition, many strikes from fists or kicks are often grappling checks."],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "atr-bod", "definitionName": "Attr_BOD", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "skl-grappling_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": ""
+			},
+			"Skill_Heal": {
+				"name": "Skill_Heal", "fieldName": "heal", "group": "Skill", "description": "", "variable": "skl-heal{0}", "title": "Heal", "subGroup": "Cast", "descriptions": ["Heal is an active skill used to perform medical procedures such as first aid and using healing magic. It includes long-term medical support for disease and illness and in circumstances where surgery is required."],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "atr-int", "definitionName": "Attr_INT", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "skl-heal_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": ""
+			},
 			"Skill_Inspire": {
-				"name": "Skill_Inspire", "fieldName": "inspire", "group": "Skill", "description": "", "variable": "skl-inspire{0}", "title": "Inspire", "subGroup": "Social", "descriptions": ["Inspire is a social skill used to evoke feelings of hope and to counter dispair. Inspire is used when motivating action. Techniques that use inspire often provide emotional boosts and bolster willpower. Inspire is also often used in persuasion attempts to convince another to help. "],
+				"name": "Skill_Inspire", "fieldName": "inspire", "group": "Skill", "description": "", "variable": "skl-inspire{0}", "title": "Inspire", "subGroup": "Persuade", "descriptions": ["Inspire is a social skill used to evoke feelings of hope and to counter dispair. Inspire is used when motivating action. Techniques that use inspire often provide emotional boosts and bolster willpower. Inspire is also often used in persuasion attempts to convince another to help. "],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-cnv", "definitionName": "Attr_CNV", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-inspire_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": ""
+			},
+			"Skill_Jump": {
+				"name": "Skill_Jump", "fieldName": "jump", "group": "Skill", "description": "", "variable": "skl-jump{0}", "title": "Jump", "subGroup": "Traversal", "descriptions": ["Jump is an active skill used when quick propulsion is required such as when jumping. Most often it is used for jump height and distance but also is used when a technique requires maneuverability in the air."],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "atr-bod", "definitionName": "Attr_BOD", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "skl-jump_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
 				},
 				"linkedGroups": [],
 				"isResource": ""
@@ -1990,11 +2041,11 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": ""
 			},
-			"Skill_Persuade": {
-				"name": "Skill_Persuade", "fieldName": "persuade", "group": "Skill", "description": "", "variable": "skl-persuade{0}", "title": "Persuade", "subGroup": "Social", "descriptions": ["Persuade is a social skill used when persuading another through reason and logic. Persuade is usually a tool for negotiation when appealing to a logical mindset such as when pragmatism is necessary. It can also be used to deceive using misinformation and selling it as truth or through lies of omission."],
+			"Skill_Palming": {
+				"name": "Skill_Palming", "fieldName": "palming", "group": "Skill", "description": "", "variable": "skl-palming{0}", "title": "Palming", "subGroup": "Device", "descriptions": ["Palming is a technical skill that represents skill with ones' own hands. It is used for any kind of hand tricks most often to conceal items and objects quickly and discretely. "],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "atr-rsn", "definitionName": "Attr_RSN", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "skl-persuade_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
+					"workers": [{ "variableName": "atr-qck", "definitionName": "Attr_QCK", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "skl-palming_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
 				},
 				"linkedGroups": [],
 				"isResource": ""
@@ -2004,6 +2055,15 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-qck", "definitionName": "Attr_QCK", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-pilot_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": ""
+			},
+			"Skill_Rationalize": {
+				"name": "Skill_Rationalize", "fieldName": "rationalize", "group": "Skill", "description": "", "variable": "skl-rationalize{0}", "title": "Rationalize", "subGroup": "Persuade", "descriptions": ["Rationalize is a social skill used when persuading another through reason and logic. Rationalize is usually a tool for negotiation when appealing to a logical mindset such as when pragmatism is necessary. "],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "atr-rsn", "definitionName": "Attr_RSN", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "skl-rationalize_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
 				},
 				"linkedGroups": [],
 				"isResource": ""
@@ -2022,6 +2082,15 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-int", "definitionName": "Attr_INT", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-search_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": ""
+			},
+			"Skill_Shape": {
+				"name": "Skill_Shape", "fieldName": "shape", "group": "Skill", "description": "", "variable": "skl-shape{0}", "title": "Shape", "subGroup": "Cast", "descriptions": ["Shape is an active skill used to shape dust or other material into new objects and items through magic. Many building techniques require one to use shape to manipulate a material to accurately represent the intended form and ensure its durability."],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "atr-rsn", "definitionName": "Attr_RSN", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "skl-shape_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
 				},
 				"linkedGroups": [],
 				"isResource": ""
@@ -2045,7 +2114,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": ""
 			},
 			"Skill_Sneak": {
-				"name": "Skill_Sneak", "fieldName": "sneak", "group": "Skill", "description": "", "variable": "skl-sneak{0}", "title": "Sneak", "subGroup": "Movement", "descriptions": ["Sneak is an active skill to conceal your presence. This will often be used to keep yourself hidden while performing other actions such as quick movement or stealthy attacks."],
+				"name": "Skill_Sneak", "fieldName": "sneak", "group": "Skill", "description": "", "variable": "skl-sneak{0}", "title": "Sneak", "subGroup": "Traversal", "descriptions": ["Sneak is an active skill to conceal your presence. This will often be used to keep yourself hidden while performing other actions such as quick movement or stealthy attacks."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-prc", "definitionName": "Attr_PRC", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-sneak_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
@@ -2056,7 +2125,7 @@ var WuxDef = WuxDef || (function () {
 			"Skill_Throw": {
 				"name": "Skill_Throw", "fieldName": "throw", "group": "Skill", "description": "", "variable": "skl-throw{0}", "title": "Throw", "subGroup": "Athletics", "descriptions": ["Throw is an active skill that allows one to throw objects accurately and far. This can be used to throw objects but also whenever a spell requires one to toss or lob an effect."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "atr-bod", "definitionName": "Attr_BOD", "value": 0, "multiplier": 1, "max": 0 },
+					"workers": [{ "variableName": "atr-prc", "definitionName": "Attr_PRC", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-throw_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
 				},
 				"linkedGroups": [],
@@ -2067,15 +2136,6 @@ var WuxDef = WuxDef || (function () {
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "atr-prc", "definitionName": "Attr_PRC", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "skl-tinker_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": ""
-			},
-			"Skill_Traversal": {
-				"name": "Skill_Traversal", "fieldName": "traversal", "group": "Skill", "description": "", "variable": "skl-traversal{0}", "title": "Traversal", "subGroup": "Movement", "descriptions": ["Traversal is an active skill that governs a character's movement. This can be used to do complex acts of climbing, running, swimming, or even flying."],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "atr-bod", "definitionName": "Attr_BOD", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "skl-traversal_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
 				},
 				"linkedGroups": [],
 				"isResource": ""
@@ -2462,7 +2522,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": ""
 			},
 			"Lore_Sculpting": {
-				"name": "Lore_Sculpting", "fieldName": "sculpting", "group": "Lore", "description": "", "variable": "lor-sculpting{0}", "title": "Sculpting", "subGroup": "Craftmanship", "descriptions": ["Sculpting allows one to use soft material like clay and shape it into a desired form."],
+				"name": "Lore_Sculpting", "fieldName": "sculpting", "group": "Lore", "description": "", "variable": "lor-sculpting{0}", "title": "Sculpting", "subGroup": "Craftmanship", "descriptions": ["Sculpting allows one to use soft material like clay and shape it into a desired form."]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "gen-recall", "definitionName": "Recall", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "lor-sculpting_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
@@ -2525,8 +2586,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": ""
 			},
 			"Lore_Khem": {
-				"name": "Lore_Khem", "fieldName": "khem", "group": "Lore", "description": "", "variable": "lor-khem{0}", "title": "Khem", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of the Kingdom of Apollo and its mountainous region of Khem to the north east."]
-				,
+				"name": "Lore_Khem", "fieldName": "khem", "group": "Lore", "description": "", "variable": "lor-khem{0}", "title": "Khem", "subGroup": "Geography", "descriptions": ["This check represents geographical knowledge of the Kingdom of Apollo and its mountainous region of Khem to the north east."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "gen-recall", "definitionName": "Recall", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "lor-khem_rank", "definitionName": "", "value": 0, "multiplier": 1, "max": 0 }]
@@ -3128,7 +3188,8 @@ var WuxDef = WuxDef || (function () {
 			"Stat_Sickened": {
 				"name": "Stat_Sickened", "fieldName": "stat_sickened", "group": "Status", "description": "", "variable": "sts-sickened{0}", "title": "Sickened", "subGroup": "Condition", "descriptions": ["Sickened characters receive +1 Disadvantage on all skill checks. You can't willingly ingest anything while Sickened."],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
-				"linkedGroups": [],
+				"linkedGroups": []
+				,
 				"isResource": "", "endsOnRoundStart": false
 			},
 			"Stat_Stunned": {
@@ -3181,9 +3242,7 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Stat_Joyful": {
 				"name": "Stat_Joyful", "fieldName": "stat_joyful", "group": "Status", "description": "", "variable": "sts-joyful{0}", "title": "Joyful", "subGroup": "Emotion", "descriptions": ["-"],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": []
-				},
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": { "workers": [] },
 				"linkedGroups": [],
 				"isResource": "", "endsOnRoundStart": false
 			},
@@ -3496,6 +3555,80 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
+			"Tech_Vanguard": {
+				"name": "Tech_Vanguard", "fieldName": "tech_vanguard", "group": "Technique", "description": "", "variable": "tch-vanguard{0}", "title": "Vanguard", "subGroup": "Warrior; Guardian", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "atr-bod", "definitionName": "Attr_BOD", "value": 0, "multiplier": 10, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }]
+					},
+					"effect": "HP", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
+					},
+					"effect": "Def_Brace", "traits": ""
+				},
+				{
+					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
+					},
+					"effect": "Def_Resolve", "traits": ""
+				},
+				{
+					"name": "T3", "defense": "", "target": "", "type": "Boost", "subType": "Set", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
+					},
+					"effect": "Power", "traits": ""
+				},
+				{
+					"name": "T4", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "", "definitionName": "", "value": 5, "multiplier": 1, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
+					},
+					"effect": "Cmb_HV", "traits": ""
+				}]
+			},
+			"Tech_Vanguard II": {
+				"name": "Tech_Vanguard II", "fieldName": "tech_vanguard_ii", "group": "Technique", "description": "", "variable": "tch-vanguard_ii{0}", "title": "Vanguard II", "subGroup": "Warrior; Guardian", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Reflex", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
+					"effect": "Cmb_Armor", "traits": ""
+				}]
+			},
+			"Tech_Vanguard's Blockade": {
+				"name": "Tech_Vanguard's Blockade", "fieldName": "tech_vanguard's_blockade", "group": "Technique", "description": "", "variable": "tch-vanguard's_blockade{0}", "title": "Vanguard's Blockade", "subGroup": "Warrior; Guardian", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false
+			},
 			"Tech_Warrior": {
 				"name": "Tech_Warrior", "fieldName": "tech_warrior", "group": "Technique", "description": "", "variable": "tch-warrior{0}", "title": "Warrior", "subGroup": "Warrior", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
@@ -3650,234 +3783,6 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": "", "tier": 3, "affinity": "", "isFree": false, "passiveBoosts": []
 			},
-			"Tech_Vanguard": {
-				"name": "Tech_Vanguard", "fieldName": "tech_vanguard", "group": "Technique", "description": "", "variable": "tch-vanguard{0}", "title": "Vanguard", "subGroup": "Warrior; Guardian", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "atr-bod", "definitionName": "Attr_BOD", "value": 0, "multiplier": 10, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }]
-					},
-					"effect": "HP", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
-					},
-					"effect": "Def_Brace", "traits": ""
-				},
-				{
-					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
-					},
-					"effect": "Def_Resolve", "traits": ""
-				},
-				{
-					"name": "T3", "defense": "", "target": "", "type": "Boost", "subType": "Set", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
-					},
-					"effect": "Power", "traits": ""
-				},
-				{
-					"name": "T4", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "", "definitionName": "", "value": 5, "multiplier": 1, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
-					},
-					"effect": "Cmb_HV", "traits": ""
-				}]
-			},
-			"Tech_Vanguard II": {
-				"name": "Tech_Vanguard II", "fieldName": "tech_vanguard_ii", "group": "Technique", "description": "", "variable": "tch-vanguard_ii{0}", "title": "Vanguard II", "subGroup": "Warrior; Guardian", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Reflex", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
-					"effect": "Cmb_Armor", "traits": ""
-				}]
-			},
-			"Tech_Vanguard's Blockade": {
-				"name": "Tech_Vanguard's Blockade", "fieldName": "tech_vanguard's_blockade", "group": "Technique", "description": "", "variable": "tch-vanguard's_blockade{0}", "title": "Vanguard's Blockade", "subGroup": "Warrior; Guardian", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false
-			},
-			"Tech_Rogue": {
-				"name": "Tech_Rogue", "fieldName": "tech_rogue", "group": "Technique", "description": "", "variable": "tch-rogue{0}", "title": "Rogue", "subGroup": "Rogue", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Reflex", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Evasion", "traits": ""
-				},
-				{
-					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Hide", "traits": ""
-				}]
-			},
-			"Tech_Sneak Attack": {
-				"name": "Tech_Sneak Attack", "fieldName": "tech_sneak_attack", "group": "Technique", "description": "", "variable": "tch-sneak_attack{0}", "title": "Sneak Attack", "subGroup": "Rogue", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false
-			},
-			"Tech_Disengage": {
-				"name": "Tech_Disengage", "fieldName": "tech_disengage", "group": "Technique", "description": "", "variable": "tch-disengage{0}", "title": "Disengage", "subGroup": "Rogue", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false
-			},
-			"Tech_Cover": {
-				"name": "Tech_Cover", "fieldName": "tech_cover", "group": "Technique", "description": "", "variable": "tch-cover{0}", "title": "Cover", "subGroup": "Rogue", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false
-			},
-			"Tech_Slip Past": {
-				"name": "Tech_Slip Past", "fieldName": "tech_slip_past", "group": "Technique", "description": "", "variable": "tch-slip_past{0}", "title": "Slip Past", "subGroup": "Rogue", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 3, "affinity": "", "isFree": false
-			},
-			"Tech_Sneak Attack II": {
-				"name": "Tech_Sneak Attack II", "fieldName": "tech_sneak_attack_ii", "group": "Technique", "description": "", "variable": "tch-sneak_attack_ii{0}", "title": "Sneak Attack II", "subGroup": "Rogue", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 3, "affinity": "", "isFree": false
-			},
-			"Tech_Brawler": {
-				"name": "Tech_Brawler", "fieldName": "tech_brawler", "group": "Technique", "description": "", "variable": "tch-brawler{0}", "title": "Brawler", "subGroup": "Brawler", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }] },
-					"effect": "HP", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Brace", "traits": ""
-				},
-				{
-					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Evasion", "traits": ""
-				}]
-			},
-			"Tech_Bullet Punch": {
-				"name": "Tech_Bullet Punch", "fieldName": "tech_bullet_punch", "group": "Technique", "description": "", "variable": "tch-bullet_punch{0}", "title": "Bullet Punch", "subGroup": "Brawler", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false
-			},
-			"Tech_Follow-Up Strike": {
-				"name": "Tech_Follow-Up Strike", "fieldName": "tech_follow-up_strike", "group": "Technique", "description": "", "variable": "tch-follow-up_strike{0}", "title": "Follow-Up Strike", "subGroup": "Brawler", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false
-			},
-			"Tech_Dodge": {
-				"name": "Tech_Dodge", "fieldName": "tech_dodge", "group": "Technique", "description": "", "variable": "tch-dodge{0}", "title": "Dodge", "subGroup": "Brawler", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false
-			},
-			"Tech_Momentum": {
-				"name": "Tech_Momentum", "fieldName": "tech_momentum", "group": "Technique", "description": "", "variable": "tch-momentum{0}", "title": "Momentum", "subGroup": "Brawler", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 3, "affinity": "", "isFree": false
-			},
-			"Tech_Flurry of Blows": {
-				"name": "Tech_Flurry of Blows", "fieldName": "tech_flurry_of_blows", "group": "Technique", "description": "", "variable": "tch-flurry_of_blows{0}", "title": "Flurry of Blows", "subGroup": "Brawler", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 3, "affinity": "", "isFree": false, "passiveBoosts": []
-			},
 			"Tech_Athlete": {
 				"name": "Tech_Athlete", "fieldName": "tech_athlete", "group": "Technique", "description": "", "variable": "tch-athlete{0}", "title": "Athlete", "subGroup": "Rogue; Brawler", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
@@ -3946,8 +3851,227 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
 				},
-				"linkedGroups": []
-				,
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false
+			},
+			"Tech_Rogue": {
+				"name": "Tech_Rogue", "fieldName": "tech_rogue", "group": "Technique", "description": "", "variable": "tch-rogue{0}", "title": "Rogue", "subGroup": "Rogue", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Reflex", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Evasion", "traits": ""
+				},
+				{
+					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Hide", "traits": ""
+				}]
+			},
+			"Tech_Sneak Att,ack": {
+				"name": "Tech_Sneak Att,ack", "fieldName": "tech_sneak_att,ack", "group": "Technique", "description": "", "variable": "tch-sneak_att,ack{0}", "title": "Sneak Att,ack", "subGroup": "Rogue", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false
+			},
+			"Tech_Disengage": {
+				"name": "Tech_Disengage", "fieldName": "tech_disengage", "group": "Technique", "description": "", "variable": "tch-disengage{0}", "title": "Disengage", "subGroup": "Rogue", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false
+			},
+			"Tech_Cover": {
+				"name": "Tech_Cover", "fieldName": "tech_cover", "group": "Technique", "description": "", "variable": "tch-cover{0}", "title": "Cover", "subGroup": "Rogue", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false
+			},
+			"Tech_Slip Past": {
+				"name": "Tech_Slip Past", "fieldName": "tech_slip_past", "group": "Technique", "description": "", "variable": "tch-slip_past{0}", "title": "Slip Past", "subGroup": "Rogue", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 3, "affinity": "", "isFree": false
+			},
+			"Tech_Sneak Attack II": {
+				"name": "Tech_Sneak Attack II", "fieldName": "tech_sneak_attack_ii", "group": "Technique", "description": "", "variable": "tch-sneak_attack_ii{0}", "title": "Sneak Attack II", "subGroup": "Rogue", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 3, "affinity": "", "isFree": false
+			},
+			"Tech_Brawler": {
+				"name": "Tech_Brawler", "fieldName": "tech_brawler", "group": "Technique", "description": "", "variable": "tch-brawler{0}", "title": "Brawler", "subGroup": "Brawler", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }]
+					},
+					"effect": "HP", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Brace", "traits": ""
+				},
+				{
+					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Evasion", "traits": ""
+				}]
+			},
+			"Tech_Bullet Punch": {
+				"name": "Tech_Bullet Punch", "fieldName": "tech_bullet_punch", "group": "Technique", "description": "", "variable": "tch-bullet_punch{0}", "title": "Bullet Punch", "subGroup": "Brawler", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false
+			},
+			"Tech_Follow-Up Strike": {
+				"name": "Tech_Follow-Up Strike", "fieldName": "tech_follow-up_strike", "group": "Technique", "description": "", "variable": "tch-follow-up_strike{0}", "title": "Follow-Up Strike", "subGroup": "Brawler", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false
+			},
+			"Tech_Dodge": {
+				"name": "Tech_Dodge", "fieldName": "tech_dodge", "group": "Technique", "description": "", "variable": "tch-dodge{0}", "title": "Dodge", "subGroup": "Brawler", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false
+			},
+			"Tech_Momentum": {
+				"name": "Tech_Momentum", "fieldName": "tech_momentum", "group": "Technique", "description": "", "variable": "tch-momentum{0}", "title": "Momentum", "subGroup": "Brawler", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 3, "affinity": "", "isFree": false
+			},
+			"Tech_Flurry of Blows": {
+				"name": "Tech_Flurry of Blows", "fieldName": "tech_flurry_of_blows", "group": "Technique", "description": "", "variable": "tch-flurry_of_blows{0}", "title": "Flurry of Blows", "subGroup": "Brawler", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 3, "affinity": "", "isFree": false, "passiveBoosts": []
+			},
+			"Tech_Marksman": {
+				"name": "Tech_Marksman", "fieldName": "tech_marksman", "group": "Technique", "description": "", "variable": "tch-marksman{0}", "title": "Marksman", "subGroup": "Hunter; Kineticist", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }] },
+					"effect": "HP", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
+					},
+					"effect": "Def_Reflex", "traits": ""
+				},
+				{
+					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
+					},
+					"effect": "Def_Guile", "traits": ""
+				},
+				{
+					"name": "T3", "defense": "", "target": "", "type": "Boost", "subType": "Set", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
+					},
+					"effect": "Accuracy", "traits": ""
+				}]
+			},
+			"Tech_Marksman II": {
+				"name": "Tech_Marksman II", "fieldName": "tech_marksman_ii", "group": "Technique", "description": "", "variable": "tch-marksman_ii{0}", "title": "Marksman II", "subGroup": "Hunter; Kineticist", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "atr-prc", "definitionName": "Attr_PRC", "value": 0, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Disruption", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 }] },
+					"effect": "Cmb_Mv", "traits": ""
+				}]
+			},
+			"Tech_Marksman's Aim": {
+				"name": "Tech_Marksman's Aim", "fieldName": "tech_marksman's_aim", "group": "Technique", "description": "", "variable": "tch-marksman's_aim{0}", "title": "Marksman's Aim", "subGroup": "Hunter; Kineticist", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
 				"isResource": "", "tier": 2, "affinity": "", "isFree": false
 			},
 			"Tech_Hunter": {
@@ -4071,125 +4195,6 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": "", "tier": 2, "affinity": "", "isFree": false
 			},
-			"Tech_Marksman": {
-				"name": "Tech_Marksman", "fieldName": "tech_marksman", "group": "Technique", "description": "", "variable": "tch-marksman{0}", "title": "Marksman", "subGroup": "Hunter; Kineticist", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }] },
-					"effect": "HP", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
-					},
-					"effect": "Def_Reflex", "traits": ""
-				},
-				{
-					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
-					},
-					"effect": "Def_Guile", "traits": ""
-				},
-				{
-					"name": "T3", "defense": "", "target": "", "type": "Boost", "subType": "Set", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
-					},
-					"effect": "Accuracy", "traits": ""
-				}]
-			},
-			"Tech_Marksman II": {
-				"name": "Tech_Marksman II", "fieldName": "tech_marksman_ii", "group": "Technique", "description": "", "variable": "tch-marksman_ii{0}", "title": "Marksman II", "subGroup": "Hunter; Kineticist", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "atr-prc", "definitionName": "Attr_PRC", "value": 0, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Disruption", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 }] },
-					"effect": "Cmb_Mv", "traits": ""
-				}]
-			},
-			"Tech_Marksman's Aim": {
-				"name": "Tech_Marksman's Aim", "fieldName": "tech_marksman's_aim", "group": "Technique", "description": "", "variable": "tch-marksman's_aim{0}", "title": "Marksman's Aim", "subGroup": "Hunter; Kineticist", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false
-			},
-			"Tech_Medic": {
-				"name": "Tech_Medic", "fieldName": "tech_medic", "group": "Technique", "description": "", "variable": "tch-medic{0}", "title": "Medic", "subGroup": "Medic", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Disruption", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Scrutiny", "traits": ""
-				},
-				{
-					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Fortitude", "traits": ""
-				}]
-			},
-			"Tech_Emergency Care": {
-				"name": "Tech_Emergency Care", "fieldName": "tech_emergency_care", "group": "Technique", "description": "", "variable": "tch-emergency_care{0}", "title": "Emergency Care", "subGroup": "Medic", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false
-			},
-			"Tech_Nightingale": {
-				"name": "Tech_Nightingale", "fieldName": "tech_nightingale", "group": "Technique", "description": "", "variable": "tch-nightingale{0}", "title": "Nightingale", "subGroup": "Medic", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false
-			},
-			"Tech_Rhapsody": {
-				"name": "Tech_Rhapsody", "fieldName": "tech_rhapsody", "group": "Technique", "description": "", "variable": "tch-rhapsody{0}", "title": "Rhapsody", "subGroup": "Medic", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 3, "affinity": "", "isFree": false
-			},
 			"Tech_Mage": {
 				"name": "Tech_Mage", "fieldName": "tech_mage", "group": "Technique", "description": "", "variable": "tch-mage{0}", "title": "Mage", "subGroup": "Medic", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
@@ -4255,6 +4260,132 @@ var WuxDef = WuxDef || (function () {
 			},
 			"Tech_Mage's Focus": {
 				"name": "Tech_Mage's Focus", "fieldName": "tech_mage's_focus", "group": "Technique", "description": "", "variable": "tch-mage's_focus{0}", "title": "Mage's Focus", "subGroup": "Medic", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false
+			},
+			"Tech_Medic": {
+				"name": "Tech_Medic", "fieldName": "tech_medic", "group": "Technique", "description": "", "variable": "tch-medic{0}", "title": "Medic", "subGroup": "Medic", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Disruption", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Scrutiny", "traits": ""
+				},
+				{
+					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Fortitude", "traits": ""
+				}]
+			},
+			"Tech_Emergency Care": {
+				"name": "Tech_Emergency Care", "fieldName": "tech_emergency_care", "group": "Technique", "description": "", "variable": "tch-emergency_care{0}", "title": "Emergency Care", "subGroup": "Medic", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false
+			},
+			"Tech_Nightingale": {
+				"name": "Tech_Nightingale", "fieldName": "tech_nightingale", "group": "Technique", "description": "", "variable": "tch-nightingale{0}", "title": "Nightingale", "subGroup": "Medic", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false
+			},
+			"Tech_Rhapsody": {
+				"name": "Tech_Rhapsody", "fieldName": "tech_rhapsody", "group": "Technique", "description": "", "variable": "tch-rhapsody{0}", "title": "Rhapsody", "subGroup": "Medic", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 3, "affinity": "", "isFree": false
+			},
+			"Tech_Strategist": {
+				"name": "Tech_Strategist", "fieldName": "tech_strategist", "group": "Technique", "description": "", "variable": "tch-strategist{0}", "title": "Strategist", "subGroup": "Scholar", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "atr-rsn", "definitionName": "Attr_RSN", "value": 0, "multiplier": 5, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }]
+					},
+					"effect": "WILL", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
+					},
+					"effect": "Def_Disruption", "traits": ""
+				},
+				{
+					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
+					},
+					"effect": "Def_Guile", "traits": ""
+				},
+				{
+					"name": "T3", "defense": "", "target": "", "type": "Boost", "subType": "Set", "dVal": "", "dType": "", "formula": {
+						"workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 },
+						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
+					},
+					"effect": "Charisma", "traits": ""
+				},
+				{
+					"name": "T4", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "atr-rsn", "definitionName": "Attr_RSN", "value": 0, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Scrutiny", "traits": ""
+				}]
+			},
+			"Tech_Strategist II": {
+				"name": "Tech_Strategist II", "fieldName": "tech_strategist_ii", "group": "Technique", "description": "", "variable": "tch-strategist_ii{0}", "title": "Strategist II", "subGroup": "Scholar", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 2, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Insight", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [] },
+					"effect": "", "traits": ""
+				}]
+			},
+			"Tech_Strategist's Aid": {
+				"name": "Tech_Strategist's Aid", "fieldName": "tech_strategist's_aid", "group": "Technique", "description": "", "variable": "tch-strategist's_aid{0}", "title": "Strategist's Aid", "subGroup": "Scholar", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -4344,117 +4475,6 @@ var WuxDef = WuxDef || (function () {
 					"effect": "Def_Fortitude", "traits": ""
 				}]
 			},
-			"Tech_Strategist": {
-				"name": "Tech_Strategist", "fieldName": "tech_strategist", "group": "Technique", "description": "", "variable": "tch-strategist{0}", "title": "Strategist", "subGroup": "Scholar", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "atr-rsn", "definitionName": "Attr_RSN", "value": 0, "multiplier": 5, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }]
-					},
-					"effect": "WILL", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
-					},
-					"effect": "Def_Disruption", "traits": ""
-				},
-				{
-					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "", "definitionName": "", "value": 1, "multiplier": 1, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
-					},
-					"effect": "Def_Guile", "traits": ""
-				},
-				{
-					"name": "T3", "defense": "", "target": "", "type": "Boost", "subType": "Set", "dVal": "", "dType": "", "formula": {
-						"workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 },
-						{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }]
-					},
-					"effect": "Charisma", "traits": ""
-				},
-				{
-					"name": "T4", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "atr-rsn", "definitionName": "Attr_RSN", "value": 0, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Scrutiny", "traits": ""
-				}]
-			},
-			"Tech_Strategist II": {
-				"name": "Tech_Strategist II", "fieldName": "tech_strategist_ii", "group": "Technique", "description": "", "variable": "tch-strategist_ii{0}", "title": "Strategist II", "subGroup": "Scholar", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Insight", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [] },
-					"effect": "", "traits": ""
-				}]
-			},
-			"Tech_Strategist's Aid": {
-				"name": "Tech_Strategist's Aid", "fieldName": "tech_strategist's_aid", "group": "Technique", "description": "", "variable": "tch-strategist's_aid{0}", "title": "Strategist's Aid", "subGroup": "Scholar", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 2, "affinity": "", "isFree": false
-			},
-			"Tech_Bard": {
-				"name": "Tech_Bard", "fieldName": "tech_bard", "group": "Technique", "description": "", "variable": "tch-bard{0}", "title": "Bard", "subGroup": "Bard", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Resolve", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Scrutiny", "traits": ""
-				}]
-			},
-			"Tech_Orator": {
-				"name": "Tech_Orator", "fieldName": "tech_orator", "group": "Technique", "description": "", "variable": "tch-orator{0}", "title": "Orator", "subGroup": "Orator", "descriptions": [""],
-				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
-					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
-					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
-					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
-					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
-				},
-				"linkedGroups": [],
-				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
-					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }] },
-					"effect": "WILL", "traits": ""
-				},
-				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Guile", "traits": ""
-				},
-				{
-					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Notice", "traits": ""
-				}]
-			},
 			"Tech_Advocate": {
 				"name": "Tech_Advocate", "fieldName": "tech_advocate", "group": "Technique", "description": "", "variable": "tch-advocate{0}", "title": "Advocate", "subGroup": "Bard; Orator", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
@@ -4522,8 +4542,8 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": "", "tier": 2, "affinity": "", "isFree": false
 			},
-			"Tech_Artisan ": {
-				"name": "Tech_Artisan ", "fieldName": "tech_artisan_", "group": "Technique", "description": "", "variable": "tch-artisan_{0}", "title": "Artisan ", "subGroup": "Artisan ", "descriptions": [""],
+			"Tech_Bard": {
+				"name": "Tech_Bard", "fieldName": "tech_bard", "group": "Technique", "description": "", "variable": "tch-bard{0}", "title": "Bard", "subGroup": "Bard", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -4537,11 +4557,11 @@ var WuxDef = WuxDef || (function () {
 				},
 				{
 					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Notice", "traits": ""
+					"effect": "Def_Scrutiny", "traits": ""
 				}]
 			},
-			"Tech_Waymaker": {
-				"name": "Tech_Waymaker", "fieldName": "tech_waymaker", "group": "Technique", "description": "", "variable": "tch-waymaker{0}", "title": "Waymaker", "subGroup": "Waymaker", "descriptions": [""],
+			"Tech_Orator": {
+				"name": "Tech_Orator", "fieldName": "tech_orator", "group": "Technique", "description": "", "variable": "tch-orator{0}", "title": "Orator", "subGroup": "Orator", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -4551,19 +4571,19 @@ var WuxDef = WuxDef || (function () {
 				"linkedGroups": [],
 				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
 					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }] },
-					"effect": "HP", "traits": ""
+					"effect": "WILL", "traits": ""
 				},
 				{
-					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Reflex", "traits": ""
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Guile", "traits": ""
 				},
 				{
 					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
-					"effect": "Def_Resolve", "traits": ""
+					"effect": "Def_Notice", "traits": ""
 				}]
 			},
-			"Tech_Journeyman": {
-				"name": "Tech_Journeyman", "fieldName": "tech_journeyman", "group": "Technique", "description": "", "variable": "tch-journeyman{0}", "title": "Journeyman", "subGroup": "Artisan; Waymaker", "descriptions": [""],
+			"Tech_Waymaker": {
+				"name": "Tech_Waymaker", "fieldName": "tech_waymaker", "group": "Technique", "description": "", "variable": "tch-waymaker{0}", "title": "Waymaker", "subGroup": "Artisan; Journeyman", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -4604,8 +4624,8 @@ var WuxDef = WuxDef || (function () {
 					"effect": "Accuracy", "traits": ""
 				}]
 			},
-			"Tech_Journeyman II": {
-				"name": "Tech_Journeyman II", "fieldName": "tech_journeyman_ii", "group": "Technique", "description": "", "variable": "tch-journeyman_ii{0}", "title": "Journeyman II", "subGroup": "Artisan; Waymaker", "descriptions": [""],
+			"Tech_Waymaker II": {
+				"name": "Tech_Waymaker II", "fieldName": "tech_waymaker_ii", "group": "Technique", "description": "", "variable": "tch-waymaker_ii{0}", "title": "Waymaker II", "subGroup": "Artisan; Journeyman", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -4620,6 +4640,46 @@ var WuxDef = WuxDef || (function () {
 				{
 					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 2, "multiplier": 1, "max": 0 }] },
 					"effect": "Initiative", "traits": ""
+				}]
+			},
+			"Tech_Artisan ": {
+				"name": "Tech_Artisan ", "fieldName": "tech_artisan_", "group": "Technique", "description": "", "variable": "tch-artisan_{0}", "title": "Artisan ", "subGroup": "Artisan ", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Resolve", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Notice", "traits": ""
+				}]
+			},
+			"Tech_Journeyman": {
+				"name": "Tech_Journeyman", "fieldName": "tech_journeyman", "group": "Technique", "description": "", "variable": "tch-journeyman{0}", "title": "Journeyman", "subGroup": "Journeyman", "descriptions": [""],
+				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
+					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
+					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
+					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
+					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
+				},
+				"linkedGroups": [],
+				"isResource": "", "tier": 1, "affinity": "", "isFree": false, "passiveBoosts": [{
+					"name": "T0", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 5, "max": 0 }] },
+					"effect": "HP", "traits": ""
+				},
+				{
+					"name": "T1", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Reflex", "traits": ""
+				},
+				{
+					"name": "T2", "defense": "", "target": "", "type": "Boost", "subType": "", "dVal": "", "dType": "", "formula": { "workers": [{ "variableName": "", "definitionName": "", "value": 3, "multiplier": 1, "max": 0 }] },
+					"effect": "Def_Resolve", "traits": ""
 				}]
 			},
 			"Tech_Skulk Away": {
@@ -4674,7 +4734,8 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
 				},
-				"linkedGroups": [],
+				"linkedGroups": []
+				,
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
 			"Tech_Eclectic Knowledge": {
@@ -4733,8 +4794,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "tier": 1, "affinity": "", "isFree": false
 			},
 			"Tech_Insist": {
-				"name": "Tech_Insist", "fieldName": "tech_insist", "group": "Technique", "description": "", "variable": "tch-insist{0}", "title": "Insist", "subGroup": "Inspiring Presence", "descriptions": [""]
-				,
+				"name": "Tech_Insist", "fieldName": "tech_insist", "group": "Technique", "description": "", "variable": "tch-insist{0}", "title": "Insist", "subGroup": "Inspiring Presence", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -5405,7 +5465,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
 			"Tech_Compromise": {
-				"name": "Tech_Compromise", "fieldName": "tech_compromise", "group": "Technique", "description": "", "variable": "tch-compromise{0}", "title": "Compromise", "subGroup": "", "descriptions": [""],
+				"name": "Tech_Compromise", "fieldName": "tech_compromise", "group": "Technique", "description": "", "variable": "tch-compromise{0}", "title": "Compromise", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -5467,8 +5528,7 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
 				},
-				"linkedGroups": []
-				,
+				"linkedGroups": [],
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
 			"Tech_Close it Out": {
@@ -6143,7 +6203,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
 			"Tech_Wind Bullet": {
-				"name": "Tech_Wind Bullet", "fieldName": "tech_wind_bullet", "group": "Technique", "description": "", "variable": "tch-wind_bullet{0}", "title": "Wind Bullet", "subGroup": "", "descriptions": [""],
+				"name": "Tech_Wind Bullet", "fieldName": "tech_wind_bullet", "group": "Technique", "description": "", "variable": "tch-wind_bullet{0}", "title": "Wind Bullet", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -6209,8 +6270,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
 			"Tech_Nightfall": {
-				"name": "Tech_Nightfall", "fieldName": "tech_nightfall", "group": "Technique", "description": "", "variable": "tch-nightfall{0}", "title": "Nightfall", "subGroup": "", "descriptions": [""]
-				,
+				"name": "Tech_Nightfall", "fieldName": "tech_nightfall", "group": "Technique", "description": "", "variable": "tch-nightfall{0}", "title": "Nightfall", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -6888,7 +6948,8 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
 				},
-				"linkedGroups": [],
+				"linkedGroups": []
+				,
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
 			"Tech_Entangle": {
@@ -6954,8 +7015,7 @@ var WuxDef = WuxDef || (function () {
 					{ "variableName": "adv-ap_technique", "definitionName": "AdvancementTechnique", "value": 0, "multiplier": 1, "max": 0 },
 					{ "variableName": "trn-tp_technique", "definitionName": "TrainingTechniques", "value": 0, "multiplier": 1, "max": 0 }]
 				},
-				"linkedGroups": []
-				,
+				"linkedGroups": [],
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
 			"Tech_Cold Field": {
@@ -7069,7 +7129,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
 			"Tech_Wide Pressure": {
-				"name": "Tech_Wide Pressure", "fieldName": "tech_wide_pressure", "group": "Technique", "description": "", "variable": "tch-wide_pressure{0}", "title": "Wide Pressure", "subGroup": "", "descriptions": [""],
+				"name": "Tech_Wide Pressure", "fieldName": "tech_wide_pressure", "group": "Technique", "description": "", "variable": "tch-wide_pressure{0}", "title": "Wide Pressure", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -7619,7 +7679,8 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
 			"Tech_Martial Training": {
-				"name": "Tech_Martial Training", "fieldName": "tech_martial_training", "group": "Technique", "description": "", "variable": "tch-martial_training{0}", "title": "Martial Training", "subGroup": "", "descriptions": [""],
+				"name": "Tech_Martial Training", "fieldName": "tech_martial_training", "group": "Technique", "description": "", "variable": "tch-martial_training{0}", "title": "Martial Training", "subGroup": "", "descriptions": [""]
+				,
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -7685,8 +7746,7 @@ var WuxDef = WuxDef || (function () {
 				"isResource": "", "tier": 0, "affinity": "", "isFree": true
 			},
 			"Tech_Vitality Boost": {
-				"name": "Tech_Vitality Boost", "fieldName": "tech_vitality_boost", "group": "Technique", "description": "", "variable": "tch-vitality_boost{0}", "title": "Vitality Boost", "subGroup": "", "descriptions": [""]
-				,
+				"name": "Tech_Vitality Boost", "fieldName": "tech_vitality_boost", "group": "Technique", "description": "", "variable": "tch-vitality_boost{0}", "title": "Vitality Boost", "subGroup": "", "descriptions": [""],
 				"abbreviation": "", "baseFormula": "", "modifiers": "", "formula": {
 					"workers": [{ "variableName": "adv-level", "definitionName": "Level", "value": 0, "multiplier": 1, "max": 4 },
 					{ "variableName": "adv-cr", "definitionName": "CR", "value": 0, "multiplier": 3, "max": 0 },
@@ -7797,9 +7857,9 @@ var WuxDef = WuxDef || (function () {
 			}
 		},
 		sortingGroups = {
-			"group": { "Type": ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "SeverityRank", "DamageType", "Trait", "Status", "Condition", "Emotion", "Boon"], "VariableMod": ["_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error"], "AffinityType": ["Wood", "Fire", "Earth", "Metal", "Water"], "InnateDefenseType": ["BOD", "PRC", "QCK"], "InnateSenseType": ["CNV", "INT", "RSN"], "AttributeValue": ["AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad"], "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3"], "LoreTier": ["LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3"], "GeneralLoreTier": ["GeneralLoreTier0", "GeneralLoreTier1"], "LoreCategory": ["Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "LoreCat_Academics", "LoreCat_Profession", "LoreCat_Craftmanship", "LoreCat_Geography", "LoreCat_History", "LoreCat_Culture", "LoreCat_Religion"], "ChatType": ["Speak", "Whisper", "Yell", "Think", "Describe"], "PageSet": ["PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training"], "Page": ["Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Page_Sidebar"], "Title": ["Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Skills", "Title_Emotes", "Title_Outfits", "Title_TechEffect", "Title_TechDC", "Title_TechDefense", "Title_Boon"], "Chat": ["Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "Chat_OutfitDefault", "Chat_OutfitDefaultURL"], "Untyped": ["RepeatingActiveEmotes", "RepeatingOutfits", "Resistance", "WeaponDamage", "MvCharge", "Dash", "MaxDash", "RepeatingInfluences"], "Advancement": ["Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques"], "Training": ["TrainingKnowledge", "TrainingTechniques", "PP"], "Attribute": ["Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN"], "Defense": ["Def_Brace", "Def_Fortitude", "Def_Disruption", "Def_Hide", "Def_Reflex", "Def_Evasion"], "Sense": ["Def_Insight", "Def_Notice", "Def_Guile", "Def_Scrutiny", "Def_Resolve", "Def_Freewill"], "Special Defense": ["CombatDefense", "SocialSense"], "Result": ["WillBreak"], "Origin": ["SheetName", "FullName", "DisplayName", "IntroName", "Background", "Age", "Gender", "Homeland"], "OriginStat": ["Affinity", "InnateDefense", "InnateSense"], "Boon": ["Boon_Rest", "Boon_Nourishment", "Boon_Inspiration"], "General": ["HP", "WILL", "EN", "Initiative", "Recall", "Power", "Accuracy", "Artistry", "Charisma", "Carrying Capacity"], "Combat": ["Cmb_Chakra", "Cmb_HV", "Cmb_Armor", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "Cmb_Mv", "Cmb_MvPotency"], "": ["Chakra"], "Social": ["Soc_Favor", "Soc_Influence", "Soc_Severity", "Soc_RequestCheck", "Soc_SupportInfluence", "Soc_OpposeInfluence", "Soc_Patience"], "InfluenceType": ["InfluenceTrait", "InfluenceIdeal", "InfluenceBond", "InfluenceGoal"], "SeverityRank": ["Svr_LowSeverity", "Svr_ModerateSeverity", "Svr_HighSeverity"], "DamageType": ["Dmg_Burn", "Dmg_Cold", "Dmg_Energy", "Dmg_Fire", "Dmg_Force", "Dmg_Piercing", "Dmg_Shock", "Dmg_Tension", "Dmg_Weapon"], "Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Light", "Trait_Sharp", "Trait_Sturdy", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Transparent"], "Style": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Maneuver", "Style_Basic Social", "Style_Charm Unrestrained", "Style_Inspiring Presence", "Style_Deft Negotiator", "Style_Abrasive Wit", "Style_Tyrannical Voice", "Style_Calming Empathy"], "Skill": ["Skill_Acrobatics", "Skill_Alchemy", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Cook", "Skill_Demoralize", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Inspire", "Skill_Might", "Skill_Persuade", "Skill_Pilot", "Skill_Resonance", "Skill_Search", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker", "Skill_Traversal", "Skill_Warding"], "Language": ["Lang_Minere", "Lang_Junal", "Lang_Apollen", "Lang_Lib", "Lang_Cert", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq", "Lang_Kleikan", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca", "Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan"], "Lore": ["Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Warrior", "Job_Guardian", "Job_Brawler", "Job_Rogue", "Job_Hunter", "Job_Kineticist", "Job_Medic", "Job_Scholar", "Job_Investigator", "Job_Bard", "Job_Orator", "Job_Artisan", "Job_Waymaker", "Job_Physician"], "JobStyle": ["JStyle_Warrior", "JStyle_Guardian", "JStyle_Brawler", "JStyle_Rogue", "JStyle_Hunter", "JStyle_Kineticist", "JStyle_Medic", "JStyle_Scholar", "JStyle_Investigator", "JStyle_Bard", "JStyle_Orator", "JStyle_Artisan", "JStyle_Waymaker", "JStyle_Physician"], "Status": ["Stat_Downed", "Stat_Dying", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Invisible", "Stat_Multiact", "Stat_Restrained", "Stat_Unconscious", "Stat_Aflame", "Stat_Chilled", "Stat_Delayed", "Stat_Empowered", "Stat_Encumbered", "Stat_Hasted", "Stat_Hindered", "Stat_Immobilized", "Stat_Impaired", "Stat_Launched", "Stat_Paralyzed", "Stat_Persevering", "Stat_Prone", "Stat_Sickened", "Stat_Stunned", "Stat_Angered", "Stat_Disgusted", "Stat_Doubt", "Stat_Encouraged", "Stat_Frightened", "Stat_Flustered", "Stat_Receptive", "Stat_Joyful", "Stat_Saddened", "Stat_Surprised"], "Technique": ["Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Rogue", "Tech_Sneak Attack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Bard", "Tech_Orator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Artisan ", "Tech_Waymaker", "Tech_Journeyman", "Tech_Journeyman II", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"] }, "subGroup": { "": ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "SeverityRank", "DamageType", "Trait", "Status", "Condition", "Emotion", "Boon", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "Speak", "Whisper", "Yell", "Think", "Describe", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Page_Sidebar", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Skills", "Title_Emotes", "Title_Outfits", "Title_TechEffect", "Title_TechDC", "Title_TechDefense", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "WillBreak", "SheetName", "FullName", "DisplayName", "IntroName", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "Title_Boon", "Boon_Rest", "Boon_Nourishment", "Boon_Inspiration", "HP", "WILL", "EN", "Cmb_Chakra", "Chakra", "Initiative", "Recall", "Power", "Accuracy", "Artistry", "Charisma", "Carrying Capacity", "Cmb_HV", "Cmb_Armor", "Resistance", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "WeaponDamage", "Cmb_Mv", "Cmb_MvPotency", "MvCharge", "Dash", "MaxDash", "Soc_Favor", "RepeatingInfluences", "Soc_Influence", "InfluenceTrait", "InfluenceIdeal", "InfluenceBond", "InfluenceGoal", "Soc_Severity", "Svr_LowSeverity", "Svr_ModerateSeverity", "Svr_HighSeverity", "Soc_RequestCheck", "Soc_SupportInfluence", "Soc_OpposeInfluence", "Soc_Patience", "Dmg_Burn", "Dmg_Cold", "Dmg_Energy", "Dmg_Fire", "Dmg_Force", "Dmg_Piercing", "Dmg_Shock", "Dmg_Tension", "Dmg_Weapon", "Job_Physician", "JStyle_Physician", "Tech_Marksman's Sight", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "Attribute": ["Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN"], "Combat Defense": ["Def_Brace", "Def_Disruption", "Def_Reflex"], "Defense": ["Def_Fortitude", "Def_Hide", "Def_Evasion"], "Social Sense": ["Def_Insight", "Def_Guile", "Def_Resolve"], "Sense": ["Def_Notice", "Def_Scrutiny", "Def_Freewill"], "Special Defense": ["CombatDefense", "SocialSense"], "Technique Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall"], "Item Trait": ["Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Light", "Trait_Sharp", "Trait_Sturdy"], "Material Trait": ["Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Transparent"], "Basic": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Maneuver", "Style_Basic Social"], "Standard": ["Style_Charm Unrestrained", "Style_Inspiring Presence", "Style_Deft Negotiator", "Style_Abrasive Wit", "Style_Tyrannical Voice", "Style_Calming Empathy"], "Movement": ["Skill_Acrobatics", "Skill_Sneak", "Skill_Traversal"], "Craft": ["Skill_Alchemy", "Skill_Build", "Skill_Cook"], "Scan": ["Skill_Analyze", "Skill_Resonance", "Skill_Search"], "Cast": ["Skill_Channel", "Skill_Enchant", "Skill_Warding"], "Social": ["Skill_Charm", "Skill_Demoralize", "Skill_Empathy", "Skill_Inspire", "Skill_Persuade"], "Athletics": ["Skill_Finesse", "Skill_Might", "Skill_Shoot", "Skill_Skirmish", "Skill_Throw"], "Device": ["Skill_Pilot", "Skill_Tinker"], "Walthair": ["Lang_Minere", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca"], "Aridsha": ["Lang_Junal", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira"], "Khem": ["Lang_Apollen", "Lang_Kleikan"], "Colswei": ["Lang_Lib"], "Ceres": ["Lang_Cert", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq"], "Special": ["Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan"], "Academics": ["LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology"], "Profession": ["LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining"], "Craftmanship": ["LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving"], "Geography": ["LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane"], "History": ["LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History"], "Culture": ["LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater"], "Religion": ["LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Vanguard": ["Job_Warrior", "Job_Guardian", "JStyle_Warrior", "JStyle_Guardian"], "Athlete": ["Job_Brawler", "Job_Rogue", "JStyle_Brawler", "JStyle_Rogue"], "Marksman": ["Job_Hunter", "Job_Kineticist", "JStyle_Hunter", "JStyle_Kineticist"], "Mage": ["Job_Medic", "JStyle_Medic"], "Strategist": ["Job_Scholar", "Job_Investigator", "JStyle_Scholar", "JStyle_Investigator"], "Advocate": ["Job_Bard", "Job_Orator", "JStyle_Bard", "JStyle_Orator"], "Journeyman": ["Job_Artisan", "Job_Waymaker", "JStyle_Artisan", "JStyle_Waymaker"], "Status": ["Stat_Downed", "Stat_Dying", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Invisible", "Stat_Multiact", "Stat_Restrained", "Stat_Unconscious"], "Condition": ["Stat_Aflame", "Stat_Chilled", "Stat_Delayed", "Stat_Empowered", "Stat_Encumbered", "Stat_Hasted", "Stat_Hindered", "Stat_Immobilized", "Stat_Impaired", "Stat_Launched", "Stat_Paralyzed", "Stat_Persevering", "Stat_Prone", "Stat_Sickened", "Stat_Stunned"], "Emotion": ["Stat_Angered", "Stat_Disgusted", "Stat_Doubt", "Stat_Encouraged", "Stat_Frightened", "Stat_Flustered", "Stat_Receptive", "Stat_Joyful", "Stat_Saddened", "Stat_Surprised"], "Basic Action": ["Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash"], "Basic Support": ["Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind"], "Basic Maneuver": ["Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge"], "Basic Activity": ["Tech_Reposition"], "Basic Attack": ["Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike"], "Basic Social": ["Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive"], "Warrior": ["Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted"], "Guardian": ["Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior"], "Warrior; Guardian": ["Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade"], "Rogue": ["Tech_Rogue", "Tech_Sneak Attack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II"], "Brawler": ["Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows"], "Rogue; Brawler": ["Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash"], "Hunter": ["Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Spellshot"], "Kineticist": ["Tech_Follow-Up Shot", "Tech_Kineticist", "Tech_Follow-Up Throw"], "Hunter; Kineticist": ["Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim"], "Medic": ["Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus"], "Scholar": ["Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid"], "Investigator": ["Tech_Investigator"], "Bard": ["Tech_Bard"], "Orator": ["Tech_Orator"], "Bard; Orator": ["Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm"], "Artisan ": ["Tech_Artisan "], "Waymaker": ["Tech_Waymaker"], "Artisan; Waymaker": ["Tech_Journeyman", "Tech_Journeyman II"], "Deft Negotiator; Tyrannical Voice": ["Tech_Build Pressure", "Tech_Proposal"], "Charm Unrestrained; Calming Empathy": ["Tech_Appeal"], "Inspiring Presence": ["Tech_Insist", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II"], "Abrasive Wit; Tyrannical Voice": ["Tech_Dismiss"], "Charm Unrestrained": ["Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II"], "Deft Negotiator": ["Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push"], "Abrasive Wit": ["Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger"], "Tyrannical Voice": ["Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage"], "Calming Empathy": ["Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy"], "Ki Extension": ["Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +"], "Swordplay": ["Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II"] }, "formulaMods": {
-				"CR": ["Attribute", "Skill", "Job", "Technique", "HP", "WILL", "Cmb_Chakra", "Initiative", "Recall", "Power", "Accuracy", "Artistry", "Charisma", "Cmb_HV", "Job_Warrior", "Job_Guardian", "Job_Brawler", "Job_Rogue", "Job_Hunter", "Job_Kineticist", "Job_Medic", "Job_Scholar", "Job_Investigator", "Job_Bard", "Job_Orator", "Job_Artisan", "Job_Waymaker", "Job_Physician", "Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Rogue", "Tech_Sneak Attack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Bard", "Tech_Orator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Artisan ", "Tech_Waymaker", "Tech_Journeyman", "Tech_Journeyman II", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"]
-				, "Level": ["Skill", "Technique", "Advancement", "HP", "WILL", "Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Rogue", "Tech_Sneak Attack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Bard", "Tech_Orator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Artisan ", "Tech_Waymaker", "Tech_Journeyman", "Tech_Journeyman II", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "AdvancementSkill": ["Skill"], "AdvancementJob": ["Job", "Job_Warrior", "Job_Guardian", "Job_Brawler", "Job_Rogue", "Job_Hunter", "Job_Kineticist", "Job_Medic", "Job_Scholar", "Job_Investigator", "Job_Bard", "Job_Orator", "Job_Artisan", "Job_Waymaker", "Job_Physician"], "TrainingKnowledge": ["Knowledge"], "AdvancementTechnique": ["Technique", "Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Rogue", "Tech_Sneak Attack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Bard", "Tech_Orator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Artisan ", "Tech_Waymaker", "Tech_Journeyman", "Tech_Journeyman II", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "TrainingTechniques": ["Technique", "Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Rogue", "Tech_Sneak Attack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Bard", "Tech_Orator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Artisan ", "Tech_Waymaker", "Tech_Journeyman", "Tech_Journeyman II", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "Attr_BOD": ["Def_Brace", "Def_Fortitude", "HP", "Power", "Carrying Capacity", "Skill_Enchant", "Skill_Might", "Skill_Throw", "Skill_Traversal"], "Attr_PRC": ["Def_Disruption", "Def_Hide", "Accuracy", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Tinker"], "Attr_QCK": ["Def_Reflex", "Def_Evasion", "Initiative", "Skill_Acrobatics", "Skill_Finesse", "Skill_Pilot", "Skill_Warding"], "Attr_INT": ["Def_Insight", "Def_Notice", "Artistry", "Skill_Charm", "Skill_Cook", "Skill_Empathy", "Skill_Search"], "Attr_RSN": ["Def_Guile", "Def_Scrutiny", "Recall", "Skill_Alchemy", "Skill_Analyze", "Skill_Build", "Skill_Persuade"], "Attr_CNV": ["Def_Resolve", "Def_Freewill", "WILL", "Charisma", "Cmb_HV", "Skill_Channel", "Skill_Demoralize", "Skill_Inspire", "Skill_Resonance"], "Recall": ["LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"]
+			"group": { "Type": ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "SeverityRank", "DamageType", "Trait", "Status", "Condition", "Emotion", "Boon"], "VariableMod": ["_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error"], "AffinityType": ["Wood", "Fire", "Earth", "Metal", "Water"], "InnateDefenseType": ["BOD", "PRC", "QCK"], "InnateSenseType": ["CNV", "INT", "RSN"], "AttributeValue": ["AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad"], "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3"], "LoreTier": ["LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3"], "GeneralLoreTier": ["GeneralLoreTier0", "GeneralLoreTier1"], "LoreCategory": ["Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "LoreCat_Academics", "LoreCat_Profession", "LoreCat_Craftmanship", "LoreCat_Geography", "LoreCat_History", "LoreCat_Culture", "LoreCat_Religion"], "ChatType": ["Speak", "Whisper", "Yell", "Think", "Describe"], "PageSet": ["PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training"], "Page": ["Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Page_Sidebar"], "Title": ["Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Skills", "Title_Emotes", "Title_Outfits", "Title_TechEffect", "Title_TechDC", "Title_TechDefense", "Title_Boon"], "Chat": ["Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "Chat_OutfitDefault", "Chat_OutfitDefaultURL"], "Untyped": ["RepeatingActiveEmotes", "RepeatingOutfits", "Resistance", "WeaponDamage", "MvCharge", "Dash", "MaxDash", "RepeatingInfluences"], "Advancement": ["Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques"], "Training": ["TrainingKnowledge", "TrainingTechniques", "PP"], "Attribute": ["Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN"], "Defense": ["Def_Brace", "Def_Fortitude", "Def_Disruption", "Def_Hide", "Def_Reflex", "Def_Evasion"], "Sense": ["Def_Insight", "Def_Notice", "Def_Guile", "Def_Scrutiny", "Def_Resolve", "Def_Freewill"], "Special Defense": ["CombatDefense", "SocialSense"], "Result": ["WillBreak"], "Origin": ["SheetName", "FullName", "DisplayName", "IntroName", "Background", "Age", "Gender", "Homeland"], "OriginStat": ["Affinity", "InnateDefense", "InnateSense"], "Boon": ["Boon_Rest", "Boon_Nourishment", "Boon_Inspiration"], "General": ["HP", "WILL", "EN", "Initiative", "Recall", "Power", "Accuracy", "Artistry", "Charisma", "Carrying Capacity"], "Combat": ["Cmb_Chakra", "Cmb_HV", "Cmb_Armor", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "Cmb_Mv", "Cmb_MvPotency"], "": ["Chakra"], "Social": ["Soc_Favor", "Soc_Influence", "Soc_InfluenceType", "Soc_Severity", "Soc_RequestCheck", "Soc_SupportInfluence", "Soc_OpposeInfluence", "Soc_Patience"], "InfluenceType": ["InfluenceTrait", "InfluenceIdeal", "InfluenceBond", "InfluenceGoal"], "SeverityRank": ["Svr_LowSeverity", "Svr_ModerateSeverity", "Svr_HighSeverity"], "DamageType": ["Dmg_Burn", "Dmg_Cold", "Dmg_Energy", "Dmg_Fire", "Dmg_Force", "Dmg_Piercing", "Dmg_Shock", "Dmg_Tension", "Dmg_Weapon"], "Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall", "Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Light", "Trait_Sharp", "Trait_Sturdy", "Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Transparent"], "Style": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Maneuver", "Style_Basic Social", "Style_Charm Unrestrained", "Style_Inspiring Presence", "Style_Deft Negotiator", "Style_Abrasive Wit", "Style_Tyrannical Voice", "Style_Calming Empathy"], "Skill": ["Skill_Acrobatics", "Skill_Alchemy", "Skill_Analyze", "Skill_Build", "Skill_Channel", "Skill_Charm", "Skill_Cook", "Skill_Deception", "Skill_Demoralize", "Skill_Endurance", "Skill_Empathy", "Skill_Enchant", "Skill_Finesse", "Skill_Grappling", "Skill_Heal", "Skill_Inspire", "Skill_Jump", "Skill_Might", "Skill_Palming", "Skill_Pilot", "Skill_Rationalize", "Skill_Resonance", "Skill_Search", "Skill_Shape", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker", "Skill_Warding"], "Language": ["Lang_Minere", "Lang_Junal", "Lang_Apollen", "Lang_Lib", "Lang_Cert", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq", "Lang_Kleikan", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca", "Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan"], "Lore": ["Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Job": ["Job_Warrior", "Job_Guardian", "Job_Brawler", "Job_Rogue", "Job_Hunter", "Job_Kineticist", "Job_Medic", "Job_Scholar", "Job_Investigator", "Job_Bard", "Job_Orator", "Job_Artisan", "Job_Waymaker", "Job_Physician"], "JobStyle": ["JStyle_Warrior", "JStyle_Guardian", "JStyle_Brawler", "JStyle_Rogue", "JStyle_Hunter", "JStyle_Kineticist", "JStyle_Medic", "JStyle_Scholar", "JStyle_Investigator", "JStyle_Bard", "JStyle_Orator", "JStyle_Artisan", "JStyle_Waymaker", "JStyle_Physician"], "Status": ["Stat_Downed", "Stat_Dying", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Invisible", "Stat_Multiact", "Stat_Restrained", "Stat_Unconscious", "Stat_Aflame", "Stat_Chilled", "Stat_Delayed", "Stat_Empowered", "Stat_Encumbered", "Stat_Hasted", "Stat_Hindered", "Stat_Immobilized", "Stat_Impaired", "Stat_Launched", "Stat_Paralyzed", "Stat_Persevering", "Stat_Prone", "Stat_Sickened", "Stat_Stunned", "Stat_Angered", "Stat_Disgusted", "Stat_Doubt", "Stat_Encouraged", "Stat_Frightened", "Stat_Flustered", "Stat_Receptive", "Stat_Joyful", "Stat_Saddened", "Stat_Surprised"], "Technique": ["Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Rogue", "Tech_Sneak Att,ack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Bard", "Tech_Orator", "Tech_Waymaker", "Tech_Waymaker II", "Tech_Artisan ", "Tech_Journeyman", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"] }, "subGroup": { "": ["Attribute", "Skill", "Job", "JobStyle", "Knowledge", "Language", "LoreCategory", "Lore", "Style", "StyleType", "Technique", "PageSet", "Page", "Title", "Advancement", "Training", "Defense", "Sense", "AffinityType", "InnateDefenseType", "InnateSenseType", "General", "Chat", "Combat", "Social", "SeverityRank", "DamageType", "Trait", "Status", "Condition", "Emotion", "Boon", "_max", "_true", "_rank", "_build", "_filter", "_subfilter", "_expand", "_tab", "_page", "_info", "_exit", "_finish", "_origin", "_learn", "_pts", "_tech", "_expertise", "_gear", "_affinity", "_error", "Wood", "Fire", "Earth", "Metal", "Water", "BOD", "PRC", "QCK", "CNV", "INT", "RSN", "AttributeValueMediocre", "AttributeValueGreat", "AttributeValueGood", "AttributeValueAverage", "AttributeValueBad", "JobTier0", "JobTier1", "JobTier2", "JobTier3", "LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3", "GeneralLoreTier0", "GeneralLoreTier1", "Academics", "Profession", "Craftmanship", "Geography", "History", "Culture", "Religion", "Speak", "Whisper", "Yell", "Think", "Describe", "PageSet_Character Creator", "PageSet_Core", "PageSet_TechType", "PageSet_Advancement", "PageSet_Training", "Page_Origin", "Page_Jobs", "Page_Skills", "Page_Knowledge", "Page_Attributes", "Page_Styles", "Page_LearnTechniques", "Page_SetStyles", "Page_Character", "Page_Overview", "Page_Details", "Page_Chat", "Page_Options", "Page_Gear", "Page_Actions", "Page_Training", "Page_Advancement", "Page_Sidebar", "Title_Origin", "Title_OriginStats", "Title_OriginAdvancement", "Title_OriginTraining", "Title_Advancement", "Title_AdvancementConversion", "Title_Training", "Title_TrainingConversion", "Title_ShowTechnique", "Title_UseTechnique", "Title_Chat", "Title_LanguageSelect", "Title_Skills", "Title_Emotes", "Title_Outfits", "Title_TechEffect", "Title_TechDC", "Title_TechDefense", "Chat_Type", "Chat_Target", "Chat_Message", "Chat_Language", "Chat_LanguageTag", "Chat_PostContent", "RepeatingActiveEmotes", "Chat_SetId", "Chat_Emotes", "Chat_DefaultEmote", "Chat_PostName", "Chat_PostURL", "Chat_OutfitName", "Chat_OutfitEmotes", "Chat_EmoteName", "Chat_EmoteURL", "RepeatingOutfits", "Chat_OutfitDefault", "Chat_OutfitDefaultURL", "Level", "CR", "XP", "AdvancementJob", "AdvancementSkill", "AdvancementTechnique", "JobTier", "JobTechniques", "LearnStyle", "StyleTechniques", "StyleFreeTechniques", "TrainingKnowledge", "TrainingTechniques", "PP", "WillBreak", "SheetName", "FullName", "DisplayName", "IntroName", "Background", "Age", "Gender", "Homeland", "Affinity", "InnateDefense", "InnateSense", "Title_Boon", "Boon_Rest", "Boon_Nourishment", "Boon_Inspiration", "HP", "WILL", "EN", "Cmb_Chakra", "Chakra", "Initiative", "Recall", "Power", "Accuracy", "Artistry", "Charisma", "Carrying Capacity", "Cmb_HV", "Cmb_Armor", "Resistance", "Cmb_ResistanceDesc", "Cmb_WeaknessDesc", "Cmb_Vitality", "Cmb_Surge", "WeaponDamage", "Cmb_Mv", "Cmb_MvPotency", "MvCharge", "Dash", "MaxDash", "Soc_Favor", "RepeatingInfluences", "Soc_Influence", "Soc_InfluenceType", "InfluenceTrait", "InfluenceIdeal", "InfluenceBond", "InfluenceGoal", "Soc_Severity", "Svr_LowSeverity", "Svr_ModerateSeverity", "Svr_HighSeverity", "Soc_RequestCheck", "Soc_SupportInfluence", "Soc_OpposeInfluence", "Soc_Patience", "Dmg_Burn", "Dmg_Cold", "Dmg_Energy", "Dmg_Fire", "Dmg_Force", "Dmg_Piercing", "Dmg_Shock", "Dmg_Tension", "Dmg_Weapon", "Job_Physician", "JStyle_Physician", "Tech_Marksman's Sight", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "Attribute": ["Attr_BOD", "Attr_PRC", "Attr_QCK", "Attr_CNV", "Attr_INT", "Attr_RSN"], "Combat Defense": ["Def_Brace", "Def_Disruption", "Def_Reflex"], "Defense": ["Def_Fortitude", "Def_Hide", "Def_Evasion"], "Social Sense": ["Def_Insight", "Def_Guile", "Def_Resolve"], "Sense": ["Def_Notice", "Def_Scrutiny", "Def_Freewill"], "Special Defense": ["CombatDefense", "SocialSense"], "Technique Trait": ["Trait_Accurate", "Trait_Affinity", "Trait_Affinity+", "Trait_AP", "Trait_Brutal", "Trait_Evadible", "Trait_Focus", "Trait_Focus+", "Trait_Material", "Trait_Simple", "Trait_Volatile", "Trait_Vortex", "Trait_Weapon", "Trait_Wall"], "Item Trait": ["Trait_Arcing", "Trait_Shield", "Trait_Thrown", "Trait_Two-Handed", "Trait_Loud", "Trait_Light", "Trait_Sharp", "Trait_Sturdy"], "Material Trait": ["Trait_Flammable", "Trait_Flexible", "Trait_Frozen", "Trait_Transparent"], "Basic": ["Style_Basic Action", "Style_Basic Attack", "Style_Basic Maneuver", "Style_Basic Social"], "Standard": ["Style_Charm Unrestrained", "Style_Inspiring Presence", "Style_Deft Negotiator", "Style_Abrasive Wit", "Style_Tyrannical Voice", "Style_Calming Empathy"], "Traversal": ["Skill_Acrobatics", "Skill_Endurance", "Skill_Jump", "Skill_Sneak"], "Craft": ["Skill_Alchemy", "Skill_Build", "Skill_Cook"], "Scan": ["Skill_Analyze", "Skill_Resonance", "Skill_Search"], "Cast": ["Skill_Channel", "Skill_Enchant", "Skill_Heal", "Skill_Shape", "Skill_Warding"], "Persuade": ["Skill_Charm", "Skill_Inspire", "Skill_Rationalize"], "Cunning": ["Skill_Deception", "Skill_Demoralize", "Skill_Empathy"], "Athletics": ["Skill_Finesse", "Skill_Grappling", "Skill_Might", "Skill_Shoot", "Skill_Skirmish", "Skill_Throw"], "Device": ["Skill_Palming", "Skill_Pilot", "Skill_Tinker"], "Walthair": ["Lang_Minere", "Lang_Crinere", "Lang_Palmic", "Lang_Shorespeak", "Lang_Verdeni", "Lang_Vulca"], "Aridsha": ["Lang_Junal", "Lang_Byric", "Lang_Dustell", "Lang_Muralic", "Lang_Shira"], "Khem": ["Lang_Apollen", "Lang_Kleikan"], "Colswei": ["Lang_Lib"], "Ceres": ["Lang_Cert", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq"], "Special": ["Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan"], "Academics": ["LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology"], "Profession": ["LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining"], "Craftmanship": ["LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving"], "Geography": ["LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane"], "History": ["LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History"], "Culture": ["LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater"], "Religion": ["LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"], "Vanguard": ["Job_Warrior", "Job_Guardian", "JStyle_Warrior", "JStyle_Guardian"], "Athlete": ["Job_Brawler", "Job_Rogue", "JStyle_Brawler", "JStyle_Rogue"], "Marksman": ["Job_Hunter", "Job_Kineticist", "JStyle_Hunter", "JStyle_Kineticist"], "Mage": ["Job_Medic", "JStyle_Medic"], "Strategist": ["Job_Scholar", "Job_Investigator", "JStyle_Scholar", "JStyle_Investigator"], "Advocate": ["Job_Bard", "Job_Orator", "JStyle_Bard", "JStyle_Orator"], "Journeyman": ["Job_Artisan", "Job_Waymaker", "JStyle_Artisan", "JStyle_Waymaker", "Tech_Journeyman"], "Status": ["Stat_Downed", "Stat_Dying", "Stat_Engaged", "Stat_Ethereal", "Stat_Grappled", "Stat_Hidden", "Stat_Invisible", "Stat_Multiact", "Stat_Restrained", "Stat_Unconscious"], "Condition": ["Stat_Aflame", "Stat_Chilled", "Stat_Delayed", "Stat_Empowered", "Stat_Encumbered", "Stat_Hasted", "Stat_Hindered", "Stat_Immobilized", "Stat_Impaired", "Stat_Launched", "Stat_Paralyzed", "Stat_Persevering", "Stat_Prone", "Stat_Sickened", "Stat_Stunned"], "Emotion": ["Stat_Angered", "Stat_Disgusted", "Stat_Doubt", "Stat_Encouraged", "Stat_Frightened", "Stat_Flustered", "Stat_Receptive", "Stat_Joyful", "Stat_Saddened", "Stat_Surprised"], "Basic Action": ["Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash"], "Basic Support": ["Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind"], "Basic Maneuver": ["Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge"], "Basic Activity": ["Tech_Reposition"], "Basic Attack": ["Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike"], "Basic Social": ["Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive"], "Warrior; Guardian": ["Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade"], "Warrior": ["Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted"], "Guardian": ["Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior"], "Rogue; Brawler": ["Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash"], "Rogue": ["Tech_Rogue", "Tech_Sneak Att,ack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II"], "Brawler": ["Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows"], "Hunter; Kineticist": ["Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim"], "Hunter": ["Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Spellshot"], "Kineticist": ["Tech_Follow-Up Shot", "Tech_Kineticist", "Tech_Follow-Up Throw"], "Medic": ["Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody"], "Scholar": ["Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall"], "Investigator": ["Tech_Investigator"], "Bard; Orator": ["Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm"], "Bard": ["Tech_Bard"], "Orator": ["Tech_Orator"], "Artisan; Journeyman": ["Tech_Waymaker", "Tech_Waymaker II"], "Artisan ": ["Tech_Artisan "], "Deft Negotiator; Tyrannical Voice": ["Tech_Build Pressure", "Tech_Proposal"], "Charm Unrestrained; Calming Empathy": ["Tech_Appeal"], "Inspiring Presence": ["Tech_Insist", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II"], "Abrasive Wit; Tyrannical Voice": ["Tech_Dismiss"], "Charm Unrestrained": ["Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II"], "Deft Negotiator": ["Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push"], "Abrasive Wit": ["Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger"], "Tyrannical Voice": ["Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage"], "Calming Empathy": ["Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy"], "Ki Extension": ["Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +"], "Swordplay": ["Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II"], "undefined": ["Tech_Wide Pressure"] }, "formulaMods": {
+				"CR": ["Attribute", "Skill", "Job", "Technique", "HP", "WILL", "Cmb_Chakra", "Initiative", "Recall", "Power", "Accuracy", "Artistry", "Charisma", "Cmb_HV", "Job_Warrior", "Job_Guardian", "Job_Brawler", "Job_Rogue", "Job_Hunter", "Job_Kineticist", "Job_Medic", "Job_Scholar", "Job_Investigator", "Job_Bard", "Job_Orator", "Job_Artisan", "Job_Waymaker", "Job_Physician", "Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Rogue", "Tech_Sneak Att,ack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Bard", "Tech_Orator", "Tech_Waymaker", "Tech_Waymaker II", "Tech_Artisan ", "Tech_Journeyman", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"]
+				, "Level": ["Skill", "Technique", "Advancement", "HP", "WILL", "Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Rogue", "Tech_Sneak Att,ack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Bard", "Tech_Orator", "Tech_Waymaker", "Tech_Waymaker II", "Tech_Artisan ", "Tech_Journeyman", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "AdvancementSkill": ["Skill"], "AdvancementJob": ["Job", "Job_Warrior", "Job_Guardian", "Job_Brawler", "Job_Rogue", "Job_Hunter", "Job_Kineticist", "Job_Medic", "Job_Scholar", "Job_Investigator", "Job_Bard", "Job_Orator", "Job_Artisan", "Job_Waymaker", "Job_Physician"], "TrainingKnowledge": ["Knowledge"], "AdvancementTechnique": ["Technique", "Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Rogue", "Tech_Sneak Att,ack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Bard", "Tech_Orator", "Tech_Waymaker", "Tech_Waymaker II", "Tech_Artisan ", "Tech_Journeyman", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "TrainingTechniques": ["Technique", "Tech_Hide", "Tech_Mount", "Tech_Move", "Tech_Prepare", "Tech_Interact", "Tech_Detect Ether", "Tech_Detect Creature", "Tech_Dash", "Tech_Aid", "Tech_Stabilize", "Tech_Calm Mind", "Tech_Break Free", "Tech_Escape", "Tech_Move Silently", "Tech_Grab an Edge", "Tech_Reposition", "Tech_Grapple", "Tech_Unarmed Strike", "Tech_Basic Strike", "Tech_Throw", "Tech_Heavy Strike", "Tech_Reassure", "Tech_Build Favor", "Tech_Agitate", "Tech_Emphasize", "Tech_Request", "Tech_Sense Motive", "Tech_Vanguard", "Tech_Vanguard II", "Tech_Vanguard's Blockade", "Tech_Warrior", "Tech_Wild Swing", "Tech_Second Wind", "Tech_Second Breath", "Tech_Fast Healing", "Tech_Undaunted", "Tech_Guardian", "Tech_Savior", "Tech_Savior's Retaliation", "Tech_Intercepting Dash", "Tech_Physicalward", "Tech_Distant Savior", "Tech_Athlete", "Tech_Athlete II", "Tech_Athlete's Dash", "Tech_Rogue", "Tech_Sneak Att,ack", "Tech_Disengage", "Tech_Cover", "Tech_Slip Past", "Tech_Sneak Attack II", "Tech_Brawler", "Tech_Bullet Punch", "Tech_Follow-Up Strike", "Tech_Dodge", "Tech_Momentum", "Tech_Flurry of Blows", "Tech_Marksman", "Tech_Marksman II", "Tech_Marksman's Aim", "Tech_Hunter", "Tech_Assign Quarry", "Tech_Hunter's Mark", "Tech_Longshot", "Tech_Follow-Up Shot", "Tech_Spellshot", "Tech_Marksman's Sight", "Tech_Kineticist", "Tech_Follow-Up Throw", "Tech_Mage", "Tech_Mage II", "Tech_Mage's Focus", "Tech_Medic", "Tech_Emergency Care", "Tech_Nightingale", "Tech_Rhapsody", "Tech_Strategist", "Tech_Strategist II", "Tech_Strategist's Aid", "Tech_Scholar", "Tech_Foresight", "Tech_Saw That Coming", "Tech_As You May Recall", "Tech_Investigator", "Tech_Advocate", "Tech_Advocate II", "Tech_Advocate's Charm", "Tech_Bard", "Tech_Orator", "Tech_Waymaker", "Tech_Waymaker II", "Tech_Artisan ", "Tech_Journeyman", "Tech_Skulk Away", "Tech_Skulk Then Hide", "Tech_First Aid", "Tech_Cleansing Aid", "Tech_Environmental Awareness", "Tech_Eclectic Knowledge", "Tech_Point of Clarity", "Tech_Swift Rebuttal", "Tech_Build Pressure", "Tech_Appeal", "Tech_Insist", "Tech_Proposal", "Tech_Dismiss", "Tech_Flatter", "Tech_Beguile", "Tech_Magnetic Charm", "Tech_Disarming Gaze", "Tech_Charming Request", "Tech_Pander", "Tech_Flatter II", "Tech_Invigorate", "Tech_Enthusiasm", "Tech_Meditate", "Tech_Zeal", "Tech_Deepen Connection", "Tech_Bravado", "Tech_Motivational Speech", "Tech_Invigorate II", "Tech_Diplomacy", "Tech_Fast Talk", "Tech_Quick Request", "Tech_Segue", "Tech_Increase Tension", "Tech_Diplomacy II", "Tech_Final Push", "Tech_Subvert", "Tech_Indifference", "Tech_Spite", "Tech_Ridicule", "Tech_Unfazed", "Tech_Subvert II", "Tech_Redirect Anger", "Tech_Threaten", "Tech_Taunt", "Tech_Domineer", "Tech_Tyrannize", "Tech_Command", "Tech_Threaten II", "Tech_Rage", "Tech_Tranquility", "Tech_Simple Request", "Tech_Small Talk", "Tech_Guidance", "Tech_Mindfulness", "Tech_Tranquility II", "Tech_Sympathy", "Tech_Serenity of Mind", "Tech_Clemency", "Tech_Emotional Intelligence", "Tech_Mean", "Tech_Fuel the Fire", "Tech_Veiled Anger", "Tech_Oppress", "Tech_Bellow", "Tech_Bulldoze", "Tech_Enforcement", "Tech_Bluster", "Tech_Give No Quarter", "Tech_Eye on the Prize", "Tech_Intrigue", "Tech_Consideration", "Tech_Compromise", "Tech_Appeal to Reason", "Tech_Common Ground", "Tech_Silver Tongue", "Tech_Dig Deep", "Tech_Debate", "Tech_Close it Out", "Tech_Obtuse", "Tech_Reconsider", "Tech_Evil Eye", "Tech_Seeds of Doubt", "Tech_White Lie", "Tech_Reel'Em In", "Tech_Pole Vault", "Tech_Quick Draw", "Tech_Extension Strike", "Tech_Step Extension", "Tech_Lasting Extension", "Tech_Far Strike", "Tech_Extension Strike +", "Tech_Quick Slash", "Tech_Precision Blade", "Tech_Armor Piercer", "Tech_Quick Slash II", "Tech_Cleave", "Tech_Crushing Blade", "Tech_Great Cleave", "Tech_Cleave +", "Tech_Sudden Cleave", "Tech_Great Cleave II", "Tech_Power Flex", "Tech_Crush Knuckle", "Tech_Impact Knuckle", "Tech_Knuckle Flurry", "Tech_Water Blast", "Tech_Geyser", "Tech_Geyser Line", "Tech_Surf", "Tech_Great Geyser Line", "Tech_Tidal Wave", "Tech_Sand Surge", "Tech_Sand Spout", "Tech_Sand Wave", "Tech_Sand Launcher", "Tech_Sicken", "Tech_Spores", "Tech_Sickening Cloud", "Tech_Virulent Spores", "Tech_Firebolt", "Tech_Flame Arrow", "Tech_Fireball", "Tech_Fireblast", "Tech_Ragnarok", "Tech_Bonfire", "Tech_Wall of Fire", "Tech_Field of Flame", "Tech_Lightning Shaft", "Tech_Shock", "Tech_Lightning Bolt", "Tech_Plasma Arc", "Tech_Fulgor", "Tech_Cold Snap", "Tech_Frostbite", "Tech_Freezebind", "Tech_Cold Burst", "Tech_Cold Front", "Tech_Diamond Dust", "Tech_Wind Bullet", "Tech_Gust", "Tech_Windsweep", "Tech_Gale", "Tech_Darkness", "Tech_Shadow Wall", "Tech_Nightfall", "Tech_Fog Cloud", "Tech_Sleet", "Tech_Freezing Sleet", "Tech_Hail", "Tech_Binding Sleet", "Tech_Ice Storm", "Tech_Fimbulwinter", "Tech_Smoke Cloud", "Tech_Burning Smoke", "Tech_Choking Smoke", "Tech_Acceleration", "Tech_Power Vault", "Tech_Expeditious", "Tech_Quick Climb", "Tech_Quick Swim", "Tech_Poise", "Tech_Cat Fall", "Tech_Kip Up", "Tech_Silent Stride", "Tech_Shove", "Tech_Knockdown", "Tech_Tumble", "Tech_Field Medic", "Tech_Camoflauge", "Tech_Blurred Light", "Tech_Light Refraction", "Tech_Shadow Steps", "Tech_Shadow Walker", "Tech_Wind Step", "Tech_Updraft", "Tech_Clouded Updraft", "Tech_Wind Fall", "Tech_Walk on Air", "Tech_Fire Step", "Tech_Liftoff", "Tech_Jet", "Tech_Cunning Action", "Tech_Demoralize", "Tech_Fascinate", "Tech_Impersonator", "Tech_Ether Sense", "Tech_Spirit Sense", "Tech_Tremorsense", "Tech_Dustcraft", "Tech_Shape Material", "Tech_Quickcraft", "Tech_Improved Shaping", "Tech_Greater Shaping", "Tech_Legendary Shaping", "Tech_Dust Material", "Tech_Dust Area", "Tech_Improved Dusting", "Tech_Greater Dusting", "Tech_Legendary Dusting", "Tech_Form Path", "Tech_Form Pillar", "Tech_Stepping Path", "Tech_Form Wall", "Tech_Scattered Pillars", "Tech_Great Wall", "Tech_Cultivate", "Tech_Entangle", "Tech_Wildwood", "Tech_Distortion", "Tech_Lasting Distortion", "Tech_Heat Field", "Tech_Burn Guard", "Tech_Cold Field", "Tech_Chill Guard", "Tech_Kinesis", "Tech_Distant Kinesis", "Tech_Kinetic Strike", "Tech_Kinetic Throw", "Tech_Heavy Kinesis", "Tech_Burden", "Tech_Pressure", "Tech_Restrain", "Tech_Wide Pressure", "Tech_Prostration", "Tech_Deep Pressure", "Tech_Gravity Well", "Tech_Shield Block", "Tech_Glancing Block", "Tech_Aegis", "Tech_Light", "Tech_Dancing Lights", "Tech_Flash", "Tech_Sunlight", "Tech_Stress Release", "Tech_Stress Release +", "Tech_Stress Release ++", "Tech_Sensory Training", "Tech_Sensory Training +", "Tech_Broad Study", "Tech_Experienced Tracker", "Tech_Multilingual", "Tech_Multilingual +", "Tech_Specialized Lore", "Tech_Specialized Lore +", "Tech_Specialized Lore ++", "Tech_Improved Initiative", "Tech_Knowledge Training", "Tech_Knowledge Training +", "Tech_Knowledge Training ++", "Tech_Social Training", "Tech_Social Training +", "Tech_Social Training ++", "Tech_Refocus", "Tech_Refocus +", "Tech_Sustained Channel", "Tech_Sustained Channel +", "Tech_Ki Control", "Tech_Ki Control +", "Tech_Ki Control ++", "Tech_Surge Value", "Tech_Surge Value +", "Tech_Channel Training", "Tech_Channel Training +", "Tech_Channel Training ++", "Tech_Physical Training", "Tech_Physical Training +", "Tech_Body Training", "Tech_Body Training +", "Tech_Body Training ++", "Tech_Technical Training", "Tech_Technical Training +", "Tech_Technical Training ++", "Tech_Martial Training", "Tech_Martial Training +", "Tech_Martial Training ++", "Tech_HP Up", "Tech_HP Up+", "Tech_HP Up++", "Tech_Vitality Boost", "Tech_Vitality Boost +", "Tech_Vitality Boost ++", "Tech_Undying", "Tech_Undying +", "Tech_Extra Follow-Up Attack", "Tech_Extra Follow-Up Attack +", "Tech_Change Tech Slots", "Tech_Hold Out", "Tech_Overdrive"], "Attr_BOD": ["Def_Brace", "Def_Fortitude", "HP", "Power", "Carrying Capacity", "Skill_Endurance", "Skill_Enchant", "Skill_Grappling", "Skill_Jump", "Skill_Might"], "Attr_PRC": ["Def_Disruption", "Def_Hide", "Accuracy", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker"], "Attr_QCK": ["Def_Reflex", "Def_Evasion", "Initiative", "Skill_Acrobatics", "Skill_Finesse", "Skill_Palming", "Skill_Pilot", "Skill_Warding"], "Attr_INT": ["Def_Insight", "Def_Notice", "Artistry", "Skill_Charm", "Skill_Cook", "Skill_Empathy", "Skill_Heal", "Skill_Search"], "Attr_RSN": ["Def_Guile", "Def_Scrutiny", "Recall", "Skill_Alchemy", "Skill_Analyze", "Skill_Build", "Skill_Rationalize", "Skill_Shape"], "Attr_CNV": ["Def_Resolve", "Def_Freewill", "WILL", "Charisma", "Cmb_HV", "Skill_Channel", "Skill_Deception", "Skill_Demoralize", "Skill_Inspire", "Skill_Resonance"], "Recall": ["LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCat_Profession", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"]
 			}
 		},
 		_max = "_max",

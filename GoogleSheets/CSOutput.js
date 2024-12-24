@@ -153,6 +153,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 						influences = function () {
         			        let contents = "";
 							let influenceDef = WuxDef.Get("Soc_Influence");
+							let influenceTypeDef = WuxDef.Get("Soc_InfluenceType");
 							let severityDef = WuxDef.Get("Soc_Severity");
 
 							let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
@@ -166,7 +167,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 							${influenceInfo}`;
 
 							let influenceContents = WuxSheetMain.MultiRow(
-								WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "InfluenceType")]), false, "wuxInfluenceType") + 
+								WuxSheetMain.Select(influenceTypeDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "InfluenceType")]), false, "wuxInfluenceType") + 
 								WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]), false, "wuxInfluenceType") + 
 								WuxSheetMain.CustomInput("text", influenceDef.getAttribute(), "wuxInput wuxInfluenceDescription", ` placeholder="Influence Description"`)
 							);
@@ -1047,7 +1048,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 							techniqueDefinition = technique.createDefinition(WuxDef.Get("Technique"));
 							let techniqueTierArray = techniquesByRequrements.get(techniqueDefinition.tier);
 							if (techniqueTierArray == undefined) {
-								
+
 							}
 							else {
 								if (!techniqueTierArray.has(techniqueDefinition.affinity)) {
@@ -1215,6 +1216,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 						influences = function () {
         			        let contents = "";
 							let influenceDef = WuxDef.Get("Soc_Influence");
+							let influenceTypeDef = WuxDef.Get("Soc_InfluenceType");
 							let severityDef = WuxDef.Get("Soc_Severity");
 
 							let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
@@ -1228,7 +1230,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							${influenceInfo}`;
 
 							let influenceContents = WuxSheetMain.MultiRow(
-								WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "InfluenceType")]), false, "wuxInfluenceType") + 
+								WuxSheetMain.Select(influenceTypeDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "InfluenceType")]), false, "wuxInfluenceType") + 
 								WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]), false, "wuxInfluenceType") + 
 								WuxSheetMain.CustomInput("text", influenceDef.getAttribute(), "wuxInput wuxInfluenceDescription", ` placeholder="Influence Description"`)
 							);
