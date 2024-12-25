@@ -138,7 +138,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createSkills = function (arr) {
-            return new Database(arr, ["group"], function (arr) {
+            return new Database(arr, ["group", "subGroup"], function (arr) {
                 return new SkillData(arr);
             });
         },
@@ -727,7 +727,7 @@ var WuxDefinition = WuxDefinition || (function () {
                 expandContents += "\n" + WuxSheetMain.Desc(definitionData.descriptions[i]);
             }
             if (definitionData.formula.hasFormula()) {
-                expandContents += `\n${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`;
+                expandContents += "\n" + WuxSheetMain.Desc(`${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`);
             }
             return expandContents;
         },
@@ -1264,10 +1264,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     return `<div class="wuxInteractiveBlock${isExpanding ? " wuxInteractiveExpandingBlock" : ""}">\n${contents}\n</div>`;
                 },
 
-                buildTooltipCheckboxInput = function (fieldName, contents, tooltipContents) {
+                buildTooltipCheckboxInput = function (fieldName, infoFieldName, contents, infoContents) {
                     return `<div class="wuxInteractiveBlock">
+                    ${WuxSheetMain.Info.Button(infoFieldName)}
                     ${checkboxBlockIcon(fieldName, contents)}
-                    ${WuxSheetMain.Tooltip.Icon(tooltipContents)}
+                    ${WuxSheetMain.HiddenField(infoFieldName, `<div class="wuxInfoContent">\n${infoContents}\n</div>`)}
                     </div>`;
                 },
 

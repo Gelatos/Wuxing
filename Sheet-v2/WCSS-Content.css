@@ -388,6 +388,11 @@ input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubdata
 	display: inline-block;
 	width: calc(100% - 30px);
 }
+.wuxInteractiveBlock .wuxInfoButton + .wuxInteractiveInnerBlock
+{
+	display: inline-block;
+	width: calc(100% - 40px);
+}
 
 .wuxInteractiveInnerExpandBlock
 {

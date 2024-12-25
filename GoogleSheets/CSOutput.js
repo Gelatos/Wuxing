@@ -368,7 +368,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
 						buildLanguage = function (knowledge) {
 							let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
-							return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(knowledgeDefinition.getAttribute(WuxDef._rank),
+							return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(knowledgeDefinition.getAttribute(WuxDef._rank), knowledgeDefinition.getAttribute(WuxDef._info),
 								buildInteractionMainBlock(knowledge, knowledgeDefinition), WuxDefinition.TooltipDescription(knowledgeDefinition));
 						},
 
@@ -594,11 +594,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 				}()),
 
 				printJobs = function (jobsDictionary, techDictionary) {
-					let contents = "";
-
-					contents += buildJobs.Build(jobsDictionary, techDictionary);
-
-					return WuxSheetMain.Build(contents);
+					return WuxSheetMain.Build(buildJobs.Build(jobsDictionary, techDictionary));
 				},
 
 				buildJobs = buildJobs || (function () {
@@ -685,8 +681,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 				}()),
 
 				printSkills = function (skillDictionary) {
-					let contents = buildSkills.Build(skillDictionary);
-					return WuxSheetMain.Build(contents);
+					return WuxSheetMain.Build(buildSkills.Build(skillDictionary));
 				},
 
 				buildSkills = buildSkills || (function () {
@@ -694,25 +689,35 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
 					var
 						build = function (database) {
-        			        let contents = WuxSheetMain.MultiRowGroup(buildGroups(database), WuxSheetMain.Table.FlexTable, 2);
-        			        contents = WuxSheetMain.TabBlock(contents);
-        			        
-        			        let definition = WuxDef.Get("Page_Skills");
-        				    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+							let contents = buildSkillGroup(database, "ActiveSkills");
+							contents += buildSkillGroup(database, "SocialSkills");
+							contents += buildSkillGroup(database, "TechnicalSkills");
+							return contents;
 						},
 
-						buildGroups = function (database) {
+						buildSkillGroup = function(database, group) {
+							let subGroups = WuxDef.Filter([new DatabaseFilterData("group", group)]);;
+
+        			        let contents = WuxSheetMain.MultiRowGroup(buildSubGroups(database, subGroups), WuxSheetMain.Table.FlexTable, 3);
+        			        contents = WuxSheetMain.TabBlock(contents);
+        			        
+							let definitionName = `Page_${group}`;
+        			        let definition = WuxDef.Get(definitionName);
+        				    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+
+						},
+
+						buildSubGroups = function (database, subGroups) {
 							let output = [];
 							let groupName = "";
-							let filterSettings = [new DatabaseFilterData("group", "")];
+							let filterSettings = [new DatabaseFilterData("subGroup", "")];
 							let filteredData = {};
-							let skillGroups = database.getPropertyValues("group");
-							skillGroups = skillGroups.sort();
-							for (let i = 0; i < skillGroups.length; i++) {
-								if (skillGroups[i] == "") {
+							subGroups = subGroups.sort();
+							for (let i = 0; i < subGroups.length; i++) {
+								if (subGroups[i].name == "") {
 									continue;
 								}
-								groupName = skillGroups[i];
+								groupName = subGroups[i].name;
 								filterSettings[0].value = groupName;
 								filteredData = database.filter(filterSettings);
 								output.push(buildGroup(groupName, filteredData));
@@ -739,7 +744,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							let skillDefinition = skill.createDefinition(WuxDef.Get("Skill"));
 							let interactHeader = `<span class="wuxHeader">${skill.name} (${WuxDef.GetAbbreviation(skill.abilityScore)})</span>`;
 							
-							return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(skillDefinition.getAttribute(WuxDef._rank),
+							return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(skillDefinition.getAttribute(WuxDef._rank), skillDefinition.getAttribute(WuxDef._info),
 							interactHeader, WuxDefinition.TooltipDescription(skillDefinition));
 						}
 					return {
@@ -781,9 +786,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							let expandContents = "";
 							let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinition.name));
 							for (let i = 0; i < formulaDefinitions.length; i++) {
-							    expandContents += WuxSheetMain.Header2(formulaDefinitions[i].title, "span");
-								expandContents += "<br />";
-								expandContents += WuxDefinition.DefinitionContents(formulaDefinitions[i]);
+								if (formulaDefinitions[i].group != "Skill"){
+									expandContents += WuxSheetMain.Header2(formulaDefinitions[i].title, "span");
+									expandContents += "<br />";
+									expandContents += WuxDefinition.DefinitionContents(formulaDefinitions[i]);
+								}
 							}
 							let expandFieldName = attributeDefinition.getAttribute(WuxDef._expand);
 							contents += WuxSheetMain.InteractionElement.Build(true, `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
@@ -974,7 +981,8 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					let tooltip = WuxSheetMain.Tooltip.Icon(tooltipDesc);
 
 					let learnStyle = WuxSheetMain.HiddenAuxField(filterFieldName, 
-						WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(styleDef.getAttribute(), WuxSheetMain.Header2("Learn Style"), tooltipDesc))
+						WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(styleDef.getAttribute(), styleDef.getAttribute(WuxDef._info), 
+						WuxSheetMain.Header2("Learn Style"), tooltipDesc))
 						+ WuxSheetMain.HiddenField(filterFieldName, WuxSheetMain.Header2("Learn Style") + tooltip)
 						+ WuxSheetMain.Desc(`<strong>Requirements</strong>\n${styleDef.requirements}`);
 					
