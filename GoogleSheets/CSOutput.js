@@ -602,15 +602,25 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
 					var
 						build = function (jobsDictionary, techDictionary) {
-							let jobs = [];
-							jobsDictionary.iterate(function (job) {
-								jobs.push(buildJob(job, techDictionary));
-							});
-							let output = WuxSheetMain.MultiRowGroup(jobs, WuxSheetMain.Table.FlexTable, 2);
+							let output = "";
+							let groups = WuxDef.Filter([new DatabaseFilterData("group", "JobGroup")]);
+							for(let i = 0; i < groups.length; i++) {
+								output += buildJobGroup(jobsDictionary.filter([new DatabaseFilterData("group", groups[i].title)]), groups[i], techDictionary);
+							}
+							return output;
+						},
+
+						buildJobGroup = function(jobs, jobGroup, techDictionary) {
+							let jobData = [];
+							for(let i = 0; i < jobs.length; i++) {
+								jobData.push(buildJob(jobs[i], techDictionary));
+							};
+
+							let output = WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2);
 							output = WuxSheetMain.TabBlock(output);
 
-							let definition = WuxDef.Get("Job");
-							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, output);
+							return WuxSheetMain.CollapsibleTab(jobGroup.getAttribute(WuxDef._tab, WuxDef._expand), `${jobGroup.title}s`, output);
+
 						},
 
 						buildJob = function (job, techDictionary) {
