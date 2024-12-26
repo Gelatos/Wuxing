@@ -410,7 +410,8 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
 
         // Math
         rollSkillCheck = function (msg, count) {
-            let results = Dice.RollSkillCheck(count, 0);
+            let results = new DieRoll();
+            results.rollSkillCheck(count, 0);
             let message = `${Format.ShowTooltip(`Rolling Skill Check ${results.total}`, results.message)}`;
             WuxingMessages.SendSystemMessage(message, "", msg.who);
         }

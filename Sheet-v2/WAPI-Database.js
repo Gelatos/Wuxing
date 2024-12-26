@@ -2023,6 +2023,103 @@ class FormulaData {
         return output;
     }
 }
+class DieRoll {
+    constructor(dieRoll) {
+        this.createEmpty();
+        if (dieRoll != undefined) {
+            this.clone(dieRoll);
+        }
+    }
+
+    createEmpty() {
+        this.rolls = [];
+        this.keeps = [];
+        this.message = "";
+        this.total = 0;
+    }
+
+    clone(dieRoll) {
+        this.rolls = dieRoll.rolls;
+        this.keeps = dieRoll.keeps;
+        this.message = dieRoll.message;
+        this.total = dieRoll.total;
+    }
+
+    rollDice(dieValue, dieType) {
+        this.rolls = [];
+        this.message = "Rolls(";
+        let dieRoll = 0;
+        while (dieValue > 0) {
+            dieValue--;
+            dieRoll = randomInteger(dieType);
+            this.rolls.push(dieRoll);
+            this.message += `${dieRoll}`;
+            if (dieValue > 0) {
+                this.message += `, `;
+            }
+        }
+        this.message += `)`;
+        this.total = this.totalValues(this.rolls);
+    }
+
+    totalValues(values) {
+        let total = 0;
+        _.each(values, function (obj) {
+            total += obj;
+        });
+        return total;
+    }
+
+    sortRollsAscending() {
+        this.rolls.sort();
+    }
+
+    sortRollsDescending() {
+        this.rolls = Format.SortArrayDecrementing(this.rolls);
+    }
+
+    dropRollDice(dieCount, dieType, keepCount, keepHigh) {
+        this.rollDice(dieCount, dieType);
+        if (keepHigh) {
+            this.sortRollsDescending();
+        }
+        else {
+            this.sortRollsAscending();
+        }
+
+        this.message = "Rolls(";
+        for (let i = 0; i < this.rolls.length; i++) {
+            if (i < keepCount) {
+                this.keeps.push(this.rolls[i]);
+                this.message += `[${this.rolls[i]}]`;
+            }
+            else {
+                this.message += `${this.rolls[i]}`;
+            }
+            if (i < this.rolls.length - 1) {
+                this.message += `, `;
+            }
+        }
+        this.message += `)`;
+        this.total = this.totalValues(this.keeps);
+    }
+
+    rollCheck(advantages) {
+        let dieCount = 2 + Math.abs(advantages);
+        let dieType = 6;
+        this.dropRollDice(dieCount, dieType, 2, advantages >= 0);
+    }
+
+    addModToRoll(mod) {
+        this.total += mod;
+        this.message += ` + Mod[${mod}]`;
+    }
+
+    rollSkillCheck(advantages, mod) {
+        this.rollCheck(advantages);
+        this.addModToRoll(mod);
+    }
+}
 
 class AttributeHandler {
     constructor(mods) {
@@ -2693,82 +2790,6 @@ var Format = Format || (function () {
         SanitizeMacroRollTemplate: sanitizeMacroRollTemplate,
         SanitizeSheetRoll: sanitizeSheetRoll,
         SanitizeSheetRollAction: sanitizeSheetRollAction
-    };
-}());
-
-var Dice = Dice || (function () {
-    'use strict';
-
-    var
-        rollDice = function (dieValue, dieType) {
-            let rolls = [];
-            while (dieValue > 0) {
-                dieValue--;
-                rolls.push(randomInteger(dieType));
-            }
-            return rolls;
-        },
-
-        totalDice = function (rolls) {
-            let total = 0;
-            _.each(rolls, function (obj) {
-                total += obj;
-            });
-            return total;
-        },
-
-        dropRollDice = function (dieCount, dieType, keepCount, keepHigh) {
-            let output = {
-                rolls: [],
-                keeps: [],
-                message: ""
-            }
-            output.rolls = rollDice(dieCount, dieType);
-            if (keepHigh) {
-                output.rolls = Format.SortArrayDecrementing(output.rolls);
-            }
-            else {
-                output.rolls.sort();
-            }
-
-            output.message = "Rolls(";
-            for (let i = 0; i < output.rolls.length; i++) {
-                if (i < keepCount) {
-                    output.keeps.push(output.rolls[i]);
-                    output.message += `[${output.rolls[i]}]`;
-                }
-                else {
-                    output.message += `${output.rolls[i]}`;
-                }
-                if (i < output.rolls.length - 1) {
-                    output.message += `, `;
-                }
-            }
-            output.message += `)`;
-
-            return output;
-        },
-
-        rollSkillCheck = function (advantages, mod) {
-            let dieCount = 2 + Math.abs(advantages);
-            let dieType = 6;
-            let roll = dropRollDice(dieCount, dieType, 2, advantages >= 0);
-            let total = totalDice(roll.keeps) + mod;
-            let message = `${roll.message} + Mod[${mod}]`;
-            return {
-                rolls: roll.rolls,
-                keeps: roll.keeps,
-                message: message,
-                total: total
-            };
-        }
-
-        ;
-    return {
-        RollDice: rollDice,
-        TotalDice: totalDice,
-        DropRollDice: dropRollDice,
-        RollSkillCheck: rollSkillCheck
     };
 }());
 

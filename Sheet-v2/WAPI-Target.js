@@ -280,9 +280,10 @@ class TokenTargetData extends TargetData {
         attributeHandler.addMod(baseSpeedVar);
         attributeHandler.addMod(maxSpeedVar);
         attributeHandler.addFinishCallback(function (attrHandler) {
-            let move = Math.ceil(attrHandler.parseInt(baseSpeedVar, 0, false),
-                Dice.RollDice(1, attrHandler.parseInt(maxSpeedVar, 0, false))
-            );
+            let dieRoll = new DieRoll();
+            dieRoll.rollDice(1, attrHandler.parseInt(maxSpeedVar, 0, false));
+
+            let move = Math.ceil(attrHandler.parseInt(baseSpeedVar, 0, false), dieRoll);
             tokenTargetData.setTurnIcon(move);
         });
     }
@@ -524,11 +525,11 @@ var TokenReference = TokenReference || (function () {
                 case "!creset":
                     commandResetToken(msg);
                     break;
-                case "!cdefenses":
-                    commandShowDefenses(msg);
+                case "!cshowgroup":
+                    commandShowGroup(msg, content);
                     break;
-                case "!csenses":
-                    commandShowSenses(msg);
+                case "!crollsubgroup":
+                    commandRollSubGroup(msg, content);
                     break;
                 case "!cskill":
                     commandRollSkillCheck(msg, content);
@@ -568,19 +569,32 @@ var TokenReference = TokenReference || (function () {
             });
         },
 
-        commandShowDefenses = function (msg) {
-            let tableName = "Defenses";
-            let defensesArray = WuxDef.Filter(new DatabaseFilterData("group", "Defense"));
+        commandShowGroup = function (msg, content) {
+            content = content.split(";");
+            let group = content[0];
+            let advantage = content.length > 1 ? content[1] : 0;
+            let tableName = "";
+            switch (content) {
+                case "Defenses": group = "Defense"; tableName = "Defenses"; break;
+                case "Senses": group = "Sense"; tableName = "Senses"; break;
+                default: tableName = content; break;
+            }
+
+            let groupArray = WuxDef.Filter(new DatabaseFilterData("group", group));
             iterateOverSelectedTokens(msg, function (tokenTargetData) {
-                checkModifiers(tableName, tokenTargetData, defensesArray);
+                checkModifiers(tableName, tokenTargetData, groupArray, false), advantage;
             });
         },
 
-        commandShowSenses = function (msg) {
-            let tableName = "Senses";
-            let defensesArray = WuxDef.Filter(new DatabaseFilterData("group", "Sense"));
+        commandRollSubGroup = function (msg, content) {
+            content = content.split(";");
+            let subGroup = content[0];
+            let advantage = content.length > 1 ? content[1] : 0;
+            let tableName = `${content} Checks`;
+
+            let groupArray = WuxDef.Filter(new DatabaseFilterData("subGroup", subGroup));
             iterateOverSelectedTokens(msg, function (tokenTargetData) {
-                checkModifiers(tableName, tokenTargetData, defensesArray);
+                checkModifiers(tableName, tokenTargetData, groupArray, true, advantage);
             });
         },
 
@@ -590,21 +604,30 @@ var TokenReference = TokenReference || (function () {
 
         // Token Setting
 
-        checkModifiers = function (tableName, tokenTargetData, definitions) {
+        checkModifiers = function (tableName, tokenTargetData, definitions, addSkillCheck, advantage) {
             let tableData = new TableMessage([tokenTargetData.displayName, tableName]);
             let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+            let dieRoll = new DieRoll();
+            dieRoll.rollCheck(advantage);
+
             _.each(definitions, function (modDefinition) {
                 let variable = modDefinition.getVariable();
                 attributeHandler.addMod(variable);
                 attributeHandler.addFinishCallback(function (attrHandler) {
-                    let value = attrHandler.parseString(variable, "0", false);
-                    tableData.addRow([modDefinition.title, value]);
+                    let value = attrHandler.parseString(variable, 0, false);
+                    if (addSkillCheck) {
+                        let results = new DieRoll(dieRoll);
+                        results.addModToRoll(value);
+                        tableData.addRow([modDefinition.title, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
+                    }
+                    else {
+                        tableData.addRow([modDefinition.title, value]);
+                    }
                 });
             });
             attributeHandler.run();
 
             let message = tableData.print();
-            DebugLog(`[TokenReference][checkModifiers] ${message}`);
             let systemMessage = new SystemInfoMessage(message);
             systemMessage.setSender("System");
             WuxMessage.Send(systemMessage);

@@ -258,7 +258,8 @@ class TableMessage {
 
             attributeHandler.addFinishCallback(function (attrHandler) {
                 let value = attrHandler.parseInt(variableName, 0, false);
-                results = Dice.RollSkillCheck(0, value);
+                results = new DieRoll();
+                results.rollSkillCheck(0, value);
             });
             attributeHandler.run();
             results.tokenTargetData = tokenTargetData;
