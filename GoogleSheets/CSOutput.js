@@ -431,7 +431,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 						},
 
 						buildLore = function (knowledgeDefinition, groupName, interactHeader) {
-							return WuxSheetMain.InteractionElement.BuildTooltipSelectInput(knowledgeDefinition.getAttribute(WuxDef._rank),
+							return WuxSheetMain.InteractionElement.BuildTooltipSelectInput(knowledgeDefinition.getAttribute(WuxDef._rank), knowledgeDefinition.getAttribute(WuxDef._info),
 							WuxDef.Filter([new DatabaseFilterData("group", groupName)]), false, "wuxWidth70 wuxMarginRight10",
 							interactHeader, WuxDefinition.TooltipDescription(knowledgeDefinition));
 						},
@@ -1417,11 +1417,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
 							contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_LanguageTag"), "wuxInput");
 
-							let languageAttr = WuxDef.GetAttribute("Chat_Language");
 							let languageFilters = WuxDef.Filter([new DatabaseFilterData("group", "Language")]);
 							for (let i = 0; i < languageFilters.length; i++) {
 								contents += WuxSheetMain.HiddenField(languageFilters[i].getAttribute(WuxDef._filter), 
-								WuxSheetMain.InteractionElement.BuildTooltipRadioInput(languageAttr, languageFilters[i].title, 
+								WuxSheetMain.InteractionElement.BuildTooltipRadioInput(WuxDef.GetAttribute("Chat_Language"), WuxDef.GetAttribute("Chat_Language", WuxDef._info), 
+									languageFilters[i].title, 
 									languageTitle(languageFilters[i]), WuxDefinition.TooltipDescription(languageFilters[i]))
 								);
 							}

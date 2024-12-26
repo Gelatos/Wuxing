@@ -728,6 +728,17 @@ var WuxDefinition = WuxDefinition || (function () {
             }
             if (definitionData.formula.hasFormula()) {
                 expandContents += "\n" + WuxSheetMain.Desc(`${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`);
+                switch (definitionData.group) {
+                    case "Skill":
+                        expandContents += "\n" + WuxSheetMain.Desc(`If trained, add 2 + [${WuxDef.GetTitle("CR")}]`);
+                        break;
+                    case "LoreCategory":
+                        expandContents += "\n" + WuxSheetMain.Desc(`If trained, add [${WuxDef.GetTitle("CR")}]`);
+                        break;
+                    case "Lore":
+                        expandContents += "\n" + WuxSheetMain.Desc(`If trained, add this lore's [Tier] + [${WuxDef.GetTitle("CR")}]`);
+                        break;
+                }
             }
             return expandContents;
         },
@@ -1272,21 +1283,24 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     </div>`;
                 },
 
-                buildTooltipRadioInput = function (fieldName, value, contents, tooltipContents) {
+                buildTooltipRadioInput = function (fieldName, infoFieldName, value, contents, infoContents) {
                     return `<div class="wuxInteractiveBlock">
+                    ${WuxSheetMain.Info.Button(infoFieldName)}
                     ${radioBlockIcon(fieldName, value, contents)}
-                    ${WuxSheetMain.Tooltip.Icon(tooltipContents)}
+                    ${WuxSheetMain.HiddenField(infoFieldName, `<div class="wuxInfoContent">\n${infoContents}\n</div>`)}
                     </div>`;
                 },
 
-                buildTooltipSelectInput = function (fieldName, definitionGroup, showEmpty, className, contents, tooltipContents) {
+                buildTooltipSelectInput = function (fieldName, infoFieldName, definitionGroup, showEmpty, className, contents, infoContents) {
                     return `<div class="wuxInteractiveBlock">
+                    ${WuxSheetMain.Info.Button(infoFieldName)}
                     ${select(fieldName, definitionGroup, showEmpty, className)}
                     <div class="wuxInteractiveSelectContent">
                     ${contents}
-                    ${WuxSheetMain.Tooltip.Icon(tooltipContents)}
                     </div>
+                    ${WuxSheetMain.HiddenField(infoFieldName, `<div class="wuxInfoContent">\n${infoContents}\n</div>`)}
                     </div>`;
+
                 },
 
                 expandableBlockIcon = function (fieldName) {

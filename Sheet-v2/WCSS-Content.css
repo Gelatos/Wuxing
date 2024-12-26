@@ -520,6 +520,6 @@ input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInterac
 {
     position: relative; 
     display: inline-block; 
-    width: calc(100% - 85px);
+    width: calc(100% - 125px);
 }
 
