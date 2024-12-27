@@ -706,7 +706,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 						},
 
 						buildSkillGroup = function(database, group) {
-							let subGroups = WuxDef.Filter([new DatabaseFilterData("group", group)]);;
+							let subGroups = WuxDef.Filter([new DatabaseFilterData("group", group)]);
 
         			        let contents = WuxSheetMain.MultiRowGroup(buildSubGroups(database, subGroups), WuxSheetMain.Table.FlexTable, 3);
         			        contents = WuxSheetMain.TabBlock(contents);
@@ -859,10 +859,12 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			var
 				print = function () {
 					let tabFieldName = WuxDef.GetAttribute("Page");
+					let actionSidebar = WuxSheetSidebar.BuildChatSection();
+					actionSidebar += WuxSheetSidebar.BuildChecksSection();
 					let output = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
 					${WuxSheet.PageDisplay("Techniques", buildTechPointsSection(WuxDef.GetAttribute("Technique")))}
 					${WuxSheet.PageDisplay("Styles", buildTechPointsSection(WuxDef.GetAttribute("JobStyle"), "Job") + buildTechPointsSection(WuxDef.GetAttribute("Style"), "Standard"))}
-					${WuxSheet.PageDisplay("Actions", WuxSheetSidebar.BuildChatSection())}`;
+					${WuxSheet.PageDisplay("Actions", actionSidebar)}`;
 					
 					return WuxSheetSidebar.Build("", output);
 				},
@@ -1158,6 +1160,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 				printSidebar = function () {
 					let contents = "";
 					contents += WuxSheetSidebar.BuildChatSection();
+					contents += WuxSheetSidebar.BuildChecksSection();
 					// contents += WuxSheetSidebar.BuildLanguageSection();
 					return WuxSheetSidebar.Build("", contents);
 				}

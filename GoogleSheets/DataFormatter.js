@@ -727,17 +727,19 @@ var WuxDefinition = WuxDefinition || (function () {
                 expandContents += "\n" + WuxSheetMain.Desc(definitionData.descriptions[i]);
             }
             if (definitionData.formula.hasFormula()) {
-                expandContents += "\n" + WuxSheetMain.Desc(`${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`);
                 switch (definitionData.group) {
                     case "Skill":
+                        expandContents += "\n" + WuxSheetMain.Desc(`${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`);
                         expandContents += "\n" + WuxSheetMain.Desc(`If trained, add 2 + [${WuxDef.GetTitle("CR")}]`);
                         break;
                     case "LoreCategory":
-                        expandContents += "\n" + WuxSheetMain.Desc(`If trained, add [${WuxDef.GetTitle("CR")}]`);
+                        expandContents += "\n" + WuxSheetMain.Desc(`If trained, ${definitionData.title} is calculated as:\n${definitionData.formula.getString()} + [${WuxDef.GetTitle("CR")}]`);
                         break;
                     case "Lore":
-                        expandContents += "\n" + WuxSheetMain.Desc(`If trained, add this lore's [Tier] + [${WuxDef.GetTitle("CR")}]`);
+                        expandContents += "\n" + WuxSheetMain.Desc(`If trained, ${definitionData.title} is calculated as:\n${definitionData.formula.getString()} + this lore's [Tier] + [${WuxDef.GetTitle("CR")}]`);
                         break;
+                    default:
+                        expandContents += "\n" + WuxSheetMain.Desc(`${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`);
                 }
             }
             return expandContents;
@@ -911,17 +913,11 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
 
         buildChecksSection = function () {
             let definition = WuxDef.Get("Title_Skills");
-            let definitiionFilter = WuxDef.Filter([new DatabaseFilterData("group", "Skill")]);
             let contents = "";
-
-            for (let i = 0; i < definitiionFilter.length; i++) {
-                contents += WuxSheetMain.CustomInput();
-            }
+            contents += `<button class="wuxButton wuxSizePercent" type="roll" value="!cshowgroup ${WuxDef.GetVariable("SheetName")}@@@?{What will you show?|Defenses|Senses}"><span>Show Stat</span></button>`;
+            contents += `<button class="wuxButton wuxSizePercent" type="roll" value="!cskillgroupcheck ${WuxDef.GetVariable("SheetName")}@@@?{Choose a Skill Group to Roll|Fight|Cast|Athletics|Persuade|Cunning|Craft|Device|Scan|Lore};?{Advantage|0}"><span>Roll Skill</span></button>`;
 
             return collapsibleHeader(definition.getTitle(), definition.getAttribute(), contents, true);
-        },
-
-        skillButton = function () {
         }
 
         ;

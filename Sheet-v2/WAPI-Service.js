@@ -15,7 +15,6 @@ on("chat:message", function(msg) {
         WuxTechniqueResolver.HandleInput(msg, tag, content);
         WuxMessage.HandleMessageInput(msg, tag, content);
         TargetReference.HandleInput(msg, tag, content);
-        TokenReference.HandleInput(msg, tag, content);
 
         switch(tag) {
             case "!markernames":
@@ -289,6 +288,7 @@ on("chat:message", function(msg) {
 
 DebugLog = function (msg) {
     log(msg);
+    sendChat("System Error", `\w GM ${msg}`, null, { noarchive: true });
 }
 
 // Data Retrieval

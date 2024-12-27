@@ -52,37 +52,22 @@ class TargetData {
 
     importTokenData(token) {
         if (token == undefined) {
-            DebugLog(`[TokenData] No token exists.`);
+            DebugLog(`[TargetData] No token exists.`);
             return;
         }
 
         this.charId = token.get('represents');
         if (this.charId == undefined || this.charId == "") {
-            DebugLog(`[TokenData] (${this.token.name}) has no representative character.`);
+            DebugLog(`[TargetData] (${this.token.name}) has no representative character.`);
             return;
         }
+        this.tokenId = token.get("_id");
 
         let character = getObj('character', this.charId);
 
         this.charName = character.get("name");
-        this.tokenId = token.get("_id");
-
-        let ownerId = character.get("controlledby").split(",")[0];
-        if (ownerId != "") {
-            this.owner = getObj("player", ownerId).get("_displayname");
-        }
-
-        let attributeHandler = new SandboxAttributeHandler(this.charId);
-        let tokenData = this;
-        let displayNameVar = WuxDef.GetVariable("DisplayName");
-        let affinityVar = WuxDef.GetVariable("Affinity");
-        attributeHandler.addMod(displayNameVar);
-        attributeHandler.addMod(affinityVar);
-        attributeHandler.addFinishCallback(function (attrHandler) {
-            tokenData.displayName = attrHandler.parseString(displayNameVar);
-            tokenData.elem = tokenData.getElementStatus(attrHandler.parseString(affinityVar));
-        });
-        attributeHandler.run();
+        this.setOwner(character);
+        this.setCharacterData();
     }
 
     getElementStatus(affinity) {
@@ -102,6 +87,57 @@ class TargetData {
         }
     }
 
+    findCharacterByName(characterName) {
+        let characters = findObjs({
+            _type: 'character',
+            name: characterName
+        }, { caseInsensitive: true });
+        if (characters.length > 0) {
+            return characters[0];
+        }
+
+        characters = findObjs({ _type: 'character' });
+        characters.forEach(function (chr) {
+            if (chr.get('name') == characterName) {
+                return chr;
+            }
+        });
+        return undefined;
+    }
+
+    importCharacterByName(characterName) {
+        let character = this.findCharacterByName(characterName);
+        if (character == undefined) {
+            DebugLog(`[importCharacterByName] Error. Character ${characterName} could not be found.`);
+            return;
+        }
+
+        this.charId = character.get("_id");
+        this.charName = character.get("name");
+        this.setOwner(character);
+        this.setCharacterData();
+    }
+
+    setOwner(character) {
+        let ownerId = character.get("controlledby").split(",")[0];
+        if (ownerId != "") {
+            this.owner = getObj("player", ownerId).get("_displayname");
+        }
+    }
+    setCharacterData() {
+        let attributeHandler = new SandboxAttributeHandler(this.charId);
+        let targetData = this;
+        let displayNameVar = WuxDef.GetVariable("DisplayName");
+        let affinityVar = WuxDef.GetVariable("Affinity");
+        attributeHandler.addMod(displayNameVar);
+        attributeHandler.addMod(affinityVar);
+        attributeHandler.addFinishCallback(function (attrHandler) {
+            targetData.displayName = attrHandler.parseString(displayNameVar);
+            targetData.elem = targetData.getElementStatus(attrHandler.parseString(affinityVar));
+        });
+        attributeHandler.run();
+    }
+
     setTeamIndex(index) {
         this.teamIndex = index;
     }
@@ -109,6 +145,10 @@ class TargetData {
 class TokenTargetData extends TargetData {
     constructor(token, targetData) {
         super(undefined);
+        if (token == undefined) {
+            return;
+        }
+
         if (targetData != undefined) {
             this.importJSON(targetData);
             this.token = token;
@@ -124,6 +164,19 @@ class TokenTargetData extends TargetData {
     importTokenData(token) {
         this.token = token;
         super.importTokenData(token);
+    }
+
+    importTokenDataOnPlayerPage() {
+        var tokens = findObjs({
+            _pageid: Campaign().get("playerpageid"),
+            _type: "graphic",
+            represents: this.charId
+        });
+        if (tokens.length == 0) {
+            return;
+        }
+        this.token = tokens[0];
+        this.tokenId = this.token.get("_id");
     }
 
     // token bar
@@ -381,6 +434,32 @@ var TargetReference = TargetReference || (function () {
                 case "!actclr":
                     commandClearActiveTargets();
                     break;
+                case "!tss":
+                    commandSetSocialData(TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!ten":
+                    commandAddEnergy(TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!tmove":
+                    commandAddMoveCharge(TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!treset":
+                    commandResetToken(TokenReference.GetTokenTargetDataArray(msg));
+                    break;
+                case "!tshowgroup":
+                    commandShowGroup(TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!cshowgroup":
+                    content = getCharacterSheetTarget(content);
+                    commandShowGroup(content.targets, content.content);
+                    break;
+                case "!tskillgroupcheck":
+                    commandRollSkillGroupCheck(TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!cskillgroupcheck":
+                    content = getCharacterSheetTarget(content);
+                    commandRollSkillGroupCheck(content.targets, content.content);
+                    break;
             };
         },
 
@@ -416,6 +495,122 @@ var TargetReference = TargetReference || (function () {
 
         commandClearActiveTargets = function () {
             clearActiveTargetData();
+        },
+
+        getCharacterSheetTarget = function (content) {
+            let output = {
+                content: "",
+                targets: []
+            }
+            let contentSplit = content.split("@@@");
+            output.content = contentSplit[1];
+
+            let target = getTargetDataByName(contentSplit[0]);
+            if (target != undefined) {
+                output.targets.push(target);
+            }
+
+            return output;
+        },
+
+        commandSetSocialData = function (targets, content) {
+            let contents = content.split(",");
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.setPatience(attributeHandler, contents[0]);
+                tokenTargetData.setFavor(attributeHandler, contents[1]);
+                attributeHandler.run();
+            });
+        },
+
+        commandAddEnergy = function (targets, content) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.addEnergy(attributeHandler, content);
+                attributeHandler.run();
+            });
+        },
+
+        commandAddMoveCharge = function (targets, content) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.addMoveCharge(content);
+                attributeHandler.run();
+            });
+        },
+
+        commandResetToken = function (targets) {
+            _.each(targets, function (tokenTargetData) {
+                resetTokenDisplay(tokenTargetData);
+            });
+        },
+
+        commandShowGroup = function (targets, content) {
+            content = content.split(";");
+            let group = content[0];
+            let advantage = content.length > 1 ? content[1] : 0;
+            let tableName = "";
+            switch (group) {
+                case "Defenses": group = "Defense"; tableName = "Defenses"; break;
+                case "Senses": group = "Sense"; tableName = "Senses"; break;
+                default: tableName = content; break;
+            }
+
+            let groupArray = WuxDef.Filter(new DatabaseFilterData("group", group));
+            if (groupArray.length == 0) {
+                DebugLog(`[commandShowGroup] Error. The group (${group}) is empty!`);
+            }
+            else {
+                _.each(targets, function (tokenTargetData) {
+                    checkModifiers(tableName, tokenTargetData, groupArray, false, advantage);
+                });
+            }
+        },
+
+        commandRollSkillGroupCheck = function (targets, content) {
+            content = content.split(";");
+            let subGroup = content[0];
+            let advantage = content.length > 1 ? content[1] : 0;
+            let tableName = `${content}`;
+
+            if (subGroup == "Lore") {
+
+            }
+            else {
+                let groupArray = WuxDef.Filter(new DatabaseFilterData("subGroup", subGroup));
+                _.each(targets, function (tokenTargetData) {
+                    checkModifiers(tableName, tokenTargetData, groupArray, true, advantage);
+                });
+            }
+        },
+
+        checkModifiers = function (tableName, tokenTargetData, definitions, addSkillCheck, advantage) {
+            let tableData = new TableMessage([tokenTargetData.displayName, tableName]);
+            let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+            let dieRoll = new DieRoll();
+            dieRoll.rollCheck(advantage);
+
+            _.each(definitions, function (modDefinition) {
+                let variable = modDefinition.getVariable();
+                attributeHandler.addMod(variable);
+                attributeHandler.addFinishCallback(function (attrHandler) {
+                    let value = attrHandler.parseString(variable, 0, false);
+                    if (addSkillCheck) {
+                        let results = new DieRoll(dieRoll);
+                        results.addModToRoll(value);
+                        tableData.addRow([modDefinition.title, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
+                    }
+                    else {
+                        tableData.addRow([modDefinition.title, value]);
+                    }
+                });
+            });
+            attributeHandler.run();
+
+            let message = tableData.print();
+            let systemMessage = new SystemInfoMessage(message);
+            systemMessage.setSender("System");
+            WuxMessage.Send(systemMessage);
         },
 
         // Active Characters
@@ -476,8 +671,31 @@ var TargetReference = TargetReference || (function () {
 
         getTokenTargetDataByName = function (characterName) {
             if (state.TargetReference.activeCharacters.names[characterName] == undefined) {
-                DebugLog(`[TargetReference][getTokenTargetDataByName] No target data exists for ${characterName}`);
-                return undefined;
+                let tokenTargetData = new TokenTargetData();
+                tokenTargetData.importCharacterByName(characterName);
+                if (tokenTargetData.charId == "") {
+                    DebugLog(`[TargetReference][getTargetDataByName] No target data exists for ${characterName}`);
+                    return undefined;
+                }
+                tokenTargetData.importTokenDataOnPlayerPage();
+                if (tokenTargetData.tokenId == "") {
+                    DebugLog(`[TargetReference][getTargetDataByName] No token data exists for ${characterName}`);
+                    return undefined;
+                }
+                return tokenTargetData;
+            }
+            return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.names[characterName]]);
+        },
+
+        getTargetDataByName = function (characterName) {
+            if (state.TargetReference.activeCharacters.names[characterName] == undefined) {
+                let targetData = new TargetData();
+                targetData.importCharacterByName(characterName);
+                if (targetData.charId == "") {
+                    DebugLog(`[TargetReference][getTargetDataByName] No target data exists for ${characterName}`);
+                    return undefined;
+                }
+                return targetData;
             }
             return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.names[characterName]]);
         }
@@ -488,7 +706,8 @@ var TargetReference = TargetReference || (function () {
         IterateOverActiveTargetData: iterateOverActiveTargetData,
         ClearActiveTargetData: clearActiveTargetData,
         GetTokenTargetData: getTokenTargetData,
-        GetTokenTargetDataByName: getTokenTargetDataByName
+        GetTokenTargetDataByName: getTokenTargetDataByName,
+        GetTargetDataByName: getTargetDataByName
     };
 
 }());
@@ -506,141 +725,6 @@ var TokenReference = TokenReference || (function () {
                 };
             }
             state.TokenReference.tokens = {};
-        },
-
-        // Input Commands
-        // ---------------------------
-
-        handleInput = function (msg, tag, content) {
-            switch (tag) {
-                case "!css":
-                    commandSetSocialData(msg, content);
-                    break;
-                case "!cen":
-                    commandAddEnergy(msg, content);
-                    break;
-                case "!cmove":
-                    commandAddMoveCharge(msg, content);
-                    break;
-                case "!creset":
-                    commandResetToken(msg);
-                    break;
-                case "!cshowgroup":
-                    commandShowGroup(msg, content);
-                    break;
-                case "!crollsubgroup":
-                    commandRollSubGroup(msg, content);
-                    break;
-                case "!cskill":
-                    commandRollSkillCheck(msg, content);
-                    break;
-            };
-        },
-
-        commandSetSocialData = function (msg, content) {
-            let contents = content.split(",");
-            iterateOverSelectedTokens(msg, function (tokenTargetData) {
-                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                tokenTargetData.setPatience(attributeHandler, contents[0]);
-                tokenTargetData.setFavor(attributeHandler, contents[1]);
-                attributeHandler.run();
-            });
-        },
-
-        commandAddEnergy = function (msg, content) {
-            iterateOverSelectedTokens(msg, function (tokenTargetData) {
-                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                tokenTargetData.addEnergy(attributeHandler, content);
-                attributeHandler.run();
-            });
-        },
-
-        commandAddMoveCharge = function (msg, content) {
-            iterateOverSelectedTokens(msg, function (tokenTargetData) {
-                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                tokenTargetData.addMoveCharge(content);
-                attributeHandler.run();
-            });
-        },
-
-        commandResetToken = function (msg) {
-            iterateOverSelectedTokens(msg, function (tokenTargetData) {
-                resetTokenDisplay(tokenTargetData);
-            });
-        },
-
-        commandShowGroup = function (msg, content) {
-            content = content.split(";");
-            let group = content[0];
-            let advantage = content.length > 1 ? content[1] : 0;
-            let tableName = "";
-            switch (content) {
-                case "Defenses": group = "Defense"; tableName = "Defenses"; break;
-                case "Senses": group = "Sense"; tableName = "Senses"; break;
-                default: tableName = content; break;
-            }
-
-            let groupArray = WuxDef.Filter(new DatabaseFilterData("group", group));
-            iterateOverSelectedTokens(msg, function (tokenTargetData) {
-                checkModifiers(tableName, tokenTargetData, groupArray, false), advantage;
-            });
-        },
-
-        commandRollSubGroup = function (msg, content) {
-            content = content.split(";");
-            let subGroup = content[0];
-            let advantage = content.length > 1 ? content[1] : 0;
-            let tableName = `${content} Checks`;
-
-            let groupArray = WuxDef.Filter(new DatabaseFilterData("subGroup", subGroup));
-            iterateOverSelectedTokens(msg, function (tokenTargetData) {
-                checkModifiers(tableName, tokenTargetData, groupArray, true, advantage);
-            });
-        },
-
-        commandRollSkillCheck = function (msg, content) {
-            rollCheck(msg, `Skill_${content}`);
-        },
-
-        // Token Setting
-
-        checkModifiers = function (tableName, tokenTargetData, definitions, addSkillCheck, advantage) {
-            let tableData = new TableMessage([tokenTargetData.displayName, tableName]);
-            let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-            let dieRoll = new DieRoll();
-            dieRoll.rollCheck(advantage);
-
-            _.each(definitions, function (modDefinition) {
-                let variable = modDefinition.getVariable();
-                attributeHandler.addMod(variable);
-                attributeHandler.addFinishCallback(function (attrHandler) {
-                    let value = attrHandler.parseString(variable, 0, false);
-                    if (addSkillCheck) {
-                        let results = new DieRoll(dieRoll);
-                        results.addModToRoll(value);
-                        tableData.addRow([modDefinition.title, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
-                    }
-                    else {
-                        tableData.addRow([modDefinition.title, value]);
-                    }
-                });
-            });
-            attributeHandler.run();
-
-            let message = tableData.print();
-            let systemMessage = new SystemInfoMessage(message);
-            systemMessage.setSender("System");
-            WuxMessage.Send(systemMessage);
-        },
-
-        rollCheck = function (msg, definitionName) {
-            let skillDefinition = WuxDef.Get(definitionName);
-            let tableData = new TableMessage(["", skillDefinition.title]);
-            tableData.addTargetModifierTable(getTokenTargetDataArray(msg), skillDefinition.getVariable());
-
-            let systemMessage = new SystemInfoMessage(tableData.print());
-            systemMessage.setSender("System");
-            WuxMessage.Send(systemMessage);
         },
 
         // State Token Getters
@@ -790,7 +874,6 @@ var TokenReference = TokenReference || (function () {
         ;
     return {
         CheckInstall: checkInstall,
-        HandleInput: handleInput,
         IterateOverSelectedTokens: iterateOverSelectedTokens,
         GetTokenTargetDataArray: getTokenTargetDataArray,
         GetToken: getToken,
