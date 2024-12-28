@@ -288,7 +288,7 @@ on("chat:message", function(msg) {
 
 DebugLog = function (msg) {
     log(msg);
-    sendChat("System Error", `\w GM ${msg}`, null, { noarchive: true });
+    sendChat("System Error", `/w GM ${msg}`, null, { noarchive: true });
 }
 
 // Data Retrieval

@@ -902,35 +902,56 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return `<div class="wuxHeader">&nbsp;${header}</div>\n${attributeSectionWithError(name, output, `${attrName}_error`)}`;
         },
 
-        buildBoonSection = function () {
-            let definition = WuxDef.Get("Title_Boon");
-
-            let output = "";
-            let boonsDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
-            for (let i = 0; i < boonsDefs.length; i++) {
-                output += WuxSheetMain.InteractionElement.CheckboxBlockIcon(boonsDefs[i].getAttribute(), WuxSheetMain.Header2(boonsDefs[i].title));
-            }
-
-            return collapsibleHeader(definition.getTitle(), definition.getAttribute(), output, true);
-        },
-
         buildChatSection = function () {
-            let definition = WuxDef.Get("Page_Chat");
-            return collapsibleHeader(definition.getTitle(), definition.getAttribute(), WuxSheetMain.Chat.Build(), true);
+            let titleDefinition = WuxDef.Get("Page_Chat");
+            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), WuxSheetMain.Chat.Build(), true);
         },
 
         buildLanguageSection = function () {
-            let definition = WuxDef.Get("Title_LanguageSelect");
-            return collapsibleHeader(definition.getTitle(), definition.getAttribute(), WuxSheetMain.Language.Build(), true);
+            let titleDefinition = WuxDef.Get("Title_LanguageSelect");
+            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), WuxSheetMain.Language.Build(), true);
         },
 
         buildChecksSection = function () {
-            let definition = WuxDef.Get("Title_Skills");
             let contents = "";
-            contents += `<button class="wuxButton wuxSizePercent" type="roll" value="!cshowgroup ${WuxDef.GetVariable("SheetName")}@@@?{What will you show?|Defenses|Senses}"><span>Show Stat</span></button>`;
-            contents += `<button class="wuxButton wuxSizePercent" type="roll" value="!cskillgroupcheck ${WuxDef.GetVariable("SheetName")}@@@?{Choose a Skill Group to Roll|Fight|Cast|Athletics|Persuade|Cunning|Craft|Device|Scan|Lore};?{Advantage|0}"><span>Roll Skill</span></button>`;
 
-            return collapsibleHeader(definition.getTitle(), definition.getAttribute(), contents, true);
+            let showStatValue = `!cshowgroup @{${WuxDef.GetVariable("SheetName")}}@@@?{What will you show?|Defenses|Senses}`;
+            let rollSkillValue = `!cskillgroupcheck @{${WuxDef.GetVariable("SheetName")}}@@@?{Choose a Skill Group to Roll|Fight|Cast|Athletics|Persuade|Cunning|Craft|Device|Scan|Lore};?{Advantage|0}`;
+            contents += `<button class="wuxButton wuxSizePercent" type="roll" value="${showStatValue}"><span>Show Stat</span></button>`;
+            contents += `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
+
+            let titleDefinition = WuxDef.Get("Check");
+            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), contents, true);
+        },
+
+        buildBoonSection = function () {
+            let boons = [];
+            let boonsDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
+            for (let i = 0; i < boonsDefs.length; i++) {
+                boons.push(WuxSheetMain.InteractionElement.CheckboxBlockIcon(boonsDefs[i].getAttribute(), WuxSheetMain.Header2(boonsDefs[i].title)));
+            }
+            let output = WuxSheetMain.MultiRowGroup(boons, WuxSheetMain.Table.FlexTable, 3);
+
+            let titleDefinition = WuxDef.Get("Title_Boon");
+            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), output, true);
+        },
+
+        buildStatusSection = function() {
+            let output = buildStatusNames(WuxDef.Filter([new DatabaseFilterData("subGroup", "Status")]));
+            output += buildStatusNames(WuxDef.Filter([new DatabaseFilterData("subGroup", "Condition")]));
+            output += buildStatusNames(WuxDef.Filter([new DatabaseFilterData("subGroup", "Emotion")]));
+
+            let titleDefinition = WuxDef.Get("Status");
+            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), output, true);
+        },
+
+        buildStatusNames = function (statusDefs) {
+            let output = "";
+            for (let i = 0; i < statusDefs.length; i++) {
+                output += WuxSheetMain.HiddenField(statusDefs[i].getAttribute(), 
+                    collapsibleSubheader(WuxSheetMain.Header2(statusDefs[i].title), statusDefs[i].getAttribute(WuxDef._info), WuxSheetMain.Desc(statusDefs[i].getDescription()), false));
+            }
+            return output;
         }
 
         ;
@@ -943,7 +964,8 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         BuildBoonSection: buildBoonSection,
         BuildChatSection: buildChatSection,
         BuildLanguageSection: buildLanguageSection,
-        BuildChecksSection: buildChecksSection
+        BuildChecksSection: buildChecksSection,
+        BuildStatusSection: buildStatusSection
     };
 }());
 
