@@ -56,7 +56,7 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArra
         let techDef = technique.createDefinition(definitionDatabase.get("Technique"));
         definitionDatabase.add(techDef.name, techDef);
     });
-    
+
     let jsClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.Get);
     jsClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
     jsClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
@@ -82,7 +82,7 @@ function SetTechniquesDatabase(techniqueDatabaseString) {
 function Test(definitionArray) {
     let data = new DefinitionData(definitionArray[0]);
     return JSON.stringify(data);
-	// return PrintLargeEntry(DisplayTechniquesSheet.PrintTest(SheetsDatabase.CreateStyles(stylesArray), SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString))), "t");
+    // return PrintLargeEntry(DisplayTechniquesSheet.PrintTest(SheetsDatabase.CreateStyles(stylesArray), SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString))), "t");
 }
 
 function ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
@@ -142,7 +142,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
                 return new SkillData(arr);
             });
         },
-        
+
         createStyles = function (arr) {
             return new Database(arr, ["group", "cr"], function (arr) {
                 return new TechniqueStyle(arr);
@@ -196,7 +196,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
     var
         getDisplayOptions = function () {
             return {
-                
+
                 techniqueDefinition: {},
                 autoExpand: false,
                 hasCSS: false,
@@ -234,25 +234,25 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             'use strict';
 
             var
-            print = function (techDisplayData, displayOptions) {
-                let output = "";
-                output += setTechniqueDisplayHeaderExpandSection(techDisplayData, displayOptions);
-                output += setTechniqueDisplayHeaderSelectSection(techDisplayData, displayOptions);
-                // output += setTechniqueDisplayHeaderUseSection(techDisplayData, displayOptions);
-                output += setTechniqueDisplayHeaderNameFields(techDisplayData, displayOptions);
+                print = function (techDisplayData, displayOptions) {
+                    let output = "";
+                    output += setTechniqueDisplayHeaderExpandSection(techDisplayData, displayOptions);
+                    output += setTechniqueDisplayHeaderSelectSection(techDisplayData, displayOptions);
+                    // output += setTechniqueDisplayHeaderUseSection(techDisplayData, displayOptions);
+                    output += setTechniqueDisplayHeaderNameFields(techDisplayData, displayOptions);
 
-                output = `<div ${setFeatureStyle(["wuxFeatureHeader", `wuxFeatureHeader-${techDisplayData.actionType}`], displayOptions)}>\n${output}\n</div>\n`;
-                output += setTechniqueDisplayHeaderExtentFeatures(techDisplayData, displayOptions);
-                return output;
-            },
+                    output = `<div ${setFeatureStyle(["wuxFeatureHeader", `wuxFeatureHeader-${techDisplayData.actionType}`], displayOptions)}>\n${output}\n</div>\n`;
+                    output += setTechniqueDisplayHeaderExtentFeatures(techDisplayData, displayOptions);
+                    return output;
+                },
 
-            setTechniqueDisplayHeaderExpandSection = function (techDisplayData, displayOptions) {
-                if (displayOptions.hasCSS) {
-                    // add the collapsible field
-                    let attributeName = techDisplayData.definition.getAttribute(WuxDef._expand);
-                    let isChecked = displayOptions.autoExpand ? `checked value="on"` : "";
+                setTechniqueDisplayHeaderExpandSection = function (techDisplayData, displayOptions) {
+                    if (displayOptions.hasCSS) {
+                        // add the collapsible field
+                        let attributeName = techDisplayData.definition.getAttribute(WuxDef._expand);
+                        let isChecked = displayOptions.autoExpand ? `checked value="on"` : "";
 
-                    return `<div class="wuxFeatureHeaderInteractBlock">
+                        return `<div class="wuxFeatureHeaderInteractBlock">
                         <div class="wuxFeatureHeaderInteractInnerBlock">
                         <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${attributeName}" ${isChecked}>
                         <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
@@ -262,13 +262,13 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                         </div>
                         ${setTechniqueDisplayHeaderUseSection(techDisplayData, displayOptions)}
                     </div>`;
-                }
-                return "";
-            },
+                    }
+                    return "";
+                },
 
-            setTechniqueDisplayHeaderSelectSection = function (techDisplayData, displayOptions) {
-                if (displayOptions.hasSelect) {
-                    return `
+                setTechniqueDisplayHeaderSelectSection = function (techDisplayData, displayOptions) {
+                    if (displayOptions.hasSelect) {
+                        return `
                     ${WuxSheetMain.CustomInput("hidden", techDisplayData.definition.getAttribute(WuxDef._subfilter), "wuxFeatureInteraction-flag", ` value="0"`)}
                     <div class="wuxFeatureHeaderInteractBlock">
                     <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${techDisplayData.definition.getAttribute()}">
@@ -277,19 +277,19 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${techDisplayData.definition.getAttribute()}">
                     <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9634;</span>
                     </div>`;
-                }
-                return "";
-            },
+                    }
+                    return "";
+                },
 
-            setTechniqueDisplayHeaderUseSection = function (techDisplayData, displayOptions) {
+                setTechniqueDisplayHeaderUseSection = function (techDisplayData, displayOptions) {
 
-                // add technique data for the api
-                techDisplayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
-                techDisplayData.technique.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
-                techDisplayData.technique.displayname = techDisplayData.displayname;
-                let useDefinition = WuxDef.Get("Title_UseTechnique");
+                    // add technique data for the api
+                    techDisplayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
+                    techDisplayData.technique.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
+                    techDisplayData.technique.displayname = techDisplayData.displayname;
+                    let useDefinition = WuxDef.Get("Title_UseTechnique");
 
-                return `
+                    return `
                 ${WuxSheetMain.CustomInput("hidden", displayOptions.techniqueDefinition.getAttribute(WuxDef._subfilter), "wuxHiddenField-flag", ` value="0"`)}
                 <div class="wuxHiddenAuxField">
                     <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='${techDisplayData.getRollTemplate(true)}'>
@@ -300,29 +300,29 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     </button>
                 </div>
                 `;
-            },
+                },
 
-            setTechniqueDisplayHeaderNameFields = function (techDisplayData, displayOptions) {
-                return `<div ${setFeatureStyle("wuxFeatureHeaderDisplayBlock", displayOptions)}>
+                setTechniqueDisplayHeaderNameFields = function (techDisplayData, displayOptions) {
+                    return `<div ${setFeatureStyle("wuxFeatureHeaderDisplayBlock", displayOptions)}>
                 <span ${setFeatureStyle("wuxFeatureHeaderName", displayOptions)}>${techDisplayData.name}</span>
                 <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.resourceData}</div>
                 <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.targetData}</div>
                 </div>`;
-            },
+                },
 
-            setTechniqueDisplayHeaderExtentFeatures = function (techDisplayData, displayOptions) {
-                let output = "";
-                if (techDisplayData.trigger != "") {
-                    output += setFeatureLineWithHeader("wuxFeatureHeaderInfoTrigger", "Trigger", techDisplayData.trigger, displayOptions);
+                setTechniqueDisplayHeaderExtentFeatures = function (techDisplayData, displayOptions) {
+                    let output = "";
+                    if (techDisplayData.trigger != "") {
+                        output += setFeatureLineWithHeader("wuxFeatureHeaderInfoTrigger", "Trigger", techDisplayData.trigger, displayOptions);
+                    }
+                    if (techDisplayData.itemTraits.length > 0) {
+                        output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Item Traits", setDefinitions(techDisplayData.itemTraits, "<span> or </span>", displayOptions), displayOptions);
+                    }
+                    if (techDisplayData.requirements != "") {
+                        output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Requirements", techDisplayData.requirements, displayOptions);
+                    }
+                    return output;
                 }
-                if (techDisplayData.itemTraits.length > 0) {
-                    output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Item Traits", setDefinitions(techDisplayData.itemTraits, "<span> or </span>", displayOptions), displayOptions);
-                }
-                if (techDisplayData.requirements != "") {
-                    output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Requirements", techDisplayData.requirements, displayOptions);
-                }
-                return output;
-            }
 
             return {
                 Print: print
@@ -333,95 +333,95 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             'use strict';
 
             var
-            print = function (techDisplayData, displayOptions) {
-                let output = "";
-
-                output += setTechniqueDisplayFunctionBlock(techDisplayData, displayOptions);
-                output += techniqueDisplayContentEffects.PrintEffects(techDisplayData, displayOptions);
-                output += setTechniqueDisplayFunctionBlockDefinitions(techDisplayData, displayOptions);
-
-                if (displayOptions.hasCSS) {
-                    let attributeName = techDisplayData.definition.getAttribute(WuxDef._expand);
-                    let isChecked = displayOptions.autoExpand ? ` checked value="on"` : "";
-
-                    return `<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="${attributeName}"${isChecked}>\n<div class="wuxFeatureExpandingContent">\n${output}\n</div>\n`;
-                }
-                else {
-                    return output;
-                }
-            },
-
-            setTechniqueDisplayFunctionBlock = function (techDisplayData, displayOptions) {
-
-                let output = "";
-                output += setTechniqueDisplayFunctionBlockFlavorText(techDisplayData, displayOptions);
-                output += setTechniqueDisplayFunctionBlockTraits(techDisplayData, displayOptions);
-
-                if (output != "") {
-                    return `<div ${setFeatureStyle("wuxFeatureFunctionBlock", displayOptions)}>\n${output}\n</div>\n`;
-                }
-                return "";
-            },
-
-            setTechniqueDisplayFunctionBlockFlavorText = function (techDisplayData, displayOptions) {
-                if (techDisplayData.flavorText != "") {
-                    return setFeatureLine("wuxFeatureFunctionBlockFlavorText", techDisplayData.flavorText, displayOptions);
-                }
-                return "";
-            },
-
-            setTechniqueDisplayFunctionBlockTraits = function (techDisplayData, displayOptions) {
-                if (techDisplayData.traits.length > 0) {
-                    return setFeatureLineWithHeader("wuxFeatureFunctionBlockRow", "Traits", setDefinitions(techDisplayData.traits, "; ", displayOptions), displayOptions);
-                }
-                return "";
-            },
-
-            setTechniqueDisplayFunctionBlockDefinitions = function (techDisplayData, displayOptions) {
-                if (techDisplayData.definitions.length > 0) {
-                    return `<div ${setFeatureStyle("wuxFeatureFunctionBlock", displayOptions)}>
-                    ${setFeatureLineWithHeader("wuxFeatureFunctionBlockRow", "Definitions", setDefinitions(techDisplayData.definitions, "<span>, </span>", displayOptions), displayOptions)}
-                    </div>\n`;
-                }
-                return "";
-            },
-
-            techniqueDisplayContentEffects = techniqueDisplayContentEffects || (function () {
-                'use strict';
-
-                var 
-
-                printEffects = function (techDisplayData, displayOptions) {
+                print = function (techDisplayData, displayOptions) {
                     let output = "";
-                    let defenseDisplay = "";
-                    techDisplayData.effects.forEach(function (effectData) {
-                        if (effectData.check != undefined) {
-                            defenseDisplay = WuxSheetMain.Tooltip.Text(effectData.check, WuxSheetMain.Header2(effectData.check) + WuxSheetMain.Desc(effectData.checkDescription));
 
-                            output += setFeatureLine("wuxFeatureCheckHeader", defenseDisplay, displayOptions);
-                            effectData.effects.forEach(function (effect) {
-                                output += setTechniqueDisplayCheckBlock(effect, displayOptions);
-                            });
-                        }
-                    });
+                    output += setTechniqueDisplayFunctionBlock(techDisplayData, displayOptions);
+                    output += techniqueDisplayContentEffects.PrintEffects(techDisplayData, displayOptions);
+                    output += setTechniqueDisplayFunctionBlockDefinitions(techDisplayData, displayOptions);
 
-                    if (output != "") {
-                        return `<div ${setFeatureStyle("wuxFeatureEffectsBlock", displayOptions)}>\n${output}\n</div>\n`;
+                    if (displayOptions.hasCSS) {
+                        let attributeName = techDisplayData.definition.getAttribute(WuxDef._expand);
+                        let isChecked = displayOptions.autoExpand ? ` checked value="on"` : "";
+
+                        return `<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="${attributeName}"${isChecked}>\n<div class="wuxFeatureExpandingContent">\n${output}\n</div>\n`;
                     }
-                    return output;
+                    else {
+                        return output;
+                    }
                 },
 
-                setTechniqueDisplayCheckBlock = function (effectsOutput, displayOptions) {
-                    return `<div ${setFeatureStyle("wuxFeatureCheckBlock", displayOptions)}>
+                setTechniqueDisplayFunctionBlock = function (techDisplayData, displayOptions) {
+
+                    let output = "";
+                    output += setTechniqueDisplayFunctionBlockFlavorText(techDisplayData, displayOptions);
+                    output += setTechniqueDisplayFunctionBlockTraits(techDisplayData, displayOptions);
+
+                    if (output != "") {
+                        return `<div ${setFeatureStyle("wuxFeatureFunctionBlock", displayOptions)}>\n${output}\n</div>\n`;
+                    }
+                    return "";
+                },
+
+                setTechniqueDisplayFunctionBlockFlavorText = function (techDisplayData, displayOptions) {
+                    if (techDisplayData.flavorText != "") {
+                        return setFeatureLine("wuxFeatureFunctionBlockFlavorText", techDisplayData.flavorText, displayOptions);
+                    }
+                    return "";
+                },
+
+                setTechniqueDisplayFunctionBlockTraits = function (techDisplayData, displayOptions) {
+                    if (techDisplayData.traits.length > 0) {
+                        return setFeatureLineWithHeader("wuxFeatureFunctionBlockRow", "Traits", setDefinitions(techDisplayData.traits, "; ", displayOptions), displayOptions);
+                    }
+                    return "";
+                },
+
+                setTechniqueDisplayFunctionBlockDefinitions = function (techDisplayData, displayOptions) {
+                    if (techDisplayData.definitions.length > 0) {
+                        return `<div ${setFeatureStyle("wuxFeatureFunctionBlock", displayOptions)}>
+                    ${setFeatureLineWithHeader("wuxFeatureFunctionBlockRow", "Definitions", setDefinitions(techDisplayData.definitions, "<span>, </span>", displayOptions), displayOptions)}
+                    </div>\n`;
+                    }
+                    return "";
+                },
+
+                techniqueDisplayContentEffects = techniqueDisplayContentEffects || (function () {
+                    'use strict';
+
+                    var
+
+                        printEffects = function (techDisplayData, displayOptions) {
+                            let output = "";
+                            let defenseDisplay = "";
+                            techDisplayData.effects.forEach(function (effectData) {
+                                if (effectData.check != undefined) {
+                                    defenseDisplay = WuxSheetMain.Tooltip.Text(effectData.check, WuxSheetMain.Header2(effectData.check) + WuxSheetMain.Desc(effectData.checkDescription));
+
+                                    output += setFeatureLine("wuxFeatureCheckHeader", defenseDisplay, displayOptions);
+                                    effectData.effects.forEach(function (effect) {
+                                        output += setTechniqueDisplayCheckBlock(effect, displayOptions);
+                                    });
+                                }
+                            });
+
+                            if (output != "") {
+                                return `<div ${setFeatureStyle("wuxFeatureEffectsBlock", displayOptions)}>\n${output}\n</div>\n`;
+                            }
+                            return output;
+                        },
+
+                        setTechniqueDisplayCheckBlock = function (effectsOutput, displayOptions) {
+                            return `<div ${setFeatureStyle("wuxFeatureCheckBlock", displayOptions)}>
                     <span ${setFeatureStyle("wuxFeatureCheckBlockRow", displayOptions)}>${effectsOutput}</span>
                     </div>\n`;
-                }
+                        }
 
-                return {
-                    PrintEffects: printEffects
-                };
-            })()
-            ;
+                    return {
+                        PrintEffects: printEffects
+                    };
+                })()
+                ;
             return {
                 Print: print
             }
@@ -449,7 +449,8 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                         output += delimeter;
                     }
                     if (displayOptions.hasCSS) {
-                        output += WuxSheetMain.Tooltip.Text(definitions[i].title, WuxDefinition.TooltipDescription(definitions[i]));                    }
+                        output += WuxSheetMain.Tooltip.Text(definitions[i].title, WuxDefinition.TooltipDescription(definitions[i]));
+                    }
                     else {
                         output += `<a style="margin-right: 10px; text-decoration: underline dotted;" title="${description}">${definitions[i].name}</a>`;
                     }
@@ -641,11 +642,11 @@ var WuxDefinition = WuxDefinition || (function () {
 
     var
         get = function (key) {
-			if (values[key] == undefined) {
-				let definition = new DefinitionData();
-				definition.name = `${key} Not Found`;
-				return definition;
-			}
+            if (values[key] == undefined) {
+                let definition = new DefinitionData();
+                definition.name = `${key} Not Found`;
+                return definition;
+            }
             switch (values[key]["group"]) {
                 case "Technique":
                     return new TechniqueDefinitionData(values[key]);
@@ -681,7 +682,7 @@ var WuxDefinition = WuxDefinition || (function () {
         getVariables = function (key, array, mod1) {
             let output = [];
             let data = get(key);
-            for(let i = 0; i < array.length; i++) {
+            for (let i = 0; i < array.length; i++) {
                 output.push(data.getVariable(array[i], mod1));
             }
             return output;
@@ -718,9 +719,9 @@ var WuxDefinition = WuxDefinition || (function () {
             let expandContents = `${WuxSheetMain.Header2(definitionData.title)}\n${definitionContents(definitionData)}`;
             return expandContents;
         },
-        definitionContents = function(definitionData) {
+        definitionContents = function (definitionData) {
             let expandContents = "";
-            if(definitionData.subGroup != "") {
+            if (definitionData.subGroup != "") {
                 expandContents += WuxSheetMain.Desc(`<em>${definitionData.subGroup}</em>`);
             }
             for (let i = 0; i < definitionData.descriptions.length; i++) {
@@ -901,6 +902,18 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return `<div class="wuxHeader">&nbsp;${header}</div>\n${attributeSectionWithError(name, output, `${attrName}_error`)}`;
         },
 
+        buildBoonSection = function () {
+            let definition = WuxDef.Get("Title_Boon");
+
+            let output = "";
+            let boonsDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
+            for (let i = 0; i < boonsDefs.length; i++) {
+                output += WuxSheetMain.InteractionElement.CheckboxBlockIcon(boonsDefs[i].getAttribute(), WuxSheetMain.Header2(boonsDefs[i].title));
+            }
+
+            return collapsibleHeader(definition.getTitle(), definition.getAttribute(), output, true);
+        },
+
         buildChatSection = function () {
             let definition = WuxDef.Get("Page_Chat");
             return collapsibleHeader(definition.getTitle(), definition.getAttribute(), WuxSheetMain.Chat.Build(), true);
@@ -927,6 +940,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         CollapsibleHeader: collapsibleHeader,
         CollapsibleSubheader: collapsibleSubheader,
         BuildPointsSection: buildPointsSection,
+        BuildBoonSection: buildBoonSection,
         BuildChatSection: buildChatSection,
         BuildLanguageSection: buildLanguageSection,
         BuildChecksSection: buildChecksSection
@@ -1054,7 +1068,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<input type="${type}" class="${className}" name="${fieldName}"${extras} />`
         },
 
-        inputLabel = function(contents) {
+        inputLabel = function (contents) {
             return `<div class="wuxInputLabel">${contents}</div>`;
         },
 
@@ -1079,7 +1093,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
 
             let output = `<select class="${className}" name="${fieldName}" value="0">`;
 
-            if (showEmpty == undefined || showEmpty) { 
+            if (showEmpty == undefined || showEmpty) {
                 output += `\n<option value="0">-</option>`;
             }
 
@@ -1095,7 +1109,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 className = "";
             }
             else {
-                className = " " + className; 
+                className = " " + className;
             }
             return `<div class="wuxButton${className}">\n<input type="checkbox" name="${fieldName}">\n<span>${contents}</span>\n </div>`;
         },
@@ -1131,20 +1145,20 @@ var WuxSheetMain = WuxSheetMain || (function () {
             'use strict';
 
             var
-            button = function (fieldName) {
-                return `<div class="wuxInfoButton"><input type="checkbox" name="${fieldName}"><span>?</span></div>`;
-            },
-    
-            contents = function (fieldName, contents) {
-                let output = `<div class="wuxInfoContent">\n${contents}\n</div>`;
-                return WuxSheetMain.HiddenField(fieldName, output);
-            },
-    
-            defaultContents = function (definition) {
-                let output = "";
-                output += WuxDefinition.TooltipDescription(definition);
-                return contents(definition.getAttribute(WuxDef._info), output);
-            }
+                button = function (fieldName) {
+                    return `<div class="wuxInfoButton"><input type="checkbox" name="${fieldName}"><span>?</span></div>`;
+                },
+
+                contents = function (fieldName, contents) {
+                    let output = `<div class="wuxInfoContent">\n${contents}\n</div>`;
+                    return WuxSheetMain.HiddenField(fieldName, output);
+                },
+
+                defaultContents = function (definition) {
+                    let output = "";
+                    output += WuxDefinition.TooltipDescription(definition);
+                    return contents(definition.getAttribute(WuxDef._info), output);
+                }
 
             return {
                 Button: button,
@@ -1157,31 +1171,31 @@ var WuxSheetMain = WuxSheetMain || (function () {
             'use strict';
 
             var
-            button = function (fieldName, contents) {
-                return `<div class="wuxTooltipButtonContainer">
+                button = function (fieldName, contents) {
+                    return `<div class="wuxTooltipButtonContainer">
                 <div class="wuxTooltipButton wuxFloatRight">
                 <input type="checkbox" name="${fieldName}">
                 <div class="wuxTooltipText">i</div>
                 <div class="wuxTooltipContent">\n${contents}\n</div>
                 </div>
                 </div>`;
-            },
+                },
 
-            icon = function (contents) {
-                return `<div class="wuxTooltipButtonContainer">
+                icon = function (contents) {
+                    return `<div class="wuxTooltipButtonContainer">
                 <div class="wuxTooltipButton wuxFloatRight">
                 <div class="wuxTooltipText">i</div>
                 <div class="wuxTooltipContent">\n${contents}\n</div>
                 </div>
                 </div>`;
-            },
+                },
 
-            text = function (text, contents) {
-                return `<span class="wuxTooltip">
+                text = function (text, contents) {
+                    return `<span class="wuxTooltip">
                 <span class="wuxTooltipText">\n${text}\n</span>
                 <div class="wuxTooltipContent">\n${contents}\n</div>
                 </span>`;
-            }
+                }
 
             return {
                 Button: button,
@@ -1311,7 +1325,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     return `<div class="wuxInteractiveInnerExpandBlock">\n<span class="wuxInteractiveExpandIcon">&nbsp;</span>\n</div>`;
                 },
 
-                innerBlock = function(contents) {
+                innerBlock = function (contents) {
                     return `<div class="wuxInteractiveInnerBlock">\n${contents}\n</div>`;
                 },
 
@@ -1390,7 +1404,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
                         </fieldset>
                     </div>`;
                 },
-                
+
                 emotePostButton = function () {
                     return `<button class="wuxEmoteButton" type="roll" value="${senderPostMessage()}">
                     <span name="${WuxDef.GetAttribute("Chat_PostName")}">emote</span>
@@ -1418,9 +1432,9 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     let languageAttr = WuxDef.GetAttribute("Chat_Language");
                     let languageFilters = WuxDef.Filter([new DatabaseFilterData("group", "Language")]);
                     for (let i = 0; i < languageFilters.length; i++) {
-                        contents += WuxSheetMain.HiddenField(languageFilters[i].getAttribute(WuxDef._filter), 
-                        WuxSheetMain.InteractionElement.BuildTooltipRadioInput(languageAttr, languageFilters[i].title, 
-                            languageTitle(languageFilters[i]), WuxDefinition.TooltipDescription(languageFilters[i]))
+                        contents += WuxSheetMain.HiddenField(languageFilters[i].getAttribute(WuxDef._filter),
+                            WuxSheetMain.InteractionElement.BuildTooltipRadioInput(languageAttr, languageFilters[i].title,
+                                languageTitle(languageFilters[i]), WuxDefinition.TooltipDescription(languageFilters[i]))
                         );
                     }
                     return contents;
@@ -1520,7 +1534,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         buildHeader = function (header, subheader, infoFieldName) {
             return `<div class="wuxHeader2">${WuxSheetMain.Info.Button(infoFieldName)}${subheader}</div>\n<div class="wuxHeader">${header}</div>`;
         },
-        
+
         buildOverviewPageNavigation = function (selectedTab) {
             let sideBarButtons = "";
             let tabFieldName = WuxDef.GetAttribute("PageSet_Core", WuxDef._tab);
@@ -1531,7 +1545,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", selectedTab == "Overview", "") + "\n";
 
             let definition = WuxDef.Get("Page_Character");
-            return buildSection(mainPageNavigation(definition.title, WuxDef.GetTitle(`Page_${selectedTab}`), definition.getAttribute(WuxDef._info), buildStickySideTab(buildTabButtonRow(sideBarButtons))), 
+            return buildSection(mainPageNavigation(definition.title, WuxDef.GetTitle(`Page_${selectedTab}`), definition.getAttribute(WuxDef._info), buildStickySideTab(buildTabButtonRow(sideBarButtons))),
                 overviewInfoContents(definition.getAttribute(WuxDef._info), tabFieldName));
         },
 
@@ -1545,12 +1559,12 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             // output += WuxSheet.PageDisplay("Options", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Options")));
             return WuxSheetMain.Info.Contents(fieldName, output);
         },
-        
+
         buildGearPageNavigation = function () {
             let definition = WuxDef.Get("Page_Gear");
             return buildSection(mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
         },
-        
+
         buildActionsPageNavigation = function () {
             let definition = WuxDef.Get("Page_Actions");
             return buildSection(mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
@@ -1655,7 +1669,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             let tabNames = ["Techniques", "Attributes", "Knowledge", "Skills", "Jobs", "Origin"];
 
             for (let i = 0; i < tabNames.length; i++) {
-                output += buildTabButton("radio",  WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
+                output += buildTabButton("radio", WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
             }
             output = buildTabButtonRow(output);
 
@@ -1772,7 +1786,7 @@ class JavascriptDataClass {
 
     createDatabase(customDataNames, customData) {
         let database = {};
-        for(let i = 0; i < customData.length; i++) {
+        for (let i = 0; i < customData.length; i++) {
             database[customDataNames[i]] = customData[i];
         }
         return database;
@@ -1783,9 +1797,9 @@ class JavascriptDataClass {
         json = json.replace(/(},|],)/g, '$1\n');
         return json;
     }
-      
 
-    print (className) {
+
+    print(className) {
         return `var ${className} = ${className} || (function() {
             'use strict';
 
@@ -1820,12 +1834,12 @@ class JavascriptDataClass {
         let key = "";
         let data = "";
         for (let i = 0; i < dictionary.keys.length; i++) {
-          key = dictionary.keys[i];
-          if (data != "") {
-            data += `,
+            key = dictionary.keys[i];
+            if (data != "") {
+                data += `,
             `;
-          }
-          data += `${key}${delimeter}${dictionary.get(key)}`;
+            }
+            data += `${key}${delimeter}${dictionary.get(key)}`;
         }
         return data;
     }
@@ -1835,7 +1849,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
     'use strict';
 
     var
-        create = function(database, getFunction) {
+        create = function (database, getFunction) {
             var jsClassData = new JavascriptDataClass();
             jsClassData.addVariable("keys", JSON.stringify(database.keys));
             jsClassData.addVariable("values", jsClassData.formatJsonForDatabase(database.values));
@@ -1857,14 +1871,14 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             return jsClassData;
         },
         getValues = function (keyArray, delimeter) {
-			if (keyArray == undefined || keyArray == "") {
-				return [];
-			}
-			if (typeof keyArray == "string") {
-				keyArray = keyArray.split(delimeter);
-			}
+            if (keyArray == undefined || keyArray == "") {
+                return [];
+            }
+            if (typeof keyArray == "string") {
+                keyArray = keyArray.split(delimeter);
+            }
 
-			let output = [];
+            let output = [];
             let name = "";
             let lookup = "";
             let dataInfo;
@@ -1878,25 +1892,25 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
                 }
 
                 dataInfo = get(lookup);
-				if (dataInfo != undefined) {
-					dataInfo.name = name;
-					output.push(dataInfo);
-				}
+                if (dataInfo != undefined) {
+                    dataInfo.name = name;
+                    output.push(dataInfo);
+                }
             }
-            
-			return output;
-		},
-        has = function(key) {
+
+            return output;
+        },
+        has = function (key) {
             return keys.includes(key);
         },
-        iterate = function(callback) {
+        iterate = function (callback) {
             for (let i = 0; i < keys.length; i++) {
                 callback(values[keys[i]]);
             }
         },
-        filter = function(filterData) {
+        filter = function (filterData) {
             let filteredGroup;
-            if(Array.isArray(filterData)) {
+            if (Array.isArray(filterData)) {
                 filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
                 let nextFilter = [];
                 for (let i = 1; i < filterData.length; i++) {
@@ -1916,11 +1930,11 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             return getGroupData(filteredGroup);
         },
 
-        getSortedGroup = function(property, propertyValue) {
+        getSortedGroup = function (property, propertyValue) {
             return sortingGroups[property][propertyValue];
         },
 
-        getGroupData = function(group) {
+        getGroupData = function (group) {
             let output = [];
             for (let i = 0; i < group.length; i++) {
                 output.push(get(group[i]));
@@ -1928,7 +1942,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             return output;
         },
 
-        getPropertyValues = function(property) {
+        getPropertyValues = function (property) {
             let output = [];
             for (let key in sortingGroups[property]) {
                 output.push(key);

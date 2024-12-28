@@ -1384,6 +1384,11 @@
     margin-bottom: 5px;
 }
 
+.sheet-rolltemplate-systemInfoBox .inlinerollresult
+{
+    color: #e60aa0;
+}
+
 .sheet-rolltemplate-responseBox .sheet-formattedTextbox 
 {
     padding: 4px 6px;

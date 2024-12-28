@@ -859,7 +859,9 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			var
 				print = function () {
 					let tabFieldName = WuxDef.GetAttribute("Page");
-					let actionSidebar = WuxSheetSidebar.BuildChatSection();
+					let actionSidebar = "";
+					actionSidebar += WuxSheetSidebar.BuildBoonSection();
+					actionSidebar += WuxSheetSidebar.BuildChatSection();
 					actionSidebar += WuxSheetSidebar.BuildChecksSection();
 					let output = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
 					${WuxSheet.PageDisplay("Techniques", buildTechPointsSection(WuxDef.GetAttribute("Technique")))}
@@ -1159,6 +1161,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 			var
 				printSidebar = function () {
 					let contents = "";
+					contents += WuxSheetSidebar.BuildBoonSection();
 					contents += WuxSheetSidebar.BuildChatSection();
 					contents += WuxSheetSidebar.BuildChecksSection();
 					// contents += WuxSheetSidebar.BuildLanguageSection();
@@ -1188,6 +1191,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			        let contents = "";
         			        contents += basics();
         			        contents += influences();
+							contents += boons();
 							contents += WuxSheetMain.MultiRowGroup([advancement(), training()], WuxSheetMain.Table.FlexTable, 2);
         			        
         			        contents = WuxSheetMain.TabBlock(contents);
@@ -1200,38 +1204,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         			        let contents = "";
         			        contents += WuxDefinition.BuildText(WuxDef.Get("FullName"), WuxSheetMain.Span(WuxDef.GetAttribute("FullName")));
         			        return contents;
-        			    },
-        			    
-        			    advancement = function () {
-        			        let contents = "";
-							let titleDefinition = WuxDef.Get("Title_Advancement");
-        			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
-
-							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
-
-							let levelDefinition = WuxDef.Get("Level");
-        			        contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute()));
-
-							let xpDefinition = WuxDef.Get("XP");
-        			        contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}</span>`);
-							
-							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-        			    },
-        			    
-        			    training = function () {
-        			        let contents = "";
-							let titleDefinition = WuxDef.Get("Title_Training");
-        			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
-
-							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
-
-							let levelDefinition = WuxDef.Get("Training");
-        			        contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute(WuxDef._max)));
-
-							let ppDefinition = WuxDef.Get("PP");
-        			        contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}</span>`);
-							
-							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
         			    },
 
 						influences = function () {
@@ -1264,7 +1236,57 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 								</fieldset>
 							</div>`;
 							return contents;
-						}
+						},
+
+						boons = function () {
+        			        let contents = "";
+							let boonDef = WuxDef.Get("Title_Boon");
+							let boonsDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
+
+							let boonInfo = WuxDefinition.TooltipDescription(boonDef);
+							boonInfo = WuxSheetMain.Info.Contents(boonDef.getAttribute(WuxDef._info), boonInfo);
+
+        			        contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(boonDef.getAttribute(WuxDef._info))}${boonDef.title}`)}
+							${boonInfo}`;
+
+							for (let i = 0; i < boonsDefs.length; i++) {
+								contents += WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(boonsDefs[i].getAttribute(), boonsDefs[i].getAttribute(WuxDef._info),
+								WuxSheetMain.Header(boonsDefs[i].title), WuxDefinition.TooltipDescription(boonsDefs[i]));
+							}
+							return contents;
+						},
+        			    
+        			    advancement = function () {
+        			        let contents = "";
+							let titleDefinition = WuxDef.Get("Title_Advancement");
+        			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
+
+							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
+
+							let levelDefinition = WuxDef.Get("Level");
+        			        contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute()));
+
+							let xpDefinition = WuxDef.Get("XP");
+        			        contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}</span>`);
+							
+							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
+        			    },
+        			    
+        			    training = function () {
+        			        let contents = "";
+							let titleDefinition = WuxDef.Get("Title_Training");
+        			        contents +=  WuxDefinition.InfoHeader(titleDefinition);
+
+							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
+
+							let levelDefinition = WuxDef.Get("Training");
+        			        contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute(WuxDef._max)));
+
+							let ppDefinition = WuxDef.Get("PP");
+        			        contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}</span>`);
+							
+							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
+        			    }
         			    
         			    return {
         			        Build : build
