@@ -2176,7 +2176,7 @@ class CombatDetails {
     constructor(json) {
         this.createEmpty();
         if (json != undefined) {
-            importJson(json);
+            this.importJson(json);
         }
     }
     createEmpty() {
@@ -2188,8 +2188,10 @@ class CombatDetails {
         this.status = [];
         this.surges = 2;
         this.maxsurges = 2;
-        this.supportiveInfluence = "";
-        this.opposingInfluence = "";
+        this.vitality = 1;
+        this.maxvitality = 1;
+        this.supportiveInfluence = 0;
+        this.opposingInfluence = 0;
     }
 
     importJson(json) {
@@ -2201,8 +2203,10 @@ class CombatDetails {
         this.status = json.status != undefined ? json.status : [];
         this.surges = json.surges != undefined ? json.surges : 2;
         this.maxsurges = json.maxsurges != undefined ? json.maxsurges : 2;
-        this.supportiveInfluence = json.supportiveInfluence != undefined ? json.supportiveInfluence : "";
-        this.opposingInfluence = json.opposingInfluence != undefined ? json.opposingInfluence : "";
+        this.vitality = json.vitality != undefined ? json.vitality : 1;
+        this.maxvitality = json.maxvitality != undefined ? json.maxvitality : 1;
+        this.supportiveInfluence = json.supportiveInfluence != undefined ? json.supportiveInfluence : 0;
+        this.opposingInfluence = json.opposingInfluence != undefined ? json.opposingInfluence : 0;
     }
 
     printTooltip() {
@@ -2214,12 +2218,21 @@ class CombatDetails {
             case "Battle":
                 output += `Surges:`;
                 for (let i = 0; i < this.maxsurges; i++) {
-                    output += i < this.surges ? `♥` : `♡`;
+                    output += i < this.surges ? `⛊` : `⛉`;
+                }
+                output += `.Vitality:`;
+                for (let i = 0; i < this.maxvitality; i++) {
+                    output += i < this.vitality ? `♥` : `♡`;
                 }
                 break;
             case "Social":
-                let influences = `${this.supportiveInfluence != "" ? `${this.supportiveInfluence}(+)` : ""}${this.opposingInfluence != "" ? `${this.opposingInfluence}(-)` : ""}`;
-                output += `Influences:${influences == "" ? "None" : influences}`;
+                output += `Influences:`;
+                for (let i = 0; i < 3; i++) {
+                    output += i < this.supportiveInfluence ? `▲` : `△`;
+                }
+                for (let i = 0; i < 3; i++) {
+                    output += i < this.opposingInfluence ? `▼` : `▽`;
+                }
                 break;
         }
         output += this.printTooltipStatus();

@@ -1006,12 +1006,14 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 			let attributeHandler = new WorkerAttributeHandler();
 			let worker = new WuxWorkerBuildManager("JobStyle");
 			worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
-			let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
-			attributeHandler.addGetAttrCallback(function (attrHandler) {
-				let jobData = WuxDef.Get(jobName);
-				combatDetailsHandler.onUpdateArchetype(attrHandler, jobData.subGroup);
-			});
+			if (eventinfo.newValue != 0) {
+				let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+				attributeHandler.addGetAttrCallback(function (attrHandler) {
+					let jobData = WuxDef.Get(jobName);
+					combatDetailsHandler.onUpdateArchetype(attrHandler, jobData.subGroup);
+				});
+			}
 			attributeHandler.run();
 		},
 		updateTechniquesPageToLearn = function (attributeHandler) {
