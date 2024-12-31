@@ -32,6 +32,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
 			let output = "";
 			output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Technique", WuxDef._page, WuxDef._learn));
 			output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("CombatDetails"));
+			output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Status"));
 
 			let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", "Social")]);
 			for (let i = 0; i < filteredStats.length; i++) {
@@ -48,6 +49,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
 			output += BuilderBackend.Print(sheetsDb);
 			output += TrainingBackend.Print(sheetsDb);
 			output += AdvancementBackend.Print(sheetsDb);
+			output += OverviewBuilder.Print();
 			output += ChatBuilder.Print();
 			return `<script type="text/worker">
 			on("sheet:opened", function(eventinfo) {
@@ -1320,7 +1322,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							contents += statusNames(WuxDef.Get("Status"), WuxDef.Filter([new DatabaseFilterData("subGroup", "Status")]));
 							contents += statusNames(WuxDef.Get("Condition"), WuxDef.Filter([new DatabaseFilterData("subGroup", "Condition")]));
 							contents += statusNames(WuxDef.Get("Emotion"), WuxDef.Filter([new DatabaseFilterData("subGroup", "Emotion")]));
-							
+
 							return contents;
 						},
 
@@ -1736,10 +1738,13 @@ var BuilderBackend = BuilderBackend || (function () {
 			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 		},
 		listenerUpdateJobStyleBuildPoints = function () {
-			let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));
-			let output = `WuxWorkerTechniques.UpdateJobStyleBuildPoints(eventinfo)`;
-
-			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+			let output = "";
+            let jobs = WuxDef.Filter([new DatabaseFilterData("group", "Job")]);
+			for (let i = 0; i < jobs.length; i++) {
+				let groupVariableNames = [(jobs[i].getVariable())];
+				output += "\n" + WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerTechniques.UpdateJobStyleBuildPoints("${jobs[i].name}", eventinfo)`, true);
+			}
+			return output;
 		}
 
 	return {
@@ -1890,6 +1895,37 @@ var AdvancementBackend = AdvancementBackend || (function () {
 		Print: print
 	}
 }())
+
+var OverviewBuilder = OverviewBuilder || (function () {
+	'use strict';
+
+	var
+		print = function () {
+			let output = "";
+			output += listenerUpdateDisplayName();
+			output += listenerUpdateStatus();
+			return output;
+		},
+		listenerUpdateDisplayName = function () {
+			let groupVariableNames = [`${WuxDef.GetVariable("DisplayName")}`];
+			let output = `WuxWorkerGeneral.UpdateDisplayName(eventinfo)`;
+
+			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+		},
+		listenerUpdateStatus = function () {
+			let output = "";
+            let statuses = WuxDef.Filter([new DatabaseFilterData("group", "Status")]);
+			for (let i = 0; i < statuses.length; i++) {
+				let groupVariableNames = [(statuses[i].getVariable())];
+				output += "\n" + WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerGeneral.UpdateStatus("${statuses[i].name}", eventinfo)`, true);
+			}
+
+			return output;
+		}
+	return {
+		Print: print
+	}
+}());
 
 var ChatBuilder = ChatBuilder || (function () {
 	'use strict';

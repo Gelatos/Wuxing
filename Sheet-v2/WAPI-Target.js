@@ -52,13 +52,13 @@ class TargetData {
 
     importTokenData(token) {
         if (token == undefined) {
-            DebugLog(`[TargetData] No token exists.`);
+            Debug.Log(`[TargetData] No token exists.`);
             return;
         }
 
         this.charId = token.get('represents');
         if (this.charId == undefined || this.charId == "") {
-            DebugLog(`[TargetData] (${this.token.name}) has no representative character.`);
+            Debug.LogError(`[TargetData] (${this.token.name}) has no representative character.`);
             return;
         }
         this.tokenId = token.get("_id");
@@ -108,7 +108,7 @@ class TargetData {
     importCharacterByName(characterName) {
         let character = this.findCharacterByName(characterName);
         if (character == undefined) {
-            DebugLog(`[importCharacterByName] Error. Character ${characterName} could not be found.`);
+            Debug.LogError(`[importCharacterByName] Error. Character ${characterName} could not be found.`);
             return;
         }
 
@@ -218,13 +218,12 @@ class TokenTargetData extends TargetData {
         this.token.set("show_tooltip", isShown);
     }
     setTooltip(value) {
+        Debug.Log(`Setting Tooltip to ${value}`);
         this.token.set("tooltip", value);
     }
 
     // status settings
     setEnergy(value) {
-        DebugLog(`[TokenTargetData][setEnergy] ${this.token} Setting energy to ${value}`);
-        DebugLog(`[TokenTargetData][setEnergy] ${JSON.stringify(this.token)}`);
         this.token.set(this.elem, value);
     }
     setTurnIcon(value) {
@@ -558,7 +557,7 @@ var TargetReference = TargetReference || (function () {
 
             let groupArray = WuxDef.Filter(new DatabaseFilterData("group", group));
             if (groupArray.length == 0) {
-                DebugLog(`[commandShowGroup] Error. The group (${group}) is empty!`);
+                Debug.LogError(`[commandShowGroup] The group (${group}) is empty!`);
             }
             else {
                 _.each(targets, function (tokenTargetData) {
@@ -623,6 +622,10 @@ var TargetReference = TargetReference || (function () {
             };
         },
 
+        hasActiveTargets = function() {
+            return Object.keys(state.TargetReference.activeCharacters.targetData).length > 0;
+        },
+
         iterateOverActiveTargetData = function (callback) {
             for (let targetData in state.TargetReference.activeCharacters.targetData) {
                 let tokenTargetData = TokenReference.GetTokenData(targetData);
@@ -634,7 +637,7 @@ var TargetReference = TargetReference || (function () {
 
         addToActiveCharacters = function (tokenTargetData) {
             if (tokenTargetData == undefined) {
-                DebugLog(`[TargetReference][addToActiveCharacters] No target data exists.`);
+                Debug.LogError(`[TargetReference][addToActiveCharacters] No target data exists.`);
                 return;
             }
             delete (tokenTargetData.token);
@@ -674,12 +677,12 @@ var TargetReference = TargetReference || (function () {
                 let tokenTargetData = new TokenTargetData();
                 tokenTargetData.importCharacterByName(characterName);
                 if (tokenTargetData.charId == "") {
-                    DebugLog(`[TargetReference][getTargetDataByName] No target data exists for ${characterName}`);
+                    Debug.LogError(`[TargetReference][getTargetDataByName] No target data exists for ${characterName}`);
                     return undefined;
                 }
                 tokenTargetData.importTokenDataOnPlayerPage();
                 if (tokenTargetData.tokenId == "") {
-                    DebugLog(`[TargetReference][getTargetDataByName] No token data exists for ${characterName}`);
+                    Debug.LogError(`[TargetReference][getTargetDataByName] No token data exists for ${characterName}`);
                     return undefined;
                 }
                 return tokenTargetData;
@@ -692,7 +695,7 @@ var TargetReference = TargetReference || (function () {
                 let targetData = new TargetData();
                 targetData.importCharacterByName(characterName);
                 if (targetData.charId == "") {
-                    DebugLog(`[TargetReference][getTargetDataByName] No target data exists for ${characterName}`);
+                    Debug.LogError(`[TargetReference][getTargetDataByName] No target data exists for ${characterName}`);
                     return undefined;
                 }
                 return targetData;
@@ -703,6 +706,7 @@ var TargetReference = TargetReference || (function () {
     return {
         CheckInstall: checkInstall,
         HandleInput: handleInput,
+        HasActiveTargets: hasActiveTargets,
         IterateOverActiveTargetData: iterateOverActiveTargetData,
         ClearActiveTargetData: clearActiveTargetData,
         GetTokenTargetData: getTokenTargetData,
@@ -744,15 +748,23 @@ var TokenReference = TokenReference || (function () {
                 if (state.TokenReference.tokens[data.tokenId] == undefined) {
                     let token = getToken(data.tokenId);
                     if (token == undefined) {
-                        DebugLog(`[TokenReference][getToken] Token for ${data.charName} not found`);
+                        Debug.LogError(`[TokenReference][getToken] Token for ${data.charName} not found`);
                         return undefined;
                     }
                     tokenData = new TokenTargetData(token, data);
+                    if (tokenData == undefined) {
+                        Debug.LogError(`[TokenReference][getToken] Tokendata for ${data.charName} could not be created`);
+                        return undefined;
+                    }
                     tokenData.setDisplayName();
                     addToken(tokenData, data.tokenId);
                 }
                 else {
                     tokenData = state.TokenReference.tokens[data.tokenId];
+                    if (tokenData == undefined) {
+                        Debug.LogError(`[TokenReference][getToken] Something went wrong. Tokendata for ${data.charName} is undefined`);
+                        return undefined;
+                    }
                     tokenData.setDisplayName();
                 }
             }
@@ -760,15 +772,23 @@ var TokenReference = TokenReference || (function () {
                 if (state.TokenReference.tokens[data] == undefined) {
                     let token = getToken(data);
                     if (token == undefined) {
-                        DebugLog(`[TokenReference][getToken] Token for id ${data} not found`);
+                        Debug.LogError(`[TokenReference][getToken] Token for id ${data} not found`);
                         return undefined;
                     }
                     tokenData = new TokenTargetData(token);
+                    if (token == undefined) {
+                        Debug.LogError(`[TokenReference][getToken] Tokendata for id ${data} could not be created`);
+                        return undefined;
+                    }
                     tokenData.setDisplayName();
                     addToken(tokenData, data);
                 }
                 else {
                     tokenData = state.TokenReference.tokens[data];
+                    if (tokenData == undefined) {
+                        Debug.LogError(`[TokenReference][getToken] Something went wrong. Tokendata for ${data} is undefined`);
+                        return undefined;
+                    }
                     tokenData.setDisplayName();
                 }
             }
@@ -794,12 +814,12 @@ var TokenReference = TokenReference || (function () {
 
         getFirstSelectedToken = function (msg) {
             if (msg.selected.length == 0) {
-                DebugLog(`[TokenReference][commandShowDefenses] No token selected`);
+                Debug.Log(`[TokenReference][commandShowDefenses] No token selected`);
                 return undefined;
             }
             let tokenId = msg.selected[0]._id;
             if (tokenId == undefined) {
-                DebugLog(`[TokenReference][commandShowDefenses] No token selected`);
+                Debug.Log(`[TokenReference][commandShowDefenses] No token selected`);
                 return undefined;
             }
             return getTokenData(msg.selected[0]);
@@ -837,11 +857,14 @@ var TokenReference = TokenReference || (function () {
             attributeHandler.addAttribute(hpVar);
             attributeHandler.addAttribute(willpowerVar);
             attributeHandler.addAttribute(enVar);
+            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
             attributeHandler.addFinishCallback(function (attrHandler) {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(hpVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
                 tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
+                combatDetailsHandler.onUpdateDisplayStyle(attrHandler, "Battle");
+                tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
             });
         },
         setTokenForSocialBattle = function (tokenTargetData, attributeHandler) {
@@ -853,12 +876,15 @@ var TokenReference = TokenReference || (function () {
             attributeHandler.addAttribute(willpowerVar);
             attributeHandler.addAttribute(favorVar);
             attributeHandler.addAttribute(enVar);
+            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
             attributeHandler.addFinishCallback(function (attrHandler) {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(patienceVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
                 tokenTargetData.setBar(3, attrHandler.getAttribute(favorVar), true, true);
                 tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
+                combatDetailsHandler.onUpdateDisplayStyle(attrHandler, "Social");
+                tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
             });
         },
         resetTokenDisplay = function (tokenTargetData) {

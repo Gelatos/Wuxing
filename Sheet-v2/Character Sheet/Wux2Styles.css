@@ -349,6 +349,11 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
     display: none;
 }
 
+.wuxFloatSidebar .wuxSubheader
+{
+    font-size: 9px;
+}
+
 .wuxSideBarTitle
 
 /*========================================
@@ -1497,17 +1502,6 @@ input[type=hidden].wuxPageDisplay-Flag[value="Gear"] ~ .wuxPageDisplay-Gear,
 input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-PartyManager
 {
 	display: block;
-}
-
-
-/*========================================
-  Sidebar
-========================================*/
-
-.wuxSheetSidebar
-{
-    position: relative;
-    display: block;
 }
 
 /*========================================

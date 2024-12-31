@@ -4,7 +4,7 @@ function SetTechniquesDatabaseJson(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr
     return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
 }
 
-function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueDatabaseString) {
+function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, archetypesArray, statusArray, techniqueDatabaseString) {
     let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
 
     definitionDatabase.importSheets(definitionArray, function (arr) {
@@ -46,6 +46,10 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArra
     definitionDatabase.importSheets(jobsArray, function (arr) {
         let job = new JobData(arr);
         return job.createDefinition(definitionDatabase.get("JobStyle"));
+    });
+    definitionDatabase.importSheets(archetypesArray, function (arr) {
+        let archetype = new ArchetypeData(arr);
+        return archetype.createDefinition(definitionDatabase.get("Archetype"));
     });
     definitionDatabase.importSheets(statusArray, function (arr) {
         let status = new StatusData(arr);

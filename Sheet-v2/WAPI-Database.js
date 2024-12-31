@@ -806,6 +806,9 @@ class JobData extends WuxDatabaseData {
         return output;
     }
 }
+class ArchetypeData extends WuxDatabaseData {
+
+}
 class StatusData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
@@ -813,6 +816,7 @@ class StatusData extends WuxDatabaseData {
         this.fieldName = json.fieldName;
         this.group = json.group;
         this.description = json.description;
+        this.shortDescription = json.shortDescription;
         this.endsOnRoundStart = json.endsOnRoundStart;
     }
     importSheets(dataArray) {
@@ -822,6 +826,7 @@ class StatusData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i]; i++;
         this.description = "" + dataArray[i]; i++;
+        this.shortDescription = "" + dataArray[i]; i++;
         this.endsOnRoundStart = ("" + dataArray[i]) != ""; i++;
     }
     createEmpty() {
@@ -830,11 +835,13 @@ class StatusData extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.description = "";
+        this.shortDescription = "";
         this.endsOnRoundStart = false;
     }
     createDefinition(baseDefinition) {
         let definition = new StatusDefinitionData(super.createDefinition(baseDefinition));
         definition.subGroup = this.group;
+        definition.shortDescription = this.shortDescription;
         definition.endsOnRoundStart = this.endsOnRoundStart;
         return definition;
     }
@@ -954,86 +961,6 @@ class TemplateData extends dbObj {
     }
     createEmpty() {
 
-    }
-}
-class ResistanceData {
-    constructor(json) {
-        if (json != undefined) {
-            this.importJson(json);
-        }
-        else {
-            this.createEmpty();
-        }
-    }
-
-    importJson(json) {
-        this.damageTypes = json.damageTypes;
-        for (let i = 0; i < this.damageTypes.length; i++) {
-            this[this.damageTypes[i]] = json[this.damageTypes[i]];
-        }
-    }
-
-    createEmpty() {
-        let damageTypeDefs = WuxDef.Filter(new DatabaseFilterData("group", "DamageType"));
-        this.damageTypes = [];
-        for (let i = 0; i < damageTypeDefs.length; i++) {
-            this.damageTypes.push(damageTypeDefs[i].name);
-            this[damageTypeDefs[i].name] = 0;
-        }
-    }
-
-    addResistanceData(resistanceData) {
-        for (let i = 0; i < this.damageTypes.length; i++) {
-            this[this.damageTypes[i]] += resistanceData[this.damageTypes[i]];
-        }
-    }
-
-    addResistanceValue(damageType, value) {
-        this[damageType] += value;
-    }
-
-    getResistanceValue(damageType) {
-        return this[damageType];
-    }
-
-    getResistanceString(damageType) {
-        if (this[damageType] == 0) {
-            return "";
-        }
-        else if (this[damageType] > 0) {
-            return `${damageType} Resistance: ${this[damageType]}`;
-        }
-        else {
-            return `${damageType} Weakness: ${Math.abs(this[damageType])}`;
-        }
-    }
-
-    getAllResistancesString() {
-        let output = "";
-        for (let i = 0; i < this.damageTypes.length; i++) {
-            if (this[this.damageTypes[i]] > 0) {
-                if (output != "") {
-                    output += "\n";
-                }
-                output += `${damageType}: ${this[damageType]}`;
-            }
-        }
-
-        return output;
-    }
-
-    getAllWeaknessesString() {
-        let output = "";
-        for (let i = 0; i < this.damageTypes.length; i++) {
-            if (this[this.damageTypes[i]] < 0) {
-                if (output != "") {
-                    output += "\n";
-                }
-                output += `${damageType}: ${this[damageType]}`;
-            }
-        }
-
-        return output;
     }
 }
 
@@ -1275,6 +1202,7 @@ class JobDefinitionData extends DefinitionData {
 class StatusDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
+        this.shortDescription = json.shortDescription;
         this.endsOnRoundStart = json.endsOnRoundStart;
     }
 
@@ -1283,11 +1211,15 @@ class StatusDefinitionData extends DefinitionData {
             case "endsOnRoundStart":
                 this.endsOnRoundStart = value.toLowerCase() == "true" ? true : false;
                 break;
+            case "shortDescription":
+                this.shortDescription = value;
+                break;
         }
     }
 
     createEmpty() {
         super.createEmpty();
+        this.shortDescription = "";
         this.endsOnRoundStart = false;
     }
 }
@@ -2120,6 +2052,275 @@ class DieRoll {
         this.addModToRoll(mod);
     }
 }
+class ResistanceData {
+    constructor(json) {
+        if (json != undefined) {
+            this.importJson(json);
+        }
+        else {
+            this.createEmpty();
+        }
+    }
+
+    importJson(json) {
+        this.damageTypes = json.damageTypes;
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            this[this.damageTypes[i]] = json[this.damageTypes[i]];
+        }
+    }
+
+    createEmpty() {
+        let damageTypeDefs = WuxDef.Filter(new DatabaseFilterData("group", "DamageType"));
+        this.damageTypes = [];
+        for (let i = 0; i < damageTypeDefs.length; i++) {
+            this.damageTypes.push(damageTypeDefs[i].name);
+            this[damageTypeDefs[i].name] = 0;
+        }
+    }
+
+    addResistanceData(resistanceData) {
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            this[this.damageTypes[i]] += resistanceData[this.damageTypes[i]];
+        }
+    }
+
+    addResistanceValue(damageType, value) {
+        this[damageType] += value;
+    }
+
+    getResistanceValue(damageType) {
+        return this[damageType];
+    }
+
+    getResistanceString(damageType) {
+        if (this[damageType] == 0) {
+            return "";
+        }
+        else if (this[damageType] > 0) {
+            return `${damageType} Resistance: ${this[damageType]}`;
+        }
+        else {
+            return `${damageType} Weakness: ${Math.abs(this[damageType])}`;
+        }
+    }
+
+    getAllResistancesString() {
+        let output = "";
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            if (this[this.damageTypes[i]] > 0) {
+                if (output != "") {
+                    output += "\n";
+                }
+                output += `${damageType}: ${this[damageType]}`;
+            }
+        }
+
+        return output;
+    }
+
+    getAllWeaknessesString() {
+        let output = "";
+        for (let i = 0; i < this.damageTypes.length; i++) {
+            if (this[this.damageTypes[i]] < 0) {
+                if (output != "") {
+                    output += "\n";
+                }
+                output += `${damageType}: ${this[damageType]}`;
+            }
+        }
+
+        return output;
+    }
+}
+
+class StatusHandler {
+    constructor(attributeHandler) {
+        this.attributeHandler = attributeHandler;
+        this.statusDef = WuxDef.Get("Status");
+		this.attributeHandler.addMod(statusDef.getVariable());
+        this.combatDetailsHandler = new CombatDetailsHandler(this.attributeHandler);
+    }
+
+    changeStatus(statusName, newValue) {
+        let status = WuxDef.Get(statusName);
+        if (status == undefined) {
+            Debug.LogError(`[StatusHandler][addStatus] Tried to add incorrect status ${statusName}`);
+            return;
+        }
+        this.attributeHandler.addUpdate(status.getVariable(), newValue);
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let statuses = this.parseJSON(this.statusDef.getVariable());
+            if (newValue == "on") {
+                if (statuses.includes(statusName)) {
+                    return;
+                }
+                statuses.push(statusName);
+                attrHandler.addUpdate(statusDef.getVariable(), statuses);
+            }
+            else if (newValue == 0) {
+                let statusIndex = statuses.indexOf(statusName);
+                if (statusIndex == -1) {
+                    return;
+                }
+                statuses.splice(statusIndex, 1);
+                attrHandler.addUpdate(statusDef.getVariable(), statuses);
+            }
+
+            this.combatDetailsHandler.onUpdateStatus(attrHandler, statuses);
+        });
+        this.attributeHandler.run();
+    }
+}
+
+class CombatDetails {
+    constructor(json) {
+        this.createEmpty();
+        if (json != undefined) {
+            importJson(json);
+        }
+    }
+    createEmpty() {
+        this.displayStyle = "";
+        this.displayName = "";
+        this.cr = 1;
+        this.archetype = "";
+        this.archetypeDesc = "";
+        this.status = [];
+        this.surges = 2;
+        this.maxsurges = 2;
+        this.supportiveInfluence = "";
+        this.opposingInfluence = "";
+    }
+
+    importJson(json) {
+        this.displayStyle = json.displayStyle != undefined ? json.displayStyle : "";
+        this.displayName = json.displayName != undefined ? json.displayName : "";
+        this.cr = json.cr != undefined ? json.cr : 1;
+        this.archetype = json.archetype != undefined ? json.archetype : "";
+        this.archetypeDesc = json.archetypeDesc != undefined ? json.archetypeDesc : "";
+        this.status = json.status != undefined ? json.status : [];
+        this.surges = json.surges != undefined ? json.surges : 2;
+        this.maxsurges = json.maxsurges != undefined ? json.maxsurges : 2;
+        this.supportiveInfluence = json.supportiveInfluence != undefined ? json.supportiveInfluence : "";
+        this.opposingInfluence = json.opposingInfluence != undefined ? json.opposingInfluence : "";
+    }
+
+    printTooltip() {
+        let output = `${this.displayName} [CR${this.cr}] ${this.archetype}`;
+        output += ` =========================== `;
+        output += `${this.archetypeDesc} - `;
+
+        switch(this.displayStyle) {
+            case "Battle":
+                output += `Surges:`;
+                for (let i = 0; i < this.maxsurges; i++) {
+                    output += i < this.surges ? `♥` : `♡`;
+                }
+                break;
+            case "Social":
+                let influences = `${this.supportiveInfluence != "" ? `${this.supportiveInfluence}(+)` : ""}${this.opposingInfluence != "" ? `${this.opposingInfluence}(-)` : ""}`;
+                output += `Influences:${influences == "" ? "None" : influences}`;
+                break;
+        }
+        output += this.printTooltipStatus();
+        return output;
+    }
+
+    printTooltipStatus() {
+        let output = ` ==========STATUS========== `;
+
+        if (this.status.length == 0) {
+            output += `None`;
+        }
+        else {
+            let statuses = "";
+            let conditions = "";
+            let emotions = "";
+            for (let i = 0; i < this.status.length; i++) {
+                let statusDef = WuxDef.Get(this.status[i]);
+                switch(statusDef.subGroup) {
+                    case "Status": statuses = this.addStatusToTooltip(statusDef, "Status", statuses); break;
+                    case "Condition": conditions = this.addStatusToTooltip(statusDef, "Conditions", conditions); break;
+                    case "Emotion": emotions = this.addStatusToTooltip(statusDef, "Emotions", emotions); break;
+                }
+            }
+            output += statuses != "" ? `${statuses} `: "";
+            output += conditions != "" ? `${conditions} `: "";
+            output += emotions != "" ? `${emotions} `: "";
+        }
+
+        return output;
+    }
+
+    addStatusToTooltip(statusDef, groupname, group) {
+        if (group == "") {
+            group = `${groupname}:`;
+        }
+        else {
+            group += ";";
+        }
+        group += statusDef.title();
+        return group;
+    }
+}
+
+class CombatDetailsHandler {
+    constructor(attributeHandler) {
+        this.combatDetailsVar = WuxDef.GetVariable("CombatDetails");
+		attributeHandler.addMod(this.combatDetailsVar);
+        this.combatDetails = new CombatDetails();
+    }
+
+    printTooltip(attrHandler) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        return this.combatDetails.printTooltip();
+    }
+
+    onUpdateDisplayStyle(attrHandler, value) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.displayStyle = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateDisplayName(attrHandler, value) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.displayName = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateCR(attrHandler, value) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.cr = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateArchetype(attrHandler, value) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        let archetypeDef = WuxDef.Get(`Archetype_${value}`);
+        this.combatDetails.archetype = archetypeDef.title;
+        this.combatDetails.archetypeDesc = archetypeDef.getDescription();
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateStatus(attrHandler, value) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.status = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateSurges(attrHandler, value) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.surges = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateInfluences(attrHandler, support, oppose) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.supportiveInfluence = support;
+        this.combatDetails.opposingInfluence = oppose;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+}
 
 class AttributeHandler {
     constructor(mods) {
@@ -2234,10 +2435,10 @@ class AttributeHandler {
         return output;
     }
     databaseParseJSON(fieldName) {
-        if (this.update[fieldName] != undefined) {
+        if (this.update[fieldName] != undefined && this.update[fieldName] != "") {
             return JSON.parse(this.getUpdateValue(fieldName));
         }
-        else if (this.current[fieldName] != undefined) {
+        else if (this.current[fieldName] != undefined && this.current[fieldName] != "") {
             return JSON.parse(this.getCurrentValue(fieldName));
         }
         return undefined;
@@ -2257,7 +2458,7 @@ class SandboxAttributeHandler extends AttributeHandler {
         this.maxCheck = isMax;
     }
     getUpdateValue(fieldName) {
-        return this.update[fieldName].get(this.maxCheck ? "max" : "current");
+        return this.update[fieldName][this.maxCheck ? "max" : "current"];
     }
     parseString(fieldName, defaultValue, isMax) {
         this.setMaxCheck(isMax);
@@ -2309,7 +2510,7 @@ class SandboxAttributeHandler extends AttributeHandler {
         if (this.attributes.hasOwnProperty(attr)) {
             return;
         }
-        DebugLog(`[SandboxAttributeHandler][addAttribute] Adding attribute ${attr}`);
+        Debug.Log(`[SandboxAttributeHandler][addAttribute] Adding attribute ${attr}`);
         this.attributes[attr] = this.getCharacterAttribute(attr);
     }
     getAttribute(attr) {
@@ -2319,10 +2520,20 @@ class SandboxAttributeHandler extends AttributeHandler {
         return this.attributes[attr];
     }
     addUpdate(attr, value, isMax) {
+        Debug.Log(`Adding update ${attr} with value ${value}`);
         if (this.attributes[attr] == undefined) {
+            Debug.Log(`Adding the attribute ${attr}`);
             this.addAttribute(attr);
         }
-        super.addUpdate(attr, { type: isMax ? "max" : "current", value: value });
+
+        if (this.update[attr] != undefined && this.update[attr] != "") {
+            this.update[attr][isMax ? "max" : "current"] = value;
+        }
+        else {
+            let newUpdate = {};
+            newUpdate[isMax ? "max" : "current"] = value;
+            super.addUpdate(attr, newUpdate);
+        }
     }
     run() {
         let attributeHandler = this;
@@ -2341,7 +2552,9 @@ class SandboxAttributeHandler extends AttributeHandler {
             attribute = attributeHandler.attributes[property];
             updateData = attributeHandler.update[property];
             if (attribute != undefined && updateData != undefined) {
-                attribute.set(updateData.type, updateData.value);
+                for (const subProperty in updateData) {
+                    attribute.set(subProperty, updateData[subProperty]);
+                }
             }
         };
     }

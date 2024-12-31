@@ -71,6 +71,10 @@ var WuxConflictManager = WuxConflictManager || (function () {
 
         startConflict = function () {
             state.WuxConflictManager.round = 0;
+            if (!TargetReference.HasActiveTargets()) {
+                Debug.LogError(`[startConflict] No Active Targets for Conflict`);
+                return;
+            }
             rollInitiative();
             setActiveTokensForConflict();
             startRound();
@@ -261,7 +265,7 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
             use = function (msg, content) {
                 initializeData(content);
                 if (tokenTargetData == undefined) {
-                    DebugLog(`[ResourceConsumption] ${resourceData.sheetname} tokenData not found`);
+                    Debug.Log(`[ResourceConsumption] ${resourceData.sheetname} tokenData not found`);
                     return;
                 }
 
@@ -368,10 +372,10 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
             use = function (msg, content) {
                 initializeData(content);
                 if (userTokenTargetData == undefined || targetTokenTargetData == undefined) {
-                    DebugLog(`[CheckTechnique] tokenData not found`);
+                    Debug.LogError(`[CheckTechnique] tokenData not found`);
                     return;
                 }
-                DebugLog(`[CheckTechnique] got ${JSON.stringify(techniqueData)}`);
+                Debug.Log(`[CheckTechnique] got ${JSON.stringify(techniqueData)}`);
             },
 
             initializeData = function (content) {

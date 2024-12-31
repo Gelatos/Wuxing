@@ -1,4 +1,4 @@
-on("chat:message", function(msg) {
+on("chat:message", function (msg) {
     if (msg.type == "api" && msg.content != null) {
 
         let firstSpace = msg.content.indexOf(" ");
@@ -8,7 +8,7 @@ on("chat:message", function(msg) {
         let tag = msg.content.substring(0, firstSpace).toLowerCase().trim();
         let content = "";
         if (firstSpace < msg.content.length) {
-             content = msg.content.substring(firstSpace).trim();
+            content = msg.content.substring(firstSpace).trim();
         }
 
         WuxConflictManager.HandleInput(msg, tag, content);
@@ -16,7 +16,7 @@ on("chat:message", function(msg) {
         WuxMessage.HandleMessageInput(msg, tag, content);
         TargetReference.HandleInput(msg, tag, content);
 
-        switch(tag) {
+        switch (tag) {
             case "!markernames":
                 let tokenMarkers = JSON.parse(Campaign().get("token_markers"));
                 let chatMessage = '';
@@ -25,42 +25,42 @@ on("chat:message", function(msg) {
                 });
                 sendChat("Token Markers", chatMessage);
 
-            return;
+                return;
             case "!clearmarkers":
                 if (!msg.selected && msg.selected[0]._type == "graphic") return;
                 obj = getObj(msg.selected[0]._type, msg.selected[0]._id);
                 obj.set("statusmarkers", "");
                 SanitizeTokenConditions(obj, true);
-                
-            return;
+
+                return;
             case "!gettokenmarkers":
                 if (!msg.selected) return;
                 if (msg.selected[0]._type !== "graphic") return;
                 obj = getObj(msg.selected[0]._type, msg.selected[0]._id);
                 currentMarkers = obj.get("statusmarkers");
                 sendChat("Token Markers", currentMarkers);
-                
-            return;
+
+                return;
             case "!target":
             case "!targetw":
                 CommandTargetFunction(msg);
-                
-            return;
+
+                return;
             case "!targetname":
             case "!targetnamew":
                 CommandTargetNameFunction(msg);
-                
-            return;
-            case "!token":
-            case "!tokenw":  
-                CommandTokenFunction(msg);  
 
-            return;
+                return;
+            case "!token":
+            case "!tokenw":
+                CommandTokenFunction(msg);
+
+                return;
             case "!c":
             case "!cw":
                 CommandCharacterFunction(msg);
-                
-            return;
+
+                return;
             case "!jp":
             case "!jpl":
             case "!jps":
@@ -71,181 +71,181 @@ on("chat:message", function(msg) {
             case "!jia":
             case "!jbt":
                 CommandJukebox(msg);
-                
-            return;
-                
-            return;
+
+                return;
+
+                return;
             case "!help":
                 CommandHelpCommands(msg, content);
-                
-            return;
+
+                return;
             case "!deathsave":
                 CommandDeathSave(content);
-                
-            return;
+
+                return;
             case "!deathfailure":
                 CommandDeathFailure(content);
-                
-            return;
+
+                return;
             case "!roll20am":
                 Roll20AM.InputController(msg);
-                
-            return;
-    
+
+                return;
+
 
             // Triggered Events
             case "!createability":
                 OnTriggerCreateAbility(content);
-                
-            return;
+
+                return;
             case "!linger":
                 OnTriggerDyingInjury(content);
-                
-            return;
+
+                return;
             case "!insp":
                 OnTriggerInspiration(content);
-                
-            return;
+
+                return;
             case "!spendresolve":
                 OnTriggerResolve(content);
-                
-            return;
+
+                return;
             case "!spendfate":
                 OnTriggerFate(content);
-                
-            return;
+
+                return;
             case "!check":
                 OnTriggerInteractTarget(msg, content);
-                
-            return;
+
+                return;
             case "!ctemplate":
                 OnTriggerCallTemplate(msg, content);
-                
-            return;
+
+                return;
 
             // Token Triggered Events
             case "!tatk":
                 let contentSplit = content.split("$$$");
                 CreateActionOutput(contentSplit[0], contentSplit[1]);
-                
-            return;
+
+                return;
             case "!actionresults":
                 CommandHandleActionResults(content);
-                
-            return;
+
+                return;
             case "!healinj":
                 CommandTargetHealInjury(content);
-                
-            return;
+
+                return;
         }
 
         // GM Events
         if (playerIsGM(msg.playerid)) {
-            switch(tag) {
+            switch (tag) {
                 case "!cp":
                 case "!cps":
                     CommandTargetPartyFunction(msg);
-                return;
+                    return;
                 case "!p":
                 case "!ps":
                 case "!pc":
                 case "!pcs":
                     CommandPartyFunction(msg);
-                    
-                return;
+
+                    return;
                 case "!startsession":
                     CommandStartSession(content);
-                    
-                return;
+
+                    return;
                 case "!pta":
                     CommandAddToParty(msg);
-                    
-                return;
+
+                    return;
                 case "!pt":
                     CommandSetParty(msg);
-                    
-                return;
+
+                    return;
                 case "!sta":
                     CommandSetTokenAlly(msg);
-                    
-                return;
+
+                    return;
                 case "!st":
                     CommandSetToken(msg);
-                    
-                return;
+
+                    return;
                 case "!npc":
                     CommandSetNPC(msg);
-                    
-                return;
+
+                    return;
                 case "!rndnpc":
                     CommandRandomizeNPC(msg);
-                    
-                return;
+
+                    return;
                 case "!recast":
                     CommandRecastNPC(msg);
-                    
-                return;
+
+                    return;
                 case "!castnpc":
                     CommandCastNPC(msg);
-                    
-                return;
+
+                    return;
                 case "!intro":
                     IntroduceNPC(msg);
-                    
-                return;
+
+                    return;
                 case "!showname":
                     ShowNameplates(msg);
-                    
-                return;
+
+                    return;
                 case "!hidename":
                     HideNameplates(msg);
-                    
-                return;
+
+                    return;
                 case "!img":
                     PrintTokenImageURL(msg);
-                    
-                return;
+
+                    return;
                 case "!generatenpc":
                     CommandGenerateNPC(msg);
-                    
-                return;
+
+                    return;
                 case "!assigntoken":
                     CommandAssignToken(msg);
-                    
-                return;
+
+                    return;
                 case "!gainmorale":
                     TargetGainMorale(content);
-                    
-                return;
+
+                    return;
                 case "!gainkarma":
                     TargetGainKarma(content);
-                    
-                return;
+
+                    return;
                 case "!showmission":
                     CommandShowMission(content);
-                    
-                return;
+
+                    return;
                 case "!completemission":
                     CommandCompleteMission(content);
-                    
-                return;
+
+                    return;
                 case "!setmissionxp":
                     CommandSetMissionXp(content);
-                    
-                return;
+
+                    return;
                 case "!setmissioncurrency":
                     CommandSetMissionCurrency(content);
-                    
-                return;
+
+                    return;
                 case "!importpartystats":
                     CommandImportPartyStats(msg);
-                    
-                return;
+
+                    return;
                 case "!sendpmnote":
-                    log ("sending note");
+                    log("sending note");
                     CommandSendPmNote(content);
-                    
-                return;
+
+                    return;
             }
         }
     }
@@ -279,27 +279,39 @@ on("chat:message", function(msg) {
             if (msg.content.indexOf("##") >= 0) {
                 let stringout = msg.content.split("##")[1];
                 let js = JSON.parse(stringout);
-                log (`js: ${js}`);
-                log (`js: ${JSON.stringify(js)}`);
+                log(`js: ${js}`);
+                log(`js: ${JSON.stringify(js)}`);
             }
         }
     }
 });
 
-DebugLog = function (msg) {
-    log(msg);
-    sendChat("System Error", `/w GM ${msg}`, null, { noarchive: true });
-}
+var Debug = Debug || (function () {
+    'use strict';
+    var
+        logMessage = function (msg) {
+            log(msg);
+        },
+        logError = function (msg) {
+            log(`Error! ${msg}`);
+            sendChat("System Error", `/w GM ${msg}`, null, { noarchive: true });
+        }
+
+    return {
+        Log: logMessage,
+        LogError: logError
+    };
+}());
 
 // Data Retrieval
-function GetCharacterAttribute (charId, attrName) {
+function GetCharacterAttribute(charId, attrName) {
 
     var returnVal = undefined;
     var chracterAttributes = findObjs({
         _characterid: charId,
         _type: "attribute",
         name: attrName
-    }, {caseInsensitive: true});
+    }, { caseInsensitive: true });
 
     if (chracterAttributes.length > 0) {
         returnVal = chracterAttributes[0];
@@ -310,39 +322,39 @@ function GetCharacterAttribute (charId, attrName) {
 
 function AttrParseInt(charId, fieldName, defaultValue) {
 
-	return ParseIntValue(getAttrByName(charId, fieldName), defaultValue);
+    return ParseIntValue(getAttrByName(charId, fieldName), defaultValue);
 }
 
 function ParseIntValue(value, defaultValue) {
-	if (defaultValue == undefined) {
-		defaultValue = 0;
-	}
-	return isNaN(parseInt(value)) ? defaultValue : parseInt(value);
+    if (defaultValue == undefined) {
+        defaultValue = 0;
+    }
+    return isNaN(parseInt(value)) ? defaultValue : parseInt(value);
 }
 
 function AttrParseFloat(charId, fieldName, defaultValue) {
 
-	return ParseFloatValue(getAttrByName(charId, fieldName), defaultValue);
+    return ParseFloatValue(getAttrByName(charId, fieldName), defaultValue);
 }
 
 
 // attribute creation
 function CreateRepeatingRowAttribute(repeatingSection, id, name, value, charId) {
 
-    return createObj("attribute", {"name": GetSectionIdName(repeatingSection, id, name), "current": value, "_characterid": charId});
+    return createObj("attribute", { "name": GetSectionIdName(repeatingSection, id, name), "current": value, "_characterid": charId });
 }
 
 function CreateNormalAttribute(name, value, charId, max) {
-    log (`Creating Attribute ${name} with value ${value}`);
+    log(`Creating Attribute ${name} with value ${value}`);
 
     if (max != undefined) {
-        return createObj("attribute", {"name": name, "current": value, "max": max, "_characterid": charId});
+        return createObj("attribute", { "name": name, "current": value, "max": max, "_characterid": charId });
     }
 
-    return createObj("attribute", {"name": name, "current": value, "_characterid": charId});
+    return createObj("attribute", { "name": name, "current": value, "_characterid": charId });
 }
 
-function CreateAbility (name, pattern, charId) {
+function CreateAbility(name, pattern, charId) {
     var checkAbility = findObjs({
         _type: 'ability',
         _characterid: charId,
@@ -368,11 +380,10 @@ function RemoveRowData(charId, rowId) {
         _characterid: charId,
         _type: "attribute",
         name: rowId
-    }, {caseInsensitive: true});
-    
-    if (chracterAttributes.length > 0)
-    {
-        chracterAttributes[0].remove(); 
+    }, { caseInsensitive: true });
+
+    if (chracterAttributes.length > 0) {
+        chracterAttributes[0].remove();
     }
 }
 
@@ -380,7 +391,7 @@ function RemoveRowData(charId, rowId) {
 function GenerateUUID() {
 
     var a = 0, b = [];
-    return function() {
+    return function () {
         var c = (new Date()).getTime() + 0, d = c === a;
         a = c;
         for (var e = new Array(8), f = 7; 0 <= f; f--) {
@@ -398,7 +409,7 @@ function GenerateUUID() {
                 b[f] = Math.floor(64 * Math.random());
             }
         }
-        for (f = 0; 12 > f; f++){
+        for (f = 0; 12 > f; f++) {
             c += "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(b[f]);
         }
         return c;
@@ -483,7 +494,7 @@ function ParseSheetRollTechniqueJSON(stringifiedJSON) {
 // =================================================
 
 function SendChatMessage(snd, msg, alt, opt) {
-    
+
     if (alt == undefined) {
         sendChat(snd, msg);
     }
@@ -495,35 +506,35 @@ function SendChatMessage(snd, msg, alt, opt) {
 
 
 function CommandImportPartyStats(msg) {
-    
+
     //  we're storing a list of party member IDs because these are used a lot
     if (state.mainParty == undefined) {
         state.mainParty = {};
     }
     state.mainParty.party = [];
-    
+
     // set the party manager in the party because we use it a lot
     var partyManager = FindCharacter("PartyManager");
     state.mainParty.party["PartyManager"] = {
         name: "PartyManager",
         id: partyManager.id
     }
-    
+
     // now get all of the party members in our party manager
     var partyList = getAttrByName(partyManager.id, "all_party_members");
     partyList = partyList.split(",");
 
     // iterate through the party
-    _.each(partyList, function(charName) {
+    _.each(partyList, function (charName) {
         charName = charName.trim();
         if (charName != "") {
             var characters = findObjs({
                 _type: 'character',
                 name: charName
-            }, {caseInsensitive: true});
+            }, { caseInsensitive: true });
             if (characters.length > 0) {
                 // this character is a party member. Add them to the list
-                if (state.mainParty.party[charName] == undefined){
+                if (state.mainParty.party[charName] == undefined) {
                     state.mainParty.party[charName] = {
                         name: charName,
                         id: characters[0].get("id")
@@ -532,8 +543,8 @@ function CommandImportPartyStats(msg) {
             }
         }
     });
-    
-    sendChat("Game Manager", "/w GM Character Importer has completed", null, {noarchive: true});
+
+    sendChat("Game Manager", "/w GM Character Importer has completed", null, { noarchive: true });
 }
 
 function FindCharacterIdFromParty(charName) {
@@ -562,15 +573,15 @@ function FindCharacter(charName) {
         var characters = findObjs({
             _type: 'character',
             name: charName
-        }, {caseInsensitive: true});
+        }, { caseInsensitive: true });
         if (characters.length > 0) {
             // log ("Found Character " + charName + ": " + characters[0]);
             return characters[0];
         }
 
-        characters = findObjs({_type: 'character'});
-        characters.forEach(function(chr) { 
-            if(chr.get('name') == charName) {
+        characters = findObjs({ _type: 'character' });
+        characters.forEach(function (chr) {
+            if (chr.get('name') == charName) {
                 // log ("Found Character " + charName + ": " + chr);
                 return chr;
             }
@@ -580,7 +591,7 @@ function FindCharacter(charName) {
 }
 
 function GetCharacterPlayerId(character) {
-    
+
     var players = character.get("controlledby");
     if (players.indexOf(",")) {
         players = players.split(",")[0].trim();
@@ -589,12 +600,12 @@ function GetCharacterPlayerId(character) {
 }
 
 function GetPlayerNameFromId(id) {
-    
+
     var players = findObjs({
         _id: id
     });
     var returnVal = "";
-    _.each(players, function(obj) {
+    _.each(players, function (obj) {
         if (returnVal == "") {
             returnVal = obj.get("_displayname");
         }
@@ -607,7 +618,7 @@ function GetCharacter(charId) {
 }
 
 function GetSelectedCharacter(msg, sendingPlayerName, msgwho, ignoreToken, token) {
-    
+
     // first get the selected character from whichever token is selected or passed
     if (ignoreToken == undefined) {
         ignoreToken = false;
@@ -632,8 +643,8 @@ function GetSelectedCharacter(msg, sendingPlayerName, msgwho, ignoreToken, token
     if (sendingPlayerName != msgwho) {
         return FindCharacter(msgwho);
     }
-    
-    sendChat("Game Manager", "/w " + sendingPlayerName + " There was an error in your message. You do not have a selected token or selected an invalid character.", null, {noarchive:true});
+
+    sendChat("Game Manager", "/w " + sendingPlayerName + " There was an error in your message. You do not have a selected token or selected an invalid character.", null, { noarchive: true });
     return null;
 }
 
@@ -688,7 +699,7 @@ function GetTokenIdTargetData(tokenId) {
     if (token != undefined) {
         return GetTokenTargetData(token);
     }
-    log (`[EventData] No token with id ${tokenId} exists.`);
+    log(`[EventData] No token with id ${tokenId} exists.`);
     return undefined;
 }
 
@@ -707,11 +718,11 @@ function GetTokenTargetData(token) {
             return FormTargetData(id, getObj("character", token.get('represents')).get("name"), token.get("_id"), displayName);
         }
         else {
-            log (`[EventData] This token has no representative character.`);
+            log(`[EventData] This token has no representative character.`);
             return undefined;
         }
     }
-    log (`[EventData] No token exists.`);
+    log(`[EventData] No token exists.`);
     return undefined;
 }
 
@@ -789,7 +800,7 @@ function FormTargetData(charId, charName, tokenId, displayName) {
         displayName: displayName,
         token: undefined,
 
-        getToken: function() {
+        getToken: function () {
             if (this.token == undefined) {
                 this.token = getObj('graphic', this.tokenId);
             }
