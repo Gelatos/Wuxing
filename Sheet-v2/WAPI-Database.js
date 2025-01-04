@@ -1518,6 +1518,9 @@ class TechniqueEffectDisplayData {
             case "Dash":
                 output = this.formatDashEffect(effect);
                 break;
+            case "MoveCharge":
+                output = this.formatMoveChargeEffect(effect);
+                break;
             case "EN":
                 output = this.formatEnEffect(effect);
                 break;
@@ -1633,6 +1636,8 @@ class TechniqueEffectDisplayData {
                 let resistance = WuxDef.GetTitle("Resistance");
                 let damageType = WuxDef.GetTitle(effect.effect);
                 return `${effectTarget}, ${target} gain${plural} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
+            case "Desc":
+                return `${effectTarget}, ${effect.effect}`;
         }
 
     }
@@ -1649,6 +1654,9 @@ class TechniqueEffectDisplayData {
         else {
             return `Target rolls their Move Potency die to gain Move Charge.`;
         }
+    }
+    formatMoveChargeEffect(effect) {
+        return "You may move a number of squares equal to your Move Charge. You then lose all your Move Charge.";
     }
     formatEnEffect(effect) {
         let effectTotal = this.formatCalcBonus(effect);
