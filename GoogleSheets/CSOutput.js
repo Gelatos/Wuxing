@@ -299,7 +299,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 							contents += WuxDefinition.InfoHeader(titleDefinition);
 
 							let ppDefinition = WuxDef.Get("PP");
-							contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}</span>`);
+							contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}`);
 							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Convert To TP`));
 
 							return WuxSheetMain.Table.FlexTableGroup(contents);
@@ -571,7 +571,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							contents += WuxDefinition.InfoHeader(titleDefinition);
 
 							let xpDefinition = WuxDef.Get("XP");
-							contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}</span>`);
+							contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}`);
 							contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Convert To Levels`));
 
 							return WuxSheetMain.Table.FlexTableGroup(contents);
@@ -1195,7 +1195,8 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 						build = function () {
 							let contents = "";
 							contents += buildCharacterSection();
-							contents += buildEffectsSection();
+							contents += buildResourcesSection();
+							contents += buildStatusSection();
 							return contents;
 						},
 
@@ -1211,14 +1212,26 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
 						},
 
-						buildEffectsSection = function () {
+						buildResourcesSection = function () {
 							let contents = "";
-							contents += boons();
+							let contentData = [];
+							contentData.push(boons());
+							contentData = contentData.concat(resources());
+							contents += WuxSheetMain.MultiRowGroup(contentData, WuxSheetMain.Table.FlexTable, 2);
+
+							contents = WuxSheetMain.TabBlock(contents);
+
+							let definition = WuxDef.Get("Page_OverviewResources");
+							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+						},
+
+						buildStatusSection = function () {
+							let contents = "";
 							contents += statuses();
 
 							contents = WuxSheetMain.TabBlock(contents);
 
-							let definition = WuxDef.Get("Page_OverviewEffects");
+							let definition = WuxDef.Get("Page_OverviewStatus");
 							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
 						},
 
@@ -1271,7 +1284,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute()));
 
 							let xpDefinition = WuxDef.Get("XP");
-							contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}</span>`);
+							contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}`);
 
 							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
 						},
@@ -1287,7 +1300,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute(WuxDef._max)));
 
 							let ppDefinition = WuxDef.Get("PP");
-							contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}</span>`);
+							contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}`);
 
 							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
 						},
@@ -1307,7 +1320,24 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 								contents += WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(boonsDefs[i].getAttribute(), boonsDefs[i].getAttribute(WuxDef._info),
 									WuxSheetMain.Header(boonsDefs[i].title), WuxDefinition.TooltipDescription(boonsDefs[i]));
 							}
-							return contents;
+							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
+						},
+
+						resources = function () {
+							let output = [];
+
+							let groups = ["General", "Combat", "Social"];
+							for (let i = 0; i < groups.length; i++) {
+								let resourcesDef = WuxDef.Get(groups[i]);
+								let resourceDefs = WuxDef.Filter([new DatabaseFilterData("group", groups[i]), new DatabaseFilterData("hasMax", "true")]);
+
+								let contents = `${WuxSheetMain.Header(`${resourcesDef.title}`)}`;
+								for (let j = 0; j < resourceDefs.length; j++) {
+									contents += WuxDefinition.BuildNumberLabelInput(resourceDefs[j], resourceDefs[j].getAttribute(), `Max: <span name="${resourceDefs[j].getAttribute(WuxDef._max)}"></span>`);
+								}
+								output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
+							}
+							return output;
 						},
 
 						statuses = function () {
@@ -1739,7 +1769,7 @@ var BuilderBackend = BuilderBackend || (function () {
 		},
 		listenerUpdateJobStyleBuildPoints = function () {
 			let output = "";
-            let jobs = WuxDef.Filter([new DatabaseFilterData("group", "Job")]);
+			let jobs = WuxDef.Filter([new DatabaseFilterData("group", "Job")]);
 			for (let i = 0; i < jobs.length; i++) {
 				let groupVariableNames = [(jobs[i].getVariable())];
 				output += "\n" + WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerTechniques.UpdateJobStyleBuildPoints("${jobs[i].name}", eventinfo)`, true);
@@ -1914,7 +1944,7 @@ var OverviewBuilder = OverviewBuilder || (function () {
 		},
 		listenerUpdateStatus = function () {
 			let output = "";
-            let statuses = WuxDef.Filter([new DatabaseFilterData("group", "Status")]);
+			let statuses = WuxDef.Filter([new DatabaseFilterData("group", "Status")]);
 			for (let i = 0; i < statuses.length; i++) {
 				let groupVariableNames = [(statuses[i].getVariable())];
 				output += "\n" + WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerGeneral.UpdateStatus("${statuses[i].name}", eventinfo)`, true);

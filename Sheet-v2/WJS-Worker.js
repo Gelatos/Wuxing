@@ -1295,6 +1295,24 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 				styleWorker.cleanBuildStats(attrHandler);
 				styleWorker.saveBuildStatsToFinal(attrHandler);
 			});
+		},
+		updateBoostStats = function (attributeHandler) {
+			let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("techMods", WuxDef._tech));
+
+			for (let i = 0; i < formulaDefinitions.length; i++) {
+				attributeHandler.addFormulaMods(formulaDefinitions[i]);
+			}
+
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				for (let i = 0; i < formulaDefinitions.length; i++) {
+					if (formulaDefinitions[i].isResource) {
+						attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
+					}
+					else {
+						attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
+					}
+				}
+			});
 		}
 
 	return {

@@ -882,9 +882,9 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return `<div class="wuxInteractiveInnerBlock">
                 <input class="wuxInteractiveContent-flag" type="checkbox" name="${fieldName}">
                 <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
-                <span class="wuxInteractiveIcon">&#9656;</span>
+                <span class="wuxInteractiveIcon">&#9662;</span>
                 <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
-                <span class="wuxInteractiveAuxIcon">&#9662;</span>
+                <span class="wuxInteractiveAuxIcon">&#9656;</span>
                 
                 ${titleContent}
             </div>`;
@@ -940,7 +940,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), output, true);
         },
 
-        buildStatusSection = function() {
+        buildStatusSection = function () {
             let output = buildStatusNames(WuxDef.Filter([new DatabaseFilterData("subGroup", "Status")]));
             output += buildStatusNames(WuxDef.Filter([new DatabaseFilterData("subGroup", "Condition")]));
             output += buildStatusNames(WuxDef.Filter([new DatabaseFilterData("subGroup", "Emotion")]));
@@ -949,11 +949,28 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), output, true);
         },
 
+        collapsibleSubheader = function (header, fieldName, contents, defaultOpen) {
+            return collapsibleSection(`<div class="wuxSubheader">${header}</div>`, fieldName, contents, defaultOpen);
+        },
+
         buildStatusNames = function (statusDefs) {
             let output = "";
             for (let i = 0; i < statusDefs.length; i++) {
-                output += WuxSheetMain.HiddenField(statusDefs[i].getAttribute(), 
-                    collapsibleSubheader(WuxSheetMain.Header2(statusDefs[i].title), statusDefs[i].getAttribute(WuxDef._info), WuxSheetMain.Desc(statusDefs[i].getDescription()), false));
+                // output += WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(statusDefs[i].getAttribute(),
+                //     statusDefs[i].getAttribute(WuxDef._info), WuxSheetMain.Header2(statusDefs[i].title), WuxSheetMain.Desc(statusDefs[i].shortDescription));
+
+                // output += WuxSheetMain.HiddenField(statusDefs[i].getAttribute(),
+                //     collapsibleSubheader(WuxSheetMain.Header2(statusDefs[i].title), statusDefs[i].getAttribute(WuxDef._info), WuxSheetMain.Desc(statusDefs[i].shortDescription), false));
+
+                output += WuxSheetMain.HiddenField(statusDefs[i].getAttribute(),
+                    `<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
+                    ${collapsibleSectionTitle(
+                        WuxSheetMain.Subheader(WuxSheetMain.InteractionElement.CheckboxBlockIcon(statusDefs[i].getAttribute(), WuxSheetMain.Header2(statusDefs[i].title))), 
+                        statusDefs[i].getAttribute(WuxDef._info)
+                    )}
+                    ${collapsibleSectionContent(WuxSheetMain.Desc(statusDefs[i].shortDescription), statusDefs[i].getAttribute(WuxDef._info), false)}
+                    </div>`
+                );
             }
             return output;
         }

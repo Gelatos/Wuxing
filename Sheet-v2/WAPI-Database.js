@@ -227,7 +227,7 @@ class ExtendedDescriptionDatabase extends Database {
             }
             return definition;
         };
-        super(data, ["group", "subGroup", "formulaMods"], dataCreation);
+        super(data, ["group", "subGroup", "formulaMods", "techMods", "hasMax"], dataCreation);
     }
 
     importSheets(dataArray, dataCreationCallback) {
@@ -251,6 +251,12 @@ class ExtendedDescriptionDatabase extends Database {
         let formulaDefs = value.formula.getDefinitions();
         for (let i = 0; i < formulaDefs.length; i++) {
             this.addSortingGroup("formulaMods", formulaDefs[i], value);
+        }
+        if (value.modifiers.includes(WuxDef._tech)) {
+            this.addSortingGroup("techMods", WuxDef._tech, value);
+        }
+        if (value.isResource) {
+            this.addSortingGroup("hasMax", "true", value);
         }
     }
 }
@@ -1022,6 +1028,7 @@ class DefinitionData extends WuxDatabaseData {
         definition.subGroup = this.subGroup;
         definition.descriptions = this.descriptions;
         definition.abbreviation = this.abbreviation;
+        definition.modifiers = this.modifiers;
         definition.formula = new FormulaData(this.baseFormula);
         definition.formula.addAttributes(definition.getFormulaMods(this.modifiers));
         definition.linkedGroups = this.linkedGroups;
