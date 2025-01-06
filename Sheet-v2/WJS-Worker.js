@@ -995,10 +995,10 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 				else if (attrHandler.parseString(WuxDef.GetVariable("Page")) == "Styles") {
 					let worker = new WuxWorkerBuildManager("Style");
 					worker.onChangeWorkerAttribute(attributeHandler2, eventinfo.sourceAttribute, eventinfo.newValue);
+					updateSetStyles(attributeHandler2);
 				}
 				attributeHandler2.run();
 			});
-
 
 			attributeHandler.run();
 		},
@@ -1027,6 +1027,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 			filterTechniquesForLearn(attributeHandler);
 		},
 		filterTechniquesForLearn = function (attributeHandler) {
+			Debug.Log("Filter Techniques for Learn");
 			let techniqueWorker = new WuxWorkerBuild("Technique");
 			attributeHandler.addMod(techniqueWorker.attrBuildDraft);
 			attributeHandler.addMod(WuxDef.GetVariable("CR"));
@@ -1150,6 +1151,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 			});
 		},
 		filterTechniquesForStyleSet = function (attributeHandler) {
+			Debug.Log("Filter Techniques for Style Set");
 			let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
 			let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 
@@ -1174,14 +1176,24 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 				jobWorker.cleanBuildStats();
 				techniqueWorker.setBuildStatsFinal(attrHandler);
 				techniqueWorker.cleanBuildStats();
+				let workerVariableName = "";
+				let styleValue = "0";
 
 				let isVisible = false;
 				for (let i = 0; i < styleDefinitions.length; i++) {
+					workerVariableName = styleDefinitions[i].getVariable();
+					styleValue = styleWorker.buildStats.has(workerVariableName);
+					attrHandler.addUpdate(styleDefinitions[i].getVariable(), styleValue ? "on" : "0");
+
 					isVisible = techniqueWorker.buildStats.has(styleDefinitions[i].getVariable());
 					attrHandler.addUpdate(styleDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
 				}
 
 				for (let i = 0; i < jobDefinitions.length; i++) {
+					workerVariableName = jobDefinitions[i].getVariable();
+					styleValue = jobStyleWorker.buildStats.has(workerVariableName);
+					attrHandler.addUpdate(jobDefinitions[i].getVariable(), styleValue ? "on" : "0");
+					
 					isVisible = jobWorker.buildStats.has(jobDefinitions[i].getVariable(WuxDef._rank));
 					attrHandler.addUpdate(jobDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
 				}
@@ -1274,6 +1286,12 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 			let techniqueWorker = new WuxWorkerBuild("Technique");
 			attributeHandler.addMod(techniqueWorker.attrBuildFinal);
 
+			let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("techMods", WuxDef._tech));
+
+			for (let i = 0; i < formulaDefinitions.length; i++) {
+				attributeHandler.addFormulaMods(formulaDefinitions[i]);
+			}
+
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				jobStyleWorker.setBuildStatsFinal(attrHandler);
 				styleWorker.setBuildStatsFinal(attrHandler);
@@ -1294,16 +1312,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 				jobStyleWorker.saveBuildStatsToFinal(attrHandler);
 				styleWorker.cleanBuildStats(attrHandler);
 				styleWorker.saveBuildStatsToFinal(attrHandler);
-			});
-		},
-		updateBoostStats = function (attributeHandler) {
-			let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("techMods", WuxDef._tech));
 
-			for (let i = 0; i < formulaDefinitions.length; i++) {
-				attributeHandler.addFormulaMods(formulaDefinitions[i]);
-			}
-
-			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				for (let i = 0; i < formulaDefinitions.length; i++) {
 					if (formulaDefinitions[i].isResource) {
 						attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
@@ -1743,7 +1752,6 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 		}
 	return {
 		SelectOutfit: selectOutfit,
-		UpdateDisplayName: updateDisplayName,
 		UpdatePostContent: updatePostContent,
 		UpdatePostType: updatePostType,
 		UpdateSelectedLanguage: updateSelectedLanguage,
