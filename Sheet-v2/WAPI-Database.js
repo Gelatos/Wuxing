@@ -249,6 +249,13 @@ class ExtendedDescriptionDatabase extends Database {
     add(key, value) {
         super.add(key, value);
         let formulaDefs = value.formula.getDefinitions();
+        if (value.subGroup.includes(";")) {
+            let subGroups = value.subGroup.split(";");
+            for (let i = 0; i < subGroups.length; i++) {
+                this.addSortingGroup("subGroup", subGroups[i], value);
+            }
+            
+        }
         for (let i = 0; i < formulaDefs.length; i++) {
             this.addSortingGroup("formulaMods", formulaDefs[i], value);
         }

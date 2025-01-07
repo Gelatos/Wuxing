@@ -1067,7 +1067,6 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 				tier = isNaN(tier) ? 0 : tier;
 				affinity = techDefinitions[i].affinity;
 				isLearnable = !techDefinitions[i].isFree && styleStatus != "0" && tier <= cr && (affinity == "" || affinities.includes(affinity));
-				// console.log(`Technique ${techDefinitions[i].title} is${isLearnable ? "" : " not"} learnable: from styleStatus ${styleStatus}, tier ${tier} <= ${cr}, and affinity ${affinity} in ${affinities}`);
 				attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
 
 				workerVariableName = techDefinitions[i].getVariable();
@@ -1176,31 +1175,64 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 				jobWorker.cleanBuildStats();
 				techniqueWorker.setBuildStatsFinal(attrHandler);
 				techniqueWorker.cleanBuildStats();
+				
 				let workerVariableName = "";
-				let styleValue = "0";
-
+				let isStyleSet = "0";
 				let isVisible = false;
 				for (let i = 0; i < styleDefinitions.length; i++) {
 					workerVariableName = styleDefinitions[i].getVariable();
-					styleValue = styleWorker.buildStats.has(workerVariableName);
-					attrHandler.addUpdate(styleDefinitions[i].getVariable(), styleValue ? "on" : "0");
+					isStyleSet = styleWorker.buildStats.has(workerVariableName);
+					attrHandler.addUpdate(styleDefinitions[i].getVariable(), isStyleSet ? "on" : "0");
 
 					isVisible = techniqueWorker.buildStats.has(styleDefinitions[i].getVariable());
 					attrHandler.addUpdate(styleDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+					if (isVisible) {
+						filterStyleTechniquesForStyleSet(styleDefinitions[i], attrHandler, techniqueWorker);
+					}
 				}
 
 				for (let i = 0; i < jobDefinitions.length; i++) {
 					workerVariableName = jobDefinitions[i].getVariable();
-					styleValue = jobStyleWorker.buildStats.has(workerVariableName);
-					attrHandler.addUpdate(jobDefinitions[i].getVariable(), styleValue ? "on" : "0");
+					isStyleSet = jobStyleWorker.buildStats.has(workerVariableName);
+					attrHandler.addUpdate(jobDefinitions[i].getVariable(), isStyleSet ? "on" : "0");
 					
 					isVisible = jobWorker.buildStats.has(jobDefinitions[i].getVariable(WuxDef._rank));
 					attrHandler.addUpdate(jobDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+					if (isVisible) {
+						filterJobTechniquesForStyleSet(jobDefinitions[i], attrHandler, parseInt(jobWorker.buildStats.get(jobDefinitions[i].getVariable(WuxDef._rank)).value));
+					}
 				}
 
 				attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Basic", WuxDef._filter), "1");
 				attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._subfilter), "1");
 			});
+		},
+		filterStyleTechniquesForStyleSet = function (styleDefinition, attrHandler, techniqueWorker) {
+			let workerVariableName = "";
+			let isVisible = false;
+
+			let techDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Technique"), new DatabaseFilterData("subGroup", styleDefinition.title)]);
+			for (let i = 0; i < techDefinitions.length; i++) {
+				workerVariableName = techDefinitions[i].getVariable();
+				isVisible = techDefinitions[i].isFree || techniqueWorker.buildStats.has(workerVariableName);
+					Debug.Log(`Filtering Technique ${techDefinitions[i].title} which is ${isVisible ? "visible" : "hidden"}`);
+				attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+			}
+		},
+		filterJobTechniquesForStyleSet = function (jobDefinition, attrHandler, jobTier) {
+			let workerVariableName = "";
+			let tier = 0;
+			let isVisible = false;
+
+			let techDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Technique"), new DatabaseFilterData("subGroup", jobDefinition.title)]);
+			for (let i = 0; i < techDefinitions.length; i++) {
+				workerVariableName = techDefinitions[i].getVariable();
+				tier = parseInt(techDefinitions[i].tier);
+				tier = isNaN(tier) ? 0 : tier;
+				isVisible = tier <= jobTier;
+					Debug.Log(`Filtering Job Technique ${techDefinitions[i].title} which is ${isVisible ? "visible" : "hidden"} because ${tier} <= ${jobTier}`);
+				attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+			}
 		},
 		filterTechniquesForActions = function (attributeHandler) {
 			let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
@@ -1224,12 +1256,18 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 					workerVariableName = styleDefinitions[i].getVariable();
 					isVisible = styleWorker.buildStats.has(workerVariableName);
 					attrHandler.addUpdate(styleDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+					if (isVisible) {
+						filterStyleTechniquesForStyleSet(styleDefinitions[i], attrHandler, techniqueWorker);
+					}
 				}
 
 				for (let i = 0; i < jobDefinitions.length; i++) {
 					workerVariableName = jobDefinitions[i].getVariable();
 					isVisible = jobStyleWorker.buildStats.has(workerVariableName);
 					attrHandler.addUpdate(jobDefinitions[i].getVariable(WuxDef._filter), isVisible ? "0" : "1");
+					if (isVisible) {
+						filterJobTechniquesForStyleSet(jobDefinitions[i], attrHandler, parseInt(jobWorker.buildStats.get(jobDefinitions[i].getVariable(WuxDef._rank)).value));
+					}
 				}
 
 				attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Basic", WuxDef._filter), "0");
