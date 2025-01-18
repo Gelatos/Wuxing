@@ -6,25 +6,26 @@ class Dictionary {
         this.keys = [];
         this.values = {};
     }
+
     import(data, dataCreationCallback) {
         if (data != undefined) {
             if (Array.isArray(data)) {
                 this.importSheets(data, dataCreationCallback);
-            }
-            else if (typeof data == "string") {
+            } else if (typeof data == "string") {
                 this.importStringifiedJson(data, dataCreationCallback);
-            }
-            else {
+            } else {
                 this.importJson(data, dataCreationCallback);
             }
         }
     }
+
     importStringifiedJson(stringifiedJSON, dataCreationCallback) {
         if (stringifiedJSON == undefined || stringifiedJSON == "") {
             return;
         }
         this.importJson(JSON.parse(stringifiedJSON), dataCreationCallback);
     }
+
     importJson(json, dataCreationCallback) {
         if (json == undefined) {
             return;
@@ -35,11 +36,11 @@ class Dictionary {
             for (let i = 0; i < json.keys.length; i++) {
                 this.values[json.keys[i]] = dataCreationCallback(json.values[json.keys[i]]);
             }
-        }
-        else {
+        } else {
             this.values = json.values;
         }
     }
+
     importSheets(dataArray, dataCreationCallback) {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
@@ -49,32 +50,40 @@ class Dictionary {
             }
         }
     }
+
     add(key, value) {
         if (!this.keys.includes(key)) {
             this.keys.push(key);
         }
         this.values[key] = value;
     }
+
     get(key) {
         return this.values[key];
     }
+
     getkey(index) {
         return this.keys[index];
     }
+
     getByIndex(index) {
         return this.get(this.getkey(index));
     }
+
     set(key, value) {
         this.values[key] = value;
     }
+
     has(key) {
         return this.keys.includes(key);
     }
+
     iterate(callback) {
         for (let i = 0; i < this.keys.length; i++) {
             callback(this.values[this.keys[i]], this.keys[i]);
         }
     }
+
     clean(validKeys) {
         let keys = this.keys.filter(key => validKeys.includes(key));
         let values = {};
@@ -85,12 +94,14 @@ class Dictionary {
         this.values = values;
     }
 }
+
 class DatabaseFilterData {
     constructor(property, value) {
         this.property = property;
         this.value = value;
     }
 }
+
 class Database extends Dictionary {
     constructor(data, sortingProperties, dataCreationCallback) {
         super();
@@ -100,6 +111,7 @@ class Database extends Dictionary {
 
         this.import(data, dataCreationCallback);
     }
+
     importJson(json, dataCreationCallback) {
         super.importJson(json, dataCreationCallback);
         this.sortingGroups = json.sortingGroups;
@@ -120,6 +132,7 @@ class Database extends Dictionary {
             this.sortingGroups[sortingProperties[i]] = {};
         }
     }
+
     addSortingGroup(property, propertyValue, newEntry) {
         if (this.sortingGroups != undefined) {
             if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
@@ -142,8 +155,7 @@ class Database extends Dictionary {
                 nextFilter = this.getSortedGroup(filterData[i].property, filterData[i].value);
                 filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
             }
-        }
-        else {
+        } else {
             filteredGroup = this.getSortedGroup(filterData.property, filterData.value);
         }
         if (filteredGroup == undefined || filteredGroup.length == 0) {
@@ -180,6 +192,7 @@ class Database extends Dictionary {
         return output;
     }
 }
+
 class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
@@ -196,14 +209,14 @@ class ExtendedTechniqueDatabase extends Database {
         }
         super.importJson(json, dataCreationCallback);
     }
+
     importSheets(dataArray) {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
             data = new TechniqueData(dataArray[i]);
             if (this.has(data.name)) {
                 this.get(data.name).importEffectsFromTechnique(data);
-            }
-            else {
+            } else {
                 this.add(data.name, data);
             }
         }
@@ -218,6 +231,7 @@ class ExtendedTechniqueDatabase extends Database {
         }
     }
 }
+
 class ExtendedDescriptionDatabase extends Database {
     constructor(data) {
         let dataCreation = function (data) {
@@ -239,8 +253,7 @@ class ExtendedDescriptionDatabase extends Database {
             }
             if (this.has(data.name)) {
                 this.values[data.name].descriptions.push(data.descriptions[0]);
-            }
-            else {
+            } else {
                 this.add(data.name, data);
             }
         }
@@ -254,7 +267,7 @@ class ExtendedDescriptionDatabase extends Database {
             for (let i = 0; i < subGroups.length; i++) {
                 this.addSortingGroup("subGroup", subGroups[i], value);
             }
-            
+
         }
         for (let i = 0; i < formulaDefs.length; i++) {
             this.addSortingGroup("formulaMods", formulaDefs[i], value);
@@ -262,11 +275,15 @@ class ExtendedDescriptionDatabase extends Database {
         if (value.modifiers.includes(WuxDef._tech)) {
             this.addSortingGroup("techMods", WuxDef._tech, value);
         }
+        if (value.modifiers.includes(WuxDef._techset)) {
+            this.addSortingGroup("techMods", WuxDef._techset, value);
+        }
         if (value.isResource) {
             this.addSortingGroup("hasMax", "true", value);
         }
     }
 }
+
 class TechniqueEffectDatabase extends Database {
     constructor(data) {
         let dataCreation = function (data) {
@@ -281,12 +298,14 @@ class TechniqueEffectDatabase extends Database {
         }
         super.importJson(json, dataCreationCallback);
     }
+
     importSheets(dataArray) {
         let dataCreationCallback = function (data) {
             return new TechniqueEffect(data);
         }
         super.importSheets(json, dataCreationCallback);
     }
+
     getBoostEffects() {
         return this.filter(new DatabaseFilterData("type", "Boost"));
     }
@@ -298,15 +317,14 @@ class dbObj {
         if (data != undefined) {
             if (Array.isArray(data)) {
                 this.importSheets(data);
-            }
-            else if (typeof data == "string") {
+            } else if (typeof data == "string") {
                 this.importStringifiedJson(data);
-            }
-            else {
+            } else {
                 this.importJson(data);
             }
         }
     }
+
     importStringifiedJson(stringifiedJSON) {
         if (stringifiedJSON == undefined || stringifiedJSON == "") {
             return;
@@ -314,9 +332,15 @@ class dbObj {
         let json = JSON.parse(stringifiedJSON);
         this.importJson(json);
     }
-    importJson(json) { }
-    importSheets(dataArray) { }
-    createEmpty() { }
+
+    importJson(json) {
+    }
+
+    importSheets(dataArray) {
+    }
+
+    createEmpty() {
+    }
 }
 
 class WuxDatabaseData extends dbObj {
@@ -326,13 +350,18 @@ class WuxDatabaseData extends dbObj {
         this.group = json.group;
         this.description = json.description;
     }
+
     importSheets(dataArray) {
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
         this.fieldName = Format.ToFieldName(this.name);
-        this.group = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i];
+        i++;
+        this.description = "" + dataArray[i];
+        i++;
     }
+
     createEmpty() {
         this.name = "";
         this.fieldName = "";
@@ -340,6 +369,7 @@ class WuxDatabaseData extends dbObj {
         this.description = "";
         this.variable = "";
     }
+
     createDefinition(baseDefinition) {
         let definition = new DefinitionData();
         definition.name = baseDefinition.isResource ? `${this.name}` : `${baseDefinition.abbreviation}_${this.name}`;
@@ -356,6 +386,7 @@ class WuxDatabaseData extends dbObj {
     }
 
 }
+
 class TechniqueData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
@@ -380,32 +411,50 @@ class TechniqueData extends WuxDatabaseData {
         this.definitions = json.definitions;
         this.effects = new TechniqueEffectDatabase(json.effects);
     }
+
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
         this.fieldName = Format.ToFieldName(this.name);
-        this.techSet = "" + dataArray[i]; i++;
-        this.group = "" + dataArray[i]; i++;
-        this.affinity = "" + dataArray[i]; i++;
+        this.techSet = "" + dataArray[i];
+        i++;
+        this.group = "" + dataArray[i];
+        i++;
+        this.affinity = "" + dataArray[i];
+        i++;
         this.tier = parseInt(dataArray[i]);
-        this.tier = isNaN(this.tier) ? 0 : this.tier; i++;
+        this.tier = isNaN(this.tier) ? 0 : this.tier;
+        i++;
         this.isFree = this.affinity == "" && this.tier <= 0;
-        this.action = "" + dataArray[i]; i++;
-        this.traits = "" + dataArray[i]; i++;
-        this.resourceCost = "" + dataArray[i]; i++;
-        this.limits = "" + dataArray[i]; i++;
-        this.skill = "" + dataArray[i]; i++;
-        this.range = "" + dataArray[i]; i++;
-        this.target = "" + dataArray[i]; i++;
-        this.requirement = "" + dataArray[i]; i++;
-        this.itemTraits = "" + dataArray[i]; i++;
-        this.trigger = "" + dataArray[i]; i++;
-        this.flavorText = "" + dataArray[i]; i++;
+        this.action = "" + dataArray[i];
+        i++;
+        this.traits = "" + dataArray[i];
+        i++;
+        this.resourceCost = "" + dataArray[i];
+        i++;
+        this.limits = "" + dataArray[i];
+        i++;
+        this.skill = "" + dataArray[i];
+        i++;
+        this.range = "" + dataArray[i];
+        i++;
+        this.target = "" + dataArray[i];
+        i++;
+        this.requirement = "" + dataArray[i];
+        i++;
+        this.itemTraits = "" + dataArray[i];
+        i++;
+        this.trigger = "" + dataArray[i];
+        i++;
+        this.flavorText = "" + dataArray[i];
+        i++;
         this.definitions = [];
         this.effects = new TechniqueEffectDatabase();
         this.addEffect(new TechniqueEffect(dataArray.slice(i)));
     }
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -429,6 +478,7 @@ class TechniqueData extends WuxDatabaseData {
         this.definitions = [];
         this.effects = new TechniqueEffectDatabase();
     }
+
     createDefinition(baseDefinition) {
         let definition = new TechniqueDefinitionData(super.createDefinition(baseDefinition));
         definition.subGroup = this.techSet;
@@ -450,6 +500,7 @@ class TechniqueData extends WuxDatabaseData {
             baseTechnique.addDefinition(definition);
         });
     }
+
     addEffect(effect) {
         switch (effect.type) {
             case "Definition":
@@ -469,6 +520,7 @@ class TechniqueData extends WuxDatabaseData {
                 break;
         }
     }
+
     addDefinition(definition) {
         if (!this.definitions.includes(definition)) {
             this.definitions.push(definition);
@@ -478,11 +530,13 @@ class TechniqueData extends WuxDatabaseData {
     getUseTech() {
         return `!utech ${this.formatTechniqueForSandbox()}`;
     }
+
     formatTechniqueForSandbox() {
         this.displayname = ``;
         this.sheetname = ``;
         return `${this.sanitizeSheetRollAction(JSON.stringify(this))}$$@{${WuxDef.GetVariable("SheetName")}}`;
     }
+
     sanitizeSheetRollAction(sheetRoll) {
         sheetRoll = sheetRoll.replace(/"/g, "%%");
         sheetRoll = sheetRoll.replace(/:/g, "&&");
@@ -500,6 +554,7 @@ class TechniqueData extends WuxDatabaseData {
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
         return sheetRoll;
     }
+
     unsanitizeSheetRollAction(jsonString) {
         jsonString = jsonString.replace(/%%/g, '"');
         jsonString = jsonString.replace(/&&/g, ":");
@@ -507,10 +562,12 @@ class TechniqueData extends WuxDatabaseData {
         jsonString = jsonString.replace(/>>/g, "}");
         return JSON.parse(jsonString);
     }
+
     importSandboxJson(jsonString) {
         this.importJson(this.unsanitizeSheetRollAction(jsonString));
     }
 }
+
 class TechniqueEffect extends dbObj {
     importJson(json) {
         this.name = json.name;
@@ -524,19 +581,30 @@ class TechniqueEffect extends dbObj {
         this.effect = json.effect;
         this.traits = json.traits;
     }
+
     importSheets(dataArray) {
         let i = 0;
         this.name = "";
-        this.defense = "" + dataArray[i]; i++;
-        this.target = "" + dataArray[i]; i++;
-        this.type = "" + dataArray[i]; i++;
-        this.subType = "" + dataArray[i]; i++;
-        this.dVal = "" + dataArray[i]; i++;
-        this.dType = "" + dataArray[i]; i++;
-        this.formula = new FormulaData("" + dataArray[i]); i++;
-        this.effect = "" + dataArray[i]; i++;
-        this.traits = "" + dataArray[i]; i++;
+        this.defense = "" + dataArray[i];
+        i++;
+        this.target = "" + dataArray[i];
+        i++;
+        this.type = "" + dataArray[i];
+        i++;
+        this.subType = "" + dataArray[i];
+        i++;
+        this.dVal = "" + dataArray[i];
+        i++;
+        this.dType = "" + dataArray[i];
+        i++;
+        this.formula = new FormulaData("" + dataArray[i]);
+        i++;
+        this.effect = "" + dataArray[i];
+        i++;
+        this.traits = "" + dataArray[i];
+        i++;
     }
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -550,22 +618,29 @@ class TechniqueEffect extends dbObj {
         this.effect = "";
         this.traits = "";
     }
+
     setName(name) {
         this.name = name;
     }
 }
+
 class TechniqueResources extends dbObj {
     importJson(json) {
         this.sheetname = json.sheetname;
         this.name = json.name;
         this.resourceCost = json.resourceCost;
     }
+
     importSheets(dataArray) {
         let i = 0;
-        this.sheetname = "" + dataArray[i]; i++;
-        this.name = "" + dataArray[i]; i++;
-        this.resourceCost = "" + dataArray[i]; i++;
+        this.sheetname = "" + dataArray[i];
+        i++;
+        this.name = "" + dataArray[i];
+        i++;
+        this.resourceCost = "" + dataArray[i];
+        i++;
     }
+
     createEmpty() {
         super.createEmpty();
         this.sheetname = "";
@@ -588,15 +663,18 @@ class TechniqueResources extends dbObj {
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
         return sheetRoll;
     }
+
     unsanitizeSheetRollAction(jsonString) {
         jsonString = jsonString.replace(/%%/g, '"');
         jsonString = jsonString.replace(/&&/g, ":");
         return JSON.parse(jsonString);
     }
+
     importSandboxJson(jsonString) {
         this.importJson(this.unsanitizeSheetRollAction(jsonString));
     }
 }
+
 class TechniqueStyle extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
@@ -607,16 +685,23 @@ class TechniqueStyle extends WuxDatabaseData {
         this.affinity = json.affinity;
         this.cr = json.cr;
     }
+
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
         this.fieldName = Format.ToFieldName(this.name);
-        this.group = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
-        this.affinity = "" + dataArray[i]; i++;
-        this.cr = parseInt(dataArray[i]); i++;
+        this.group = "" + dataArray[i];
+        i++;
+        this.description = "" + dataArray[i];
+        i++;
+        this.affinity = "" + dataArray[i];
+        i++;
+        this.cr = parseInt(dataArray[i]);
+        i++;
     }
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -626,6 +711,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.affinity = "";
         this.cr = 0;
     }
+
     createDefinition(baseDefinition) {
         let definition = new TechniqueStyleDefinitionData(super.createDefinition(baseDefinition));
         definition.subGroup = this.group;
@@ -634,6 +720,7 @@ class TechniqueStyle extends WuxDatabaseData {
         definition.requirements = this.getRequirements();
         return definition;
     }
+
     getRequirements() {
         let requirements = "";
 
@@ -652,6 +739,7 @@ class TechniqueStyle extends WuxDatabaseData {
         return requirements;
     }
 }
+
 class SkillData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
@@ -662,17 +750,24 @@ class SkillData extends WuxDatabaseData {
         this.abilityScore = json.abilityScore;
         this.description = json.description;
     }
+
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
         this.fieldName = Format.ToFieldName(this.name);
-        this.group = "" + dataArray[i]; i++;
-        this.subGroup = "" + dataArray[i]; i++;
-        this.abilityScore = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i];
+        i++;
+        this.subGroup = "" + dataArray[i];
+        i++;
+        this.abilityScore = "" + dataArray[i];
+        i++;
+        this.description = "" + dataArray[i];
+        i++;
 
     }
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -682,6 +777,7 @@ class SkillData extends WuxDatabaseData {
         this.abilityScore = "";
         this.description = "";
     }
+
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
         definition.subGroup = this.subGroup;
@@ -690,6 +786,7 @@ class SkillData extends WuxDatabaseData {
         return definition;
     }
 }
+
 class LanguageData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
@@ -699,15 +796,21 @@ class LanguageData extends WuxDatabaseData {
         this.location = json.location;
         this.description = json.description;
     }
+
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
         this.fieldName = Format.ToFieldName(this.name);
-        this.group = "" + dataArray[i]; i++;
-        this.location = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i];
+        i++;
+        this.location = "" + dataArray[i];
+        i++;
+        this.description = "" + dataArray[i];
+        i++;
     }
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -716,6 +819,7 @@ class LanguageData extends WuxDatabaseData {
         this.location = "";
         this.description = "";
     }
+
     createDefinition(baseDefinition) {
         let definition = new LanguageDefinitionData(super.createDefinition(baseDefinition));
         definition.subGroup = this.group;
@@ -723,6 +827,7 @@ class LanguageData extends WuxDatabaseData {
         return definition;
     }
 }
+
 class LoreData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
@@ -731,14 +836,19 @@ class LoreData extends WuxDatabaseData {
         this.group = json.group;
         this.description = json.description;
     }
+
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
         this.fieldName = Format.ToFieldName(this.name);
-        this.group = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
+        this.group = "" + dataArray[i];
+        i++;
+        this.description = "" + dataArray[i];
+        i++;
     }
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -746,6 +856,7 @@ class LoreData extends WuxDatabaseData {
         this.group = "";
         this.description = "";
     }
+
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
         definition.subGroup = this.group;
@@ -754,6 +865,7 @@ class LoreData extends WuxDatabaseData {
         return definition;
     }
 }
+
 class JobData extends WuxDatabaseData {
     createEmpty() {
         super.createEmpty();
@@ -761,28 +873,36 @@ class JobData extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.description = "";
-        this.prereq = "";
+        this.defenses = "";
         this.techniques = [];
     }
+
     importJson(json) {
         this.createEmpty();
         this.name = json.name;
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.description = json.description;
-        this.prereq = json.prereq;
+        this.defenses = json.defenses;
         this.techniques = json.techniques;
     }
+
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
         this.fieldName = Format.ToFieldName(this.name);
-        this.group = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
-        this.prereq = "" + dataArray[i]; i++;
-        this.techniques = this.createJobTechnique(dataArray.slice(i)); i++;
+        this.group = "" + dataArray[i];
+        i++;
+        this.description = "" + dataArray[i];
+        i++;
+        this.defenses = "" + dataArray[i];
+        i++;
+        this.techniques = this.createJobTechnique(dataArray.slice(i));
+        i++;
     }
+
     createDefinition(baseDefinition) {
         let definition = new JobDefinitionData(super.createDefinition(baseDefinition));
         definition.subGroup = this.group;
@@ -791,14 +911,7 @@ class JobData extends WuxDatabaseData {
     }
 
     getRequirements() {
-        let requirements = "";
-
-        if (this.prereq != "") {
-            requirements += this.prereq;
-        }
-        if (requirements == "") {
-            requirements = "None";
-        }
+        let requirements = "None";
         return requirements;
     }
 
@@ -813,15 +926,17 @@ class JobData extends WuxDatabaseData {
             }
             data = "" + modArray[i];
             dataSplit = data.split(";");
-            output.push({ name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0 });
+            output.push({name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0});
             i++;
         }
         return output;
     }
 }
+
 class ArchetypeData extends WuxDatabaseData {
 
 }
+
 class StatusData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
@@ -832,16 +947,23 @@ class StatusData extends WuxDatabaseData {
         this.shortDescription = json.shortDescription;
         this.endsOnRoundStart = json.endsOnRoundStart;
     }
+
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
         this.fieldName = Format.ToFieldName(this.name);
-        this.group = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
-        this.shortDescription = "" + dataArray[i]; i++;
-        this.endsOnRoundStart = ("" + dataArray[i]) != ""; i++;
+        this.group = "" + dataArray[i];
+        i++;
+        this.description = "" + dataArray[i];
+        i++;
+        this.shortDescription = "" + dataArray[i];
+        i++;
+        this.endsOnRoundStart = ("" + dataArray[i]) != "";
+        i++;
     }
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -851,6 +973,7 @@ class StatusData extends WuxDatabaseData {
         this.shortDescription = "";
         this.endsOnRoundStart = false;
     }
+
     createDefinition(baseDefinition) {
         let definition = new StatusDefinitionData(super.createDefinition(baseDefinition));
         definition.subGroup = this.group;
@@ -859,21 +982,28 @@ class StatusData extends WuxDatabaseData {
         return definition;
     }
 }
+
 class RoleData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
 
     }
+
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
         this.fieldName = Format.ToFieldName(this.name);
-        this.group = "" + dataArray[i]; i++;
-        this.description = "" + dataArray[i]; i++;
-        this.techniques = this.createTechnique(dataArray.slice(i)); i++;
+        this.group = "" + dataArray[i];
+        i++;
+        this.description = "" + dataArray[i];
+        i++;
+        this.techniques = this.createTechnique(dataArray.slice(i));
+        i++;
 
     }
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -894,27 +1024,36 @@ class RoleData extends WuxDatabaseData {
             }
             data = "" + modArray[i];
             dataSplit = data.split(";");
-            output.push({ name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0 });
+            output.push({name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0});
             i++;
         }
         return output;
     }
 }
+
 class AttributeGroupData extends dbObj {
     importJson(json) {
 
     }
+
     importSheets(modArray) {
         let i = 0;
-        this.bod = parseInt(modArray[i]); i++;
-        this.prc = parseInt(modArray[i]); i++;
-        this.qck = parseInt(modArray[i]); i++;
-        this.cnv = parseInt(modArray[i]); i++;
-        this.int = parseInt(modArray[i]); i++;
-        this.rsn = parseInt(modArray[i]); i++;
+        this.bod = parseInt(modArray[i]);
+        i++;
+        this.prc = parseInt(modArray[i]);
+        i++;
+        this.qck = parseInt(modArray[i]);
+        i++;
+        this.cnv = parseInt(modArray[i]);
+        i++;
+        this.int = parseInt(modArray[i]);
+        i++;
+        this.rsn = parseInt(modArray[i]);
+        i++;
         this.removeAttributeNaN();
 
     }
+
     createEmpty() {
         this.bod = 0;
         this.prc = 0;
@@ -964,14 +1103,17 @@ class AttributeGroupData extends dbObj {
         return output;
     }
 }
+
 class TemplateData extends dbObj {
     importJson(json) {
 
     }
+
     importSheets(dataArray) {
         let i = 0;
 
     }
+
     createEmpty() {
 
     }
@@ -993,24 +1135,38 @@ class DefinitionData extends WuxDatabaseData {
         this.linkedGroups = json.linkedGroups;
         this.isResource = json.isResource;
     }
+
     importSheets(dataArray) {
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
         this.fieldName = Format.ToFieldName(this.name);
-        this.title = "" + dataArray[i]; i++;
-        this.group = "" + dataArray[i]; i++;
-        this.subGroup = "" + dataArray[i]; i++;
-        this.descriptions = [("" + dataArray[i])]; i++;
-        this.abbreviation = "" + dataArray[i]; i++;
-        this.variable = "" + dataArray[i]; i++;
-        this.baseFormula = "" + dataArray[i]; i++;
-        this.modifiers = "" + dataArray[i]; i++;
+        this.title = "" + dataArray[i];
+        i++;
+        this.group = "" + dataArray[i];
+        i++;
+        this.subGroup = "" + dataArray[i];
+        i++;
+        this.descriptions = [("" + dataArray[i])];
+        i++;
+        this.abbreviation = "" + dataArray[i];
+        i++;
+        this.variable = "" + dataArray[i];
+        i++;
+        this.baseFormula = "" + dataArray[i];
+        i++;
+        this.modifiers = "" + dataArray[i];
+        i++;
         this.formula = new FormulaData(this.baseFormula);
         this.formula.addAttributes(this.getFormulaMods(this.modifiers));
-        this.linkedGroups = Format.StringToArray("" + dataArray[i]); i++;
-        this.isResource = dataArray[i]; i++;
-        this.iterateExtraData(("" + dataArray[i]).split(";")); i++;
+        this.linkedGroups = Format.StringToArray("" + dataArray[i]);
+        i++;
+        this.isResource = dataArray[i];
+        i++;
+        this.iterateExtraData(("" + dataArray[i]).split(";"));
+        i++;
     }
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -1028,6 +1184,7 @@ class DefinitionData extends WuxDatabaseData {
         this.isResource = false;
 
     }
+
     createDefinition(baseDefinition) {
         this.definition = "";
         let definition = super.createDefinition(baseDefinition);
@@ -1045,9 +1202,11 @@ class DefinitionData extends WuxDatabaseData {
 
         return definition;
     }
+
     getTitle() {
         return this.title;
     }
+
     getVariables(array, mod1) {
         let output = [];
         for (let i = 0; i < array.length; i++) {
@@ -1055,6 +1214,7 @@ class DefinitionData extends WuxDatabaseData {
         }
         return output;
     }
+
     getVariable(mod, mod1) {
         if (mod == undefined) {
             mod = "";
@@ -1069,16 +1229,17 @@ class DefinitionData extends WuxDatabaseData {
             i = parseInt(m);
             if (Array.isArray(mod) && i < mod.length && mod[i] != undefined) {
                 return mod[i];
-            }
-            else if (i == 0) {
+            } else if (i == 0) {
                 return mod;
             }
             return "";
         });
     }
+
     getAttribute(mod, mod1) {
         return `attr_${this.getVariable(mod, mod1)}`;
     }
+
     getDescription() {
         let output = "";
         this.descriptions.forEach((description) => {
@@ -1086,6 +1247,7 @@ class DefinitionData extends WuxDatabaseData {
         });
         return output;
     }
+
     getFormulaMods(modifiers) {
         let mods = [];
         if (modifiers != "") {
@@ -1099,6 +1261,7 @@ class DefinitionData extends WuxDatabaseData {
         }
         return mods;
     }
+
     iterateExtraData(extraDataValues) {
         let dataSplit;
         let definition = this;
@@ -1109,8 +1272,11 @@ class DefinitionData extends WuxDatabaseData {
             }
         });
     }
-    setImportSheetExtraData(property, value) { }
+
+    setImportSheetExtraData(property, value) {
+    }
 }
+
 class TechniqueDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
@@ -1119,6 +1285,7 @@ class TechniqueDefinitionData extends DefinitionData {
         this.isFree = json.isFree;
         this.passiveBoosts = json.passiveBoosts;
     }
+
     setImportSheetExtraData(property, value) {
         switch (property) {
             case "tier":
@@ -1135,6 +1302,7 @@ class TechniqueDefinitionData extends DefinitionData {
                 break;
         }
     }
+
     createEmpty() {
         super.createEmpty();
         this.tier = 0;
@@ -1142,10 +1310,12 @@ class TechniqueDefinitionData extends DefinitionData {
         this.isFree = false;
         this.passiveBoosts = [];
     }
+
     isPassive() {
         return this.passiveBoosts.length > 0;
     }
 }
+
 class TechniqueStyleDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
@@ -1175,6 +1345,7 @@ class TechniqueStyleDefinitionData extends DefinitionData {
         this.requirements = "";
     }
 }
+
 class LanguageDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
@@ -1194,6 +1365,7 @@ class LanguageDefinitionData extends DefinitionData {
         this.location = "";
     }
 }
+
 class JobDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
@@ -1213,6 +1385,7 @@ class JobDefinitionData extends DefinitionData {
         this.requirements = "";
     }
 }
+
 class StatusDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
@@ -1268,13 +1441,13 @@ class TechniqueDisplayData {
         this.actionType = technique.action;
         this.isFree = technique.isFree;
     }
+
     setTechSetResourceData(technique) {
         this.resourceData = technique.action;
         let skillData = WuxDef.Get(technique.skill);
         if (skillData != undefined) {
             this.resourceData += ` ${skillData.group}`;
-        }
-        else {
+        } else {
             this.resourceData += ` Action`;
         }
         if (technique.limits != "") {
@@ -1296,6 +1469,7 @@ class TechniqueDisplayData {
             }
         }
     }
+
     setTechTargetData(technique) {
         this.targetData = technique.skill == "" ? "No Check" : technique.skill;
         if (technique.range != "") {
@@ -1311,30 +1485,34 @@ class TechniqueDisplayData {
             this.targetData += `${technique.target}`;
         }
     }
+
     setExtentionEffects(technique) {
         this.requirements = technique.requirement;
         this.itemTraits = WuxDef.GetValues(technique.itemTraits, ";");
         this.trigger = technique.trigger;
     }
+
     setTraits(technique) {
         this.traits = WuxDef.GetValues(technique.traits, ";");
     }
+
     setFlavorText(technique) {
         this.flavorText = technique.flavorText;
     }
+
     setDefinitions(technique) {
         if (technique.definitions == undefined) {
             this.definitions = [];
             let definition = new DefinitionData();
             definition.title = "Error! No definitions found!";
             this.definitions.push(definition);
-        }
-        else {
+        } else {
             for (let i = 0; i < technique.definitions.length; i++) {
                 this.definitions.push(WuxDef.Get(technique.definitions[i]));
             }
         }
     }
+
     setEffects(technique) {
         this.effects = [];
         let defenses = technique.effects.getPropertyValues("defense");
@@ -1342,7 +1520,8 @@ class TechniqueDisplayData {
         for (let i = 0; i < defenses.length; i++) {
             filteredTechniqueEffects = technique.effects.filter(new DatabaseFilterData("defense", defenses[i]));
             this.effects.push(defenses[i], new TechniqueEffectDisplayData(filteredTechniqueEffects));
-        };
+        }
+        ;
     }
 
     createEmpty() {
@@ -1409,6 +1588,7 @@ class TechniqueDisplayData {
 
         return `&{template:technique} ${this.sanitizeSheetRollAction(output.trim())}`;
     }
+
     rollTemplateDefinitions(definition, traitType) {
         let output = "";
         for (let i = 0; i < definition.length; i++) {
@@ -1416,6 +1596,7 @@ class TechniqueDisplayData {
         }
         return output;
     }
+
     rollTemplateEffects() {
         let output = "";
         let incrementer = 0;
@@ -1424,8 +1605,7 @@ class TechniqueDisplayData {
                 output += `{{Effect${incrementer}Name=${effect.check}}}{{Effect${incrementer}Desc=${effect.checkDescription}}}`;
                 if (effect.effects == undefined) {
                     output += `{{Effect${incrementer}=Error! No effects found!}}`;
-                }
-                else {
+                } else {
                     effect.effects.forEach(function (desc) {
                         output += `{{Effect${incrementer}=${desc}}}`;
                         incrementer++;
@@ -1436,6 +1616,7 @@ class TechniqueDisplayData {
         });
         return output;
     }
+
     sanitizeSheetRollAction(roll) {
         var sheetRoll = roll;
         sheetRoll = sheetRoll.replace(/'/g, "&#39;");
@@ -1453,6 +1634,7 @@ class TechniqueDisplayData {
         return sheetRoll;
     }
 }
+
 class TechniqueEffectDisplayData {
 
     constructor(techniqueEffects) {
@@ -1473,26 +1655,24 @@ class TechniqueEffectDisplayData {
                 definition = WuxDef.Get("Title_TechEffect");
                 this.check = definition.title;
                 this.checkDescription = definition.getDescription();
-            }
-            else {
+            } else {
                 definition = WuxDef.Get(defense);
                 if (definition.group == "Result") {
                     this.check = `${definition.title}`;
                     this.checkDescription = `${definition.getDescription()}`;
-                }
-                else {
+                } else {
                     let definition2 = WuxDef.Get("Title_TechDefense");
                     this.check = `${definition2.title}${definition.title}`;
                     this.checkDescription = `${definition2.getDescription()}\n${definition.getDescription()}`;
                 }
             }
-        }
-        else {
+        } else {
             definition = WuxDef.Get("Title_TechDC");
             this.check = `${definition.title}${defense}`;
             this.checkDescription = definition.getDescription();
         }
     }
+
     importEffectData(effectData) {
         for (let i = 0; i < effectData.length; i++) {
             this.effects.push(this.formatEffect(effectData[i]));
@@ -1549,6 +1729,7 @@ class TechniqueEffectDisplayData {
 
         return output;
     }
+
     formatHpEffect(effect) {
         let hp = WuxDef.GetTitle("HP");
         switch (effect.subType) {
@@ -1560,6 +1741,7 @@ class TechniqueEffectDisplayData {
                 return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
         }
     }
+
     formatWillEffect(effect) {
         let willpower = WuxDef.GetTitle("WILL");
         switch (effect.subType) {
@@ -1569,6 +1751,7 @@ class TechniqueEffectDisplayData {
                 return `${this.formatCalcBonus(effect)} ${willpower} damage`;
         }
     }
+
     formatVitalityEffect(effect) {
         let vitality = WuxDef.GetTitle("Cmb_Vitality");
         switch (effect.subType) {
@@ -1578,6 +1761,7 @@ class TechniqueEffectDisplayData {
                 return `Lose ${this.formatCalcBonus(effect)} ${vitality}`;
         }
     }
+
     formatSocialMeterEffect(effect, type) {
         switch (effect.subType) {
             case "Heal":
@@ -1586,6 +1770,7 @@ class TechniqueEffectDisplayData {
                 return `Increase target's ${type} by ${this.formatCalcBonus(effect)}`;
         }
     }
+
     formatPatienceMeterEffect(effect) {
         let patience = WuxDef.GetTitle("Soc_Patience");
         switch (effect.subType) {
@@ -1595,9 +1780,11 @@ class TechniqueEffectDisplayData {
                 return `Reduce target's ${patience} by ${this.formatCalcBonus(effect)}`;
         }
     }
+
     formatRequestEffect(effect) {
         return `Make a request check on the target with ${this.formatCalcBonus(effect)}`;
     }
+
     formatStatusEffect(effect) {
         let state = WuxDef.Get(effect.effect);
         let target = "Target";
@@ -1608,16 +1795,25 @@ class TechniqueEffectDisplayData {
         }
 
         switch (effect.subType) {
-            case "Add": return `${target} gain${plural} the ${state.title} ${state.group}`;
-            case "Remove": return `${target} lose${plural} the ${state.title} ${state.group}`;
-            case "Remove Any": return `${target} lose${plural} any condition of your choice`;
-            case "Remove All": return `${target} lose${plural} all conditions of your choice`;
-            case "Remove Will": return `${target} lose${plural} all emotions of your choice`;
-            case "Self": return `${target} gain${plural} the ${state.title} ${state.group} targeted towards the caster`;
-            case "Choose": return `${target} gain${plural} the ${state.title} ${state.group} targeted towards a character of your choice`;
-            default: return `${target} gain${plural} the ${state.title} ${state.group}`;
+            case "Add":
+                return `${target} gain${plural} the ${state.title} ${state.group}`;
+            case "Remove":
+                return `${target} lose${plural} the ${state.title} ${state.group}`;
+            case "Remove Any":
+                return `${target} lose${plural} any condition of your choice`;
+            case "Remove All":
+                return `${target} lose${plural} all conditions of your choice`;
+            case "Remove Will":
+                return `${target} lose${plural} all emotions of your choice`;
+            case "Self":
+                return `${target} gain${plural} the ${state.title} ${state.group} targeted towards the caster`;
+            case "Choose":
+                return `${target} gain${plural} the ${state.title} ${state.group} targeted towards a character of your choice`;
+            default:
+                return `${target} gain${plural} the ${state.title} ${state.group}`;
         }
     }
+
     formatTemporaryEffect(effect) {
         let target = "Target";
         let plural = "s";
@@ -1642,6 +1838,9 @@ class TechniqueEffectDisplayData {
             case "Round":
                 effectTarget = "Until the end of the round";
                 break;
+            case "Conflict":
+                effectTarget = "Until the end of the conflict";
+                break;
         }
 
         let effectSubType = effectSubs[0].trim();
@@ -1655,32 +1854,41 @@ class TechniqueEffectDisplayData {
         }
 
     }
+
     formatBoostEffect(effect) {
         switch (effect.subType) {
-            case "Set": return `${WuxDef.GetTitle(effect.effect)} is set to ${this.formatCalcBonus(effect)}`;
-            default: return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
+            case "Set":
+                return `${WuxDef.GetTitle(effect.effect)} is set to ${this.formatCalcBonus(effect)}`;
+            default:
+                return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
         }
     }
+
     formatDashEffect(effect) {
-        if (effect.target == "Self") {
+        if (effect.target === "Self") {
             return `You roll your Move Potency die to gain Move Charge.`;
-        }
-        else {
+        } else {
             return `Target rolls their Move Potency die to gain Move Charge.`;
         }
     }
+
     formatMoveChargeEffect(effect) {
-        return "You may move a number of squares equal to your Move Charge. You then lose all your Move Charge.";
+        if (effect.target === "Self") {
+            return "You may move a number of squares equal to your Move Charge. If you choose to move, you then lose all your Move Charge.";
+        } else {
+            return "The target may move a number of squares equal to their Move Charge. If they choose to move, they then lose all their Move Charge.";
+        }
     }
+
     formatEnEffect(effect) {
         let effectTotal = this.formatCalcBonus(effect);
         if (effect.target == "Self") {
             return `You gain ${effectTotal} ${WuxDef.GetTitle("EN")}`;
-        }
-        else {
+        } else {
             return `Target gains ${effectTotal} ${WuxDef.GetTitle("EN")}`;
         }
     }
+
     formatDescriptionEffect(effect) {
         return effect.effect;
     }
@@ -1693,20 +1901,19 @@ class TechniqueEffectDisplayData {
         if (effect.target == "Self") {
             output.target = "You";
             output.plural = "";
-        }
-        else {
+        } else {
             output.target = "Target";
             output.plural = plural;
         }
         return output;
     }
+
     formatCalcBonus(effect) {
         let output = this.formatEffectDice(effect);
         let formulaString = "";
         try {
             formulaString = effect.formula.getString();
-        }
-        catch (e) {
+        } catch (e) {
             formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
         }
         if (formulaString != "" && output != "") {
@@ -1714,6 +1921,7 @@ class TechniqueEffectDisplayData {
         }
         return output + formulaString;
     }
+
     formatEffectDice(effect) {
         if (effect.dVal != "" && effect.dVal > 0) {
             return `${effect.dVal}d${effect.dType}`;
@@ -1742,17 +1950,21 @@ class WuxRepeatingSection {
     addIds(ids) {
         this.ids = this.ids.concat(ids);
     }
+
     clearIds() {
         this.ids = [];
     }
+
     iterate(callback) {
         for (let i = 0; i < this.ids.length; i++) {
             callback(this.ids[i]);
         }
     }
+
     getFieldName(id, fieldName) {
         return `${this.repeatingSection}_${id}_${fieldName}`;
     }
+
     addAttributeMods(attributeHandler, fieldNames) {
         let repeater = this;
 
@@ -1765,18 +1977,22 @@ class WuxRepeatingSection {
             }
         });
     }
+
     getIdFromFieldName(fieldName) {
         return fieldName.split("_")[2];
     }
+
     removeId(id) {
         removeRepeatingRow(this.repeatingSection + "_" + id);
     }
+
     removeAllIds() {
         for (let i = 0; i < this.ids.length; i++) {
             this.removeId(this.ids[i]);
         }
     }
 }
+
 class FormulaData {
 
     constructor(data) {
@@ -1784,8 +2000,7 @@ class FormulaData {
         if (data != undefined) {
             if (data.workers == undefined) {
                 this.importFormula(data);
-            }
-            else {
+            } else {
                 this.importJson(data);
             }
         }
@@ -1814,15 +2029,13 @@ class FormulaData {
                 definition = WuxDef.Get(definitionName);
                 if (definitionNameModifier == "") {
                     formulaVar = definition.getVariable();
-                }
-                else {
+                } else {
                     modDefinition = WuxDef.Get(definitionNameModifier);
                     formulaVar = definition.getVariable(modDefinition.getVariable());
                 }
 
                 formulaData.workers.push(formulaData.makeWorker(formulaVar, definitionName, 0, multiplier, max));
-            }
-            else {
+            } else {
                 formulaData.workers.push(formulaData.makeWorker("", "", parseInt(definitionName), multiplier, max));
             }
         })
@@ -1884,7 +2097,8 @@ class FormulaData {
             if (this.workers[i].variableName != "") {
                 attributes.push(this.workers[i].variableName);
             }
-        };
+        }
+        ;
         return attributes;
     }
 
@@ -1911,8 +2125,7 @@ class FormulaData {
                 if (printBreakdown) {
                     console.log(`Adding ${worker.variableName}(${worker.value}) * ${worker.multiplier}`);
                 }
-            }
-            else if (printBreakdown) {
+            } else if (printBreakdown) {
                 console.log(`Adding ${worker.value} * ${worker.multiplier}`);
             }
             mod = worker.value * worker.multiplier;
@@ -1938,8 +2151,7 @@ class FormulaData {
                         if (worker.multiplier != 1) {
                             if (worker.multiplier > 1) {
                                 output += `[${definition.title} x ${worker.multiplier}]`;
-                            }
-                            else {
+                            } else {
                                 switch (worker.multiplier) {
                                     case 0.5:
                                         output += `[1/2 x ${definition.title}]`;
@@ -1955,8 +2167,7 @@ class FormulaData {
                                         break;
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             output += `[${definition.title}]`;
                         }
 
@@ -1965,8 +2176,7 @@ class FormulaData {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 if (output != "") {
                     output += " + ";
                 }
@@ -1977,6 +2187,7 @@ class FormulaData {
         return output;
     }
 }
+
 class DieRoll {
     constructor(dieRoll) {
         this.createEmpty();
@@ -2036,8 +2247,7 @@ class DieRoll {
         this.rollDice(dieCount, dieType);
         if (keepHigh) {
             this.sortRollsDescending();
-        }
-        else {
+        } else {
             this.sortRollsAscending();
         }
 
@@ -2046,8 +2256,7 @@ class DieRoll {
             if (i < keepCount) {
                 this.keeps.push(this.rolls[i]);
                 this.message += `[${this.rolls[i]}]`;
-            }
-            else {
+            } else {
                 this.message += `${this.rolls[i]}`;
             }
             if (i < this.rolls.length - 1) {
@@ -2074,12 +2283,12 @@ class DieRoll {
         this.addModToRoll(mod);
     }
 }
+
 class ResistanceData {
     constructor(json) {
         if (json != undefined) {
             this.importJson(json);
-        }
-        else {
+        } else {
             this.createEmpty();
         }
     }
@@ -2117,11 +2326,9 @@ class ResistanceData {
     getResistanceString(damageType) {
         if (this[damageType] == 0) {
             return "";
-        }
-        else if (this[damageType] > 0) {
+        } else if (this[damageType] > 0) {
             return `${damageType} Resistance: ${this[damageType]}`;
-        }
-        else {
+        } else {
             return `${damageType} Weakness: ${Math.abs(this[damageType])}`;
         }
     }
@@ -2159,7 +2366,7 @@ class StatusHandler {
     constructor(attributeHandler) {
         this.attributeHandler = attributeHandler;
         this.statusDef = WuxDef.Get("Status");
-		this.attributeHandler.addMod(statusDef.getVariable());
+        this.attributeHandler.addMod(statusDef.getVariable());
         this.combatDetailsHandler = new CombatDetailsHandler(this.attributeHandler);
     }
 
@@ -2178,8 +2385,7 @@ class StatusHandler {
                 }
                 statuses.push(statusName);
                 attrHandler.addUpdate(statusDef.getVariable(), statuses);
-            }
-            else if (newValue == 0) {
+            } else if (newValue == 0) {
                 let statusIndex = statuses.indexOf(statusName);
                 if (statusIndex == -1) {
                     return;
@@ -2201,12 +2407,13 @@ class CombatDetails {
             this.importJson(json);
         }
     }
+
     createEmpty() {
         this.displayStyle = "";
         this.displayName = "";
         this.cr = 1;
-        this.archetype = "";
-        this.archetypeDesc = "";
+        this.job = "";
+        this.jobDefenses = "";
         this.status = [];
         this.surges = 2;
         this.maxsurges = 2;
@@ -2220,8 +2427,8 @@ class CombatDetails {
         this.displayStyle = json.displayStyle != undefined ? json.displayStyle : "";
         this.displayName = json.displayName != undefined ? json.displayName : "";
         this.cr = json.cr != undefined ? json.cr : 1;
-        this.archetype = json.archetype != undefined ? json.archetype : "";
-        this.archetypeDesc = json.archetypeDesc != undefined ? json.archetypeDesc : "";
+        this.job = json.job != undefined ? json.job : "";
+        this.jobDefenses = json.jobDefenses != undefined ? json.jobDefenses : "";
         this.status = json.status != undefined ? json.status : [];
         this.surges = json.surges != undefined ? json.surges : 2;
         this.maxsurges = json.maxsurges != undefined ? json.maxsurges : 2;
@@ -2232,11 +2439,11 @@ class CombatDetails {
     }
 
     printTooltip() {
-        let output = `${this.displayName} [CR${this.cr}] ${this.archetype}`;
+        let output = `${this.displayName} [CR${this.cr}] ${this.job}`;
         output += ` =========================== `;
-        output += `${this.archetypeDesc} - `;
+        output += `${this.jobDefenses} - `;
 
-        switch(this.displayStyle) {
+        switch (this.displayStyle) {
             case "Battle":
                 output += `Surges:`;
                 for (let i = 0; i < this.maxsurges; i++) {
@@ -2266,22 +2473,27 @@ class CombatDetails {
 
         if (this.status.length == 0) {
             output += `None`;
-        }
-        else {
+        } else {
             let statuses = "";
             let conditions = "";
             let emotions = "";
             for (let i = 0; i < this.status.length; i++) {
                 let statusDef = WuxDef.Get(this.status[i]);
-                switch(statusDef.subGroup) {
-                    case "Status": statuses = this.addStatusToTooltip(statusDef, "Status", statuses); break;
-                    case "Condition": conditions = this.addStatusToTooltip(statusDef, "Conditions", conditions); break;
-                    case "Emotion": emotions = this.addStatusToTooltip(statusDef, "Emotions", emotions); break;
+                switch (statusDef.subGroup) {
+                    case "Status":
+                        statuses = this.addStatusToTooltip(statusDef, "Status", statuses);
+                        break;
+                    case "Condition":
+                        conditions = this.addStatusToTooltip(statusDef, "Conditions", conditions);
+                        break;
+                    case "Emotion":
+                        emotions = this.addStatusToTooltip(statusDef, "Emotions", emotions);
+                        break;
                 }
             }
-            output += statuses != "" ? `${statuses} `: "";
-            output += conditions != "" ? `${conditions} `: "";
-            output += emotions != "" ? `${emotions} `: "";
+            output += statuses != "" ? `${statuses} ` : "";
+            output += conditions != "" ? `${conditions} ` : "";
+            output += emotions != "" ? `${emotions} ` : "";
         }
 
         return output;
@@ -2290,8 +2502,7 @@ class CombatDetails {
     addStatusToTooltip(statusDef, groupname, group) {
         if (group == "") {
             group = `${groupname}:`;
-        }
-        else {
+        } else {
             group += ";";
         }
         group += statusDef.title();
@@ -2302,7 +2513,7 @@ class CombatDetails {
 class CombatDetailsHandler {
     constructor(attributeHandler) {
         this.combatDetailsVar = WuxDef.GetVariable("CombatDetails");
-		attributeHandler.addMod(this.combatDetailsVar);
+        attributeHandler.addMod(this.combatDetailsVar);
         this.combatDetails = new CombatDetails();
     }
 
@@ -2329,11 +2540,10 @@ class CombatDetailsHandler {
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
-    onUpdateArchetype(attrHandler, value) {
+    onUpdateJob(attrHandler, jobDef) {
         this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        let archetypeDef = WuxDef.Get(`Archetype_${value}`);
-        this.combatDetails.archetype = archetypeDef.title;
-        this.combatDetails.archetypeDesc = archetypeDef.getDescription();
+        this.combatDetails.job = jobDef.title;
+        this.combatDetails.jobDefenses = jobDef.defenses;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
@@ -2361,8 +2571,7 @@ class AttributeHandler {
     constructor(mods) {
         if (Array.isArray(mods)) {
             this.mods = mods;
-        }
-        else {
+        } else {
             this.mods = [];
             if (mods != undefined) {
                 this.mods.push(mods);
@@ -2373,36 +2582,45 @@ class AttributeHandler {
         this.getCallbacks = [];
         this.finishCallbacks = [];
     }
+
     addMod(mods) {
         if (Array.isArray(mods)) {
             this.mods = this.mods.concat(mods);
-        }
-        else {
+        } else {
             this.mods.push(mods);
         }
     }
-    addFormulaMods(definition) {
-        console.log(`Adding formula mods for ${definition.name}`);
+
+    addFormulaMods(definition, printLog) {
+        if (printLog) {
+            Debug.Log(`Adding formula mods for ${definition.name}`);
+        }
         this.addMod(definition.formula.getAttributes());
     }
+
     addUpdate(attr, value) {
         this.update[attr] = value;
     }
+
     addGetAttrCallback(callback) {
         this.getCallbacks.push(callback);
     }
+
     addFinishCallback(callback) {
         this.finishCallbacks.push(callback);
     }
+
     run() {
     }
 
     getCurrentValue(fieldName) {
         return this.current[fieldName];
     }
+
     getUpdateValue(fieldName) {
         return this.update[fieldName];
     }
+
     validateDefaultValue(defaultValue, newDefaultValue) {
         if (defaultValue == undefined) {
             return newDefaultValue;
@@ -2418,15 +2636,16 @@ class AttributeHandler {
         }
         return output;
     }
+
     databaseParseString(fieldName) {
         if (this.update[fieldName] != undefined) {
             return this.getUpdateValue(fieldName);
-        }
-        else if (this.current[fieldName] != undefined) {
+        } else if (this.current[fieldName] != undefined) {
             return this.getCurrentValue(fieldName);
         }
         return undefined;
     }
+
     parseInt(fieldName, defaultValue) {
         defaultValue = this.validateDefaultValue(defaultValue, 0);
         let output = this.databaseParseInt(fieldName);
@@ -2435,15 +2654,16 @@ class AttributeHandler {
         }
         return output;
     }
+
     databaseParseInt(fieldName) {
         if (this.update[fieldName] != undefined) {
             return parseInt(this.getUpdateValue(fieldName));
-        }
-        else if (this.current[fieldName] != undefined) {
+        } else if (this.current[fieldName] != undefined) {
             return parseInt(this.getCurrentValue(fieldName));
         }
         return undefined;
     }
+
     parseFloat(fieldName, defaultValue) {
         defaultValue = this.validateDefaultValue(defaultValue, 0);
         let output = this.databaseParseFloat(fieldName);
@@ -2452,15 +2672,16 @@ class AttributeHandler {
         }
         return output;
     }
+
     databaseParseFloat(fieldName) {
         if (this.update[fieldName] != undefined) {
             return parseFloat(this.getUpdateValue(fieldName));
-        }
-        else if (this.current[fieldName] != undefined) {
+        } else if (this.current[fieldName] != undefined) {
             return parseFloat(this.getCurrentValue(fieldName));
         }
         return undefined;
     }
+
     parseJSON(fieldName, defaultValue) {
         defaultValue = this.validateDefaultValue(defaultValue, "");
         let output = this.databaseParseJSON(fieldName);
@@ -2469,16 +2690,17 @@ class AttributeHandler {
         }
         return output;
     }
+
     databaseParseJSON(fieldName) {
         if (this.update[fieldName] != undefined && this.update[fieldName] != "") {
             return JSON.parse(this.getUpdateValue(fieldName));
-        }
-        else if (this.current[fieldName] != undefined && this.current[fieldName] != "") {
+        } else if (this.current[fieldName] != undefined && this.current[fieldName] != "") {
             return JSON.parse(this.getCurrentValue(fieldName));
         }
         return undefined;
     }
 }
+
 class SandboxAttributeHandler extends AttributeHandler {
     constructor(characterId, mods) {
         super(mods);
@@ -2486,19 +2708,23 @@ class SandboxAttributeHandler extends AttributeHandler {
         this.attributes = {};
         this.maxCheck = false;
     }
+
     setMaxCheck(isMax) {
         if (isMax == undefined) {
             this.maxCheck = false;
         }
         this.maxCheck = isMax;
     }
+
     getUpdateValue(fieldName) {
         return this.update[fieldName][this.maxCheck ? "max" : "current"];
     }
+
     parseString(fieldName, defaultValue, isMax) {
         this.setMaxCheck(isMax);
         return super.parseString(fieldName, defaultValue);
     }
+
     databaseParseString(fieldName) {
         let output = super.databaseParseString(fieldName);
         if (output == undefined && this.attributes[fieldName] != undefined) {
@@ -2511,6 +2737,7 @@ class SandboxAttributeHandler extends AttributeHandler {
         this.setMaxCheck(isMax);
         return super.parseInt(fieldName, defaultValue);
     }
+
     databaseParseInt(fieldName) {
         let output = super.databaseParseInt(fieldName);
         if (output == undefined && this.attributes[fieldName] != undefined) {
@@ -2518,10 +2745,12 @@ class SandboxAttributeHandler extends AttributeHandler {
         }
         return output;
     }
+
     parseFloat(fieldName, defaultValue, isMax) {
         this.setMaxCheck(isMax);
         return super.parseFloat(fieldName, defaultValue);
     }
+
     databaseParseFloat(fieldName) {
         let output = super.databaseParseFloat(fieldName);
         if (output == undefined && this.attributes[fieldName] != undefined) {
@@ -2529,10 +2758,12 @@ class SandboxAttributeHandler extends AttributeHandler {
         }
         return output;
     }
+
     parseJSON(fieldName, defaultValue, isMax) {
         this.setMaxCheck(isMax);
         return super.parseJSON(fieldName, defaultValue);
     }
+
     databaseParseJSON(fieldName) {
         let output = super.databaseParseJSON(fieldName);
         if (output == undefined && this.attributes[fieldName] != undefined) {
@@ -2548,12 +2779,14 @@ class SandboxAttributeHandler extends AttributeHandler {
         Debug.Log(`[SandboxAttributeHandler][addAttribute] Adding attribute ${attr}`);
         this.attributes[attr] = this.getCharacterAttribute(attr);
     }
+
     getAttribute(attr) {
         if (!this.attributes.hasOwnProperty(attr)) {
             return undefined;
         }
         return this.attributes[attr];
     }
+
     addUpdate(attr, value, isMax) {
         Debug.Log(`Adding update ${attr} with value ${value}`);
         if (this.attributes[attr] == undefined) {
@@ -2563,13 +2796,13 @@ class SandboxAttributeHandler extends AttributeHandler {
 
         if (this.update[attr] != undefined && this.update[attr] != "") {
             this.update[attr][isMax ? "max" : "current"] = value;
-        }
-        else {
+        } else {
             let newUpdate = {};
             newUpdate[isMax ? "max" : "current"] = value;
             super.addUpdate(attr, newUpdate);
         }
     }
+
     run() {
         let attributeHandler = this;
         attributeHandler.mods.forEach((property) => {
@@ -2591,7 +2824,8 @@ class SandboxAttributeHandler extends AttributeHandler {
                     attribute.set(subProperty, updateData[subProperty]);
                 }
             }
-        };
+        }
+        ;
     }
 
     getCharacterAttribute(attrName) {
@@ -2600,7 +2834,7 @@ class SandboxAttributeHandler extends AttributeHandler {
             _characterid: this.characterId,
             _type: "attribute",
             name: attrName
-        }, { caseInsensitive: true });
+        }, {caseInsensitive: true});
 
         if (chracterAttributes.length > 0) {
             returnVal = chracterAttributes[0];
@@ -2609,21 +2843,27 @@ class SandboxAttributeHandler extends AttributeHandler {
         return returnVal;
     }
 }
+
 class WorkerBuildStat extends dbObj {
     importJson(json) {
         this.name = json.name;
         this.value = parseInt(json.value);
     }
+
     importSheets(dataArray) {
         let i = 0;
-        this.name = "" + dataArray[i]; i++;
-        this.value = "" + dataArray[i]; i++;
+        this.name = "" + dataArray[i];
+        i++;
+        this.value = "" + dataArray[i];
+        i++;
     }
+
     createEmpty() {
         this.name = "";
         this.value = "0";
     }
 }
+
 class WorkerBuildStats extends Dictionary {
 
     constructor() {
@@ -2643,8 +2883,7 @@ class WorkerBuildStats extends Dictionary {
         for (let i = 0; i < this.keys.length; i++) {
             if (this.values[this.keys[i]].value == "on") {
                 points++;
-            }
-            else {
+            } else {
                 points += isNaN(parseInt(this.values[this.keys[i]].value)) ? 0 : parseInt(this.values[this.keys[i]].value);
             }
         }
@@ -2666,6 +2905,7 @@ class WorkerBuildStats extends Dictionary {
         this.values = values;
     }
 }
+
 class WorkerFormula {
     constructor(variableName, definitionName, value, multiplier) {
         this.variableName = variableName;
@@ -2772,13 +3012,27 @@ var FeatureService = FeatureService || (function () {
 
         setActionEffectData = function (actionEffectsObj, action, effect, targetSelf) {
             switch (action) {
-                case "S": actionEffectsObj.addState(effect, targetSelf); break;
-                case "C": actionEffectsObj.addCondition(effect, targetSelf); break;
-                case "R": actionEffectsObj.addRemoval(effect, targetSelf); break;
-                case "SR": actionEffectsObj.addStatusRemoval(effect, targetSelf); break;
-                case "H": actionEffectsObj.addHeal(effect, targetSelf); break;
-                case "T": actionEffectsObj.addTempHeal(effect, targetSelf); break;
-                case "K": actionEffectsObj.addEnergyRecovery(effect, targetSelf); break;
+                case "S":
+                    actionEffectsObj.addState(effect, targetSelf);
+                    break;
+                case "C":
+                    actionEffectsObj.addCondition(effect, targetSelf);
+                    break;
+                case "R":
+                    actionEffectsObj.addRemoval(effect, targetSelf);
+                    break;
+                case "SR":
+                    actionEffectsObj.addStatusRemoval(effect, targetSelf);
+                    break;
+                case "H":
+                    actionEffectsObj.addHeal(effect, targetSelf);
+                    break;
+                case "T":
+                    actionEffectsObj.addTempHeal(effect, targetSelf);
+                    break;
+                case "K":
+                    actionEffectsObj.addEnergyRecovery(effect, targetSelf);
+                    break;
             }
         },
 
@@ -2793,7 +3047,7 @@ var FeatureService = FeatureService || (function () {
                 kiRecoveries: [],
 
                 createTargetData: function (name, targetSelf) {
-                    return { name: name, targetSelf: targetSelf };
+                    return {name: name, targetSelf: targetSelf};
                 },
 
                 addState: function (name, targetSelf) {
@@ -2826,7 +3080,7 @@ var FeatureService = FeatureService || (function () {
             };
         }
 
-        ;
+    ;
     return {
         GetRollTemplate: getRollTemplate,
         GetRollTemplateFromTechnique: getRollTemplateFromTechnique,
@@ -2861,7 +3115,7 @@ var ItemHandler = ItemHandler || (function () {
             return output;
         }
 
-        ;
+    ;
     return {
         GetTechniqueWeaponRollTemplate: getTechniqueWeaponRollTemplate
     };
@@ -3023,7 +3277,7 @@ var Format = Format || (function () {
             return sheetRoll;
         }
 
-        ;
+    ;
     return {
         ToCamelCase: toCamelCase,
         ToUpperCamelCase: toUpperCamelCase,
@@ -3060,7 +3314,7 @@ var RowId = RowId || (function () {
             return output;
         }
 
-        ;
+    ;
     return {
         BuildId: buildId,
         BuildIdFromArray: buildIdFromArray
