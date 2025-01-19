@@ -1609,7 +1609,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                     skillPointValue = skillDefinitions[i].formula.getValue(attrHandler);
                     skillRank = attrHandler.parseString(skillDefinitions[i].getVariable(WuxDef._rank));
                     if (skillRank == "on") {
-                        skillPointValue = skillPointValue + 1 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+                        skillPointValue = skillPointValue + 2 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
                     }
                     attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);
                 }

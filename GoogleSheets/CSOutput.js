@@ -145,10 +145,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 							contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
 							contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
 							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
-							contents += WuxDefinition.BuildSelect(WuxDef.Get("InnateDefense"), WuxDef.GetAttribute("InnateDefense"), WuxDef.Filter([new DatabaseFilterData("group", "InnateDefenseType")]));
-							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("InnateDefense", WuxDef._learn));
-							contents += WuxDefinition.BuildSelect(WuxDef.Get("InnateSense"), WuxDef.GetAttribute("InnateSense"), WuxDef.Filter([new DatabaseFilterData("group", "InnateSenseType")]));
-							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("InnateSense", WuxDef._learn));
+							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max));
 
 							return WuxSheetMain.Table.FlexTableGroup(contents);
 						},
@@ -1470,10 +1467,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
 							contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
 							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
-							contents += WuxDefinition.BuildSelect(WuxDef.Get("InnateDefense"), WuxDef.GetAttribute("InnateDefense"), WuxDef.Filter([new DatabaseFilterData("group", "InnateDefenseType")]));
-							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("InnateDefense", WuxDef._learn));
-							contents += WuxDefinition.BuildSelect(WuxDef.Get("InnateSense"), WuxDef.GetAttribute("InnateSense"), WuxDef.Filter([new DatabaseFilterData("group", "InnateSenseType")]));
-							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("InnateSense", WuxDef._learn));
+							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max));
 							return WuxSheetMain.Table.FlexTableGroup(contents);
 						}
 
@@ -1716,8 +1710,6 @@ var BuilderBackend = BuilderBackend || (function () {
 			output += listenerUpdatePageState();
 			output += listenerCharacterCreationFinishButton();
 			output += listenerCharacterCreationSetAffinity();
-			output += listenerSetInnateDefense();
-			output += listenerSetInnateSense();
 			output += listenerUpdateTechniqueBuildPoints();
 			output += listenerUpdateStyleBuildPoints();
 			output += listenerUpdateJobStyleBuildPoints();
@@ -1741,19 +1733,7 @@ var BuilderBackend = BuilderBackend || (function () {
 			let groupVariableNames = [WuxDef.GetVariable("Affinity")];
 			let output = `WuxWorkerCharacterCreation.SetAffinityValue();\n`;
 
-			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
-		},
-		listenerSetInnateDefense = function () {
-			let groupVariableNames = [WuxDef.GetVariable("InnateDefense")];
-			let output = `WuxWorkerCharacterCreation.SetInnateDefense();\n`;
-
-			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
-		},
-		listenerSetInnateSense = function () {
-			let groupVariableNames = [WuxDef.GetVariable("InnateSense")];
-			let output = `WuxWorkerCharacterCreation.SetInnateSense();\n`;
-
-			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+			return WuxSheetBackend.OnChange(groupVariableNames, output, false);
 		},
 		listenerUpdateTechniqueBuildPoints = function () {
 			let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Technique"));
@@ -1761,6 +1741,7 @@ var BuilderBackend = BuilderBackend || (function () {
 
 			return WuxSheetBackend.OnChange(groupVariableNames, output, true);
 		},
+		 
 		listenerUpdateStyleBuildPoints = function () {
 			let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"));
 			let output = `WuxWorkerTechniques.UpdateStyleBuildPoints(eventinfo)`;
