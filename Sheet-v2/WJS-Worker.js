@@ -582,6 +582,18 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
             });
             attributeHandler.run();
         },
+        setBonusAttributes = function () {
+            Debug.Log("Setting Bonus Attribute Points");
+            let attributeHandler = new WorkerAttributeHandler();
+            let attributesVariable = WuxDef.Get("Attribute");
+
+            attributeHandler.addFormulaMods(attributesVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let newValue = attributesVariable.formula.getValue(attrHandler);
+                attrHandler.addUpdate(attributesVariable.getVariable(WuxDef._max), newValue);
+            });
+            attributeHandler.run();
+        },
         setInnateDefense = function () {
             console.log("Setting Innate Defense");
             let attributeHandler = new WorkerAttributeHandler();
@@ -703,6 +715,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
     return {
         FinishBuild: finishBuild,
         SetAffinityValue: setAffinityValue,
+        SetBonusAttributes: setBonusAttributes,
         SetInnateDefense: setInnateDefense,
         SetInnateSense: setInnateSense
     };

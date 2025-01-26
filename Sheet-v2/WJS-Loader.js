@@ -11,6 +11,7 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 	let advancementWorker = new WuxAdvancementWorkerBuild();
 	advancementWorker.setBuildStatsDraft(attributeHandler);
 	attributeHandler.addUpdate(WuxDef.GetVariable("XP"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("Vitality", WuxDef._max), 1);
 	advancementWorker.updateLevel(attributeHandler, WuxDef.GetVariable("Level"), 1);
 
 	let trainingWorker = new WuxTrainingWorkerBuild();

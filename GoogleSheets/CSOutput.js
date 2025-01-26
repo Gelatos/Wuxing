@@ -145,7 +145,8 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 							contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
 							contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
 							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
-							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max));
+							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max), 1);
+							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusAttributePoints"), WuxDef.GetAttribute("BonusAttributePoints"), 0);
 
 							return WuxSheetMain.Table.FlexTableGroup(contents);
 						},
@@ -1467,7 +1468,8 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
 							contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
 							contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
-							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max));
+							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max), 1);
+							contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusAttributePoints"), WuxDef.GetAttribute("BonusAttributePoints"), 0);
 							return WuxSheetMain.Table.FlexTableGroup(contents);
 						}
 
@@ -1710,6 +1712,7 @@ var BuilderBackend = BuilderBackend || (function () {
 			output += listenerUpdatePageState();
 			output += listenerCharacterCreationFinishButton();
 			output += listenerCharacterCreationSetAffinity();
+			output += listenerCharacterCreationBonusAttributes();
 			output += listenerUpdateTechniqueBuildPoints();
 			output += listenerUpdateStyleBuildPoints();
 			output += listenerUpdateJobStyleBuildPoints();
@@ -1733,6 +1736,12 @@ var BuilderBackend = BuilderBackend || (function () {
 			let groupVariableNames = [WuxDef.GetVariable("Affinity")];
 			let output = `WuxWorkerCharacterCreation.SetAffinityValue();\n`;
 
+			return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+		},
+		listenerCharacterCreationBonusAttributes = function () {
+			let groupVariableNames = [WuxDef.GetVariable("BonusAttributePoints")];
+			let output = `WuxWorkerCharacterCreation.SetBonusAttributes();\n`;
+			
 			return WuxSheetBackend.OnChange(groupVariableNames, output, false);
 		},
 		listenerUpdateTechniqueBuildPoints = function () {

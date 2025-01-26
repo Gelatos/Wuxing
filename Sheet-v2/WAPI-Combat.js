@@ -42,7 +42,8 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 case "!endcombat":
                     commandEndConflict();
                     break;
-            };
+            }
+            ;
         },
 
         commandStartBattle = function () {
@@ -116,7 +117,8 @@ var WuxConflictManager = WuxConflictManager || (function () {
                         break;
                     }
                 }
-            };
+            }
+            ;
 
             let systemMessage = new SystemInfoMessage(tableData.print());
             systemMessage.setSender("System");
@@ -187,8 +189,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
             let team = state.WuxConflictManager.teams[state.WuxConflictManager.activeTeamIndex];
             if (team.isPlayer && team.lastActiveOwner != "") {
                 return `${team.name} Phase Start!\n${team.lastActiveOwner}, select the next character to have a turn`;
-            }
-            else {
+            } else {
                 return " Phase Start!";
             }
         },
@@ -201,7 +202,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 attributeHandler.run();
             });
         }
-        ;
+    ;
 
     return {
         CheckInstall: checkInstall,
@@ -240,7 +241,8 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 case "!roll":
                     commandRollSkillCheck(msg, content);
                     break;
-            };
+            }
+            ;
         },
 
         commandConsumeTechnique = function (msg, content) {
@@ -262,101 +264,99 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 resources = {},
                 messages = [],
 
-            use = function (msg, content) {
-                initializeData(content);
-                if (tokenTargetData == undefined) {
-                    Debug.Log(`[ResourceConsumption] ${resourceData.sheetname} tokenData not found`);
-                    return;
-                }
+                use = function (msg, content) {
+                    initializeData(content);
+                    if (tokenTargetData == undefined) {
+                        Debug.Log(`[ResourceConsumption] ${resourceData.sheetname} tokenData not found`);
+                        return;
+                    }
 
-                setResources();
-                consumeResources();
-                printMessages();
-            },
+                    setResources();
+                    consumeResources();
+                    printMessages();
+                },
 
-            initializeData = function (content) {
-                resourceData = new TechniqueResources();
-                resourceData.importSandboxJson(content);
-                tokenTargetData = TargetReference.GetTokenTargetDataByName(resourceData.sheetname);
-                messages = [];
-            },
+                initializeData = function (content) {
+                    resourceData = new TechniqueResources();
+                    resourceData.importSandboxJson(content);
+                    tokenTargetData = TargetReference.GetTokenTargetDataByName(resourceData.sheetname);
+                    messages = [];
+                },
 
-            setResources = function () {
-                resources = {};
-                let resourceNames = resourceData.resourceCost.split(";");
-                for (let i = 0; i < resourceNames.length; i++) {
-                    let resource = resourceNames[i].trim().split(" ", 2);
-                    resources[resource[1]] = parseInt(resource[0]);
-                }
-            },
+                setResources = function () {
+                    resources = {};
+                    let resourceNames = resourceData.resourceCost.split(";");
+                    for (let i = 0; i < resourceNames.length; i++) {
+                        let resource = resourceNames[i].trim().split(" ", 2);
+                        resources[resource[1]] = parseInt(resource[0]);
+                    }
+                },
 
-            consumeResources = function () {
-                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                let failure = false;
-                let enChange = 999;
+                consumeResources = function () {
+                    let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                    let failure = false;
+                    let enChange = 999;
 
-                for (let resourceName in resources) {
-                    let resourceValue = resources[resourceName];
-                    let resourceTitle = WuxDef.GetTitle(resourceName);
-                    switch (resourceName) {
-                        case undefined:
-                            break;
-                        case "EN":
-                            tokenTargetData.addEnergy(attributeHandler, resourceValue * -1, function (results, attrHandler, attributeVar) {
-                                if (results.remainder < 0) {
-                                    failure = true;
-                                    messages = [];
-                                    messages.push(`Not enough ${resourceTitle} to use this technique`);
-                                }
-                                else {
-                                    messages.push(`Consumed ${resourceValue} ${resourceTitle}`);
-                                    attrHandler.addUpdate(attributeVar, results.newValue, false);
-                                    enChange = results.newValue;
-                                }
-                            });
-                            break;
-                        case "Boon":
-                            messages.push(`! You must manually consume a boon to use this technique !`);
-                            break;
-                        default:
-                            tokenTargetData.modifyResourceAttribute(attributeHandler, resourceName, resourceValue * -1, tokenTargetData.addModifierToAttribute,
-                                function (results, attrHandler, attributeVar) {
+                    for (let resourceName in resources) {
+                        let resourceValue = resources[resourceName];
+                        let resourceTitle = WuxDef.GetTitle(resourceName);
+                        switch (resourceName) {
+                            case undefined:
+                                break;
+                            case "EN":
+                                tokenTargetData.addEnergy(attributeHandler, resourceValue * -1, function (results, attrHandler, attributeVar) {
                                     if (results.remainder < 0) {
                                         failure = true;
                                         messages = [];
                                         messages.push(`Not enough ${resourceTitle} to use this technique`);
-                                    }
-                                    else {
+                                    } else {
                                         messages.push(`Consumed ${resourceValue} ${resourceTitle}`);
                                         attrHandler.addUpdate(attributeVar, results.newValue, false);
+                                        enChange = results.newValue;
                                     }
-                                    return results;
-                                }
-                            );
+                                });
+                                break;
+                            case "Boon":
+                                messages.push(`! You must manually consume a boon to use this technique !`);
+                                break;
+                            default:
+                                tokenTargetData.modifyResourceAttribute(attributeHandler, resourceName, resourceValue * -1, tokenTargetData.addModifierToAttribute,
+                                    function (results, attrHandler, attributeVar) {
+                                        if (results.remainder < 0) {
+                                            failure = true;
+                                            messages = [];
+                                            messages.push(`Not enough ${resourceTitle} to use this technique`);
+                                        } else {
+                                            messages.push(`Consumed ${resourceValue} ${resourceTitle}`);
+                                            attrHandler.addUpdate(attributeVar, results.newValue, false);
+                                        }
+                                        return results;
+                                    }
+                                );
+                                break;
+                        }
+                        if (failure) {
                             break;
+                        }
                     }
-                    if (failure) {
-                        break;
+                    if (!failure) {
+                        attributeHandler.run();
+                        if (enChange != 999) {
+                            tokenTargetData.setEnergy(enChange);
+                        }
                     }
-                }
-                if (!failure) {
-                    attributeHandler.run();
-                    if (enChange != 999) {
-                        tokenTargetData.setEnergy(enChange);
-                    }
-                }
-            },
+                },
 
-            printMessages = function () {
-                let message = `${resourceData.sheetname} uses ${resourceData.name}`;
-                for (let i = 0; i < messages.length; i++) {
-                    message += `\n${messages[i]}`;
-                }
+                printMessages = function () {
+                    let message = `${resourceData.sheetname} uses ${resourceData.name}`;
+                    for (let i = 0; i < messages.length; i++) {
+                        message += `\n${messages[i]}`;
+                    }
 
-                let systemMessage = new SystemInfoMessage(message);
-                systemMessage.setSender("System");
-                WuxMessage.Send(systemMessage, "GM");
-            }
+                    let systemMessage = new SystemInfoMessage(message);
+                    systemMessage.setSender("System");
+                    WuxMessage.Send(systemMessage, "GM");
+                }
 
             return {
                 Use: use
@@ -365,38 +365,38 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
 
         CheckTechnique = CheckTechnique || (function () {
             var techniqueData = {},
-            userTokenTargetData = {},
-            targetTokenTargetData = {},
-            messages = [],
+                userTokenTargetData = {},
+                targetTokenTargetData = {},
+                messages = [],
 
-            use = function (msg, content) {
-                initializeData(content);
-                if (userTokenTargetData == undefined || targetTokenTargetData == undefined) {
-                    Debug.LogError(`[CheckTechnique] tokenData not found`);
-                    return;
+                use = function (msg, content) {
+                    initializeData(content);
+                    if (userTokenTargetData == undefined || targetTokenTargetData == undefined) {
+                        Debug.LogError(`[CheckTechnique] tokenData not found`);
+                        return;
+                    }
+                    Debug.Log(`[CheckTechnique] got ${JSON.stringify(techniqueData)}`);
+                },
+
+                initializeData = function (content) {
+                    let contentData = content.split("$$");
+                    techniqueData = new TechniqueData();
+                    techniqueData.importSandboxJson(contentData[0]);
+                    userTokenTargetData = TargetReference.GetTokenTargetDataByName(contentData[1]);
+                    targetTokenTargetData = TargetReference.GetTokenTargetData(contentData[2]);
+                    messages = [];
+                },
+
+                printMessages = function () {
+                    let message = `${resourceData.sheetname} uses ${resourceData.name}`;
+                    for (let i = 0; i < messages.length; i++) {
+                        message += `\n${messages[i]}`;
+                    }
+
+                    let systemMessage = new SystemInfoMessage(message);
+                    systemMessage.setSender("System");
+                    WuxMessage.Send(systemMessage, "GM");
                 }
-                Debug.Log(`[CheckTechnique] got ${JSON.stringify(techniqueData)}`);
-            },
-
-            initializeData = function (content) {
-                let contentData = content.split("$$");
-                techniqueData = new TechniqueData();
-                techniqueData.importSandboxJson(contentData[0]);
-                userTokenTargetData = TargetReference.GetTokenTargetDataByName(contentData[1]);
-                targetTokenTargetData = TargetReference.GetTokenTargetData(contentData[2]);
-                messages = [];
-            },
-
-            printMessages = function () {
-                let message = `${resourceData.sheetname} uses ${resourceData.name}`;
-                for (let i = 0; i < messages.length; i++) {
-                    message += `\n${messages[i]}`;
-                }
-
-                let systemMessage = new SystemInfoMessage(message);
-                systemMessage.setSender("System");
-                WuxMessage.Send(systemMessage, "GM");
-            }
 
             return {
                 Use: use
@@ -419,7 +419,7 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
             let message = `${Format.ShowTooltip(`Rolling Skill Check ${results.total}`, results.message)}`;
             WuxingMessages.SendSystemMessage(message, "", msg.who);
         }
-        ;
+    ;
 
     return {
         CheckInstall: checkInstall,
@@ -437,8 +437,7 @@ var TechniqueConsume = TechniqueConsume || (function () {
             // consume resources
             if (consumeTechniqueResources(targetData, technique)) {
                 displayTechnique(msg, technique, weaponData);
-            }
-            else {
+            } else {
                 WuxingMessages.SendSystemMessage(`${targetData.displayName} does not have the resources to use ${technique.name}`);
             }
         },
@@ -464,8 +463,7 @@ var TechniqueConsume = TechniqueConsume || (function () {
                     resourceData = createResourceDataObj(targetData, resource);
                     if (resourceData == undefined) {
                         return undefined;
-                    }
-                    else {
+                    } else {
                         resourceDatas.push(resourceData);
                     }
                 }
@@ -500,29 +498,28 @@ var TechniqueConsume = TechniqueConsume || (function () {
             _.each(resourceDatas, function (obj) {
                 if (obj.resourceName == "ki") {
                     TokenReference.AddEnergy(targetData, obj.cost * -1, false);
-                }
-                else {
+                } else {
                     obj.resource.set("current", obj.newVal);
                 }
             });
+        },
+
+        displayTechnique = function (msg, technique, weapon) {
+
+            let output = FeatureService.GetRollTemplateFromTechnique(technique);
+
+            technique.target = "@{target||token_id}";
+            let useTech = SanitizeSheetRollAction(JSON.stringify(technique));
+
+            if (weapon != undefined) {
+                output += ItemHandler.GetTechniqueWeaponRollTemplate(weapon);
+                useTech += `##${SanitizeSheetRollAction(JSON.stringify(weapon))}`;
+            }
+            output += `{{targetData=!utech ${useTech}}}`;
+            WuxingMessages.SendMessage(output, "", msg.who);
+
         }
-
-    displayTechnique = function (msg, technique, weapon) {
-
-        let output = FeatureService.GetRollTemplateFromTechnique(technique);
-
-        technique.target = "@{target||token_id}";
-        let useTech = SanitizeSheetRollAction(JSON.stringify(technique));
-
-        if (weapon != undefined) {
-            output += ItemHandler.GetTechniqueWeaponRollTemplate(weapon);
-            useTech += `##${SanitizeSheetRollAction(JSON.stringify(weapon))}`;
-        }
-        output += `{{targetData=!utech ${useTech}}}`;
-        WuxingMessages.SendMessage(output, "", msg.who);
-
-    }
-        ;
+    ;
     return {
         ConsumeTechnique: consumeTechnique
     };
@@ -587,7 +584,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
                 skillValue: 0,
                 total: 0
             };
-        }
+        },
 
     getBasicCheckSkillData = function () {
         let output = getSkillRollData();
@@ -596,7 +593,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
         output.roll = 15;
         output.total = 15;
         return output;
-    }
+    },
 
     getTechniqueDefenderAttr = function (skillData, technique, targetData, weaponData) {
         // determine if any traits change the defender's defense
@@ -618,8 +615,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
                         skillData.skillFull += "[Brace]";
                         skillData.attrSkill = "skill_brace";
                         skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, skillData.attrSkill));
-                    }
-                    else if (weaponData.abilities.indexOf("Crushing") >= 0) {
+                    } else if (weaponData.abilities.indexOf("Crushing") >= 0) {
                         skillData.skillFull += "[Reflex]";
                         skillData.attrSkill = "skill_reflex";
                         skillData.skillValue = ParseIntValue(getAttrByName(targetData.charId, skillData.attrSkill));
@@ -668,8 +664,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
 
             if (skill == "Weapon") {
                 skillData = setSkillRollDataFromWeapon(skillData, technique, weaponData);
-            }
-            else {
+            } else {
                 skillData = parseSkillRollDataFromTechnique(skillData, skill);
             }
             return skillData;
@@ -679,8 +674,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
             if (technique.rType == "Range" && weaponData.traits.indexOf("Thrown") >= 0) {
                 skillData.skillFull = "Throw";
                 skillData.attrSkill = "throw";
-            }
-            else {
+            } else {
                 skillData.skillFull = weaponData.skill;
                 skillData.attrSkill = Format.ToCamelCase(weaponData.skill);
             }
@@ -705,11 +699,9 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
         compareTechniqueSkillChecks = function (userSkill, defenderSkill) {
             if (userSkill.total >= defenderSkill.total + 10) {
                 return "Critical Hit";
-            }
-            else if (userSkill.total >= defenderSkill.total) {
+            } else if (userSkill.total >= defenderSkill.total) {
                 return "Hit";
-            }
-            else if (userSkill.total >= defenderSkill.total - 5) {
+            } else if (userSkill.total >= defenderSkill.total - 5) {
                 return "Glancing Hit";
             }
 
@@ -825,7 +817,7 @@ var TechniqueUseResults = TechniqueUseResults || (function () {
             }
             return `&{template:usetechnique} ${message}`;
         }
-        ;
+    ;
     return {
         UseTechnique: useTechnique
     };

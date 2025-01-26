@@ -4,10 +4,18 @@ function SetTechniquesDatabaseJson(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr
     return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
 }
 
-function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, archetypesArray, statusArray, techniqueDatabaseString) {
+function SetDefinitionsDatabase(definitionTypesArray, definitionArray, systemDefinitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueDatabaseString) {
     let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
 
     definitionDatabase.importSheets(definitionArray, function (arr) {
+        let definition = new DefinitionData(arr);
+        let baseDefinition = definitionDatabase.get(definition.group);
+        if (baseDefinition != undefined && baseDefinition.group == "Type") {
+            return definition.createDefinition(baseDefinition);
+        }
+        return definition;
+    });
+    definitionDatabase.importSheets(systemDefinitionArray, function (arr) {
         let definition = new DefinitionData(arr);
         let baseDefinition = definitionDatabase.get(definition.group);
         if (baseDefinition != undefined && baseDefinition.group == "Type") {
@@ -46,10 +54,6 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, styleArra
     definitionDatabase.importSheets(jobsArray, function (arr) {
         let job = new JobData(arr);
         return job.createDefinition(definitionDatabase.get("JobStyle"));
-    });
-    definitionDatabase.importSheets(archetypesArray, function (arr) {
-        let archetype = new ArchetypeData(arr);
-        return archetype.createDefinition(definitionDatabase.get("Archetype"));
     });
     definitionDatabase.importSheets(statusArray, function (arr) {
         let status = new StatusData(arr);
@@ -786,9 +790,9 @@ var WuxDefinition = WuxDefinition || (function () {
                 WuxSheetMain.Textarea(fieldName, className, placeholder);
         },
 
-        buildNumberInput = function (definition, fieldName) {
+        buildNumberInput = function (definition, fieldName, defaultValue) {
             return buildHeader(definition) + "\n" +
-                WuxSheetMain.Input("number", fieldName);
+                WuxSheetMain.Input("number", fieldName, defaultValue);
         },
 
         buildNumberLabelInput = function (definition, fieldName, labelContent) {

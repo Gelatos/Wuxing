@@ -681,6 +681,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.name = json.name;
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
+        this.subGroup = json.subGroup;
         this.description = json.description;
         this.affinity = json.affinity;
         this.cr = json.cr;
@@ -693,6 +694,8 @@ class TechniqueStyle extends WuxDatabaseData {
         i++;
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i];
+        i++;
+        this.subGroup = "" + dataArray[i];
         i++;
         this.description = "" + dataArray[i];
         i++;
@@ -707,6 +710,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.name = "";
         this.fieldName = "";
         this.group = "";
+        this.subGroup = "";
         this.description = "";
         this.affinity = "";
         this.cr = 0;
@@ -714,7 +718,7 @@ class TechniqueStyle extends WuxDatabaseData {
 
     createDefinition(baseDefinition) {
         let definition = new TechniqueStyleDefinitionData(super.createDefinition(baseDefinition));
-        definition.subGroup = this.group;
+        definition.subGroup = this.subGroup;
         definition.tier = this.cr;
         definition.affinity = this.affinity;
         definition.requirements = this.getRequirements();
@@ -2116,17 +2120,18 @@ class FormulaData {
         return this.workers.length > 0;
     }
 
-    getValue(attributeHandler, printBreakdown) {
+    getValue(attributeHandler, printName) {
         let output = 0;
         let mod = 0;
+        let printOutput = "";
         this.workers.forEach((worker) => {
             if (worker.variableName != "") {
                 worker.value = attributeHandler.parseInt(worker.variableName);
-                if (printBreakdown) {
-                    console.log(`Adding ${worker.variableName}(${worker.value}) * ${worker.multiplier}`);
+                if (printName != undefined) {
+                    printOutput = this.addPrintModifier(printOutput, `${worker.variableName}(${worker.value})`, worker.multiplier);
                 }
-            } else if (printBreakdown) {
-                console.log(`Adding ${worker.value} * ${worker.multiplier}`);
+            } else if (printName != undefined) {
+                printOutput = this.addPrintModifier(printOutput, `${worker.value}`, worker.multiplier);
             }
             mod = worker.value * worker.multiplier;
             if (worker.max > 0 && mod > worker.max) {
@@ -2134,7 +2139,20 @@ class FormulaData {
             }
             output += mod;
         });
+        if (printName != undefined) {
+            Debug.Log(`${printName} Formula: ${printOutput} = ${output}`);
+        }
         return output;
+    }
+    addPrintModifier(printOutput, value, multiplier) {
+        if (printOutput != "") {
+            printOutput += ` + `;
+        }
+        printOutput += value;
+        if (multiplier != 1) {
+            printOutput += `*${multiplier}`;
+        }
+        return printOutput;
     }
 
     getString() {
