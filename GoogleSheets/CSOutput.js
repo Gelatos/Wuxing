@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols,HtmlUnknownAttribute,ES6ConvertVarToLetConst,JSUnresolvedReference,SpellCheckingInspection
+
 function CreateCharacterSheet(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
 	let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
 		stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray
@@ -12,7 +14,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
 		print = function (sheetsDb) {
 			let output = "";
 			output += buildCharacterSheetHtml(sheetsDb);
-			output += buildHiddenFields(sheetsDb);
+			output += buildHiddenFields();
 			output += buildSheetWorkerContainer(sheetsDb);
 			return output;
 		},
@@ -28,7 +30,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
 			return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n</div>`;
 		},
 
-		buildHiddenFields = function (sheetsDb) {
+		buildHiddenFields = function () {
 			let output = "";
 			output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Technique", WuxDef._page, WuxDef._learn));
 			output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("CombatDetails"));
@@ -68,7 +70,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 	'use strict';
 
 	var
-		print = function (sheetsDb) {
+		print = function () {
 			let definition = WuxDef.Get("Page_Origin");
 			let output = WuxSheetNavigation.BuildOriginPageNavigation(definition) +
 				SideBarData.Print() +
@@ -216,7 +218,6 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 				Print: print
 			}
 		}());
-	;
 	return {
 		Print: print
 	};
@@ -233,7 +234,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 			return output;
 		},
 
-		printTraining = function (sheetsDb) {
+		printTraining = function () {
 			let definition = WuxDef.Get("Page_Training");
 			let output = WuxSheetNavigation.BuildTrainingPageNavigation(definition) +
 				SideBarData.PrintTraining() +
@@ -455,7 +456,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 				PrintKnowledge: printKnowledge
 			}
 		}());
-	;
+	
 	return {
 		Print: print
 	};
@@ -474,7 +475,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 			return output;
 		},
 
-		printAdvancement = function (sheetsDb) {
+		printAdvancement = function () {
 			let definition = WuxDef.Get("Page_Advancement");
 			let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
 				SideBarData.PrintAdvancement() +
@@ -498,7 +499,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 			return WuxSheet.PageDisplay("Skills", output);
 		},
 
-		printAttributes = function (sheetsDb) {
+		printAttributes = function () {
 			let definition = WuxDef.Get("Page_Attributes");
 			let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
 				SideBarData.PrintAttributes() +
@@ -615,7 +616,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 							let jobData = [];
 							for (let i = 0; i < jobs.length; i++) {
 								jobData.push(buildJob(jobs[i], techDictionary));
-							};
+							}
 
 							let output = WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2);
 							output = WuxSheetMain.TabBlock(output);
@@ -843,7 +844,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 			return WuxSheet.PageDisplay("Technique", output);
 		},
 
-		printTest = function (stylesDatabase, techniqueDatabase) {
+		printTest = function (stylesDatabase) {
 			let filters = [new DatabaseFilterData("group", "Standard")];
 			let filteredData = stylesDatabase.filter(filters);
 
@@ -1059,11 +1060,11 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
 					let techniquesByRequrements = new Dictionary();
 					techniquesByRequrements.add("Free", []);
-					for (var i = 0; i <= 5; i++) {
+					for (let i = 0; i <= 5; i++) {
 						techniquesByRequrements.add(i, new Dictionary());
 					}
 
-					for (var i = 0; i < techniques.length; i++) {
+					for (let i = 0; i < techniques.length; i++) {
 						technique = new TechniqueData(techniques[i]);
 						if (technique.isFree) {
 							techniquesByRequrements.get("Free").push(buildTechnique(technique, displayOptions));
@@ -1116,41 +1117,41 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 			output += WuxSheet.PageDisplayInput(WuxDef.GetAttribute("PageSet_Core", WuxDef._tab));
 			output += printOverview(sheetsDb);
 			output += printDetails(sheetsDb);
-			output += printOrigin(sheetsDb);
-			output += printChat(sheetsDb);
-			output += printOptions(sheetsDb);
+			output += printOrigin();
+			output += printChat();
+			output += printOptions();
 			return WuxSheet.PageDisplay("Character", output);
 		},
 
-		printOverview = function (sheetsDb) {
+		printOverview = function () {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Overview") +
 				SideBarData.PrintSidebar() +
 				MainContentData.PrintOverview();
 			return WuxSheet.PageDisplay("Overview", output);
 		},
 
-		printDetails = function (sheetsDb) {
+		printDetails = function () {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Details") +
 				SideBarData.PrintSidebar() +
 				MainContentData.PrintDetails();
 			return WuxSheet.PageDisplay("Details", output);
 		},
 
-		printOrigin = function (sheetsDb) {
+		printOrigin = function () {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Origin") +
 				SideBarData.PrintSidebar() +
 				MainContentData.PrintOrigin();
 			return WuxSheet.PageDisplay("Origin", output);
 		},
 
-		printChat = function (sheetsDb) {
+		printChat = function () {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Chat") +
 				SideBarData.PrintSidebar() +
 				MainContentData.PrintChat();
 			return WuxSheet.PageDisplay("Chat", output);
 		},
 
-		printOptions = function (sheetsDb) {
+		printOptions = function () {
 			let output = WuxSheetNavigation.BuildOverviewPageNavigation("Options") +
 				SideBarData.PrintSidebar() +
 				MainContentData.PrintOptions();
@@ -1421,11 +1422,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
 						createStatBlockValue = function (fieldName) {
 							return WuxSheetMain.Table.FlexTableGroup(`<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, " wuxMinWidth100");
-						},
-
-						createStatBlockValueWithHeader = function (name, fieldName) {
-							return WuxSheetMain.Table.FlexTableGroup(`${WuxSheetMain.Table.FlexTableSubheader(name)}
-							<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, " wuxMinWidth100");
 						}
 
 					return {
@@ -1500,15 +1496,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
 						},
 
-						chatBox = function () {
-							let contents = "";
-							let titleDefinition = WuxDef.Get("Title_Chat");
-							contents += WuxDefinition.InfoHeader(titleDefinition);
-							contents += WuxSheetMain.Chat.Build();
-
-							return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-						},
-
 						languageSelect = function () {
 							let contents = "";
 							let titleDefinition = WuxDef.Get("Title_LanguageSelect");
@@ -1529,14 +1516,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
 						languageTitle = function (languageDef) {
 							return `<span class="wuxHeader2">${languageDef.title}</span><span class="wuxSubheader"> - ${languageDef.location}</span>`;
-						},
-
-						createOutfitDisplay = function () {
-							let contents = outfitCollection();
-							contents = WuxSheetMain.TabBlock(contents);
-
-							let definition = WuxDef.Get("Title_Emotes");
-							return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
 						},
 
 						outfitCollection = function () {
@@ -1633,7 +1612,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 				PrintOptions: printOptions
 			}
 		}());
-	;
+	
 	return {
 		Print: print
 	};
@@ -1643,13 +1622,13 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 	'use strict';
 
 	var
-		print = function (sheetsDb) {
+		print = function () {
 			let output = "";
-			output += printEquipment(sheetsDb);
+			output += printEquipment();
 			return output;
 		},
 
-		printEquipment = function (sheetsDb) {
+		printEquipment = function () {
 			let output = WuxSheetNavigation.BuildGearPageNavigation("Gear") +
 				SideBarData.PrintEquipment() +
 				MainContentData.PrintEquipment();
@@ -1683,8 +1662,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
 					var
 						build = function () {
-							let contents = "";
-							return contents;
+							return "";
 						}
 
 					return {
@@ -1696,7 +1674,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 				PrintEquipment: printEquipment
 			}
 		}());
-	;
+	
 	return {
 		Print: print
 	};
@@ -1707,7 +1685,7 @@ var BuilderBackend = BuilderBackend || (function () {
 	'use strict';
 
 	var
-		print = function (sheetsDb) {
+		print = function () {
 			let output = "";
 			output += listenerUpdatePageState();
 			output += listenerCharacterCreationFinishButton();
@@ -1776,7 +1754,7 @@ var TrainingBackend = TrainingBackend || (function () {
 	'use strict';
 
 	var
-		print = function (sheetsDb) {
+		print = function () {
 			let output = "";
 
 			output += listenerTrainingGoToPageSet();
@@ -1842,7 +1820,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 	'use strict';
 
 	var
-		print = function (sheetsDb) {
+		print = function () {
 			let output = "";
 			output += listenerGoToPageSet();
 			output += listenerFinishButton();

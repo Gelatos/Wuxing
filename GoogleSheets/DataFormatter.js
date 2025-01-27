@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols,HtmlUnknownAttribute,ES6ConvertVarToLetConst,JSUnresolvedReference,SpellCheckingInspection
+
 function SetTechniquesDatabaseJson(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
     arr0 = ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9);
     let techniqueDatabase = SheetsDatabase.CreateTechniques(arr0);
@@ -460,7 +462,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                         output += WuxSheetMain.Tooltip.Text(definitions[i].title, WuxDefinition.TooltipDescription(definitions[i]));
                     }
                     else {
-                        output += `<a style="margin-right: 10px; text-decoration: underline dotted;" title="${description}">${definitions[i].name}</a>`;
+                        output += `<a style="margin-right: 10px; text-decoration: underline dotted;" title="${definitions[i].description}">${definitions[i].name}</a>`;
                     }
                 }
                 return output;
@@ -487,7 +489,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             else {
                 if (Array.isArray(style)) {
                     let output = "";
-                    for (var i = 0; i < style.length; i++) {
+                    for (let i = 0; i < style.length; i++) {
                         if (output != "") {
                             output += " ";
                         }
@@ -724,8 +726,7 @@ var WuxDefinition = WuxDefinition || (function () {
             return output;
         },
         tooltipDescription = function (definitionData) {
-            let expandContents = `${WuxSheetMain.Header2(definitionData.title)}\n${definitionContents(definitionData)}`;
-            return expandContents;
+            return `${WuxSheetMain.Header2(definitionData.title)}\n${definitionContents(definitionData)}`;
         },
         definitionContents = function (definitionData) {
             let expandContents = "";
@@ -951,10 +952,6 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
 
             let titleDefinition = WuxDef.Get("Status");
             return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), output, true);
-        },
-
-        collapsibleSubheader = function (header, fieldName, contents, defaultOpen) {
-            return collapsibleSection(`<div class="wuxSubheader">${header}</div>`, fieldName, contents, defaultOpen);
         },
 
         buildStatusNames = function (statusDefs) {

@@ -1,4 +1,5 @@
 // ====== Classes
+// noinspection JSUnusedGlobalSymbols,JSUnresolvedReference,SpellCheckingInspection,ES6ConvertVarToLetConst
 
 class Dictionary {
 
@@ -289,7 +290,7 @@ class TechniqueEffectDatabase extends Database {
         let dataCreation = function (data) {
             return new TechniqueEffect(data);
         };
-        super(data, ["defense", "type"], dataCreation);
+        super(data, ["type"], dataCreation);
     }
 
     importJson(json) {
@@ -303,7 +304,7 @@ class TechniqueEffectDatabase extends Database {
         let dataCreationCallback = function (data) {
             return new TechniqueEffect(data);
         }
-        super.importSheets(json, dataCreationCallback);
+        super.importSheets(dataArray, dataCreationCallback);
     }
 
     getBoostEffects() {
@@ -915,12 +916,11 @@ class JobData extends WuxDatabaseData {
     }
 
     getRequirements() {
-        let requirements = "None";
-        return requirements;
+        return "None";
     }
 
     createJobTechnique(modArray) {
-        var output = [];
+        let output = [];
         let i = 0;
         let data = "";
         let dataSplit = {};
@@ -1018,7 +1018,7 @@ class RoleData extends WuxDatabaseData {
     }
 
     createTechnique(modArray) {
-        var output = [];
+        let output = [];
         let i = 0;
         let data = "";
         let dataSplit = {};
@@ -1114,7 +1114,6 @@ class TemplateData extends dbObj {
     }
 
     importSheets(dataArray) {
-        let i = 0;
 
     }
 
@@ -1299,7 +1298,7 @@ class TechniqueDefinitionData extends DefinitionData {
                 this.affinity = value;
                 break;
             case "isFree":
-                this.isFree = value.toLowerCase() == "true" ? true : false;
+                this.isFree = value.toLowerCase() == "true";
                 break;
             case "passiveBoosts":
                 this.passiveBoosts = value;
@@ -1400,7 +1399,7 @@ class StatusDefinitionData extends DefinitionData {
     setImportSheetExtraData(property, value) {
         switch (property) {
             case "endsOnRoundStart":
-                this.endsOnRoundStart = value.toLowerCase() == "true" ? true : false;
+                this.endsOnRoundStart = value.toLowerCase() == "true";
                 break;
             case "shortDescription":
                 this.shortDescription = value;
@@ -1519,13 +1518,25 @@ class TechniqueDisplayData {
 
     setEffects(technique) {
         this.effects = [];
-        let defenses = technique.effects.getPropertyValues("defense");
-        let filteredTechniqueEffects;
-        for (let i = 0; i < defenses.length; i++) {
-            filteredTechniqueEffects = technique.effects.filter(new DatabaseFilterData("defense", defenses[i]));
-            this.effects.push(defenses[i], new TechniqueEffectDisplayData(filteredTechniqueEffects));
+        let techDisplayData = this;
+        let filteredTechniqueEffects = [];
+        let defense = "";
+        technique.effects.iterate(function (effect) {
+            if (effect.defense == defense) {
+                filteredTechniqueEffects.push(effect);
+            }
+            else {
+                if (filteredTechniqueEffects.length > 0) {
+                    techDisplayData.effects.push(new TechniqueEffectDisplayData(filteredTechniqueEffects));
+                    filteredTechniqueEffects = [];
+                }
+                filteredTechniqueEffects.push(effect);
+                defense = effect.defense;
+            }
+        });
+        if (filteredTechniqueEffects.length > 0) {
+            techDisplayData.effects.push(new TechniqueEffectDisplayData(filteredTechniqueEffects));
         }
-        ;
     }
 
     createEmpty() {
@@ -1622,7 +1633,7 @@ class TechniqueDisplayData {
     }
 
     sanitizeSheetRollAction(roll) {
-        var sheetRoll = roll;
+        let sheetRoll = roll;
         sheetRoll = sheetRoll.replace(/'/g, "&#39;");
         // sheetRoll = sheetRoll.replace(/%/g, "&#37;");
         // sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
@@ -1659,7 +1670,13 @@ class TechniqueEffectDisplayData {
                 definition = WuxDef.Get("Title_TechEffect");
                 this.check = definition.title;
                 this.checkDescription = definition.getDescription();
-            } else {
+            } 
+            else if (defense == "Def_Evasion") {
+                definition = WuxDef.Get("Title_TechEvasion");
+                this.check = definition.title;
+                this.checkDescription = definition.getDescription();
+            }
+            else {
                 definition = WuxDef.Get(defense);
                 if (definition.group == "Result") {
                     this.check = `${definition.title}`;
@@ -1679,7 +1696,10 @@ class TechniqueEffectDisplayData {
 
     importEffectData(effectData) {
         for (let i = 0; i < effectData.length; i++) {
-            this.effects.push(this.formatEffect(effectData[i]));
+            let formattedEffect = this.formatEffect(effectData[i]);
+            if (formattedEffect != "") {
+                this.effects.push(formattedEffect);
+            }
         }
     }
 
@@ -1914,7 +1934,7 @@ class TechniqueEffectDisplayData {
 
     formatCalcBonus(effect) {
         let output = this.formatEffectDice(effect);
-        let formulaString = "";
+        let formulaString;
         try {
             formulaString = effect.formula.getString();
         } catch (e) {
@@ -2102,7 +2122,6 @@ class FormulaData {
                 attributes.push(this.workers[i].variableName);
             }
         }
-        ;
         return attributes;
     }
 
@@ -2834,21 +2853,21 @@ class SandboxAttributeHandler extends AttributeHandler {
         // set the update changes
         let attribute = {};
         let updateData = {};
-        for (const property in attributeHandler.update) {
+        for (let property in attributeHandler.update) {
             attribute = attributeHandler.attributes[property];
             updateData = attributeHandler.update[property];
             if (attribute != undefined && updateData != undefined) {
-                for (const subProperty in updateData) {
+                for (let subProperty in updateData) {
                     attribute.set(subProperty, updateData[subProperty]);
                 }
             }
         }
-        ;
+        
     }
 
     getCharacterAttribute(attrName) {
-        var returnVal = undefined;
-        var chracterAttributes = findObjs({
+        let returnVal = undefined;
+        let chracterAttributes = findObjs({
             _characterid: this.characterId,
             _type: "attribute",
             name: attrName
@@ -2961,7 +2980,7 @@ var FeatureService = FeatureService || (function () {
 
         rollTemplateTraits = function (traitsDb, rtPrefix) {
             let output = "";
-            for (var i = 0; i < traitsDb.length; i++) {
+            for (let i = 0; i < traitsDb.length; i++) {
                 output += `{{${rtPrefix}${i}=${traitsDb[i].name}}} {{${rtPrefix}${i}Desc=${traitsDb[i].description}}} `;
             }
             return output;
@@ -2969,14 +2988,14 @@ var FeatureService = FeatureService || (function () {
 
         getDamageString = function (feature) {
 
-            var output = "";
+            let output = "";
 
             if (feature.dVal != "" && feature.dVal > 0) {
                 output += feature.dVal + "d" + feature.dType;
             }
             if (feature.dBonus != "" && feature.dBonus != undefined) {
-                var elements = feature.dBonus.split(";");
-                for (var i = 0; i < elements.length; i++) {
+                let elements = feature.dBonus.split(";");
+                for (let i = 0; i < elements.length; i++) {
                     output += `+${elements[i]}`;
                 }
             }
@@ -2990,10 +3009,8 @@ var FeatureService = FeatureService || (function () {
             return output;
         },
 
-        getPrerequisiteString = function (feature) {
-            var output = "";
-
-            return output;
+        getPrerequisiteString = function () {
+            return "";
         },
 
         // Technique Effects
@@ -3113,8 +3130,7 @@ var FeatureService = FeatureService || (function () {
 var ItemHandler = ItemHandler || (function () {
     'use strict';
 
-    var
-        getTechniqueWeaponRollTemplate = function (itemData) {
+    let getTechniqueWeaponRollTemplate = function (itemData) {
             let output = "";
             output += `{{WpnName=${itemData.name}}} `;
 
@@ -3142,8 +3158,7 @@ var ItemHandler = ItemHandler || (function () {
 var Format = Format || (function () {
     'use strict';
 
-    var
-        toCamelCase = function (inputString) {
+    let toCamelCase = function (inputString) {
 
             if (inputString == "" || inputString == undefined) {
                 return inputString;
@@ -3186,11 +3201,11 @@ var Format = Format || (function () {
         romanize = function (num) {
             if (isNaN(num))
                 return NaN;
-            var digits = String(+num).split(""),
+            let digits = String(+num).split(""),
                 key = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
                     "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
-                    "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"],
-                roman = "",
+                    "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
+            let roman = "",
                 i = 3;
             while (i--)
                 roman = (key[+digits.pop() + (i * 10)] || "") + roman;
@@ -3249,7 +3264,7 @@ var Format = Format || (function () {
         sanitizeMacroJSON = function (macro) {
             macro = macro.replace(/"/g, "%#");
             macro = macro.replace(/\{/gi, "&#123;");
-            macro = macro.replace(/\}/gi, "&#125;");
+            macro = macro.replace(/}/gi, "&#125;");
             return macro;
         },
 
@@ -3259,19 +3274,19 @@ var Format = Format || (function () {
         },
 
         sanitizeMacroRollTemplate = function (roll) {
-            var sheetRoll = roll;
+            let sheetRoll = roll;
             sheetRoll = sheetRoll.replace(/\{/gi, "&#123;");
-            sheetRoll = sheetRoll.replace(/\}/gi, "&#125;");
+            sheetRoll = sheetRoll.replace(/}/gi, "&#125;");
             return sheetRoll;
         },
 
         sanitizeSheetRoll = function (roll) {
-            var sheetRoll = roll;
+            let sheetRoll = roll;
             sheetRoll = sheetRoll.replace(/%/g, "&#37;");
             sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
             sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-            sheetRoll = sheetRoll.replace(/\</g, "&#60;");
-            sheetRoll = sheetRoll.replace(/\>/g, "&#62;");
+            sheetRoll = sheetRoll.replace(/</g, "&#60;");
+            sheetRoll = sheetRoll.replace(/>/g, "&#62;");
             sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
             sheetRoll = sheetRoll.replace(/@/g, "&#64;");
             sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
@@ -3281,7 +3296,7 @@ var Format = Format || (function () {
         },
 
         sanitizeSheetRollAction = function (roll) {
-            var sheetRoll = roll;
+            let sheetRoll = roll;
             sheetRoll = sheetRoll.replace(/%/g, "&#37;");
             sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
             sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -3316,11 +3331,10 @@ var Format = Format || (function () {
 var RowId = RowId || (function () {
     'use strict';
 
-    var
-        buildId = function (sectionName, currentID, variableName) {
+    let buildId = function (sectionName, currentID, variableName) {
 
             if (variableName.startsWith("attr")) {
-                variableName = variableName.substr(4);
+                variableName = variableName.substring(4);
             }
             return `${sectionName}${!sectionName.endsWith("_") ? "_" : ""}${currentID}${!variableName.startsWith("_") ? "_" : ""}${variableName}`;
         },
@@ -3345,7 +3359,7 @@ var RowId = RowId || (function () {
 function GetSectionIdName(sectionName, currentID, variableName) {
 
     if (variableName.startsWith("attr")) {
-        variableName = variableName.substr(4);
+        variableName = variableName.substring(4);
     }
 
     if (currentID != "") {
@@ -3388,8 +3402,8 @@ function GetRepeatingSectionFromFieldName(fieldName) {
 }
 
 function GetRepeatingSectionIdFromId(id, repeatingSection) {
-    var len = repeatingSection.length + 1;
-    return id.substr(len, 20);
+    let len = repeatingSection.length + 1;
+    return id.substring(len, 20);
 }
 
 // ===== Generators
@@ -3411,7 +3425,7 @@ function GetBlankCharacter() {
 }
 
 function CharacterNationalityGenerator() {
-    var rnd = Math.floor(Math.random() * 5);
+    let rnd = Math.floor(Math.random() * 5);
     switch (rnd) {
         case 0:
             return "Minerva";
@@ -3429,7 +3443,7 @@ function CharacterNationalityGenerator() {
 }
 
 function CharacterRaceGenerator(nationality) {
-    var races = [];
+    let races;
 
     // change the odds based on nationality
     switch (nationality) {
@@ -3454,9 +3468,9 @@ function CharacterRaceGenerator(nationality) {
     }
 
     // roll on the randomizer
-    var rnd = Math.floor(Math.random() * 100);
+    let rnd = Math.floor(Math.random() * 100);
 
-    for (var i = 0; i < races.length; i++) {
+    for (let i = 0; i < races.length; i++) {
         if (rnd < races[i].odds) {
             return races[i].race;
         }
@@ -3467,7 +3481,7 @@ function CharacterRaceGenerator(nationality) {
 }
 
 function CharacterGenderGenerator() {
-    var rnd = Math.floor(Math.random() * 2);
+    let rnd = Math.floor(Math.random() * 2);
     if (rnd == 0) {
         return "Male";
     } else {
@@ -3476,11 +3490,11 @@ function CharacterGenderGenerator() {
 }
 
 function CharacterNameGenerator(nationality, race, gender) {
-    var firstNameList = [""];
-    var lastNameList = [""];
-    var firstName = "";
-    var lastName = "";
-    var rnd = 0;
+    let firstNameList;
+    let lastNameList;
+    let firstName;
+    let lastName;
+    let rnd;
 
     // Choose whether to select a name based on race or nationality. 
     rnd = Math.random() * 100;
@@ -3511,27 +3525,26 @@ function CharacterNameGenerator(nationality, race, gender) {
 }
 
 function CharacterNatureGenerator() {
-    var natures = GetNatureList();
+    let natures = GetNatureList();
 
-    var rnd = Math.floor(Math.random() * natures.length);
+    let rnd = Math.floor(Math.random() * natures.length);
 
     return natures[rnd];
 }
 
 function CharacterClassGenerator(venueClass) {
     // set up variables
-    var maxRoll = 0;
-    var eliteRoll = 0;
-    var highRoll = 0;
-    var mediumRoll = 0;
-    var lowRoll = 0;
+    let maxRoll = 0;
+    let eliteRoll;
+    let highRoll;
+    let mediumRoll = 0;
 
 
     // these represent ratios or chances each class might show up
-    var eliteMod = 1;
-    var highMod = 9;
-    var mediumMod = 60;
-    var lowMod = 120;
+    let eliteMod = 1;
+    let highMod = 9;
+    let mediumMod = 60;
+    let lowMod = 120;
 
 
     // first we need to determine the maxRoll value which represents the highest possible roll
@@ -3548,12 +3561,11 @@ function CharacterClassGenerator(venueClass) {
     }
     if (venueClass != "High" && venueClass != "Medium") {
         maxRoll += lowMod;
-        lowRoll = maxRoll;
     }
 
 
     // select a random number within the Max Range
-    var rnd = Math.floor(Math.random() * maxRoll);
+    let rnd = Math.floor(Math.random() * maxRoll);
 
 
     // return a class
@@ -3569,17 +3581,17 @@ function CharacterClassGenerator(venueClass) {
 }
 
 function CharacterSectorGenerator(classCategory) {
-    var sectors = GetSectorProbabilityList(classCategory);
-    var i = 0;
+    let sectors = GetSectorProbabilityList(classCategory);
+    let i;
 
     // determine the number of odds
-    var maxRnd = 0;
+    let maxRnd = 0;
     for (i = 0; i < sectors.length; i++) {
         maxRnd += sectors[i].odds;
     }
 
     // select a random sector
-    var rnd = Math.floor(Math.random() * maxRnd);
+    let rnd = Math.floor(Math.random() * maxRnd);
     for (i = 0; i < sectors.length; i++) {
         if (rnd < sectors[i].odds) {
             return sectors[i].sector;
@@ -3591,8 +3603,8 @@ function CharacterSectorGenerator(classCategory) {
 }
 
 function CharacterProfessionGenerator(classCategory, sector) {
-    var professions = GetProfessionList(sector);
-    var professionsList = [];
+    let professions = GetProfessionList(sector);
+    let professionsList;
 
     switch (classCategory) {
         case "Elite":
@@ -3611,7 +3623,7 @@ function CharacterProfessionGenerator(classCategory, sector) {
     }
 
     // select a random number within the list
-    var rnd = Math.floor(Math.random() * professionsList.length);
+    let rnd = Math.floor(Math.random() * professionsList.length);
 
     return professionsList[rnd];
 }
