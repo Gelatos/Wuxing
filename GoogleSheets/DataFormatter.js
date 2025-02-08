@@ -1,15 +1,22 @@
 // noinspection JSUnusedGlobalSymbols,HtmlUnknownAttribute,ES6ConvertVarToLetConst,JSUnresolvedReference,SpellCheckingInspection
-
 function SetTechniquesDatabaseJson(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
     arr0 = ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9);
     let techniqueDatabase = SheetsDatabase.CreateTechniques(arr0);
     return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
 }
 
-function SetDefinitionsDatabase(definitionTypesArray, definitionArray, systemDefinitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueDatabaseString) {
+function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefinitionArray, systemDefinitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueDatabaseString) {
     let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
 
     definitionDatabase.importSheets(definitionArray, function (arr) {
+        let definition = new DefinitionData(arr);
+        let baseDefinition = definitionDatabase.get(definition.group);
+        if (baseDefinition != undefined && baseDefinition.group == "Type") {
+            return definition.createDefinition(baseDefinition);
+        }
+        return definition;
+    });
+    definitionDatabase.importSheets(groupDefinitionArray, function (arr) {
         let definition = new DefinitionData(arr);
         let baseDefinition = definitionDatabase.get(definition.group);
         if (baseDefinition != undefined && baseDefinition.group == "Type") {
@@ -1999,6 +2006,525 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
     };
 }());
 
+function onOpen() {
+    SpreadsheetApp.getUi()
+        .createMenu('Assessment')
+        .addItem('Assess All', 'AssessAllTechniques')
+        .addToUi();
+}
+
+function onEdit(e) {
+    TryTechniqueAssessment(e);
+}
+
+function TryTechniqueAssessment(e) {
+    const sheet = e.range.getSheet();
+    if (sheet.getSheetName() == "Techniques") {
+        const row = e.range.getRow();
+        let assessColumn = getNamedColumn(sheet, "Assessment");
+        
+        let assessingCell = sheet.getRange(row, assessColumn, 1, 1);
+        assessingCell.setValue("Calculating...")
+        
+        let techniqueData = GetTechniqueForAssessment(sheet, row, assessColumn);
+        if (techniqueData != undefined) {
+            let assessment = new TechniqueAssessment(techniqueData.tech);
+            assessment.printCellValues(sheet, techniqueData.row, assessColumn);
+            if (row != techniqueData.row) {
+                assessingCell.setValue("");
+            }
+        }
+        else {
+            assessingCell.setValue("");
+        }
+    }
+}
+
+function AssessAllTechniques() {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getActiveSheet();
+    if (sheet.getSheetName() == "Techniques") {
+        const lastRow = sheet.getLastRow();
+        let assessColumn = getNamedColumn(sheet, "Assessment");
+        let rowIndex = 2;
+        let techniqueData;
+        while (rowIndex < lastRow) {
+            let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
+            assessingCell.setValue("Calculating...")
+            
+            techniqueData = GetTechniqueForAssessment(sheet, rowIndex, assessColumn);
+            if (techniqueData != undefined) {
+                rowIndex = techniqueData.finalRow;
+                let assessment = new TechniqueAssessment(techniqueData.tech);
+                assessment.printCellValues(sheet, techniqueData.row, assessColumn);
+            }
+            else {
+                assessingCell.setValue("");
+                rowIndex++;
+            }
+        }
+    }
+}
+
+function GetTechniqueForAssessment(sheet, row, assessColumn) {
+    let baseTechnique;
+    let baseRow = row;
+    let finalRow = row;
+    let maxIterations = 15;
+    let newTechnique;
+    newTechnique = GetTechniqueFromSheetRow(sheet, row, assessColumn);
+    if (newTechnique.name == "") {
+        return undefined; // no working on blank cells
+    }
+    if (newTechnique.action == "") {
+        let startName = newTechnique.name;
+        // this is a support entry. We must find the base technique
+        let techniqueData = [];
+        techniqueData.push(newTechnique);
+        while (maxIterations > 0) {
+            maxIterations--;
+            baseRow--;
+            newTechnique = GetTechniqueFromSheetRow(sheet, baseRow, assessColumn);
+            if (newTechnique.name != startName) {
+                return undefined; // Something is wrong with this data
+            }
+            
+            if (newTechnique.action != "") {
+                baseTechnique = newTechnique;
+                break;
+            }
+            else {
+                techniqueData.push(newTechnique);
+            }
+        }
+        if (baseTechnique == undefined) {
+            return undefined; // no base technique found
+        }
+
+        while (techniqueData.length > 0) {
+            baseTechnique.importEffectsFromTechnique(techniqueData.pop());
+        }
+    }
+    else {
+        baseTechnique = newTechnique;
+    }
+    
+    while (maxIterations > 0) {
+        maxIterations--;
+        finalRow++;
+        newTechnique = GetTechniqueFromSheetRow(sheet, finalRow, assessColumn);
+        if (newTechnique.name == baseTechnique.name) {
+            baseTechnique.importEffectsFromTechnique(newTechnique);
+        }
+        else {
+            break;
+        }
+    }
+    
+    return {tech: baseTechnique, row: baseRow, finalRow: finalRow};
+}
+
+function GetTechniqueFromSheetRow(sheet, row, assessColumn) {
+    let techLine = sheet.getRange(row, 1, 1, assessColumn - 1).getValues()[0];
+    return new TechniqueData(techLine);
+}
+
+function getNamedColumn(sheet, name) {
+    const headerRow = 1; // Row containing column names
+
+    const lastColumn = sheet.getLastColumn();
+
+    if (lastColumn < 1) { // Check if the sheet is empty
+        return -1; // Return -1 if no columns are found
+    }
+
+    const headerValues = sheet.getRange(headerRow, 1, 1, lastColumn).getValues()[0];
+
+    for (let i = 0; i < headerValues.length; i++) {
+        if (headerValues[i] === name) {
+            return i + 1; // Column numbers are 1-based, array indices are 0-based
+        }
+    }
+
+    return -1; // Return -1 if "Assess" column is not found
+}
+
+class TechniqueAssessment {
+    constructor(technique)
+    {
+        this.technique = technique;
+        this.assessment = "";
+        this.averagePoints = 0;
+        
+        this.points = 0;
+        this.pointsRubric = "";
+
+        this.dps = 0;
+        this.lowDps = 0;
+        this.highDps = 0;
+        this.dpsVariance = false;
+
+        this.will = 0;
+        this.lowWill = 0;
+        this.highWill = 0;
+        this.willVariance = false;
+
+        this.favor = 0;
+        this.lowFavor = 0;
+        this.highFavor = 0;
+        this.favorVariance = false;
+
+        this.assessTechnique();
+    }
+
+    setAssessment(value)
+    {
+        if (value == 0) {
+            this.assessment = "???";
+        }
+        else if (value < 20) {
+            this.assessment = "Too Weak";
+        }
+        else if (value < 40) {
+            this.assessment = "Weak";
+        }
+        else if (value < 60) {
+            this.assessment = "Average";
+        }
+        else if (value < 80) {
+            this.assessment = "Strong";
+        }
+        else {
+            this.assessment = "Too Strong";
+        }
+    }
+
+    printCellValues(sheet, row, assessColumn) {
+        let range = sheet.getRange(row, assessColumn, 1, 1);
+        range.setNote(this.printNotes());
+        range = sheet.getRange(row, assessColumn, 1, 3);
+        range.setValues([[this.assessment, this.points, this.dps]]);
+    }
+    
+    printNotes() {
+        let output = `Expected Average: ${this.averagePoints}`;
+        output += `\nTotal Points: ${this.points}\n${this.pointsRubric}`;
+        if (this.dps > 0) {
+            output += `\nDPS: ${this.lowDps} => ${this.dps} <= ${this.highDps}`;
+            if (this.dpsVariance) {
+                output += " (High Variance)";
+            }
+        }
+        if (this.will > 0) {
+            output += `\nWill: ${this.lowWill} => ${this.will} <= ${this.highWill}`;
+            if (this.willVariance) {
+                output += " (High Variance)";
+            }
+        }
+        if (this.favor > 0) {
+            output += `\nFavor: ${this.lowFavor} => ${this.favor} <= ${this.highFavor}`;
+            if (this.favorVariance) {
+                output += " (High Variance)";
+            }
+        }
+        return output;
+    }
+
+    assessTechnique() {
+        let assessor = this;
+        this.averagePoints = this.getAveragePoint(this.getEnergy(), this.technique.action, this.technique.target);
+        let attributeHandler = this.getFakeAttributeHandler();
+
+        this.technique.effects.iterate(function (effect) {
+            assessor.assessEffect(effect, attributeHandler);
+        });
+
+        if (this.points == 0) {
+            this.setAssessment(0);
+        }
+        else {
+            let difference = assessor.points - this.averagePoints;
+            this.setAssessment(50 + (difference * 100 / this.averagePoints));
+            this.getVarianceCalculation();
+        }
+    }
+
+    getFakeAttributeHandler() {
+        let attributeHandler = new AttributeHandler();
+        attributeHandler.addMod(WuxDef.GetVariable("Power"));
+        attributeHandler.current[WuxDef.GetVariable("Power")] = 3;
+        attributeHandler.addMod(WuxDef.GetVariable("Accuracy"));
+        attributeHandler.current[WuxDef.GetVariable("Accuracy")] = 3;
+        attributeHandler.addMod(WuxDef.GetVariable("Artistry"));
+        attributeHandler.current[WuxDef.GetVariable("Artistry")] = 3;
+        attributeHandler.addMod(WuxDef.GetVariable("Charisma"));
+        attributeHandler.current[WuxDef.GetVariable("Charisma")] = 3;
+        attributeHandler.addMod(WuxDef.GetVariable("Recall"));
+        attributeHandler.current[WuxDef.GetVariable("Recall")] = 3;
+        attributeHandler.addMod(WuxDef.GetVariable("CR"));
+        attributeHandler.current[WuxDef.GetVariable("CR")] = 1;
+        attributeHandler.addMod(WuxDef.GetVariable("Cmb_HV"));
+        attributeHandler.current[WuxDef.GetVariable("Cmb_HV")] = this.getAveragePoint(0, "Quick", "") - 2;
+
+        return attributeHandler;
+    }
+
+    getEnergy() {
+        let resources = this.technique.resourceCost.split(";");
+        for (let i = 0; i < resources.length; i++) {
+            let splits = resources[i].split(" ");
+            if (splits.length >= 2 && splits[1].trim() == "EN") {
+                return parseInt(splits[0]);
+            }
+        }
+        return 0;
+    }
+
+    getAveragePoint(energy, action, target) {
+        let points = 8;
+        let enAdjust = 1;
+        while (enAdjust <= energy) {
+            points += 3 + enAdjust;
+            enAdjust++;
+        }
+
+        switch (action) {
+            case "Quick":
+                break;
+            case "Full":
+                points += 3 + this.getAveragePoint(0, "Quick", "");
+                break;
+            case "Reaction":
+            case "Swift":
+                points = Math.floor(points / 2);
+        }
+
+        const patterns = ["Burst", "Blast", "Line", "Cone"];
+        if (patterns.some(pattern => target.includes(pattern))) {
+            points = Math.floor(points * 0.5);
+        }
+
+        return points;
+    }
+    
+    getVarianceCalculation() {
+        let variance = 0;
+        if (this.dps > 0) {
+            variance = this.dps - this.lowDps;
+            if (variance / this.dps > 0.5) {
+                this.dpsVariance = true;
+                this.assessment += "*";
+            }
+        }
+        if (this.will > 0) {
+            variance = this.will - this.lowWill;
+            if (variance / this.will > 0.5) {
+                this.willVariance = true;
+                this.assessment += "*";
+            }
+        }
+        if (this.favor > 0) {
+            variance = this.favor - this.lowFavor;
+            if (variance / this.favor > 0.5) {
+                this.favorVariance = true;
+                this.assessment += "*";
+            }
+        }
+    }
+
+    assessEffect(effect, attributeHandler) {
+        switch (effect.type) {
+            case "HP":
+                this.getHPAssessment(effect, attributeHandler);
+                break;
+            case "WILL":
+                this.getWillAssessment(effect, attributeHandler);
+                break;
+            case "Vitality":
+                this.getVitalityAssessment(effect, attributeHandler);
+                break;
+            case "Patience":
+                this.getPatienceAssessment(effect, attributeHandler);
+                break;
+            case "Favor":
+                this.getFavorAssessment(effect, attributeHandler);
+                break;
+            case "Request":
+                this.getRequestAssessment(effect, attributeHandler);
+                break;
+            case "Status":
+                this.getStatusAssessment(effect, attributeHandler);
+                break;
+            case "Dash":
+                this.getDashAssessment(effect);
+                break;
+            case "MoveCharge":
+                this.getMoveChargeAssessment(effect);
+                break;
+            case "EN":
+                this.getEnAssessment(effect, attributeHandler);
+                break;
+        }
+    }
+
+    getHPAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+
+        let message = "";
+        switch (effect.subType) {
+            case "Heal":
+                output.value *= 2;
+                message = `${output.value}(Heal HP)`;
+                break;
+            case "Surge":
+                message = `${output.value}(Heal HP)`;
+                break;
+            default:
+                if (effect.target == "Self") {
+                    output.value = Math.floor(output.value * -0.5);
+                }
+                else {
+                    this.dps += output.value;
+                    this.lowDps += output.lowValue;
+                    this.highDps += output.highValue;
+                }
+                message = `${output.value}(HP)`;
+                break;
+        }
+        this.addPointsRubric(output.value, message);
+    }
+    
+    getWillAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+
+        let message = "";
+        switch (effect.subType) {
+            case "Heal":
+                output.value *= 2;
+                message = `${output.value}(Heal Will)`;
+                break;
+            default:
+                if (effect.target == "Self") {
+                    output.value = Math.floor(output.value * -0.5);
+                }
+                else {
+                    this.will += output.value;
+                    this.lowWill += output.lowValue;
+                    this.highWill += output.highValue;
+                }
+                message = `${output.value}(Will)`;
+                break;
+        }
+        this.addPointsRubric(output.value, message);
+    }
+
+    getVitalityAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        output.value *= 30;
+        let message = `${output.value}(${effect.subType != "" ? `${effect.subType} ` : ""}Vit)`;
+        this.addPointsRubric(output.value, message);
+    }
+
+    getPatienceAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        output.value *= -3;
+        let message = `${output.value}(Patience)`;
+        this.addPointsRubric(output.value, message);
+    }
+
+    getFavorAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        let message = "";
+        switch (effect.subType) {
+            case "Heal":
+                output.value *= 10;
+                message = `${output.value}(Heal Favor)`;
+                break;
+            default:
+                this.favor += output.value;
+                this.lowFavor += output.lowValue;
+                this.highFavor += output.highValue;
+                output.value *= 5;
+                message = `${output.value}(Favor)`;
+                break;
+        }
+        this.addPointsRubric(output.value, message);
+    }
+
+    getRequestAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        let message = `${output.value}(Request)`;
+        this.addPointsRubric(output.value, message);
+    }
+
+    getDashAssessment(effect) {
+        let message = `8(Dash)`;
+        this.addPointsRubric(8, message);
+    }
+
+    getMoveChargeAssessment(effect) {
+        let message = `5(MvChrge)`;
+        this.addPointsRubric(5, message);
+    }
+
+    getEnAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        output.value *= 10;
+        let message = `${output.value}(EN)`;
+        this.addPointsRubric(output.value, message);
+    }
+
+    getStatusAssessment(effect) {
+        let state = WuxDef.Get(effect.effect);
+        let value = 0;
+        let message = "";
+        switch (effect.subType) {
+            case "Add":
+            case "Self":
+                value = parseInt(state.points);
+                message = `${value}(Add ${effect.effect})`;
+                break;
+            case "Remove":
+                value = Math.floor(parseInt(state.points) * 0.75);
+                message = `${value}(Remove ${effect.effect})`;
+                break;
+            case "Choose":
+                value = parseInt(state.points) + 2;
+                message = `${value}(Choose ${effect.effect})`;
+                break;
+            case "Remove Any":
+                value = 14;
+                message = `${value}(Remove Any)`;
+                break;
+            case "Remove All":
+                value = 20;
+                message = `${value}(Remove All)`;
+                break;
+            case "Remove Will":
+                value = 20;
+                message = `${value}(Remove Will)`;
+                break;
+        }
+        this.addPointsRubric(value, message);
+    }
+    
+    addPointsRubric(points, message) {
+        this.points += points;
+        if (this.pointsRubric != "") {
+            this.pointsRubric += " + ";
+        }
+        this.pointsRubric += message;
+        
+    }
+
+    getDiceFormula(effect, attributeHandler) {
+        let value = effect.formula.getValue(attributeHandler);
+        let lowValue = value + effect.getLowDiceValue();
+        let highValue = value + effect.getHighDiceValue();
+        value += effect.getAverageDiceValue();
+        return {value: value, lowValue: lowValue, highValue: highValue};
+    }
+}
 
 
 
