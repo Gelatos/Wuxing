@@ -329,6 +329,9 @@ class TokenTargetData extends TargetData {
         let tokenTargetData = this;
         let baseSpeedVar = WuxDef.GetVariable("Cmb_Mv");
         let maxSpeedVar = WuxDef.GetVariable("Cmb_MvPotency");
+        if (baseSpeedVar > maxSpeedVar) {
+            baseSpeedVar = maxSpeedVar;
+        }
         attributeHandler.addMod(baseSpeedVar);
         attributeHandler.addMod(maxSpeedVar);
         attributeHandler.addFinishCallback(function (attrHandler) {

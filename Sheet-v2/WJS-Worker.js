@@ -1381,6 +1381,8 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                 attributeHandler.addFormulaMods(techniqueModifierDefs[i]);
             }
 
+            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 jobStyleWorker.setBuildStatsDraft(attrHandler);
                 jobWorker.setBuildStatsFinal(attrHandler);
@@ -1393,6 +1395,9 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 
                 jobStyleWorker.saveBuildStatsToFinal(attrHandler);
                 styleWorker.saveBuildStatsToFinal(attrHandler);
+                
+                let healValueData = WuxDef.Get("Cmb_HV");
+                combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.getValue(healValueData.getVariable()));
             });
         },
         setDefaultStyleDictionary = function (styleWorker, baseWorker) {

@@ -623,6 +623,19 @@ class TechniqueEffect extends dbObj {
     setName(name) {
         this.name = name;
     }
+    
+    getAverageDiceValue() {
+        if (this.dVal > 0) {
+            return Math.floor(this.dVal * (this.dType / 2 + 0.5));
+        }
+        return 0;
+    }
+    getLowDiceValue() {
+        return parseInt(this.dVal);
+    }
+    getHighDiceValue() {
+        return this.dVal * this.dType;
+    }
 }
 
 class TechniqueResources extends dbObj {
@@ -949,6 +962,7 @@ class StatusData extends WuxDatabaseData {
         this.group = json.group;
         this.description = json.description;
         this.shortDescription = json.shortDescription;
+        this.points = json.points;
         this.endsOnRoundStart = json.endsOnRoundStart;
     }
 
@@ -964,6 +978,8 @@ class StatusData extends WuxDatabaseData {
         i++;
         this.shortDescription = "" + dataArray[i];
         i++;
+        this.points = "" + dataArray[i];
+        i++;
         this.endsOnRoundStart = ("" + dataArray[i]) != "";
         i++;
     }
@@ -975,6 +991,7 @@ class StatusData extends WuxDatabaseData {
         this.group = "";
         this.description = "";
         this.shortDescription = "";
+        this.points = 0;
         this.endsOnRoundStart = false;
     }
 
@@ -982,6 +999,7 @@ class StatusData extends WuxDatabaseData {
         let definition = new StatusDefinitionData(super.createDefinition(baseDefinition));
         definition.subGroup = this.group;
         definition.shortDescription = this.shortDescription;
+        definition.points = this.points;
         definition.endsOnRoundStart = this.endsOnRoundStart;
         return definition;
     }
@@ -1393,6 +1411,7 @@ class StatusDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
         this.shortDescription = json.shortDescription;
+        this.points = json.points;
         this.endsOnRoundStart = json.endsOnRoundStart;
     }
 
@@ -1410,6 +1429,7 @@ class StatusDefinitionData extends DefinitionData {
     createEmpty() {
         super.createEmpty();
         this.shortDescription = "";
+        this.points = 0;
         this.endsOnRoundStart = false;
     }
 }
@@ -2048,7 +2068,7 @@ class FormulaData {
         let definition = {};
         let modDefinition = {};
         let formulaVar = "";
-        this.iterateFormulaComponents(data, function (definitionName, definitionNameModifier, multiplier, max) {
+        this.iterateFormulaComponentsForImport(data, function (definitionName, definitionNameModifier, multiplier, max) {
             if (isNaN(parseInt(definitionName))) {
                 definition = WuxDef.Get(definitionName);
                 if (definitionNameModifier == "") {
@@ -2065,7 +2085,7 @@ class FormulaData {
         })
     }
 
-    iterateFormulaComponents(baseFormula, callback) {
+    iterateFormulaComponentsForImport(baseFormula, callback) {
         let definitionName = "";
         let definitionNameModifier = "";
         let multiplier = 1;
@@ -2452,6 +2472,7 @@ class CombatDetails {
         this.job = "";
         this.jobDefenses = "";
         this.status = [];
+        this.healvalue = 0;
         this.surges = 2;
         this.maxsurges = 2;
         this.vitality = 1;
@@ -2467,6 +2488,7 @@ class CombatDetails {
         this.job = json.job != undefined ? json.job : "";
         this.jobDefenses = json.jobDefenses != undefined ? json.jobDefenses : "";
         this.status = json.status != undefined ? json.status : [];
+        this.healvalue = json.healvalue;
         this.surges = json.surges != undefined ? json.surges : 2;
         this.maxsurges = json.maxsurges != undefined ? json.maxsurges : 2;
         this.vitality = json.vitality != undefined ? json.vitality : 1;
@@ -2482,11 +2504,12 @@ class CombatDetails {
 
         switch (this.displayStyle) {
             case "Battle":
-                output += `Surges:`;
+                output += `HV:${this.healvalue}`;
+                output += `.Surges:`;
                 for (let i = 0; i < this.maxsurges; i++) {
                     output += i < this.surges ? `⛊` : `⛉`;
                 }
-                output += `.Vitality:`;
+                output += `.Vit:`;
                 for (let i = 0; i < this.maxvitality; i++) {
                     output += i < this.vitality ? `♥` : `♡`;
                 }
@@ -2581,6 +2604,12 @@ class CombatDetailsHandler {
         this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
         this.combatDetails.job = jobDef.title;
         this.combatDetails.jobDefenses = jobDef.defenses;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateHealValue(attrHandler, healValue) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.healvalue = healValue;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
