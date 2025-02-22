@@ -786,6 +786,10 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     border-image: linear-gradient(to right, #ffffffff 0%, #ffffff00 40%) 1;
 }
 
+.wuxSectionBlock .wuxInteractiveBlock .wuxHeader
+{
+    color: #71B9DE;
+}
 
 .wuxInlineRow,
 .sheet-rolltemplate-action .sheet-wuxInlineRow,

@@ -242,7 +242,7 @@ class ExtendedDescriptionDatabase extends Database {
             }
             return definition;
         };
-        super(data, ["group", "subGroup", "formulaMods", "techMods", "hasMax"], dataCreation);
+        super(data, ["group", "subGroup", "mainGroup", "formulaMods", "techMods", "hasMax"], dataCreation);
     }
 
     importSheets(dataArray, dataCreationCallback) {
@@ -396,7 +396,7 @@ class TechniqueData extends WuxDatabaseData {
         this.techSet = json.techSet;
         this.group = json.group;
         this.affinity = json.affinity;
-        this.tier = json.tier;
+        this.tier = parseInt(json.tier);
         this.isFree = this.affinity == "" && this.tier <= 0;
         this.action = json.action;
         this.traits = json.traits;
@@ -405,6 +405,7 @@ class TechniqueData extends WuxDatabaseData {
         this.skill = json.skill;
         this.range = json.range;
         this.target = json.target;
+        this.size = parseInt(json.size);
         this.requirement = json.requirement;
         this.itemTraits = json.itemTraits;
         this.trigger = json.trigger;
@@ -443,6 +444,8 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.target = "" + dataArray[i];
         i++;
+        this.size = parseInt(dataArray[i]);
+        i++;
         this.requirement = "" + dataArray[i];
         i++;
         this.itemTraits = "" + dataArray[i];
@@ -472,6 +475,7 @@ class TechniqueData extends WuxDatabaseData {
         this.skill = "";
         this.range = "";
         this.target = "";
+        this.size = 0;
         this.requirement = "";
         this.itemTraits = "";
         this.trigger = "";
@@ -514,6 +518,21 @@ class TechniqueData extends WuxDatabaseData {
                 if (effect.effect != "") {
                     this.addDefinition(effect.effect);
                 }
+                break;
+            case "Move":
+                effect.setName(`T${this.effects.keys.length}`);
+                this.effects.add(effect.name, effect);
+                let moveTypes = ["Pushed", "Pulled", "ForceMove", "Flight", "Float", "FreeMove"];
+                if (!moveTypes.some(moveType => effect.subType.includes(moveType))) {
+                    this.addDefinition(effect.subType);
+                }
+                let moveDefs = effect.formula.getDefinitions();
+                moveDefs.forEach(moveDef => this.addDefinition(moveDef.name));
+                break;
+            case "Terrain":
+                effect.setName(`T${this.effects.keys.length}`);
+                this.effects.add(effect.name, effect);
+                this.addDefinition(effect.effect);
                 break;
             default:
                 effect.setName(`T${this.effects.keys.length}`);
@@ -576,6 +595,7 @@ class TechniqueEffect extends dbObj {
         this.target = json.target;
         this.type = json.type;
         this.subType = json.subType;
+        this.duration = json.duration;
         this.dVal = json.dVal;
         this.dType = json.dType;
         this.formula = new FormulaData(json.formula);
@@ -594,6 +614,8 @@ class TechniqueEffect extends dbObj {
         i++;
         this.subType = "" + dataArray[i];
         i++;
+        this.duration = "" + dataArray[i];
+        i++;
         this.dVal = "" + dataArray[i];
         i++;
         this.dType = "" + dataArray[i];
@@ -601,6 +623,18 @@ class TechniqueEffect extends dbObj {
         this.formula = new FormulaData("" + dataArray[i]);
         i++;
         this.effect = "" + dataArray[i];
+        switch(this.type) {
+            case "HP":
+            case "Resistance":
+                this.effect = `${WuxDef.GetAbbreviation("DamageType")}_${this.effect}`;
+                break;
+            case "Status":
+                this.effect = `${WuxDef.GetAbbreviation("Status")}_${this.effect}`;
+                break;
+            case "Terrain":
+                this.effect = `${WuxDef.GetAbbreviation("TerrainFxType")}_${this.effect}`;
+                break;
+        }
         i++;
         this.traits = "" + dataArray[i];
         i++;
@@ -613,6 +647,7 @@ class TechniqueEffect extends dbObj {
         this.target = "";
         this.type = "";
         this.subType = "";
+        this.duration = "";
         this.dVal = "";
         this.dType = "";
         this.formula = new FormulaData();
@@ -631,10 +666,11 @@ class TechniqueEffect extends dbObj {
         return 0;
     }
     getLowDiceValue() {
-        return parseInt(this.dVal);
+        return isNaN(parseInt(this.dVal)) ? 0 : parseInt(this.dVal);
     }
     getHighDiceValue() {
-        return this.dVal * this.dType;
+        let output = this.dVal * this.dType;
+        return isNaN(output) ? 0 : output;
     }
 }
 
@@ -732,6 +768,7 @@ class TechniqueStyle extends WuxDatabaseData {
 
     createDefinition(baseDefinition) {
         let definition = new TechniqueStyleDefinitionData(super.createDefinition(baseDefinition));
+        definition.mainGroup = this.group;
         definition.subGroup = this.subGroup;
         definition.tier = this.cr;
         definition.affinity = this.affinity;
@@ -1140,6 +1177,7 @@ class TemplateData extends dbObj {
     }
 }
 
+// Definitions
 class DefinitionData extends WuxDatabaseData {
     importJson(json) {
         this.name = json.name;
@@ -1340,6 +1378,7 @@ class TechniqueDefinitionData extends DefinitionData {
 class TechniqueStyleDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
+        this.mainGroup = json.mainGroup;
         this.cr = json.cr;
         this.affinity = json.affinity;
         this.requirements = json.requirements;
@@ -1361,6 +1400,7 @@ class TechniqueStyleDefinitionData extends DefinitionData {
 
     createEmpty() {
         super.createEmpty();
+        this.mainGroup = "";
         this.cr = 0;
         this.affinity = "";
         this.requirements = "";
@@ -1434,6 +1474,7 @@ class StatusDefinitionData extends DefinitionData {
     }
 }
 
+// Technique Display
 class TechniqueDisplayData {
 
     constructor(technique) {
@@ -1505,7 +1546,14 @@ class TechniqueDisplayData {
             if (this.targetData != "") {
                 this.targetData += "; ";
             }
-            this.targetData += `${technique.target}`;
+            if (technique.size > 0) {
+                if (technique.target.includes("Target")) {
+                    this.targetData += `${technique.size} ${technique.target}`;
+                }
+                else {
+                    this.targetData += `${technique.target} ${technique.size}`;
+                }
+            }
         }
     }
 
@@ -1690,7 +1738,7 @@ class TechniqueEffectDisplayData {
                 definition = WuxDef.Get("Title_TechEffect");
                 this.check = definition.title;
                 this.checkDescription = definition.getDescription();
-            } 
+            }
             else if (defense == "Def_Evasion") {
                 definition = WuxDef.Get("Title_TechEvasion");
                 this.check = definition.title;
@@ -1725,53 +1773,79 @@ class TechniqueEffectDisplayData {
 
     formatEffect(effect) {
         let output = "";
+        output = this.formatTemporaryEffect(effect);
         switch (effect.type) {
             case "HP":
-                output = this.formatHpEffect(effect);
+                output += this.formatHpEffect(effect);
                 break;
             case "WILL":
-                output = this.formatWillEffect(effect);
+                output += this.formatWillEffect(effect);
                 break;
             case "Vitality":
-                output = this.formatVitalityEffect(effect);
+                output += this.formatVitalityEffect(effect);
                 break;
             case "Patience":
-                output = this.formatPatienceMeterEffect(effect);
+                output += this.formatPatienceMeterEffect(effect);
                 break;
             case "Favor":
-                output = this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Favor"));
+                output += this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Favor"));
+                break;
+            case "Influence":
+                output += this.formatInfluenceMeterEffect(effect);
                 break;
             case "Request":
-                output = this.formatRequestEffect(effect);
+                output += this.formatRequestEffect(effect);
                 break;
             case "Status":
-                output = this.formatStatusEffect(effect);
+                output += this.formatStatusEffect(effect);
                 break;
-            case "Temp":
-                output = this.formatTemporaryEffect(effect);
+            case "Resistance":
+                output += this.formatResistanceEffect(effect);
+                break;
+            case "Advantage":
+                output += this.formatAdvantageEffect(effect);
                 break;
             case "Boost":
-                output = this.formatBoostEffect(effect);
+                output += this.formatBoostEffect(effect);
                 break;
-            case "Dash":
-                output = this.formatDashEffect(effect);
+            case "Terrain":
+                output += this.formaTerrainEffect(effect);
                 break;
-            case "MoveCharge":
-                output = this.formatMoveChargeEffect(effect);
+            case "Structure":
+                output += this.formatStructureEffect(effect);
+                break;
+            case "Move":
+                output += this.formatMoveEffect(effect);
                 break;
             case "EN":
-                output = this.formatEnEffect(effect);
+                output += this.formatEnEffect(effect);
                 break;
             case "Definition":
                 // Do nothing
                 break;
             case "Desc":
             case "":
-                output = this.formatDescriptionEffect(effect);
+                output += this.formatDescriptionEffect(effect);
                 break;
         }
 
         return output;
+    }
+
+    formatTemporaryEffect(effect) {
+        switch (effect.duration) {
+            case "Trigger":
+                return "Against the triggering effect, ";
+            case "Turn":
+                return "Until the end of the turn, ";
+            case "Round":
+                return "Until the end of the round, ";
+            case "Focus":
+                return "Until you lose focus, ";
+            case "Conflict":
+                return "Until the end of the conflict, ";
+        }
+        return "";
     }
 
     formatHpEffect(effect) {
@@ -1812,6 +1886,26 @@ class TechniqueEffectDisplayData {
                 return `Reduce target's ${type} by ${this.formatCalcBonus(effect)}`;
             default:
                 return `Increase target's ${type} by ${this.formatCalcBonus(effect)}`;
+        }
+    }
+
+    formatInfluenceMeterEffect(effect) {
+        let subTypes = effect.subType.split(":");
+        switch (subTypes[0]) {
+            case "Raise":
+                return `You raise the severity of an influence on your target.`;
+            case "Lower":
+                return `You lower the severity of an influence on your target.`;
+            case "Adjust":
+                return `You raise or lower the severity of an influence on your target.`;
+            case "Reveal":
+                return "A related influence to the statement is revealed to you. You learn whether the influence is supportive or oppositional.";
+            case "RevealNeg":
+                return "A related oppositional influence to the statement is revealed to you.";
+            case "RevealPos":
+                return "A related supportive influence to the statement is revealed to you.";
+            case "Add":
+                return `The target gains the influence, "${effect.effect}" which is at ${subTypes[1]} Severity. This influence is removed if the target becomes hostile towards you or the social conflict ends. `;
         }
     }
 
@@ -1857,46 +1951,32 @@ class TechniqueEffectDisplayData {
                 return `${target} gain${plural} the ${state.title} ${state.group}`;
         }
     }
-
-    formatTemporaryEffect(effect) {
+    
+    formatResistanceEffect(effect) {
         let target = "Target";
         let plural = "s";
+        let copulas = "is";
         if (effect.target == "Self") {
             target = "You";
             plural = "";
+            copulas = "are";
         }
-        let effectSubs = effect.subType.split(":");
+        let resistance = WuxDef.GetTitle("Resistance");
+        let damageType = WuxDef.GetTitle(effect.effect);
+        return `${target} gain${plural} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
+    }
 
-        if (effectSubs.length != 2) {
-            return "Error! Effect not formatted correctly";
+    formatAdvantageEffect(effect) {
+        let target = "Target";
+        let plural = "s";
+        let owner = "their";
+        if (effect.target == "Self") {
+            target = "You";
+            plural = "";
+            owner = "your";
         }
-
-        let effectTarget = effectSubs[1].trim();
-        switch (effectTarget) {
-            case "Trigger":
-                effectTarget = "Against the triggering effect";
-                break;
-            case "Turn":
-                effectTarget = "Until the end of the turn";
-                break;
-            case "Round":
-                effectTarget = "Until the end of the round";
-                break;
-            case "Conflict":
-                effectTarget = "Until the end of the conflict";
-                break;
-        }
-
-        let effectSubType = effectSubs[0].trim();
-        switch (effectSubType) {
-            case "Resistance":
-                let resistance = WuxDef.GetTitle("Resistance");
-                let damageType = WuxDef.GetTitle(effect.effect);
-                return `${effectTarget}, ${target} gain${plural} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
-            case "Desc":
-                return `${effectTarget}, ${effect.effect}`;
-        }
-
+        let formatCalc = this.formatCalcBonus(effect);
+        return `${target} gain${plural} +${formatCalc} ${formatCalc > 0 ? "Advantage" : "Disadvantage"} on ${owner} next ${effect.effect}`;
     }
 
     formatBoostEffect(effect) {
@@ -1908,19 +1988,59 @@ class TechniqueEffectDisplayData {
         }
     }
 
-    formatDashEffect(effect) {
-        if (effect.target === "Self") {
-            return `You roll your Move Potency die to gain Move Charge.`;
-        } else {
-            return `Target rolls their Move Potency die to gain Move Charge.`;
+    formaTerrainEffect(effect) {
+        switch (effect.subType) {
+            case "Add":
+                return `The area is considered [${effect.effect.getTitle()}].`;
+            case "Remove":
+                return `Any effects in the area considered [${effect.effect.getTitle()}] are removed.`;
         }
     }
 
-    formatMoveChargeEffect(effect) {
-        if (effect.target === "Self") {
-            return "You may move a number of squares equal to your Move Charge. If you choose to move, you then lose all your Move Charge.";
-        } else {
-            return "The target may move a number of squares equal to their Move Charge. If they choose to move, they then lose all their Move Charge.";
+    formatStructureEffect(effect) {
+        switch (effect.subType) {
+            case "Count":
+                return `You create ${this.formatCalcBonus(effect)} ${effect.effect} in the targeted spaces.`;
+            case "Height":
+                return `Each ${effect.effect} is ${this.formatCalcBonus(effect)} spaces high.`;
+            case "HP":
+                return `Each ${effect.effect} has ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle("HP")}.`;
+            default:
+                return effect.effect;
+        }
+    }
+
+    formatMoveEffect(effect) {
+        let target = "Target";
+        let plural = "s";
+        let copulas = "is";
+        if (effect.target == "Self") {
+            target = "You";
+            plural = "";
+            copulas = "are";
+        }
+        
+        switch (effect.subType) {
+            case "Charge":
+                return `${target} gain${plural} ${this.formatCalcBonus(effect)} Move Charge.`;
+            case "Pushed":
+                return `${target} ${copulas} Pushed ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "from you." : effect.effect}`;
+            case "Pulled":
+                return `${target} ${copulas} Pulled ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "towards you." : effect.effect}`;
+            case "ForceMove":
+                return `${target} ${copulas} Force Moved ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
+            case "Aloft":
+                return `${target} stays aloft and moves up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
+            case "Float":
+                return `${target} Float${plural}.`;
+            case "FreeMove":
+                return `${target} may Free Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
+            case "Sneak":
+                return `${target} may Move up to ${this.formatCalcBonus(effect)} spaces. Your movement does not break your hidden status.`;
+            case "Invis":
+                return `${target} may Move up to ${this.formatCalcBonus(effect)} spaces. Your movement does not break your hidden or invisible status.`;
+            default:
+                return `${target} may Move up to ${this.formatCalcBonus(effect)} spaces.`;
         }
     }
 
@@ -1974,6 +2094,7 @@ class TechniqueEffectDisplayData {
     }
 }
 
+// Helper
 class WuxRepeatingSection {
     constructor(definitionId) {
         this.definition = WuxDef.Get(definitionId);
@@ -2211,16 +2332,16 @@ class FormulaData {
                             } else {
                                 switch (worker.multiplier) {
                                     case 0.5:
-                                        output += `[1/2 x ${definition.title}]`;
+                                        output += `[½ ${definition.title}]`;
                                         break;
                                     case 0.33:
-                                        output += `[1/3 x ${definition.title}]`;
+                                        output += `[⅓ ${definition.title}]`;
                                         break;
                                     case 0.25:
-                                        output += `[1/4 x ${definition.title}]`;
+                                        output += `[¼ ${definition.title}]`;
                                         break;
                                     case 0.2:
-                                        output += `[1/5 x ${definition.title}]`;
+                                        output += `[⅕ ${definition.title}]`;
                                         break;
                                 }
                             }

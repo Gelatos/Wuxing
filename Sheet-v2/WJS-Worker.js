@@ -1089,7 +1089,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                 let cr = attrHandler.parseInt(WuxDef.GetVariable("CR"));
                 let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity"))];
 
-                let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("subGroup", "Standard")]);
+                let styleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Standard")]);
                 for (let i = 0; i < styleDefinitions.length; i++) {
                     workerVariableName = styleDefinitions[i].getVariable();
                     styleValue = techniqueWorker.buildStats.has(workerVariableName) ? techniqueWorker.buildStats.get(workerVariableName).value : "0";

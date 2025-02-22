@@ -1,11 +1,21 @@
 // noinspection JSUnusedGlobalSymbols,HtmlUnknownAttribute,ES6ConvertVarToLetConst,JSUnresolvedReference,SpellCheckingInspection
-function SetTechniquesDatabaseJson(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9) {
-    arr0 = ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9);
-    let techniqueDatabase = SheetsDatabase.CreateTechniques(arr0);
-    return PrintLargeEntry(JSON.stringify(techniqueDatabase), "t");
-}
+var Debug = Debug || (function () {
+    'use strict';
+    var
+        log = function (msg) {
+            Logger.log(msg);
+        },
+        logError = function (msg) {
+            Logger.log(`ERROR! ${msg}`);
+        }
 
-function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefinitionArray, systemDefinitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueDatabaseString) {
+    return {
+        Log: log,
+        LogError: logError
+    };
+}());
+
+function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefinitionArray, systemDefinitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueArray) {
     let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
 
     definitionDatabase.importSheets(definitionArray, function (arr) {
@@ -51,8 +61,7 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
         let lore = new LoreData(arr);
         if (lore.group == lore.name) {
             return lore.createDefinition(definitionDatabase.get("LoreCategory"));
-        }
-        else {
+        } else {
             return lore.createDefinition(definitionDatabase.get("Lore"));
         }
     });
@@ -68,7 +77,7 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
         let status = new StatusData(arr);
         return status.createDefinition(definitionDatabase.get("Status"));
     });
-    let techDb = SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString));
+    let techDb = SheetsDatabase.CreateTechniques(techniqueArray);
     techDb.iterate(function (technique) {
         let techDef = technique.createDefinition(definitionDatabase.get("Technique"));
         definitionDatabase.add(techDef.name, techDef);
@@ -88,12 +97,6 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
     }
 
     return PrintLargeEntry(jsClassData.print("WuxDef"), "]");
-}
-
-function SetTechniquesDatabase(techniqueDatabaseString) {
-    let techDb = SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString));
-    let jsClassData = JavascriptDatabase.Create(techDb, WuxDefinition.Get);
-    return PrintLargeEntry(jsClassData.print("WuxTechniqueDb"), "d");
 }
 
 function Test(definitionArray) {
@@ -161,7 +164,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createStyles = function (arr) {
-            return new Database(arr, ["group", "cr"], function (arr) {
+            return new Database(arr, ["group", "mainGroup", "subGroup", "cr"], function (arr) {
                 return new TechniqueStyle(arr);
             });
         },
@@ -193,7 +196,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         createDefinitionTypes = function (arr) {
             return new ExtendedDescriptionDatabase(arr);
         }
-        ;
+    ;
     return {
         CreateDatabaseCollection: createDatabaseCollection,
         CreateTechniques: createTechniques,
@@ -362,8 +365,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                         let isChecked = displayOptions.autoExpand ? ` checked value="on"` : "";
 
                         return `<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="${attributeName}"${isChecked}>\n<div class="wuxFeatureExpandingContent">\n${output}\n</div>\n`;
-                    }
-                    else {
+                    } else {
                         return output;
                     }
                 },
@@ -438,7 +440,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                         PrintEffects: printEffects
                     };
                 })()
-                ;
+            ;
             return {
                 Print: print
             }
@@ -467,8 +469,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     }
                     if (displayOptions.hasCSS) {
                         output += WuxSheetMain.Tooltip.Text(definitions[i].title, WuxDefinition.TooltipDescription(definitions[i]));
-                    }
-                    else {
+                    } else {
                         output += `<a style="margin-right: 10px; text-decoration: underline dotted;" title="${definitions[i].description}">${definitions[i].name}</a>`;
                     }
                 }
@@ -488,12 +489,10 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                         output += style[i];
                     }
                     return `class="${output}"`;
-                }
-                else {
+                } else {
                     return `class="${style}"`;
                 }
-            }
-            else {
+            } else {
                 if (Array.isArray(style)) {
                     let output = "";
                     for (let i = 0; i < style.length; i++) {
@@ -503,8 +502,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                         output += getFeatureStyleSheetStyle(style[i]);
                     }
                     return `style="${output}"`;
-                }
-                else {
+                } else {
                     return `style="${getFeatureStyleSheetStyle(style)}"`;
                 }
             }
@@ -647,7 +645,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     return "";
             }
         }
-        ;
+    ;
     return {
         GetDisplayOptions: getDisplayOptions,
         Get: get
@@ -691,8 +689,7 @@ var WuxDefinition = WuxDefinition || (function () {
             let data = get(key);
             if (data.abbreviation == "") {
                 return data.title;
-            }
-            else {
+            } else {
                 return data.abbreviation;
             }
         },
@@ -812,7 +809,7 @@ var WuxDefinition = WuxDefinition || (function () {
             return buildHeader(definition) + "\n" +
                 WuxSheetMain.Select(fieldName, definitionGroup, showEmpty);
         }
-        ;
+    ;
     return {
         Get: get,
         GetAttribute: getAttribute,
@@ -932,7 +929,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             let contents = "";
 
             let showStatValue = `!cshowgroup @{${WuxDef.GetVariable("SheetName")}}@@@?{What will you show?|Defenses|Senses}`;
-            let rollSkillValue = `!cskillgroupcheck @{${WuxDef.GetVariable("SheetName")}}@@@?{Choose a Skill Group to Roll|Fight|Cast|Athletics|Persuade|Cunning|Craft|Device|Scan|Lore};?{Advantage|0}`;
+            let rollSkillValue = `!cskillgroupcheck @{${WuxDef.GetVariable("SheetName")}}@@@?{Choose a Skill Group to Roll|Fight|Cast|Athletics|Persuade|Cunning|Craft|Device|Investigate|Lore};?{Advantage|0}`;
             contents += `<button class="wuxButton wuxSizePercent" type="roll" value="${showStatValue}"><span>Show Stat</span></button>`;
             contents += `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
 
@@ -973,7 +970,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
                 output += WuxSheetMain.HiddenField(statusDefs[i].getAttribute(),
                     `<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
                     ${collapsibleSectionTitle(
-                        WuxSheetMain.Subheader(WuxSheetMain.InteractionElement.CheckboxBlockIcon(statusDefs[i].getAttribute(), WuxSheetMain.Header2(statusDefs[i].title))), 
+                        WuxSheetMain.Subheader(WuxSheetMain.InteractionElement.CheckboxBlockIcon(statusDefs[i].getAttribute(), WuxSheetMain.Header2(statusDefs[i].title))),
                         statusDefs[i].getAttribute(WuxDef._info)
                     )}
                     ${collapsibleSectionContent(WuxSheetMain.Desc(statusDefs[i].shortDescription), statusDefs[i].getAttribute(WuxDef._info), false)}
@@ -983,7 +980,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return output;
         }
 
-        ;
+    ;
     return {
         Build: build,
         AttributeSection: attributeSection,
@@ -1126,8 +1123,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         textarea = function (fieldName, className, placeholder) {
             if (className == undefined) {
                 className = "";
-            }
-            else {
+            } else {
                 className = ` class="${className}"`;
             }
             placeholder = placeholder == undefined ? "" : ` placeholder="${placeholder}"`;
@@ -1137,8 +1133,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         select = function (fieldName, definitionGroup, showEmpty, className) {
             if (className == undefined) {
                 className = "wuxInput";
-            }
-            else {
+            } else {
                 className = `wuxInput ${className}`;
             }
 
@@ -1158,8 +1153,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         button = function (fieldName, contents, className) {
             if (className == undefined) {
                 className = "";
-            }
-            else {
+            } else {
                 className = " " + className;
             }
             return `<div class="wuxButton${className}">\n<input type="checkbox" name="${fieldName}">\n<span>${contents}</span>\n </div>`;
@@ -1500,7 +1494,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
 
         }())
 
-        ;
+    ;
     return {
         Build: build,
         Tab: tab,
@@ -1737,7 +1731,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
             return buildStickySideTab(output);
         }
-        ;
+    ;
     return {
         BuildOverviewPageNavigation: buildOverviewPageNavigation,
         BuildGearPageNavigation: buildGearPageNavigation,
@@ -1757,8 +1751,7 @@ var WuxSheet = WuxSheet || (function () {
         pageDispayInput = function (fieldName, value) {
             if (value == undefined) {
                 value = "";
-            }
-            else {
+            } else {
                 value = ` value="${value}"`;
             }
             return `<input type="hidden" class="wuxPageDisplay-Flag" name="${fieldName}"${value} />`
@@ -1766,7 +1759,7 @@ var WuxSheet = WuxSheet || (function () {
         pageDisplay = function (fieldName, contents) {
             return `<div class="wuxPageDisplay-${fieldName}">\n${contents}\n</div>`;
         }
-        ;
+    ;
     return {
         PageDisplayInput: pageDispayInput,
         PageDisplay: pageDisplay
@@ -1787,7 +1780,7 @@ var WuxSheetBackend = WuxSheetBackend || (function () {
             }
             return `on("${output}", function (${hasEvents != undefined ? "eventinfo" : ""}) {\n${contents}\n});\n`;
         }
-        ;
+    ;
     return {
         OnChange: onChange
     };
@@ -1812,10 +1805,12 @@ class JavascriptDataClass {
     addPublicData(name) {
         this.publicData.add(Format.ToUpperCamelCase(name), name);
     }
+
     addPublicVariable(name, data) {
         this.addVariable(name, data);
         this.addPublicData(name);
     }
+
     addPublicFunction(name, data) {
         this.addFunction(name, data);
         this.addPublicData(name);
@@ -1971,8 +1966,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
                     nextFilter = getSortedGroup(filterData[i].property, filterData[i].value);
                     filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
                 }
-            }
-            else {
+            } else {
                 filteredGroup = getSortedGroup(filterData.property, filterData.value);
             }
             if (filteredGroup == undefined || filteredGroup.length == 0) {
@@ -2000,7 +1994,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             }
             return output;
         }
-        ;
+    ;
     return {
         Create: create
     };
@@ -2010,6 +2004,7 @@ function onOpen() {
     SpreadsheetApp.getUi()
         .createMenu('Assessment')
         .addItem('Assess All', 'AssessAllTechniques')
+        .addItem('Assess All From Here', 'AssessAllTechniquesFromPosition')
         .addToUi();
 }
 
@@ -2020,23 +2015,7 @@ function onEdit(e) {
 function TryTechniqueAssessment(e) {
     const sheet = e.range.getSheet();
     if (sheet.getSheetName() == "Techniques") {
-        const row = e.range.getRow();
-        let assessColumn = getNamedColumn(sheet, "Assessment");
-        
-        let assessingCell = sheet.getRange(row, assessColumn, 1, 1);
-        assessingCell.setValue("Calculating...")
-        
-        let techniqueData = GetTechniqueForAssessment(sheet, row, assessColumn);
-        if (techniqueData != undefined) {
-            let assessment = new TechniqueAssessment(techniqueData.tech);
-            assessment.printCellValues(sheet, techniqueData.row, assessColumn);
-            if (row != techniqueData.row) {
-                assessingCell.setValue("");
-            }
-        }
-        else {
-            assessingCell.setValue("");
-        }
+        AssessTechniqueAtRow(sheet, e.range.getRow());
     }
 }
 
@@ -2044,24 +2023,61 @@ function AssessAllTechniques() {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getActiveSheet();
     if (sheet.getSheetName() == "Techniques") {
-        const lastRow = sheet.getLastRow();
-        let assessColumn = getNamedColumn(sheet, "Assessment");
-        let rowIndex = 2;
-        let techniqueData;
-        while (rowIndex < lastRow) {
-            let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
-            assessingCell.setValue("Calculating...")
-            
-            techniqueData = GetTechniqueForAssessment(sheet, rowIndex, assessColumn);
-            if (techniqueData != undefined) {
-                rowIndex = techniqueData.finalRow;
-                let assessment = new TechniqueAssessment(techniqueData.tech);
-                assessment.printCellValues(sheet, techniqueData.row, assessColumn);
-            }
-            else {
-                assessingCell.setValue("");
-                rowIndex++;
-            }
+        AssessAllTechniquesByStartRow(sheet, 2);
+    }
+}
+
+function AssessAllTechniquesFromPosition() {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getActiveSheet();
+    if (sheet.getSheetName() == "Techniques") {
+        const range = sheet.getActiveRange();
+        let row = range.getRow();
+        row = AssessTechniqueAtRow(sheet, row);
+        AssessAllTechniquesByStartRow(sheet, row);
+    }
+}
+
+function AssessTechniqueAtRow(sheet, rowIndex) {
+    if (rowIndex == 1) {
+        return;
+    }
+    let assessColumn = getNamedColumn(sheet, "Assessment");
+
+    let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
+    assessingCell.setValue("Calculating...")
+
+    let techniqueData = GetTechniqueForAssessment(sheet, rowIndex, assessColumn);
+    if (techniqueData != undefined) {
+        let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, assessColumn);
+        assessment.printCellValues();
+        if (rowIndex != techniqueData.row) {
+            assessingCell.setValue("");
+        }
+        return techniqueData.finalRow;
+    } else {
+        assessingCell.setValue("");
+        return rowIndex + 1;
+    }
+}
+
+function AssessAllTechniquesByStartRow(sheet, startRow) {
+    const lastRow = sheet.getLastRow();
+    let assessColumn = getNamedColumn(sheet, "Assessment");
+    let rowIndex = startRow;
+    let techniqueData;
+    while (rowIndex < lastRow) {
+        let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
+        assessingCell.setValue("Calculating...")
+
+        techniqueData = GetTechniqueForAssessment(sheet, rowIndex, assessColumn);
+        if (techniqueData != undefined) {
+            rowIndex = techniqueData.finalRow;
+            let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, assessColumn);
+            assessment.printCellValues();
+        } else {
+            assessingCell.setValue("");
+            rowIndex++;
         }
     }
 }
@@ -2088,12 +2104,11 @@ function GetTechniqueForAssessment(sheet, row, assessColumn) {
             if (newTechnique.name != startName) {
                 return undefined; // Something is wrong with this data
             }
-            
+
             if (newTechnique.action != "") {
                 baseTechnique = newTechnique;
                 break;
-            }
-            else {
+            } else {
                 techniqueData.push(newTechnique);
             }
         }
@@ -2104,23 +2119,21 @@ function GetTechniqueForAssessment(sheet, row, assessColumn) {
         while (techniqueData.length > 0) {
             baseTechnique.importEffectsFromTechnique(techniqueData.pop());
         }
-    }
-    else {
+    } else {
         baseTechnique = newTechnique;
     }
-    
+
     while (maxIterations > 0) {
         maxIterations--;
         finalRow++;
         newTechnique = GetTechniqueFromSheetRow(sheet, finalRow, assessColumn);
         if (newTechnique.name == baseTechnique.name) {
             baseTechnique.importEffectsFromTechnique(newTechnique);
-        }
-        else {
+        } else {
             break;
         }
     }
-    
+
     return {tech: baseTechnique, row: baseRow, finalRow: finalRow};
 }
 
@@ -2150,14 +2163,27 @@ function getNamedColumn(sheet, name) {
 }
 
 class TechniqueAssessment {
-    constructor(technique)
-    {
+    constructor(technique, sheet, row, assessColumn) {
+        this.sheet = sheet;
+        this.row = row;
+        this.assessColumn = assessColumn;
+
         this.technique = technique;
         this.assessment = "";
         this.averagePoints = 0;
-        
+
+        this.target = technique.target;
+        this.size = technique.size;
+        this.onEnterEffect = false;
+        this.statusCount = 0;
+
+        this.basePoints = 8;
         this.points = 0;
+        this.pointsCalc = "";
         this.pointsRubric = "";
+        this.willbreakPoints = 0;
+        this.willbreakPointsRubric = "";
+        this.patience = 0;
 
         this.dps = 0;
         this.lowDps = 0;
@@ -2169,46 +2195,57 @@ class TechniqueAssessment {
         this.highWill = 0;
         this.willVariance = false;
 
+        this.structureCount = 0;
+        this.structureHP = 0;
+        this.structureHeight = 0;
+
         this.favor = 0;
         this.lowFavor = 0;
         this.highFavor = 0;
         this.favorVariance = false;
 
+        this.request = 0;
+        this.lowRequest = 0;
+        this.highRequest = 0;
+        this.requestVariance = false;
+
         this.assessTechnique();
     }
 
-    setAssessment(value)
-    {
-        if (value == 0) {
+    setAssessment(value) {
+        if (value == undefined) {
             this.assessment = "???";
-        }
-        else if (value < 20) {
+        } else if (value < 20) {
             this.assessment = "Too Weak";
-        }
-        else if (value < 40) {
+        } else if (value < 40) {
             this.assessment = "Weak";
-        }
-        else if (value < 60) {
+        } else if (value < 60) {
             this.assessment = "Average";
-        }
-        else if (value < 80) {
+        } else if (value < 80) {
             this.assessment = "Strong";
-        }
-        else {
+        } else {
             this.assessment = "Too Strong";
         }
     }
 
-    printCellValues(sheet, row, assessColumn) {
-        let range = sheet.getRange(row, assessColumn, 1, 1);
+    printCellValues() {
+        let range = this.sheet.getRange(this.row, this.assessColumn, 1, 1);
         range.setNote(this.printNotes());
-        range = sheet.getRange(row, assessColumn, 1, 3);
-        range.setValues([[this.assessment, this.points, this.dps]]);
+        range = this.sheet.getRange(this.row, this.assessColumn, 1, 2);
+        range.setValues([[this.assessment, this.points]]);
     }
-    
+
     printNotes() {
-        let output = `Expected Average: ${this.averagePoints}`;
+        let farPts = Math.floor(this.averagePoints * 3 / 10);
+        let closePts = Math.floor(this.averagePoints / 10);
+        let output = `Point ${this.pointsCalc != "" ? this.pointsCalc : " (Avg)"}: `;
+        output += `${this.averagePoints - farPts} > ${closePts == 0 ? this.averagePoints : `${this.averagePoints - closePts} < ${this.averagePoints + closePts}`} < ${this.averagePoints + farPts}`;
         output += `\nTotal Points: ${this.points}\n${this.pointsRubric}`;
+        if (this.willbreakPoints > 0) {
+            output += `\nWill Break: ${this.willbreakPoints}\n${this.willbreakPointsRubric}`;
+        }
+        output += "\n";
+
         if (this.dps > 0) {
             output += `\nDPS: ${this.lowDps} => ${this.dps} <= ${this.highDps}`;
             if (this.dpsVariance) {
@@ -2227,30 +2264,56 @@ class TechniqueAssessment {
                 output += " (High Variance)";
             }
         }
+        if (this.request > 0) {
+            output += `\nRequest: ${this.lowRequest} => ${this.request} <= ${this.highRequest}`;
+            if (this.requestVariance) {
+                output += " (High Variance)";
+            }
+        }
         return output;
     }
 
     assessTechnique() {
         let assessor = this;
-        this.averagePoints = this.getAveragePoint(this.getEnergy(), this.technique.action, this.technique.target);
         let attributeHandler = this.getFakeAttributeHandler();
-
         this.technique.effects.iterate(function (effect) {
             assessor.assessEffect(effect, attributeHandler);
         });
+        Debug.Log(`Assessing ${this.technique.name} with ${this.points} points`);
+        this.getStructureAssessment();
+        let customPoints = this.sheet.getRange(this.row, this.assessColumn + 2, 1, 1).getValues()[0];
+        customPoints = isNaN(parseInt(customPoints)) ? 0 : parseInt(customPoints);
+        if (customPoints != 0) {
+            this.addPointsRubric(customPoints, `${customPoints}(Custom)`)
+        }
+
+        this.averagePoints = this.getAveragePoint(this.getEnergy(), this.technique);
+        this.averagePoints = this.addPatiencePointMod(this.averagePoints);
 
         if (this.points == 0) {
-            this.setAssessment(0);
-        }
-        else {
+            this.setAssessment();
+        } else {
             let difference = assessor.points - this.averagePoints;
-            this.setAssessment(50 + (difference * 100 / this.averagePoints));
+            let assessmentPercentage = 50 + (difference * 100 / this.averagePoints);
+            this.setAssessment(assessmentPercentage);
             this.getVarianceCalculation();
         }
     }
 
     getFakeAttributeHandler() {
         let attributeHandler = new AttributeHandler();
+        attributeHandler.addMod(WuxDef.GetVariable("Attr_BOD"));
+        attributeHandler.current[WuxDef.GetVariable("Attr_BOD")] = 2;
+        attributeHandler.addMod(WuxDef.GetVariable("Attr_PRC"));
+        attributeHandler.current[WuxDef.GetVariable("Attr_PRC")] = 2;
+        attributeHandler.addMod(WuxDef.GetVariable("Attr_QCK"));
+        attributeHandler.current[WuxDef.GetVariable("Attr_QCK")] = 2;
+        attributeHandler.addMod(WuxDef.GetVariable("Attr_CNV"));
+        attributeHandler.current[WuxDef.GetVariable("Attr_CNV")] = 2;
+        attributeHandler.addMod(WuxDef.GetVariable("Attr_INT"));
+        attributeHandler.current[WuxDef.GetVariable("Attr_INT")] = 2;
+        attributeHandler.addMod(WuxDef.GetVariable("Attr_RSN"));
+        attributeHandler.current[WuxDef.GetVariable("Attr_RSN")] = 2;
         attributeHandler.addMod(WuxDef.GetVariable("Power"));
         attributeHandler.current[WuxDef.GetVariable("Power")] = 3;
         attributeHandler.addMod(WuxDef.GetVariable("Accuracy"));
@@ -2264,7 +2327,17 @@ class TechniqueAssessment {
         attributeHandler.addMod(WuxDef.GetVariable("CR"));
         attributeHandler.current[WuxDef.GetVariable("CR")] = 1;
         attributeHandler.addMod(WuxDef.GetVariable("Cmb_HV"));
-        attributeHandler.current[WuxDef.GetVariable("Cmb_HV")] = this.getAveragePoint(0, "Quick", "") - 2;
+        attributeHandler.current[WuxDef.GetVariable("Cmb_HV")] = this.basePoints - 1;
+        attributeHandler.addMod(WuxDef.GetVariable("Soc_Favor"));
+        attributeHandler.current[WuxDef.GetVariable("Soc_Favor")] = 15;
+        attributeHandler.addMod(WuxDef.GetVariable("StrideRoll"));
+        attributeHandler.current[WuxDef.GetVariable("StrideRoll")] = 5;
+        attributeHandler.addMod(WuxDef.GetVariable("MvCharge"));
+        attributeHandler.current[WuxDef.GetVariable("MvCharge")] = 5;
+        attributeHandler.addMod(WuxDef.GetVariable("Cmb_Mv"));
+        attributeHandler.current[WuxDef.GetVariable("Cmb_Mv")] = 3;
+        attributeHandler.addMod(WuxDef.GetVariable("MvPotency"));
+        attributeHandler.current[WuxDef.GetVariable("MvPotency")] = 7;
 
         return attributeHandler;
     }
@@ -2280,33 +2353,28 @@ class TechniqueAssessment {
         return 0;
     }
 
-    getAveragePoint(energy, action, target) {
-        let points = 8;
-        let enAdjust = 1;
-        while (enAdjust <= energy) {
-            points += 3 + enAdjust;
-            enAdjust++;
-        }
-
-        switch (action) {
-            case "Quick":
-                break;
-            case "Full":
-                points += 3 + this.getAveragePoint(0, "Quick", "");
-                break;
-            case "Reaction":
-            case "Swift":
-                points = Math.floor(points / 2);
-        }
-
-        const patterns = ["Burst", "Blast", "Line", "Cone"];
-        if (patterns.some(pattern => target.includes(pattern))) {
-            points = Math.floor(points * 0.5);
+    getAveragePoint(energy, technique) {
+        let points = this.basePoints + (3 * energy) + (energy * (energy + 1) / 2);
+        if (technique.action == "Full") {
+            points += 3 + this.basePoints;
+            this.pointsCalc = "(Full)";
+        } else if (technique.action == "Swift") {
+            let lookupName = WuxDef.GetAbbreviation("Job") + "_" + technique.techSet;
+            let def = WuxDef.Get(lookupName);
+            Debug.Log(`Looking up ${lookupName} which got ${def.name}`);
+            if (WuxDef.GetTitle(lookupName) == "") {
+                points = Math.ceil(points * 0.5);
+                this.pointsCalc = "(Swift)";
+            }
         }
 
         return points;
     }
-    
+
+    addPatiencePointMod(points) {
+        return Math.floor(points * (1 + (this.patience * 0.1)));
+    }
+
     getVarianceCalculation() {
         let variance = 0;
         if (this.dps > 0) {
@@ -2333,6 +2401,10 @@ class TechniqueAssessment {
     }
 
     assessEffect(effect, attributeHandler) {
+        if (effect.defense == "TechOnEnter") {
+            this.onEnterEffect = true;
+        }
+
         switch (effect.type) {
             case "HP":
                 this.getHPAssessment(effect, attributeHandler);
@@ -2349,17 +2421,29 @@ class TechniqueAssessment {
             case "Favor":
                 this.getFavorAssessment(effect, attributeHandler);
                 break;
+            case "Influence":
+                this.getInfluenceAssessment(effect);
+                break;
             case "Request":
                 this.getRequestAssessment(effect, attributeHandler);
                 break;
             case "Status":
                 this.getStatusAssessment(effect, attributeHandler);
                 break;
-            case "Dash":
-                this.getDashAssessment(effect);
+            case "Resistance":
+                this.getResistanceAssessment(effect, attributeHandler);
                 break;
-            case "MoveCharge":
-                this.getMoveChargeAssessment(effect);
+            case "Advantage":
+                this.getAdvantageAssessment(effect, attributeHandler);
+                break;
+            case "Terrain":
+                this.getTerrainAssessment(effect, attributeHandler);
+                break;
+            case "Structure":
+                this.getStructureAssessmentData(effect, attributeHandler);
+                break;
+            case "Move":
+                this.getMoveAssessment(effect, attributeHandler);
                 break;
             case "EN":
                 this.getEnAssessment(effect, attributeHandler);
@@ -2373,41 +2457,66 @@ class TechniqueAssessment {
         let message = "";
         switch (effect.subType) {
             case "Heal":
-                output.value *= 2;
+                output.value = Math.floor(output.value * 2.5);
                 message = `${output.value}(Heal HP)`;
+
+                if (effect.defense != "WillBreak") {
+                    this.addPointsRubric(output.value, message);
+                }
+                this.addTargetedPointsRubric(effect, output.value);
                 break;
             case "Surge":
-                message = `${output.value}(Heal HP)`;
+                message = `${output.value}(Surge HP)`;
+
+                if (effect.defense != "WillBreak") {
+                    this.addPointsRubric(output.value, message);
+                }
+                this.addTargetedPointsRubric(effect, output.value);
                 break;
             default:
                 if (effect.target == "Self") {
                     output.value = Math.floor(output.value * -0.5);
-                }
-                else {
+                } else {
                     this.dps += output.value;
                     this.lowDps += output.lowValue;
                     this.highDps += output.highValue;
                 }
                 message = `${output.value}(HP)`;
+
+                if (effect.defense != "WillBreak") {
+                    this.addPointsRubric(output.value, message);
+                }
+                this.addDefensePointsRubric(effect, output.value, message);
+                this.addTargetedPointsRubric(effect, output.value);
                 break;
         }
-        this.addPointsRubric(output.value, message);
+
+        if (effect.traits != "") {
+            let effectPts;
+            if (effect.traits.includes("Brutal")) {
+                effectPts = Math.floor(output.value * 0.33);
+                this.addPointsRubric(effectPts, `${effectPts}(Brutal)`);
+            }
+            if (effect.traits.includes("AP")) {
+                effectPts = Math.floor(output.value * 0.33);
+                this.addPointsRubric(effectPts, `${effectPts}(AP)`);
+            }
+        }
     }
-    
+
     getWillAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
 
         let message = "";
         switch (effect.subType) {
             case "Heal":
-                output.value *= 2;
+                output.value = Math.floor(output.value * 1.5);
                 message = `${output.value}(Heal Will)`;
                 break;
             default:
                 if (effect.target == "Self") {
                     output.value = Math.floor(output.value * -0.5);
-                }
-                else {
+                } else {
                     this.will += output.value;
                     this.lowWill += output.lowValue;
                     this.highWill += output.highValue;
@@ -2415,21 +2524,36 @@ class TechniqueAssessment {
                 message = `${output.value}(Will)`;
                 break;
         }
-        this.addPointsRubric(output.value, message);
+
+        if (effect.defense != "WillBreak") {
+            this.addPointsRubric(output.value, message);
+        }
+        this.addDefensePointsRubric(effect, output.value, message);
+        this.addTargetedPointsRubric(effect, output.value);
     }
 
     getVitalityAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
-        output.value *= 30;
+        output.value *= 21;
         let message = `${output.value}(${effect.subType != "" ? `${effect.subType} ` : ""}Vit)`;
-        this.addPointsRubric(output.value, message);
+
+        if (effect.defense != "WillBreak") {
+            this.addPointsRubric(output.value, message);
+        }
+        this.addTargetedPointsRubric(effect, output.value);
     }
 
     getPatienceAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
-        output.value *= -3;
-        let message = `${output.value}(Patience)`;
-        this.addPointsRubric(output.value, message);
+        switch (effect.subType) {
+            case "Heal":
+                output.value *= 10;
+                this.addPointsRubric(output.value, `${output.value}(Heal Patience)`);
+                break;
+            default:
+                this.patience += output.value;
+                break;
+        }
     }
 
     getFavorAssessment(effect, attributeHandler) {
@@ -2437,39 +2561,138 @@ class TechniqueAssessment {
         let message = "";
         switch (effect.subType) {
             case "Heal":
-                output.value *= 10;
+                output.value *= 5;
                 message = `${output.value}(Heal Favor)`;
                 break;
             default:
                 this.favor += output.value;
                 this.lowFavor += output.lowValue;
                 this.highFavor += output.highValue;
-                output.value *= 5;
+                output.value *= 3;
                 message = `${output.value}(Favor)`;
                 break;
         }
-        this.addPointsRubric(output.value, message);
+
+        if (effect.defense != "WillBreak") {
+            this.addPointsRubric(output.value, message);
+        }
+        this.addDefensePointsRubric(effect, output.value, message);
+        this.addTargetedPointsRubric(effect, output.value);
+    }
+
+    getInfluenceAssessment(effect) {
+        let subTypes = effect.subType.split(":");
+        let points = 0;
+        switch (subTypes[0]) {
+            case "Raise":
+            case "Lower":
+                points = 14;
+                this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
+                break;
+            case "Adjust":
+                points = 16;
+                this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
+                break;
+            case "Reveal":
+                points = 10;
+                this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
+                break;
+            case "RevealNeg":
+            case "RevealPos":
+                points = 8;
+                this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
+                break;
+            case "Add":
+                points = 17;
+                this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
+                break;
+        }
     }
 
     getRequestAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
+        output.value += 5;
+        this.request += output.value;
+        this.lowRequest += output.lowValue;
+        this.highRequest += output.highValue;
         let message = `${output.value}(Request)`;
         this.addPointsRubric(output.value, message);
     }
 
-    getDashAssessment(effect) {
-        let message = `8(Dash)`;
-        this.addPointsRubric(8, message);
+    getTerrainAssessment(effect, attributeHandler) {
+        let effectDefinition = WuxDef.Get(effect.effect);
+        let value = effectDefinition.formula.getValue(attributeHandler);
+        let message = "";
+        switch (effect.subType) {
+            case "Add":
+                message = `${value}(Add ${effectDefinition.getTitle()})`;
+                break;
+            case "Remove":
+                value = Math.floor(value * 0.75);
+                message = `${value}(Remove ${effectDefinition.getTitle()})`;
+                break;
+        }
+
+        if (effect.defense != "WillBreak") {
+            this.addPointsRubric(value, message);
+        }
+        this.addTargetedPointsRubric(effect, value);
     }
 
-    getMoveChargeAssessment(effect) {
-        let message = `5(MvChrge)`;
-        this.addPointsRubric(5, message);
+    getStructureAssessmentData(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        switch (effect.subType) {
+            case "Count":
+                this.structureCount += output.value;
+                break;
+            case "HP":
+                this.structureHP += output.value;
+                break;
+            case "Height":
+                this.structureHeight += output.value;
+                break;
+        }
+    }
+
+    getStructureAssessment() {
+        if (this.structureCount > 0) {
+            let pointMod = Math.ceil(this.structureHP / 8);
+            if (this.structureHeight > 0) {
+                pointMod += Math.ceil(pointMod * (this.structureHeight - 1) * 0.6);
+            }
+            let value = this.structureCount * pointMod;
+            let message = `${value}(Structure)`;
+            this.addPointsRubric(value, message);
+        }
+    }
+
+    getMoveAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        Debug.Log("assessing Effect Move " + effect.formula.getString());
+        switch (effect.subType) {
+            case "Fly":
+            case "FreeMove":
+            case "Invis":
+            case "Sneak":
+                output.value = Math.floor(output.value * 1.5);
+                break;
+            case "ForceMove":
+            case "Pushed":
+            case "Pulled":
+                output.value = Math.floor(output.value * 2);
+                break;
+        }
+        let message = `${output.value}(${effect.subType == "" ? "Move" : effect.subType})`;
+
+        if (effect.defense != "WillBreak") {
+            this.addPointsRubric(output.value, message);
+        }
+        this.addTargetedPointsRubric(effect, output.value);
     }
 
     getEnAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
-        output.value *= 10;
+        output.value *= 2;
         let message = `${output.value}(EN)`;
         this.addPointsRubric(output.value, message);
     }
@@ -2482,39 +2705,170 @@ class TechniqueAssessment {
             case "Add":
             case "Self":
                 value = parseInt(state.points);
-                message = `${value}(Add ${effect.effect})`;
+                message = `${value}(Add ${state.getTitle()})`;
+
+                if (effect.defense != "WillBreak") {
+                    this.addPointsRubric(value, message);
+                }
+                this.addDefensePointsRubric(effect, value, message);
+                this.addTargetedPointsRubric(effect, value);
+
+                if (effect.effect != "Stat_Engaged") {
+                    this.statusCount++;
+                    if (this.statusCount > 1) {
+                        value = Math.floor(this.statusCount * 4);
+                        this.addPointsRubric(value, `${value}(MultiStat)`);
+                    }
+                }
                 break;
             case "Remove":
                 value = Math.floor(parseInt(state.points) * 0.75);
-                message = `${value}(Remove ${effect.effect})`;
+                message = `${value}(Remove ${state.getTitle()})`;
+
+                if (effect.defense != "WillBreak") {
+                    this.addPointsRubric(value, message);
+                }
+                this.addTargetedPointsRubric(effect, value);
+
+                if (effect.effect != "Stat_Engaged") {
+                    this.statusCount++;
+                    if (this.statusCount > 1) {
+                        let subvalue = Math.max(-2, -1 * value);
+                        this.addPointsRubric(subvalue, `${subvalue}(MultiStat)`);
+                    }
+                }
                 break;
             case "Choose":
                 value = parseInt(state.points) + 2;
-                message = `${value}(Choose ${effect.effect})`;
+                message = `${value}(Choose ${state.getTitle()})`;
+
+                if (effect.defense != "WillBreak") {
+                    this.addPointsRubric(value, message);
+                }
+                this.addTargetedPointsRubric(effect, value);
                 break;
             case "Remove Any":
-                value = 14;
+                value = 10;
                 message = `${value}(Remove Any)`;
+
+                if (effect.defense != "WillBreak") {
+                    this.addPointsRubric(value, message);
+                }
+                this.addTargetedPointsRubric(effect, value);
                 break;
             case "Remove All":
                 value = 20;
                 message = `${value}(Remove All)`;
+
+                if (effect.defense != "WillBreak") {
+                    this.addPointsRubric(value, message);
+                }
+                this.addTargetedPointsRubric(effect, value);
                 break;
             case "Remove Will":
-                value = 20;
+                value = 16;
                 message = `${value}(Remove Will)`;
+
+                if (effect.defense != "WillBreak") {
+                    this.addPointsRubric(value, message);
+                }
+                this.addTargetedPointsRubric(effect, value);
                 break;
         }
-        this.addPointsRubric(value, message);
     }
-    
+
+    getResistanceAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        let message = `${output.value}(Resist ${effect.effect})`;
+        this.addPointsRubric(output.value, message);
+    }
+
+    getAdvantageAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        output.value = Math.abs(Math.floor(output.value * 4));
+        let message = `${output.value}(${output.value > 0 ? "Advantage" : "Disadvantage"})`;
+        this.addPointsRubric(output.value, message);
+    }
+
+    addDefensePointsRubric(effect, points, message) {
+        let pointMod = 0;
+
+        let hasDefenseTypes = ["HP", "WILL", "Favor", "Status", "Move", "EN"];
+        if (hasDefenseTypes.some(type => type == effect.type)) {
+            switch (effect.defense) {
+                case "Def_Evasion":
+                    pointMod = Math.ceil(points * 0.25);
+                    this.addPointsRubric(pointMod, `${pointMod}(Evasion)`);
+                    break;
+                case "Def_Fortitude":
+                    pointMod = Math.ceil(points * 0.15);
+                    this.addPointsRubric(pointMod, `${pointMod}(Fortitude)`);
+                    break;
+                case "Def_Scrutiny":
+                    pointMod = Math.ceil(points * 0.15);
+                    this.addPointsRubric(pointMod, `${pointMod}(Scrutiny)`);
+                    break;
+                case "":
+                    if (effect.target != "Self") {
+                        pointMod = Math.ceil(points * 0.4);
+                        this.addPointsRubric(pointMod, `${pointMod}(No Def)`);
+                    }
+                    break;
+            }
+        }
+    }
+
+    addTargetedPointsRubric(effect, points) {
+
+        let pointMod = 0;
+
+        switch (this.target) {
+            case "Targets":
+                pointMod = Math.floor(points * (this.size - 1) * 0.65);
+                this.addPointsRubric(pointMod, `${pointMod}(${this.size} ${this.target})`);
+                break;
+            case "Blast":
+            case "Blast(2H)":
+            case "Burst":
+            case "Burst(2H)":
+                pointMod = Math.floor(points * this.getAreaPointMod(0.65, 1));
+                this.addPointsRubric(pointMod, `${pointMod}(${this.target} ${this.size})`);
+                break;
+            case "Cone":
+            case "Line":
+            case "Line(2H)":
+            case "Line(3H)":
+                pointMod = Math.floor(points * this.getAreaPointMod(0.4, 0.66));
+                this.addPointsRubric(pointMod, `${pointMod}(${this.target} ${this.size})`);
+                break;
+        }
+
+        if (this.onEnterEffect) {
+            pointMod = 4;
+            this.addPointsRubric(pointMod, `${pointMod}(On Enter)`);
+            this.pointsRubric += "\n";
+        } else if (pointMod > 0) {
+            this.pointsRubric += "\n";
+        }
+    }
+
+    getAreaPointMod(baseMod, incrementMod) {
+        let i = this.size;
+        let output = 0;
+        while (i > 0) {
+            output += baseMod;
+            baseMod *= incrementMod;
+            i--;
+        }
+        return output;
+    }
+
     addPointsRubric(points, message) {
         this.points += points;
         if (this.pointsRubric != "") {
             this.pointsRubric += " + ";
         }
         this.pointsRubric += message;
-        
     }
 
     getDiceFormula(effect, attributeHandler) {
