@@ -2535,6 +2535,9 @@ class TechniqueAssessment {
     getVitalityAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
         output.value *= 21;
+        if (effect.subType != "Heal") {
+            output.value = Math.floor(output.value * 1.5);
+        }
         let message = `${output.value}(${effect.subType != "" ? `${effect.subType} ` : ""}Vit)`;
 
         if (effect.defense != "WillBreak") {
@@ -2679,7 +2682,7 @@ class TechniqueAssessment {
             case "ForceMove":
             case "Pushed":
             case "Pulled":
-                output.value = Math.floor(output.value * 2);
+                output.value = Math.floor(output.value * (1 + (output.value * 0.5)));
                 break;
         }
         let message = `${output.value}(${effect.subType == "" ? "Move" : effect.subType})`;
@@ -2709,9 +2712,9 @@ class TechniqueAssessment {
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
+                    this.addDefensePointsRubric(effect, value, message);
+                    this.addTargetedPointsRubric(effect, value);
                 }
-                this.addDefensePointsRubric(effect, value, message);
-                this.addTargetedPointsRubric(effect, value);
 
                 if (effect.effect != "Stat_Engaged") {
                     this.statusCount++;
@@ -2788,6 +2791,7 @@ class TechniqueAssessment {
         output.value = Math.abs(Math.floor(output.value * 4));
         let message = `${output.value}(${output.value > 0 ? "Advantage" : "Disadvantage"})`;
         this.addPointsRubric(output.value, message);
+        this.addTargetedPointsRubric(effect, output.value);
     }
 
     addDefensePointsRubric(effect, points, message) {
@@ -2824,14 +2828,17 @@ class TechniqueAssessment {
 
         switch (this.target) {
             case "Targets":
+            case "Targets or Self":
                 pointMod = Math.floor(points * (this.size - 1) * 0.65);
                 this.addPointsRubric(pointMod, `${pointMod}(${this.size} ${this.target})`);
                 break;
             case "Blast":
             case "Blast(2H)":
+            case "Blast(3H)":
             case "Burst":
             case "Burst(2H)":
-                pointMod = Math.floor(points * this.getAreaPointMod(0.65, 1));
+            case "Burst(3H)":
+                pointMod = Math.floor(points * this.getAreaPointMod(0.75, 1));
                 this.addPointsRubric(pointMod, `${pointMod}(${this.target} ${this.size})`);
                 break;
             case "Cone":

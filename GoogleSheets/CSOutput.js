@@ -147,6 +147,9 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
                             contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
+                            
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedAffinity"), WuxDef.GetAttribute("AdvancedAffinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).concat(WuxDef.Filter([new DatabaseFilterData("group", "BranchType")])), true);
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedBranch"), WuxDef.GetAttribute("AdvancedBranch"), WuxDef.Filter([new DatabaseFilterData("group", "BranchType")]), true);
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max), 1);
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusAttributePoints"), WuxDef.GetAttribute("BonusAttributePoints"), 0);
 
@@ -845,7 +848,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
         },
 
         printTest = function (stylesDatabase) {
-            let filters = [new DatabaseFilterData("group", "Standard")];
+            let filters = [new DatabaseFilterData("group", "Advanced")];
             let filteredData = stylesDatabase.filter(filters);
 
             let output = "";
@@ -899,7 +902,8 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                     displayOptions.hasSelect = false;
                     output += buildJobStyle(jobDatabase, techniqueDatabase, displayOptions);
                     displayOptions.hasSelect = true;
-                    output += buildStandardStyleGroup(stylesDatabase, techniqueDatabase, displayOptions);
+                    output += buildAdvancedStyleGroup(stylesDatabase, techniqueDatabase, displayOptions);
+                    output += buildSpecialStyleGroup(stylesDatabase, techniqueDatabase, displayOptions);
                     displayOptions.hasSelect = false;
                     output += buildBasicStyleGroup(stylesDatabase, techniqueDatabase, displayOptions);
                     return output;
@@ -948,7 +952,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)))}`;
                 },
 
-                buildStandardStyleGroup = function (stylesDatabase, techniqueDatabase, displayOptions) {
+                buildAdvancedStyleGroup = function (stylesDatabase, techniqueDatabase, displayOptions) {
                     let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "StyleGroup")]);
 
                     let output = "";
@@ -958,8 +962,8 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                     output = WuxSheetMain.TabBlock(output);
                     
                     let definition = WuxDef.Get("StyleType");
-                    return `${WuxSheetMain.CustomInput("hidden", definition.getAttribute("Standard", WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
-					${WuxSheetMain.CollapsibleTab(definition.getAttribute("Standard", WuxDef._expand), `${"Standard"} ${definition.title}`, output)}`;
+                    return `${WuxSheetMain.CustomInput("hidden", definition.getAttribute("Advanced", WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
+					${WuxSheetMain.CollapsibleTab(definition.getAttribute("Advanced", WuxDef._expand), `${"Advanced"} ${definition.title}`, output)}`;
                 },
                 
                 buildStyleGroup = function (stylesDatabase, techniqueDatabase, definition, displayOptions) 
@@ -972,7 +976,23 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                         techStyles.push(buildTechStyleSection(filteredData[i], techniqueDatabase, displayOptions));
                     }
                     return WuxDefinition.InfoHeader(definition) + WuxSheetMain.Table.FlexTable(techStyles);
-                }, 
+                },
+
+                buildSpecialStyleGroup = function (stylesDatabase, techniqueDatabase, displayOptions) {
+                    let filters = [new DatabaseFilterData("group", "Branched")];
+                    let filteredData = stylesDatabase.filter(filters);
+
+                    let techStyles = [];
+                    for (let i = 0; i < filteredData.length; i++) {
+                        techStyles.push(buildTechStyleSection(filteredData[i], techniqueDatabase, displayOptions));
+                    }
+                    let output = WuxSheetMain.Table.FlexTable(techStyles);
+                    output = WuxSheetMain.TabBlock(output);
+                    let definition = WuxDef.Get("StyleType");
+
+                    return `${WuxSheetMain.CustomInput("hidden", definition.getAttribute("Branched", WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
+					${WuxSheetMain.CollapsibleTab(definition.getAttribute("Branched", WuxDef._expand), `${"Branched"} ${definition.title}`, output)}`;
+                },
 
                 buildBasicStyleGroup = function (stylesDatabase, techniqueDatabase, displayOptions) {
                     let filters = [new DatabaseFilterData("group", "Basic")];
@@ -1486,6 +1506,8 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
                             contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedAffinity"), WuxDef.GetAttribute("AdvancedAffinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).concat(WuxDef.Filter([new DatabaseFilterData("group", "BranchType")])), true);
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedBranch"), WuxDef.GetAttribute("AdvancedBranch"), WuxDef.Filter([new DatabaseFilterData("group", "BranchType")]), true);
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max), 1);
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusAttributePoints"), WuxDef.GetAttribute("BonusAttributePoints"), 0);
                             return WuxSheetMain.Table.FlexTableGroup(contents);

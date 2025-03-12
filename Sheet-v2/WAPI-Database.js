@@ -1742,6 +1742,11 @@ class TechniqueEffectDisplayData {
             else if (defense == "Def_Evasion") {
                 definition = WuxDef.Get("Title_TechEvasion");
                 this.check = definition.title;
+                this.checkDescription = techniqueEffect.effect;
+            }
+            else if (defense == "TechNewTargets") {
+                definition = WuxDef.Get("Title_TechNewTargets");
+                this.check = definition.title;
                 this.checkDescription = definition.getDescription();
             }
             else {
@@ -1967,7 +1972,7 @@ class TechniqueEffectDisplayData {
     }
 
     formatAdvantageEffect(effect) {
-        let target = "Target";
+        let target = "The Target";
         let plural = "s";
         let owner = "their";
         if (effect.target == "Self") {
@@ -1976,7 +1981,13 @@ class TechniqueEffectDisplayData {
             owner = "your";
         }
         let formatCalc = this.formatCalcBonus(effect);
-        return `${target} gain${plural} +${formatCalc} ${formatCalc > 0 ? "Advantage" : "Disadvantage"} on ${owner} next ${effect.effect}`;
+
+        switch (effect.subType) {
+            case "Opponent":
+                return `The next ${effect.effect} made against ${target} gains +${Math.abs(formatCalc)} ${formatCalc > 0 ? "Advantage" : "Disadvantage"}`;
+            default:
+                return `${target} gain${plural} +${Math.abs(formatCalc)} ${formatCalc > 0 ? "Advantage" : "Disadvantage"} on ${owner} next ${effect.effect}`;
+        }
     }
 
     formatBoostEffect(effect) {
