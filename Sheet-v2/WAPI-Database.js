@@ -166,6 +166,20 @@ class Database extends Dictionary {
     }
 
     getSortedGroup(property, propertyValue) {
+        if (!this.sortingGroups.hasOwnProperty(property)) {
+            let keys = "";
+            for (let key in this.sortingGroups) {
+                keys += `${key}, `;
+            }
+            Debug.Log (`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
+        }
+        if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
+            let keys = "";
+            for (let key in this.sortingGroups[property]) {
+                keys += `${key}, `;
+            }
+            Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
+        }
         return this.sortingGroups[property][propertyValue];
     }
 
@@ -197,7 +211,7 @@ class Database extends Dictionary {
 class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
-        let filters = ["style", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
+        let filters = ["techSet", "style", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
         let dataCreation = function (data) {
             return new TechniqueData(data);
         };
@@ -928,6 +942,7 @@ class JobData extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.description = "";
+        this.shortDescription = "";
         this.defenses = "";
         this.techniques = [];
     }
@@ -938,6 +953,7 @@ class JobData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.description = json.description;
+        this.shortDescription = json.shortDescription;
         this.defenses = json.defenses;
         this.techniques = json.techniques;
     }
@@ -951,6 +967,8 @@ class JobData extends WuxDatabaseData {
         this.group = "" + dataArray[i];
         i++;
         this.description = "" + dataArray[i];
+        i++;
+        this.shortDescription = "" + dataArray[i];
         i++;
         this.defenses = "" + dataArray[i];
         i++;
@@ -1742,7 +1760,17 @@ class TechniqueEffectDisplayData {
             else if (defense == "Def_Evasion") {
                 definition = WuxDef.Get("Title_TechEvasion");
                 this.check = definition.title;
-                this.checkDescription = techniqueEffect.effect;
+                this.checkDescription = definition.effect;
+            }
+            else if (defense == "TechOnEnter") {
+                definition = WuxDef.Get("Title_TechOnEnter");
+                this.check = definition.title;
+                this.checkDescription = definition.getDescription();
+            }
+            else if (defense == "TechOnEndFocus") {
+                definition = WuxDef.Get("Title_TechOnEndFocus");
+                this.check = definition.title;
+                this.checkDescription = definition.getDescription();
             }
             else if (defense == "TechNewTargets") {
                 definition = WuxDef.Get("Title_TechNewTargets");
@@ -1814,7 +1842,7 @@ class TechniqueEffectDisplayData {
                 output += this.formatBoostEffect(effect);
                 break;
             case "Terrain":
-                output += this.formaTerrainEffect(effect);
+                output += this.formatTerrainEffect(effect);
                 break;
             case "Structure":
                 output += this.formatStructureEffect(effect);
@@ -1999,12 +2027,12 @@ class TechniqueEffectDisplayData {
         }
     }
 
-    formaTerrainEffect(effect) {
+    formatTerrainEffect(effect) {
         switch (effect.subType) {
             case "Add":
-                return `The area is considered [${effect.effect.getTitle()}].`;
+                return `The area is considered [${effect.effect}].`;
             case "Remove":
-                return `Any effects in the area considered [${effect.effect.getTitle()}] are removed.`;
+                return `Any effects in the area considered [${effect.effect}] are removed.`;
         }
     }
 

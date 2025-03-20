@@ -633,7 +633,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = `${buildJobHeader(jobDef, job)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
 							${WuxSheetMain.InteractionElement.ExpandableBlockContents(jobDef.getAttribute(WuxDef._expand),
-                                WuxSheetMain.SectionBlockContents(buildJobContents(job, jobDef, techDictionary)))}`;
+                                WuxSheetMain.SectionBlockContents(buildJobContents(job, jobDef, techDictionary)))}
+                            ${buildJobShortDescription(job)}`;
 
                             return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
                         },
@@ -644,6 +645,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 WuxDef.Filter([new DatabaseFilterData("group", "JobTier")]), false, "wuxWidth70 wuxMarginRight10")}
 								${job.name}`
                             );
+                        },
+                        
+                        buildJobShortDescription = function (job) {
+                            return WuxSheetMain.Desc(job.shortDescription);
                         },
 
                         buildJobContents = function (job, jobDef, techDictionary) {

@@ -1976,6 +1976,20 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         },
 
         getSortedGroup = function (property, propertyValue) {
+            if (!sortingGroups.hasOwnProperty(property)) {
+                let keys = "";
+                for (let key in sortingGroups) {
+                    keys += `${key}, `;
+                }
+                Debug.Log (`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
+            }
+            if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
+                let keys = "";
+                for (let key in sortingGroups[property]) {
+                    keys += `${key}, `;
+                }
+                Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
+            }
             return sortingGroups[property][propertyValue];
         },
 
