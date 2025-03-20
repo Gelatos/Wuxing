@@ -2534,6 +2534,7 @@ class TechniqueAssessment {
                     this.will += output.value;
                     this.lowWill += output.lowValue;
                     this.highWill += output.highValue;
+                    output.value = Math.floor(output.value * 0.8);
                 }
                 message = `${output.value}(Will)`;
                 break;
@@ -2849,10 +2850,13 @@ class TechniqueAssessment {
             case "Blast":
             case "Blast(2H)":
             case "Blast(3H)":
+                pointMod = Math.floor(points * this.getAreaPointMod(0.75, 1));
+                this.addPointsRubric(pointMod, `${pointMod}(${this.target} ${this.size})`);
+                break;
             case "Burst":
             case "Burst(2H)":
             case "Burst(3H)":
-                pointMod = Math.floor(points * this.getAreaPointMod(0.75, 1));
+                pointMod = Math.floor(points * this.getAreaPointMod(0.6, 1));
                 this.addPointsRubric(pointMod, `${pointMod}(${this.target} ${this.size})`);
                 break;
             case "Cone":

@@ -1,33 +1,61 @@
 // noinspection JSUnusedGlobalSymbols,HtmlUnknownAttribute,ES6ConvertVarToLetConst,JSUnresolvedReference,SpellCheckingInspection
 
-function CreateCharacterSheet(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
+function CreateCharacterSheetBase(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
     let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
         stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray
     );
-    return PrintLargeEntry(BuildCharacterSheet.Print(sheetsDb));
+    return PrintLargeEntry(BuildCharacterSheet.PrintBase(sheetsDb));
+}
+function CreateCharacterSheetTech(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
+    let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
+        stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray
+    );
+    return PrintLargeEntry(BuildCharacterSheet.PrintTech(sheetsDb));
+}
+function CreateCharacterSheetWorkers(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
+    let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
+        stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray
+    );
+    return PrintLargeEntry(BuildCharacterSheet.PrintWorkers(sheetsDb));
 }
 
 var BuildCharacterSheet = BuildCharacterSheet || (function () {
     'use strict';
 
     var
-        print = function (sheetsDb) {
+        printBase = function (sheetsDb) {
             let output = "";
-            output += buildCharacterSheetHtml(sheetsDb);
+            output += buildCharacterSheetBaseHtml(sheetsDb);
+            return output;
+        },
+
+        printTech = function (sheetsDb) {
+            let output = "";
+            output += buildCharacterSheetTechHtml(sheetsDb);
+            return output;
+        },
+
+        printWorkers = function (sheetsDb) {
+            let output = "";
             output += buildHiddenFields();
             output += buildSheetWorkerContainer(sheetsDb);
             return output;
         },
 
-        buildCharacterSheetHtml = function (sheetsDb) {
+        buildCharacterSheetBaseHtml = function (sheetsDb) {
             let output = "";
             output += DisplayOriginSheet.Print(sheetsDb);
             output += DisplayTrainingSheet.Print(sheetsDb);
             output += DisplayAdvancementSheet.Print(sheetsDb);
-            output += DisplayTechniquesSheet.Print(sheetsDb);
             output += DisplayCoreCharacterSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
-            return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n</div>`;
+            return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}`;
+        },
+
+        buildCharacterSheetTechHtml = function (sheetsDb) {
+            let output = "";
+            output += DisplayTechniquesSheet.Print(sheetsDb);
+            return `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n</div>`;
         },
 
         buildHiddenFields = function () {
@@ -62,7 +90,9 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
         }
     ;
     return {
-        Print: print
+        PrintBase: printBase,
+        PrintTech: printTech,
+        PrintWorkers: printWorkers
     };
 }());
 

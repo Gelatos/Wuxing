@@ -1129,7 +1129,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
             tier = isNaN(tier) ? 0 : tier;
             let affinity = styleDefinition.affinity.trim();
             let isLearnable = tier <= cr && (affinity == "" || affinities.some(entry => entry.includes(affinity)));
-            Debug.Log(`affinity: ${affinity} affinities: ${affinities} Learnable: ${isLearnable}`);
+            Debug.Log(`Setting learnable tech for style ${styleDefinition.name}\naffinity: ${affinity} affinities: ${affinities} Learnable: ${isLearnable}`);
             attrHandler.addUpdate(styleDefinition.getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
             attrHandler.addUpdate(styleDefinition.getVariable(), styleStatus);
 

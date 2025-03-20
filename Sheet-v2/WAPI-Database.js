@@ -280,7 +280,7 @@ class ExtendedDescriptionDatabase extends Database {
         if (value.subGroup != undefined && value.subGroup.includes(";")) {
             let subGroups = value.subGroup.split(";");
             for (let i = 0; i < subGroups.length; i++) {
-                this.addSortingGroup("subGroup", subGroups[i], value);
+                this.addSortingGroup("subGroup", subGroups[i].trim(), value);
             }
 
         }

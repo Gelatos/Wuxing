@@ -1,5 +1,360 @@
-<!-- WORKERS -->
+<div class="wuxHiddenFields">
+    <input type="hidden" class="wuxInput" name="attr_tch_page_learn" /><input type="hidden" class="wuxInput" name="attr_cmbdtls" /><input type="hidden" class="wuxInput" name="attr_sts" /><input type="hidden" class="wuxInput" name="attr_soc-favor" /><input type="hidden" class="wuxInput" name="attr_soc-influence" /><input type="hidden" class="wuxInput" name="attr_soc-influencetype" /><input type="hidden" class="wuxInput" name="attr_soc-severity" /><input type="hidden" class="wuxInput" name="attr_soc-requestcheck" /><input type="hidden" class="wuxInput" name="attr_soc-support_influence" /><input type="hidden" class="wuxInput" name="attr_soc-oppose_influence" /><input type="hidden" class="wuxInput" name="attr_soc-patience" />
+</div>
 <script type="text/worker">
     on("sheet:opened", function(eventinfo) {
-        on_sheet_opened();
+    on_sheet_opened();
     });
+    on("change:pag", function (eventinfo) {
+    WuxWorkerGeneral.UpdatePageState(eventinfo)
+    });
+    on("change:pgs-character_creator_finish", function (eventinfo) {
+    WuxWorkerCharacterCreation.FinishBuild();
+    
+    });
+    on("change:affinity", function (eventinfo) {
+    WuxWorkerCharacterCreation.SetAffinityValue();
+    
+    });
+    on("change:bonusattrpt", function (eventinfo) {
+    WuxWorkerCharacterCreation.SetBonusAttributes();
+    
+    });
+    on("change:tch-hide change:tch-mount change:tch-move change:tch-jump change:tch-prepare change:tch-interact change:tch-detect_ether change:tch-detect_creature change:tch-shove change:tch-stride change:tch-style_change change:tch-overdrive change:tch-pass_turn change:tch-aid change:tch-stabilize change:tch-calm_mind change:tch-break_free change:tch-escape change:tch-move_silently change:tch-grab_an_edge change:tch-unarmed_strike change:tch-basic_strike change:tch-throw change:tch-heavy_strike change:tch-reassure change:tch-build_favor change:tch-agitate change:tch-emphasize change:tch-request change:tch-sense_motive change:tch-vanguard_jobs change:tch-vanguard change:tch-vanguard's_blockade change:tch-vanguard's_aegis change:tch-fighter change:tch-fighter_discipline change:tch-wild_swing change:tch-second_wind change:tch-shrug_it_off change:tch-fighter's_blockade change:tch-undaunted change:tch-fast_healing change:tch-second_wind_ii change:tch-sentinel change:tch-sentinel_discipline change:tch-savior change:tch-defender change:tch-sentinel's_blockade change:tch-distant_savior change:tch-sentinel's_aegis change:tch-physicalward change:tch-intercepting_dash change:tch-increased_savior change:tch-bulwark change:tch-bulwark_discipline change:tch-lasting_creations change:tch-focus_material change:tch-permanent_creations change:tch-solidify change:tch-mold_cover change:tch-bulwark's_blockade change:tch-bulwark's_aegis change:tch-remake_conjury change:tch-maintenance change:tch-warden change:tch-warden_discipline change:tch-ethereal_mantle change:tch-ally_mantle change:tch-reprisal_ward change:tch-mantle_shielding change:tch-warden's_blockade change:tch-warden's_aegis change:tch-great_mantle change:tch-healing_ward change:tch-operator_jobs change:tch-operator change:tch-operator's_aim change:tch-hunter change:tch-hunter_discipline change:tch-assign_quarry change:tch-hunter's_mark change:tch-seek_prey change:tch-pinpoint change:tch-follow-up_shot change:tch-hunter's_aim change:tch-bloodseeker change:tch-wildmark change:tch-sniper change:tch-sniper_discipline change:tch-veilbreak_sight change:tch-longshot change:tch-high_ground_range change:tch-sniper's_aim change:tch-distant_energy change:tch-deadeye change:tch-trooper change:tch-trooper_discipline change:tch-assign_overwatch change:tch-quickdraw_instinct change:tch-fulldraw_instinct change:tch-warning_shot change:tch-trooper's_aim change:tch-assign_l._overwatch change:tch-en_warning_shot change:tch-blackwatch change:tch-warmage change:tch-warmage_discipline change:tch-sculpt_spell change:tch-enlarge_spell change:tch-pushing_blast change:tch-warmage's_aim change:tch-arcane_impact change:tch-arcane_burstspike change:tch-athlete_jobs change:tch-athlete change:tch-athlete's_dash change:tch-rogue change:tch-rogue_discipline change:tch-sneak_attack change:tch-disengage change:tch-cover change:tch-rogue's_dash change:tch-slip_past change:tch-assassinate change:tch-sneak_attack_ii change:tch-brawler change:tch-brawler_discipline change:tch-bullet_punch change:tch-follow-up_strike change:tch-dodge change:tch-brawler's_dash change:tch-follow-up_step change:tch-reactive_reposition change:tch-kineticist change:tch-kineticist_discipline change:tch-kinetic_motion change:tch-rapid_redraw change:tch-anti-air_shot change:tch-kinetic_step change:tch-kineticist's_dash change:tch-kinetic_rush change:tch-retaliatory_burst change:tch-ki_volley change:tch-labourer change:tch-labourer_discipline change:tch-long_haul change:tch-pick_up_labour change:tch-efficient_labour change:tch-lasting_focus change:tch-reserved_focus change:tch-labourer's_dash change:tch-reserved_energy change:tch-unfailing_endurance change:tch-waymaker_jobs change:tch-waymaker change:tch-waymaker's_focus change:tch-bard change:tch-bard_discipline change:tch-rally change:tch-rebound_will change:tch-group_rally change:tch-bard's_focus change:tch-energized_rally change:tch-bardic_boon change:tch-spellwright change:tch-spellwright_discipline change:tch-focus_resonant change:tch-quicken_craft change:tch-shaped_conversion change:tch-unshape change:tch-spellwright's_focus change:tch-memorize_shape change:tch-maintain_transmute change:tch-quickcraft_ii change:tch-medic change:tch-medic_discipline change:tch-first_aid change:tch-emergency_care change:tch-rapid_treatment change:tch-medic's_focus change:tch-medic's_expertise change:tch-benediction change:tch-rhapsody change:tch-strategist_jobs change:tch-strategist change:tch-strategist's_advice change:tch-scholar change:tch-scholar_discipline change:tch-factual_reasoning change:tch-point_of_clarity change:tch-swift_rebuttal change:tch-scholar's_advice change:tch-energized_teacher change:tch-as_you_may_recall change:tch-eclectic_knowledge change:tch-tactician change:tch-tactician_discipline change:tch-planned_movement change:tch-ready_for_action change:tch-saw_that_coming change:tch-emergency_positions change:tch-commanding_action change:tch-tactician's_advice change:tch-energized_dash change:tch-tactical_action change:tch-detective change:tch-detective_discipline change:tch-analytical_mind change:tch-lie_detector change:tch-gut_instinct change:tch-behavioral_insight change:tch-detective's_advice change:tch-influence_trail change:tch-discern_intent change:tch-magus change:tch-magus_discipline change:tch-focus_envocation change:tch-shape_envocation change:tch-binding_spell change:tch-magus'_advice change:tch-hindering_ether change:tch-enlarge_envocation change:tch-advocate_jobs change:tch-advocate change:tch-advocate's_charm change:tch-empath change:tch-empath_discipline change:tch-calming_presence change:tch-redirect_tension change:tch-build_understanding change:tch-empath's_charm change:tch-defuse_tension change:tch-booned_counseling change:tch-merchant change:tch-merchant_discipline change:tch-promote change:tch-rescind_request change:tch-side_hustle change:tch-merchant's_charm change:tch-energized_praise change:tch-final_sale change:tch-orator change:tch-orator_discipline change:tch-silver_tongue change:tch-evil_eye change:tch-coaxing_request change:tch-orator's_charm change:tch-mesmerize change:tch-suggestion change:tch-etherealist change:tch-etherealist_discipline change:tch-spirit_beacon change:tch-pulse_reading change:tch-spirit_walk change:tch-harmonic_appeal change:tch-etherealist's_charm change:tch-mirror_motives change:tch-expel_soul change:tch-spirit_sense change:tch-weapon_fighting change:tch-overhead_chop change:tch-overhead_chop_ii change:tch-overhead_chop_iii change:tch-slash change:tch-slash_ii change:tch-slash_iii change:tch-cleaving_arte change:tch-sweeping_wide_chop change:tch-spinning_heavy_slash change:tch-sweeping_wide_chop_ii change:tch-spinning_heavy_slash_ii change:tch-battering_arte change:tch-knockback_swing change:tch-battering_swing change:tch-launching_swing change:tch-battering_swing_ii change:tch-launching_swing_ii change:tch-berserker_arte change:tch-berserker_barrage change:tch-reckless_swing change:tch-berserker_barrage_ii change:tch-reckless_swing_ii change:tch-berserker_barrage_iii change:tch-duelist_arte change:tch-advancing_slash change:tch-needle_point change:tch-faltering_blade change:tch-advancing_slash_ii change:tch-needle_point_ii change:tch-swift_faltering_blade change:tch-crestfall_arte change:tch-overhead_slash change:tch-fading_slash change:tch-crestfall_charge change:tch-crestfall_slash change:tch-overhead_slash_ii change:tch-crestfall_slash_ii change:tch-overwhelming_arte change:tch-overhead_swing change:tch-swinging_flurry change:tch-clobber change:tch-swing_fast change:tch-overhead_swing_ii change:tch-overhead_swing_iii change:tch-swinging_flurry_ii change:tch-swinging_flurry_iii change:tch-phalanx_arte change:tch-leaping_thrust change:tch-piercing_thrust change:tch-high_thrust change:tch-leaping_thrust_ii change:tch-piercing_thrust_ii change:tch-reaching_thrust change:tch-heavy_full_thrust change:tch-power_thrust change:tch-sky_pike_arte change:tch-midrange_lunge change:tch-pole_vault change:tch-rising_strike change:tch-aerial_smash change:tch-leaping_pole_vault change:tch-descending_smash change:tch-rising_strike_ii change:tch-descending_smash_ii change:tch-finesse_blade_arte change:tch-quick_cut change:tch-blade_dance change:tch-quick_cut_ii change:tch-blade_dance_ii change:tch-quick_cut_iii change:tch-quick_cut_iv change:tch-whip_arte change:tch-whip_lash change:tch-whip_lash_ii change:tch-tripping_whip change:tch-hindering_whip change:tch-whip_lash_iii change:tch-hindering_whip_ii change:tch-stunning_whip change:tch-head_banger change:tch-martial_arts change:tch-grapple change:tch-jab change:tch-jab_ii change:tch-jab_iii change:tch-sudden_shove change:tch-battering_ram change:tch-smiting_ram change:tch-forceful_fist_arte change:tch-crush_knuckle change:tch-knockback_fist change:tch-knockback_fist_ii change:tch-crush_knuckle_ii change:tch-unavoidable_fist change:tch-knockback_fist_iii change:tch-wrestling_arte change:tch-combat_grab change:tch-holding_grapple change:tch-follow_the_hold change:tch-arm_twist change:tch-suplex change:tch-arm_twist_ii change:tch-strangle change:tch-submission_hold change:tch-flash_fang_arte change:tch-weaving_strike change:tch-reposition change:tch-freeflow_blow change:tch-swap_sting change:tch-slingshot_strike change:tch-freeflow_blow_ii change:tch-slingshot_strike_ii change:tch-ranged_weapons change:tch-bow_arte change:tch-quick_arrow change:tch-spreading_arrow change:tch-quick_arrow_ii change:tch-charged_shot change:tch-arrow_rain change:tch-charged_shot_ii change:tch-spreading_arrow_ii change:tch-charged_shot_iii change:tch-arrow_rain_ii change:tch-midrange_arte change:tch-quick_shot change:tch-quick_shot_ii change:tch-slipfire change:tch-suppressing_fire change:tch-quick_shot_iii change:tch-slipfire_ii change:tch-quick_shot_iv change:tch-suppressing_fire_ii change:tch-longsight_arte change:tch-sniping_shot change:tch-sniping_shot_ii change:tch-distant_lancer change:tch-hindering_snipe change:tch-distant_lancer_ii change:tch-hindering_snipe_ii change:tch-sniping_shot_iii change:tch-scatterpoint_arte change:tch-pointblank_shot change:tch-scattering_fire change:tch-focuspoint_shot change:tch-scattering_fire_ii change:tch-pointblank_shot_ii change:tch-focuspoint_shot_ii change:tch-l._scattering_fire change:tch-pointblank_shot_iii change:tch-scattering_fire_iii change:tch-l._scattering_fire_ii change:tch-arcanification_magic change:tch-create_flames change:tch-create_shock change:tch-create_cold change:tch-heat_field change:tch-chill_field change:tch-flame_whirl change:tch-frost_whirl change:tch-firebolt change:tch-shock change:tch-cold_snap change:tch-firebolt_ii change:tch-shock_ii change:tch-cold_snap_ii change:tch-arcane_conduit change:tch-heat_target change:tch-shock_target change:tch-chill_target change:tch-burnstrike change:tch-extinguish_fire change:tch-shockstrike change:tch-static_remover change:tch-coldstrike change:tch-frost_removal change:tch-firestrike change:tch-joltstrike change:tch-chillstrike change:tch-arcane_spellshot change:tch-flame_arrow change:tch-lightning_shaft change:tch-lightningbolt change:tch-jolt change:tch-frostbite change:tch-firebolt_iii change:tch-flame_piercer change:tch-fulgor change:tch-lightning_bolt_ii change:tch-parabolt change:tch-coldlock change:tch-freezebind change:tch-flame_arrow_ii change:tch-flame_piercer_ii change:tch-fulgor_ii change:tch-gadzap change:tch-cold_snap_iii change:tch-freezebind_ii change:tch-thor change:tch-arcane_blast change:tch-fireball change:tch-spark_ball change:tch-fireball_ii change:tch-spark_ball_ii change:tch-fireblast change:tch-blasting_flames change:tch-spark_ball_iii change:tch-plasma_blast change:tch-fireblast_ii change:tch-blasting_flames_ii change:tch-plasma_blast_ii change:tch-arcane_bomb change:tch-flame_grenade change:tch-burn_burst change:tch-volt_bomb change:tch-lightning_burst change:tch-flame_grenade_ii change:tch-firebomb change:tch-fire_burst change:tch-volt_bomb_ii change:tch-ball_lightning change:tch-jolt_burst change:tch-flame_grenade_iii change:tch-burn_burst_ii change:tch-firebomb_ii change:tch-l._firebomb change:tch-volt_bomb_iii change:tch-lightning_burst_ii change:tch-ball_lightning_ii change:tch-l._firebomb_ii change:tch-fire_burst_ii change:tch-ball_lightning_iii change:tch-jolt_burst_ii change:tch-ragnarok change:tch-arcane_storm change:tch-burning_field change:tch-sleet_storm change:tch-fire_blockade change:tch-ice_storm change:tch-field_of_fire change:tch-wall_of_flames change:tch-sheer_cold change:tch-hail change:tch-great_field_of_fire change:tch-blizzard change:tch-freezer_point change:tch-fimbulwinter change:tch-remote_messaging change:tch-whisper change:tch-distant_whisper change:tch-transmission change:tch-fluctuation_magic change:tch-propelling_force change:tch-wind_bullet change:tch-force_bullet change:tch-gust change:tch-telekinetic_rush change:tch-windsweep change:tch-gale change:tch-telekinetic_rush_ii change:tch-gale_ii change:tch-area_force change:tch-updraft change:tch-lift_space change:tch-area_updraft change:tch-dowdraft change:tch-lift_zone change:tch-heavy_zone change:tch-twister change:tch-tornado change:tch-levitation_ change:tch-object_levitate change:tch-distant_obj_levitate change:tch-kinetic_strike change:tch-kinetic_crush change:tch-kinetic_strike_ii change:tch-kinetic_crush_ii change:tch-object_levitate_ii change:tch-kinetic_crush_iii change:tch-object_levitate_iii change:tch-object_levitate_iv change:tch-surging_dust change:tch-surging_strike change:tch-surging_crush change:tch-water_blast change:tch-dust_launcher change:tch-surging_strike_ii change:tch-surging_crush_ii change:tch-water_blast_ii change:tch-geyser change:tch-dust_launcher_ii change:tch-surging_wave change:tch-geyser_ii change:tch-surging_crush_iii change:tch-surging_wave_ii change:tch-materialization_magic change:tch-form_dust change:tch-dust_area change:tch-structural_magic change:tch-form_path change:tch-form_passage change:tch-form_pillar change:tch-form_rampart change:tch-form_pillar_ii change:tch-form_spires change:tch-form_wall change:tch-form_spires_ii change:tch-form_fortification change:tch-dust_shaping change:tch-move_dust change:tch-dustcraft change:tch-quickcraft change:tch-dust_material change:tch-dustcraft_ii change:tch-dust_material_ii change:tch-dustcraft_iii change:tch-dust_material_iii change:tch-dustcraft_iv change:tch-dust_material_iv change:tch-conjure_blades change:tch-magic_dart change:tch-magic_spear change:tch-spreading_darts change:tch-magic_spear_ii change:tch-spinning_blades change:tch-spreading_darts_ii change:tch-magic_arrows change:tch-spinning_blades_ii change:tch-magic_arrows_ii change:tch-clouded_shroud change:tch-pollen_cloud change:tch-smoke_cloud change:tch-sand_cloud change:tch-fog_cloud change:tch-stinking_pollen_cloud change:tch-petal_cloud change:tch-choking_cloud change:tch-earthen_shroud change:tch-obscuring_mist change:tch-l._petal_cloud change:tch-ashen_cloud change:tch-l._earthen_shroud change:tch-l._obscuring_mist change:tch-burning_ash_cloud change:tch-geomancy change:tch-ridges change:tch-cultivate change:tch-wildwood change:tch-rocky_terrain change:tch-ice_floor change:tch-entangle change:tch-swamp change:tch-tremor change:tch-localized_tremor change:tch-chilling_floor change:tch-marsh change:tch-large_entangle change:tch-seism change:tch-freezing_floor change:tch-earthquake change:tch-lava_field change:tch-athletics_and_physiomancy change:tch-dash change:tch-assign_mark change:tch-kip_up change:tch-free_movement change:tch-unrestrainable change:tch-wind_step change:tch-quick_aid change:tch-healing_hands change:tch-aromatherapy change:tch-heal change:tch-cure change:tch-group_aromatherapy change:tch-calming_perfume change:tch-heal_ii change:tch-purify change:tch-deathward change:tch-cure_ii change:tch-renewal change:tch-close_wounds change:tch-lifeweave change:tch-life_cleanse change:tch-purge change:tch-cleanse change:tch-surging_power change:tch-forceful_flex change:tch-power_flex change:tch-traversal change:tch-heavy_carry change:tch-expeditious change:tch-power_lift change:tch-fast_climb change:tch-fast_swim change:tch-power_lift_ii change:tch-power_carry change:tch-self_haste change:tch-group_power_lift change:tch-haste change:tch-bounding_leap change:tch-leap change:tch-power_jump change:tch-leap_ii change:tch-swift_spring change:tch-power_spring change:tch-power_jump_ii change:tch-swift_pounce change:tch-power_pounce change:tch-group_power_jump change:tch-freeform_flight change:tch-wind_fall change:tch-airglide change:tch-airlift change:tch-liftoff change:tch-hover change:tch-windsprint change:tch-jet change:tch-fly change:tch-walk_on_air change:tch-pyroglide change:tch-freeflight change:tch-balance change:tch-cat_fall change:tch-tumble change:tch-grab_an_edge_ii change:tch-solid_footing change:tch-sensory_control change:tch-mana_scan change:tch-ether_scan change:tch-wide_mana_scan change:tch-blindsense change:tch-tremorsense change:tch-wide_ether_scan change:tch-aquasense change:tch-manasense change:tch-ethersense change:tch-evasive_maneuvers change:tch-marked_sidestep change:tch-reflexive_defense change:tch-uncanny_dodge change:tch-hidden_footing change:tch-camoflauge change:tch-cloaked_movement change:tch-speechcraft change:tch-build_pressure change:tch-appeal change:tch-insist change:tch-proposal change:tch-dismiss change:tch-charm_unrestrained change:tch-flatter change:tch-beguile change:tch-magnetic_charm change:tch-disarming_gaze change:tch-charming_request change:tch-pander change:tch-flatter_ii change:tch-inspiring_presence change:tch-invigorate change:tch-enthusiasm change:tch-meditate change:tch-zeal change:tch-deepen_connection change:tch-bravado change:tch-motivational_speech change:tch-invigorate_ii change:tch-deft_negotiator change:tch-diplomacy change:tch-fast_talk change:tch-quick_request change:tch-segue change:tch-increase_tension change:tch-diplomacy_ii change:tch-final_push change:tch-abrasive_wit change:tch-subvert change:tch-indifference change:tch-spite change:tch-ridicule change:tch-unfazed change:tch-subvert_ii change:tch-redirect_anger change:tch-tyranical_voice change:tch-threaten change:tch-taunt change:tch-domineer change:tch-tyrannize change:tch-command change:tch-threaten_ii change:tch-rage change:tch-calming_empathy change:tch-tranquility change:tch-simple_request change:tch-small_talk change:tch-guidance change:tch-mindfulness change:tch-tranquility_ii change:tch-sympathy change:tch-serenity_of_mind change:tch-clemency change:tch-mean change:tch-fuel_the_fire change:tch-veiled_anger change:tch-oppress change:tch-bellow change:tch-bulldoze change:tch-enforcement change:tch-bluster change:tch-give_no_quarter change:tch-eye_on_the_prize change:tch-intrigue change:tch-consideration change:tch-compromise change:tch-appeal_to_reason change:tch-common_ground change:tch-dig_deep change:tch-debate change:tch-close_it_out change:tch-obtuse change:tch-reconsider change:tch-seeds_of_doubt change:tch-white_lie change:tch-reel'em_in change:tch-specialized_styles change:tch-toxic_material change:tch-trance_pollen change:tch-sleep_spore change:tch-poison_gas change:tch-stunning_spores change:tch-blight change:tch-blight_ii change:tch-manafication change:tch-break_focus change:tch-arcane_release change:tch-ki_charger change:tch-envoke_release change:tch-copy_arcane change:tch-focus_breaker change:tch-ki_battery change:tch-drain_ki change:tch-siphon_ki change:tch-aided_focus change:tch-soul_surge change:tch-mend change:tch-sprint change:tch-vault change:tch-force_lift change:tch-vault_ii change:tch-force_lift_ii change:tch-force_carry change:tch-mend_ii change:tch-accelerate change:tch-self_accelerate change:tch-life_mending change:tch-soul_retrieval change:tch-light_control change:tch-blur change:tch-mirage change:tch-torchlight change:tch-light_veil change:tch-light_illusion change:tch-l._torchlight change:tch-invisibility change:tch-large_illusion change:tch-wall_of_invisibility change:tch-huge_illusion change:tch-shadow_control change:tch-cloud_of_darkness change:tch-clouded_eyes change:tch-darkvision change:tch-shadow_walk change:tch-l._cloud_of_darkness change:tch-grant_darkvision change:tch-group_shadow_walk change:tch-cold_darkness change:tch-blindness change:tch-gravity_force change:tch-restrain change:tch-featherfall change:tch-pressure change:tch-subdue change:tch-weighted_terrain change:tch-prostration change:tch-group_prostration change:tch-gravity_well change:tch-black_spiral change:tch-ether_magic change:tch-shimmer change:tch-ethereal_message change:tch-reflection change:tch-spirit_speaking change:tch-large_reflection change:tch-magnify_reflection change:tch-mirror_images change:tch-mimic_arcane change:tch-greater_reflection change:tch-mimic_f._arcane change:tch-blood_flux change:tch-lacerate change:tch-attenuate change:tch-hold_person change:tch-coagulate change:tch-blood_transfusion change:tch-seize_persons change:tch-cardiac_seizure change:tch-resurrection change:tch-sound_control change:tch-message change:tch-thunderclap change:tch-echo_sounds change:tch-echolocation change:tch-sculpt_sound change:tch-sound_blast change:tch-thunderclap_ii change:tch-sound_blast_ii change:tch-boom_blast change:tch-time_control change:tch-distortion change:tch-lethargy change:tch-temporal_reposition change:tch-blink change:tch-alacrity change:tch-self_alacrity change:tch-quick_stop change:tch-rewinding_step change:tch-group_quick_stop change:tch-time_stop change:tch-flying_assault change:tch-windstomp change:tch-flamestomp change:tch-instant_overhead change:tch-dive_kick change:tch-instant_overhead_ii change:tch-gusting_dive_kick change:tch-flaming_dive_kick", function (eventinfo) {
+    WuxWorkerTechniques.UpdateTechniqueBuildPoints(eventinfo)
+    });
+    on("change:sty-basic_action change:sty-basic_attack change:sty-basic_maneuver change:sty-basic_social change:sty-cleaving_arte change:sty-battering_arte change:sty-berserker_arte change:sty-duelist_arte change:sty-crestfall_arte change:sty-overwhelming_arte change:sty-phalanx_arte change:sty-sky_pike_arte change:sty-finesse_blade_arte change:sty-whip_arte change:sty-forceful_fist_arte change:sty-wrestling_arte change:sty-flash_fang_arte change:sty-bow_arte change:sty-midrange_arte change:sty-longsight_arte change:sty-scatterpoint_arte change:sty-arcane_conduit change:sty-arcane_spellshot change:sty-arcane_blast change:sty-arcane_bomb change:sty-arcane_storm change:sty-remote_messaging change:sty-propelling_force change:sty-area_force change:sty-levitation change:sty-surging_dust change:sty-structural_magic change:sty-dust_shaping change:sty-conjure_blades change:sty-clouded_shroud change:sty-geomancy change:sty-healing_hands change:sty-surging_power change:sty-traversal change:sty-bounding_leap change:sty-freeform_flight change:sty-balance change:sty-sensory_control change:sty-evasive_maneuvers change:sty-hidden_footing change:sty-charm_unrestrained change:sty-inspiring_presence change:sty-deft_negotiator change:sty-abrasive_wit change:sty-tyrannical_voice change:sty-calming_empathy change:sty-toxic_material change:sty-mana_control change:sty-soul_surge change:sty-light_control change:sty-shadow_control change:sty-gravity_force change:sty-ether_magic change:sty-blood_flux change:sty-sound_control change:sty-time_control change:sty-flying_assault", function (eventinfo) {
+    WuxWorkerTechniques.UpdateStyleBuildPoints(eventinfo)
+    });
+    
+    on("change:job-fighter", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Fighter", eventinfo)
+    });
+    
+    on("change:job-sentinel", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Sentinel", eventinfo)
+    });
+    
+    on("change:job-bulwark", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Bulwark", eventinfo)
+    });
+    
+    on("change:job-warden", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Warden", eventinfo)
+    });
+    
+    on("change:job-hunter", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Hunter", eventinfo)
+    });
+    
+    on("change:job-sniper", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Sniper", eventinfo)
+    });
+    
+    on("change:job-trooper", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Trooper", eventinfo)
+    });
+    
+    on("change:job-warmage", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Warmage", eventinfo)
+    });
+    
+    on("change:job-rogue", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Rogue", eventinfo)
+    });
+    
+    on("change:job-brawler", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Brawler", eventinfo)
+    });
+    
+    on("change:job-kineticist", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Kineticist", eventinfo)
+    });
+    
+    on("change:job-labourer", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Labourer", eventinfo)
+    });
+    
+    on("change:job-bard", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Bard", eventinfo)
+    });
+    
+    on("change:job-medic", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Medic", eventinfo)
+    });
+    
+    on("change:job-spellwright", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Spellwright", eventinfo)
+    });
+    
+    on("change:job-scholar", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Scholar", eventinfo)
+    });
+    
+    on("change:job-tactician", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Tactician", eventinfo)
+    });
+    
+    on("change:job-detective", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Detective", eventinfo)
+    });
+    
+    on("change:job-magus", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Magus", eventinfo)
+    });
+    
+    on("change:job-empath", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Empath", eventinfo)
+    });
+    
+    on("change:job-merchant", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Merchant", eventinfo)
+    });
+    
+    on("change:job-orator", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Orator", eventinfo)
+    });
+    
+    on("change:job-etherealist", function (eventinfo) {
+    WuxWorkerTechniques.UpdateJobStyleBuildPoints("Job_Etherealist", eventinfo)
+    });
+    on("change:ttl-training", function (eventinfo) {
+    WuxWorkerTraining.GoToPageSet();
+    
+    });
+    on("change:pgs-training_finish", function (eventinfo) {
+    WuxWorkerTraining.FinishBuild();
+    
+    });
+    on("change:pgs-training_exit", function (eventinfo) {
+    WuxWorkerTraining.ExitBuild();
+    
+    });
+    on("change:ttl-trainingconversion", function (eventinfo) {
+    WuxWorkerTraining.ConvertPp();
+    
+    });
+    on("change:trn_max", function (eventinfo) {
+    WuxWorkerTraining.SetTrainingPoints(eventinfo);
+    
+    });
+    on("change:trn-tp_knowledge change:trn-tp_technique", function (eventinfo) {
+    WuxWorkerTraining.SetTrainingPointsUpdate(eventinfo);
+    
+    });
+    on("change:lng-minere_rank change:lng-junal_rank change:lng-apollen_rank change:lng-lib_rank change:lng-cert_rank change:lng-byric_rank change:lng-dustell_rank change:lng-muralic_rank change:lng-shira_rank change:lng-ciel_rank change:lng-citeq_rank change:lng-manstan_rank change:lng-salkan_rank change:lng-sansic_rank change:lng-silq_rank change:lng-kleikan_rank change:lng-crinere_rank change:lng-palmic_rank change:lng-shorespeak_rank change:lng-verdeni_rank change:lng-vulca_rank change:lng-emotion_rank change:lng-empathy_rank change:lng-wolfwarg_rank change:lng-jovean_rank change:lng-mytikan_rank change:lrc-Academics_rank change:lrc-Profession_rank change:lrc-Craftmanship_rank change:lrc-Geography_rank change:lrc-History_rank change:lrc-Culture_rank change:lrc-Religion_rank change:lor-health_rank change:lor-mana_rank change:lor-mathematics_rank change:lor-nature_rank change:lor-school_rank change:lor-spirit_rank change:lor-warfare_rank change:lor-zoology_rank change:lor-arboriculture_rank change:lor-farming_rank change:lor-fishing_rank change:lor-hunting_rank change:lor-legal_rank change:lor-mercantile_rank change:lor-mining_rank change:lor-alchemy_rank change:lor-architecture_rank change:lor-brewing_rank change:lor-cooking_rank change:lor-engineering_rank change:lor-glassblowing_rank change:lor-leatherworking_rank change:lor-sculpting_rank change:lor-smithing_rank change:lor-weaving_rank change:lor-aridsha_rank change:lor-ceres_rank change:lor-colswei_rank change:lor-khem_rank change:lor-novus_rank change:lor-walthair_rank change:lor-wayling_rank change:lor-ethereal_plane_rank change:lor-aridsha_history_rank change:lor-ceres_history_rank change:lor-colswei_history_rank change:lor-khem_history_rank change:lor-novus_history_rank change:lor-walthair_history_rank change:lor-wayling_history_rank change:lor-art_rank change:lor-etiquette_rank change:lor-fashion_rank change:lor-games_rank change:lor-music_rank change:lor-scribing_rank change:lor-theater_rank change:lor-church_of_kongkwei_rank change:lor-guidance_rank change:lor-life's_circle_rank change:lor-ocean_court_rank change:lor-sylvan_rank change:lor-zushaon_rank", function (eventinfo) {
+    WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)
+    });
+    on("change:ttl-advancement", function (eventinfo) {
+    WuxWorkerAdvancement.GoToPageSet();
+    
+    });
+    on("change:pgs-advancement_finish", function (eventinfo) {
+    WuxWorkerAdvancement.FinishBuild();
+    
+    });
+    on("change:pgs-advancement_exit", function (eventinfo) {
+    WuxWorkerAdvancement.ExitBuild();
+    
+    });
+    on("change:ttl-advancementconversion", function (eventinfo) {
+    WuxWorkerAdvancement.ConvertXp();
+    
+    });
+    on("change:adv-level", function (eventinfo) {
+    WuxWorkerAdvancement.SetLevel(eventinfo);
+    
+    });
+    on("change:adv-ap_job change:adv-ap_skill change:adv-ap_technique", function (eventinfo) {
+    WuxWorkerAdvancement.SetAdvancementPointsUpdate(eventinfo);
+    
+    });
+    on("change:job-fighter_rank change:job-sentinel_rank change:job-bulwark_rank change:job-warden_rank change:job-hunter_rank change:job-sniper_rank change:job-trooper_rank change:job-warmage_rank change:job-rogue_rank change:job-brawler_rank change:job-kineticist_rank change:job-labourer_rank change:job-bard_rank change:job-medic_rank change:job-spellwright_rank change:job-scholar_rank change:job-tactician_rank change:job-detective_rank change:job-magus_rank change:job-empath_rank change:job-merchant_rank change:job-orator_rank change:job-etherealist_rank", function (eventinfo) {
+    WuxWorkerJobs.UpdateBuildPoints(eventinfo)
+    });
+    on("change:skl-agility_rank change:skl-alchemy_rank change:skl-analyze_rank change:skl-build_rank change:skl-channel_rank change:skl-charm_rank change:skl-conjure_rank change:skl-cook_rank change:skl-demoralize_rank change:skl-empathy_rank change:skl-enchant_rank change:skl-finesse_rank change:skl-grappling_rank change:skl-heal_rank change:skl-inspire_rank change:skl-kinesis_rank change:skl-might_rank change:skl-misdirect_rank change:skl-palming_rank change:skl-physique_rank change:skl-pilot_rank change:skl-rationalize_rank change:skl-resonance_rank change:skl-search_rank change:skl-shape_rank change:skl-shoot_rank change:skl-skirmish_rank change:skl-sneak_rank change:skl-throw_rank change:skl-tinker_rank", function (eventinfo) {
+    WuxWorkerSkills.UpdateBuildPoints(eventinfo)
+    });
+    on("change:atr-bod change:atr-prc change:atr-qck change:atr-cnv change:atr-int change:atr-rsn", function (eventinfo) {
+    WuxWorkerAttributes.UpdateBuildPoints(eventinfo)
+    });
+    on("change:display_name", function (eventinfo) {
+    WuxWorkerGeneral.UpdateDisplayName(eventinfo)
+    });
+    
+    on("change:sts-blinded", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Blinded", eventinfo)
+    });
+    
+    on("change:sts-downed", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Downed", eventinfo)
+    });
+    
+    on("change:sts-dying", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Dying", eventinfo)
+    });
+    
+    on("change:sts-engaged", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Engaged", eventinfo)
+    });
+    
+    on("change:sts-ethereal", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Ethereal", eventinfo)
+    });
+    
+    on("change:sts-float", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Float", eventinfo)
+    });
+    
+    on("change:sts-frozen", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Frozen", eventinfo)
+    });
+    
+    on("change:sts-grappled", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Grappled", eventinfo)
+    });
+    
+    on("change:sts-hidden", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Hidden", eventinfo)
+    });
+    
+    on("change:sts-invisible", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Invisible", eventinfo)
+    });
+    
+    on("change:sts-paralyzed", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Paralyzed", eventinfo)
+    });
+    
+    on("change:sts-restrained", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Restrained", eventinfo)
+    });
+    
+    on("change:sts-unconscious", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Unconscious", eventinfo)
+    });
+    
+    on("change:sts-aflame", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Aflame", eventinfo)
+    });
+    
+    on("change:sts-chilled", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Chilled", eventinfo)
+    });
+    
+    on("change:sts-encumbered", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Encumbered", eventinfo)
+    });
+    
+    on("change:sts-empowered", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Empowered", eventinfo)
+    });
+    
+    on("change:sts-hasted", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Hasted", eventinfo)
+    });
+    
+    on("change:sts-hindered", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Hindered", eventinfo)
+    });
+    
+    on("change:sts-immobilized", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Immobilized", eventinfo)
+    });
+    
+    on("change:sts-impaired", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Impaired", eventinfo)
+    });
+    
+    on("change:sts-jolted", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Jolted", eventinfo)
+    });
+    
+    on("change:sts-prone", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Prone", eventinfo)
+    });
+    
+    on("change:sts-shielded", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Shielded", eventinfo)
+    });
+    
+    on("change:sts-sickened", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Sickened", eventinfo)
+    });
+    
+    on("change:sts-stunned", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Stunned", eventinfo)
+    });
+    
+    on("change:sts-angered", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Angered", eventinfo)
+    });
+    
+    on("change:sts-disgusted", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Disgusted", eventinfo)
+    });
+    
+    on("change:sts-doubt", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Doubt", eventinfo)
+    });
+    
+    on("change:sts-encouraged", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Encouraged", eventinfo)
+    });
+    
+    on("change:sts-frightened", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Frightened", eventinfo)
+    });
+    
+    on("change:sts-flustered", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Flustered", eventinfo)
+    });
+    
+    on("change:sts-persevering", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Persevering", eventinfo)
+    });
+    
+    on("change:sts-receptive", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Receptive", eventinfo)
+    });
+    
+    on("change:sts-joyful", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Joyful", eventinfo)
+    });
+    
+    on("change:sts-saddened", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Saddened", eventinfo)
+    });
+    
+    on("change:sts-surprised", function (eventinfo) {
+    WuxWorkerGeneral.UpdateStatus("Stat_Surprised", eventinfo)
+    });
+    on("change:chat-message", function (eventinfo) {
+    WuxWorkerChat.UpdatePostContent(eventinfo)
+    });
+    on("change:chat-type", function (eventinfo) {
+    WuxWorkerChat.UpdatePostType(eventinfo)
+    });
+    on("change:chat-language", function (eventinfo) {
+    WuxWorkerChat.UpdateSelectedLanguage(eventinfo)
+    });
+    on("change:repeating_emotes:chat-outfit_name_learn", function (eventinfo) {
+    WuxWorkerChat.SelectOutfit(eventinfo)
+    });
+    on("change:repeating_emotes:chat-outfit_name", function (eventinfo) {
+    WuxWorkerChat.UpdateNameOutfit(eventinfo)
+    });
+    on("change:repeating_emotes:chat-outfit_emotes", function (eventinfo) {
+    WuxWorkerChat.UpdateOutfitEmotesGroup(eventinfo)
+    });
+    on("change:repeating_emotes:chat-outfit_default_url", function (eventinfo) {
+    WuxWorkerChat.UpdateOutfitEmotesDefaultUrl(eventinfo)
+    });
+    on("change:repeating_emotes:chat-outfit_default_name change:repeating_emotes:chat-emote_name2 change:repeating_emotes:chat-emote_name3 change:repeating_emotes:chat-emote_name4 change:repeating_emotes:chat-emote_name5 change:repeating_emotes:chat-emote_name6 change:repeating_emotes:chat-emote_name7 change:repeating_emotes:chat-emote_name8 change:repeating_emotes:chat-emote_name9 change:repeating_emotes:chat-emote_name10 change:repeating_emotes:chat-emote_name11 change:repeating_emotes:chat-emote_name12 change:repeating_emotes:chat-emote_name13 change:repeating_emotes:chat-emote_name14 change:repeating_emotes:chat-emote_name15 change:repeating_emotes:chat-emote_name16 change:repeating_emotes:chat-emote_name17 change:repeating_emotes:chat-emote_name18 change:repeating_emotes:chat-emote_name19 change:repeating_emotes:chat-emote_name20 change:repeating_emotes:chat-emote_name21 change:repeating_emotes:chat-emote_name22 change:repeating_emotes:chat-emote_name23 change:repeating_emotes:chat-emote_name24 change:repeating_emotes:chat-emote_name25 change:repeating_emotes:chat-emote_name26 change:repeating_emotes:chat-emote_name27 change:repeating_emotes:chat-emote_name28 change:repeating_emotes:chat-emote_name29 change:repeating_emotes:chat-emote_name30", function (eventinfo) {
+    WuxWorkerChat.UpdateOutfitEmotesName(eventinfo)
+    });
+    on("change:repeating_emotes:chat-emote_url2 change:repeating_emotes:chat-emote_url3 change:repeating_emotes:chat-emote_url4 change:repeating_emotes:chat-emote_url5 change:repeating_emotes:chat-emote_url6 change:repeating_emotes:chat-emote_url7 change:repeating_emotes:chat-emote_url8 change:repeating_emotes:chat-emote_url9 change:repeating_emotes:chat-emote_url10 change:repeating_emotes:chat-emote_url11 change:repeating_emotes:chat-emote_url12 change:repeating_emotes:chat-emote_url13 change:repeating_emotes:chat-emote_url14 change:repeating_emotes:chat-emote_url15 change:repeating_emotes:chat-emote_url16 change:repeating_emotes:chat-emote_url17 change:repeating_emotes:chat-emote_url18 change:repeating_emotes:chat-emote_url19 change:repeating_emotes:chat-emote_url20 change:repeating_emotes:chat-emote_url21 change:repeating_emotes:chat-emote_url22 change:repeating_emotes:chat-emote_url23 change:repeating_emotes:chat-emote_url24 change:repeating_emotes:chat-emote_url25 change:repeating_emotes:chat-emote_url26 change:repeating_emotes:chat-emote_url27 change:repeating_emotes:chat-emote_url28 change:repeating_emotes:chat-emote_url29 change:repeating_emotes:chat-emote_url30", function (eventinfo) {
+    WuxWorkerChat.UpdateOutfitEmotesUrl(eventinfo)
+    });
+    
+    
