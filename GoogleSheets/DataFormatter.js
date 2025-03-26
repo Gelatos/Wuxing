@@ -15,7 +15,7 @@ var Debug = Debug || (function () {
     };
 }());
 
-function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefinitionArray, systemDefinitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueArray) {
+function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefinitionArray, systemDefinitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
     let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
 
     definitionDatabase.importSheets(definitionArray, function (arr) {
@@ -82,6 +82,19 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
         let techDef = technique.createDefinition(definitionDatabase.get("Technique"));
         definitionDatabase.add(techDef.name, techDef);
     });
+    definitionDatabase.importSheets(goodsArray, function (arr) {
+        let item = new GoodsData(arr);
+        return item.createDefinition(definitionDatabase.get("Goods"));
+    });
+    definitionDatabase.importSheets(gearArray, function (arr) {
+        let item = new GearData(arr);
+        return item.createDefinition(definitionDatabase.get("Gear"));
+    });
+    definitionDatabase.importSheets(consumablesArray, function (arr) {
+        let item = new ConsumableData(arr);
+        return item.createDefinition(definitionDatabase.get("Consumable"));
+    });
+    
 
     let jsClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.Get);
     jsClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
@@ -140,16 +153,18 @@ var SheetsDatabase = SheetsDatabase || (function () {
     'use strict';
 
     var
-        createDatabaseCollection = function (stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
+        createDatabaseCollection = function (stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
 
-            // let techDb = createTechniques(JSON.parse(techniqueDatabaseString));
             return {
                 techniques: createTechniques(techniqueArray),
                 styles: createStyles(stylesArray),
                 skills: createSkills(skillsArray),
                 language: createLanguages(languageArray),
                 lore: createLores(loreArray),
-                job: createJobs(jobsArray)
+                job: createJobs(jobsArray),
+                goods: createGoods(goodsArray),
+                gear: createGear(gearArray),
+                consumables: createConsumables(consumablesArray)
             }
         },
 
@@ -184,6 +199,24 @@ var SheetsDatabase = SheetsDatabase || (function () {
         createJobs = function (arr) {
             return new Database(arr, ["group"], function (arr) {
                 return new JobData(arr);
+            });
+        },
+
+        createGoods = function (arr) {
+            return new Database(arr, ["group"], function (arr) {
+                return new GoodsData(arr);
+            });
+        },
+
+        createGear = function (arr) {
+            return new Database(arr, ["group"], function (arr) {
+                return new GearData(arr);
+            });
+        },
+
+        createConsumables = function (arr) {
+            return new Database(arr, ["group"], function (arr) {
+                return new ConsumableData(arr);
             });
         },
 
@@ -673,6 +706,10 @@ var WuxDefinition = WuxDefinition || (function () {
                     return new JobDefinitionData(values[key]);
                 case "Status":
                     return new StatusDefinitionData(values[key]);
+                case "Goods":
+                case "Gear":
+                case "Consumable":
+                    return new ItemDefinitionData(values[key]);
                 default:
                     return new DefinitionData(values[key]);
             }
@@ -2023,14 +2060,38 @@ function onOpen() {
 }
 
 function onEdit(e) {
-    TryTechniqueAssessment(e);
+    const sheet = e.range.getSheet();
+    if (TryTechniqueAssessment(sheet, e)) {
+        return;
+    }
+    if (TryGearAssessment(sheet, e)) {
+        return;
+    }
+    TryConsumableAssessment(sheet, e);
 }
 
-function TryTechniqueAssessment(e) {
-    const sheet = e.range.getSheet();
+function TryTechniqueAssessment(sheet, e) {
     if (sheet.getSheetName() == "Techniques") {
         AssessTechniqueAtRow(sheet, e.range.getRow());
+        return true;
     }
+    return false;
+}
+
+function TryGearAssessment(sheet, e) {
+    if (sheet.getSheetName() == "Gear") {
+        AssessGearAtRow(sheet, e.range.getRow());
+        return true;
+    }
+    return false;
+}
+
+function TryConsumableAssessment(sheet, e) {
+    if (sheet.getSheetName() == "Consumables") {
+        AssessConsumableAtRow(sheet, e.range.getRow());
+        return true;
+    }
+    return false;
 }
 
 function AssessAllTechniques() {
@@ -2073,6 +2134,43 @@ function AssessTechniqueAtRow(sheet, rowIndex) {
         assessingCell.setValue("");
         return rowIndex + 1;
     }
+}
+
+function AssessGearAtRow(sheet, rowIndex) {
+    if (rowIndex == 1) {
+        return;
+    }
+    let assessColumn = getNamedColumn(sheet, "Assessment");
+    let valueColumn = getNamedColumn(sheet, "Value");
+
+    let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
+    assessingCell.setValue("Calculating...")
+
+    let valueCell = sheet.getRange(rowIndex, valueColumn, 1, 1);
+    valueCell.setValue("Calc.")
+
+    let itemData = GetGearForAssessment(sheet, rowIndex, assessColumn);
+    if (itemData != undefined) {
+        if (itemData.item.hasTechnique) {
+            let techniqueAssessment = new TechniqueAssessment(itemData.item.technique, sheet, itemData.row, assessColumn);
+            techniqueAssessment.printCellValues();
+        }
+        let valueAssessment = new GearValueAssessment(itemData.item, sheet, itemData.row, valueColumn);
+        valueAssessment.printCellValues();
+        if (rowIndex != itemData.row) {
+            assessingCell.setValue("");
+            valueCell.setValue("");
+        }
+        return itemData.finalRow;
+    } else {
+        assessingCell.setValue("");
+        valueCell.setValue("");
+        return rowIndex + 1;
+    }
+}
+
+function AssessConsumableAtRow(sheet, rowIndex) {
+    AssessGearAtRow(sheet, rowIndex);
 }
 
 function AssessAllTechniquesByStartRow(sheet, startRow) {
@@ -2153,7 +2251,81 @@ function GetTechniqueForAssessment(sheet, row, assessColumn) {
 
 function GetTechniqueFromSheetRow(sheet, row, assessColumn) {
     let techLine = sheet.getRange(row, 1, 1, assessColumn - 1).getValues()[0];
-    return new TechniqueData(techLine);
+    if (sheet.getSheetName() == "Techniques") {
+        return new TechniqueData(techLine);
+    }
+    else if (sheet.getSheetName() == "Items") {
+        let itemData = new ItemData(techLine);
+        return itemData.technique;
+    }
+}
+
+function GetGearForAssessment(sheet, row, assessColumn) {
+    let baseItem;
+    let baseRow = row;
+    let finalRow = row;
+    let maxIterations = 15;
+    let startItem;
+    let newItem;
+    startItem = GetGearFromSheetRow(sheet, row, assessColumn);
+    if (startItem.name == "") {
+        Debug.Log(`There is no item at row ${baseRow}`);
+        return undefined; // no working on blank cells
+    }
+    if (startItem.technique.action == "") {
+        let startName = startItem.name;
+        // this is a support entry. We must find the base technique
+        let techniqueData = [];
+        techniqueData.push(startItem.technique);
+        while (maxIterations > 0) {
+            maxIterations--;
+            baseRow--;
+            newItem = GetGearFromSheetRow(sheet, baseRow, assessColumn);
+            if (newItem.name != startName) {
+                Debug.Log(`Item at row ${baseRow} has no technique. Returning it.`);
+                return {item: startItem, row: row, finalRow: row};
+            }
+
+            if (newItem.action != "") {
+                Debug.Log(`Found the item's base technique at row ${baseRow}`);
+                baseItem = newItem;
+                break;
+            } else {
+                techniqueData.push(newItem.technique);
+            }
+        }
+        if (baseItem == undefined) {
+            Debug.Log(`Item at row ${baseRow} has no technique. Returning it.`);
+            return {item: startItem, row: row, finalRow: row};
+        }
+
+        Debug.Log(`Adding technique data down to row ${finalRow}`);
+        while (techniqueData.length > 0) {
+            baseItem.technique.importEffectsFromTechnique(techniqueData.pop());
+        }
+    } else {
+        Debug.Log(`Found the item's base technique at row ${baseRow}`);
+        baseItem = startItem;
+    }
+
+    while (maxIterations > 0) {
+        maxIterations--;
+        finalRow++;
+        newItem = GetGearFromSheetRow(sheet, finalRow, assessColumn);
+        if (newItem.name == baseItem.name) {
+            Debug.Log(`Adding technique data at row ${finalRow}`);
+            baseItem.technique.importEffectsFromTechnique(newItem.technique);
+        } else {
+            break;
+        }
+    }
+
+    return {item: baseItem, row: baseRow, finalRow: finalRow};
+}
+
+function GetGearFromSheetRow(sheet, row, assessColumn) {
+    let techLine = sheet.getRange(row, 1, 1, assessColumn - 1).getValues()[0];
+    return new GearData(techLine);
 }
 
 function getNamedColumn(sheet, name) {
@@ -2905,7 +3077,58 @@ class TechniqueAssessment {
     }
 }
 
+class GearValueAssessment {
+    constructor(item, sheet, row, valueColumn) {
+        this.item = item;
+        this.sheet = sheet;
+        this.row = row;
+        this.valueColumn = valueColumn;
+        this.baseMaterialValue = 15;
 
+        this.materialCost = 0;
+        this.componentCost = 0;
+        this.materialCostCalc = "";
+        this.componentCostCalc = "";
+        this.getBaseMaterialValue();
+        this.getComponentValues();
+        this.assessment = this.materialCost + this.componentCost;
+    }
+
+    printCellValues() {
+        let range = this.sheet.getRange(this.row, this.valueColumn, 1, 1);
+        range.setNote(this.printNotes());
+        range.setValue(this.assessment);
+    }
+
+    printNotes() {
+        return `${this.materialCostCalc}\n${this.componentCostCalc}`;
+    }
+    
+    getBaseMaterialValue() {
+        this.materialCost = this.item.bulk * this.item.valMod * this.baseMaterialValue;
+        this.materialCostCalc = `${this.item.bulk}[bulk] * ${this.item.valMod}[mod] * ${this.baseMaterialValue}[matVal] = ${this.materialCost}`;
+    }
+    
+    getComponentValues() {
+        if (this.item.components.trim() == "") {
+            return;
+        }
+        let components = this.item.components.split(";");
+        this.componentCost = 0;
+        
+        components.forEach(componentData => {
+            componentData = componentData.trim();
+            let firstSpace = componentData.indexOf(" ");
+            let count = parseInt(componentData.substring(0, firstSpace).trim());
+            let componentName = componentData.substring(firstSpace).trim();
+            let componentDef = WuxDef.Get(componentName);
+            
+            let val = count * componentDef.value;
+            this.componentCostCalc += `\n${count}[${componentDef.title}] * ${componentDef.value}[${componentDef.name}] = ${val}`;
+            this.componentCost += val;
+        });
+    }
+}
 
 
 

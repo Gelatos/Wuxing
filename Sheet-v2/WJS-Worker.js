@@ -571,14 +571,17 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
             attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
             WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
         },
-        setAffinityValue = function () {
-            console.log("Setting Affinity");
+        setAffinityValue = function (eventinfo) {
+            Debug.Log(`Setting ${eventinfo.sourceAttribute}`);
             let attributeHandler = new WorkerAttributeHandler();
-            let affinityVariable = WuxDef.GetVariable("Affinity");
+            let affinityVariable = eventinfo.sourceAttribute;
 
             attributeHandler.addMod(affinityVariable);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                attrHandler.addUpdate(WuxDef.GetVariable("Affinity", WuxDef._learn), WuxDef.GetDescription(attrHandler.parseString(affinityVariable)));
+                let variable = `${affinityVariable}${WuxDef._learn}`;
+                let desc = WuxDef.GetDescription(`${WuxDef.GetAbbreviation()}${eventinfo.newValue}`);
+                Debug.Log(`Setting ${variable} to ${desc}`);
+                attrHandler.addUpdate(variable, desc);
             });
             WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
             attributeHandler.run();

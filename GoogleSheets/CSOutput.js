@@ -1,45 +1,41 @@
 // noinspection JSUnusedGlobalSymbols,HtmlUnknownAttribute,ES6ConvertVarToLetConst,JSUnresolvedReference,SpellCheckingInspection
 
-function CreateCharacterSheetBase(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
+function CreateCharacterSheetTech(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
     let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
-        stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray
-    );
-    return PrintLargeEntry(BuildCharacterSheet.PrintBase(sheetsDb));
-}
-function CreateCharacterSheetTech(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
-    let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
-        stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray
+        stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray, goodsArray, gearArray, consumablesArray
     );
     return PrintLargeEntry(BuildCharacterSheet.PrintTech(sheetsDb));
 }
-function CreateCharacterSheetWorkers(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray) {
+
+function CreateCharacterSheetBase(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
     let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
-        stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray
+        stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray, goodsArray, gearArray, consumablesArray
     );
-    return PrintLargeEntry(BuildCharacterSheet.PrintWorkers(sheetsDb));
+    return PrintLargeEntry(BuildCharacterSheet.PrintBase(sheetsDb));
 }
 
 var BuildCharacterSheet = BuildCharacterSheet || (function () {
     'use strict';
 
     var
-        printBase = function (sheetsDb) {
-            let output = "";
-            output += buildCharacterSheetBaseHtml(sheetsDb);
-            return output;
-        },
-
         printTech = function (sheetsDb) {
             let output = "";
             output += buildCharacterSheetTechHtml(sheetsDb);
             return output;
         },
-
-        printWorkers = function (sheetsDb) {
+        
+        printBase = function (sheetsDb) {
             let output = "";
+            output += buildCharacterSheetBaseHtml(sheetsDb);
             output += buildHiddenFields();
             output += buildSheetWorkerContainer(sheetsDb);
             return output;
+        },
+
+        buildCharacterSheetTechHtml = function (sheetsDb) {
+            let output = "";
+            output += DisplayTechniquesSheet.Print(sheetsDb);
+            return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}`;
         },
 
         buildCharacterSheetBaseHtml = function (sheetsDb) {
@@ -49,13 +45,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayAdvancementSheet.Print(sheetsDb);
             output += DisplayCoreCharacterSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
-            return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}`;
-        },
-
-        buildCharacterSheetTechHtml = function (sheetsDb) {
-            let output = "";
-            output += DisplayTechniquesSheet.Print(sheetsDb);
-            return `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n</div>`;
+            return `\n${output}\n</div>`;
         },
 
         buildHiddenFields = function () {
@@ -91,8 +81,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
     ;
     return {
         PrintBase: printBase,
-        PrintTech: printTech,
-        PrintWorkers: printWorkers
+        PrintTech: printTech
     };
 }());
 
@@ -177,9 +166,11 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
                             contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
-                            
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedAffinity"), WuxDef.GetAttribute("AdvancedAffinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).concat(WuxDef.Filter([new DatabaseFilterData("group", "BranchType")])), true);
+                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn));
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedBranch"), WuxDef.GetAttribute("AdvancedBranch"), WuxDef.Filter([new DatabaseFilterData("group", "BranchType")]), true);
+                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedBranch", WuxDef._learn));
+                            
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max), 1);
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusAttributePoints"), WuxDef.GetAttribute("BonusAttributePoints"), 0);
 
@@ -1542,7 +1533,9 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
                             contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedAffinity"), WuxDef.GetAttribute("AdvancedAffinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).concat(WuxDef.Filter([new DatabaseFilterData("group", "BranchType")])), true);
+                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn));
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedBranch"), WuxDef.GetAttribute("AdvancedBranch"), WuxDef.Filter([new DatabaseFilterData("group", "BranchType")]), true);
+                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedBranch", WuxDef._learn));
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max), 1);
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusAttributePoints"), WuxDef.GetAttribute("BonusAttributePoints"), 0);
                             return WuxSheetMain.Table.FlexTableGroup(contents);
@@ -1790,10 +1783,10 @@ var BuilderBackend = BuilderBackend || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerCharacterCreationSetAffinity = function () {
-            let groupVariableNames = [WuxDef.GetVariable("Affinity")];
-            let output = `WuxWorkerCharacterCreation.SetAffinityValue();\n`;
+            let groupVariableNames = [WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("AdvancedBranch")];
+            let output = `WuxWorkerCharacterCreation.SetAffinityValue(eventinfo);\n`;
 
-            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerCharacterCreationBonusAttributes = function () {
             let groupVariableNames = [WuxDef.GetVariable("BonusAttributePoints")];
