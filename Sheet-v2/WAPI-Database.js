@@ -247,6 +247,36 @@ class ExtendedTechniqueDatabase extends Database {
     }
 }
 
+class ExtendedUsableItemDatabase extends Database {
+
+    constructor(data) {
+        let filters = ["group", "action", "skill", "range"];
+        let dataCreation = function (data) {
+            return new UsableItemData(data);
+        };
+        super(data, filters, dataCreation);
+    }
+
+    importJson(json) {
+        let dataCreationCallback = function (data) {
+            return new UsableItemData(data);
+        }
+        super.importJson(json, dataCreationCallback);
+    }
+
+    importSheets(dataArray) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = new UsableItemData(dataArray[i]);
+            if (this.has(data.name)) {
+                this.get(data.name).technique.importEffectsFromTechnique(data.technique);
+            } else {
+                this.add(data.name, data);
+            }
+        }
+    }
+}
+
 class ExtendedDescriptionDatabase extends Database {
     constructor(data) {
         let dataCreation = function (data) {
@@ -508,6 +538,7 @@ class TechniqueData extends WuxDatabaseData {
         if (this.action == "Passive") {
             definition.passiveBoosts = this.effects.getBoostEffects();
         }
+        definition.jsonData = this;
         return definition;
     }
 
@@ -1188,7 +1219,7 @@ class GoodsData extends ItemData {
     }
 }
 
-class GearData extends ItemData {
+class UsableItemData extends ItemData {
     importJson(json) {
         super.importJson(json);
         this.valMod = json.valMod;
@@ -1225,37 +1256,15 @@ class GearData extends ItemData {
         this.technique = new TechniqueData();
         this.hasTechnique = false;
     }
-}
 
-class ConsumableData extends ItemData {
-    importJson(json) {
-        super.importJson(json);
-        this.dc = json.dc;
-        this.time = json.time;
-        this.components = json.components;
-        this.technique = new TechniqueData(json.technique);
-    }
-
-    importSheets(dataArray) {
-        let i = super.importSheets(dataArray);
-        this.dc = parseInt(dataArray[i]);
-        i++;
-        this.time = parseInt(dataArray[i]);
-        i++;
-        this.components = "" + dataArray[i];
-        i++;
-        let techData = [this.name, "Item", "", "", 0].concat(dataArray.slice(i));
-        this.technique = new TechniqueData(techData);
-        i++;
-        return i;
-    }
-
-    createEmpty() {
-        super.createEmpty();
-        this.dc = 0;
-        this.time = 0;
-        this.components = "";
-        this.technique = new TechniqueData();
+    createDefinition(baseDefinition) {
+        let itemDefinition = super.createDefinition(baseDefinition);
+        let definition = new UsableItemDefinitionData(baseDefinition);
+        definition.subGroup = itemDefinition.subGroup;
+        definition.category = itemDefinition.category;
+        definition.value = itemDefinition.value;
+        definition.techInfo = this.technique;
+        return definition;
     }
 }
 
@@ -1648,14 +1657,23 @@ class ItemDefinitionData extends DefinitionData {
         super.importJson(json);
         this.category = json.category;
         this.value = json.value;
-    }
-    setImportSheetExtraData(property, value) {
-
+        this.techInfo = json.techInfo;
     }
     createEmpty() {
         super.createEmpty();
         this.category = "";
         this.value = 0;
+    }
+}
+
+class UsableItemDefinitionData extends ItemDefinitionData {
+    importJson(json) {
+        super.importJson(json);
+        this.techInfo = json.techInfo;
+    }
+    createEmpty() {
+        super.createEmpty();
+        this.techInfo = {};
     }
 }
 

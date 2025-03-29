@@ -87,11 +87,11 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
         return item.createDefinition(definitionDatabase.get("Goods"));
     });
     definitionDatabase.importSheets(gearArray, function (arr) {
-        let item = new GearData(arr);
+        let item = new UsableItemData(arr);
         return item.createDefinition(definitionDatabase.get("Gear"));
     });
     definitionDatabase.importSheets(consumablesArray, function (arr) {
-        let item = new ConsumableData(arr);
+        let item = new UsableItemData(arr);
         return item.createDefinition(definitionDatabase.get("Consumable"));
     });
     
@@ -112,9 +112,10 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
     return PrintLargeEntry(jsClassData.print("WuxDef"), "]");
 }
 
-function Test(definitionArray) {
-    let data = new DefinitionData(definitionArray[0]);
-    return JSON.stringify(data);
+function Test() {
+    return JSON.stringify(WuxDef.Get("Tech_Overhead Chop").jsonData);
+    // let data = new DefinitionData(definitionArray[0]);
+    // return JSON.stringify(data);
     // return PrintLargeEntry(DisplayTechniquesSheet.PrintTest(SheetsDatabase.CreateStyles(stylesArray), SheetsDatabase.CreateTechniques(JSON.parse(techniqueDatabaseString))), "t");
 }
 
@@ -209,15 +210,11 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createGear = function (arr) {
-            return new Database(arr, ["group"], function (arr) {
-                return new GearData(arr);
-            });
+            return new ExtendedUsableItemDatabase(arr);
         },
 
         createConsumables = function (arr) {
-            return new Database(arr, ["group"], function (arr) {
-                return new ConsumableData(arr);
-            });
+            return new ExtendedUsableItemDatabase(arr);
         },
 
         createStatus = function (arr) {
@@ -707,9 +704,10 @@ var WuxDefinition = WuxDefinition || (function () {
                 case "Status":
                     return new StatusDefinitionData(values[key]);
                 case "Goods":
+                    return new ItemDefinitionData(values[key]);
                 case "Gear":
                 case "Consumable":
-                    return new ItemDefinitionData(values[key]);
+                    return new UsableItemDefinitionData(values[key]);
                 default:
                     return new DefinitionData(values[key]);
             }
@@ -2267,9 +2265,8 @@ function GetGearForAssessment(sheet, row, assessColumn) {
     let maxIterations = 15;
     let startItem;
     let newItem;
-    startItem = GetGearFromSheetRow(sheet, row, assessColumn);
+    startItem = GetUsableItemFromSheetRow(sheet, row, assessColumn);
     if (startItem.name == "") {
-        Debug.Log(`There is no item at row ${baseRow}`);
         return undefined; // no working on blank cells
     }
     if (startItem.technique.action == "") {
@@ -2280,14 +2277,15 @@ function GetGearForAssessment(sheet, row, assessColumn) {
         while (maxIterations > 0) {
             maxIterations--;
             baseRow--;
-            newItem = GetGearFromSheetRow(sheet, baseRow, assessColumn);
+            newItem = GetUsableItemFromSheetRow(sheet, baseRow, assessColumn);
             if (newItem.name != startName) {
-                Debug.Log(`Item at row ${baseRow} has no technique. Returning it.`);
+                if (startItem.group == "") {
+                    return undefined; // no working on title rows
+                }
                 return {item: startItem, row: row, finalRow: row};
             }
 
             if (newItem.action != "") {
-                Debug.Log(`Found the item's base technique at row ${baseRow}`);
                 baseItem = newItem;
                 break;
             } else {
@@ -2295,23 +2293,23 @@ function GetGearForAssessment(sheet, row, assessColumn) {
             }
         }
         if (baseItem == undefined) {
-            Debug.Log(`Item at row ${baseRow} has no technique. Returning it.`);
+            if (startItem.group == "") {
+                return undefined; // no working on title rows
+            }
             return {item: startItem, row: row, finalRow: row};
         }
 
-        Debug.Log(`Adding technique data down to row ${finalRow}`);
         while (techniqueData.length > 0) {
             baseItem.technique.importEffectsFromTechnique(techniqueData.pop());
         }
     } else {
-        Debug.Log(`Found the item's base technique at row ${baseRow}`);
         baseItem = startItem;
     }
 
     while (maxIterations > 0) {
         maxIterations--;
         finalRow++;
-        newItem = GetGearFromSheetRow(sheet, finalRow, assessColumn);
+        newItem = GetUsableItemFromSheetRow(sheet, finalRow, assessColumn);
         if (newItem.name == baseItem.name) {
             Debug.Log(`Adding technique data at row ${finalRow}`);
             baseItem.technique.importEffectsFromTechnique(newItem.technique);
@@ -2323,9 +2321,9 @@ function GetGearForAssessment(sheet, row, assessColumn) {
     return {item: baseItem, row: baseRow, finalRow: finalRow};
 }
 
-function GetGearFromSheetRow(sheet, row, assessColumn) {
+function GetUsableItemFromSheetRow(sheet, row, assessColumn) {
     let techLine = sheet.getRange(row, 1, 1, assessColumn - 1).getValues()[0];
-    return new GearData(techLine);
+    return new UsableItemData(techLine);
 }
 
 function getNamedColumn(sheet, name) {
@@ -2542,7 +2540,7 @@ class TechniqueAssessment {
     getAveragePoint(energy, technique) {
         let points = this.basePoints + (3 * energy) + (energy * (energy + 1) / 2);
         if (technique.action == "Full") {
-            points += 3 + this.basePoints;
+            points += 3 + (2 * energy) + this.basePoints;
             this.pointsCalc = "(Full)";
         } else if (technique.action == "Swift") {
             let lookupName = WuxDef.GetAbbreviation("Job") + "_" + technique.techSet;

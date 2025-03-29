@@ -35,7 +35,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
         buildCharacterSheetTechHtml = function (sheetsDb) {
             let output = "";
             output += DisplayTechniquesSheet.Print(sheetsDb);
-            return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}`;
+            return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n`;
         },
 
         buildCharacterSheetBaseHtml = function (sheetsDb) {
@@ -45,7 +45,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayAdvancementSheet.Print(sheetsDb);
             output += DisplayCoreCharacterSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
-            return `\n${output}\n</div>`;
+            return `${output}\n</div>`;
         },
 
         buildHiddenFields = function () {
@@ -869,7 +869,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
         print = function (sheetsDb) {
             let output = WuxSheetNavigation.BuildTechniquesNavigation() +
                 SideBarData.Print() +
-                MainContentData.Print(sheetsDb.styles, sheetsDb.job, sheetsDb.techniques);
+                MainContentData.Print(sheetsDb.styles, sheetsDb.job, sheetsDb.techniques, sheetsDb.gear, sheetsDb.consumables);
             return WuxSheet.PageDisplay("Technique", output);
         },
 
@@ -917,15 +917,17 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
             'use strict';
 
             var
-                print = function (stylesDatabase, jobDatabase, techniqueDatabase) {
+                print = function (stylesDatabase, jobDatabase, techniqueDatabase, gearDatabase, consumableDatabase) {
 
-                    return WuxSheetMain.Build(buildTechniquesByGroup(stylesDatabase, jobDatabase, techniqueDatabase, WuxDef.Get("Technique")));
+                    return WuxSheetMain.Build(buildTechniquesByGroup(stylesDatabase, jobDatabase, techniqueDatabase, gearDatabase, consumableDatabase));
                 },
 
-                buildTechniquesByGroup = function (stylesDatabase, jobDatabase, techniqueDatabase, techniqueDefinition) {
+                buildTechniquesByGroup = function (stylesDatabase, jobDatabase, techniqueDatabase, gearDatabase, consumableDatabase) {
+                    let techniqueDefinition = WuxDef.Get("Technique");
                     let displayOptions = getDisplayOptions(techniqueDefinition);
                     let output = "";
                     displayOptions.hasSelect = false;
+                    output += buildGearStyle(gearDatabase, displayOptions);
                     output += buildJobStyle(jobDatabase, techniqueDatabase, displayOptions);
                     displayOptions.hasSelect = true;
                     output += buildAdvancedStyleGroup(stylesDatabase, techniqueDatabase, displayOptions);
@@ -942,66 +944,50 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                     return displayOptions;
                 },
 
+                buildGearStyle = function (gearDatabase, displayOptions) {
+                    let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "GearGroup")]);
+                    let techStyles = [];
+                    for (let i = 0; i < filteredData.length; i++) {
+                        techStyles.push(buildUsableItemGroupFlexTableEntry(filteredData[i], gearDatabase, displayOptions));
+                    }
+
+                    return buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), "EqGear", "Equipped Gear Techniques");
+                },
+
+                buildConsumablesStyle = function (consumablesDatabase, displayOptions) {
+                    let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "ConsumableGroup")]);
+                    let techStyles = [];
+                    for (let i = 0; i < filteredData.length; i++) {
+                        techStyles.push(buildUsableItemGroupFlexTableEntry(filteredData[i], consumablesDatabase, displayOptions));
+                    }
+
+                    return buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), "EqConsumables", "Packed Consumables");
+                },
+
                 buildJobStyle = function (jobDatabase, techniqueDatabase, displayOptions) {
-                    let groupName = "Job";
                     let techStyles = [];
                     jobDatabase.iterate(function (value) {
                         if (value != undefined) {
-                            techStyles.push(buildJobStyleSection(value, techniqueDatabase, displayOptions));
+                            techStyles.push(buildJobGroupFlexTableEntry(value, techniqueDatabase, displayOptions));
                         }
                     });
-                    let output = WuxSheetMain.Table.FlexTable(techStyles);
-                    output = WuxSheetMain.TabBlock(output);
-                    let definition = WuxDef.Get("StyleType");
-
-                    return `${WuxSheetMain.CustomInput("hidden", definition.getAttribute(groupName, WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
-					${WuxSheetMain.CollapsibleTab(definition.getAttribute(groupName, WuxDef._expand), `${groupName} ${definition.title}`, output)}`;
-                },
-
-                buildJobStyleSection = function (job, techniqueDatabase, displayOptions) {
-                    let jobDef = job.createDefinition(WuxDef.Get("Job"));
-                    let tabFieldName = WuxDef.GetAttribute("Page");
-
-                    let interactionHeader = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDef.getAttribute(WuxDef._expand))}
-					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(jobDef.getAttribute(), WuxSheetMain.Header(job.name))}`;
-                    let normalHeader = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDef.getAttribute(WuxDef._expand))} ${WuxSheetMain.Header(job.name)}`;
-
-                    let contents = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
-					${WuxSheet.PageDisplay("Techniques", normalHeader)}
-					${WuxSheet.PageDisplay("Styles", interactionHeader)}
-					${WuxSheet.PageDisplay("Actions", normalHeader)}
-					${WuxSheetMain.SectionBlockHeaderFooter()}
-					${WuxSheetMain.InteractionElement.ExpandableBlockContents(jobDef.getAttribute(WuxDef._expand),
-                        WuxSheetMain.SectionBlockContents(buildStyleContents(jobDef, techniqueDatabase, displayOptions)))}`;
-
-                    return `${WuxSheetMain.CustomInput("hidden", jobDef.getAttribute(WuxDef._filter), "wuxFlexTableItemGroup-flag", ` value="0"`)}
-					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)))}`;
+                    
+                    return buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), "Job", "Job Techniques");
                 },
 
                 buildAdvancedStyleGroup = function (stylesDatabase, techniqueDatabase, displayOptions) {
+                    let contents = "";
                     let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "StyleGroup")]);
-
-                    let output = "";
                     for (let i = 0; i < filteredData.length; i++) {
-                        output += buildStyleGroup(stylesDatabase, techniqueDatabase, filteredData[i], displayOptions);
+                        let techFilterData = stylesDatabase.filter([new DatabaseFilterData("subGroup", filteredData[i].getTitle())]);
+                        let techStyles = [];
+                        for (let i = 0; i < techFilterData.length; i++) {
+                            techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[i], techniqueDatabase, displayOptions));
+                        }
+                        contents += WuxDefinition.InfoHeader(filteredData[i]) + WuxSheetMain.Table.FlexTable(techStyles);
                     }
-                    output = WuxSheetMain.TabBlock(output);
                     
-                    let definition = WuxDef.Get("StyleType");
-                    return `${WuxSheetMain.CustomInput("hidden", definition.getAttribute("Advanced", WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
-					${WuxSheetMain.CollapsibleTab(definition.getAttribute("Advanced", WuxDef._expand), `${"Advanced"} ${definition.title}`, output)}`;
-                },
-                
-                buildStyleGroup = function (stylesDatabase, techniqueDatabase, definition, displayOptions) 
-                {
-                    let filters = [new DatabaseFilterData("subGroup", definition.getTitle())];
-                    let filteredData = stylesDatabase.filter(filters);
-
-                    let techStyles = [];
-                    for (let i = 0; i < filteredData.length; i++) {
-                        techStyles.push(buildTechStyleSection(filteredData[i], techniqueDatabase, displayOptions));
-                    }
-                    return WuxDefinition.InfoHeader(definition) + WuxSheetMain.Table.FlexTable(techStyles);
+                    return buildTechniqueStyleGroupTab(contents, "Advanced", "Advanced Techniques");
                 },
 
                 buildSpecialStyleGroup = function (stylesDatabase, techniqueDatabase, displayOptions) {
@@ -1010,14 +996,10 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
                     let techStyles = [];
                     for (let i = 0; i < filteredData.length; i++) {
-                        techStyles.push(buildTechStyleSection(filteredData[i], techniqueDatabase, displayOptions));
+                        techStyles.push(buildStyleGroupFlexTableEntry(filteredData[i], techniqueDatabase, displayOptions));
                     }
-                    let output = WuxSheetMain.Table.FlexTable(techStyles);
-                    output = WuxSheetMain.TabBlock(output);
-                    let definition = WuxDef.Get("StyleType");
-
-                    return `${WuxSheetMain.CustomInput("hidden", definition.getAttribute("Branched", WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
-					${WuxSheetMain.CollapsibleTab(definition.getAttribute("Branched", WuxDef._expand), `${"Branched"} ${definition.title}`, output)}`;
+                    
+                    return buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), "Branched", "Branched Techniques");
                 },
 
                 buildBasicStyleGroup = function (stylesDatabase, techniqueDatabase, displayOptions) {
@@ -1026,42 +1008,50 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 
                     let techStyles = [];
                     for (let i = 0; i < filteredData.length; i++) {
-                        techStyles.push(buildTechStyleSection(filteredData[i], techniqueDatabase, displayOptions));
+                        techStyles.push(buildStyleGroupFlexTableEntry(filteredData[i], techniqueDatabase, displayOptions));
                     }
-                    let output = WuxSheetMain.Table.FlexTable(techStyles);
-                    output = WuxSheetMain.TabBlock(output);
-                    let definition = WuxDef.Get("StyleType");
-
-                    return `${WuxSheetMain.CustomInput("hidden", definition.getAttribute("Basic", WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
-					${WuxSheetMain.CollapsibleTab(definition.getAttribute("Basic", WuxDef._expand), `${"Basic"} ${definition.title}`, output)}`;
+                    
+                    return buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), "Basic", "Basic Techniques");
                 },
 
-                buildTechStyleSection = function (style, techniqueDatabase, displayOptions) {
+                buildStyleGroupFlexTableEntry = function (style, techniqueDatabase, displayOptions) {
                     let styleDef = style.createDefinition(WuxDef.Get("Style"));
-                    let tabFieldName = WuxDef.GetAttribute("Page");
+                    let groupContents = buildStyleInformation(styleDef);
+                    groupContents += buildTechDatabaseTechniquesByStyleDefinition(styleDef, techniqueDatabase, displayOptions);
+                    return buildTechniqueGroupFlexTableEntry(styleDef, groupContents, "Half wuxMinWidth220");
+                },
 
-                    let interactionHeader = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(styleDef.getAttribute(WuxDef._expand))}
-					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(styleDef.getAttribute(), WuxSheetMain.Header(style.name))}`;
-                    let normalHeader = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(styleDef.getAttribute(WuxDef._expand))} ${WuxSheetMain.Header(style.name)}`;
+                buildUsableItemGroupFlexTableEntry = function (itemDef, usableItemDatabase, displayOptions) {
+                    let groupContents = buildUsableItemDatabaseTechniquesByGearGroup(itemDef, usableItemDatabase, displayOptions);
+                    return buildTechniqueGroupFlexTableEntry(itemDef, groupContents, "Half wuxMinWidth220");
+                },
+
+                buildJobGroupFlexTableEntry = function (job, techniqueDatabase, displayOptions) {
+                    let jobDef = job.createDefinition(WuxDef.Get("Job"));
+                    let groupContents = buildTechDatabaseTechniquesByStyleDefinition(jobDef, techniqueDatabase, displayOptions);
+                    return buildTechniqueGroupFlexTableEntry(jobDef, groupContents, "");
+                },
+
+                buildTechniqueGroupFlexTableEntry = function (groupDefinition, groupContents, flexTableStyling) {
+                    let tabFieldName = WuxDef.GetAttribute("Page");
+                    let interactionHeader = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(groupDefinition.getAttribute(WuxDef._expand))}
+					${WuxSheetMain.InteractionElement.CheckboxBlockIcon(groupDefinition.getAttribute(), WuxSheetMain.Header(groupDefinition.getTitle()))}`;
+                    let normalHeader = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(groupDefinition.getAttribute(WuxDef._expand))} ${WuxSheetMain.Header(groupDefinition.getTitle())}`;
 
                     let contents = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
 					${WuxSheet.PageDisplay("Techniques", normalHeader)}
 					${WuxSheet.PageDisplay("Styles", interactionHeader)}
 					${WuxSheet.PageDisplay("Actions", normalHeader)}
 					${WuxSheetMain.SectionBlockHeaderFooter()}
-					${WuxSheetMain.InteractionElement.ExpandableBlockContents(styleDef.getAttribute(WuxDef._expand),
-                        WuxSheetMain.SectionBlockContents(buildStyleContents(styleDef, techniqueDatabase, displayOptions)))}`;
+					${WuxSheetMain.InteractionElement.ExpandableBlockContents(groupDefinition.getAttribute(WuxDef._expand),
+                        WuxSheetMain.SectionBlockContents(groupContents))}`;
 
-                    return `${WuxSheetMain.CustomInput("hidden", styleDef.getAttribute(WuxDef._filter), "wuxFlexTableItemGroup-flag", ` value="0"`)}
-					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)), "Half wuxMinWidth220")}`;
+                    return `${WuxSheetMain.CustomInput("hidden", groupDefinition.getAttribute(WuxDef._filter), "wuxFlexTableItemGroup-flag", ` value="0"`)}
+					${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(WuxSheetMain.InteractionElement.Build(true, contents)), flexTableStyling)}`;
                 },
 
-                buildStyleContents = function (styleDef, techniqueDatabase, displayOptions) {
-                    let contents = "";
-                    contents += buildStyleLearn(styleDef);
-                    contents += buildStyleDescription(styleDef);
-                    contents += buildTechniques(styleDef, techniqueDatabase, displayOptions);
-                    return contents;
+                buildStyleInformation = function (styleDef) {
+                    return buildStyleLearn(styleDef) + buildStyleDescription(styleDef);
                 },
 
                 buildStyleLearn = function (styleDef) {
@@ -1085,7 +1075,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
 					${WuxSheetMain.Desc(styleDef.getDescription())}`;
                 },
 
-                buildTechniques = function (styleDef, techniqueDatabase, displayOptions) {
+                buildTechDatabaseTechniquesByStyleDefinition = function (styleDef, techniqueDatabase, displayOptions) {
                     let output = WuxSheetMain.Header(`<span>Techniques</span>`);
 
                     let filters = [new DatabaseFilterData("style", styleDef.title)];
@@ -1156,6 +1146,22 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                     return techniquesByRequrements;
                 },
 
+                buildUsableItemDatabaseTechniquesByGearGroup = function (itemDef, usableItemDatabase, displayOptions) {
+                    let output = WuxSheetMain.Header(`<span>Equipped Techniques</span>`);
+
+                    let filters = [new DatabaseFilterData("group", itemDef.title)];
+                    let filteredGear = usableItemDatabase.filter(filters);
+                    let item;
+
+                    for (let i = 0; i < filteredGear.length; i++) {
+                        item = new UsableItemData(filteredGear[i]);
+                        if (item.hasTechnique) {
+                            output += `\n${buildTechnique(item.technique, displayOptions)}`;
+                        }
+                    }
+                    return `${output}\n`;
+                },
+
                 buildTechnique = function (technique, displayOptions) {
                     let techDef = technique.createDefinition(WuxDef.Get("Technique"));
                     let fieldName = techDef.getAttribute(WuxDef._filter);
@@ -1164,6 +1170,13 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                     output += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="0">`;
                     output += WuxPrintTechnique.Get(technique, displayOptions);
                     return output;
+                },
+
+                buildTechniqueStyleGroupTab = function (contents, groupName, title) {
+                    let styleDefinition = WuxDef.Get("StyleType");
+
+                    return `${WuxSheetMain.CustomInput("hidden", styleDefinition.getAttribute(groupName, WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
+					${WuxSheetMain.CollapsibleTab(styleDefinition.getAttribute(groupName, WuxDef._expand), title, WuxSheetMain.TabBlock(contents))}`;
                 }
 
             return {
