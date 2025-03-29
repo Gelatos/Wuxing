@@ -1167,7 +1167,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                     let fieldName = techDef.getAttribute(WuxDef._filter);
 
                     let output = "";
-                    output += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="0">`;
+                    output += `<input type="hidden" class="wuxFilterFeature-flag" name="${fieldName}" value="1">`;
                     output += WuxPrintTechnique.Get(technique, displayOptions);
                     return output;
                 },

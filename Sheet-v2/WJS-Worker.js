@@ -1082,6 +1082,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
         },
         updateTechniquesPageToLearn = function (attributeHandler) {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "EqGear", WuxDef._filter), "1");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Job", WuxDef._filter), "1");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Advanced", WuxDef._filter), "0");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Branched", WuxDef._filter), "0");
@@ -1158,9 +1159,12 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
             }
         },
         filterTechniquesForCore = function (attributeHandler) {
-            let advStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Advanced")]);
-            let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Branched")]);
+            let advStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), 
+                new DatabaseFilterData("mainGroup", "Advanced")]);
+            let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), 
+                new DatabaseFilterData("mainGroup", "Branched")]);
             let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
+            let gearDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Gear"));
 
             let styleWorker = new WuxWorkerBuild("Style");
             attributeHandler.addMod(styleWorker.attrBuildDraft);
@@ -1173,6 +1177,9 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
 
             let techniqueWorker = new WuxWorkerBuild("Technique");
             attributeHandler.addMod(techniqueWorker.attrBuildFinal);
+
+            let gearWorker = new WuxWorkerBuild("Gear");
+            attributeHandler.addMod(gearWorker.attrBuildDraft);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 styleWorker.setBuildStatsDraft(attrHandler);
@@ -1236,6 +1243,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                     }
                 }
 
+                attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "EqGear", WuxDef._filter), "0");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Job", WuxDef._filter), "0");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Advanced", WuxDef._filter), "0");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Branched", WuxDef._filter), "0");
@@ -1309,6 +1317,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                 }
 
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Basic", WuxDef._filter), "1");
+                attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "EqGear", WuxDef._filter), "1");
                 attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._subfilter), "1");
             });
         },
@@ -1535,7 +1544,6 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
             });
             attributeHandler.run();
         },
-
         getValidBoostTechniques = function (techniqueWorker, styleWorker, jobWorker, jobStyleWorker) {
             let validBoostTechniques = [];
             styleWorker.buildStats.iterate(function (value, key) {
