@@ -1651,9 +1651,8 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         mainPageNavigation = function (tabTitle, subheader, infoAttribute, sideBarButtons) {
-            let mainContents = "";
-            mainContents += buildTabs(tabTitle, WuxDef.GetAttribute("Page"), ["Actions", "Styles", "Character"]);
-            // mainContents += buildTabs(tabTitle, WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Styles", "Character"]);
+            let mainContents = ""
+            mainContents += buildTabs(tabTitle, WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Styles", "Character"]);
             mainContents += sideBarButtons;
             mainContents += buildMainSheetHeader(subheader, infoAttribute);
 

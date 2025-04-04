@@ -299,9 +299,9 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 
     getCharacterRank(level) {
         let cr = 1;
-        let incrementer = 5;
-        let modIncrementer = 5;
-        let checkingLevel = 5;
+        let incrementer = 4;
+        let modIncrementer = 1;
+        let checkingLevel = 4;
         while (level >= checkingLevel) {
             cr++;
             incrementer += modIncrementer;
