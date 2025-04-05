@@ -1754,20 +1754,60 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                         buildEquippedItemsSection = function () {
                             let contents = "";
-                            contents += basics();
-                            contents += influences();
-                            contents += WuxSheetMain.MultiRowGroup([advancement(), training()], WuxSheetMain.Table.FlexTable, 2);
+                            
+                            contents += WuxSheetMain.MultiRowGroup([buildWornEquipmentSection(), buildHandheldEquipmentSection(), buildConsumableEquipmentSection()], WuxSheetMain.Table.FlexTable, 3);
 
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definition = WuxDef.Get("Page_OverviewCharacter");
+                            let definition = WuxDef.Get("Page_GearEquippedGear");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
-
-                        basics = function () {
+                        
+                        buildWornEquipmentSection = function () {
                             let contents = "";
-                            contents += WuxDefinition.BuildText(WuxDef.Get("FullName"), WuxSheetMain.Span(WuxDef.GetAttribute("FullName")));
-                            return contents;
+
+                            let equippedGearDef = WuxDef.Get("Page_GearWearables");
+                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
+                            
+                            let filterData = WuxDef.Filter([new DatabaseFilterData("group", "GearGroup")]);
+                            let emptyName = WuxDef.GetTitle("Page_GearEmpty");
+                            for (let i = 0; i < filterData.length; i++) {
+                                contents += WuxDefinition.BuildText(filterData[i], WuxSheetMain.Span(filterData[i].getAttribute()));
+                                contents += WuxSheetMain.Input("hidden", filterData[i].getAttribute(), emptyName);
+                            }
+                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
+                        },
+
+                        buildHandheldEquipmentSection = function () {
+                            let contents = "";
+
+                            let equippedGearDef = WuxDef.Get("Page_GearHandhelds");
+                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
+
+                            let definition = WuxDef.Get("HandheldSlot");
+                            let emptyName = WuxDef.GetTitle("Page_GearEmpty");
+                            for (let i = 1; i <= 6; i++) {
+                                contents += WuxSheetMain.Header2(`${definition.title} ${i}`) + "\n" +
+                                    WuxSheetMain.Desc(WuxSheetMain.Span(definition.getAttribute(i)));
+                                contents += WuxSheetMain.Input("hidden", definition.getAttribute(i), emptyName);
+                            }
+                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
+                        },
+
+                        buildConsumableEquipmentSection = function () {
+                            let contents = "";
+
+                            let equippedGearDef = WuxDef.Get("Page_GearConsumables");
+                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
+
+                            let definition = WuxDef.Get("ConsumableSlot");
+                            let emptyName = WuxDef.GetTitle("Page_GearEmpty");
+                            for (let i = 1; i <= 6; i++) {
+                                contents += WuxSheetMain.Header2(`${definition.title} ${i}`) + "\n" +
+                                    WuxSheetMain.Desc(WuxSheetMain.Span(definition.getAttribute(i)));
+                                contents += WuxSheetMain.Input("hidden", definition.getAttribute(i), emptyName);
+                            }
+                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
 
                         influences = function () {
