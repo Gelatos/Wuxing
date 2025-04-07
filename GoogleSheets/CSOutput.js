@@ -1755,7 +1755,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         buildEquippedItemsSection = function () {
                             let contents = "";
                             
-                            contents += WuxSheetMain.MultiRowGroup([buildWornEquipmentSection(), buildHandheldEquipmentSection(), buildConsumableEquipmentSection()], WuxSheetMain.Table.FlexTable, 3);
+                            contents += WuxSheetMain.MultiRowGroup([equippedWearables(), equippedTools(), equippedConsumables()], WuxSheetMain.Table.FlexTable, 3);
 
                             contents = WuxSheetMain.TabBlock(contents);
 
@@ -1763,7 +1763,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
                         
-                        buildWornEquipmentSection = function () {
+                        equippedWearables = function () {
                             let contents = "";
 
                             let equippedGearDef = WuxDef.Get("Page_GearWearables");
@@ -1778,13 +1778,13 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
 
-                        buildHandheldEquipmentSection = function () {
+                        equippedTools = function () {
                             let contents = "";
 
-                            let equippedGearDef = WuxDef.Get("Page_GearHandhelds");
+                            let equippedGearDef = WuxDef.Get("Page_GearTools");
                             contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
 
-                            let definition = WuxDef.Get("HandheldSlot");
+                            let definition = WuxDef.Get("ToolSlot");
                             let emptyName = WuxDef.GetTitle("Page_GearEmpty");
                             for (let i = 1; i <= 6; i++) {
                                 contents += WuxSheetMain.Header2(`${definition.title} ${i}`) + "\n" +
@@ -1794,7 +1794,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
 
-                        buildConsumableEquipmentSection = function () {
+                        equippedConsumables = function () {
                             let contents = "";
 
                             let equippedGearDef = WuxDef.Get("Page_GearConsumables");
@@ -1810,11 +1810,13 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
 
-                        influences = function () {
+                        wearables = function () {
                             let contents = "";
                             let influenceDef = WuxDef.Get("Soc_Influence");
                             let influenceTypeDef = WuxDef.Get("Soc_InfluenceType");
                             let severityDef = WuxDef.Get("Soc_Severity");
+                            
+                            // wuxFlexTableItemGroup2
 
                             let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
                             influenceInfo += WuxDefinition.TooltipDescription(severityDef);
