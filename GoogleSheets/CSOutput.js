@@ -1749,6 +1749,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         build = function () {
                             let contents = "";
                             contents += buildEquippedItemsSection();
+                            contents += buildWearablesSection();
                             return contents;
                         },
 
@@ -1808,6 +1809,21 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 contents += WuxSheetMain.Input("hidden", definition.getAttribute(i), emptyName);
                             }
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
+                        },
+                        
+                        buildWearablesSection = function () {
+                            let contents = "";
+                            
+                            contents += testTechniquePopup();
+
+                            contents = WuxSheetMain.TabBlock(contents);
+
+                            let definition = WuxDef.Get("Page_GearEquippedGear");
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                        },
+                        
+                        testTechniquePopup = function () {
+                            
                         },
 
                         wearables = function () {
