@@ -320,3 +320,80 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     opacity: 0;
 }
 
+/*========================================
+    Popup
+========================================*/
+
+.wuxPopupOverlay {
+    display: block;
+    position: fixed;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99999;
+}
+
+.wuxPopup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    min-width: 200px;
+    width: 80%;
+    max-width: 512px;
+    padding: 20px;
+    
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.wuxPopupHeader
+{
+    position: relative;
+    display: flex;
+    align-content: flex-start;
+    margin-bottom: 15px;
+    width: calc(100% - 15px);
+    height: 22px;
+    padding: 3px;
+    padding-left: 6px;
+    z-index: 1;
+
+    border-bottom: 3px solid;
+    border-color: transparent transparent #71B9DE transparent;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.wuxPopupHeader .wuxPopupInnerHeader
+{
+    flex: 5;
+
+    color: #1d1e1f;
+    font-family: "Candal", serif;
+    font-size: 16px;
+    line-height: 22px;
+    vertical-align: bottom;
+    text-transform: capitalize;
+}
+
+.wuxPopupHeader .wuxButton
+{
+    flex: 1;
+    min-width: 20px;
+    width: auto;
+    padding: 0;
+
+    background: #71B9DE;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.wuxPopupHeader .wuxButton:hover {
+    background: #0056b3;
+}

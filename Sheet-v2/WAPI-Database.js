@@ -1711,10 +1711,10 @@ class TechniqueDisplayData {
 
     setTechSetResourceData(technique) {
         this.resourceData = technique.action;
-        let skillData = WuxDef.Get(technique.skill);
-        if (skillData != undefined) {
-            this.resourceData += ` ${skillData.group}`;
-        } else {
+        if (technique.group != "") {
+            this.resourceData += ` ${technique.group}`;
+        }
+        else {
             this.resourceData += ` Action`;
         }
         if (technique.limits != "") {
@@ -1767,7 +1767,7 @@ class TechniqueDisplayData {
     }
 
     setTraits(technique) {
-        this.traits = WuxDef.GetValues(technique.traits, ";");
+        this.traits = WuxDef.GetValues(technique.traits, ";", "Trait_");
     }
 
     setFlavorText(technique) {
@@ -1822,13 +1822,13 @@ class TechniqueDisplayData {
 
         this.resourceData = "";
         this.targetData = "";
+        this.traits = [];
 
         this.trigger = "";
         this.requirements = "";
         this.itemTraits = [];
 
         this.flavorText = "";
-        this.traits = [];
         this.effects = [];
         this.definitions = [];
     }
@@ -2319,68 +2319,6 @@ class TechniqueEffectDisplayData {
 }
 
 // Helper
-class WuxRepeatingSection {
-    constructor(definitionId) {
-        this.definition = WuxDef.Get(definitionId);
-        this.repeatingSection = this.definition.getVariable();
-        this.ids = [];
-    }
-
-    getIds(callback) {
-        let repeater = this;
-        getSectionIDs(this.repeatingSection, function (ids) {
-            ids.forEach(function (id) {
-                repeater.ids.push(id);
-            });
-            callback(repeater);
-        });
-    }
-
-    addIds(ids) {
-        this.ids = this.ids.concat(ids);
-    }
-
-    clearIds() {
-        this.ids = [];
-    }
-
-    iterate(callback) {
-        for (let i = 0; i < this.ids.length; i++) {
-            callback(this.ids[i]);
-        }
-    }
-
-    getFieldName(id, fieldName) {
-        return `${this.repeatingSection}_${id}_${fieldName}`;
-    }
-
-    addAttributeMods(attributeHandler, fieldNames) {
-        let repeater = this;
-
-        if (!Array.isArray(fieldNames)) {
-            fieldNames = [fieldNames];
-        }
-        this.iterate(function (id) {
-            for (let i = 0; i < fieldNames.length; i++) {
-                attributeHandler.addMod(repeater.getFieldName(id, fieldNames[i]));
-            }
-        });
-    }
-
-    getIdFromFieldName(fieldName) {
-        return fieldName.split("_")[2];
-    }
-
-    removeId(id) {
-        removeRepeatingRow(this.repeatingSection + "_" + id);
-    }
-
-    removeAllIds() {
-        for (let i = 0; i < this.ids.length; i++) {
-            this.removeId(this.ids[i]);
-        }
-    }
-}
 
 class FormulaData {
 
@@ -3252,6 +3190,143 @@ class SandboxAttributeHandler extends AttributeHandler {
         }
 
         return returnVal;
+    }
+}
+
+
+class RepeatingSectionHandler {
+    constructor(definitionId) {
+        this.definition = WuxDef.Get(definitionId);
+        this.repeatingSection = this.definition.getVariable();
+        this.ids = [];
+        this.fieldNames = [];
+    }
+
+    addIds(ids) {
+        if (Array.isArray(ids)) {
+            this.ids = this.ids.concat(ids);
+        } else {
+            this.ids.push(ids);
+        }
+    }
+
+    clearIds() {
+        this.ids = [];
+    }
+
+    generateUUId() {
+
+        let a = 0, b = [];
+        return function () {
+            let c = (new Date()).getTime() + 0, d = c === a;
+            a = c;
+            for (let e = new Array(8), f = 7; 0 <= f; f--) {
+                e[f] = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(c % 64);
+                c = Math.floor(c / 64);
+            }
+            c = e.join("");
+            if (d) {
+                for (f = 11; 0 <= f && 63 === b[f]; f--) {
+                    b[f] = 0;
+                }
+                b[f]++;
+            } else {
+                for (f = 0; 12 > f; f++) {
+                    b[f] = Math.floor(64 * Math.random());
+                }
+            }
+            for (f = 0; 12 > f; f++) {
+                c += "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(b[f]);
+            }
+            return c;
+        };
+    }
+
+    generateRowId() {
+
+        return generateUUId().replace(/_/g, "Z");
+    }
+    
+    addFieldNames(fieldNames) {
+        if (Array.isArray(fieldNames)) {
+            this.fieldNames = this.fieldNames.concat(fieldNames);
+        } else {
+            this.fieldNames.push(fieldNames);
+        }
+    }
+
+    iterate(callback) {
+        for (let i = 0; i < this.ids.length; i++) {
+            callback(this.ids[i]);
+        }
+    }
+
+    getFieldName(id, fieldName) {
+        return `${this.repeatingSection}_${id}_${fieldName}`;
+    }
+
+    addAttributeMods(attributeHandler, fieldNames) {
+        let repeater = this;
+
+        if (!Array.isArray(fieldNames)) {
+            fieldNames = [fieldNames];
+        }
+        this.iterate(function (id) {
+            for (let i = 0; i < fieldNames.length; i++) {
+                attributeHandler.addMod(repeater.getFieldName(id, fieldNames[i]));
+            }
+        });
+    }
+
+    getIdFromFieldName(fieldName) {
+        return fieldName.split("_")[2];
+    }
+
+    removeId(id) {
+        
+    }
+
+    removeAllIds() {
+        for (let i = 0; i < this.ids.length; i++) {
+            this.removeId(this.ids[i]);
+        }
+    }
+}
+
+class SandboxRepeatingSectionHandler extends RepeatingSectionHandler {
+    
+    constructor(definitionId, characterId) {
+        super(definitionId);
+        this.characterId = characterId;
+    }
+    
+    findRepeatingRowIdAttribute(id) {
+        let chracterAttributes = findObjs({
+            _characterid: this.characterId,
+            _type: "attribute",
+            name: id
+        }, { caseInsensitive: true });
+
+        if (chracterAttributes.length > 0) {
+            return chracterAttributes[0];
+        }
+        return undefined;
+    }
+    
+    removeId(id) {
+        super.removeId(id);
+        
+        if (this.fieldNames.length == 0) {
+            Debug.LogError(`[RepeatingSectionHandler][removeId] No field names to remove for ${this.repeatingSection}`);
+            return;
+        }
+        
+        for(let i = 0; i < this.fieldNames.length; i++) {
+            let chracterAttribute = this.findRepeatingRowIdAttribute(this.getFieldName(id, this.fieldNames[i]));
+            if (chracterAttribute != undefined) {
+                chracterAttribute.remove();
+            }
+        }
     }
 }
 

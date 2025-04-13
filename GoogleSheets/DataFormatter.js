@@ -353,11 +353,20 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 },
 
                 setTechniqueDisplayHeaderNameFields = function (techDisplayData, displayOptions) {
-                    return `<div ${setFeatureStyle("wuxFeatureHeaderDisplayBlock", displayOptions)}>
-                <span ${setFeatureStyle("wuxFeatureHeaderName", displayOptions)}>${techDisplayData.name}</span>
-                <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.resourceData}</div>
-                <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.targetData}</div>
-                </div>`;
+                    let contents = `<div ${setFeatureStyle("wuxFeatureHeaderDisplayBlock", displayOptions)}>
+                    <span ${setFeatureStyle("wuxFeatureHeaderName", displayOptions)}>${techDisplayData.name}</span>
+                    <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.resourceData}</div>
+                    <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.targetData}</div>\n`;
+                    contents += setTechniqueDisplayHeaderBlockTraits(techDisplayData, displayOptions);
+                    contents += `\n</div>`;
+                    return contents;
+                },
+
+                setTechniqueDisplayHeaderBlockTraits = function (techDisplayData, displayOptions) {
+                    if (techDisplayData.traits.length > 0) {
+                        return setFeatureLineWithHeader("wuxFeatureHeaderInfo", "Traits", setDefinitions(techDisplayData.traits, "; ", displayOptions), displayOptions);
+                    }
+                    return `<div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}><span><strong>Traits:</strong> None</span></div>`;
                 },
 
                 setTechniqueDisplayHeaderExtentFeatures = function (techDisplayData, displayOptions) {
@@ -365,11 +374,11 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                     if (techDisplayData.trigger != "") {
                         output += setFeatureLineWithHeader("wuxFeatureHeaderInfoTrigger", "Trigger", techDisplayData.trigger, displayOptions);
                     }
-                    if (techDisplayData.itemTraits.length > 0) {
-                        output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Item Traits", setDefinitions(techDisplayData.itemTraits, "<span> or </span>", displayOptions), displayOptions);
-                    }
                     if (techDisplayData.requirements != "") {
                         output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Requirements", techDisplayData.requirements, displayOptions);
+                    }
+                    if (techDisplayData.itemTraits.length > 0) {
+                        output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Req. Tool Traits", setDefinitions(techDisplayData.itemTraits, "<span> or </span>", displayOptions), displayOptions);
                     }
                     return output;
                 }
@@ -404,7 +413,6 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
 
                     let output = "";
                     output += setTechniqueDisplayFunctionBlockFlavorText(techDisplayData, displayOptions);
-                    output += setTechniqueDisplayFunctionBlockTraits(techDisplayData, displayOptions);
 
                     if (output != "") {
                         return `<div ${setFeatureStyle("wuxFeatureFunctionBlock", displayOptions)}>\n${output}\n</div>\n`;
@@ -415,13 +423,6 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
                 setTechniqueDisplayFunctionBlockFlavorText = function (techDisplayData, displayOptions) {
                     if (techDisplayData.flavorText != "") {
                         return setFeatureLine("wuxFeatureFunctionBlockFlavorText", techDisplayData.flavorText, displayOptions);
-                    }
-                    return "";
-                },
-
-                setTechniqueDisplayFunctionBlockTraits = function (techDisplayData, displayOptions) {
-                    if (techDisplayData.traits.length > 0) {
-                        return setFeatureLineWithHeader("wuxFeatureFunctionBlockRow", "Traits", setDefinitions(techDisplayData.traits, "; ", displayOptions), displayOptions);
                     }
                     return "";
                 },
@@ -490,12 +491,12 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             return "";
         },
 
-        setDefinitions = function (definitions, delimeter, displayOptions) {
+        setDefinitions = function (definitions, delimiter, displayOptions) {
             if (definitions.length > 0) {
                 let output = "";
                 for (var i = 0; i < definitions.length; i++) {
                     if (output != "") {
-                        output += delimeter;
+                        output += delimiter;
                     }
                     if (displayOptions.hasCSS) {
                         output += WuxSheetMain.Tooltip.Text(definitions[i].title, WuxDefinition.TooltipDescription(definitions[i]));
@@ -1910,7 +1911,7 @@ class JavascriptDataClass {
         return this.printFormatClassData(this.publicData, ": ");
     }
 
-    printFormatClassData(dictionary, delimeter) {
+    printFormatClassData(dictionary, delimiter) {
         let key = "";
         let data = "";
         for (let i = 0; i < dictionary.keys.length; i++) {
@@ -1919,7 +1920,7 @@ class JavascriptDataClass {
                 data += `,
             `;
             }
-            data += `${key}${delimeter}${dictionary.get(key)}`;
+            data += `${key}${delimiter}${dictionary.get(key)}`;
         }
         return data;
     }
@@ -1950,12 +1951,15 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             jsClassData.addPublicData("getSortedGroup");
             return jsClassData;
         },
-        getValues = function (keyArray, delimeter) {
+        getValues = function (keyArray, delimiter, prefix) {
             if (keyArray == undefined || keyArray == "") {
                 return [];
             }
             if (typeof keyArray == "string") {
-                keyArray = keyArray.split(delimeter);
+                keyArray = keyArray.split(delimiter);
+            }
+            if (prefix == undefined) {
+                prefix = "";
             }
 
             let output = [];
@@ -1964,7 +1968,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             let dataInfo;
 
             for (let i = 0; i < keyArray.length; i++) {
-                name = "" + keyArray[i].trim();
+                name = `${prefix}${keyArray[i].trim()}`;
 
                 lookup = name;
                 if (lookup.indexOf("(") >= 0) {

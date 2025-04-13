@@ -390,11 +390,11 @@ function RemoveRowData(charId, rowId) {
 // uuid generation
 function GenerateUUID() {
 
-    var a = 0, b = [];
+    let a = 0, b = [];
     return function () {
-        var c = (new Date()).getTime() + 0, d = c === a;
+        let c = (new Date()).getTime() + 0, d = c === a;
         a = c;
-        for (var e = new Array(8), f = 7; 0 <= f; f--) {
+        for (let e = new Array(8), f = 7; 0 <= f; f--) {
             e[f] = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(c % 64);
             c = Math.floor(c / 64);
         }
@@ -414,12 +414,12 @@ function GenerateUUID() {
         }
         return c;
     };
-};
+}
 
 function GenerateRowID() {
 
     return GenerateUUID().replace(/_/g, "Z");
-};
+}
 
 // Sanitization
 function SanitizeSheetRoll(roll) {

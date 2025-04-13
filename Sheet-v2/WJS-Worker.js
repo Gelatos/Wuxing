@@ -31,6 +31,24 @@ class WorkerAttributeHandler extends AttributeHandler {
     }
 }
 
+class WorkerRepeatingSectionHandler extends RepeatingSectionHandler {
+    
+    getIds(callback) {
+        let repeater = this;
+        getSectionIDs(this.repeatingSection, function (ids) {
+            ids.forEach(function (id) {
+                repeater.ids.push(id);
+            });
+            callback(repeater);
+        });
+    }
+    
+    removeId(id) {
+        super.removeId(id);
+        removeRepeatingRow(this.repeatingSection + "_" + id);
+    }
+}
+
 class WuxWorkerBuildManager {
     constructor(definitionIds) {
         this.workers = [];
@@ -1349,6 +1367,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
             }
         },
         filterTechniquesForActions = function (attributeHandler) {
+            Debug.Log("Filter Techniques For Actions");
             let advStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Advanced")]);
             let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Branched")]);
             let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
@@ -1359,11 +1378,15 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
             let jobStyleWorker = new WuxWorkerBuild("JobStyle");
             attributeHandler.addMod(jobStyleWorker.attrBuildDraft);
 
+            let techniqueWorker = new WuxWorkerBuild("Technique");
+            attributeHandler.addMod(techniqueWorker.attrBuildFinal);
+
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 styleWorker.setBuildStatsDraft(attrHandler);
                 styleWorker.cleanBuildStats();
                 jobStyleWorker.setBuildStatsDraft(attrHandler);
                 jobStyleWorker.cleanBuildStats();
+                techniqueWorker.setBuildStatsFinal(attrHandler);
 
                 let isVisible = false;
                 let workerVariableName = "";
@@ -1472,8 +1495,8 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                 jobStyleWorker.saveBuildStatsToFinal(attrHandler);
                 styleWorker.saveBuildStatsToFinal(attrHandler);
                 
-                let healValueData = WuxDef.Get("Cmb_HV");
-                combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.getValue(healValueData.getVariable()));
+                let healValueDefinition = WuxDef.Get("Cmb_HV");
+                combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueDefinition.getVariable()));
             });
         },
         setDefaultStyleDictionary = function (styleWorker, baseWorker) {
@@ -1763,9 +1786,9 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         selectOutfit = function (eventinfo) {
             console.log(`Selecting outfit`);
 
-            let outfitRepeatingSection = new WuxRepeatingSection("RepeatingOutfits");
+            let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
             outfitRepeatingSection.getIds(function (outfitRepeater) {
-                let emoteButtonRepeaterSection = new WuxRepeatingSection("RepeatingActiveEmotes");
+                let emoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotes");
                 emoteButtonRepeaterSection.getIds(function (emoteButtonRepeater) {
                     emoteButtonRepeater.removeAllIds();
 
@@ -1870,7 +1893,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         },
         updateOutfitEmotesGroup = function (eventinfo) {
             console.log(`Setting outfit emotes through a json submission`);
-            let outfitRepeatingSection = new WuxRepeatingSection("RepeatingOutfits");
+            let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
             let jsonData = "";
 
             try {
@@ -1893,7 +1916,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 
             let updateId = outfitRepeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
 
-            let emoteButtonRepeaterSection = new WuxRepeatingSection("RepeatingActiveEmotes");
+            let emoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotes");
             emoteButtonRepeaterSection.getIds(function (emoteButtonRepeater) {
 
                 let attributeHandler = new WorkerAttributeHandler();
@@ -1947,9 +1970,9 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             setOutfitEmotesIndividualEntry(eventinfo);
         },
         setOutfitEmotesIndividualEntry = function (eventinfo) {
-            let outfitRepeatingSection = new WuxRepeatingSection("RepeatingOutfits");
+            let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
             outfitRepeatingSection.getIds(function (outfitRepeater) {
-                let emoteButtonRepeaterSection = new WuxRepeatingSection("RepeatingActiveEmotes");
+                let emoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotes");
                 emoteButtonRepeaterSection.getIds(function (emoteButtonRepeater) {
                     emoteButtonRepeater.removeAllIds();
 
@@ -2014,5 +2037,46 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         UpdateOutfitEmotesName: updateOutfitEmotesName,
         UpdateOutfitEmotesDefaultUrl: updateOutfitEmotesDefaultUrl,
         UpdateOutfitEmotesUrl: updateOutfitEmotesUrl
+    };
+}());
+
+var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
+    'use strict';
+
+    var
+        openItemInspection = function (eventinfo) {
+            console.log("Open Item Popup");
+            
+            let itemPopupValuesRepeatingSection = new WorkerRepeatingSectionHandler("ItemPopupValues");
+            
+            showPopup(function (attrHandler) {
+                itemPopupValuesRepeatingSection.removeAllIds();
+            });
+        },
+        
+        showPopup = function (getAttrCallback) {
+            let attributeHandler = new WorkerAttributeHandler();
+            
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_PopupActive"), "on");
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "on");
+            });
+            attributeHandler.addGetAttrCallback(getAttrCallback);
+            attributeHandler.run();
+        },
+        
+        closePopup = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_PopupActive"), "0");
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "0");
+            });
+            attributeHandler.run();
+        }
+
+    return {
+        OpenItemInspection: openItemInspection,
+        ClosePopup: closePopup
     };
 }());

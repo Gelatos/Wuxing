@@ -23,7 +23,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += buildCharacterSheetTechHtml(sheetsDb);
             return output;
         },
-        
+
         printBase = function (sheetsDb) {
             let output = "";
             output += buildCharacterSheetBaseHtml(sheetsDb);
@@ -45,6 +45,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayAdvancementSheet.Print(sheetsDb);
             output += DisplayCoreCharacterSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
+            output += DisplayPopups.Print();
             return `${output}\n</div>`;
         },
 
@@ -70,6 +71,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += TrainingBackend.Print(sheetsDb);
             output += AdvancementBackend.Print(sheetsDb);
             output += OverviewBuilder.Print();
+            output += PopupBuilder.Print();
             output += ChatBuilder.Print();
             return `<script type="text/worker">
 			on("sheet:opened", function(eventinfo) {
@@ -170,7 +172,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn));
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedBranch"), WuxDef.GetAttribute("AdvancedBranch"), WuxDef.Filter([new DatabaseFilterData("group", "BranchType")]), true);
                             contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedBranch", WuxDef._learn));
-                            
+
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max), 1);
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusAttributePoints"), WuxDef.GetAttribute("BonusAttributePoints"), 0);
 
@@ -667,7 +669,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 								${job.name}`
                             );
                         },
-                        
+
                         buildJobShortDescription = function (job) {
                             return WuxSheetMain.Desc(job.shortDescription);
                         },
@@ -809,8 +811,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
-                        buildAttributes = function () 
-                        {
+                        buildAttributes = function () {
                             let attributes = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
                             let output = [];
                             let attributeValuesFilter = WuxDef.Filter([new DatabaseFilterData("group", "AttributeValue")]);
@@ -971,7 +972,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                             techStyles.push(buildJobGroupFlexTableEntry(value, techniqueDatabase, displayOptions));
                         }
                     });
-                    
+
                     return buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), "Job", "Job Techniques");
                 },
 
@@ -986,7 +987,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                         }
                         contents += WuxDefinition.InfoHeader(filteredData[i]) + WuxSheetMain.Table.FlexTable(techStyles);
                     }
-                    
+
                     return buildTechniqueStyleGroupTab(contents, "Advanced", "Advanced Techniques");
                 },
 
@@ -998,7 +999,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                     for (let i = 0; i < filteredData.length; i++) {
                         techStyles.push(buildStyleGroupFlexTableEntry(filteredData[i], techniqueDatabase, displayOptions));
                     }
-                    
+
                     return buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), "Branched", "Branched Techniques");
                 },
 
@@ -1010,7 +1011,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                     for (let i = 0; i < filteredData.length; i++) {
                         techStyles.push(buildStyleGroupFlexTableEntry(filteredData[i], techniqueDatabase, displayOptions));
                     }
-                    
+
                     return buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), "Basic", "Basic Techniques");
                 },
 
@@ -1725,7 +1726,13 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
             var
                 printEquipment = function () {
-                    return WuxSheetSidebar.Build("", "<div>&nbsp;</div>");
+                    let contents = "";
+                    contents += WuxSheetSidebar.BuildChatSection();
+                    contents += WuxSheetSidebar.BuildChecksSection();
+                    contents += WuxSheetSidebar.BuildBoonSection();
+                    contents += WuxSheetSidebar.BuildStatusSection();
+                    // contents += WuxSheetSidebar.BuildLanguageSection();
+                    return WuxSheetSidebar.Build("", contents);
                 }
 
             return {
@@ -1742,6 +1749,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = Equipment.Build();
                     return WuxSheetMain.Build(contents);
                 },
+
                 Equipment = Equipment || (function () {
                     'use strict';
 
@@ -1755,7 +1763,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                         buildEquippedItemsSection = function () {
                             let contents = "";
-                            
+
                             contents += WuxSheetMain.MultiRowGroup([equippedWearables(), equippedTools(), equippedConsumables()], WuxSheetMain.Table.FlexTable, 3);
 
                             contents = WuxSheetMain.TabBlock(contents);
@@ -1763,13 +1771,13 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             let definition = WuxDef.Get("Page_GearEquippedGear");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
-                        
+
                         equippedWearables = function () {
                             let contents = "";
 
                             let equippedGearDef = WuxDef.Get("Page_GearWearables");
                             contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
-                            
+
                             let filterData = WuxDef.Filter([new DatabaseFilterData("group", "GearGroup")]);
                             let emptyName = WuxDef.GetTitle("Page_GearEmpty");
                             for (let i = 0; i < filterData.length; i++) {
@@ -1810,10 +1818,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             }
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
-                        
+
                         buildWearablesSection = function () {
                             let contents = "";
-                            
+
                             contents += testTechniquePopup();
 
                             contents = WuxSheetMain.TabBlock(contents);
@@ -1821,9 +1829,13 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             let definition = WuxDef.Get("Page_GearEquippedGear");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
-                        
+
                         testTechniquePopup = function () {
-                            
+                            let contents = "";
+                            let itemPopupDef = WuxDef.Get("Popup_AddHeadGear");
+                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(itemPopupDef.getAttribute(), itemPopupDef.getTitle()));
+
+                            return contents;
                         },
 
                         wearables = function () {
@@ -1831,7 +1843,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             let influenceDef = WuxDef.Get("Soc_Influence");
                             let influenceTypeDef = WuxDef.Get("Soc_InfluenceType");
                             let severityDef = WuxDef.Get("Soc_Severity");
-                            
+
                             // wuxFlexTableItemGroup2
 
                             let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
@@ -1907,6 +1919,242 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
     };
 }());
 
+var DisplayPopups = DisplayPopups || (function () {
+    'use strict';
+
+    var
+        print = function () {
+            let output = "";
+            output += printTechPopup();
+            return printBasePopupSheet(output);
+        },
+        
+        printBasePopupSheet = function (contents) {
+            contents = ` <div class="wuxPopupOverlay">
+                ${contents}
+            </div>`;
+            return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_PopupActive"), contents);
+        },
+
+        printTechPopup = function () {
+            return buildBasePopup(WuxDef.GetAttribute("Popup_InspectPopupActive"), 
+                TechPopup.Print(), "Inspection",  WuxDef.GetAttribute("Popup_InspectPopupName")
+            );
+        },
+
+        buildBasePopup = function (attribute, popupContents, popupHeader, popupHeaderName) {
+            popupContents = `<div class="wuxPopup">
+                <div class="wuxPopupHeader">
+                    <span class="wuxPopupInnerHeader"${popupHeaderName != undefined ? `name="${popupHeaderName}"` : ""}>${popupHeader}</span>
+                    ${WuxSheetMain.Button(attribute, "Exit")}
+                </div>
+                ${popupContents}
+            </div>`;
+            return WuxSheetMain.HiddenField(attribute, popupContents);
+        },
+
+        TechPopup = TechPopup || (function () {
+            'use strict';
+
+            var
+                print = function () {
+                    let contents = "";
+                    
+                    return contents;
+                },
+                
+                buildTechniqueTemplate = function () {
+                    let contents = `<div class="wuxFeature">
+                        <input type="hidden" class="wuxFeatureHeader-flag" name="${WuxDef.GetAttribute("Popup_TechActionType")}">
+                        <div class="wuxFeatureHeader">
+                            <div class="wuxFeatureHeaderDisplayBlock">
+                                <span class="wuxFeatureHeaderName" name="${WuxDef.GetAttribute("Popup_TechName")}"></span>
+                                <div class="wuxFeatureHeaderInfo" name="${WuxDef.GetAttribute("Popup_TechResourceData")}"></div>
+                                <div class="wuxFeatureHeaderInfo" name="${WuxDef.GetAttribute("Popup_TechTargetingData")}"></div>
+                                <div class="wuxFeatureHeaderInfo">
+                                    <span><strong>Traits: </strong></span>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait0")}" value="0" />
+                                    <div class="wuxHiddenField">
+                                        <span>None</span>
+                                    </div>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait0")}" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <span class="wuxTooltip">
+                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait0")}">-</span>
+                                            <div class="wuxTooltipContent">
+                                                <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechTrait0")}">-</div>
+                                                <span class="wuxDescription"><em>Technique Trait</em></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait0Desc0")}"></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait0Desc1")}"></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait0Desc2")}"></span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait1")}" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <span>; </span>
+                                        <span class="wuxTooltip">
+                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait1")}">-</span>
+                                            <div class="wuxTooltipContent">
+                                                <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechTrait1")}">-</div>
+                                                <span class="wuxDescription"><em>Technique Trait</em></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait1Desc0")}"></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait1Desc1")}"></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait1Desc2")}"></span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait2")}" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <span>; </span>
+                                        <span class="wuxTooltip">
+                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait2")}">-</span>
+                                            <div class="wuxTooltipContent">
+                                                <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechTrait2")}">-</div>
+                                                <span class="wuxDescription"><em>Technique Trait</em></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait2Desc0")}"></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait2Desc1")}"></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait2Desc2")}"></span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait3")}" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <span>; </span>
+                                        <span class="wuxTooltip">
+                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait3")}">-</span>
+                                            <div class="wuxTooltipContent">
+                                                <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechTrait3")}">-</div>
+                                                <span class="wuxDescription"><em>Technique Trait</em></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait3Desc0")}"></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait3Desc1")}"></span>
+                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait3Desc2")}"></span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrigger")}" value="0" />
+                        <div class="wuxHiddenAuxField">
+                            <div class="wuxFeatureHeaderInfoReq">
+                                <span><strong>Trigger: </strong></span>
+                                <span name="${WuxDef.GetAttribute("Popup_TechTrigger")}"></span>
+                            </div>
+                        </div>
+                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechRequirements")}" value="0" />
+                        <div class="wuxHiddenAuxField">
+                            <div class="wuxFeatureHeaderInfoReq">
+                                <span><strong>Requirements: </strong></span>
+                                <span name="${WuxDef.GetAttribute("Popup_TechRequirements")}"></span>
+                            </div>
+                        </div>
+                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq0")}" value="0" />
+                        <div class="wuxHiddenAuxField">
+                            <div class="wuxFeatureHeaderInfoReq">
+                                <span><strong>Item Traits: </strong></span>
+                                <span class="wuxTooltip">
+                                    <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechItemReq0")}">-</span>
+                                    <div class="wuxTooltipContent">
+                                        <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechItemReq0")}">-</div>
+                                        <span class="wuxDescription"><em>Item Trait</em></span>
+                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc0")}"></span>
+                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc1")}"></span>
+                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc2")}"></span>
+                                    </div>
+                                </span>
+                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq1")}" value="0" />
+                                <div class="wuxHiddenAuxField">
+                                    <span> and </span>
+                                    <span class="wuxTooltip">
+                                        <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechItemReq1")}">-</span>
+                                        <div class="wuxTooltipContent">
+                                            <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechItemReq1")}">-</div>
+                                            <span class="wuxDescription"><em>Item Trait</em></span>
+                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc0")}"></span>
+                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc1")}"></span>
+                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc2")}"></span>
+                                        </div>
+                                    </span>
+                                </div>
+                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq2")}" value="0" />
+                                <div class="wuxHiddenAuxField">
+                                    <span> and </span>
+                                    <span class="wuxTooltip">
+                                        <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechItemReq2")}">-</span>
+                                        <div class="wuxTooltipContent">
+                                            <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechItemReq2")}">-</div>
+                                            <span class="wuxDescription"><em>Item Trait</em></span>
+                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc0")}"></span>
+                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc1")}"></span>
+                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc2")}"></span>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechFlavorText")}" value="0" />
+                        <div class="wuxHiddenAuxField">
+                            <div class="wuxFeatureFunctionBlock">
+                                <div class="wuxFeatureFunctionBlockFlavorText">
+                                    <span name="${WuxDef.GetAttribute("Popup_TechFlavorText")}"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wuxFeatureEffectsBlock">
+                                <div class="wuxFeatureCheckHeader">
+                                    <span><span class="wuxTooltip">
+                                            <span class="wuxTooltipText">
+                                                Effects
+                                            </span>
+                                            <div class="wuxTooltipContent">
+                                                <div class="wuxHeader2">Effects</div><span class="wuxDescription">This contains the effects that will occur when this technique is used. There is no skill check necessary.
+                                                </span>
+                                            </div>
+                                        </span></span>
+                                </div>
+                                <div class="wuxFeatureCheckBlock">
+                                    <span class="wuxFeatureCheckBlockRow">You create 6 disks in the targeted spaces.</span>
+                                </div>
+                                <div class="wuxFeatureCheckBlock">
+                                    <span class="wuxFeatureCheckBlockRow">Each disk has 10 + [Character Rank x 5] Hit Points.</span>
+                                </div>
+                                <div class="wuxFeatureCheckBlock">
+                                    <span class="wuxFeatureCheckBlockRow">If a disk is in adjacent spaces they may connect and will be considered one piece. These disks must be connected to solid ground otherwise they fall.</span>
+                                </div>
+                                <div class="wuxFeatureCheckHeader">
+                                    <span><span class="wuxTooltip">
+                                            <span class="wuxTooltipText">
+                                                DC 13
+                                            </span>
+                                            <div class="wuxTooltipContent">
+                                                <div class="wuxHeader2">DC 13</div><span class="wuxDescription">Your skill check must meet or exceed this value for the following effects to occur.
+                                                </span>
+                                            </div>
+                                        </span></span>
+                                </div>
+                                <div class="wuxFeatureCheckBlock">
+                                    <span class="wuxFeatureCheckBlockRow">Choose 3 more target spaces. </span>
+                                </div>
+                                <div class="wuxFeatureCheckBlock">
+                                    <span class="wuxFeatureCheckBlockRow">You create 3 disks in the targeted spaces.</span>
+                                </div>
+
+                            </div>
+                    </div>`;
+                }
+
+            return {
+                Print: print
+            }
+        }());
+
+    return {
+        Print: print
+    };
+}());
 
 var BuilderBackend = BuilderBackend || (function () {
     'use strict';
@@ -2146,6 +2394,33 @@ var OverviewBuilder = OverviewBuilder || (function () {
             }
 
             return output;
+        }
+    return {
+        Print: print
+    }
+}());
+
+var PopupBuilder = PopupBuilder || (function () {
+    'use strict';
+
+    var
+        print = function () {
+            let output = "";
+            output += listenerOpenItemInspectPopup();
+            output += listenerCloseInspectPopup();
+            return output;
+        },
+        listenerOpenItemInspectPopup = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Popup_AddHeadGear")}`];
+            let output = `WuxWorkerInspectPopup.OpenItemInspection(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerCloseInspectPopup = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Popup_InspectPopupActive")}`];
+            let output = `WuxWorkerInspectPopup.ClosePopup(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
     return {
         Print: print
