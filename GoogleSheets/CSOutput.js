@@ -215,7 +215,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             let contents = "";
                             contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginAdvancement"));
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
-                            contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR")));
+                            contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR", WuxDef._max)));
                             contents += WuxDefinition.BuildText(WuxDef.Get("Advancement"),
                                 `${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement", WuxDef._max))}`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementJob"), WuxDef.GetAttribute("AdvancementJob"), `cost: 2 advancement points`);
@@ -606,7 +606,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let titleDefinition = WuxDef.Get("Title_Advancement");
                             contents += WuxDefinition.InfoHeader(titleDefinition);
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
-                            contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR")));
+                            contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR", WuxDef._max)));
                             contents += WuxDefinition.BuildText(WuxDef.Get("Advancement"),
                                 `${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement", WuxDef._max))}`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementJob"), WuxDef.GetAttribute("AdvancementJob"), `cost: 2 advancement points`);
@@ -1407,13 +1407,19 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                         resources = function () {
                             let output = [];
+                            
+                            // add CR
+                            let crDef = WuxDef.Get("CR");
+                            let contents = `${WuxSheetMain.Header(`${crDef.title}`)}`;
+                            contents += WuxDefinition.BuildNumberLabelInput(crDef, crDef.getAttribute(), `Max: <span name="${crDef.getAttribute(WuxDef._max)}"></span>`);
+                            output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
 
                             let groups = ["General", "Combat", "Social"];
                             for (let i = 0; i < groups.length; i++) {
                                 let resourcesDef = WuxDef.Get(groups[i]);
                                 let resourceDefs = WuxDef.Filter([new DatabaseFilterData("group", groups[i]), new DatabaseFilterData("hasMax", "true")]);
 
-                                let contents = `${WuxSheetMain.Header(`${resourcesDef.title}`)}`;
+                                contents = `${WuxSheetMain.Header(`${resourcesDef.title}`)}`;
                                 for (let j = 0; j < resourceDefs.length; j++) {
                                     contents += WuxDefinition.BuildNumberLabelInput(resourceDefs[j], resourceDefs[j].getAttribute(), `Max: <span name="${resourceDefs[j].getAttribute(WuxDef._max)}"></span>`);
                                 }
@@ -1945,7 +1951,7 @@ var DisplayPopups = DisplayPopups || (function () {
         buildBasePopup = function (attribute, popupContents, popupHeader, popupHeaderName) {
             popupContents = `<div class="wuxPopup">
                 <div class="wuxPopupHeader">
-                    <span class="wuxPopupInnerHeader"${popupHeaderName != undefined ? `name="${popupHeaderName}"` : ""}>${popupHeader}</span>
+                    <span class="wuxPopupInnerHeader"${popupHeaderName != undefined ? ` name="${popupHeaderName}"` : ""}>${popupHeader}</span>
                     ${WuxSheetMain.Button(attribute, "Exit")}
                 </div>
                 ${popupContents}
@@ -2377,6 +2383,7 @@ var OverviewBuilder = OverviewBuilder || (function () {
             let output = "";
             output += listenerUpdateDisplayName();
             output += listenerUpdateStatus();
+            output += listenerUpdateCR();
             return output;
         },
         listenerUpdateDisplayName = function () {
@@ -2394,6 +2401,12 @@ var OverviewBuilder = OverviewBuilder || (function () {
             }
 
             return output;
+        },
+        listenerUpdateCR = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("CR")}`];
+            let output = `WuxWorkerGeneral.UpdateCR(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
     return {
         Print: print

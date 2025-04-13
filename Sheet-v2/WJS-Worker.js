@@ -126,7 +126,7 @@ class WuxWorkerBuild {
     }
 
     setPointsMax(attributeHandler) {
-        let max = this.definition.formula.getValue(attributeHandler);
+        let max = this.definition.formula.getValue(attributeHandler, this.definition.getTitle());
         attributeHandler.addUpdate(this.attrMax, max);
     }
 
@@ -266,8 +266,11 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
     updateLevel(attributeHandler, fieldName, level) {
         let worker = this;
         level = parseInt(level);
+        let crDefinition = WuxDef.Get("CR");
         attributeHandler.addUpdate(fieldName, level);
         attributeHandler.addMod(worker.attrBuildDraft);
+        attributeHandler.addMod(crDefinition.getVariable());
+        attributeHandler.addMod(crDefinition.getVariable(WuxDef._max));
         let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
         let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute"]);
@@ -275,8 +278,13 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             let cr = worker.getCharacterRank(level);
-            attrHandler.addUpdate(WuxDef.GetVariable("CR"), cr);
-            combatDetailsHandler.onUpdateCR(attrHandler, cr);
+            if (cr != attrHandler.parseInt(crDefinition.getVariable(WuxDef._max))) {
+                if (attrHandler.parseInt(crDefinition.getVariable()) == attrHandler.parseInt(crDefinition.getVariable(WuxDef._max))) {
+                    attrHandler.addUpdate(crDefinition.getVariable(), cr);
+                    combatDetailsHandler.onUpdateCR(attrHandler, cr);
+                }
+                attrHandler.addUpdate(crDefinition.getVariable(WuxDef._max), cr);
+            }
 
             worker.setBuildStatsDraft(attrHandler);
             worker.updateBuildStats(attrHandler, fieldName, level);
@@ -547,12 +555,30 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let attributeHandler = new WorkerAttributeHandler();
             let statusHandler = new StatusHandler(attributeHandler);
             statusHandler.changeStatus(statusName, eventinfo.newValue);
+        },
+        updateCR = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+            let cr = parseInt(eventinfo.newValue);
+
+            WuxWorkerAttributes.UpdateStats(attributeHandler);
+            WuxWorkerSkills.UpdateStats(attributeHandler);
+            WuxWorkerKnowledges.UpdateStats(attributeHandler);
+            WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+            WuxWorkerAdvancement.UpdateStats(attributeHandler);
+            updateStats(attributeHandler);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                combatDetailsHandler.onUpdateCR(attrHandler, cr);
+            });
+            attributeHandler.run();
         }
+        
     return {
         UpdatePageState: updatePageState,
         UpdateStats: updateStats,
         UpdateDisplayName: updateDisplayName,
-        UpdateStatus: updateStatus
+        UpdateStatus: updateStatus,
+        UpdateCR: updateCR
     };
 }());
 
@@ -1034,7 +1060,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                     let worker = new WuxWorkerBuildManager("Technique");
                     worker.onChangeWorkerAttribute(attributeHandler2, eventinfo.sourceAttribute, eventinfo.newValue);
 
-                    attributeHandler2.addMod(WuxDef.GetVariable("CR"));
+                    attributeHandler2.addMod(WuxDef.GetVariable("CR", WuxDef._max));
                     attributeHandler2.addMod(WuxDef.GetVariable("Affinity"));
                     attributeHandler2.addMod(WuxDef.GetVariable("AdvancedAffinity"));
                     attributeHandler2.addMod(WuxDef.GetVariable("AdvancedBranch"));
@@ -1044,7 +1070,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                         techniqueWorker.setBuildStatsDraft(attrHandler2);
                         let workerVariableName = "";
                         let styleValue = "0";
-                        let cr = attrHandler2.parseInt(WuxDef.GetVariable("CR"));
+                        let cr = attrHandler2.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
                         let affinities = [attrHandler2.parseString(WuxDef.GetVariable("Affinity")), attrHandler2.parseString(WuxDef.GetVariable("AdvancedAffinity")), attrHandler2.parseString(WuxDef.GetVariable("AdvancedBranch"))];
 
                         let advStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Advanced")]);
@@ -1114,7 +1140,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
             Debug.Log("Filter Techniques for Learn");
             let techniqueWorker = new WuxWorkerBuild("Technique");
             attributeHandler.addMod(techniqueWorker.attrBuildDraft);
-            attributeHandler.addMod(WuxDef.GetVariable("CR"));
+            attributeHandler.addMod(WuxDef.GetVariable("CR", WuxDef._max));
             attributeHandler.addMod(WuxDef.GetVariable("Affinity"));
             attributeHandler.addMod(WuxDef.GetVariable("AdvancedAffinity"));
             attributeHandler.addMod(WuxDef.GetVariable("AdvancedBranch"));
@@ -1124,7 +1150,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                 techniqueWorker.cleanBuildStats();
                 let workerVariableName = "";
                 let styleValue = "0";
-                let cr = attrHandler.parseInt(WuxDef.GetVariable("CR"));
+                let cr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
                 let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")), attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")), attrHandler.parseString(WuxDef.GetVariable("AdvancedBranch"))];
 
                 let advStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Advanced")]);
@@ -1151,7 +1177,6 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
             tier = isNaN(tier) ? 0 : tier;
             let affinity = styleDefinition.affinity.trim();
             let isLearnable = tier <= cr && (affinity == "" || affinities.some(entry => entry.includes(affinity)));
-            Debug.Log(`Setting learnable tech for style ${styleDefinition.name}\naffinity: ${affinity} affinities: ${affinities} Learnable: ${isLearnable}`);
             attrHandler.addUpdate(styleDefinition.getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
             attrHandler.addUpdate(styleDefinition.getVariable(), styleStatus);
 
@@ -1161,7 +1186,6 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                 tier = isNaN(tier) ? 0 : tier;
                 affinity = techDefinitions[i].affinity;
                 isLearnable = !techDefinitions[i].isFree && styleStatus != "0" && tier <= cr && (affinity == "" || affinities.some(entry => entry.includes(affinity)));
-                Debug.Log(`Tech: ${techDefinitions[i].name} affinities: ${affinity == "" || affinities.some(entry => entry.includes(affinity)) ? "true" : "false"} Learnable: ${isLearnable}`);
                 attrHandler.addUpdate(techDefinitions[i].getVariable(WuxDef._subfilter), isLearnable ? "0" : "1");
 
                 workerVariableName = techDefinitions[i].getVariable();

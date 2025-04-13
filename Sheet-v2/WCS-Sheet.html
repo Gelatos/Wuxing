@@ -432,7 +432,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="wuxDescription"><span name="attr_adv-cr"></span></span>
+                                <span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
                                 <div class="wuxHeader2">Advancement<div class="wuxTooltipButtonContainer">
                                         <div class="wuxTooltipButton wuxFloatRight">
                                             <div class="wuxTooltipText">i</div>
@@ -3165,7 +3165,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="wuxDescription"><span name="attr_adv-cr"></span></span>
+                                <span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
                                 <div class="wuxHeader2">Advancement<div class="wuxTooltipButtonContainer">
                                         <div class="wuxTooltipButton wuxFloatRight">
                                             <div class="wuxTooltipText">i</div>
@@ -18094,6 +18094,30 @@
                                     </div>
                                 </div>
                                 <div class="wuxFlexTableItemGroup wuxMinWidth150">
+                                    <div class="wuxHeader">Character Rank</div>
+                                    <div class="wuxHeader2">Character Rank<div class="wuxTooltipButtonContainer">
+                                            <div class="wuxTooltipButton wuxFloatRight">
+                                                <div class="wuxTooltipText">i</div>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2">Character Rank</div>
+
+                                                    <span class="wuxDescription">Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level.</span>
+                                                    <span class="wuxDescription">Your Character rank begins at 1.
+                                                        At 5th Level it increases to 2.
+                                                        At 15th Level it increases to 3.
+                                                        At 30th Level it increases to 4.
+                                                        At 50th Level it increases to 5.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-cr" value="" placeholder="0" />
+                                        <div class="wuxInputLabel">Max: <span name="attr_adv-cr_max"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wuxFlexTable">
+                                <div class="wuxFlexTableItemGroup wuxMinWidth150">
                                     <div class="wuxHeader">General</div>
                                     <div class="wuxHeader2">Hit Points<div class="wuxTooltipButtonContainer">
                                             <div class="wuxTooltipButton wuxFloatRight">
@@ -18128,8 +18152,6 @@
                                         <div class="wuxInputLabel">Max: <span name="attr_gen-will_max"></span></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="wuxFlexTable">
                                 <div class="wuxFlexTableItemGroup wuxMinWidth150">
                                     <div class="wuxHeader">Combat</div>
                                     <div class="wuxHeader2">Chakra<div class="wuxTooltipButtonContainer">
@@ -18185,6 +18207,8 @@
                                         <div class="wuxInputLabel">Max: <span name="attr_cmb-surge_max"></span></div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="wuxFlexTable">
                                 <div class="wuxFlexTableItemGroup wuxMinWidth150">
                                     <div class="wuxHeader">Social</div>
                                     <div class="wuxHeader2">Favor<div class="wuxTooltipButtonContainer">
@@ -28604,7 +28628,7 @@
                     <span class="wuxPopupInnerHeader" name="attr_popup-inspectpopupname">Inspection</span>
                     <div class="wuxButton">
                         <input type="checkbox" name="attr_popup-inspectpopupactive">
-                        <span>Close</span>
+                        <span>Exit</span>
                     </div>
                 </div>
 
@@ -28949,6 +28973,9 @@
     
     on("change:sts-surprised", function (eventinfo) {
     WuxWorkerGeneral.UpdateStatus("Stat_Surprised", eventinfo)
+    });
+    on("change:adv-cr", function (eventinfo) {
+    WuxWorkerGeneral.UpdateCR(eventinfo)
     });
     on("change:popup-addheadgear", function (eventinfo) {
     WuxWorkerInspectPopup.OpenItemInspection(eventinfo)
