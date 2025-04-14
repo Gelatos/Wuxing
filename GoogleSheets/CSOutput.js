@@ -1978,7 +1978,7 @@ var DisplayPopups = DisplayPopups || (function () {
                     return `
                     <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemName")}">
                     <div class="wuxHiddenAuxField">
-                        ${WuxSheetMain.Header2("Item Data")}
+                        ${WuxSheetMain.Header("Item Data")}
                         <div class="wuxFeature">
                         </div>
                     </div>
@@ -1988,23 +1988,23 @@ var DisplayPopups = DisplayPopups || (function () {
                 buildTechniqueTemplate = function () {
                     return `
                     <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechName")}">
-                    <div class="wuxHiddenAuxField">
-                        ${WuxSheetMain.Header2("Technique")}
+                    <div class="wuxHiddenField">
+                        ${WuxSheetMain.Header("Technique")}
                         <div class="wuxFeature">
                             <input type="hidden" class="wuxFeatureHeader-flag" name="${WuxDef.GetAttribute("Popup_TechActionType")}">
                             <div class="wuxFeatureHeader">
                                 <div class="wuxFeatureHeaderDisplayBlock">
                                     <span class="wuxFeatureHeaderName" name="${WuxDef.GetAttribute("Popup_TechName")}"></span>
-                                    <div class="wuxFeatureHeaderInfo" name="${WuxDef.GetAttribute("Popup_TechResourceData")}"></div>
-                                    <div class="wuxFeatureHeaderInfo" name="${WuxDef.GetAttribute("Popup_TechTargetingData")}"></div>
+                                    <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Popup_TechResourceData")}"></span></div>
+                                    <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Popup_TechTargetingData")}"></span></div>
                                     <div class="wuxFeatureHeaderInfo">
                                         <span><strong>Traits: </strong></span>
                                         <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait0")}" value="0" />
-                                        <div class="wuxHiddenField">
+                                        <div class="wuxHiddenInlineAuxField">
                                             <span>None</span>
                                         </div>
                                         <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait0")}" value="0" />
-                                        <div class="wuxHiddenAuxField">
+                                        <div class="wuxHiddenInlineField">
                                             <span class="wuxTooltip">
                                                 <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait0")}">-</span>
                                                 <div class="wuxTooltipContent">
@@ -2017,7 +2017,7 @@ var DisplayPopups = DisplayPopups || (function () {
                                             </span>
                                         </div>
                                         <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait1")}" value="0" />
-                                        <div class="wuxHiddenAuxField">
+                                        <div class="wuxHiddenInlineField">
                                             <span>; </span>
                                             <span class="wuxTooltip">
                                                 <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait1")}">-</span>
@@ -2031,7 +2031,7 @@ var DisplayPopups = DisplayPopups || (function () {
                                             </span>
                                         </div>
                                         <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait2")}" value="0" />
-                                        <div class="wuxHiddenAuxField">
+                                        <div class="wuxHiddenInlineField">
                                             <span>; </span>
                                             <span class="wuxTooltip">
                                                 <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait2")}">-</span>
@@ -2045,7 +2045,7 @@ var DisplayPopups = DisplayPopups || (function () {
                                             </span>
                                         </div>
                                         <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait3")}" value="0" />
-                                        <div class="wuxHiddenAuxField">
+                                        <div class="wuxHiddenInlineField">
                                             <span>; </span>
                                             <span class="wuxTooltip">
                                                 <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait3")}">-</span>
@@ -2062,21 +2062,21 @@ var DisplayPopups = DisplayPopups || (function () {
                                 </div>
                             </div>
                             <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrigger")}" value="0" />
-                            <div class="wuxHiddenAuxField">
+                            <div class="wuxHiddenField">
                                 <div class="wuxFeatureHeaderInfoReq">
                                     <span><strong>Trigger: </strong></span>
                                     <span name="${WuxDef.GetAttribute("Popup_TechTrigger")}"></span>
                                 </div>
                             </div>
                             <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechRequirements")}" value="0" />
-                            <div class="wuxHiddenAuxField">
+                            <div class="wuxHiddenField">
                                 <div class="wuxFeatureHeaderInfoReq">
                                     <span><strong>Requirements: </strong></span>
                                     <span name="${WuxDef.GetAttribute("Popup_TechRequirements")}"></span>
                                 </div>
                             </div>
                             <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq0")}" value="0" />
-                            <div class="wuxHiddenAuxField">
+                            <div class="wuxHiddenField">
                                 <div class="wuxFeatureHeaderInfoReq">
                                     <span><strong>Item Traits: </strong></span>
                                     <span class="wuxTooltip">
@@ -2086,17 +2086,17 @@ var DisplayPopups = DisplayPopups || (function () {
                                             <span class="wuxDescription"><em>Item Trait</em></span>
                                             <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc0")}"></span>
                                             <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc1")}" value="0" />
-                                            <div class="wuxHiddenAuxField">
+                                            <div class="wuxHiddenField">
                                                 <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc1")}"></span>
                                             </div>
                                             <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc2")}" value="0" />
-                                            <div class="wuxHiddenAuxField">
+                                            <div class="wuxHiddenField">
                                                 <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc2")}"></span>
                                             </div>
                                         </div>
                                     </span>
                                     <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq1")}" value="0" />
-                                    <div class="wuxHiddenAuxField">
+                                    <div class="wuxHiddenInlineField">
                                         <span> and </span>
                                         <span class="wuxTooltip">
                                             <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechItemReq1")}">-</span>
@@ -2105,18 +2105,18 @@ var DisplayPopups = DisplayPopups || (function () {
                                                 <span class="wuxDescription"><em>Item Trait</em></span>
                                                 <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc0")}"></span>
                                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc1")}" value="0" />
-                                                <div class="wuxHiddenAuxField">
+                                                <div class="wuxHiddenField">
                                                     <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc1")}"></span>
                                                 </div>
                                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc2")}" value="0" />
-                                                <div class="wuxHiddenAuxField">
+                                                <div class="wuxHiddenField">
                                                     <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc2")}"></span>
                                                 </div>
                                             </div>
                                         </span>
                                     </div>
                                     <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq2")}" value="0" />
-                                    <div class="wuxHiddenAuxField">
+                                    <div class="wuxHiddenInlineField">
                                         <span> and </span>
                                         <span class="wuxTooltip">
                                             <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechItemReq2")}">-</span>
@@ -2125,11 +2125,11 @@ var DisplayPopups = DisplayPopups || (function () {
                                                 <span class="wuxDescription"><em>Item Trait</em></span>
                                                 <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc0")}"></span>
                                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc1")}" value="0" />
-                                                <div class="wuxHiddenAuxField">
+                                                <div class="wuxHiddenField">
                                                     <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc1")}"></span>
                                                 </div>
                                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc2")}" value="0" />
-                                                <div class="wuxHiddenAuxField">
+                                                <div class="wuxHiddenField">
                                                     <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc2")}"></span>
                                                 </div>
                                             </div>
@@ -2139,7 +2139,7 @@ var DisplayPopups = DisplayPopups || (function () {
                             </div>
                             
                             <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechFlavorText")}" value="0" />
-                            <div class="wuxHiddenAuxField">
+                            <div class="wuxHiddenField">
                                 <div class="wuxFeatureFunctionBlock">
                                     <div class="wuxFeatureFunctionBlockFlavorText">
                                         <span name="${WuxDef.GetAttribute("Popup_TechFlavorText")}"></span>
@@ -2162,7 +2162,7 @@ var DisplayPopups = DisplayPopups || (function () {
                                 </div>
                                 
                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect1Name")}" value="0" />
-                                <div class="wuxHiddenAuxField">
+                                <div class="wuxHiddenField">
                                     <div class="wuxFeatureCheckHeader">
                                         <span class="wuxTooltip">
                                             <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect1Name")}">Name</span>
@@ -2174,14 +2174,14 @@ var DisplayPopups = DisplayPopups || (function () {
                                     </div>
                                 </div>
                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect1")}" value="0" />
-                                <div class="wuxHiddenAuxField">
+                                <div class="wuxHiddenField">
                                     <div class="wuxFeatureCheckBlock">
                                         <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect1")}">Effect</span>
                                     </div>
                                 </div>
                                 
                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect2Name")}" value="0" />
-                                <div class="wuxHiddenAuxField">
+                                <div class="wuxHiddenField">
                                     <div class="wuxFeatureCheckHeader">
                                         <span class="wuxTooltip">
                                             <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect2Name")}">Name</span>
@@ -2193,14 +2193,14 @@ var DisplayPopups = DisplayPopups || (function () {
                                     </div>
                                 </div>
                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect2")}" value="0" />
-                                <div class="wuxHiddenAuxField">
+                                <div class="wuxHiddenField">
                                     <div class="wuxFeatureCheckBlock">
                                         <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect2")}">Effect</span>
                                     </div>
                                 </div>
                                 
                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect3Name")}" value="0" />
-                                <div class="wuxHiddenAuxField">
+                                <div class="wuxHiddenField">
                                     <div class="wuxFeatureCheckHeader">
                                         <span class="wuxTooltip">
                                             <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect3Name")}">Name</span>
@@ -2212,14 +2212,14 @@ var DisplayPopups = DisplayPopups || (function () {
                                     </div>
                                 </div>
                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect3")}" value="0" />
-                                <div class="wuxHiddenAuxField">
+                                <div class="wuxHiddenField">
                                     <div class="wuxFeatureCheckBlock">
                                         <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect3")}">Effect</span>
                                     </div>
                                 </div>
                                 
                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect4Name")}" value="0" />
-                                <div class="wuxHiddenAuxField">
+                                <div class="wuxHiddenField">
                                     <div class="wuxFeatureCheckHeader">
                                         <span class="wuxTooltip">
                                             <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect4Name")}">Name</span>
@@ -2231,14 +2231,14 @@ var DisplayPopups = DisplayPopups || (function () {
                                     </div>
                                 </div>
                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect4")}" value="0" />
-                                <div class="wuxHiddenAuxField">
+                                <div class="wuxHiddenField">
                                     <div class="wuxFeatureCheckBlock">
                                         <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect4")}">Effect</span>
                                     </div>
                                 </div>
                                 
                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect5Name")}" value="0" />
-                                <div class="wuxHiddenAuxField">
+                                <div class="wuxHiddenField">
                                     <div class="wuxFeatureCheckHeader">
                                         <span class="wuxTooltip">
                                             <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect5Name")}">Name</span>
@@ -2250,7 +2250,7 @@ var DisplayPopups = DisplayPopups || (function () {
                                     </div>
                                 </div>
                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect5")}" value="0" />
-                                <div class="wuxHiddenAuxField">
+                                <div class="wuxHiddenField">
                                     <div class="wuxFeatureCheckBlock">
                                         <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect5")}">Effect</span>
                                     </div>
@@ -2258,7 +2258,7 @@ var DisplayPopups = DisplayPopups || (function () {
                             </div>
                             
                             <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechFlavorText")}" value="0" />
-                            <div class="wuxHiddenAuxField">
+                            <div class="wuxHiddenField">
                                 <div class="wuxFeatureFunctionBlock">
                                     <div class="wuxFeatureFunctionBlockRow">
                                         <span><strong>Definitions: </strong></span>
@@ -2267,11 +2267,11 @@ var DisplayPopups = DisplayPopups || (function () {
                                                 <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechDef0")}">Name</div>
                                                 <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef0Desc0")}">Desc0</span>
                                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef0Desc1")}" value="0" />
-                                                <div class="wuxHiddenAuxField">
+                                                <div class="wuxHiddenField">
                                                     <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef0Desc1")}"></span>
                                                 </div>
                                                 <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef0Desc2")}" value="0" />
-                                                <div class="wuxHiddenAuxField">
+                                                <div class="wuxHiddenField">
                                                     <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef0Desc2")}"></span>
                                                 </div>
                                             </span>
@@ -2283,11 +2283,11 @@ var DisplayPopups = DisplayPopups || (function () {
                                                     <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechDef1")}">Name</div>
                                                     <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef1Desc0")}">Desc0</span>
                                                     <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef1Desc1")}" value="0" />
-                                                    <div class="wuxHiddenAuxField">
+                                                    <div class="wuxHiddenField">
                                                         <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef1Desc1")}"></span>
                                                     </div>
                                                     <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef1Desc2")}" value="0" />
-                                                    <div class="wuxHiddenAuxField">
+                                                    <div class="wuxHiddenField">
                                                         <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef1Desc2")}"></span>
                                                     </div>
                                                 </span>
@@ -2300,11 +2300,11 @@ var DisplayPopups = DisplayPopups || (function () {
                                                     <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechDef2")}">Name</div>
                                                     <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef2Desc0")}">Desc0</span>
                                                     <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef2Desc1")}" value="0" />
-                                                    <div class="wuxHiddenAuxField">
+                                                    <div class="wuxHiddenField">
                                                         <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef2Desc1")}"></span>
                                                     </div>
                                                     <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef2Desc2")}" value="0" />
-                                                    <div class="wuxHiddenAuxField">
+                                                    <div class="wuxHiddenField">
                                                         <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef2Desc2")}"></span>
                                                     </div>
                                                 </span>
@@ -2317,11 +2317,11 @@ var DisplayPopups = DisplayPopups || (function () {
                                                     <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechDef3")}">Name</div>
                                                     <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef3Desc0")}">Desc0</span>
                                                     <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef3Desc1")}" value="0" />
-                                                    <div class="wuxHiddenAuxField">
+                                                    <div class="wuxHiddenField">
                                                         <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef3Desc1")}"></span>
                                                     </div>
                                                     <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef3Desc2")}" value="0" />
-                                                    <div class="wuxHiddenAuxField">
+                                                    <div class="wuxHiddenField">
                                                         <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef3Desc2")}"></span>
                                                     </div>
                                                 </span>
@@ -2342,7 +2342,8 @@ var DisplayPopups = DisplayPopups || (function () {
                         <span name="${WuxDef.GetAttribute("Popup_ItemSelectName")}"></span>
                     </div>`;
 
-                    return buildRepeater(WuxDef.GetVariable("ItemPopupValues"), itemData);
+                    return `${WuxSheetMain.Header("Items in Group")}
+                    ${buildRepeater(WuxDef.GetVariable("ItemPopupValues"), itemData)}`;
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {

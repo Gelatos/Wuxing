@@ -33,6 +33,40 @@ class WorkerAttributeHandler extends AttributeHandler {
 
 class WorkerRepeatingSectionHandler extends RepeatingSectionHandler {
     
+    generateUUID = (function() {
+        "use strict";
+
+        var a = 0, b = [];
+        return function() {
+            var c = (new Date()).getTime() + 0, d = c === a;
+            a = c;
+            for (var e = new Array(8), f = 7; 0 <= f; f--) {
+                e[f] = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(c % 64);
+                c = Math.floor(c / 64);
+            }
+            c = e.join("");
+            if (d) {
+                for (f = 11; 0 <= f && 63 === b[f]; f--) {
+                    b[f] = 0;
+                }
+                b[f]++;
+            } else {
+                for (f = 0; 12 > f; f++) {
+                    b[f] = Math.floor(64 * Math.random());
+                }
+            }
+            for (f = 0; 12 > f; f++){
+                c += "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(b[f]);
+            }
+            return c;
+        };
+    }())
+
+    generateRowId() {
+        let id = this.generateUUID();
+        return id.replace(/_/g, "Z");
+    }
+    
     getIds(callback) {
         let repeater = this;
         getSectionIDs(this.repeatingSection, function (ids) {
@@ -45,7 +79,6 @@ class WorkerRepeatingSectionHandler extends RepeatingSectionHandler {
     
     removeId(id) {
         super.removeId(id);
-        Debug.Log("removing " + id);
         removeRepeatingRow(this.repeatingSection + "_" + id);
     }
 }
@@ -2075,12 +2108,15 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let itemPopupValuesRepeatingSection = new WorkerRepeatingSectionHandler("ItemPopupValues");
             itemPopupValuesRepeatingSection.getIds(function (itemPopupRepeater) {
                 showPopup(function (attrHandler) {
+                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupName"), "Item Inspection");
+                    
                     itemPopupRepeater.removeAllIds();
                     let selectedItem = populateItemInspectionItems(attrHandler, itemPopupRepeater, eventinfo);
                     if (selectedItem == null) {
                         Debug.LogError(`No items found for ${eventinfo.sourceAttribute}`);
                         closePopup();
                     }
+                    setItemInfo(attrHandler, selectedItem);
                 });
             });
         },
@@ -2092,12 +2128,10 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             }
 
             let firstItem = null;
-            let itemFilter = WuxDef.Filter([new DatabaseFilterData("group", "Gear"), new DatabaseFilterData("subGroup", itemGroup)]);
+            let itemFilter = WuxGear.Filter([new DatabaseFilterData("group", itemGroup)]);
             itemFilter.forEach(function (item) {
                 let newrowid = itemPopupRepeater.generateRowId();
-                Debug.Log(`Adding item ${item.name} to popup with id ${itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectName"))}`);
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectName")), item.getTitle());
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectId")), item.name);
+                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectName")), item.name);
                 
                 if (firstItem == null) {
                     firstItem = item;
@@ -2138,6 +2172,165 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "0");
             });
             attributeHandler.run();
+        },
+        
+        setItemInfo = function (attrHandler, item) {
+            clearItemInfo(attrHandler);
+
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemName"), item.name);
+            
+            // set the technique info
+            if (item.itemType == "UsableItem" && item.hasTechnique) {
+                setTechniqueInfo(attrHandler, item.technique);
+            }
+            else {
+                clearTechniqueInfo(attrHandler);
+            }
+            
+        },
+        
+        clearItemInfo = function (attrHandler) {
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemName"), "");
+        },
+        
+        setTechniqueInfo = function (attrHandler, technique) {
+            clearTechniqueInfo(attrHandler);
+            
+            let displayData = new TechniqueDisplayData(technique);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechName"), displayData.name);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechActionType"), displayData.actionType);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechResourceData"), displayData.resourceData);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTargetingData"), displayData.targetData);
+            if (displayData.traits.length > 0) {
+                addDefinitions(attrHandler, displayData.traits, "Popup_TechTrait", 3);
+            }
+
+            if (displayData.trigger != "") {
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrigger"), displayData.trigger);
+            }
+            if (displayData.requirements != "") {
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechRequirements"), displayData.requirements);
+            }
+            if (displayData.itemTraits.length > 0) {
+                addDefinitions(attrHandler, displayData.itemTraits, "Popup_TechItemReq", 2);
+            }
+            if (displayData.flavorText != "") {
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechFlavorText"), displayData.flavorText);
+            }
+            if (displayData.effects.length > 0) {
+                addTechniqueEffects(attrHandler, displayData.effects);
+            }
+            if (displayData.definitions.length > 0) {
+                addDefinitions(attrHandler, displayData.definitions, "Popup_TechDef", 3);
+            }
+        },
+        
+        addDefinitions = function (attrHandler, definitionData, prefix, descriptionMaxIndex) {
+            for (let i = 0; i < definitionData.length; i++) {
+                attrHandler.addUpdate(WuxDef.GetVariable(`${prefix}${i}`), definitionData[i].getTitle());
+                
+                let description;
+                for(let j = 0; j < definitionData[i].descriptions.length; j++) {
+                    if (j <= descriptionMaxIndex) {
+                        attrHandler.addUpdate(WuxDef.GetVariable(`${prefix}${i}Desc${j}`), definitionData[i].descriptions[j]);
+                    }
+                    else {
+                        attrHandler.addUpdate(WuxDef.GetVariable(`${prefix}${i}Desc${descriptionMaxIndex}`), definitionData[i].descriptions[j]);
+                    }
+                }
+            }
+        },
+        
+        addTechniqueEffects = function (attrHandler, effects) 
+        {
+            let incrementer = 0;
+            effects.forEach(function (effect) {
+                if (effect.check != undefined) {
+                    attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect${incrementer}Name`), effect.check);
+                    attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect${incrementer}Desc`), effect.checkDescription);
+                    
+                    if (effect.effects != undefined) {
+                        effect.effects.forEach(function (desc) {
+                            attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect${incrementer}`), desc);
+                            incrementer++;
+                        });
+                    }
+                    incrementer++;
+                }
+            });
+        },
+        
+        clearTechniqueInfo = function (attrHandler) {
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechActionType"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechName"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDisplayName"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechResourceData"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTargetingData"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait0"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait0Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait0Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait0Desc2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait1Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait1Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait1Desc2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait2Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait2Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait2Desc2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait3"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait3Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait3Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrait3Desc2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrigger"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechRequirements"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq0"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq0Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq0Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq0Desc2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq1Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq1Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq1Desc2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq2Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq2Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechItemReq2Desc2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechFlavorText"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect0"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect0Name"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect0Desc"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect1Name"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect1Desc"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect2Name"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect2Desc"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect3"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect3Name"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect3Desc"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect4"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect4Name"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect4Desc"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect5"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect5Name"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect5Desc"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef0"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef0Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef0Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef0Desc2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef1Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef1Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef1Desc2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef2Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef2Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef2Desc2"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef3"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef3Desc0"), "");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef3Desc1"), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef3Desc2"), 0);
         }
 
     return {

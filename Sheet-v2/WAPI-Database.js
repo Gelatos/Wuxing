@@ -1177,6 +1177,7 @@ class ItemData extends WuxDatabaseData {
         this.name = "";
         this.group = "";
         this.category = "";
+        this.itemType = "None";
         this.bulk = 0;
         this.value = 0;
         this.traits = "";
@@ -1213,6 +1214,7 @@ class GoodsData extends ItemData {
 
     createEmpty() {
         super.createEmpty();
+        this.itemType = "Goods";
         this.affinity = "";
         this.location = "";
         this.rarity = 0;
@@ -1249,6 +1251,7 @@ class UsableItemData extends ItemData {
 
     createEmpty() {
         super.createEmpty();
+        this.itemType = "UsableItem";
         this.valMod = 0;
         this.dc = 0;
         this.time = 0;
@@ -1653,12 +1656,18 @@ class ItemDefinitionData extends DefinitionData {
         super.importJson(json);
         this.category = json.category;
         this.value = json.value;
+        this.bulk = json.bulk;
+        this.traits = json.traits;
+        this.description = json.description;
         this.techInfo = json.techInfo;
     }
     createEmpty() {
         super.createEmpty();
         this.category = "";
         this.value = 0;
+        this.bulk = 0;
+        this.traits = "";
+        this.description = "";
         this.techInfo = {};
     }
 }
@@ -1829,6 +1838,9 @@ class TechniqueDisplayData {
         if (this.targetData != "") {
             output += `{{Targeting=${this.targetData}}}`;
         }
+        if (this.traits.length > 0) {
+            output += this.rollTemplateDefinitions(this.traits, "Trait");
+        }
         if (this.trigger != "") {
             output += `{{Trigger=${this.trigger}}}`;
         }
@@ -1840,9 +1852,6 @@ class TechniqueDisplayData {
         }
         if (this.flavorText != "") {
             output += `{{FlavorText=${this.flavorText}}}`;
-        }
-        if (this.traits.length > 0) {
-            output += this.rollTemplateDefinitions(this.traits, "Trait");
         }
         if (this.effects.length > 0) {
             output += this.rollTemplateEffects();
@@ -1875,9 +1884,7 @@ class TechniqueDisplayData {
         this.effects.forEach(function (effect) {
             if (effect.check != undefined) {
                 output += `{{Effect${incrementer}Name=${effect.check}}}{{Effect${incrementer}Desc=${effect.checkDescription}}}`;
-                if (effect.effects == undefined) {
-                    output += `{{Effect${incrementer}=Error! No effects found!}}`;
-                } else {
+                if (effect.effects != undefined) {
                     effect.effects.forEach(function (desc) {
                         output += `{{Effect${incrementer}=${desc}}}`;
                         incrementer++;
@@ -3200,38 +3207,8 @@ class RepeatingSectionHandler {
         this.ids = [];
     }
 
-    generateUUID = (function() {
-        "use strict";
-
-        var a = 0, b = [];
-        return function() {
-            var c = (new Date()).getTime() + 0, d = c === a;
-            a = c;
-            for (var e = new Array(8), f = 7; 0 <= f; f--) {
-                e[f] = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(c % 64);
-                c = Math.floor(c / 64);
-            }
-            c = e.join("");
-            if (d) {
-                for (f = 11; 0 <= f && 63 === b[f]; f--) {
-                    b[f] = 0;
-                }
-                b[f]++;
-            } else {
-                for (f = 0; 12 > f; f++) {
-                    b[f] = Math.floor(64 * Math.random());
-                }
-            }
-            for (f = 0; 12 > f; f++){
-                c += "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(b[f]);
-            }
-            return c;
-        };
-    }())
-
     generateRowId() {
-        let id = this.generateUUID();
-        return id.replace(/_/g, "Z");
+        return "";
     }
     
     addFieldNames(fieldNames) {
@@ -3285,6 +3262,37 @@ class SandboxRepeatingSectionHandler extends RepeatingSectionHandler {
     constructor(definitionId, characterId) {
         super(definitionId);
         this.characterId = characterId;
+    }
+
+    generateUUID() {
+        let a = 0, b = [];
+        return function () {
+            let c = (new Date()).getTime() + 0, d = c === a;
+            a = c;
+            for (let e = new Array(8), f = 7; 0 <= f; f--) {
+                e[f] = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(c % 64);
+                c = Math.floor(c / 64);
+            }
+            c = e.join("");
+            if (d) {
+                for (f = 11; 0 <= f && 63 === b[f]; f--) {
+                    b[f] = 0;
+                }
+                b[f]++;
+            } else {
+                for (f = 0; 12 > f; f++) {
+                    b[f] = Math.floor(64 * Math.random());
+                }
+            }
+            for (f = 0; 12 > f; f++) {
+                c += "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(b[f]);
+            }
+            return c;
+        };
+    }
+
+    generateRowId() {
+        return this.generateUUID().replace(/_/g, "Z");
     }
     
     findRepeatingRowIdAttribute(id) {

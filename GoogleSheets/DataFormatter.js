@@ -15,9 +15,10 @@ var Debug = Debug || (function () {
     };
 }());
 
-function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefinitionArray, systemDefinitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
+function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefinitionArray, systemDefinitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, techniqueArray) {
+    let output = "";
+    
     let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
-
     definitionDatabase.importSheets(definitionArray, function (arr) {
         let definition = new DefinitionData(arr);
         let baseDefinition = definitionDatabase.get(definition.group);
@@ -82,34 +83,38 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
         let techDef = technique.createDefinition(definitionDatabase.get("Technique"));
         definitionDatabase.add(techDef.name, techDef);
     });
-    definitionDatabase.importSheets(goodsArray, function (arr) {
-        let item = new GoodsData(arr);
-        return item.createDefinition(definitionDatabase.get("Goods"));
-    });
-    definitionDatabase.importSheets(gearArray, function (arr) {
-        let item = new UsableItemData(arr);
-        return item.createDefinition(definitionDatabase.get("Gear"));
-    });
-    definitionDatabase.importSheets(consumablesArray, function (arr) {
-        let item = new UsableItemData(arr);
-        return item.createDefinition(definitionDatabase.get("Consumable"));
-    });
-    
 
-    let jsClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.Get);
-    jsClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
-    jsClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
-    jsClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
-    jsClassData.addPublicFunction("getVariables", WuxDefinition.GetVariables);
-    jsClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
-    jsClassData.addPublicFunction("getTitle", WuxDefinition.GetTitle);
-    jsClassData.addPublicFunction("getDescription", WuxDefinition.GetDescription);
+    let definitionClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.GetDefinition);
+    definitionClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
+    definitionClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
+    definitionClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
+    definitionClassData.addPublicFunction("getVariables", WuxDefinition.GetVariables);
+    definitionClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
+    definitionClassData.addPublicFunction("getTitle", WuxDefinition.GetTitle);
+    definitionClassData.addPublicFunction("getDescription", WuxDefinition.GetDescription);
     let variableMods = definitionDatabase.filter(new DatabaseFilterData("group", "VariableMod"));
     for (let i = 0; i < variableMods.length; i++) {
-        jsClassData.addPublicVariable(variableMods[i].variable, `"${variableMods[i].variable}"`);
+        definitionClassData.addPublicVariable(variableMods[i].variable, `"${variableMods[i].variable}"`);
     }
 
-    return PrintLargeEntry(jsClassData.print("WuxDef"), "]");
+    output += definitionClassData.print("WuxDef");
+    
+    return PrintLargeEntry(output, "]");
+}
+
+function SetItemTechDatabase(techniqueArray, goodsArray, gearArray, consumablesArray) {
+    let output = "";
+
+    let goodsClassData = JavascriptDatabase.Create(SheetsDatabase.CreateGoods(goodsArray), WuxDefinition.GetGoods);
+    output += goodsClassData.print("WuxGoods") + "\n";
+
+    let gearClassData = JavascriptDatabase.Create(SheetsDatabase.CreateGear(gearArray), WuxDefinition.GetItem);
+    output += gearClassData.print("WuxGear") + "\n";
+
+    let consumableClassData = JavascriptDatabase.Create(SheetsDatabase.CreateConsumables(consumablesArray), WuxDefinition.GetItem);
+    output += consumableClassData.print("WuxConsumable") + "\n";
+
+    return PrintLargeEntry(output, "]");
 }
 
 function Test() {
@@ -236,6 +241,9 @@ var SheetsDatabase = SheetsDatabase || (function () {
         CreateLores: createLores,
         CreateJobs: createJobs,
         CreateStatus: createStatus,
+        CreateGoods: createGoods,
+        CreateGear: createGear,
+        CreateConsumables: createConsumables,
         CreateDefinitionTypes: createDefinitionTypes
     }
 }());
@@ -687,7 +695,11 @@ var WuxDefinition = WuxDefinition || (function () {
     'use strict';
 
     var
+
         get = function (key) {
+            return undefined;
+        },
+        getDefinition = function (key) {
             if (values[key] == undefined) {
                 let definition = new DefinitionData();
                 definition.name = `${key} Not Found`;
@@ -711,6 +723,22 @@ var WuxDefinition = WuxDefinition || (function () {
                 default:
                     return new DefinitionData(values[key]);
             }
+        },
+        getItem = function (key) {
+            if (values[key] == undefined) {
+                let itemData = new ItemData();
+                itemData.name = `${key} Not Found`;
+                return itemData;
+            }
+            return new UsableItemData(values[key]);
+        },
+        getGoods = function (key) {
+            if (values[key] == undefined) {
+                let itemData = new ItemData();
+                itemData.name = `${key} Not Found`;
+                return itemData;
+            }
+            return new GoodsData(values[key]);
         },
         getAttribute = function (key, mod, mod1) {
             let data = get(key);
@@ -846,7 +874,9 @@ var WuxDefinition = WuxDefinition || (function () {
         }
     ;
     return {
-        Get: get,
+        GetDefinition: getDefinition,
+        GetItem: getItem,
+        GetGoods: getGoods,
         GetAttribute: getAttribute,
         GetVariable: getVariable,
         GetAbbreviation: getAbbreviation,
