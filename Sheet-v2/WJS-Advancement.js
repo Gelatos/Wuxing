@@ -1,542 +1,601 @@
-var AdvancementController = AdvancementController || (function () {
+var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 	'use strict';
-	
+
 	var
-	build = function () {
-	  
-	}
-	;
+		finishBuild = function () {
+			Debug.Log("Finish Character Creation Build");
+			let attributeHandler = new WorkerAttributeHandler();
+
+			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Technique"]);
+			pointManagers.commitChanges(attributeHandler);
+
+			let trainingWorker = new WuxTrainingWorkerBuild();
+			trainingWorker.commitChanges(attributeHandler);
+
+			let advancementWorker = new WuxAdvancementWorkerBuild();
+			advancementWorker.commitChanges(attributeHandler);
+
+			WuxWorkerAttributes.UpdateStats(attributeHandler);
+			WuxWorkerSkills.UpdateStats(attributeHandler);
+			WuxWorkerKnowledges.UpdateStats(attributeHandler);
+			WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+			WuxWorkerAdvancement.UpdateStats(attributeHandler);
+			WuxWorkerGeneral.UpdateStats(attributeHandler);
+
+			leavePageVariables(attributeHandler);
+			attributeHandler.run();
+		},
+		leavePageVariables = function (attributeHandler) {
+			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
+			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
+			attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+			WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
+		},
+		setAffinityValue = function (eventinfo) {
+			Debug.Log(`Setting ${eventinfo.sourceAttribute}`);
+			let attributeHandler = new WorkerAttributeHandler();
+			let affinityVariable = eventinfo.sourceAttribute;
+
+			attributeHandler.addMod(affinityVariable);
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				let variable = `${affinityVariable}${WuxDef._learn}`;
+				let desc = WuxDef.GetDescription(`${WuxDef.GetAbbreviation()}${eventinfo.newValue}`);
+				Debug.Log(`Setting ${variable} to ${desc}`);
+				attrHandler.addUpdate(variable, desc);
+			});
+			WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
+			attributeHandler.run();
+		},
+		setBonusAttributes = function () {
+			Debug.Log("Setting Bonus Attribute Points");
+			let attributeHandler = new WorkerAttributeHandler();
+			let attributesVariable = WuxDef.Get("Attribute");
+
+			attributeHandler.addFormulaMods(attributesVariable);
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				let newValue = attributesVariable.formula.getValue(attrHandler);
+				attrHandler.addUpdate(attributesVariable.getVariable(WuxDef._max), newValue);
+			});
+			attributeHandler.run();
+		},
+		setInnateDefense = function () {
+			Debug.Log("Setting Innate Defense");
+			let attributeHandler = new WorkerAttributeHandler();
+			let innateDefenseVariable = WuxDef.GetVariable("InnateDefense");
+			let braceDef = WuxDef.Get("Def_Brace");
+			let fortitudeDef = WuxDef.Get("Def_Fortitude");
+			let disruptionDef = WuxDef.Get("Def_Disruption");
+			let hideDef = WuxDef.Get("Def_Hide");
+			let reflexDef = WuxDef.Get("Def_Reflex");
+			let evasionDef = WuxDef.Get("Def_Evasion");
+			attributeHandler.addFormulaMods(braceDef);
+			attributeHandler.addFormulaMods(fortitudeDef);
+			attributeHandler.addFormulaMods(disruptionDef);
+			attributeHandler.addFormulaMods(hideDef);
+			attributeHandler.addFormulaMods(reflexDef);
+			attributeHandler.addFormulaMods(evasionDef);
+
+			attributeHandler.addMod(innateDefenseVariable);
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				attrHandler.addUpdate(braceDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(fortitudeDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(disruptionDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(hideDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(reflexDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(evasionDef.getVariable(WuxDef._expertise), 0);
+
+				switch (attrHandler.parseString(innateDefenseVariable)) {
+					case "BOD":
+						setDefenseVariables(attrHandler, "Defense", "BOD", "Brace", "Fortitude");
+						break;
+					case "PRC":
+						setDefenseVariables(attrHandler, "Defense", "PRC", "Disruption", "Hide");
+						break;
+					case "QCK":
+						setDefenseVariables(attrHandler, "Defense", "QCK", "Reflex", "Evasion");
+						break;
+					default:
+						attrHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), "Choose an attribute");
+						break;
+				}
+
+				attrHandler.addUpdate(braceDef.getVariable(), braceDef.formula.getValue(attrHandler));
+				attrHandler.addUpdate(fortitudeDef.getVariable(), fortitudeDef.formula.getValue(attrHandler));
+				attrHandler.addUpdate(disruptionDef.getVariable(), disruptionDef.formula.getValue(attrHandler));
+				attrHandler.addUpdate(hideDef.getVariable(), hideDef.formula.getValue(attrHandler));
+				attrHandler.addUpdate(reflexDef.getVariable(), reflexDef.formula.getValue(attrHandler));
+				attrHandler.addUpdate(evasionDef.getVariable(), evasionDef.formula.getValue(attrHandler));
+			});
+			attributeHandler.run();
+		},
+		setInnateSense = function () {
+			Debug.Log("Setting Innate Sense");
+			let attributeHandler = new WorkerAttributeHandler();
+			let innateSenseVariable = WuxDef.GetVariable("InnateSense");
+			let senseResolveDef = WuxDef.Get("Def_Resolve");
+			let senseFreewillDef = WuxDef.Get("Def_Freewill");
+			let senseInsightDef = WuxDef.Get("Def_Insight");
+			let senseNoticeDef = WuxDef.Get("Def_Notice");
+			let senseScrutinyDef = WuxDef.Get("Def_Scrutiny");
+			let senseDetectDef = WuxDef.Get("Def_Detect");
+			attributeHandler.addFormulaMods(senseResolveDef);
+			attributeHandler.addFormulaMods(senseFreewillDef);
+			attributeHandler.addFormulaMods(senseInsightDef);
+			attributeHandler.addFormulaMods(senseNoticeDef);
+			attributeHandler.addFormulaMods(senseScrutinyDef);
+			attributeHandler.addFormulaMods(senseDetectDef);
+
+			attributeHandler.addMod(innateSenseVariable);
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				attrHandler.addUpdate(senseResolveDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(senseFreewillDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(senseInsightDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(senseNoticeDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(senseScrutinyDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(senseDetectDef.getVariable(WuxDef._expertise), 0);
+
+				switch (attrHandler.parseString(innateSenseVariable)) {
+					case "CNV":
+						setDefenseVariables(attrHandler, "Sense", "CNV", "Resolve", "Freewill");
+						break;
+					case "INT":
+						setDefenseVariables(attrHandler, "Sense", "INT", "Insight", "Notice");
+						break;
+					case "RSN":
+						setDefenseVariables(attrHandler, "Sense", "RSN", "Scrutiny", "Detect");
+						break;
+					default:
+						attrHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), "Choose an attribute");
+						break;
+				}
+
+				attrHandler.addUpdate(senseResolveDef.getVariable(), senseResolveDef.formula.getValue(attrHandler));
+				attrHandler.addUpdate(senseFreewillDef.getVariable(), senseFreewillDef.formula.getValue(attrHandler));
+				attrHandler.addUpdate(senseInsightDef.getVariable(), senseInsightDef.formula.getValue(attrHandler));
+				attrHandler.addUpdate(senseNoticeDef.getVariable(), senseNoticeDef.formula.getValue(attrHandler));
+				attrHandler.addUpdate(senseScrutinyDef.getVariable(), senseScrutinyDef.formula.getValue(attrHandler));
+				attrHandler.addUpdate(senseDetectDef.getVariable(), senseDetectDef.formula.getValue(attrHandler));
+			});
+			attributeHandler.run();
+		},
+		setDefenseVariables = function (attrHandler, type, attribute, defense1, defense2) {
+			let attrDefinition = WuxDef.Get(`Attr_${attribute}`);
+			let def1Definition = WuxDef.Get(`Def_${defense1}`);
+			let def2Definition = WuxDef.Get(`Def_${defense2}`);
+
+			attrHandler.addUpdate(WuxDef.GetVariable(`Innate${type}`, WuxDef._learn), getDefenseDescription(type, attrDefinition, def1Definition, def2Definition));
+			attrHandler.addUpdate(def1Definition.getVariable(WuxDef._expertise), 2);
+			attrHandler.addUpdate(def2Definition.getVariable(WuxDef._expertise), 2);
+		},
+		getDefenseDescription = function (type, attrDefinition, def1Definition, def2Definition) {
+			Debug.Log("Getting Defense Description");
+
+			let output = `${attrDefinition.title} is associated with the following ${type}s:\n\n`;
+			output += `${def1Definition.title}: ${def1Definition.getDescription()}\n\n${def2Definition.title}: ${def2Definition.getDescription()}`;
+			Debug.Log(output);
+			return output;
+		}
+
 	return {
-	  Build: build
+		FinishBuild: finishBuild,
+		SetAffinityValue: setAffinityValue,
+		SetBonusAttributes: setBonusAttributes,
+		SetInnateDefense: setInnateDefense,
+		SetInnateSense: setInnateSense
 	};
 }());
 
+var WuxWorkerTraining = WuxWorkerTraining || (function () {
+	'use strict';
 
-function GetAdvancementLevelData(totalLevel) {
+	var
+		goToPageSet = function () {
+			let attributeHandler = new WorkerAttributeHandler();
+			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Training");
+			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Training");
+			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Training"), "Training");
 
-	if (totalLevel == "" || totalLevel == "0" || totalLevel == undefined) {
-		return {
-			keys: [],
-			values: {}
-		};
-	}
-	else {
-		return JSON.parse(totalLevel);
-	}
-}
+			attributeHandler.addMod(WuxDef.GetVariable("PP"));
+			let worker = new WuxTrainingWorkerBuild();
+			attributeHandler.addMod(worker.attrMax);
+			attributeHandler.addMod(worker.attrBuildFinal);
 
-function SetAdvancementLevelData(levelData, className, currentLevel, increaseValue) {
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				worker.setBuildStatsFinal(attrHandler);
+				worker.updateMaxBuildStats(attrHandler, WuxDef.GetVariable("PP"), attrHandler.parseInt(WuxDef.GetVariable("PP")));
+				worker.revertBuildStatsDraft(attrHandler);
+			});
 
-	if (!levelData.keys.includes(className)) {
-		levelData.keys.push(className);
-	}
-	levelData.values[className] = { current: currentLevel, increase: increaseValue };
+			WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
+			attributeHandler.run();
+		},
+		finishBuild = function () {
+			Debug.Log("Finish Training Build");
+			let attributeHandler = new WorkerAttributeHandler();
 
-	return levelData;
-}
+			let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+			pointManagers.commitChanges(attributeHandler);
 
-function ResetAdvancementLevel(levelData, updateCurrent) {
+			let trainingWorker = new WuxTrainingWorkerBuild();
+			trainingWorker.commitChanges(attributeHandler);
 
-	let i = 0;
-	while (i < levelData.keys.length) {
-		if (updateCurrent) {
-			levelData.values[levelData.keys[i]].current = ParseIntValue(levelData.values[levelData.keys[i]].current)
-				+ ParseIntValue(levelData.values[levelData.keys[i]].increase);
-		}
-		levelData.values[levelData.keys[i]].increase = 0;
+			WuxWorkerKnowledges.UpdateStats(attributeHandler);
+			WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
 
-		if (levelData.values[levelData.keys[i]].current == 0) {
-			delete levelData.values[levelData.keys[i]];
-			levelData.keys = levelData.keys.splice(i, 1);
-		}
-		else {
-			i++;
-		}
-	}
+			leavePageVariables(attributeHandler);
+			attributeHandler.run();
+		},
+		exitBuild = function () {
+			Debug.Log("Exit Training Build");
+			let attributeHandler = new WorkerAttributeHandler();
 
-	return levelData;
-}
+			let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+			pointManagers.resetChanges(attributeHandler);
 
+			let trainingWorker = new WuxTrainingWorkerBuild();
+			trainingWorker.resetChanges(attributeHandler);
 
+			WuxWorkerKnowledges.UpdateStats(attributeHandler);
+			WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
 
-// ======== Back Button
+			leavePageVariables(attributeHandler);
+			attributeHandler.run();
+		},
+		leavePageVariables = function (attributeHandler) {
+			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
+			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
+			attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+			WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
+		},
 
-on("change:advancement-button-back", function () {
-
-	update_advancement_back();
-});
-
-var update_advancement_back = function () {
-
-	let mod_attrs = ["advancement-previousPage", "advancement-level-total"];
-
-	getAttrs(mod_attrs, function (v) {
-		let update = {};
-
-		update = ResetAdvancement(update, v);
-		update["characterSheetDisplayStyle"] = v["advancement-previousPage"];
-		update["advancement-previousPage"] = "";
-		update["advancement-button-reset-everything"] = "on";
-
-		setAttrs(update, { silent: true });
-	});
-
-}
-
-
-
-
-// ======== Submission
-
-on("change:advancement-button-submit", function () {
-
-	update_advancement_submit();
-});
-
-var update_advancement_submit = function () {
-
-	let growthArray = GetGrowthList(true);
-	let skillsList = GetAllSkillsList(true);
-
-	let mod_attrs = ["base_level", "statbonus_pb", "branchpoints_bonus",
-		"builder-ancestry", "builder-baseAbilityScores", "builder-baseGrowths", "builder-baseGrowthsTotal",
-		"advancement-level-total", "advancement-advancementGrowthsTotal",
-		"techniques-techpoints", "techniques-jobTech", "techniques-learnedNewTech"
-	];
-	mod_attrs = mod_attrs.concat(growthArray);
-	mod_attrs = mod_attrs.concat(GetSkillTrainingFieldList());
-	mod_attrs = mod_attrs.concat(GetBonusSkillsList());
-	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
-	mod_attrs = mod_attrs.concat(GetDerivedBonusStatsList());
-	mod_attrs = mod_attrs.concat(GetBranchesTrainingList());
-	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(false));
-	mod_attrs = mod_attrs.concat(GetTechniquePointFieldsList(true));
-	mod_attrs = mod_attrs.concat(GetTechniquePointBonusFieldsList());
-	mod_attrs = mod_attrs.concat(GetTechSlotTechniquesFieldList());
-
-	getAttrs(mod_attrs, function (v) {
-
-		let update = {};
-
-		let baseLevel = AttrParseInt(v, "base_level");
-		let totalLevel = baseLevel;
-		let classLevelTotal = 0;
-		let levelData = GetAdvancementLevelData(v["advancement-level-total"]);
-
-		let baseAbilityScores = AttrParseJSON(v, "builder-baseAbilityScores");
-		if (baseAbilityScores == "") {
-			baseAbilityScores = CreateAbilityScoreArrayData();
-		}
-		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
-		let ancestryData = GetAncestryInfo(ancestryName);
-
-		let baseGrowths = AttrParseJSON(v, "builder-baseGrowths");
-		if (baseGrowths == "") {
-			baseGrowths = CreateGrowthsArrayData();
-		}
-		let baseGrowthsTotal = AttrParseJSON(v, "builder-baseGrowthsTotal");
-		if (baseGrowthsTotal == "") {
-			baseGrowthsTotal = CreateGrowthsArrayData();
-		}
-		let advancementGrowthsTotal = AttrParseJSON(v, "advancement-advancementGrowthsTotal");
-		if (advancementGrowthsTotal == "") {
-			advancementGrowthsTotal = CreateGrowthsArrayData();
+		convertPp = function () {
+			Debug.Log("Converting PP to Level");
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxTrainingWorkerBuild();
+			worker.convertPp(attributeHandler);
+			attributeHandler.run();
+		},
+		setTrainingPoints = function () {
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxTrainingWorkerBuild();
+			worker.updateTrainingPoints(attributeHandler);
+			attributeHandler.run();
+		},
+		setTrainingPointsUpdate = function (eventinfo) {
+			Debug.Log("Setting Training Points Values");
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxTrainingWorkerBuild();
+			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			attributeHandler.run();
 		}
 
-		let startingStatistics = GetCharacterStatGrowthTotals(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
-		let bonusGrowths = SetBonusGrowthFieldArray(v);
-		let coreData = SetCoreDataFieldArray(v, "");
+	return {
+		GoToPageSet: goToPageSet,
+		FinishBuild: finishBuild,
+		ExitBuild: exitBuild,
+		ConvertPp: convertPp,
+		SetTrainingPoints: setTrainingPoints,
+		SetTrainingPointsUpdate: setTrainingPointsUpdate
+	};
+}());
 
-		let advancementUpdate = {
-			mainLevel: {
-				header: "Character Level Increased!",
-				desc: ""
-			},
-			levelUp: [],
-			currentLevelIndex: 0,
-			techniques: new Dictionary(),
+var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
+	'use strict';
 
-			addDesc: function (desc) {
-				if (this.levelUp[this.currentLevelIndex].desc != "") {
-					this.levelUp[this.currentLevelIndex].desc += "\n";
+	var
+		goToPageSet = function () {
+			let attributeHandler = new WorkerAttributeHandler();
+			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Advancement");
+			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Advancement");
+			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement"), "Advancement");
+
+			attributeHandler.addMod(WuxDef.GetVariable("XP"));
+			let worker = new WuxAdvancementWorkerBuild();
+			attributeHandler.addMod(worker.attrMax);
+			attributeHandler.addMod(worker.attrBuildFinal);
+
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				worker.setBuildStatsFinal(attrHandler);
+				worker.updateMaxBuildStats(attrHandler, WuxDef.GetVariable("XP"), attrHandler.parseInt(WuxDef.GetVariable("XP")));
+				worker.revertBuildStatsDraft(attrHandler);
+			});
+
+			WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
+			attributeHandler.run();
+		},
+		finishBuild = function () {
+			Debug.Log("Finish Advancement Build");
+			let attributeHandler = new WorkerAttributeHandler();
+
+			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
+			pointManagers.commitChanges(attributeHandler);
+
+			let advancementWorker = new WuxAdvancementWorkerBuild();
+			advancementWorker.commitChanges(attributeHandler);
+
+			WuxWorkerAttributes.UpdateStats(attributeHandler);
+			WuxWorkerSkills.UpdateStats(attributeHandler);
+			WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+			updateStats(attributeHandler);
+
+			leavePageVariables(attributeHandler);
+			attributeHandler.run();
+		},
+		exitBuild = function () {
+			Debug.Log("Exit Advancement Build");
+			let attributeHandler = new WorkerAttributeHandler();
+
+			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
+			pointManagers.resetChanges(attributeHandler);
+
+			let advancementWorker = new WuxAdvancementWorkerBuild();
+			advancementWorker.resetChanges(attributeHandler);
+
+			WuxWorkerAttributes.UpdateStats(attributeHandler);
+			WuxWorkerSkills.UpdateStats(attributeHandler);
+			WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+			updateStats(attributeHandler);
+
+			leavePageVariables(attributeHandler);
+			attributeHandler.run();
+		},
+		leavePageVariables = function (attributeHandler) {
+			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
+			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
+			attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+			WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
+		},
+
+		convertXp = function () {
+			Debug.Log("Converting XP to Level");
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxAdvancementWorkerBuild();
+			worker.convertXp(attributeHandler);
+			attributeHandler.run();
+		},
+		setLevel = function (eventinfo) {
+			Debug.Log("Setting Level");
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxAdvancementWorkerBuild();
+			worker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			attributeHandler.run();
+		},
+		setAdvancementPointsUpdate = function (eventinfo) {
+			Debug.Log("Setting Advancement Points");
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxAdvancementWorkerBuild();
+			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			attributeHandler.run();
+		},
+		setAffinityStats = function (attributeHandler) {
+			let affinityVariable = WuxDef.GetVariable("Affinity");
+			let crVariable = WuxDef.GetVariable("CR");
+			attributeHandler.addMod([affinityVariable, crVariable]);
+
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+
+				let crValue = attrHandler.parseInt(crVariable);
+				let initiativeVar = WuxDef.GetVariable("Initiative", WuxDef._affinity);
+				let hvVar = WuxDef.GetVariable("Combat_HV", WuxDef._affinity);
+				let surgeVar = WuxDef.GetVariable("Combat_Surge", WuxDef._affinity);
+				let armorVar = WuxDef.GetVariable("Combat_Armor", WuxDef._affinity);
+				let resistanceVar = WuxDef.GetVariable("Combat_Resistance", WuxDef._affinity);
+				let resistance = new ResistanceData();
+
+				attrHandler.addUpdate(initiativeVar, 0);
+				attrHandler.addUpdate(hvVar, 0);
+				attrHandler.addUpdate(surgeVar, 0);
+				attrHandler.addUpdate(armorVar, 0);
+				attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+
+				switch (attrHandler.get(affinityVariable)) {
+					case "Wood":
+						attrHandler.addUpdate(initiativeVar, crValue);
+						attrHandler.addUpdate(hvVar, crValue * 2);
+						resistance.addResistanceValue("Cold", crValue * 2);
+						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+						break;
+					case "Fire":
+						attrHandler.addUpdate(initiativeVar, crValue);
+						resistance.addResistanceValue("Fire", crValue * 2);
+						resistance.addResistanceValue("Burn", crValue);
+						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+						break;
+					case "Earth":
+						resistance.addResistanceValue("Fire", crValue * 2);
+						resistance.addResistanceValue("Piercing", crValue);
+						resistance.addResistanceValue("Shock", crValue * 2);
+						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+						break;
+					case "Metal":
+						attrHandler.addUpdate(armorVar, crValue);
+						resistance.addResistanceValue("Force", crValue);
+						resistance.addResistanceValue("Piercing", crValue);
+						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+						break;
+					case "Water":
+						attrHandler.addUpdate(surgeVar, 1);
+						resistance.addResistanceValue("Cold", crValue * 2);
+						resistance.addResistanceValue("Force", crValue);
+						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+						break;
+
 				}
-				this.levelUp[this.currentLevelIndex].desc += desc;
-			},
+			});
+		},
+		updateStats = function (attributeHandler) {
+			let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", "CR"));
+			formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", "Level")));
 
-			addLevel: function (baseHeader) {
-				this.currentLevelIndex = this.levelUp.length;
-				this.levelUp.push({
-					header: `${baseHeader}`,
-					desc: ``
-				});
-			},
+			for (let i = 0; i < formulaDefinitions.length; i++) {
+				attributeHandler.addFormulaMods(formulaDefinitions[i]);
+			}
 
-			addMainDesc: function (desc) {
-				if (this.mainLevel.desc != "") {
-					this.mainLevel.desc += "\n";
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				for (let i = 0; i < formulaDefinitions.length; i++) {
+					if (formulaDefinitions[i].isResource) {
+						attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
+						attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
+					} else {
+						attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
+					}
 				}
-				this.mainLevel.desc += desc;
-			}
-		};
-
-		let classData;
-		let classFieldName = "";
-		let classLevel;
-
-		// Create advancement changes
-		for (let i = 0; i < levelData.keys.length; i++) {
-
-			classLevel = levelData.values[levelData.keys[i]];
-			if (classLevel.increase > 0) {
-
-				// get class and level data
-				classData = GetClassesInfo(levelData.keys[i]);
-				totalLevel += classLevel.increase;
-				advancementGrowthsTotal = AddGrowths(advancementGrowthsTotal, MultiplyGrowths(classData.growths, classLevel.increase));
-				classLevelTotal = classLevel.current + classLevel.increase;
-
-				// update the advancement update
-				advancementUpdate.addLevel(`${classData.name} Level Up!`);
-				advancementUpdate.addDesc(`${classData.name} ${classLevel.current} -> ${classLevelTotal}`);
-				advancementUpdate = CreateClassTechniqueUpdate(advancementUpdate, classData, classLevel.current, classLevelTotal);
-
-				// update UI
-				classFieldName = Format.ToCamelCase(levelData.keys[i]);
-				update[`advancement-level-${classFieldName}`] = classLevelTotal;
-				update[`advancement-level-${classFieldName}_max`] = classLevelTotal;
-				update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${classLevelTotal}`;
-			}
+			});
 		}
 
-		advancementUpdate = CreateCharacterAdvancementUpdate(advancementUpdate, baseLevel, totalLevel);
-		update = TechniquePoints.SetTechniqueAdvancementFields(update, v, totalLevel, advancementUpdate.techniques);
+	return {
+		GoToPageSet: goToPageSet,
+		FinishBuild: finishBuild,
+		ExitBuild: exitBuild,
+		ConvertXp: convertXp,
+		SetLevel: setLevel,
+		SetAdvancementPointsUpdate: setAdvancementPointsUpdate,
+		SetAffinityStats: setAffinityStats,
+		UpdateStats: updateStats
+	};
+}());
 
-		// calculate final growths
-		baseGrowthsTotal = AddGrowths(baseGrowthsTotal, MultiplyGrowths(baseGrowths, totalLevel - baseLevel));
-		update["builder-baseGrowthsTotal"] = JSON.stringify(baseGrowthsTotal);
-		update["advancement-advancementGrowthsTotal"] = JSON.stringify(advancementGrowthsTotal);
-		let endingStatistics = GetCharacterStatGrowthTotals(ancestryData, baseAbilityScores, baseGrowthsTotal, advancementGrowthsTotal);
-		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray, v);
-		v = SetAbilityScoreUpdate(v, "statscore_", update);
-		v = SetAbilityScoreUpdate(v, "", update);
-		coreData = SetAbilityScoreUpdate(v, "", update);
-		update = SetDerivedStats(update, v, ancestryData, growthArray);
-		update = SetLevelUpData(update,
-			GetCharacterStatGrowths(startingStatistics, bonusGrowths, ancestryData),
-			GetCharacterStatGrowths(endingStatistics, bonusGrowths, ancestryData),
-			advancementUpdate.levelUp, advancementUpdate.mainLevel
-		);
+var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
+	'use strict';
 
-		// set updates
-		update["base_level"] = totalLevel;
-		coreData["pb"] = AttrParseInt(v, "statbonus_pb") + GetProfBonusMod(totalLevel);
-		update["pb"] = coreData["pb"];
-		levelData = ResetAdvancementLevel(levelData, true);
-		update["advancement-level-total"] = JSON.stringify(levelData);
-		update = SetCharacterSkillsUpdateData(update, v, skillsList, coreData);
+	var
+		updateBuildPoints = function (eventinfo) {
+			Debug.Log("Update Attributes");
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxAttributeWorkerBuild();
+			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			attributeHandler.run();
+		},
+		updateStats = function (attributeHandler) {
+			let attributeDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Attribute"));
+			let formulaDefinitions = [];
 
-		update = GoToNextPage(update, "LevelUp", "Advancement");
-		update["advancement-button-reset-everything"] = "on";
+			for (let i = 0; i < attributeDefinitions.length; i++) {
+				formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinitions[i].name)));
+			}
 
-		setAttrs(update, { silent: true }, function () {
-			UpdateLearnedTechniques();
-		});
+			for (let i = 0; i < formulaDefinitions.length; i++) {
+				attributeHandler.addFormulaMods(formulaDefinitions[i]);
+			}
 
-	});
-
-}
-
-function CreateClassTechniqueUpdate(advancementUpdate, classData, currentLevel, maxLevel) {
-	// iterate through the advancement gains
-	let techLevel = currentLevel + 1;
-	let techModLevel = 0;
-	let tech = {};
-
-	// first level gets special features
-	if (techLevel == 1) {
-		tech = { name: classData.jobTechnique, type: "T" };
-		advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-		advancementUpdate.addDesc(`[Level ${techLevel}]`);
-		advancementUpdate.addDesc(`Gained the ${tech.name} technique.`);
-	}
-	while (techLevel <= 20 && techLevel <= maxLevel) {
-
-		// only check advancement on even class levels
-		if (techLevel % 2 == 0) {
-			techModLevel = Math.floor(techLevel / 2) - 1;
-			if (techModLevel >= 0) {
-				tech = classData.advancement[techModLevel];
-
-				if (tech != undefined) {
-					advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-					advancementUpdate.addDesc(`[Level ${techLevel}]`);
-					advancementUpdate.addDesc(`${tech.type == "T" ? `Gained the ${tech.name} technique.` : tech.name}`);
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				for (let i = 0; i < formulaDefinitions.length; i++) {
+					if (formulaDefinitions[i].isResource) {
+						attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
+						attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
+					} else {
+						attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
+					}
 				}
+			});
+		}
+
+	return {
+		UpdateBuildPoints: updateBuildPoints,
+		UpdateStats: updateStats
+	};
+}());
+
+var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
+	'use strict';
+
+	var
+		updateBuildPoints = function (eventinfo) {
+			Debug.Log("Update Knowledge");
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxWorkerBuildManager("Knowledge");
+			worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			attributeHandler.run();
+		},
+		updateStats = function (attributeHandler) {
+			let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
+			let loreDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Lore"));
+			let languageDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Language"));
+
+			for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+				attributeHandler.addMod(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
 			}
-		}
-		techLevel++;
-	}
-
-	return advancementUpdate;
-}
-
-function CreateCharacterAdvancementUpdate(advancementUpdate, currentLevel, maxLevel) {
-
-	// iterate through the levels for new path growths
-	advancementUpdate.addMainDesc(`Character Level ${currentLevel} -> ${maxLevel}`);
-	let pathUpdate = "";
-	let levelCheck = 0;
-
-	for (let i = currentLevel; i < maxLevel; i++) {
-		levelCheck = i + 1;
-		pathUpdate = "";
-
-		// set level bonuses
-		switch (levelCheck) {
-			case 1:
-				tech = { name: "Gain any 3 Path Techniques.", type: "PS" };
-				pathUpdate += `\n${tech.name}`;
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				tech = { name: "Gain any 2 Techniques.", type: "GD" };
-				pathUpdate += `\n${tech.name}`;
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				tech = { name: "Gain a Job Tech Slot", type: "JTS" };
-				pathUpdate += `\n${tech.name}`;
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				tech = { name: "Gain an Active Tech Slot.", type: "ATS" };
-				pathUpdate += `\n${tech.name}`;
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				tech = { name: "Gain a Passive and Support Tech Slot.", type: "PTS" };
-				pathUpdate += `\n${tech.name}`;
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				break;
-
-			case 6:
-			case 31:
-				tech = { name: "Gain an Active Tech Slot.", type: "ATS" };
-				pathUpdate += `\n${tech.name}`;
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				break;
-
-			case 21:
-				tech = { name: "Gain a Job Tech Slot", type: "JTS" };
-				pathUpdate += `\n${tech.name}`;
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				tech = { name: "Gain an Active Tech Slot.", type: "ATS" };
-				pathUpdate += `\n${tech.name}`;
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				break;
-
-			case 11:
-			case 26:
-			case 36:
-				tech = { name: "Gain a Passive and Support Tech Slot.", type: "PTS" };
-				pathUpdate += `\n${tech.name}`;
-				advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-				break;
-		}
-
-		if ((levelCheck % 4) - 2 == 0) {
-			tech = { name: "Gain any Technique.", type: "GD" };
-			pathUpdate += `\n${tech.name}`;
-			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-		}
-		else if ((levelCheck % 5) - 3 == 0) {
-			tech = { name: "Gain any Path Technique.", type: "PS" };
-			pathUpdate += `\n${tech.name}`;
-			advancementUpdate.techniques = AddAdvancementTech(advancementUpdate.techniques, tech);
-		}
-
-		if (pathUpdate != "") {
-			pathUpdate = `[Level ${levelCheck}]${pathUpdate}`;
-			advancementUpdate.addMainDesc(pathUpdate);
-		}
-
-	}
-
-	return advancementUpdate;
-}
-
-function AddAdvancementTech(advancement, tech) {
-
-	if (!advancement.keys.includes(tech.type)) {
-		advancement.keys.push(tech.type);
-		advancement.values[tech.type] = (tech.type == "T") ? "" : 0;
-	}
-
-	switch (tech.type) {
-		case 'T':
-			if (advancement.values[tech.type] != "") {
-				advancement.values[tech.type] += ";";
+			for (let i = 0; i < loreDefinitions.length; i++) {
+				attributeHandler.addMod(loreDefinitions[i].getVariable(WuxDef._rank));
 			}
-			advancement.values[tech.type] += tech.name;
-			break;
-		default:
-			advancement.values[tech.type]++;
-			break;
-	}
-
-	return advancement;
-}
-
-
-
-
-// ======== Reset
-
-on("change:advancement-button-reset", function () {
-
-	update_advancement_reset();
-});
-
-var update_advancement_reset = function () {
-
-	let mod_attrs = ["advancement-level-total"];
-	getAttrs(mod_attrs, function (v) {
-
-		let update = {};
-		update = ResetAdvancement(update, v);
-
-		setAttrs(update, { silent: true });
-
-	});
-}
-
-function ResetAdvancement(update, attrArray) {
-
-	let levelData = GetAdvancementLevelData(attrArray["advancement-level-total"]);
-
-	let classData;
-	let classLevel;
-	let classFieldName;
-
-	// iterate through the classes and record any advancement changes. Also reset UI from the advancement page
-	for (let i = 0; i < levelData.keys.length; i++) {
-
-		classLevel = levelData.values[levelData.keys[i]];
-		if (classLevel.increase > 0) {
-
-			// update UI
-			classData = GetClassesInfo(levelData.keys[i]);
-			classFieldName = Format.ToCamelCase(levelData.keys[i]);
-			update[`advancement-level-${classFieldName}_max`] = classLevel.current;
-			update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${classLevel.current}`
-		}
-	}
-
-	// set updates
-	update["advancement-level-total"] = JSON.stringify(ResetAdvancementLevel(levelData, false));
-	update["advancement-button-reset-everything"] = "on";
-	return update;
-}
-
-
-
-
-// ======== Restart
-
-on("change:advancement-button-restart-confirm", function () {
-
-	update_advancement_restart();
-});
-
-var update_advancement_restart = function () {
-	console.log(`Restarting Character Build `);
-
-	let growthArray = GetGrowthList(true);
-	let mod_attrs = ["advancement-level-total", "builder-baseAbilityScores", "builder-ancestry"];
-	mod_attrs = mod_attrs.concat(GetStatGrowthBonusList());
-	mod_attrs = mod_attrs.concat(GetDerivedBonusStatsList());
-	mod_attrs = mod_attrs.concat(GetBranchesTrainingList());
-
-	getAttrs(mod_attrs, function (v) {
-		let update = {};
-
-		let baseAbilityScores = AttrParseJSON(v, "builder-baseAbilityScores");
-		if (baseAbilityScores == "") {
-			baseAbilityScores = CreateAbilityScoreArrayData();
-		}
-		let emptyGrowths = CreateGrowthsArrayData();
-		let ancestryName = AttrParseString(v, "builder-ancestry", "Human");
-		let ancestryData = GetAncestryInfo(ancestryName);
-
-		let levelData = GetAdvancementLevelData(v["advancement-level-total"]);
-		let levelObj;
-		let classData;
-		let classFieldName;
-
-		// iterate through the classes and reset any levels
-		for (let i = 0; i < levelData.keys.length; i++) {
-
-			levelObj = levelData.values[levelData.keys[i]];
-			if (levelObj != undefined && levelObj.current > 0) {
-
-				// update UI
-				classData = GetClassesInfo(levelData.keys[i]);
-				classFieldName = Format.ToCamelCase(levelData.keys[i]);
-				update[`advancement-level-${classFieldName}`] = "0";
-				update[`advancement-level-${classFieldName}_max`] = "0";
-				update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.0`
+			for (let i = 0; i < languageDefinitions.length; i++) {
+				attributeHandler.addMod(languageDefinitions[i].getVariable(WuxDef._rank));
 			}
+
+			attributeHandler.addMod(["CR", "Recall"]);
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				let skillPointValue = 0;
+				let skillRank = 0;
+				let loreCategories = {};
+				for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+					loreCategories[loreCategoryDefinitions[i].title] = {};
+
+					skillRank = attrHandler.parseInt(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+					if (skillRank > 0) {
+						skillPointValue = skillRank + attrHandler.parseInt(WuxDef.GetVariable("CR")) + attrHandler.parseInt(WuxDef.GetVariable("Recall"));
+						loreCategories[loreCategoryDefinitions[i].title]["General"] = skillPointValue;
+					}
+				}
+				for (let i = 0; i < loreDefinitions.length; i++) {
+					skillRank = attrHandler.parseInt(loreDefinitions[i].getVariable(WuxDef._rank));
+					if (skillRank > 0) {
+						skillPointValue = skillRank + attrHandler.parseInt(WuxDef.GetVariable("CR")) + attrHandler.parseInt(WuxDef.GetVariable("Recall"));
+						loreCategories[loreDefinitions[i].subGroup][loreDefinitions[i].title] = skillPointValue;
+					}
+				}
+				attrHandler.addUpdate(WuxDef.GetVariable("Lore", WuxDef._true), JSON.stringify(loreCategories));
+
+				let languages = [];
+				for (let i = 0; i < languageDefinitions.length; i++) {
+					skillRank = attrHandler.parseString(languageDefinitions[i].getVariable(WuxDef._rank));
+					if (skillRank == "on") {
+						languages.push(languageDefinitions[i].title);
+					}
+					attrHandler.addUpdate(languageDefinitions[i].getVariable(WuxDef._filter), skillRank == "on" ? "1" : "0");
+				}
+				attrHandler.addUpdate(WuxDef.GetVariable("Language", WuxDef._true), JSON.stringify(languages));
+			});
 		}
 
-		// set updates
-		update["advancement-level-total"] = "0";
-		update["advancement-button-reset-everything"] = "on";
-		update["base_level"] = 0;
-		update["builder-baseGrowthsTotal"] = JSON.stringify(emptyGrowths);
-		update["advancement-advancementGrowthsTotal"] = JSON.stringify(emptyGrowths);
-		let endingStatistics = GetCharacterStatGrowthTotals(ancestryData, baseAbilityScores, emptyGrowths, emptyGrowths);
-		let bonusGrowths = SetBonusGrowthFieldArray(v);
-		update = SetCharacterStatGrowths(update, endingStatistics, bonusGrowths, ancestryData, growthArray, v);
-		v = SetAbilityScoreUpdate(v, "statscore_", update);
-		v = SetAbilityScoreUpdate(v, "", update);
-		update = SetDerivedStats(update, v, ancestryData, growthArray);
+	return {
+		UpdateBuildPoints: updateBuildPoints,
+		UpdateStats: updateStats
+	};
+}());
 
-		setAttrs(update, { silent: true });
+var WuxWorkerSkills = WuxWorkerSkills || (function () {
+	'use strict';
 
-	});
+	var
+		updateBuildPoints = function (eventinfo) {
+			Debug.Log("Update Skills");
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxWorkerBuildManager("Skill");
+			worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			attributeHandler.run();
+		},
+		updateStats = function (attributeHandler) {
+			let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
+			for (let i = 0; i < skillDefinitions.length; i++) {
+				attributeHandler.addFormulaMods(skillDefinitions[i]);
+			}
 
-}
-
-
-
-// ======== Advancement Listeners
-on("change:advancement-level-fighter_max change:advancement-level-interceptor_max change:advancement-level-marksman_max change:advancement-level-guardian_max change:advancement-level-rogue_max change:advancement-level-athlete_max change:advancement-level-physician_max change:advancement-level-scholar_max ", function (eventinfo) {
-
-	var className = eventinfo.sourceAttribute.match(/[^-]*$/)[0];
-	if (className.indexOf("_max") >= 0) {
-		className = className.substring(0, className.indexOf("_max"));
-	}
-	update_advancement_class_level(className);
-});
-//-- end	
-
-
-var update_advancement_class_level = function (classFieldName) {
-	let mod_attrs = ["advancement-level-total", `advancement-level-${classFieldName}`, `advancement-level-${classFieldName}_max`];
-
-	getAttrs(mod_attrs, function (v) {
-		let update = {};
-		let currentLevel = isNaN(parseInt(v[`advancement-level-${classFieldName}`])) ? 0 : parseInt(v[`advancement-level-${classFieldName}`]);
-		let newLevel = isNaN(parseInt(v[`advancement-level-${classFieldName}_max`])) ? currentLevel : parseInt(v[`advancement-level-${classFieldName}_max`]);
-
-		if (currentLevel > newLevel) {
-			update[`advancement-level-${classFieldName}_max`] = currentLevel;
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				let skillPointValue = 0;
+				let skillRank = 0;
+				for (let i = 0; i < skillDefinitions.length; i++) {
+					skillPointValue = skillDefinitions[i].formula.getValue(attrHandler);
+					skillRank = attrHandler.parseString(skillDefinitions[i].getVariable(WuxDef._rank));
+					if (skillRank == "on") {
+						skillPointValue = skillPointValue + 2 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+					}
+					attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);
+				}
+			});
 		}
-		let levelDifference = newLevel - currentLevel;
 
-		var levelData = GetAdvancementLevelData(v["advancement-level-total"]);
-		levelData = SetAdvancementLevelData(levelData, classFieldName, currentLevel, levelDifference);
-
-		let classData = GetClassesInfo(classFieldName);
-		update[`advancement-name-${classFieldName}`] = `${classData.name} Lv.${currentLevel} ${levelDifference > 0 ? `+${levelDifference}` : ""}`;
-		update["advancement-level-total"] = JSON.stringify(levelData);
-
-		setAttrs(update, { silent: true });
-	});
-}
-
+	return {
+		UpdateBuildPoints: updateBuildPoints,
+		UpdateStats: updateStats
+	};
+}());

@@ -1,641 +1,537 @@
-// ======== Attribute Values
-function AttrParseString(attrArray, fieldName, defaultValue) {
-	if (defaultValue == undefined) {
-		defaultValue = "";
-	}
-	return attrArray[fieldName] == undefined || attrArray[fieldName] == "" ? defaultValue : attrArray[fieldName];
-}
-
-function AttrParseInt(attrArray, fieldName, defaultValue) {
-
-	return ParseIntValue(attrArray[fieldName], defaultValue);
-}
-
-function ParseIntValue(value, defaultValue) {
-	if (defaultValue == undefined) {
-		defaultValue = 0;
-	}
-	return isNaN(parseInt(value)) ? defaultValue : parseInt(value);
-}
-
-function AttrParseFloat(attrArray, fieldName, defaultValue) {
-
-	return ParseFloatValue(attrArray[fieldName], defaultValue);
-}
-
-function ParseFloatValue(value, defaultValue) {
-	if (defaultValue == undefined) {
-		defaultValue = 0;
-	}
-	return isNaN(parseFloat(value)) ? defaultValue : parseFloat(value);
-}
-
-function AttrParseJSON(attrArray, fieldName, defaultValue) {
-	if (defaultValue == undefined) {
-		defaultValue = "";
-	}
-	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName] == "" ? defaultValue : JSON.parse(attrArray[fieldName]);
-}
-
-function AttrParseJSONDictionary(attrArray, fieldName) {
-	return attrArray[fieldName] == undefined ? defaultValue : attrArray[fieldName] == "" ? new Dictionary() : JSON.parse(attrArray[fieldName]);
-}
-
-
-// ======== Section Ids
-function GetSectionIdValues(idarray, repeatingSection, variableArray) {
-	var output = [];
-
-	_.each(idarray, function (currentID) {
-		_.each(variableArray, function (variableName) {
-			output.push(GetSectionIdName(repeatingSection, currentID, variableName));
-		});
-	});
-
-	return output;
-}
-
-function ClearAllSectionIds(repeatingSection) {
-
-	getSectionIDs(repeatingSection, function (idarray) {
-		_.each(idarray, function (currentID) {
-			RemoveSectionId(repeatingSection, currentID);
-		});
-	});
-}
-
-function RemoveSectionId(repeatingSection, repeatingSectionId) {
-
-	removeRepeatingRow(`${repeatingSection}_${repeatingSectionId}`);
-}
-
-
-
-
-  //// ======== Ability Scores
-
-  function GetStatisticsDefaults(path) {
-	return {
-		capacity: 40,
-		vitality: 2,
-		traumaLimit: path == "Common" ? 1 : 3,
-		kiCharge: 1,
-		kiLimit: 3,
-		chakra: 1,
-		spellForceLimit: 9,
-		kiChargeLimit: 3,
-		techSlotJob: 1,
-		techSlotActive: 1,
-		techSlotPassive: 1,
-		techSlotSupport: 1
-	}
-  }
-  
-  function CreateAbilityScoreArrayData() {
-	var output = {
-	  CON: 0, DEX: 0,
-	  QCK: 0, STR: 0,
-	  CHA: 0, INT: 0,
-	  PER: 0, WIL: 0
-	}
-	
-	return output;
-  }
-
-function SetAbilityScoreUpdate(update, updateAttr, abilityScoreArray, suffix) {
-
-	if (suffix == undefined) {
-		suffix = "";
-	}
-	let list = GetAbilityScoreList(true);
-	for (let i = 0; i < list.length; i++) {
-		update[`${updateAttr}${list[i]}`] = abilityScoreArray[list[i]] + suffix;
-
-	}
-	return update;
-}
-
-function GetAbilityScoreList(isFields) {
-	if (isFields) {
-	return ["CON", "DEX", "QCK", "STR", "CHA", "INT", "PER", "WIL"];
-	}
-	else {
-	return ["Constitution", "Dexterity", "Quickness", "Strength", "Charisma", "Intelligence", "Perception", "Willpower"];
-	}
-}
-
-function SetCoreDataFieldArray(attrArray, fieldName) {
-
-	let output = SetAbilityScoreFieldArray(attrArray, fieldName);
-	output["pb"] = AttrParseInt(attrArray, "pb");
-
-	return output;
-}
-
-function SetAbilityScoreFieldArray(attrArray, fieldName) {
-
-	let output = {};
-	let abList = GetAbilityScoreList(true);
-	for (let i = 0; i < abList.length; i++) {
-		output[abList[i]] = AttrParseInt(attrArray, `${fieldName}${abList[i]}`);
-	}
-
-	return output;
-}
-
-function AddAbilityScores(array1, array2) {
+var Debug = Debug || (function () {
+	'use strict';
+	var
+		log = function (msg) {
+			console.log(msg);
+		},
+		logError = function (msg) {
+			console.error(`ERROR! ${msg}`);
+		}
 
 	return {
-		CON: (array1.CON + array2.CON),
-		DEX: (array1.DEX + array2.DEX),
-		QCK: (array1.QCK + array2.QCK),
-		STR: (array1.STR + array2.STR),
-		CHA: (array1.CHA + array2.CHA),
-		INT: (array1.INT + array2.INT),
-		PER: (array1.PER + array2.PER),
-		WIL: (array1.WIL + array2.WIL)
+		Log: log,
+		LogError: logError
+	};
+}());
+
+class WorkerAttributeHandler extends AttributeHandler {
+	run() {
+		let attributeHandler = this;
+		getAttrs(attributeHandler.mods, function (v) {
+			attributeHandler.current = v;
+			attributeHandler.getCallbacks.forEach((callback) => {
+				callback(attributeHandler);
+			});
+			setAttrs(attributeHandler.update, {silent: true}, function () {
+				attributeHandler.finishCallbacks.forEach((callback) => {
+					callback(attributeHandler);
+				});
+			});
+		})
 	}
 }
 
-function MultiplyAbilityScores(array1, val) {
+class WorkerRepeatingSectionHandler extends RepeatingSectionHandler {
 
-	return {
-		CON: Math.floor(array1.CON * val),
-		DEX: Math.floor(array1.DEX * val),
-		QCK: Math.floor(array1.QCK * val),
-		STR: Math.floor(array1.STR * val),
-		CHA: Math.floor(array1.CHA * val),
-		INT: Math.floor(array1.INT * val),
-		PER: Math.floor(array1.PER * val),
-		WIL: Math.floor(array1.WIL * val)
-	}
-}
+	generateUUID = (function() {
+		"use strict";
 
-function ModulusAbilityScores(array1, val) {
-
-	return {
-		CON: (array1.CON % val),
-		DEX: (array1.DEX % val),
-		QCK: (array1.QCK % val),
-		STR: (array1.STR % val),
-		CHA: (array1.CHA % val),
-		INT: (array1.INT % val),
-		PER: (array1.PER % val),
-		WIL: (array1.WIL % val)
-	}
-}
-
-
-
-// ======== Growths
-
-function GetGrowthList(isFields) {
-	if (isFields) {
-	return GetAbilityScoreList(isFields).concat(["hp", "vitality", "kiCharge", "spellForce"]);
-	}
-	else {
-	return GetAbilityScoreList(isFields).concat(["HP", "Vitality", "Ki Charge", "Spellforce"]);
-	}
-}
-
-function CreateGrowthsArrayData() {
-
-	var output = CreateAbilityScoreArrayData();
-	output.hp = 0;
-	output.vitality = 0;
-	output.kiCharge = 0;
-	output.spellForce = 0;
-
-	return output;
-}
-
-function ConvertAbilityScorePointsToGrowths(growthData) {
-
-	let abilityScoreGrowthRate = 20;
-	let hpGrowthRate = 50;
-	let vitalityGrowthRate = 5;
-	let kiChargeGrowthRate = 5;
-	let spellForceGrowthRate = 6;
-	return {
-		CON: (growthData.CON * abilityScoreGrowthRate),
-		DEX: (growthData.DEX * abilityScoreGrowthRate),
-		QCK: (growthData.QCK * abilityScoreGrowthRate),
-		STR: (growthData.STR * abilityScoreGrowthRate),
-		CHA: (growthData.CHA * abilityScoreGrowthRate),
-		INT: (growthData.INT * abilityScoreGrowthRate),
-		PER: (growthData.PER * abilityScoreGrowthRate),
-		WIL: (growthData.WIL * abilityScoreGrowthRate),
-		hp: (growthData.hp * hpGrowthRate),
-		vitality: (growthData.vitality * vitalityGrowthRate),
-		kiCharge: (growthData.kiCharge * kiChargeGrowthRate),
-		spellForce: (growthData.spellForce * spellForceGrowthRate)
-	}
-}
-
-function SetGrowthFieldArray(attrArray, fieldName) {
-
-	let output = SetAbilityScoreFieldArray(attrArray, fieldName);
-	output.hp = AttrParseInt(attrArray, `${fieldName}hp`);
-	output.vitality = AttrParseInt(attrArray, `${fieldName}vitality`);
-	output.kiCharge = AttrParseInt(attrArray, `${fieldName}kiCharge`);
-	output.spellForce = AttrParseInt(attrArray, `${fieldName}spellForce`);
-
-	return output;
-}
-
-function SetBonusGrowthFieldArray(attrArray) {
-
-	let fieldName = "statbonus_";
-	let output = SetAbilityScoreFieldArray(attrArray, fieldName);
-	output.hp = AttrParseInt(attrArray, `${fieldName}hp`);
-	output.vitality = AttrParseInt(attrArray, `${fieldName}vitality`);
-	output.kiCharge = AttrParseInt(attrArray, `${fieldName}kiCharge`);
-	output.spellForce = AttrParseInt(attrArray, `${fieldName}spellForce`);
-
-	output.branchpoints = AttrParseInt(attrArray, `${fieldName}branchpoints`);
-	output.kiLimit = AttrParseInt(attrArray, `${fieldName}ki`);
-
-	return output;
-}
-
-function GetCharacterStatGrowthTotals (ancestryData, baseAbilityScores, baseGrowths, advancementGrowths) {
-
-	// convert growths to ability scores
-	let currentGrowths = ConvertAbilityScorePointsToGrowths(AddGrowths(baseGrowths, AddGrowths(ancestryData.growths, advancementGrowths)));
-	currentGrowths = AddGrowths(currentGrowths, MultiplyGrowths(baseAbilityScores, 100));
-	currentGrowths = AddGrowths(currentGrowths, MultiplyGrowths(ancestryData.startingScores, 100));
-
-	return currentGrowths;
-}
-
-function AddGrowths(array1, array2) {
-
-	let output = AddAbilityScores(array1, array2);
-
-	output.hp = (ParseIntValue(array1.hp) + ParseIntValue(array2.hp));
-	output.vitality = (ParseIntValue(array1.vitality) + ParseIntValue(array2.vitality));
-	output.kiCharge = (ParseIntValue(array1.kiCharge) + ParseIntValue(array2.kiCharge));
-	output.spellForce = (ParseIntValue(array1.spellForce) + ParseIntValue(array2.spellForce));
-
-	return output;
-}
-
-function MultiplyGrowths(array1, val) {
-
-	let output = MultiplyAbilityScores(array1, val);
-
-	output.hp = Math.floor(array1.hp * val);
-	output.vitality = Math.floor(array1.vitality * val);
-	output.kiCharge = Math.floor(array1.kiCharge * val);
-	output.spellForce = Math.floor(array1.spellForce * val);
-
-	return output;
-}
-
-function ModulusGrowths(array1, val) {
-
-	let output = ModulusAbilityScores(array1, val);
-
-	output.hp = (array1.hp % val);
-	output.vitality = (array1.vitality % val);
-	output.kiCharge = (array1.kiCharge % val);
-	output.spellForce = (array1.spellForce % val);
-
-	return output;
-}
-
-
-
-
-// ======== Techniques
-
-function GetTechniqueDataArray(type, techniques) {
-	let output = [];
-	let techniqueList = techniques.split(";");
-	let tech = "";
-	let technique;
-
-	for (let i = 0; i < techniqueList.length; i++) {
-		tech = techniqueList[i].trim();
-		switch (type.toLowerCase()) {
-			case "ancestry":
-				technique = GetAncestryTechniqueInfo(tech);
-				if (technique.name != "") {
-					output.push(technique);
+		var a = 0, b = [];
+		return function() {
+			var c = (new Date()).getTime() + 0, d = c === a;
+			a = c;
+			for (var e = new Array(8), f = 7; 0 <= f; f--) {
+				e[f] = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(c % 64);
+				c = Math.floor(c / 64);
+			}
+			c = e.join("");
+			if (d) {
+				for (f = 11; 0 <= f && 63 === b[f]; f--) {
+					b[f] = 0;
 				}
-				break;
-		}
-	}
-	return output;
-}
+				b[f]++;
+			} else {
+				for (f = 0; 12 > f; f++) {
+					b[f] = Math.floor(64 * Math.random());
+				}
+			}
+			for (f = 0; 12 > f; f++){
+				c += "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(b[f]);
+			}
+			return c;
+		};
+	}())
 
-function SetTechniqueDataAugmentTechData(technique, baseTech) {
-	if (technique.augment == "") {
-		return technique;
-	}
-
-	if (baseTech == undefined) {
-		baseTech = GetAugmentBaseDatabaseTechnique(technique);
-	}
-	technique.augmentTech = baseTech;
-	return technique;
-}
-
-function GetAugmentBaseDatabaseTechnique(technique) {
-	// grab the base technique
-	let newTechnique = {};
-	switch (technique.group) {
-		case "Ancestry":
-			newTechnique = GetAncestryTechniqueInfo(technique.augment);
-			break;
-		default:
-			newTechnique = WuxingTechniques.Get(technique.augment);
-			break;
-	}
-	return newTechnique;
-}
-
-function SetTechniqueDataList(update, repeatingSection, techniqueList, autoExpand, isDatabase) {
-
-	// start by clearing the section Ids
-	let newrowid;
-	let technique;
-
-	// iterate through each technique
-	for (let i = 0; i < techniqueList.length; i++) {
-		newrowid = generateRowID();
-		technique = techniqueList[i];
-		update = SetTechniqueData(update, repeatingSection, newrowid, technique, autoExpand, isDatabase);
+	generateRowId() {
+		let id = this.generateUUID();
+		return id.replace(/_/g, "Z");
 	}
 
-	return update;
+	getIds(callback) {
+		let repeater = this;
+		getSectionIDs(this.repeatingSection, function (ids) {
+			ids.forEach(function (id) {
+				repeater.ids.push(id);
+			});
+			callback(repeater);
+		});
+	}
 
+	removeId(id) {
+		super.removeId(id);
+		removeRepeatingRow(this.repeatingSection + "_" + id);
+	}
 }
 
-function SetTechniqueSelect(technique, selectedTechniques) {
-	technique.select = selectedTechniques.keys.includes(technique.name);
-	return technique;
-}
-
-function SetTechniqueData(update, repeatingSection, id, technique, autoExpand, isDatabase) {
-
-	technique.username = "@{nickname}";
-	update[GetSectionIdName(repeatingSection, id, "technique-select")] = technique.select != undefined ? technique.select : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-expand")] = autoExpand ? "on" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-isDatabase")] = isDatabase ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-edit")] = "0";
-
-	let isBase = technique.augment == "";
-	update[GetSectionIdName(repeatingSection, id, "technique-header")] = isBase || technique.isSpecAugment ? technique.action : "Augment";
-	update[GetSectionIdName(repeatingSection, id, "technique-name")] = technique.name;
-	update[GetSectionIdName(repeatingSection, id, "technique-isBase")] = isBase ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-augment")] = technique.augment;
-	update[GetSectionIdName(repeatingSection, id, "technique-displaygroup")] = technique.group;
-	update[GetSectionIdName(repeatingSection, id, "technique-group")] = technique.group;
-	update[GetSectionIdName(repeatingSection, id, "technique-family")] = technique.family;
-	update[GetSectionIdName(repeatingSection, id, "technique-action")] = technique.action;
-	update[GetSectionIdName(repeatingSection, id, "technique-limits")] = technique.limits;
-
-	// set the function block
-	let isMultiple = technique.traits.toLowerCase().indexOf("multiple") >= 0;
-	let isWeapon = technique.traits.toLowerCase().indexOf("armament") >= 0 || technique.traits.toLowerCase().indexOf("arsenal") >= 0;
-	let prerequisite = FeatureService.GetPrerequisiteString(technique);
-	update[GetSectionIdName(repeatingSection, id, "technique-functionBlock")] =
-		(technique.traits != "" || technique.trigger != "" || technique.requirement != "" || prerequisite != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-traits")] = technique.traits;
-	update = SetTechniqueDataTraits(update, repeatingSection, id, technique.traits);
-
-	update[GetSectionIdName(repeatingSection, id, "technique-trigger")] = technique.trigger;
-	update[GetSectionIdName(repeatingSection, id, "technique-requirement")] = requirement;
-	update[GetSectionIdName(repeatingSection, id, "technique-prerequisite")] = prerequisite;
-	update[GetSectionIdName(repeatingSection, id, "technique-resourceCost")] = technique.resourceCost;
-	update[GetSectionIdName(repeatingSection, id, "technique-isMultiple")] = isMultiple ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-isWeapon")] = isWeapon ? "1" : "0";
-
-	// set the description
-	update[GetSectionIdName(repeatingSection, id, "technique-descriptionBlock")] = (technique.description != "" || technique.onSuccess != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-description")] = technique.description;
-	update[GetSectionIdName(repeatingSection, id, "technique-onSuccess")] = technique.onSuccess;
-
-	// set the attack block
-	update[GetSectionIdName(repeatingSection, id, "technique-CheckBlock")] =
-		(technique.skill != "" || technique.defense != "" || technique.rType != "" || technique.target != "" || (technique.dVal != "" && technique.dVal != 0) || technique.damageType != "") ? "1" : "0";
-
-	update[GetSectionIdName(repeatingSection, id, "technique-CheckBlockTarget")] = (technique.rType != "" || technique.target != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-range")] = technique.range;
-	update[GetSectionIdName(repeatingSection, id, "technique-rType")] = technique.rType;
-	update[GetSectionIdName(repeatingSection, id, "technique-target")] = technique.target;
-	update[GetSectionIdName(repeatingSection, id, "technique-targetCode")] = technique.targetCode;
-
-	update[GetSectionIdName(repeatingSection, id, "technique-CheckBlockSkill")] = (technique.skill != "" || technique.defense != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-skill")] = technique.skill;
-	update[GetSectionIdName(repeatingSection, id, "technique-defense")] = technique.defense;
-
-	// set the damage
-	update[GetSectionIdName(repeatingSection, id, "technique-CheckBlockDamage")] = (technique.damage != "" || technique.damageType != "") ? "1" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-dieValue")] = technique.dVal;
-	update[GetSectionIdName(repeatingSection, id, "technique-dieType")] = technique.dType;
-	update[GetSectionIdName(repeatingSection, id, "technique-addPower")] = technique.dBonus.indexOf("Power") >= 0 ? "on" : "0";
-	update[GetSectionIdName(repeatingSection, id, "technique-damageType")] = technique.damageType;
-	update[GetSectionIdName(repeatingSection, id, "technique-element")] = technique.element;
-	update[GetSectionIdName(repeatingSection, id, "technique-damageString")] = FeatureService.GetDamageString(technique);
-	update[GetSectionIdName(repeatingSection, id, "technique-onInfo")] = FeatureService.GetRollTemplateFromTechnique(technique);
-	update[GetSectionIdName(repeatingSection, id, "technique-onUse")] = FeatureService.GetConsumeUsePost(technique);
-
-	return update;
-}
-
-function SetTechniqueDataTraits(update, repeatingSection, id, traits) {
-
-	var traitsDb = WuxingTraits.GetData(traits);
-	for (var i = 0; i < 6; i++) {
-		if (i < traitsDb.length) {
-			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i)] = traitsDb[i].name;
-			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i + "Desc")] = traitsDb[i].description;
+class WuxWorkerBuildManager {
+	constructor(definitionIds) {
+		this.workers = [];
+		if (Array.isArray(definitionIds)) {
+			for (let i = 0; i < definitionIds.length; i++) {
+				this.workers.push(new WuxWorkerBuild(definitionIds[i]));
+			}
 		} else {
-			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i)] = "0";
-			update[GetSectionIdName(repeatingSection, id, "technique-traits" + i + "Desc")] = "";
+			this.workers.push(new WuxWorkerBuild(definitionIds));
 		}
 	}
-	return update;
-}
 
-function CreateTechniqueDataFromRepeatingSection(attrArray, repeatingSection, id) {
-
-}
-
-
-
-
-// ======== Items
-
-function SetItemData(update, repeatingSection, id, item, autoExpand) {
-
-	update[GetSectionIdName(repeatingSection, id, "item-expand")] = autoExpand ? "on" : "0";
-
-	update[GetSectionIdName(repeatingSection, id, "item-name")] = item.name;
-	update[GetSectionIdName(repeatingSection, id, "item-type")] = item.type;
-	update[GetSectionIdName(repeatingSection, id, "item-group")] = item.group;
-	update[GetSectionIdName(repeatingSection, id, "item-traits")] = item.traits;
-	update = SetItemDataTraits(update, repeatingSection, id, item.traits);
-	update[GetSectionIdName(repeatingSection, id, "item-bulk")] = item.bulk;
-	update[GetSectionIdName(repeatingSection, id, "item-valuetier")] = item.value;
-	update[GetSectionIdName(repeatingSection, id, "item-valuetype")] = "CP";
-	update[GetSectionIdName(repeatingSection, id, "item-value")] = GetItemValueInCP(item);
-
-	// set crafting rules
-	update[GetSectionIdName(repeatingSection, id, "item-complexity")] = item.complexity == "" ? "0:Artisan" : item.complexity;
-	update[GetSectionIdName(repeatingSection, id, "item-time")] = item.time;
-	update[GetSectionIdName(repeatingSection, id, "item-components")] = item.components;
-
-	switch(item.type) {
-		case "Weapon":
-		case "Chest Armor":
-		case "Head Armor":
-		case "Arms Armor":
-		case "Legs Armor":
-			update[GetSectionIdName(repeatingSection, id, "item-abilities")] = item.abilities;
-			update = SetItemDataAbilities(update, repeatingSection, id, item.abilities);
-			update[GetSectionIdName(repeatingSection, id, "item-skill")] = item.skill;
-			update[GetSectionIdName(repeatingSection, id, "item-damage")] = item.dmg;
-			update[GetSectionIdName(repeatingSection, id, "item-damageType")] = item.damageType;
-			update[GetSectionIdName(repeatingSection, id, "item-dieValue")] = item.dVal;
-			update[GetSectionIdName(repeatingSection, id, "item-dieType")] = item.dType;
-			update[GetSectionIdName(repeatingSection, id, "item-addPower")] = item.dBonus.indexOf("Power") >= 0 ? "on" : "0";
-			update[GetSectionIdName(repeatingSection, id, "item-damageString")] = FeatureService.GetDamageString(item);
-			update[GetSectionIdName(repeatingSection, id, "item-range")] = item.range;
-			update[GetSectionIdName(repeatingSection, id, "item-threat")] = item.threat;
-			update[GetSectionIdName(repeatingSection, id, "item-block")] = item.block;
-			update[GetSectionIdName(repeatingSection, id, "item-armor")] = item.armor;
-			update[GetSectionIdName(repeatingSection, id, "item-reflexPen")] = item.reflexPen;
-			update[GetSectionIdName(repeatingSection, id, "item-speedPen")] = item.speedPen;
-		break;
+	iterate(callback) {
+		this.workers.forEach((worker) => {
+			callback(worker);
+		});
 	}
 
-	return update;
+	setupAttributeHandlerForPointUpdate(attributeHandler) {
+		let manager = this;
+		manager.iterate(function (worker) {
+			attributeHandler.addFormulaMods(worker.definition);
+			attributeHandler.addMod(worker.attrBuildDraft);
+		});
+	}
+
+	setAttributeHandlerPoints(attributeHandler) {
+		this.iterate(function (worker) {
+			worker.setBuildStatsDraft(attributeHandler);
+			worker.setPointsMax(attributeHandler);
+			worker.updatePoints(attributeHandler);
+		});
+	}
+
+	onChangeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
+		this.iterate(function (worker) {
+			worker.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
+		});
+	}
+
+	commitChanges(attributeHandler) {
+		this.iterate(function (worker) {
+			worker.commitChanges(attributeHandler);
+		});
+	}
+
+	resetChanges(attributeHandler) {
+		this.iterate(function (worker) {
+			worker.resetChanges(attributeHandler);
+		});
+	}
 }
 
-function SetItemDataTraits(update, repeatingSection, id, traits) {
+class WuxWorkerBuild {
+	constructor(definitionId) {
+		this.definition = WuxDef.Get(definitionId);
+		this.buildStats = {};
 
-	var traitsDb = WuxingTraits.GetData(traits);
-	for (var i = 0; i < 6; i++) {
-		if (i < traitsDb.length) {
-			update[GetSectionIdName(repeatingSection, id, "item-traits" + i)] = traitsDb[i].name;
-			update[GetSectionIdName(repeatingSection, id, "item-traits" + i + "Desc")] = traitsDb[i].description;
-		} else {
-			update[GetSectionIdName(repeatingSection, id, "item-traits" + i)] = "0";
-			update[GetSectionIdName(repeatingSection, id, "item-traits" + i + "Desc")] = "";
+		this.attrBuildDraft = this.definition.getVariable(WuxDef._build);
+		this.attrBuildFinal = this.definition.getVariable(WuxDef._build, WuxDef._max);
+		this.attrMax = this.definition.getVariable(WuxDef._max);
+	}
+
+	setBuildStatsDraft(attributeHandler) {
+		this.setBuildStats(this.attrBuildDraft, attributeHandler);
+	}
+
+	setBuildStatsFinal(attributeHandler) {
+		this.setBuildStats(this.attrBuildFinal, attributeHandler);
+	}
+
+	setBuildStats(buildStatVersion, attributeHandler) {
+		this.buildStats = new WorkerBuildStats();
+		this.buildStats.import(attributeHandler.parseJSON(buildStatVersion));
+	}
+
+	setPointsMax(attributeHandler) {
+		let max = this.definition.formula.getValue(attributeHandler, this.definition.getTitle());
+		attributeHandler.addUpdate(this.attrMax, max);
+	}
+
+	updatePoints(attributeHandler) {
+		let buildPoints = this.buildStats.getPointsTotal();
+		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
+
+		attributeHandler.addUpdate(this.definition.getVariable(), buildPointsMax - buildPoints);
+		attributeHandler.addUpdate(this.definition.getVariable(WuxDef._error), buildPoints == buildPointsMax ? "0" : buildPoints < buildPointsMax ? "1" : "-1");
+	}
+
+	updateBuildStats(attributeHandler, updatingAttr, newValue) {
+		let workerBuildStat = new WorkerBuildStat([updatingAttr, newValue]);
+		this.buildStats.add(updatingAttr, workerBuildStat);
+		attributeHandler.addUpdate(this.attrBuildDraft, JSON.stringify(this.buildStats));
+	}
+
+	updateMaxBuildStats(attributeHandler, updatingAttr, newValue) {
+		let workerBuildStat = new WorkerBuildStat([updatingAttr, newValue]);
+		this.buildStats.add(updatingAttr, workerBuildStat);
+		attributeHandler.addUpdate(this.attrBuildFinal, JSON.stringify(this.buildStats));
+	}
+
+	getBuildVariables() {
+		let splitVariable;
+		let buildVariableNames = [];
+		let buildVariables = [];
+		for (let i = 0; i < this.definition.linkedGroups.length; i++) {
+			if (this.definition.linkedGroups[i] != "") {
+				splitVariable = this.definition.linkedGroups[i].split(":");
+				if (splitVariable.length == 1) {
+					buildVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", splitVariable[0]));
+				} else {
+					buildVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", splitVariable[0]), splitVariable[1]);
+				}
+				buildVariables = buildVariables.concat(buildVariableNames);
+			}
 		}
+		return buildVariables;
 	}
-	return update;
+
+	cleanBuildStats() {
+		this.buildStats.clean(this.getBuildVariables());
+		this.buildStats.cleanValues();
+	}
+
+	setVariablesToBuildStats(attributeHandler) {
+		this.buildStats.iterate(function (buildStat) {
+			attributeHandler.addUpdate(buildStat.name, buildStat.value);
+		});
+	}
+
+	saveBuildStatsToFinal(attributeHandler) {
+		attributeHandler.addUpdate(this.attrBuildFinal, JSON.stringify(this.buildStats));
+	}
+
+	revertBuildStatsDraft(attributeHandler) {
+		attributeHandler.addUpdate(this.attrBuildDraft, JSON.stringify(this.buildStats));
+	}
+
+	changeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
+		let worker = this;
+
+		Debug.Log(`Updating ${worker.definition.name} variable ${updatingAttr} to ${newValue}`);
+		attributeHandler.addMod(worker.attrMax);
+		attributeHandler.addMod(worker.attrBuildDraft);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsDraft(attrHandler);
+			worker.updateBuildStats(attrHandler, updatingAttr, newValue);
+			worker.updatePoints(attrHandler);
+		});
+	}
+
+	commitChanges(attributeHandler) {
+		let worker = this;
+		attributeHandler.addMod(worker.attrBuildDraft);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsDraft(attrHandler);
+			worker.cleanBuildStats();
+			worker.setBuildStatVariables(attrHandler);
+			worker.saveBuildStatsToFinal(attrHandler);
+		});
+	}
+
+	resetChanges(attributeHandler) {
+		let worker = this;
+		attributeHandler.addMod(worker.attrBuildFinal);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsFinal(attrHandler);
+			worker.cleanBuildStats();
+			worker.setBuildStatVariables(attrHandler);
+			worker.revertBuildStatsDraft(attrHandler);
+		});
+	}
+
+	setBuildStatVariables(attributeHandler) {
+		this.buildStats.iterate(function (buildStat) {
+			attributeHandler.addUpdate(buildStat.name, buildStat.value);
+		});
+	}
 }
 
-function SetItemDataAbilities(update, repeatingSection, id, abilities) {
+class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
+	constructor() {
+		super("Advancement");
+	}
 
-	var traitsDb = WuxingTraits.GetData(abilities);
-	for (var i = 0; i < 6; i++) {
-		if (i < traitsDb.length) {
-			update[GetSectionIdName(repeatingSection, id, "item-ability" + i)] = traitsDb[i].name;
-			update[GetSectionIdName(repeatingSection, id, "item-ability" + i + "Desc")] = traitsDb[i].description;
-		} else {
-			update[GetSectionIdName(repeatingSection, id, "item-ability" + i)] = "0";
-			update[GetSectionIdName(repeatingSection, id, "item-ability" + i + "Desc")] = "";
+	updatePoints(attributeHandler) {
+		let buildPoints = 0;
+		let advJobs = WuxDef.GetVariable("AdvancementJob");
+		let advSkills = WuxDef.GetVariable("AdvancementSkill");
+		let advTechs = WuxDef.GetVariable("AdvancementTechnique");
+
+		if (this.buildStats.has(advJobs)) {
+			buildPoints += this.buildStats.getIntValue(advJobs) * 2;
 		}
+		if (this.buildStats.has(advSkills)) {
+			buildPoints += this.buildStats.getIntValue(advSkills) * 2;
+		}
+		if (this.buildStats.has(advTechs)) {
+			buildPoints += this.buildStats.getIntValue(advTechs);
+		}
+		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
+
+		attributeHandler.addUpdate(this.definition.getVariable(), buildPointsMax - buildPoints);
+		attributeHandler.addUpdate(this.definition.getVariable(WuxDef._error), buildPoints == buildPointsMax ? "0" : buildPoints < buildPointsMax ? "1" : "-1");
 	}
-	return update;
-}
 
-function GetItemValueInCP(itemData) {
+	getBuildVariables() {
+		return [WuxDef.GetVariable("Level"), WuxDef.GetVariable("XP"),
+			WuxDef.GetVariable("AdvancementJob"), WuxDef.GetVariable("AdvancementSkill"), WuxDef.GetVariable("AdvancementTechnique")];
+	}
 
-  var baseValue = 10;
-  var incrementer = itemData.value;
-  var valueMultiplier = 4;
-  while (incrementer > 0) {
-    baseValue *= valueMultiplier;
-    if (valueMultiplier > 2) {
-      valueMultiplier--;
-    }
-    incrementer--;
-  }
-  var bulkValue = baseValue / 20;
+	updateLevel(attributeHandler, fieldName, level) {
+		let worker = this;
+		level = parseInt(level);
+		let crDefinition = WuxDef.Get("CR");
+		attributeHandler.addUpdate(fieldName, level);
+		attributeHandler.addMod(worker.attrBuildDraft);
+		attributeHandler.addMod(crDefinition.getVariable());
+		attributeHandler.addMod(crDefinition.getVariable(WuxDef._max));
+		let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
-  return baseValue + (itemData.bulk * bulkValue);
-}
+		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
-function CreateItemDataFromRepeatingSection(attrArray, repeatingSection, id) {
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			let cr = worker.getCharacterRank(level);
+			if (cr != attrHandler.parseInt(crDefinition.getVariable(WuxDef._max))) {
+				if (attrHandler.parseInt(crDefinition.getVariable()) == attrHandler.parseInt(crDefinition.getVariable(WuxDef._max))) {
+					attrHandler.addUpdate(crDefinition.getVariable(), cr);
+					combatDetailsHandler.onUpdateCR(attrHandler, cr);
+				}
+				attrHandler.addUpdate(crDefinition.getVariable(WuxDef._max), cr);
+			}
 
-	let itemData = GetGearInfo("");
-	itemData.name = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-name"));
-	itemData.type = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-type"));
-	itemData.group = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-group"));
-	itemData.traits = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-traits"));
-	itemData.bulk = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-bulk"));
-	itemData.value = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-valuetier"));
-	itemData.complexity = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-complexity"));
-	itemData.time = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-time"));
-	itemData.components = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-components"));
-	return itemData;
-}
+			worker.setBuildStatsDraft(attrHandler);
+			worker.updateBuildStats(attrHandler, fieldName, level);
+			worker.setPointsMax(attrHandler);
+			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
+		});
+		WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
+	}
 
-function CreateEquipmentItemDataFromRepeatingSection(attrArray, repeatingSection, id) {
+	convertXp(attributeHandler) {
+		let worker = this;
+		let xpDefinition = WuxDef.Get("XP");
+		attributeHandler.addMod(xpDefinition.getVariable());
+		attributeHandler.addMod(worker.attrBuildDraft);
+		attributeHandler.addMod(worker.attrBuildFinal);
 
-	let itemData = CreateItemDataFromRepeatingSection(attrArray, repeatingSection, id);
-	itemData.abilities = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-abilities"));
-	itemData.skill = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-skill"));
-	itemData.dVal = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-dieValue"));
-	itemData.dType = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-dieType"));
-	itemData.dBonus = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-addPower")) == "on" ? "Power" : "";
-	itemData.damageType = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-damageType"));
-	itemData.range = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-range"));
-	itemData.threat = AttrParseString(attrArray, GetSectionIdName(repeatingSection, id, "item-threat"));
-	itemData.block = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-block"));
-	itemData.armor = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-armor"));
-	itemData.reflexPen = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-reflexPen"));
-	itemData.speedPen = AttrParseInt(attrArray, GetSectionIdName(repeatingSection, id, "item-speedPen"));
-	log (JSON.stringify(itemData));
-	return itemData;
-}
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsFinal(attrHandler);
+			let level = worker.buildStats.get(WuxDef.GetVariable("Level")).value;
+			let xp = attrHandler.parseInt(xpDefinition.getVariable());
+			let xpNeeded = xpDefinition.formula.getValue(attrHandler);
 
-function ConvertEquipmentDataToWeaponData(itemData) {
-	let weaponData = {};
+			worker.setBuildStatsDraft(attrHandler);
 
-	weaponData.name = itemData.name;
-	weaponData.traits = itemData.traits;
-	weaponData.abilities = itemData.abilities;
-	weaponData.skill = itemData.skill;
-	weaponData.damageString = FeatureService.GetDamageString(itemData);
-	weaponData.dType = itemData.dType;
-	weaponData.dVal = itemData.dVal;
-	weaponData.dBonus = itemData.dBonus;
-	weaponData.damageType = itemData.damageType;
-	weaponData.range = itemData.range;
-	weaponData.threat = itemData.threat;
-	log ("post: " + JSON.stringify(itemData));
-	return weaponData;
-}
+			while (xp >= xpNeeded) {
+				level++;
+				xp -= xpNeeded;
+			}
+			attrHandler.addUpdate(xpDefinition.getVariable(), xp);
 
+			let attributeHandler2 = new WorkerAttributeHandler();
+			worker.updateBuildStats(attributeHandler2, xpDefinition.getVariable(), xp);
+			worker.updateLevel(attributeHandler2, WuxDef.GetVariable("Level"), level);
+			attributeHandler2.run();
+		});
+	}
 
+	getCharacterRank(level) {
+		let cr = 1;
+		let incrementer = 4;
+		let modIncrementer = 1;
+		let checkingLevel = 4;
+		while (level >= checkingLevel) {
+			cr++;
+			incrementer += modIncrementer;
+			checkingLevel += incrementer;
+		}
+		return cr;
+	}
 
+	changeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
+		let worker = this;
 
-// ======== General Sheetworker
+		attributeHandler.addMod(worker.attrMax);
+		attributeHandler.addMod(worker.attrBuildDraft);
 
-function GoToNextPage(update, nextPage, currentPage) {
-	update[`${Format.ToCamelCase(nextPage)}-previousPage`] = currentPage;
-	update["characterSheetDisplayStyle"] = nextPage;
-	return update;
-}
+		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
-function UpdateDefaultActiveCheckbox(eventinfo, correctNewValue) {
-	
-	if (eventinfo.previousValue == eventinfo.newValue) {
-		let update = {};
-		eventinfo.newValue = correctNewValue == undefined ? "0" : correctNewValue;
-		update[eventinfo.sourceAttribute] = eventinfo.newValue;
-		setAttrs(update, { silent: true });
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsDraft(attrHandler);
+			worker.updateBuildStats(attrHandler, updatingAttr, newValue);
+			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
+		});
 	}
 }
 
-function log (output) {
-	console.log(output);
+class WuxTrainingWorkerBuild extends WuxWorkerBuild {
+	constructor() {
+		super("Training");
+	}
+
+	setPointsMax(attributeHandler) {
+		// do nothing
+
+	}
+
+	updatePoints(attributeHandler) {
+		let buildPoints = 0;
+		let advKnowledge = WuxDef.GetVariable("TrainingKnowledge");
+		let advTechs = WuxDef.GetVariable("TrainingTechniques");
+
+		if (this.buildStats.has(advKnowledge)) {
+			Debug.Log(`adding ${this.buildStats.getIntValue(advKnowledge)} to buildPoints`);
+			buildPoints += this.buildStats.getIntValue(advKnowledge);
+		}
+		if (this.buildStats.has(advTechs)) {
+			Debug.Log(`adding ${this.buildStats.getIntValue(advTechs)} to buildPoints`);
+			buildPoints += this.buildStats.getIntValue(advTechs);
+		}
+		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
+		Debug.Log(`this.attrMax: ${this.attrMax} buildPoints: ${buildPoints}, buildPointsMax: ${buildPointsMax}`);
+
+		attributeHandler.addUpdate(this.definition.getVariable(), buildPointsMax - buildPoints);
+		attributeHandler.addUpdate(this.definition.getVariable(WuxDef._error), buildPoints == buildPointsMax ? "0" : buildPoints < buildPointsMax ? "1" : "-1");
+	}
+
+	getBuildVariables() {
+		return [WuxDef.GetVariable("Training", WuxDef._max), WuxDef.GetVariable("PP"),
+			WuxDef.GetVariable("TrainingKnowledge"), WuxDef.GetVariable("TrainingTechniques")];
+	}
+
+	convertPp(attributeHandler) {
+		let worker = this;
+		let ppDefinition = WuxDef.Get("PP");
+		attributeHandler.addMod(ppDefinition.getVariable());
+		attributeHandler.addMod(worker.attrBuildDraft);
+		attributeHandler.addMod(worker.attrBuildFinal);
+
+		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsFinal(attrHandler);
+
+			let trainingPoints = 0;
+			if (worker.buildStats.has(worker.attrMax)) {
+				trainingPoints = worker.buildStats.get(worker.attrMax).value;
+			}
+			let pp = attrHandler.parseInt(ppDefinition.getVariable());
+			let xpNeeded = ppDefinition.formula.getValue(attrHandler);
+
+			worker.setBuildStatsDraft(attrHandler);
+
+			while (pp >= xpNeeded) {
+				trainingPoints++;
+				pp -= xpNeeded;
+			}
+			attrHandler.addUpdate(ppDefinition.getVariable(), pp);
+			attrHandler.addUpdate(worker.attrMax, trainingPoints);
+
+			worker.updateBuildStats(attrHandler, ppDefinition.getVariable(), pp);
+			worker.updateBuildStats(attrHandler, worker.attrMax, trainingPoints);
+			worker.setPointsMax(attrHandler);
+			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
+		});
+	}
+
+	updateTrainingPoints(attributeHandler) {
+		let worker = this;
+		attributeHandler.addMod(worker.attrMax);
+		attributeHandler.addMod(worker.attrBuildDraft);
+
+		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			Debug.Log(`Updating ${worker.attrMax} to ${attributeHandler.parseInt(worker.attrMax)}`);
+
+			worker.setBuildStatsDraft(attrHandler);
+			worker.updateBuildStats(attrHandler, worker.attrMax, attributeHandler.parseInt(worker.attrMax));
+			worker.setPointsMax(attrHandler);
+			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
+		});
+	}
+
+	changeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
+		let worker = this;
+
+		attributeHandler.addMod(worker.attrMax);
+		attributeHandler.addMod(worker.attrBuildDraft);
+
+		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsDraft(attrHandler);
+			worker.updateBuildStats(attrHandler, updatingAttr, newValue);
+			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
+		});
+	}
 }
 
+class WuxAttributeWorkerBuild extends WuxWorkerBuild {
+	constructor() {
+		super("Attribute");
+	}
+
+	updatePoints(attributeHandler) {
+		let buildPoints = this.getPointsTotal();
+		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
+
+		attributeHandler.addUpdate(this.definition.getVariable(), buildPointsMax - buildPoints);
+		attributeHandler.addUpdate(this.definition.getVariable(WuxDef._error), buildPoints == buildPointsMax ? "0" : buildPoints < buildPointsMax ? "1" : "-1");
+	}
+
+	getPointsTotal() {
+		let points = 0;
+		let hasSubtracted = false;
+		if (this.buildStats.keys == undefined) {
+			return points;
+		}
+		for (let i = 0; i < this.buildStats.keys.length; i++) {
+			if (this.buildStats.values[this.buildStats.keys[i]].value == "on") {
+				points++;
+			} else {
+				let value = parseInt(this.buildStats.values[this.buildStats.keys[i]].value);
+				if (!isNaN(value)) {
+					if (value >= 0) {
+						points += value;
+					} else if (!hasSubtracted) {
+						hasSubtracted = true;
+						points += value;
+					}
+
+				}
+			}
+		}
+		return points;
+	}
+}
