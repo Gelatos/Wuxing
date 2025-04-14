@@ -5,7 +5,7 @@ var Debug = Debug || (function () {
             console.log(msg);
         },
         logError = function (msg) {
-            console.log(`ERROR! ${msg}`);
+            console.error(`ERROR! ${msg}`);
         }
 
     return {
@@ -45,6 +45,7 @@ class WorkerRepeatingSectionHandler extends RepeatingSectionHandler {
     
     removeId(id) {
         super.removeId(id);
+        Debug.Log("removing " + id);
         removeRepeatingRow(this.repeatingSection + "_" + id);
     }
 }
@@ -190,7 +191,7 @@ class WuxWorkerBuild {
     changeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
         let worker = this;
 
-        console.log(`Updating ${worker.definition.name} variable ${updatingAttr} to ${newValue}`);
+        Debug.Log(`Updating ${worker.definition.name} variable ${updatingAttr} to ${newValue}`);
         attributeHandler.addMod(worker.attrMax);
         attributeHandler.addMod(worker.attrBuildDraft);
 
@@ -370,15 +371,15 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
         let advTechs = WuxDef.GetVariable("TrainingTechniques");
 
         if (this.buildStats.has(advKnowledge)) {
-            console.log(`adding ${this.buildStats.getIntValue(advKnowledge)} to buildPoints`);
+            Debug.Log(`adding ${this.buildStats.getIntValue(advKnowledge)} to buildPoints`);
             buildPoints += this.buildStats.getIntValue(advKnowledge);
         }
         if (this.buildStats.has(advTechs)) {
-            console.log(`adding ${this.buildStats.getIntValue(advTechs)} to buildPoints`);
+            Debug.Log(`adding ${this.buildStats.getIntValue(advTechs)} to buildPoints`);
             buildPoints += this.buildStats.getIntValue(advTechs);
         }
         let buildPointsMax = attributeHandler.parseInt(this.attrMax);
-        console.log(`this.attrMax: ${this.attrMax} buildPoints: ${buildPoints}, buildPointsMax: ${buildPointsMax}`);
+        Debug.Log(`this.attrMax: ${this.attrMax} buildPoints: ${buildPoints}, buildPointsMax: ${buildPointsMax}`);
 
         attributeHandler.addUpdate(this.definition.getVariable(), buildPointsMax - buildPoints);
         attributeHandler.addUpdate(this.definition.getVariable(WuxDef._error), buildPoints == buildPointsMax ? "0" : buildPoints < buildPointsMax ? "1" : "-1");
@@ -435,7 +436,7 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
         manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            console.log(`Updating ${worker.attrMax} to ${attributeHandler.parseInt(worker.attrMax)}`);
+            Debug.Log(`Updating ${worker.attrMax} to ${attributeHandler.parseInt(worker.attrMax)}`);
 
             worker.setBuildStatsDraft(attrHandler);
             worker.updateBuildStats(attrHandler, worker.attrMax, attributeHandler.parseInt(worker.attrMax));
@@ -507,7 +508,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
 
     var
         updatePageState = function (eventinfo) {
-            console.log("Update Page State");
+            Debug.Log("Update Page State");
             let attributeHandler = new WorkerAttributeHandler();
             switch (eventinfo.newValue) {
                 case "Styles":
@@ -587,7 +588,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 
     var
         finishBuild = function () {
-            console.log("Finish Character Creation Build");
+            Debug.Log("Finish Character Creation Build");
             let attributeHandler = new WorkerAttributeHandler();
 
             let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Technique"]);
@@ -643,7 +644,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
             attributeHandler.run();
         },
         setInnateDefense = function () {
-            console.log("Setting Innate Defense");
+            Debug.Log("Setting Innate Defense");
             let attributeHandler = new WorkerAttributeHandler();
             let innateDefenseVariable = WuxDef.GetVariable("InnateDefense");
             let braceDef = WuxDef.Get("Def_Brace");
@@ -693,7 +694,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
             attributeHandler.run();
         },
         setInnateSense = function () {
-            console.log("Setting Innate Sense");
+            Debug.Log("Setting Innate Sense");
             let attributeHandler = new WorkerAttributeHandler();
             let innateSenseVariable = WuxDef.GetVariable("InnateSense");
             let senseResolveDef = WuxDef.Get("Def_Resolve");
@@ -752,11 +753,11 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
             attrHandler.addUpdate(def2Definition.getVariable(WuxDef._expertise), 2);
         },
         getDefenseDescription = function (type, attrDefinition, def1Definition, def2Definition) {
-            console.log("Getting Defense Description");
+            Debug.Log("Getting Defense Description");
 
             let output = `${attrDefinition.title} is associated with the following ${type}s:\n\n`;
             output += `${def1Definition.title}: ${def1Definition.getDescription()}\n\n${def2Definition.title}: ${def2Definition.getDescription()}`;
-            console.log(output);
+            Debug.Log(output);
             return output;
         }
 
@@ -794,7 +795,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
             attributeHandler.run();
         },
         finishBuild = function () {
-            console.log("Finish Training Build");
+            Debug.Log("Finish Training Build");
             let attributeHandler = new WorkerAttributeHandler();
 
             let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
@@ -810,7 +811,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
             attributeHandler.run();
         },
         exitBuild = function () {
-            console.log("Exit Training Build");
+            Debug.Log("Exit Training Build");
             let attributeHandler = new WorkerAttributeHandler();
 
             let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
@@ -833,7 +834,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
         },
 
         convertPp = function () {
-            console.log("Converting PP to Level");
+            Debug.Log("Converting PP to Level");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxTrainingWorkerBuild();
             worker.convertPp(attributeHandler);
@@ -846,7 +847,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
             attributeHandler.run();
         },
         setTrainingPointsUpdate = function (eventinfo) {
-            console.log("Setting Training Points Values");
+            Debug.Log("Setting Training Points Values");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxTrainingWorkerBuild();
             worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
@@ -888,7 +889,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
             attributeHandler.run();
         },
         finishBuild = function () {
-            console.log("Finish Advancement Build");
+            Debug.Log("Finish Advancement Build");
             let attributeHandler = new WorkerAttributeHandler();
 
             let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
@@ -906,7 +907,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
             attributeHandler.run();
         },
         exitBuild = function () {
-            console.log("Exit Advancement Build");
+            Debug.Log("Exit Advancement Build");
             let attributeHandler = new WorkerAttributeHandler();
 
             let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
@@ -931,21 +932,21 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
         },
 
         convertXp = function () {
-            console.log("Converting XP to Level");
+            Debug.Log("Converting XP to Level");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxAdvancementWorkerBuild();
             worker.convertXp(attributeHandler);
             attributeHandler.run();
         },
         setLevel = function (eventinfo) {
-            console.log("Setting Level");
+            Debug.Log("Setting Level");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxAdvancementWorkerBuild();
             worker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
             attributeHandler.run();
         },
         setAdvancementPointsUpdate = function (eventinfo) {
-            console.log("Setting Advancement Points");
+            Debug.Log("Setting Advancement Points");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxAdvancementWorkerBuild();
             worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
@@ -1646,7 +1647,7 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 
     var
         updateBuildPoints = function (eventinfo) {
-            console.log("Update Knowledge");
+            Debug.Log("Update Knowledge");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxWorkerBuildManager("Knowledge");
             worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
@@ -1713,7 +1714,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
 
     var
         updateBuildPoints = function (eventinfo) {
-            console.log("Update Jobs");
+            Debug.Log("Update Jobs");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxWorkerBuildManager("Job");
             worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
@@ -1767,7 +1768,7 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 
     var
         updateBuildPoints = function (eventinfo) {
-            console.log("Update Attributes");
+            Debug.Log("Update Attributes");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxAttributeWorkerBuild();
             worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
@@ -1808,7 +1809,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 
     var
         selectOutfit = function (eventinfo) {
-            console.log(`Selecting outfit`);
+            Debug.Log(`Selecting outfit`);
 
             let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
             outfitRepeatingSection.getIds(function (outfitRepeater) {
@@ -1844,7 +1845,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         },
 
         updatePostContent = function (eventinfo) {
-            console.log(`Updating post content`);
+            Debug.Log(`Updating post content`);
 
             let messageObj = WuxMessage.ParseInput(eventinfo.newValue);
 
@@ -1877,13 +1878,13 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         },
 
         updateSelectedLanguage = function (eventinfo) {
-            console.log(`Updating selected language to ${eventinfo.newValue}`);
+            Debug.Log(`Updating selected language to ${eventinfo.newValue}`);
             let message = new EmoteMessage("");
             message.setLanguage(eventinfo.newValue);
 
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addUpdate(WuxDef.GetVariable("Chat_LanguageTag"), message.languageTag);
-            console.log(`setting language tag to ${message.languageTag}`);
+            Debug.Log(`setting language tag to ${message.languageTag}`);
             attributeHandler.run();
         },
 
@@ -1901,7 +1902,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             });
         },
         updateNameOutfit = function (eventinfo) {
-            console.log(`Renaming outfit ${eventinfo.previousValue} to ${eventinfo.newValue}`);
+            Debug.Log(`Renaming outfit ${eventinfo.previousValue} to ${eventinfo.newValue}`);
             let attributeHandler = new WorkerAttributeHandler();
             let setIdVar = WuxDef.GetVariable("Chat_SetId");
             let updateId = outfitRepeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
@@ -1916,7 +1917,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             attributeHandler.run();
         },
         updateOutfitEmotesGroup = function (eventinfo) {
-            console.log(`Setting outfit emotes through a json submission`);
+            Debug.Log(`Setting outfit emotes through a json submission`);
             let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
             let jsonData = "";
 
@@ -1950,7 +1951,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
                 attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitName")), outfitEmotes.name);
                 attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitEmotes")), JSON.stringify(outfitEmotes));
                 attributeHandler.addUpdate(outfitRepeatingSection.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitEmotes", WuxDef._true)), JSON.stringify(outfitEmotes));
-                console.log(`Setting outfit emotes for ${outfitEmotes.name} to \n${JSON.stringify(outfitEmotes)}`);
+                Debug.Log(`Setting outfit emotes for ${outfitEmotes.name} to \n${JSON.stringify(outfitEmotes)}`);
 
                 let emoteIndex = 2;
                 outfitEmotes.iterate(function (emote) {
@@ -1982,15 +1983,15 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 
         },
         updateOutfitEmotesName = function (eventinfo) {
-            console.log(`Setting outfit emotes through a name entry to ${eventinfo.newValue}`);
+            Debug.Log(`Setting outfit emotes through a name entry to ${eventinfo.newValue}`);
             setOutfitEmotesIndividualEntry(eventinfo);
         },
         updateOutfitEmotesDefaultUrl = function (eventinfo) {
-            console.log(`Setting outfit emotes through a url entry to ${eventinfo.newValue}`);
+            Debug.Log(`Setting outfit emotes through a url entry to ${eventinfo.newValue}`);
             setOutfitEmotesIndividualEntry(eventinfo);
         },
         updateOutfitEmotesUrl = function (eventinfo) {
-            console.log(`Setting outfit emotes through a url entry to ${eventinfo.newValue}`);
+            Debug.Log(`Setting outfit emotes through a url entry to ${eventinfo.newValue}`);
             setOutfitEmotesIndividualEntry(eventinfo);
         },
         setOutfitEmotesIndividualEntry = function (eventinfo) {
@@ -2069,13 +2070,53 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
     var
         openItemInspection = function (eventinfo) {
-            console.log("Open Item Popup");
+            Debug.Log("Open Item Popup");
             
             let itemPopupValuesRepeatingSection = new WorkerRepeatingSectionHandler("ItemPopupValues");
-            
-            showPopup(function (attrHandler) {
-                itemPopupValuesRepeatingSection.removeAllIds();
+            itemPopupValuesRepeatingSection.getIds(function (itemPopupRepeater) {
+                showPopup(function (attrHandler) {
+                    itemPopupRepeater.removeAllIds();
+                    let selectedItem = populateItemInspectionItems(attrHandler, itemPopupRepeater, eventinfo);
+                    if (selectedItem == null) {
+                        Debug.LogError(`No items found for ${eventinfo.sourceAttribute}`);
+                        closePopup();
+                    }
+                });
             });
+        },
+        
+        populateItemInspectionItems = function (attrHandler, itemPopupRepeater, eventinfo) {
+            let itemGroup = getItemGroupType(eventinfo);
+            if (itemGroup == "") {
+                return null;
+            }
+
+            let firstItem = null;
+            let itemFilter = WuxDef.Filter([new DatabaseFilterData("group", "Gear"), new DatabaseFilterData("subGroup", itemGroup)]);
+            itemFilter.forEach(function (item) {
+                let newrowid = itemPopupRepeater.generateRowId();
+                Debug.Log(`Adding item ${item.name} to popup with id ${itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectName"))}`);
+                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectName")), item.getTitle());
+                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectId")), item.name);
+                
+                if (firstItem == null) {
+                    firstItem = item;
+                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
+                }
+                else {
+                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
+                }
+            });
+            
+            return firstItem;
+        },
+        
+        getItemGroupType = function (eventinfo) {
+            switch (eventinfo.sourceAttribute) {
+                case WuxDef.GetVariable("Popup_AddHeadGear"):
+                    return "Head Gear";
+            }
+            return "";
         },
         
         showPopup = function (getAttrCallback) {

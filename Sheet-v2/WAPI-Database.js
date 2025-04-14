@@ -250,7 +250,7 @@ class ExtendedTechniqueDatabase extends Database {
 class ExtendedUsableItemDatabase extends Database {
 
     constructor(data) {
-        let filters = ["group", "action", "skill", "range"];
+        let filters = ["group", "subGroup", "action", "skill", "range"];
         let dataCreation = function (data) {
             return new UsableItemData(data);
         };
@@ -1258,11 +1258,7 @@ class UsableItemData extends ItemData {
     }
 
     createDefinition(baseDefinition) {
-        let itemDefinition = super.createDefinition(baseDefinition);
-        let definition = new UsableItemDefinitionData(baseDefinition);
-        definition.subGroup = itemDefinition.subGroup;
-        definition.category = itemDefinition.category;
-        definition.value = itemDefinition.value;
+        let definition = new ItemDefinitionData(super.createDefinition(baseDefinition));
         definition.techInfo = this.technique;
         return definition;
     }
@@ -1663,16 +1659,6 @@ class ItemDefinitionData extends DefinitionData {
         super.createEmpty();
         this.category = "";
         this.value = 0;
-    }
-}
-
-class UsableItemDefinitionData extends ItemDefinitionData {
-    importJson(json) {
-        super.importJson(json);
-        this.techInfo = json.techInfo;
-    }
-    createEmpty() {
-        super.createEmpty();
         this.techInfo = {};
     }
 }
@@ -3214,13 +3200,14 @@ class RepeatingSectionHandler {
         this.ids = [];
     }
 
-    generateUUId() {
+    generateUUID = (function() {
+        "use strict";
 
-        let a = 0, b = [];
-        return function () {
-            let c = (new Date()).getTime() + 0, d = c === a;
+        var a = 0, b = [];
+        return function() {
+            var c = (new Date()).getTime() + 0, d = c === a;
             a = c;
-            for (let e = new Array(8), f = 7; 0 <= f; f--) {
+            for (var e = new Array(8), f = 7; 0 <= f; f--) {
                 e[f] = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(c % 64);
                 c = Math.floor(c / 64);
             }
@@ -3235,16 +3222,16 @@ class RepeatingSectionHandler {
                     b[f] = Math.floor(64 * Math.random());
                 }
             }
-            for (f = 0; 12 > f; f++) {
+            for (f = 0; 12 > f; f++){
                 c += "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(b[f]);
             }
             return c;
         };
-    }
+    }())
 
     generateRowId() {
-
-        return generateUUId().replace(/_/g, "Z");
+        let id = this.generateUUID();
+        return id.replace(/_/g, "Z");
     }
     
     addFieldNames(fieldNames) {

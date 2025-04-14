@@ -705,10 +705,9 @@ var WuxDefinition = WuxDefinition || (function () {
                 case "Status":
                     return new StatusDefinitionData(values[key]);
                 case "Goods":
-                    return new ItemDefinitionData(values[key]);
                 case "Gear":
                 case "Consumable":
-                    return new UsableItemDefinitionData(values[key]);
+                    return new ItemDefinitionData(values[key]);
                 default:
                     return new DefinitionData(values[key]);
             }

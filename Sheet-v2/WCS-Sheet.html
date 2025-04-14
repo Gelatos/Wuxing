@@ -425,9 +425,13 @@
                                                 <span class="wuxDescription">Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level.</span>
                                                 <span class="wuxDescription">Your Character rank begins at 1.
                                                     At 5th Level it increases to 2.
-                                                    At 15th Level it increases to 3.
-                                                    At 30th Level it increases to 4.
-                                                    At 50th Level it increases to 5.</span>
+                                                    At 9th Level it increases to 3.
+                                                    At 15th Level it increases to 4.
+                                                    At 22nd Level it increases to 5.
+                                                    At 30th Level it increases to 6.
+                                                    At 39th Level it increases to 7.
+                                                    At 49th Level it increases to 8.
+                                                    At 60th Level it increases to 9.</span>
                                             </div>
                                         </div>
                                     </div>
@@ -3158,9 +3162,13 @@
                                                 <span class="wuxDescription">Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level.</span>
                                                 <span class="wuxDescription">Your Character rank begins at 1.
                                                     At 5th Level it increases to 2.
-                                                    At 15th Level it increases to 3.
-                                                    At 30th Level it increases to 4.
-                                                    At 50th Level it increases to 5.</span>
+                                                    At 9th Level it increases to 3.
+                                                    At 15th Level it increases to 4.
+                                                    At 22nd Level it increases to 5.
+                                                    At 30th Level it increases to 6.
+                                                    At 39th Level it increases to 7.
+                                                    At 49th Level it increases to 8.
+                                                    At 60th Level it increases to 9.</span>
                                             </div>
                                         </div>
                                     </div>
@@ -18104,9 +18112,13 @@
                                                     <span class="wuxDescription">Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level.</span>
                                                     <span class="wuxDescription">Your Character rank begins at 1.
                                                         At 5th Level it increases to 2.
-                                                        At 15th Level it increases to 3.
-                                                        At 30th Level it increases to 4.
-                                                        At 50th Level it increases to 5.</span>
+                                                        At 9th Level it increases to 3.
+                                                        At 15th Level it increases to 4.
+                                                        At 22nd Level it increases to 5.
+                                                        At 30th Level it increases to 6.
+                                                        At 39th Level it increases to 7.
+                                                        At 49th Level it increases to 8.
+                                                        At 60th Level it increases to 9.</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -28631,7 +28643,374 @@
                         <span>Exit</span>
                     </div>
                 </div>
+                <div class="wuxInspectionPopupContents">
+                    <div class="wuxInspectionPopupContentData">
+                        <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-itemname">
+                        <div class="wuxHiddenAuxField">
+                            <div class="wuxHeader2">Item Data</div>
+                            <div class="wuxFeature">
+                            </div>
+                        </div>
 
+                        <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techname">
+                        <div class="wuxHiddenAuxField">
+                            <div class="wuxHeader2">Technique</div>
+                            <div class="wuxFeature">
+                                <input type="hidden" class="wuxFeatureHeader-flag" name="attr_popup-techactiontype">
+                                <div class="wuxFeatureHeader">
+                                    <div class="wuxFeatureHeaderDisplayBlock">
+                                        <span class="wuxFeatureHeaderName" name="attr_popup-techname"></span>
+                                        <div class="wuxFeatureHeaderInfo" name="attr_popup-techresourcedata"></div>
+                                        <div class="wuxFeatureHeaderInfo" name="attr_popup-techtargetingdata"></div>
+                                        <div class="wuxFeatureHeaderInfo">
+                                            <span><strong>Traits: </strong></span>
+                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtrait0" value="0" />
+                                            <div class="wuxHiddenField">
+                                                <span>None</span>
+                                            </div>
+                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtrait0" value="0" />
+                                            <div class="wuxHiddenAuxField">
+                                                <span class="wuxTooltip">
+                                                    <span class="wuxTooltipText" name="attr_popup-techtrait0">-</span>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2" name="attr_popup-techtrait0">-</div>
+                                                        <span class="wuxDescription"><em>Technique Trait</em></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait0desc0"></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait0desc1"></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait0desc2"></span>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtrait1" value="0" />
+                                            <div class="wuxHiddenAuxField">
+                                                <span>; </span>
+                                                <span class="wuxTooltip">
+                                                    <span class="wuxTooltipText" name="attr_popup-techtrait1">-</span>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2" name="attr_popup-techtrait1">-</div>
+                                                        <span class="wuxDescription"><em>Technique Trait</em></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait1desc0"></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait1desc1"></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait1desc2"></span>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtrait2" value="0" />
+                                            <div class="wuxHiddenAuxField">
+                                                <span>; </span>
+                                                <span class="wuxTooltip">
+                                                    <span class="wuxTooltipText" name="attr_popup-techtrait2">-</span>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2" name="attr_popup-techtrait2">-</div>
+                                                        <span class="wuxDescription"><em>Technique Trait</em></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait2desc0"></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait2desc1"></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait2desc2"></span>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtrait3" value="0" />
+                                            <div class="wuxHiddenAuxField">
+                                                <span>; </span>
+                                                <span class="wuxTooltip">
+                                                    <span class="wuxTooltipText" name="attr_popup-techtrait3">-</span>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2" name="attr_popup-techtrait3">-</div>
+                                                        <span class="wuxDescription"><em>Technique Trait</em></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait3desc0"></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait3desc1"></span>
+                                                        <span class="wuxDescription" name="attr_popup-techtrait3desc2"></span>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtrigger" value="0" />
+                                <div class="wuxHiddenAuxField">
+                                    <div class="wuxFeatureHeaderInfoReq">
+                                        <span><strong>Trigger: </strong></span>
+                                        <span name="attr_popup-techtrigger"></span>
+                                    </div>
+                                </div>
+                                <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techrequirements" value="0" />
+                                <div class="wuxHiddenAuxField">
+                                    <div class="wuxFeatureHeaderInfoReq">
+                                        <span><strong>Requirements: </strong></span>
+                                        <span name="attr_popup-techrequirements"></span>
+                                    </div>
+                                </div>
+                                <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techitemreq0" value="0" />
+                                <div class="wuxHiddenAuxField">
+                                    <div class="wuxFeatureHeaderInfoReq">
+                                        <span><strong>Item Traits: </strong></span>
+                                        <span class="wuxTooltip">
+                                            <span class="wuxTooltipText" name="attr_popup-techitemreq0">-</span>
+                                            <div class="wuxTooltipContent">
+                                                <div class="wuxHeader2" name="attr_popup-techitemreq0">-</div>
+                                                <span class="wuxDescription"><em>Item Trait</em></span>
+                                                <span class="wuxDescription" name="attr_popup-techitemreq0desc0"></span>
+                                                <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techitemreq0desc1" value="0" />
+                                                <div class="wuxHiddenAuxField">
+                                                    <span class="wuxDescription" name="attr_popup-techitemreq0desc1"></span>
+                                                </div>
+                                                <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techitemreq0desc2" value="0" />
+                                                <div class="wuxHiddenAuxField">
+                                                    <span class="wuxDescription" name="attr_popup-techitemreq0desc2"></span>
+                                                </div>
+                                            </div>
+                                        </span>
+                                        <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techitemreq1" value="0" />
+                                        <div class="wuxHiddenAuxField">
+                                            <span> and </span>
+                                            <span class="wuxTooltip">
+                                                <span class="wuxTooltipText" name="attr_popup-techitemreq1">-</span>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2" name="attr_popup-techitemreq1">-</div>
+                                                    <span class="wuxDescription"><em>Item Trait</em></span>
+                                                    <span class="wuxDescription" name="attr_popup-techitemreq1desc0"></span>
+                                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techitemreq1desc1" value="0" />
+                                                    <div class="wuxHiddenAuxField">
+                                                        <span class="wuxDescription" name="attr_popup-techitemreq1desc1"></span>
+                                                    </div>
+                                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techitemreq1desc2" value="0" />
+                                                    <div class="wuxHiddenAuxField">
+                                                        <span class="wuxDescription" name="attr_popup-techitemreq1desc2"></span>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techitemreq2" value="0" />
+                                        <div class="wuxHiddenAuxField">
+                                            <span> and </span>
+                                            <span class="wuxTooltip">
+                                                <span class="wuxTooltipText" name="attr_popup-techitemreq2">-</span>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2" name="attr_popup-techitemreq2">-</div>
+                                                    <span class="wuxDescription"><em>Item Trait</em></span>
+                                                    <span class="wuxDescription" name="attr_popup-techitemreq2desc0"></span>
+                                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techitemreq2desc1" value="0" />
+                                                    <div class="wuxHiddenAuxField">
+                                                        <span class="wuxDescription" name="attr_popup-techitemreq2desc1"></span>
+                                                    </div>
+                                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techitemreq2desc2" value="0" />
+                                                    <div class="wuxHiddenAuxField">
+                                                        <span class="wuxDescription" name="attr_popup-techitemreq2desc2"></span>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techflavortext" value="0" />
+                                <div class="wuxHiddenAuxField">
+                                    <div class="wuxFeatureFunctionBlock">
+                                        <div class="wuxFeatureFunctionBlockFlavorText">
+                                            <span name="attr_popup-techflavortext"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="wuxFeatureEffectsBlock">
+                                    <div class="wuxFeatureCheckHeader">
+                                        <span class="wuxTooltip">
+                                            <span class="wuxTooltipText" name="attr_popup-techeffect0name">Name</span>
+                                            <div class="wuxTooltipContent">
+                                                <div class="wuxHeader2" name="attr_popup-techeffect0name">Name</div>
+                                                <span class="wuxDescription" name="attr_popup-techeffect0desc">Desc</span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <div class="wuxFeatureCheckBlock">
+                                        <span class="wuxFeatureCheckBlockRow" name="attr_popup-techeffect0">Effect</span>
+                                    </div>
+
+                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techeffect1name" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <div class="wuxFeatureCheckHeader">
+                                            <span class="wuxTooltip">
+                                                <span class="wuxTooltipText" name="attr_popup-techeffect1name">Name</span>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2" name="attr_popup-techeffect1name">Name</div>
+                                                    <span class="wuxDescription" name="attr_popup-techeffect1desc">Desc</span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techeffect1" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <div class="wuxFeatureCheckBlock">
+                                            <span class="wuxFeatureCheckBlockRow" name="attr_popup-techeffect1">Effect</span>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techeffect2name" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <div class="wuxFeatureCheckHeader">
+                                            <span class="wuxTooltip">
+                                                <span class="wuxTooltipText" name="attr_popup-techeffect2name">Name</span>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2" name="attr_popup-techeffect2name">Name</div>
+                                                    <span class="wuxDescription" name="attr_popup-techeffect2desc">Desc</span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techeffect2" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <div class="wuxFeatureCheckBlock">
+                                            <span class="wuxFeatureCheckBlockRow" name="attr_popup-techeffect2">Effect</span>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techeffect3name" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <div class="wuxFeatureCheckHeader">
+                                            <span class="wuxTooltip">
+                                                <span class="wuxTooltipText" name="attr_popup-techeffect3name">Name</span>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2" name="attr_popup-techeffect3name">Name</div>
+                                                    <span class="wuxDescription" name="attr_popup-techeffect3desc">Desc</span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techeffect3" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <div class="wuxFeatureCheckBlock">
+                                            <span class="wuxFeatureCheckBlockRow" name="attr_popup-techeffect3">Effect</span>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techeffect4name" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <div class="wuxFeatureCheckHeader">
+                                            <span class="wuxTooltip">
+                                                <span class="wuxTooltipText" name="attr_popup-techeffect4name">Name</span>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2" name="attr_popup-techeffect4name">Name</div>
+                                                    <span class="wuxDescription" name="attr_popup-techeffect4desc">Desc</span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techeffect4" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <div class="wuxFeatureCheckBlock">
+                                            <span class="wuxFeatureCheckBlockRow" name="attr_popup-techeffect4">Effect</span>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techeffect5name" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <div class="wuxFeatureCheckHeader">
+                                            <span class="wuxTooltip">
+                                                <span class="wuxTooltipText" name="attr_popup-techeffect5name">Name</span>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2" name="attr_popup-techeffect5name">Name</div>
+                                                    <span class="wuxDescription" name="attr_popup-techeffect5desc">Desc</span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techeffect5" value="0" />
+                                    <div class="wuxHiddenAuxField">
+                                        <div class="wuxFeatureCheckBlock">
+                                            <span class="wuxFeatureCheckBlockRow" name="attr_popup-techeffect5">Effect</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techflavortext" value="0" />
+                                <div class="wuxHiddenAuxField">
+                                    <div class="wuxFeatureFunctionBlock">
+                                        <div class="wuxFeatureFunctionBlockRow">
+                                            <span><strong>Definitions: </strong></span>
+                                            <span class="wuxTooltip"><span class="wuxTooltipText" name="attr_popup-techdef0">Name</span>
+                                                <span class="wuxTooltipContent">
+                                                    <div class="wuxHeader2" name="attr_popup-techdef0">Name</div>
+                                                    <span class="wuxDescription" name="attr_popup-techdef0desc0">Desc0</span>
+                                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef0desc1" value="0" />
+                                                    <div class="wuxHiddenAuxField">
+                                                        <span class="wuxDescription" name="attr_popup-techdef0desc1"></span>
+                                                    </div>
+                                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef0desc2" value="0" />
+                                                    <div class="wuxHiddenAuxField">
+                                                        <span class="wuxDescription" name="attr_popup-techdef0desc2"></span>
+                                                    </div>
+                                                </span>
+                                            </span>
+                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef1" value="0" />
+                                            <div class="wuxHiddenInlineAuxField">
+                                                <span class="wuxTooltip"><span class="wuxTooltipText" name="attr_popup-techdef1">Name</span>
+                                                    <span class="wuxTooltipContent">
+                                                        <div class="wuxHeader2" name="attr_popup-techdef1">Name</div>
+                                                        <span class="wuxDescription" name="attr_popup-techdef1desc0">Desc0</span>
+                                                        <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef1desc1" value="0" />
+                                                        <div class="wuxHiddenAuxField">
+                                                            <span class="wuxDescription" name="attr_popup-techdef1desc1"></span>
+                                                        </div>
+                                                        <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef1desc2" value="0" />
+                                                        <div class="wuxHiddenAuxField">
+                                                            <span class="wuxDescription" name="attr_popup-techdef1desc2"></span>
+                                                        </div>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef2" value="0" />
+                                            <div class="wuxHiddenInlineAuxField">
+                                                <span class="wuxTooltip"><span class="wuxTooltipText" name="attr_popup-techdef2">Name</span>
+                                                    <span class="wuxTooltipContent">
+                                                        <div class="wuxHeader2" name="attr_popup-techdef2">Name</div>
+                                                        <span class="wuxDescription" name="attr_popup-techdef2desc0">Desc0</span>
+                                                        <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef2desc1" value="0" />
+                                                        <div class="wuxHiddenAuxField">
+                                                            <span class="wuxDescription" name="attr_popup-techdef2desc1"></span>
+                                                        </div>
+                                                        <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef2desc2" value="0" />
+                                                        <div class="wuxHiddenAuxField">
+                                                            <span class="wuxDescription" name="attr_popup-techdef2desc2"></span>
+                                                        </div>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef3" value="0" />
+                                            <div class="wuxHiddenInlineAuxField">
+                                                <span class="wuxTooltip"><span class="wuxTooltipText" name="attr_popup-techdef3">Name</span>
+                                                    <span class="wuxTooltipContent">
+                                                        <div class="wuxHeader2" name="attr_popup-techdef3">Name</div>
+                                                        <span class="wuxDescription" name="attr_popup-techdef3desc0">Desc0</span>
+                                                        <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef3desc1" value="0" />
+                                                        <div class="wuxHiddenAuxField">
+                                                            <span class="wuxDescription" name="attr_popup-techdef3desc1"></span>
+                                                        </div>
+                                                        <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techdef3desc2" value="0" />
+                                                        <div class="wuxHiddenAuxField">
+                                                            <span class="wuxDescription" name="attr_popup-techdef3desc2"></span>
+                                                        </div>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wuxInspectionPopupContentData">
+                        <div class="wuxNoRepControl">
+                            <fieldset class="repeating_itempopupvalues">
+                                <input type="hidden" class="wuxInspectionPopupSelectContainer-flag" name="attr_popup-itemselectison">
+
+                                <div class="wuxButton wuxInspectionPopupSelectContainer">
+                                    <input type="checkbox" name="attr_popup-itemselectison">
+                                    <span name="attr_popup-itemselectname"></span>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

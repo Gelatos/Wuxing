@@ -397,3 +397,65 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
 .wuxPopupHeader .wuxButton:hover {
     background: #0056b3;
 }
+
+.wuxInspectionPopupContents {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: left;
+    width: 100%;
+}
+
+.wuxInspectionPopupContentData {
+    flex: 1;
+}
+
+.wuxInspectionPopupSelectContainer
+{
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0px 10px;
+
+    background: #DDDDDD;
+    text-shadow: none;
+    box-shadow: none;
+    border: 1px solid black;
+}
+
+input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInspectionPopupSelectContainer {
+
+    background: #9fa0a3;
+    box-shadow: #1d1e1f 0px 0px 5px;
+}
+
+.wuxInspectionPopupSelectContainer:hover {
+    background: #9fa0a3;
+}
+
+.wuxInspectionPopupSelectContainer input[type=checkbox]
+{
+    position: absolute;
+    display: block;
+    opacity: 0;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    z-index: 100;
+}
+
+.wuxInspectionPopupSelectContainer span
+{
+    pointer-events: none;
+    position: relative;
+    top: 3px;
+    display: block;
+    width: 100%;
+    height: 24px;
+
+    text-align: left;
+
+    color: #1d1e1f;
+    font-size: 12px;
+    font-weight: normal;
+}
