@@ -1028,6 +1028,27 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 							</div>`;
                             return contents;
                         },
+                        
+                        buildItemRepeater = function () {
+                            let itemData = `<input type="hidden" class="wuxInspectionPopupSelectContainer-flag" name="${WuxDef.GetAttribute("Popup_ItemSelectIsOn")}">
+        
+                            <div class="wuxButton wuxInspectionPopupSelectContainer">
+                                <input type="checkbox" name="${WuxDef.GetAttribute("Popup_ItemSelectIsOn")}">
+                                <span name="${WuxDef.GetAttribute("Popup_ItemSelectName")}"></span>
+                                <input type="hidden" name="${WuxDef.GetAttribute("Popup_ItemSelectType")}">
+                            </div>`;
+        
+                            return `${WuxSheetMain.Header("Items in Group")}
+                            ${buildRepeater(WuxDef.GetVariable("ItemPopupValues"), itemData)}`;
+                        },
+        
+                        buildRepeater = function (repeaterName, repeaterData) {
+                            return `<div class="wuxNoRepControl">
+                                <fieldset class="${repeaterName}">
+                                    ${repeaterData}
+                                </fieldset>
+                            </div>`;
+                        },
 
                         advancement = function () {
                             let contents = "";
