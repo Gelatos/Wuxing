@@ -492,9 +492,9 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeader,
     background-color: #acacac;
 }
 
-input.wuxFeatureHeader-flag[value="Equipment"] + .wuxFeatureHeader,
-.wuxFeatureHeader-Equipment,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Equipment
+input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Item,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Item
 {
     background-color: #ad8ac2;
     border-top: 1px solid #000;

@@ -1225,6 +1225,7 @@ class UsableItemData extends ItemData {
     importJson(json) {
         super.importJson(json);
         this.valMod = json.valMod;
+        this.skill = json.skill;
         this.dc = json.dc;
         this.time = json.time;
         this.components = json.components;
@@ -1236,9 +1237,11 @@ class UsableItemData extends ItemData {
         let i = super.importSheets(dataArray);
         this.valMod = parseInt(dataArray[i]);
         i++;
-        this.dc = parseInt(dataArray[i]);
+        this.skill = "" + dataArray[i];
         i++;
-        this.time = parseInt(dataArray[i]);
+        this.dc = isNaN(parseInt(dataArray[i])) ? 0 : parseInt(dataArray[i]);
+        i++;
+        this.time = isNaN(parseInt(dataArray[i])) ? 1 : parseInt(dataArray[i]);
         i++;
         this.components = "" + dataArray[i];
         i++;
@@ -1253,6 +1256,7 @@ class UsableItemData extends ItemData {
         super.createEmpty();
         this.itemType = "UsableItem";
         this.valMod = 0;
+        this.skill = "";
         this.dc = 0;
         this.time = 0;
         this.components = "";
@@ -1672,7 +1676,7 @@ class ItemDefinitionData extends DefinitionData {
     }
 }
 
-// Technique Display
+// Special Display
 class TechniqueDisplayData {
 
     constructor(technique) {
@@ -2200,6 +2204,8 @@ class TechniqueEffectDisplayData {
         switch (effect.subType) {
             case "Set":
                 return `${WuxDef.GetTitle(effect.effect)} is set to ${this.formatCalcBonus(effect)}`;
+            case "Penalty":
+                return `${WuxDef.GetTitle(effect.effect)} decreases by ${this.formatCalcBonus(effect)}`;
             default:
                 return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
         }
@@ -2308,6 +2314,92 @@ class TechniqueEffectDisplayData {
             return `${effect.dVal}d${effect.dType}`;
         }
         return "";
+    }
+}
+
+class ItemDisplayData {
+    constructor(item) {
+        this.createEmpty();
+        if (item != undefined) {
+            this.importItem(item);
+        }
+    }
+
+    importItem(item) {
+        this.item = item;
+        this.name = item.name;
+        this.displayname = item.displayname;
+        this.sheetname = item.sheetname;
+        this.group = `${item.group}${item.category != "" ? ` (${item.category})` : ""}`;
+        this.stats = `Base Value: ${item.value}; Bulk: ${item.bulk}`;
+        this.traits = WuxDef.GetValues(item.traits, ";");
+        this.description = item.description;
+        
+        if (item.itemType == "UsableItem") {
+            this.craftSkill = `DC ${item.dc} ${item.skill} Check; Time: ${item.time}`;
+            this.craftMaterials = item.skill == "Build" ? `${item.bulk}` : "";
+            if (item.components != "") {
+                this.craftComponents = this.getComponents(item.components);
+            }
+        }
+    }
+
+    getComponents(components) {
+        let setDelimiter = ";";
+        let quantityDelimiter = " ";
+        let typeDelimiter = "_";
+        
+        components = components.split(setDelimiter);
+
+        let output = [];
+        let splitter = "";
+        let quantity = "";
+        let type = "";
+        let name = "";
+        let item = {};
+
+        for (let i = 0; i < components.length; i++) {
+            
+            let firstIndex = components[i].indexOf(quantityDelimiter);
+            quantity = components[i].substring(0, firstIndex);
+            splitter = components[i].substring(firstIndex + 1).split(typeDelimiter);
+            type = splitter[0];
+            name = splitter[1];
+            switch (type) {
+                case "Goods":
+                    item = WuxGoods.Get(name);
+                    break;
+                default:
+                    item = WuxItems.Get(name);
+                    break;
+            }
+            
+            if (item != undefined) {
+                output.push({
+                    quantity: quantity,
+                    type: type,
+                    item: item,
+                    name: `${quantity} ${item.name}`,
+                    desc: item.description
+                });
+            }
+        }
+
+        return output;
+    }
+
+    createEmpty() {
+        this.item = {};
+        this.name = "";
+        this.displayname = "";
+        this.sheetname = "";
+        this.group = "";
+        this.stats = "";
+        this.traits = [];
+        this.description = "";
+        this.craftSkill = "";
+        this.craftMaterials = "";
+        this.craftComponents = [];
     }
 }
 

@@ -108,11 +108,10 @@ function SetItemTechDatabase(techniqueArray, goodsArray, gearArray, consumablesA
     let goodsClassData = JavascriptDatabase.Create(SheetsDatabase.CreateGoods(goodsArray), WuxDefinition.GetGoods);
     output += goodsClassData.print("WuxGoods") + "\n";
 
-    let gearClassData = JavascriptDatabase.Create(SheetsDatabase.CreateGear(gearArray), WuxDefinition.GetItem);
-    output += gearClassData.print("WuxGear") + "\n";
-
-    let consumableClassData = JavascriptDatabase.Create(SheetsDatabase.CreateConsumables(consumablesArray), WuxDefinition.GetItem);
-    output += consumableClassData.print("WuxConsumable") + "\n";
+    let itemsDatabase = SheetsDatabase.CreateGear(gearArray);
+    itemsDatabase.importSheets(consumablesArray);
+    let itemClassData = JavascriptDatabase.Create(itemsDatabase, WuxDefinition.GetItem);
+    output += itemClassData.print("WuxItems") + "\n";
 
     return PrintLargeEntry(output, "]");
 }
@@ -3150,11 +3149,19 @@ class GearValueAssessment {
             componentData = componentData.trim();
             let firstSpace = componentData.indexOf(" ");
             let count = parseInt(componentData.substring(0, firstSpace).trim());
-            let componentName = componentData.substring(firstSpace).trim();
-            let componentDef = WuxDef.Get(componentName);
+            let componentTypeName = componentData.substring(firstSpace).trim().split("_");
+            let componentType = componentTypeName[0];
+            let componentName = componentTypeName[1];
             
-            let val = count * componentDef.value;
-            this.componentCostCalc += `\n${count}[${componentDef.title}] * ${componentDef.value}[${componentDef.name}] = ${val}`;
+            let component;
+            if (componentType == "Goods") {
+                component = WuxGoods.Get(componentName)
+            } else if (componentType == "Item") {
+                component = WuxItems.Get(componentName)
+            }
+            
+            let val = count * component.value;
+            this.componentCostCalc += `\n${count}[${component.name}] * ${component.value}[${component.name}] = ${val}`;
             this.componentCost += val;
         });
     }
