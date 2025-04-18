@@ -2359,7 +2359,7 @@ class ItemDisplayData {
         let item = {};
 
         for (let i = 0; i < components.length; i++) {
-            
+            item = undefined;
             let firstIndex = components[i].indexOf(quantityDelimiter);
             quantity = components[i].substring(0, firstIndex);
             splitter = components[i].substring(firstIndex + 1).split(typeDelimiter);

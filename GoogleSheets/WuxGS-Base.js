@@ -913,27 +913,81 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     var
                         build = function () {
                             let contents = "";
-                            contents += buildEquippedItemsSection();
                             contents += buildWearablesSection();
                             return contents;
                         },
 
-                        buildEquippedItemsSection = function () {
+                        buildWearablesSection = function () {
                             let contents = "";
 
-                            contents += WuxSheetMain.MultiRowGroup([equippedWearables(), equippedTools(), equippedConsumables()], WuxSheetMain.Table.FlexTable, 3);
+                            contents += WuxSheetMain.MultiRowGroup([ownedWearables(), equippedWearables()], WuxSheetMain.Table.FlexTable, 2);
 
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definition = WuxDef.Get("Page_GearEquippedGear");
+                            let definition = WuxDef.Get("Page_GearWearables");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                        },
+
+                        ownedWearables = function () {
+                            let repeatingDef = WuxDef.Get("RepeatingWearables");
+                            let nameDef = WuxDef.Get("Gear_WearableName");
+                            let actionsDef = WuxDef.Get("Gear_WearablesActions");
+                            let bulkDef = WuxDef.Get("Gear_WearablesBulk");
+                            
+                            let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                                <div>
+								${addRepeaterHeaderWearables(actionsDef, bulkDef, nameDef)}
+								${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsWearables(actionsDef, bulkDef, nameDef))}
+								${WuxSheetMain.Row("&nbsp;")}
+								${addPopupWearables()}
+							</div>`;
+                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                        },
+                        
+                        addRepeaterContentsWearables = function (actionDef, bulkDef, nameDef) {
+                            let equipDef = WuxDef.Get("Gear_WearableIsEquipped");
+                            let subMenuContents = "";
+                            
+                            return WuxSheetMain.MultiRow(`
+                                <div class="wuxGearType">${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), subMenuContents)}</div>
+                                <div class="wuxGearType"><span class="wuxDescription" name="${bulkDef.getAttribute()}">0</span></div>
+                                <div class="wuxGearName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
+                            );
+                        },
+                        
+                        addRepeaterHeaderWearables = function (actionsDef, bulkDef, nameDef) {
+                            return `<div class="wuxHeader2">
+                                <div class="wuxGearType">${actionsDef.getTitle()}</div>
+                                <div class="wuxGearType">${bulkDef.getTitle()}</div>
+                                <div class="wuxGearName">${nameDef.getTitle()}</div>
+                            </div>`;
+                        },
+                        
+                        addPopupWearables = function () {
+                            let headPopupDef = WuxDef.Get("Page_AddHeadGear");
+                            let facePopupDef = WuxDef.Get("Page_AddFaceGear");
+                            let chestPopupDef = WuxDef.Get("Page_AddChestGear");
+                            let armPopupDef = WuxDef.Get("Page_AddArmGear");
+                            let legPopupDef = WuxDef.Get("Page_AddLegGear");
+                            let footPopupDef = WuxDef.Get("Page_AddFootGear");
+                            
+                            return `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_AddItem")}`)}
+                            ${WuxSheetMain.MultiRowGroup([
+                                WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(headPopupDef.getAttribute(), headPopupDef.getTitle())),
+                                WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(facePopupDef.getAttribute(), facePopupDef.getTitle())),
+                                WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(chestPopupDef.getAttribute(), chestPopupDef.getTitle())),
+                                WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(armPopupDef.getAttribute(), armPopupDef.getTitle())),
+                                WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(legPopupDef.getAttribute(), legPopupDef.getTitle())),
+                                WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(footPopupDef.getAttribute(), footPopupDef.getTitle()))], 
+                                WuxSheetMain.Table.FlexTable, 3)}`;
+                            
                         },
 
                         equippedWearables = function () {
                             let contents = "";
 
-                            let equippedGearDef = WuxDef.Get("Page_GearWearables");
-                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
+                            let equippedGearDef = WuxDef.Get("Page_GearEquippedGear");
+                            contents += `${WuxSheetMain.Header(`${equippedGearDef.title}`)}`;
 
                             let filterData = WuxDef.Filter([new DatabaseFilterData("group", "GearGroup")]);
                             let emptyName = WuxDef.GetTitle("Page_GearEmpty");
@@ -975,72 +1029,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             }
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
-
-                        buildWearablesSection = function () {
-                            let contents = "";
-
-                            contents += testTechniquePopup();
-
-                            contents = WuxSheetMain.TabBlock(contents);
-
-                            let definition = WuxDef.Get("Page_GearEquippedGear");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                        },
-
-                        testTechniquePopup = function () {
-                            let contents = "";
-                            let itemPopupDef = WuxDef.Get("Popup_AddHeadGear");
-                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(itemPopupDef.getAttribute(), itemPopupDef.getTitle()));
-
-                            return contents;
-                        },
-
-                        wearables = function () {
-                            let contents = "";
-                            let influenceDef = WuxDef.Get("Soc_Influence");
-                            let influenceTypeDef = WuxDef.Get("Soc_InfluenceType");
-                            let severityDef = WuxDef.Get("Soc_Severity");
-
-                            // wuxFlexTableItemGroup2
-
-                            let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
-                            influenceInfo += WuxDefinition.TooltipDescription(severityDef);
-                            influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_LowSeverity"));
-                            influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_ModerateSeverity"));
-                            influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_HighSeverity"));
-                            influenceInfo = WuxSheetMain.Info.Contents(influenceDef.getAttribute(WuxDef._info), influenceInfo);
-
-                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(influenceDef.getAttribute(WuxDef._info))}${influenceDef.title}`)}
-							${influenceInfo}`;
-
-                            let influenceContents = WuxSheetMain.MultiRow(
-                                WuxSheetMain.Select(influenceTypeDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "InfluenceType")]), false, "wuxInfluenceType") +
-                                WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]), false, "wuxInfluenceType") +
-                                WuxSheetMain.CustomInput("text", influenceDef.getAttribute(), "wuxInput wuxInfluenceDescription", ` placeholder="Influence Description"`)
-                            );
-                            let influenceHeaders = WuxSheetMain.Header2(`<div class="wuxInfluenceType">Type</div><div class="wuxInfluenceType">Severity</div><div class="wuxInfluenceType">Description</div>`);
-
-                            contents += `<div>
-								${influenceHeaders}
-								<fieldset class="${WuxDef.GetVariable("RepeatingInfluences")}">
-									${influenceContents}
-								</fieldset>
-							</div>`;
-                            return contents;
-                        },
-                        
-                        buildItemRepeater = function () {
-                            let itemData = `<input type="hidden" class="wuxInspectionPopupSelectContainer-flag" name="${WuxDef.GetAttribute("Popup_ItemSelectIsOn")}">
-        
-                            <div class="wuxButton wuxInspectionPopupSelectContainer">
-                                <input type="checkbox" name="${WuxDef.GetAttribute("Popup_ItemSelectIsOn")}">
-                                <span name="${WuxDef.GetAttribute("Popup_ItemSelectName")}"></span>
-                                <input type="hidden" name="${WuxDef.GetAttribute("Popup_ItemSelectType")}">
-                            </div>`;
-        
-                            return `${WuxSheetMain.Header("Items in Group")}
-                            ${buildRepeater(WuxDef.GetVariable("ItemPopupValues"), itemData)}`;
-                        },
         
                         buildRepeater = function (repeaterName, repeaterData) {
                             return `<div class="wuxNoRepControl">
@@ -1048,38 +1036,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                     ${repeaterData}
                                 </fieldset>
                             </div>`;
-                        },
-
-                        advancement = function () {
-                            let contents = "";
-                            let titleDefinition = WuxDef.Get("Title_Advancement");
-                            contents += WuxDefinition.InfoHeader(titleDefinition);
-
-                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
-
-                            let levelDefinition = WuxDef.Get("Level");
-                            contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute()));
-
-                            let xpDefinition = WuxDef.Get("XP");
-                            contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}`);
-
-                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-                        },
-
-                        training = function () {
-                            let contents = "";
-                            let titleDefinition = WuxDef.Get("Title_Training");
-                            contents += WuxDefinition.InfoHeader(titleDefinition);
-
-                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
-
-                            let levelDefinition = WuxDef.Get("Training");
-                            contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute(WuxDef._max)));
-
-                            let ppDefinition = WuxDef.Get("PP");
-                            contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}`);
-
-                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         }
 
                     return {
@@ -1139,7 +1095,7 @@ var DisplayPopups = DisplayPopups || (function () {
                     let contents = "";
                     contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Popup_InspectSelectType"), "") + "\n";
                     contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Popup_InspectSelectId"), "") + "\n";
-                    contents += buildInspectionPopupContentData(buildItemTemplate() + buildTechniqueTemplate());
+                    contents += buildInspectionPopupContentData(buildItemTemplate() + buildTechniqueTemplate() + buildAddButton());
                     contents += buildInspectionPopupContentData(buildItemRepeater());
                     return `<div class="wuxInspectionPopupContents">${contents}</div>`;
                 },
@@ -1702,6 +1658,11 @@ var DisplayPopups = DisplayPopups || (function () {
                             </div>
                         </div>
                     </div>`;
+                },
+                
+                buildAddButton = function () {
+                    return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"), 
+                        WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"), `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`));
                 },
 
                 buildItemRepeater = function () {

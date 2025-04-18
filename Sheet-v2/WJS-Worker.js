@@ -962,7 +962,14 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
     'use strict';
 
     var
-        openItemInspection = function (eventinfo) {
+        openWearableAdditionItemInspection = function (eventinfo) {
+            openItemInspection(eventinfo, function (attrHandler) {
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "on");
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "Add Wearable");
+            });
+        },
+        
+        openItemInspection = function (eventinfo, getAttrCallback) {
             Debug.Log("Open Item Popup");
             let repeaterName = "ItemPopupValues";
             
@@ -970,6 +977,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             itemPopupValuesRepeatingSection.getIds(function (itemPopupRepeater) {
                 showPopup(function (attrHandler) {
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupName"), "Item Inspection");
+                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
                     
                     itemPopupRepeater.removeAllIds();
                     let selectedItem = populateItemInspectionItems(attrHandler, itemPopupRepeater, eventinfo);
@@ -977,8 +985,12 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                         Debug.LogError(`No items found for ${eventinfo.sourceAttribute}`);
                         closePopup();
                     }
-                    setInspectionSelection(attrHandler, repeaterName, selectedItem.id);
+                    setInspectionSelection(attrHandler, repeaterName, selectedItem.id, selectedItem.item.name);
                     setItemInfo(attrHandler, selectedItem.item);
+                    
+                    if (getAttrCallback != undefined) {
+                        getAttrCallback(attrHandler, itemPopupRepeater, selectedItem);
+                    }
                 });
             });
         },
@@ -1020,9 +1032,34 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         
         getItemGroupType = function (eventinfo) {
             switch (eventinfo.sourceAttribute) {
-                case WuxDef.GetVariable("Popup_AddHeadGear"):
+                case WuxDef.GetVariable("Page_AddHeadGear"):
                     return {
                         group: "Head Gear",
+                        type: "Item"
+                    };
+                case WuxDef.GetVariable("Page_AddFaceGear"):
+                    return {
+                        group: "Face Gear",
+                        type: "Item"
+                    };
+                case WuxDef.GetVariable("Page_AddChestGear"):
+                    return {
+                        group: "Chest Gear",
+                        type: "Item"
+                    };
+                case WuxDef.GetVariable("Page_AddArmGear"):
+                    return {
+                        group: "Arm Gear",
+                        type: "Item"
+                    };
+                case WuxDef.GetVariable("Page_AddLegGear"):
+                    return {
+                        group: "Leg Gear",
+                        type: "Item"
+                    };
+                case WuxDef.GetVariable("Page_AddFootGear"):
+                    return {
+                        group: "Foot Gear",
                         type: "Item"
                     };
             }
@@ -1066,7 +1103,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                             let goods = WuxGoods.Get(itemName);
                             setGoodsInfo(attrHandler, goods);
                         }
-                        setInspectionSelection(attrHandler, repeaterName, selectedId);
+                        setInspectionSelection(attrHandler, repeaterName, selectedId, itemName);
                     });
                     
                 }
@@ -1104,8 +1141,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         },
 
         getInspectionVariables = function (attrHandler) {
-            attrHandler.addMod(WuxDef.GetVariable("Popup_InspectSelectType"));
-            attrHandler.addMod(WuxDef.GetVariable("Popup_InspectSelectId"));
+            attrHandler.addMod([WuxDef.GetVariable("Popup_InspectSelectType"), WuxDef.GetVariable("Popup_InspectSelectId")]);
         },
 
         clearInspectionVariables = function (attrHandler) {
@@ -1115,7 +1151,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "0");
         },
         
-        setInspectionSelection = function (attrHandler, repeaterName, id) {
+        setInspectionSelection = function (attrHandler, repeaterName, id, itemName) {
             let currentType = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectType"));
             let currentId = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectId"));
             if (currentType != "" && currentId != "") {
@@ -1344,11 +1380,43 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef3Desc0"), "");
             attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef3Desc1"), 0);
             attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDef3Desc2"), 0);
+        },
+
+        addSelectedInspectElement = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+
+            attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
+            attributeHandler.addMod(WuxDef.GetVariable("Popup_ItemName"));
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                clearInspectionVariables(attrHandler);
+                performAddSelectedInspectElement(attrHandler);
+            });
+            attributeHandler.run();
+        },
+
+        performAddSelectedInspectElement = function (attrHandler) {
+            switch(attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType"))) {
+                case "Add Wearable":
+                    performAddSelectedInspectElementWearable(attrHandler, 
+                        WuxItems.Get(attrHandler.parseString(WuxDef.GetVariable("Popup_ItemName")))
+                    );
+                    break;
+            }
+        },
+        
+        performAddSelectedInspectElementWearable = function (attrHandler, item) {
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingWearables");
+            let newrowid = repeater.generateRowId();
+            attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableName")), item.name);
+            attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearablesBulk")), item.bulk);
         }
 
     return {
+        OpenWearableAdditionItemInspection: openWearableAdditionItemInspection,
         OpenItemInspection: openItemInspection,
         SelectInspectionItemFromActiveGroup: selectInspectionItemFromActiveGroup,
-        ClosePopup: closePopup
+        ClosePopup: closePopup,
+        AddSelectedInspectElement: addSelectedInspectElement
     };
 }());

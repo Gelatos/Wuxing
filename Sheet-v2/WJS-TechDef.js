@@ -2,7 +2,7 @@ var WuxGoods = WuxGoods || (function() {
     'use strict';
 
     var
-        keys = ["Materials","Pine","Cotton","Hemp","Glass","Clay","Granite","Iron","Snow","Ice","Ironwood","Fireglass","Crystal","Steel","Glaceum","Viridium","Rubrumium","Platinum","Adamantine","Obsidian","Mithral","White Obsidian","Albryst","Common","Water","Stimulant","Component","Acid","Soap","Earthen Gelatin","Beast Gelatin","Magnet","Bee's wax","Oil","Alcohol","Black Powder","Nickel","Altillite","Mana Gem","Morillite","Sigilite","Gold","Ventu Stone","Pnevmarite","Beast Meat","Bird Meat","Saurian Meat","Beast Bone","Bird Bone","Saurian Bone","Bird Egg","Coastal","Honey Apple","Astragalus","Green Beans","Sea Cabbage","Short Carrot","Thin Cucumber","Doxyl Leaf","Highland Lettuce","Maidenhair","Truffle Mushrooms","Black Olives","Crisp Onion","Coastal Orange","Blue Popato","Sweet Peas","Tart Radish","Sea Salt","Ruby Strawberries","Ruby Tomato","Coastal Wheat","Cold","Brahmi","Winter Broccoli","Cacaold Beans","Long Carrot","Ice Grapes","Paraherb","Schizandra","Blue Spinach","White Popato","Frost Pumpkin","Round Turnip","Blanche Wheat","Desert","Aloe","Sweet Beans","White Cabbage","Spicy Carrot","Chickpeas","Giant Cucumber","White Garlic","Sand Ginger","Ginseng","Lycium","Sand Melon","Sand Onion","Arid Peach","Bleached Pear","Scorcher Pepper","Rhynoseed","Flaked Salt","Crystal Sugarcane","Turmeric","Sunset Wheat","Yidash","Grassland","Camellia Leaves","Caswinnis","Gypsy Caswinnis","Endura","Pearl Ginger","Highland Grapes","Clear Grapes","Honey","Lentils","Button Mushrooms","Sweet Onion","Tall Grain Rice","Tart Strawberries","Thousandcorn","Lowland Wheat","Yeast","Mountains","Fine Apricots","Barley","White Broccoli","Coffee Beans","Earthy Ginger","Joza Leaf","Red Lettuce","Black Mushrooms","Mountain Orange","Vibrant Peach","Long Peas","Bleached Pepper","White Radish","Rage Fruit","Short Grain Rice","Rock Salt","Shepherd's Purse","Soybeans","Green Spinach","Syrup Sugarcane","Sulfur","Hardy Tomato","Purple Turnip","Tropical","Pineapple","Victoria Lily","Coconut","Seafood","Char Eel","Lakebed Carp","Midnight Sardine","Minervan Tuna","Pebble Shrimp","Pink Trout","Rock Clam","Royal Crab","Voyager Salmon"]
+        keys = ["Materials","Pine","Cotton","Hemp","Glass","Clay","Granite","Iron","Snow","Ice","Ironwood","Fireglass","Crystal","Steel","Glaceum","Viridium","Rubrumium","Platinum","Adamantine","Obsidian","Mithral","White Obsidian","Albryst","Common","Water","Stimulant","Component","Acid","Soap","Earthen Gelatin","Beast Gelatin","Magnet","Bee's wax","Oil","Alcohol","Black Powder","Nickel","Altillite","Mana Gem","Morillite","Sigilite","Silver","Gold","Ventu Stone","Pnevmarite","Beast Meat","Bird Meat","Saurian Meat","Beast Bone","Bird Bone","Saurian Bone","Bird Egg","Coastal","Honey Apple","Astragalus","Green Beans","Sea Cabbage","Short Carrot","Thin Cucumber","Doxyl Leaf","Highland Lettuce","Maidenhair","Truffle Mushrooms","Black Olives","Crisp Onion","Coastal Orange","Blue Popato","Sweet Peas","Tart Radish","Sea Salt","Ruby Strawberries","Ruby Tomato","Coastal Wheat","Cold","Brahmi","Winter Broccoli","Cacaold Beans","Long Carrot","Ice Grapes","Paraherb","Schizandra","Blue Spinach","White Popato","Frost Pumpkin","Round Turnip","Blanche Wheat","Desert","Aloe","Sweet Beans","White Cabbage","Spicy Carrot","Chickpeas","Giant Cucumber","White Garlic","Sand Ginger","Ginseng","Lycium","Sand Melon","Sand Onion","Arid Peach","Bleached Pear","Scorcher Pepper","Rhynoseed","Flaked Salt","Crystal Sugarcane","Turmeric","Sunset Wheat","Yidash","Grassland","Camellia Leaves","Caswinnis","Gypsy Caswinnis","Endura","Pearl Ginger","Highland Grapes","Clear Grapes","Honey","Lentils","Button Mushrooms","Sweet Onion","Tall Grain Rice","Tart Strawberries","Thousandcorn","Lowland Wheat","Yeast","Mountains","Fine Apricots","Barley","White Broccoli","Coffee Beans","Earthy Ginger","Joza Leaf","Red Lettuce","Black Mushrooms","Mountain Orange","Vibrant Peach","Long Peas","Bleached Pepper","White Radish","Rage Fruit","Short Grain Rice","Rock Salt","Shepherd's Purse","Soybeans","Green Spinach","Syrup Sugarcane","Sulfur","Hardy Tomato","Purple Turnip","Tropical","Pineapple","Victoria Lily","Coconut","Seafood","Char Eel","Lakebed Carp","Midnight Sardine","Minervan Tuna","Pebble Shrimp","Pink Trout","Rock Clam","Royal Crab","Voyager Salmon"]
         ,
         values = {"Materials":{"name":"Materials","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"Goods","bulk":null,"value":null,"traits":"","affinity":"","location":"","rarity":null},
             "Pine":{"name":"Pine","fieldName":"","group":"Material","description":"A common type of wood. While Pine is the listed value, these statistics are shared amongst all wood.","variable":"","category":"","itemType":"Goods","bulk":1,"value":5,"traits":"Flammable; Sturdy","affinity":"Wood","location":"Any","rarity":1},
@@ -45,9 +45,10 @@ var WuxGoods = WuxGoods || (function() {
             "Mana Gem":{"name":"Mana Gem","fieldName":"","group":"Compound","description":" In its most pure form, this is a beautiful clear gemstone with an incredible durability. However most often it is most often found in a variety of different colors swirling with a hazy energy within. What is uniquely special about this gemstone is when it is formed it quickly takes on an elemental property of the environment it is placed within. Green mana gems are associated with wood, red with fire, yellow with earth, violet with metal, and blue with water.\n\nMana gems that have a spirit manifest within them have especially interesting qualities. If both the spirit and the mana gem's elemental affinity match, then the gem can glow a soft light at the spirit's whim. More incredibly, an ethereal caster can cast spells through the mana gem if a spirit is within it. See <a href='character-casting.html#gemCasting'>Gem Casting</a> for more information.","variable":"","category":"","itemType":"Goods","bulk":1,"value":90,"traits":"Sturdy","affinity":"Earth","location":"Any","rarity":2},
             "Morillite":{"name":"Morillite","fieldName":"","group":"Compound","description":"Morillite is a crystal that is brittle like glass. It can form in a variety of colors but is most often a soft vermillion. When magical energy flows through it, the crystal will shine. It seems to have properties that allow it to hold ki temporarily.","variable":"","category":"","itemType":"Goods","bulk":1,"value":30,"traits":"Sharp; Transparent","affinity":"Earth","location":"Any","rarity":2},
             "Sigilite":{"name":"Sigilite","fieldName":"","group":"Compound","description":"Sigilite, or more well known as binding stone, is a black stone with a glass-like sheen. When placed in close proximity to a source of ki, it disrupts its creation preventing magical effects from occurring. Because of this property, binding stone is often used in restraints to inhibit the casting of magic while not restricting the wearer's movement.\n\nSigilite's range to disrupt ki is dependant on the amount concentrated in an area. 1 lb. of Sigilite can disrupt ki up to 1 foot away maximizing out to 10 feet for 10 lbs. of Sigilite. Often when making restraints, Sigilite will be used in amounts as small as 0.1 lb as a cost saving alternative due to the closeness of the restraints to the ki source.","variable":"","category":"","itemType":"Goods","bulk":1,"value":60,"traits":"Sturdy","affinity":"Earth","location":"Any","rarity":2},
-            "Gold":{"name":"Gold","fieldName":"","group":"Compound","description":"While valuable for its appearance and use as currency, gold has its uses in magical application too. Gold has the unique property of acting as a mana stabilizer, able to prevent mana from separating. This has made gold important in day to day life, used in building and item construction frequently.\n\nOnce gold has been mixed with an object, it masks magical energy making it difficult to detect. The object becomes almost impossible to tell apart from an object made from natural forming substances.\n\nGold formed into a magical item often has the gold deep within the object, stretched thin and weaving all over the interior of the object to ensure a stable material. Skilled artisans may use the gold to create more intricate designs on the surface. Gold has always been a beautiful accent to a piece and to use it creatively in an item is a sign of artistic talent of the craftsman.","variable":"","category":"","itemType":"Goods","bulk":1,"value":30,"traits":"","affinity":"Metal","location":"Any","rarity":2},
-            "Ventu Stone":{"name":"Ventu Stone","fieldName":"","group":"Compound","description":"Ventu Stone is a type of green emerald with a swirling, wind-like, core. This wind is ether that creates a unique magical resonance. Those with communication spells can target the ventu stone itself instead of a location to deliver their messages, as long as they are aware of the magical resonance. The holder of the ventu stone can then put a little magical energy into the stone to hear the message. This message is communicated directly to the person that supplies the magic.","variable":"","category":"","itemType":"Goods","bulk":1,"value":60,"traits":"","affinity":"Metal","location":"Any","rarity":2},
-            "Pnevmarite":{"name":"Pnevmarite","fieldName":"","group":"Compound","description":"Colloquially called Spirit Stone, Pnevmarite is a violet stone with an amber glow has the unique property of repelling spirits from passing through its aura. It effectively prevents manifestation by spirits.\n\nHowever, while Pnevmarite can prevent spirits from manifesting and possession, it cannot prevent a spirit from entering its aura if a spirit has already manifested in a creature or object that is entering the Pnevmarite protected area.\n\nPnevmarite has a secondary property. It is capable of storing mana within it to release it at a later time. This property is still being explored and as such the limits of pnevarmite are currently unknown.","variable":"","category":"","itemType":"Goods","bulk":1,"value":180,"traits":"Transparent","affinity":"Earth","location":"Any","rarity":3},
+            "Silver":{"name":"Silver","fieldName":"","group":"Compound","description":"A valuable metal that has a shimmery appearance. Is often used in technology and jewelry.","variable":"","category":"","itemType":"Goods","bulk":1,"value":30,"traits":"","affinity":"Metal","location":"Any","rarity":2},
+            "Gold":{"name":"Gold","fieldName":"","group":"Compound","description":"While valuable for its appearance and use as currency, gold has its uses in magical application too. Gold has the unique property of acting as a mana stabilizer, able to prevent mana from separating. This has made gold important in day to day life, used in building and item construction frequently.\n\nOnce gold has been mixed with an object, it masks magical energy making it difficult to detect. The object becomes almost impossible to tell apart from an object made from natural forming substances.\n\nGold formed into a magical item often has the gold deep within the object, stretched thin and weaving all over the interior of the object to ensure a stable material. Skilled artisans may use the gold to create more intricate designs on the surface. Gold has always been a beautiful accent to a piece and to use it creatively in an item is a sign of artistic talent of the craftsman.","variable":"","category":"","itemType":"Goods","bulk":1,"value":100,"traits":"","affinity":"Metal","location":"Any","rarity":2},
+            "Ventu Stone":{"name":"Ventu Stone","fieldName":"","group":"Compound","description":"Ventu Stone is a type of green emerald with a swirling, wind-like, core. This wind is ether that creates a unique magical resonance. Those with communication spells can target the ventu stone itself instead of a location to deliver their messages, as long as they are aware of the magical resonance. The holder of the ventu stone can then put a little magical energy into the stone to hear the message. This message is communicated directly to the person that supplies the magic.","variable":"","category":"","itemType":"Goods","bulk":1,"value":120,"traits":"","affinity":"Metal","location":"Any","rarity":2},
+            "Pnevmarite":{"name":"Pnevmarite","fieldName":"","group":"Compound","description":"Colloquially called Spirit Stone, Pnevmarite is a violet stone with an amber glow has the unique property of repelling spirits from passing through its aura. It effectively prevents manifestation by spirits.\n\nHowever, while Pnevmarite can prevent spirits from manifesting and possession, it cannot prevent a spirit from entering its aura if a spirit has already manifested in a creature or object that is entering the Pnevmarite protected area.\n\nPnevmarite has a secondary property. It is capable of storing mana within it to release it at a later time. This property is still being explored and as such the limits of pnevarmite are currently unknown.","variable":"","category":"","itemType":"Goods","bulk":1,"value":250,"traits":"Transparent","affinity":"Earth","location":"Any","rarity":3},
             "Beast Meat":{"name":"Beast Meat","fieldName":"","group":"Meat","description":"Red meat from a beast. Savory and rich.","variable":"","category":"Beast","itemType":"Goods","bulk":2,"value":35,"traits":"Edible","affinity":"Earth","location":"Any","rarity":2},
             "Bird Meat":{"name":"Bird Meat","fieldName":"","group":"Meat","description":"White meat from a bird. Slightly sweet with a dry texture.","variable":"","category":"Bird","itemType":"Goods","bulk":1,"value":30,"traits":"Edible","affinity":"Earth","location":"Any","rarity":2},
             "Saurian Meat":{"name":"Saurian Meat","fieldName":"","group":"Meat","description":"Red meat from a saurian. It is tough and difficult to chew.","variable":"","category":"Saurian","itemType":"Goods","bulk":2,"value":15,"traits":"Edible","affinity":"Earth","location":"Any","rarity":2},
@@ -163,963 +164,1004 @@ var WuxGoods = WuxGoods || (function() {
             "Minervan Tuna":{"name":"Minervan Tuna","fieldName":"","group":"Fish","description":"A small saltwater fish that has gained popularity for its neutral flavor.","variable":"","category":"Tuna","itemType":"Goods","bulk":2,"value":12,"traits":"Edible","affinity":"","location":"Water","rarity":1},
             "Pebble Shrimp":{"name":"Pebble Shrimp","fieldName":"","group":"Fish","description":"A tiny, sweet, and savory crestacean common in seafood disshes.","variable":"","category":"Shrimp","itemType":"Goods","bulk":1,"value":6,"traits":"Edible","affinity":"","location":"Water","rarity":1},
             "Pink Trout":{"name":"Pink Trout","fieldName":"","group":"Fish","description":"A common freshwater fish used as a centerpiece of a meal in coastal cuisine.","variable":"","category":"Trout","itemType":"Goods","bulk":3,"value":12,"traits":"Edible","affinity":"","location":"Water","rarity":1},
-            "Rock Clam":{"name":"Rock Clam","fieldName":"","group":"Fish","description":"A creature that fits within two shells. It has a salty flavor.","variable":"","category":"Clam","itemType":"Goods","bulk":1,"value":
-                    6,"traits":"Edible","affinity":"","location":"Water","rarity":1},
-            "Royal Crab":{"name":"Royal Crab","fieldName":"","group":"Fish","description":"A large crustacean saught for its savory flavor.","variable":"","category":"Crab","itemType":"Goods","bulk":3,"value":16,"traits":"Edible","affinity":"","location":"Water","rarity":1},
-            "Voyager Salmon":{"name":"Voyager Salmon","fieldName":"","group":"Fish","description":"A common fish that can be found in all sorts of water. Popular for its neutral flavor.","variable":"","category":"Salmon","itemType":"Goods","bulk":3,"value":12,"traits":"Edible","affinity":"","location":"Water","rarity":1}},
-        sortingGroups = {"group":{"":["Materials","Common","Coastal","Cold","Desert","Grassland","Mountains","Tropical","Seafood"],"Material":["Pine","Cotton","Hemp","Glass","Clay","Granite","Iron","Snow","Ice","Ironwood","Fireglass","Crystal","Steel","Glaceum","Viridium","Rubrumium","Platinum","Adamantine","Obsidian","Mithral","White Obsidian","Albryst"],"Compound":["Water","Stimulant","Component","Acid","Soap","Earthen Gelatin","Beast Gelatin","Magnet","Bee's wax","Oil","Alcohol","Black Powder","Nickel","Altillite","Mana Gem","Morillite","Sigilite","Gold","Ventu Stone","Pnevmarite","Sulfur"],"Meat":["Beast Meat","Bird Meat","Saurian Meat"],"Bone":["Beast Bone","Bird Bone","Saurian Bone"],"Egg":["Bird Egg"],"Fruit":["Honey Apple","Coastal Orange","Ruby Strawberries","Ice Grapes","Sand Melon","Arid Peach","Bleached Pear","Highland Grapes","Clear Grapes","Tart Strawberries","Fine Apricots","Mountain Orange","Vibrant Peach","Pineapple","Coconut"],"Supplement":["Astragalus","Doxyl Leaf","Maidenhair","Sea Salt","Brahmi","Cacaold Beans","Paraherb","Schizandra","Aloe","White Garlic","Sand Ginger","Ginseng","Lycium","Scorcher Pepper","Rhynoseed","Flaked Salt","Crystal Sugarcane","Turmeric","Yidash","Camellia Leaves","Caswinnis","Gypsy Caswinnis","Endura","Pearl Ginger","Honey","Yeast","Coffee Beans","Earthy Ginger","Joza Leaf","Bleached Pepper","Rage Fruit","Rock Salt","Shepherd's Purse","Syrup Sugarcane","Victoria Lily"],"Vegetable":["Green Beans","Sea Cabbage","Short Carrot","Thin Cucumber","Highland Lettuce","Truffle Mushrooms","Black Olives","Crisp Onion","Sweet Peas","Tart Radish","Ruby Tomato","Winter Broccoli","Long Carrot","Blue Spinach","Frost Pumpkin","Round Turnip","Sweet Beans","White Cabbage","Spicy Carrot","Chickpeas","Giant Cucumber","Sand Onion","Lentils","Button Mushrooms","Sweet Onion","White Broccoli","White Cabbage","Red Lettuce","Black Mushrooms","Long Peas","White Radish","Soybeans","Green Spinach","Hardy Tomato","Purple Turnip"],"Starch":["Blue Popato","Coastal Wheat","White Popato","Blanche Wheat","Sunset Wheat","Tall Grain Rice","Thousandcorn","Lowland Wheat","Barley","Short Grain Rice"],"Fish":["Char Eel","Lakebed Carp","Midnight Sardine","Minervan Tuna","Pebble Shrimp","Pink Trout","Rock Clam","Royal Crab","Voyager Salmon"]}},
+                "Rock Clam":{"name":"Rock Clam","fieldName":"","group":"Fish","description":"A creature that fits within two shells. It has a salty flavor.","variable":"","category":"Clam","itemType":"Goods","bulk":1,"value":6,"traits":"Edible","affinity":"","location":"Water","rarity":1},
+                "Royal Crab":{"name":"Royal Crab","fieldName":"","group":"Fish","description":"A large crustacean saught for its savory flavor.","variable":"","category":"Crab","itemType":"Goods","bulk":3,"value":16,"traits":"Edible","affinity":"","location":"Water","rarity":1},
+                "Voyager Salmon":{"name":"Voyager Salmon","fieldName":"","group":"Fish","description":"A common fish that can be found in all sorts of water. Popular for its neutral flavor.","variable":"","category":"Salmon","itemType":"Goods","bulk":3,"value":12,"traits":"Edible","affinity":"","location":"Water","rarity":1}},
+            sortingGroups = {"group":{"":["Materials","Common","Coastal","Cold","Desert","Grassland","Mountains","Tropical","Seafood"],"Material":["Pine","Cotton","Hemp","Glass","Clay","Granite","Iron","Snow","Ice","Ironwood","Fireglass","Crystal","Steel","Glaceum","Viridium","Rubrumium","Platinum","Adamantine","Obsidian","Mithral","White Obsidian","Albryst"],"Compound":["Water","Stimulant","Component","Acid","Soap","Earthen Gelatin","Beast Gelatin","Magnet","Bee's wax","Oil","Alcohol","Black Powder","Nickel","Altillite","Mana Gem","Morillite","Sigilite","Silver","Gold","Ventu Stone","Pnevmarite","Sulfur"],"Meat":["Beast Meat","Bird Meat","Saurian Meat"],"Bone":["Beast Bone","Bird Bone","Saurian Bone"],"Egg":["Bird Egg"],"Fruit":["Honey Apple","Coastal Orange","Ruby Strawberries","Ice Grapes","Sand Melon","Arid Peach","Bleached Pear","Highland Grapes","Clear Grapes","Tart Strawberries","Fine Apricots","Mountain Orange","Vibrant Peach","Pineapple","Coconut"],"Supplement":["Astragalus","Doxyl Leaf","Maidenhair","Sea Salt","Brahmi","Cacaold Beans","Paraherb","Schizandra","Aloe","White Garlic","Sand Ginger","Ginseng","Lycium","Scorcher Pepper","Rhynoseed","Flaked Salt","Crystal Sugarcane","Turmeric","Yidash","Camellia Leaves","Caswinnis","Gypsy Caswinnis","Endura","Pearl Ginger","Honey","Yeast","Coffee Beans","Earthy Ginger","Joza Leaf","Bleached Pepper","Rage Fruit","Rock Salt","Shepherd's Purse","Syrup Sugarcane","Victoria Lily"],"Vegetable":["Green Beans","Sea Cabbage","Short Carrot","Thin Cucumber","Highland Lettuce","Truffle Mushrooms","Black Olives","Crisp Onion","Sweet Peas","Tart Radish","Ruby Tomato","Winter Broccoli","Long Carrot","Blue Spinach","Frost Pumpkin","Round Turnip","Sweet Beans","White Cabbage","Spicy Carrot","Chickpeas","Giant Cucumber","Sand Onion","Lentils","Button Mushrooms","Sweet Onion","White Broccoli","White Cabbage","Red Lettuce","Black Mushrooms","Long Peas","White Radish","Soybeans","Green Spinach","Hardy Tomato","Purple Turnip"],"Starch":["Blue Popato","Coastal Wheat","White Popato","Blanche Wheat","Sunset Wheat","Tall Grain Rice","Thousandcorn","Lowland Wheat","Barley","Short Grain Rice"],"Fish":["Char Eel","Lakebed Carp","Midnight Sardine","Minervan Tuna","Pebble Shrimp","Pink Trout","Rock Clam","Royal Crab","Voyager Salmon"]}},
 
-        get = function (key) {
-            if (values[key] == undefined) {
-                let itemData = new ItemData();
-                itemData.name = `${key} Not Found`;
-                return itemData;
-            }
-            return new GoodsData(values[key]);
-        },
-        getValues = function (keyArray, delimiter, prefix) {
-            if (keyArray == undefined || keyArray == "") {
-                return [];
-            }
-            if (typeof keyArray == "string") {
-                keyArray = keyArray.split(delimiter);
-            }
-            if (prefix == undefined) {
-                prefix = "";
-            }
-
-            let output = [];
-            let name = "";
-            let lookup = "";
-            let dataInfo;
-
-            for (let i = 0; i < keyArray.length; i++) {
-                name = `${prefix}${keyArray[i].trim()}`;
-
-                lookup = name;
-                if (lookup.indexOf("(") >= 0) {
-                    lookup = lookup.replace(/\([^)]*\)/g, "(X)");
+            get = function (key) {
+                if (values[key] == undefined) {
+                    let itemData = new ItemData();
+                    itemData.name = `${key} Not Found`;
+                    return itemData;
+                }
+                return new GoodsData(values[key]);
+            },
+            getValues = function (keyArray, delimiter, prefix) {
+                if (keyArray == undefined || keyArray == "") {
+                    return [];
+                }
+                if (typeof keyArray == "string") {
+                    keyArray = keyArray.split(delimiter);
+                }
+                if (prefix == undefined) {
+                    prefix = "";
                 }
 
-                dataInfo = get(lookup);
-                if (dataInfo != undefined) {
-                    dataInfo.name = name;
-                    output.push(dataInfo);
-                }
-            }
+                let output = [];
+                let name = "";
+                let lookup = "";
+                let dataInfo;
 
-            return output;
-        },
-        has = function (key) {
-            return keys.includes(key);
-        },
-        iterate = function (callback) {
-            for (let i = 0; i < keys.length; i++) {
-                callback(values[keys[i]]);
-            }
-        },
-        filter = function (filterData) {
-            let filteredGroup;
-            if (Array.isArray(filterData)) {
-                filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
-                let nextFilter = [];
-                for (let i = 1; i < filterData.length; i++) {
-                    if (filteredGroup == undefined || filteredGroup.length == 0) {
-                        return [];
+                for (let i = 0; i < keyArray.length; i++) {
+                    name = `${prefix}${keyArray[i].trim()}`;
+
+                    lookup = name;
+                    if (lookup.indexOf("(") >= 0) {
+                        lookup = lookup.replace(/\([^)]*\)/g, "(X)");
                     }
-                    nextFilter = getSortedGroup(filterData[i].property, filterData[i].value);
-                    filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
-                }
-            } else {
-                filteredGroup = getSortedGroup(filterData.property, filterData.value);
-            }
-            if (filteredGroup == undefined || filteredGroup.length == 0) {
-                return [];
-            }
-            return getGroupData(filteredGroup);
-        },
-        getSortedGroup = function (property, propertyValue) {
-            if (!sortingGroups.hasOwnProperty(property)) {
-                let keys = "";
-                for (let key in sortingGroups) {
-                    keys += `${key}, `;
-                }
-                Debug.Log (`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
-            }
-            if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
-                let keys = "";
-                for (let key in sortingGroups[property]) {
-                    keys += `${key}, `;
-                }
-                Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
-            }
-            return sortingGroups[property][propertyValue];
-        },
-        getGroupData = function (group) {
-            let output = [];
-            for (let i = 0; i < group.length; i++) {
-                output.push(get(group[i]));
-            }
-            return output;
-        },
-        getPropertyValues = function (property) {
-            let output = [];
-            for (let key in sortingGroups[property]) {
-                output.push(key);
-            }
-            return output;
-        }
-    ;
-    return {
-        Get: get,
-        GetValues: getValues,
-        Has: has,
-        Iterate: iterate,
-        Filter: filter,
-        GetSortedGroup: getSortedGroup
-    };
-}());
 
-var WuxItems = WuxItems || (function() {
-    'use strict';
-
-    var
-        keys = ["Weapons","Handaxe","Battleaxe","Great Axe","Club","Warhammer","Maul","Javelin","Spear","Lance","Half-Staff","Full-Staff","Dagger","Rapier","Shortsword","Longsword","Great Sword","Whip","Shortbow","Longbow","Pistol","Revolver","Sniper Rifle","HI. Sniper Rifle","Blunderbuss","Shotgun","Flamethrower","Impact Bomb","Blast Bomb","HI. Blast Bomb","Tool","Medkit","Etherlink","Mirror","Compass","Torch","Lanturn","Flashlight","Rope","Manacles","Magic Restraints","Ladder","Shovel","Spyglass","Umbrella","Camera","Chest Slot","Light Breastplate","Heavy Breastplate","Head Slot","Light Helmet","Heavy Helmet","Etherlink Headset","Arms Slot","Light Vambraces","Heavy Vambraces","Legs Slot","Light Greaves","Heavy Greaves","Foot Slot","Armored Boots","Gear","Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Backpack, common","Pouch, waist","Sack","Barrel","Basket","Box, scroll","Bucket","Case, scroll","Chest, Small","Chest, Medium","Chest, Large","Cooler","Pot","Bottle","Canteen","Cauldron","Coffee pot","Flask","Jug","Pitcher","Vial","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Lock, average","Lock, good","Lock, superior","Light Orb","Steroid Juice","Steroid Juice HQ","Compress Balm","Compress Balm HQ","Stability"],
-        values = {"Weapons":{"name":"Weapons","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Weapons","fieldName":"weapons","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Handaxe":{"name":"Handaxe","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":5,"value":150,"traits":"Axe; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Handaxe","fieldName":"handaxe","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Battleaxe":{"name":"Battleaxe","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":8,"value":240,"traits":"Axe; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Battleaxe","fieldName":"battleaxe","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"3","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Great Axe":{"name":"Great Axe","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":15,"value":450,"traits":"Axe; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Great Axe","fieldName":"great_axe","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Might","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"4","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":9,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Club":{"name":"Club","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":4,"value":120,"traits":"Hammer","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Club","fieldName":"club","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Warhammer":{"name":"Warhammer","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":8,"value":240,"traits":"Hammer","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Warhammer","fieldName":"warhammer","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"3","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Maul":{"name":"Maul","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":15,"value":null,"traits":"Hammer","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Maul","fieldName":"maul","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Might","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"4","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":9,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Javelin":{"name":"Javelin","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":5,"value":150,"traits":"Polearm; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Javelin","fieldName":"javelin","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Skirmish","range":"1-2","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Spear":{"name":"Spear","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":8,"value":240,"traits":"Polearm; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Spear","fieldName":"spear","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Skirmish","range":"1-2","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Lance":{"name":"Lance","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":15,"value":450,"traits":"Polearm; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Lance","fieldName":"lance","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Might","range":"1-2","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"3","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":9,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Half-Staff":{"name":"Half-Staff","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":4,"value":120,"traits":"Polearm","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Half-Staff","fieldName":"half-staff","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Skirmish","range":"1-2","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Full-Staff":{"name":"Full-Staff","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":8,"value":240,"traits":"Polearm","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Full-Staff","fieldName":"full-staff","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Skirmish","range":"1-2","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Dagger":{"name":"Dagger","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":3,"value":null,"traits":"Knife; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Dagger","fieldName":"dagger","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Finesse","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Rapier":{"name":"Rapier","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":5,"value":null,"traits":"Sword; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Rapier","fieldName":"rapier","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Finesse","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Shortsword":{"name":"Shortsword","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":4,"value":null,"traits":"Sword; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Shortsword","fieldName":"shortsword","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Longsword":{"name":"Longsword","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":7,"value":null,"traits":"Sword; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Longsword","fieldName":"longsword","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":9,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Great Sword":{"name":"Great Sword","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":15,"value":450,"traits":"Sword; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Great Sword","fieldName":"great_sword","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Might","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":16,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Whip":{"name":"Whip","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":3,"value":135,"traits":"Whip","valMod":3,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Whip","fieldName":"whip","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Finesse","range":"1-3","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Force","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Shortbow":{"name":"Shortbow","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":5,"value":null,"traits":"Bow; Ammunition","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Shortbow","fieldName":"shortbow","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"Arcing","resourceCost":"","limits":"","skill":"Shoot","range":"2-5","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Longbow":{"name":"Longbow","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":8,"value":null,"traits":"Bow; Ammunition","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Longbow","fieldName":"longbow","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"Arcing","resourceCost":"2 EN","limits":"","skill":"Shoot","range":"2-5","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"4","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":8,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Pistol":{"name":"Pistol","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":3,"value":300,"traits":"Handgun; Ammunition","valMod":4,"skill":"Build","dc":12,"time":1,"components":"1 Goods_Component","technique":{"name":"Pistol","fieldName":"pistol","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Shoot","range":"2-6","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Revolver":{"name":"Revolver","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":4,"value":360,"traits":"Handgun; Ammunition","valMod":4,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component","technique":{"name":"Revolver","fieldName":"revolver","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Shoot","range":"2-6","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Sniper Rifle":{"name":"Sniper Rifle","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":12,"value":1020,"traits":"Longshot; Ammunition","valMod":5,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component","technique":{"name":"Sniper Rifle","fieldName":"sniper_rifle","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Shoot","range":"3-10","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"5","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "HI. Sniper Rifle":{"name":"HI. Sniper Rifle","fieldName":"","group":"Tool","description":"A High Impact version of the Sniper Rifle. Takes time to setup a shot, but the power is often worth it.","variable":"","category":"Weapon","itemType":"UsableItem","bulk":12,"value":null,"traits":"Longshot; Ammunition","valMod":9,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component","technique":{"name":"HI. Sniper Rifle","fieldName":"hi._sniper_rifle","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"Holdout","resourceCost":"3 EN","limits":"","skill":"Shoot","range":"3-10","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0},
-                                        {"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"6","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":10,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Blunderbuss":{"name":"Blunderbuss","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":9,"value":660,"traits":"Scattershot; Ammunition","valMod":4,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component","technique":{"name":"Blunderbuss","fieldName":"blunderbuss","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Shoot","range":"2-3","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"7","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":8,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Shotgun":{"name":"Shotgun","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":10,"value":1020,"traits":"Scattershot; Ammunition","valMod":6,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component","technique":{"name":"Shotgun","fieldName":"shotgun","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"3 EN","limits":"","skill":"Shoot","range":"2-3","target":"Cone","size":3,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"5","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Piercing","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Flamethrower":{"name":"Flamethrower","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":10,"value":1200,"traits":"Scattershot","valMod":6,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component; 1 Goods_Pnevmarite","technique":{"name":"Flamethrower","fieldName":"flamethrower","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"3 EN; 1 WILL","limits":"","skill":"Shoot","range":"2-3","target":"Cone","size":3,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Fire","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"4","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":4,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Fire","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Impact Bomb":{"name":"Impact Bomb","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":2,"value":105,"traits":"Bomb","valMod":3,"skill":"Build","dc":10,"time":1,"components":"1 Goods_Black Powder","technique":{"name":"Impact Bomb","fieldName":"impact_bomb","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Throw","range":"2-5","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0},
-                                        {"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Fire","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0"]}}}},
-                "hasTechnique":true},
-            "Blast Bomb":{"name":"Blast Bomb","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":2,"value":135,"traits":"Bomb","valMod":4,"skill":"Build","dc":10,"time":1,"components":"1 Goods_Black Powder","technique":{"name":"Blast Bomb","fieldName":"blast_bomb","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Throw","range":"2-5","target":"Blast","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[]},
-                                "effect":"Dmg_Fire","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Warding","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Fire","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "HI. Blast Bomb":{"name":"HI. Blast Bomb","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":2,"value":165,"traits":"Bomb","valMod":5,"skill":"Build","dc":10,"time":1,"components":"1 Goods_Black Powder","technique":{"name":"HI. Blast Bomb","fieldName":"hi._blast_bomb","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"Holdout","resourceCost":"3 EN","limits":"","skill":"Throw","range":"2-5","target":"Blast","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Fire","traits":""},
-                            "T1":{"name":"T1","defense":"Def_Warding","target":"","type":"HP","subType":"","duration":"","dVal":"4","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0},
-                                        {"variableName":"","definitionName":"","value":4,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_Fire","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Tool":{"name":"Tool","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Tool","fieldName":"tool","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Medkit":{"name":"Medkit","fieldName":"","group":"Tool","description":"A kit full of supplies for performing first aid and preventing others from dying. Expires after 5 uses. ","variable":"","category":"Medkit","itemType":"UsableItem","bulk":3,"value":64,"traits":"","valMod":1,"skill":"Build","dc":2,"time":3,"components":"2 Goods_Cotton; 2 Goods_Water; 1 Goods_Alcohol","technique":{"name":"Medkit","fieldName":"medkit","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"","limits":"","skill":"Heal","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":["Stat_Dying"],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"10","target":"","type":"Status","subType":"Remove","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"Stat_Dying","traits":""}},
-                        "sortingGroups":{"type":{"Status":["T0"]}}}},
-                "hasTechnique":true},
-            "Etherlink":{"name":"Etherlink","fieldName":"","group":"Tool","description":"A magitech device that allows one to communicate at great distances with another Etherlink. All Etherlink are callibrated with an ID, a frequency created by the Ventu Stone, to ensure only one device receives messages.","variable":"","category":"","itemType":"UsableItem","bulk":2,"value":885,"traits":"Magitech","valMod":12,"skill":"Build","dc":15,"time":12,"components":"2 Goods_Component; 1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite; 1 Goods_Ventu Stone","technique":{"name":"Etherlink","fieldName":"etherlink","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"Seeking","resourceCost":"1 WILL","limits":"","skill":"","range":"50 miles","target":"Target","size":1,"requirement":"The target must be another Etherlink which you know the frequency ID.","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"The target hears a message you speak.","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":true},
-            "Mirror":{"name":"Mirror","fieldName":"","group":"Tool","description":"A small mirror with a frame to hold it.","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":35,"traits":"","valMod":2,"skill":"Build","dc":12,"time":1,"components":"1 Goods_Glass","technique":{"name":"Mirror","fieldName":"mirror","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Compass":{"name":"Compass","fieldName":"","group":"Tool","description":"An ordinary compass that points to the magnetic north pole.","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":50,"traits":"","valMod":3,"skill":"Build","dc":12,"time":1,"components":"1 Goods_Magnet","technique":{"name":"Compass","fieldName":"compass","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"You know which direction is north.","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]
-                            }}}},
-                "hasTechnique":true},
-            "Torch":{"name":"Torch","fieldName":"","group":"Tool","description":"A torch burns for 1 hour.","variable":"","category":"Light","itemType":"UsableItem","bulk":3,"value":45,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Torch","fieldName":"torch","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"Envoke","resourceCost":"","limits":"","skill":"","range":"","target":"Blast","size":1,"requirement":"The area created is always focused on this item.","itemTraits":"","trigger":"","flavorText":"","definitions":["Ter_Light"],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Terrain","subType":"Add","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"Ter_Light","traits":""}},
-                        "sortingGroups":{"type":{"Terrain":["T0"]}}}},
-                "hasTechnique":true},
-            "Lanturn":{"name":"Lanturn","fieldName":"","group":"Tool","description":"A lanturn burns for 6 hours on 1 pint of oil. You can carry a lanturn in one hand.","variable":"","category":"Light","itemType":"UsableItem","bulk":3,"value":135,"traits":"","valMod":3,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Lanturn","fieldName":"lanturn","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"Envoke","resourceCost":"","limits":"","skill":"","range":"","target":"Blast","size":2,"requirement":"The area created is always focused on this item.","itemTraits":"","trigger":"","flavorText":"","definitions":["Ter_Light"],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Terrain","subType":"Add","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"Ter_Light","traits":""}},
-                        "sortingGroups":{"type":{"Terrain":["T0"]}}}},
-                "hasTechnique":true},
-            "Flashlight":{"name":"Flashlight","fieldName":"","group":"Tool","description":"A handheld cylinder that holds a light orb within. Creates light. ","variable":"","category":"Light","itemType":"UsableItem","bulk":2,"value":375,"traits":"Magitech","valMod":10,"skill":"Build","dc":15,"time":2,"components":"1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite","technique":{"name":"Flashlight","fieldName":"flashlight","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"Envoke","resourceCost":"1 WILL","limits":"","skill":"","range":"","target":"Cone","size":6,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":["Ter_Light"],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Terrain","subType":"Add","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"Ter_Light","traits":""}},
-                        "sortingGroups":{"type":{"Terrain":["T0"]}}}},
-                "hasTechnique":true},
-            "Rope":{"name":"Rope","fieldName":"","group":"Tool","description":"Flexible material that can help you climb, tie things up, and other useful things. This value represents 10 ft of rope.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":4,"value":120,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Rope","fieldName":"rope","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"","limits":"","skill":"Finesse","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Reflex","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"You bind an end of the rope to the target. This may cause the rope to cause the restrained status if another end of the rope is secured to an immovable object.","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"A knot in the rope can be removed with a successful DC 12 Physique or Agility Quick-skill check.","traits":""}},
-                        "sortingGroups":{"type":{"":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Manacles":{"name":"Manacles","fieldName":"","group":"Tool","description":"Manacles are a binding tool, usually with two clasps to secure it between two objects or limbs. Usually these clasps are secured by a locking mechanism requiring a key to open them.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":2,"value":null,"traits":"","valMod":4,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Manacles","fieldName":"manacles","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"","limits":"","skill":"Finesse","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Reflex","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"You successfully secure one clasp of the manacles. This may cause the manacles to cause the restrained status if a second clasp is secured to an immovable object.","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"One manacle clasp can be removed with access to the key for the restraint or with a successful DC 16 Tinker Quick-skill check.","traits":""}},
-                        "sortingGroups":{"type":{"":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Magic Restraints":{"name":"Magic Restraints","fieldName":"","group":"Tool","description":"These chain bindings wrap around the chest, arms, and legs. These chains are linked to metal bindings meant to clamp around the arms and legs that contain sealing stone.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":2,"value":null,"traits":"","valMod":5,"skill":"Build","dc":12,"time":4,"components":"1 Goods_Sigilite","technique":{"name":"Magic Restraints","fieldName":"magic_restraints","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"","limits":"","skill":"Finesse","range":"1","target":"Target","size":1,"requirement":"The target must have the Restrained status.","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1","T2","T3"],
-                        "values":{"T0":{"name":"T0","defense":"Def_Reflex","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"You successfully secure one Magic Restraint. This on its own does nothing until five have been secured.","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"A Magic Restraint can be removed with access to the key for the restraint or with a successful DC 16 Tinker Quick-skill check.","traits":""},
-                            "T2":{"name":"T2","defense":"TechNewTargets","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"Five magic restraints are secured on one character.","traits":""},
-                            "T3":{"name":"T3","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"The target's ki generation is disrupted. The target cannot use any techniques that consume Will as a resource.","traits":""}},
-                        "sortingGroups":{"type":{"":["T0","T1","T2","T3"]}}}},
-                "hasTechnique":true},
-            "Ladder":{"name":"Ladder","fieldName":"","group":"Tool","description":"Ladders can be climbed. Most ladders are 30 feet tall.","variable":"","category":"","itemType":"UsableItem","bulk":15,"value":null,"traits":"","valMod":5,"skill":"Build","dc":0,"time":2,"components":"","technique":{"name":"Ladder","fieldName":"ladder","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Shovel":{"name":"Shovel","fieldName":"","group":"Tool","description":"A shovel helps with digging.","variable":"","category":"","itemType":"UsableItem","bulk":5,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Shovel","fieldName":"shovel","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Spyglass":{"name":"Spyglass","fieldName":"","group":"Tool","description":"Objects viewed through a spyglass are magnified to twice their size.","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"1 Goods_Glass","technique":{"name":"Spyglass","fieldName":"spyglass","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Umbrella":{"name":"Umbrella","fieldName":"","group":"Tool","description":"An umbrella is a heavier, waterproof parasol made of waxed cloth. It is intended to keep you dry in the rain or snow, but can still protect against sunlight just like a standard parasol.","variable":"","category":"","itemType":"UsableItem","bulk":5,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"1 Goods_Bee's wax","technique":{"name":"Umbrella","fieldName":"umbrella","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Camera":{"name":"Camera","fieldName":"","group":"Tool","description":"A device that captures images onto a still canvas. ","variable":"","category":"","itemType":"UsableItem","bulk":2,"value":null,"traits":"","valMod":8,"skill":"Build","dc":15,"time":5,"components":"2 Goods_Component","technique":{"name":"Camera","fieldName":"camera","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Chest Slot":{"name":"Chest Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Chest Slot","fieldName":"chest_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Light Breastplate":{"name":"Light Breastplate","fieldName":"","group":"Chest Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":15,"value":null,"traits":"","valMod":2,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Light Breastplate","fieldName":"light_breastplate","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1","T2","T3","T4"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0}]},
-                                "effect":"HP","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":4,"multiplier":1,"max":0}]},
-                                "effect":"Cmb_Armor","traits":""},
-                            "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Def_Evasion","traits":""},
-                            "T3":{"name":"T3","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Def_Reflex","traits":""},
-                            "T4":{"name":"T4","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Cmb_Mv","traits":""}},
-                        "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3","T4"]}}}},
-                "hasTechnique":true},
-            "Heavy Breastplate":{"name":"Heavy Breastplate","fieldName":"","group":"Chest Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":25,"value":1125,"traits":"","valMod":3,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Heavy Breastplate","fieldName":"heavy_breastplate","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1","T2","T3","T4"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":30,"multiplier":1,"max":0}]},
-                                "effect":"HP","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":6,"multiplier":1,"max":0}]},
-                                "effect":"Cmb_Armor","traits":""},
-                            "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-4,"multiplier":1,"max":0}]},
-                                "effect":"Def_Evasion","traits":""},
-                            "T3":{"name":"T3","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-4,"multiplier":1,"max":0}]},
-                                "effect":"Def_Reflex","traits":""},
-                            "T4":{"name":"T4","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Cmb_Mv","traits":""}},
-                        "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3","T4"]}}}},
-                "hasTechnique":true},
-            "Head Slot":{"name":"Head Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Head Slot","fieldName":"head_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Light Helmet":{"name":"Light Helmet","fieldName":"","group":"Head Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":4,"value":120,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Light Helmet","fieldName":"light_helmet","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0}]},
-                                "effect":"HP","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Def_Evasion","traits":""}},
-                        "sortingGroups":{"type":{"Boost":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Heavy Helmet":{"name":"Heavy Helmet","fieldName":"","group":"Head Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":7,"value":210,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Heavy Helmet","fieldName":"heavy_helmet","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1","T2","T3"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0}]},
-                                "effect":"HP","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
-                                "effect":"Cmb_Armor","traits":""},
-                            "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Def_Evasion","traits":""},
-                            "T3":{"name":"T3","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Def_Reflex","traits":""}},
-                        "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3"]}}}},
-                "hasTechnique":true},
-            "Etherlink Headset":{"name":"Etherlink Headset","fieldName":"","group":"Head Gear","description":"A head mounted version of an Etherlink. This is a magitech device that allows one to communicate at great distances with another Etherlink. All Etherlink are callibrated with an ID, a frequency created by the Ventu Stone, to ensure only one device receives messages.","variable":"","category":"","itemType":"UsableItem","bulk":2,"value":1425,"traits":"","valMod":30,"skill":"Build","dc":15,"time":12,"components":"2 Goods_Component; 1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite; 1 Goods_Ventu Stone","technique":{"name":"Etherlink Headset","fieldName":"etherlink_headset","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"Seeking","resourceCost":"1 WILL","limits":"","skill":"","range":"50 miles","target":"Target","size":1,"requirement":"The target must be another Etherlink which you know the frequency ID.","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"The target hears a message you speak.","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":true},
-            "Arms Slot":{"name":"Arms Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Arms Slot","fieldName":"arms_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Light Vambraces":{"name":"Light Vambraces","fieldName":"","group":"Arm Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":4,"value":null,"traits":"","valMod":2,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Light Vambraces","fieldName":"light_vambraces","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
-                                "effect":"Cmb_Armor","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Def_Evasion","traits":""}},
-                        "sortingGroups":{"type":{"Boost":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Heavy Vambraces":{"name":"Heavy Vambraces","fieldName":"","group":"Arm Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":7,"value":null,"traits":"","valMod":2,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Heavy Vambraces","fieldName":"heavy_vambraces","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1","T2"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
-                                "effect":"Cmb_Armor","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-2,"multiplier":1,"max":0}]},
-                                "effect":"Def_Evasion","traits":""},
-                            "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Def_Reflex","traits":""}},
-                        "sortingGroups":{"type":{"Boost":["T0","T1","T2"]}}}},
-                "hasTechnique":true},
-            "Legs Slot":{"name":"Legs Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Legs Slot","fieldName":"legs_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Light Greaves":{"name":"Light Greaves","fieldName":"","group":"Leg Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":10,"value":null,"traits":"","valMod":2,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Light Greaves","fieldName":"light_greaves","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1","T2","T3"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0}]},
-                                "effect":"HP","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
-                                "effect":"Cmb_Armor","traits":""},
-                            "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Def_Evasion","traits":""},
-                            "T3":{"name":"T3","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Def_Reflex","traits":""}},
-                        "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3"]}}}},
-                "hasTechnique":true},
-            "Heavy Greaves":{"name":"Heavy Greaves","fieldName":"","group":"Leg Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":15,"value":null,"traits":"","valMod":3,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Heavy Greaves","fieldName":"heavy_greaves","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1","T2","T3","T4"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":30,"multiplier":1,"max":0}]},
-                                "effect":"HP","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":4,"multiplier":1,"max":0}]},
-                                "effect":"Cmb_Armor","traits":""},
-                            "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-2,"multiplier":1,"max":0}]},
-                                "effect":"Def_Evasion","traits":""},
-                            "T3":{"name":"T3","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-2,"multiplier":1,"max":0}]},
-                                "effect":"Def_Reflex","traits":""},
-                            "T4":{"name":"T4","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Cmb_Mv","traits":""}},
-                        "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3","T4"]}}}},
-                "hasTechnique":true},
-            "Foot Slot":{"name":"Foot Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Foot Slot","fieldName":"foot_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Armored Boots":{"name":"Armored Boots","fieldName":"","group":"Foot Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":5,"value":150,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Armored Boots","fieldName":"armored_boots","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0","T1"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0}]},
-                                "effect":"HP","traits":""},
-                            "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
-                                "effect":"Def_Evasion","traits":""}},
-                        "sortingGroups":{"type":{"Boost":["T0","T1"]}}}},
-                "hasTechnique":true},
-            "Gear":{"name":"Gear","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Gear","fieldName":"gear","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Bedroll":{"name":"Bedroll","fieldName":"","group":"Gear","description":"This consists of two woolen sheets sewn together along the bottom and one side to create a bag for sleeping in. Some have cloth straps along the open side so the bedroll can be tied closed while you are sleeping. It can be rolled and tied into a tight coil for storage or transport.","variable":"","category":"Camping","itemType":"UsableItem","bulk":8,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Bedroll","fieldName":"bedroll","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Blanket":{"name":"Blanket","fieldName":"","group":"Gear","description":"This warm, woven blanket has straps so it can be rolled up and tied. Blankets are often used in conjunction with bedrolls to provide additional warmth or a ground cushion.","variable":"","category":"Camping","itemType":"UsableItem","bulk":7,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Blanket","fieldName":"blanket","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Cot":{"name":"Cot","fieldName":"","group":"Gear","description":"This elevated camp bed is made of wood and canvas, and is particularly useful when the ground is wet or rocky. It is large enough for a full-grown human, but folds down into a 4-foot-by-9-inch cylindrical bag.","variable":"","category":"Camping","itemType":"UsableItem","bulk":15,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Cot","fieldName":"cot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Hammock":{"name":"Hammock","fieldName":"","group":"Gear","description":"This blanket or net is attached to strong ropes, allowing you to hang it from a heavy branch or two trees and sleep above the ground.","variable":"","category":"Camping","itemType":"UsableItem","bulk":10,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Hammock","fieldName":"hammock","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Tent":{"name":"Tent","fieldName":"","group":"Gear","description":"A tent holds two Medium creature and takes 10 minutes to assemble.","variable":"","category":"Camping","itemType":"UsableItem","bulk":25,"value":null,"traits":"","valMod":3,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Tent","fieldName":"tent","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Pavillion Tent":{"name":"Pavillion Tent","fieldName":"","group":"Gear","description":"A huge open-air canopy, plus stakes, poles, and ropes. A pavilion holds 10 creatures and takes 60 minutes to assemble. Pavilion tents are large enough to accommodate a small fire in the center.","variable":"","category":"Camping","itemType":"UsableItem","bulk":40,"value":null,"traits":"","valMod":5,"skill":"Build","dc":12,"time":8,"components":"","technique":{"name":"Pavillion Tent","fieldName":"pavillion_tent","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Backpack, common":{"name":"Backpack, common","fieldName":"","group":"Gear","description":"This cloth knapsack has one large pocket that closes with a buckled strap and holds about 2 cubic feet of material. Some may have one or more smaller pockets on the sides.","variable":"","category":"Container","itemType":"UsableItem","bulk":8,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Backpack, common","fieldName":"backpack,_common","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Pouch, waist":{"name":"Pouch, waist","fieldName":"","group":"Gear","description":"This pack is supported by two straps that can be loosened or tightened to fit most body types. It can be adjusted to any facing along its wearer’s waist. The pack can store up to 1/2 cubic foot of material.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":1,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Pouch, waist","fieldName":"pouch,_waist","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Sack":{"name":"Sack","fieldName":"","group":"Gear","description":"A sack is a cloth bag that weighs 1/2 lb. empty and holds 1 cubic ft. or 60 lbs. of contents full.","variable":"","category":"Container","itemType":"UsableItem","bulk":4,"value":null,"traits":"","valMod":1,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Sack","fieldName":"sack","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Barrel":{"name":"Barrel","fieldName":"","group":"Gear","description":"A common barrel is constructed of wood with metal ring reinforcements and holds 10 cubic ft. or 650 lb. of materials. A barrel filled with liquid holds about 75 gallons.","variable":"","category":"Container","itemType":"UsableItem","bulk":25,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Barrel","fieldName":"barrel","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Basket":{"name":"Basket","fieldName":"","group":"Gear","description":"This large basket has a lid and holds about 2 cubic feet.","variable":"","category":"Container","itemType":"UsableItem","bulk":3,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Basket","fieldName":"basket","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Box, scroll":{"name":"Box, scroll","fieldName":"","group":"Gear","description":"This wooden box easily holds 10 scrolls and has small clips or bookmarks for easier indexing. Retrieving a scroll from a held scroll box is a move action.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Box, scroll","fieldName":"box,_scroll","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Bucket":{"name":"Bucket","fieldName":"","group":"Gear","description":"A simple bucket holds 1 cubic ft. or up to 65 lb. of liquid or material and when full. A bucket filled with liquid holds about 7 gallons.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Bucket","fieldName":"bucket","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Case, scroll":{"name":"Case, scroll","fieldName":"","group":"Gear","description":"A leather or wooden scroll case easily holds four scrolls.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Case, scroll","fieldName":"case,_scroll","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Chest, Small":{"name":"Chest, Small","fieldName":"","group":"Gear","description":"A common, wooden chest.","variable":"","category":"Container","itemType":"UsableItem","bulk":15,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Chest, Small","fieldName":"chest,_small","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Chest, Medium":{"name":"Chest, Medium","fieldName":"","group":"Gear","description":"A common, wooden chest.","variable":"","category":"Container","itemType":"UsableItem","bulk":25,"value":null,"traits":"","valMod":3,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Chest, Medium","fieldName":"chest,_medium","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Chest, Large":{"name":"Chest, Large","fieldName":"","group":"Gear","description":"A common, wooden chest.","variable":"","category":"Container","itemType":"UsableItem","bulk":35,"value":null,"traits":"","valMod":4,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Chest, Large","fieldName":"chest,_large","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Cooler":{"name":"Cooler","fieldName":"","group":"Gear","description":"This chest can contain up to 4 cubic feet of goods, and it has a lining of insulating material between two sheets of wood. As long as the chest is partially filled with a cold substance—such as cold water or ice—items stored within decompose at half their regular rate. Ice melts on a consistent basis (typically four to six times in a 24-hour period) and must be regularly replenished to maintain the effectiveness of this chest.","variable":"","category":"Container","itemType":"UsableItem","bulk":25,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":3,"components":"1 Insulation","technique":{"name":"Cooler","fieldName":"cooler","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]
-                            }}}},
-                "hasTechnique":false},
-            "Pot":{"name":"Pot","fieldName":"","group":"Gear","description":"Pots come in a variety of materials, but the most common is formed of iron.","variable":"","category":"Container","itemType":"UsableItem","bulk":2,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Pot","fieldName":"pot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Bottle":{"name":"Bottle","fieldName":"","group":"Gear","description":"This glass bottle holds about a pint and includes a cork.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Bottle","fieldName":"bottle","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Canteen":{"name":"Canteen","fieldName":"","group":"Gear","description":"This hollow container is made of wood, a gourd, or metal, and carries liquid.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Canteen","fieldName":"canteen","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Cauldron":{"name":"Cauldron","fieldName":"","group":"Gear","description":"This larger version of an iron pot holds approximately 1 gallon—enough to fill the bellies of four hungry humans for one meal.","variable":"","category":"Container","itemType":"UsableItem","bulk":8,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Cauldron","fieldName":"cauldron","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Coffee pot":{"name":"Coffee pot","fieldName":"","group":"Gear","description":"This tall, teapot-like device contains a small chamber for coffee grounds and a large chamber for water, connected by a small tube. Heating the pot forces boiling water through the tube and into the grounds. A glass knob at the top of the tube allows you to see the color of the brew and stop when it is sufficiently strong. It can brew up to 4 cups of coffee at a time. It can also be used to make tea, steep medicinal herbs, or just boil water.","variable":"","category":"Container","itemType":"UsableItem","bulk":3,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Coffee pot","fieldName":"coffee_pot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Flask":{"name":"Flask","fieldName":"","group":"Gear","description":"A flask holds 1 pint of liquid and weighs 1 lb. when full.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Flask","fieldName":"flask","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Jug":{"name":"Jug","fieldName":"","group":"Gear","description":"This basic jug is fitted with a stopper and holds 1 gallon of liquid.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Jug","fieldName":"jug","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Pitcher":{"name":"Pitcher","fieldName":"","group":"Gear","description":"A clay pitcher.","variable":"","category":"Container","itemType":"UsableItem","bulk":3,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Pitcher","fieldName":"pitcher","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Vial":{"name":"Vial","fieldName":"","group":"Gear","description":"A vial is made out of glass or steel and holds 1 ounce of liquid.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Vial","fieldName":"vial","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Canvas (1 sq. yd)":{"name":"Canvas (1 sq. yd)","fieldName":"","group":"Gear","description":"This square yard of heavy cloth is suitable for painting, for covering items in a rainstorm, for creating a sail, or as an improvised bag. It is not waterproof but can be treated with oil, wax, or resin to make it water-resistant.","variable":"","category":"Writing","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":1,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Canvas (1 sq. yd)","fieldName":"canvas_(1_sq._yd)","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Inkpen":{"name":"Inkpen","fieldName":"","group":"Gear","description":"This is a wooden stylus with a metal tip that retains a small amount of ink after you dip it in a vial of ink.","variable":"","category":"Writing","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":1,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Inkpen","fieldName":"inkpen","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Paper (30 sheets)":{"name":"Paper (30 sheets)","fieldName":"","group":"Gear","description":"A sheet of ordinary paper typically measures 9 inches by 6 inches and is unsuitable for making magical scrolls. ","variable":"","category":"Writing","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":1,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Paper (30 sheets)","fieldName":"paper_(30_sheets)","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Lock, average":{"name":"Lock, average","fieldName":"","group":"Gear","description":"A simple lock can be unlocked with a standard Mechanical check.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":8,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Lock, average","fieldName":"lock,_average","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Lock, good":{"name":"Lock, good","fieldName":"","group":"Gear","description":"A good lock can be unlocked with a difficult Mechanical check.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":12,"skill":"Build","dc":15,"time":3,"components":"","technique":{"name":"Lock, good","fieldName":"lock,_good","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Lock, superior":{"name":"Lock, superior","fieldName":"","group":"Gear","description":"A superior lock can be unlocked with a risky Mechanical check.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":16,"skill":"Build","dc":18,"time":4,"components":"","technique":{"name":"Lock, superior","fieldName":"lock,_superior","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"","traits":""}},
-                        "sortingGroups":{"type":{"":["T0"]}}}},
-                "hasTechnique":false},
-            "Light Orb":{"name":"Light Orb","fieldName":"","group":"Gear","description":"A magitech device that creates light with a little energy.","variable":"","category":"Light","itemType":"UsableItem","bulk":1,"value":375,"traits":"Magitech","valMod":10,"skill":"Build","dc":15,"time":2,"components":"1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite","technique":{"name":"Light Orb","fieldName":"light_orb","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"Envoke","resourceCost":"1 WILL","limits":"","skill":"","range":"","target":"Blast","size":2,"requirement":"The area created is always focused on this item.","itemTraits":"","trigger":"","flavorText":"","definitions":["Ter_Light"],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Terrain","subType":"Add","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"Ter_Light","traits":""}},
-                        "sortingGroups":{"type":{"Terrain":["T0"]}}}},
-                "hasTechnique":true},
-            "Steroid Juice":{"name":"Steroid Juice","fieldName":"","group":"Medicine","description":"This stimulant helps to quickly allieviate pain and promote healing.","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":74,"traits":"Ingested","valMod":1,"skill":"","dc":12,"time":3,"components":"1 Goods_Water; 2 Goods_Schizandra; 4 Goods_Brahmi","technique":{"name":"Steroid Juice","fieldName":"steroid_juice","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"","range":"1","target":"Target or Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"Surge","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"cmb-hv","definitionName":"Cmb_HV","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0"]}}}},
-                "hasTechnique":true},
-            "Steroid Juice HQ":{"name":"Steroid Juice HQ","fieldName":"","group":"Medicine","description":"This powerful stimulant helps to quickly allieviate pain and promote healing.","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":147,"traits":"Ingested","valMod":4,"skill":"","dc":15,"time":3,"components":"1 Goods_Water; 3 Goods_Schizandra; 6 Goods_Brahmi","technique":{"name":"Steroid Juice HQ","fieldName":"steroid_juice_hq","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"","range":"1","target":"Target or Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"Surge","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"cmb-hv","definitionName":"Cmb_HV","value":0,"multiplier":1,"max":0},
-                                        {"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0"]}}}},
-                "hasTechnique":true},
-            "Compress Balm":{"name":"Compress Balm","fieldName":"","group":"Medicine","description":"A cooling ointment is applied to a compress bandage to quickly heal a wound. ","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":76,"traits":"","valMod":1,"skill":"","dc":12,"time":3,"components":"1 Goods_Bee's wax; 2 Goods_Schizandra; 4 Goods_Shepherd's Purse","technique":{"name":"Compress Balm","fieldName":"compress_balm","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"1 EN","limits":"","skill":"","range":"1","target":"Target or Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"Surge","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"cmb-hv","definitionName":"Cmb_HV","value":0,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0"]}}}},
-                "hasTechnique":true},
-            "Compress Balm HQ":{"name":"Compress Balm HQ","fieldName":"","group":"Medicine","description":"A powerful cooling ointment is applied to a compress bandage to quickly heal a wound. ","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":154,"traits":"","valMod":4,"skill":"","dc":12,"time":3,"components":"2 Goods_Bee's wax; 3 Goods_Schizandra; 6 Goods_Shepherd's Purse","technique":{"name":"Compress Balm HQ","fieldName":"compress_balm_hq","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"3 EN","limits":"","skill":"","range":"1","target":"Target or Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"Surge","duration":"","dVal":"3","dType":"6","formula":{"workers":[{"variableName":"cmb-hv","definitionName":"Cmb_HV","value":0,"multiplier":1,"max":0},
-                                        {"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0}]},
-                                "effect":"Dmg_","traits":""}},
-                        "sortingGroups":{"type":{"HP":["T0"]}}}},
-                "hasTechnique":true},
-            "Stability":{"name":"Stability","fieldName":"","group":"Medicine","description":"This drug eliminates feels of sickness and nausea instantly. ","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":82,"traits":"Inhalent","valMod":1,"skill":"","dc":12,"time":3,"components":"1 Goods_Water; 2 Goods_Astragalus; 4 Goods_Schizandra","technique":{"name":"Stability","fieldName":"stability","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"","range":"1","target":"Target or Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":["Stat_Sickened"],
-                    "effects":{"keys":["T0"],
-                        "values":{"T0":{"name":"T0","defense":"","target":"","type":"Status","subType":"Remove","duration":"","dVal":"","dType":"","formula":{"workers":[]},
-                                "effect":"Stat_Sickened","traits":""}},
-                        "sortingGroups":{"type":{"Status":["T0"]}}}},
-                "hasTechnique":true}},
-        sortingGroups = {"group":{"":["Weapons","Tool","Chest Slot","Head Slot","Arms Slot","Legs Slot","Foot Slot","Gear"],"Tool":["Handaxe","Battleaxe","Great Axe","Club","Warhammer","Maul","Javelin","Spear","Lance","Half-Staff","Full-Staff","Dagger","Rapier","Shortsword","Longsword","Great Sword","Whip","Shortbow","Longbow","Pistol","Revolver","Sniper Rifle","HI. Sniper Rifle","Blunderbuss","Shotgun","Flamethrower","Impact Bomb","Blast Bomb","HI. Blast Bomb","Medkit","Etherlink","Mirror","Compass","Torch","Lanturn","Flashlight","Rope","Manacles","Magic Restraints","Ladder","Shovel","Spyglass","Umbrella","Camera"],"Chest Gear":["Light Breastplate","Heavy Breastplate"],"Head Gear":["Light Helmet","Heavy Helmet","Etherlink Headset"],"Arm Gear":["Light Vambraces","Heavy Vambraces"],"Leg Gear":["Light Greaves","Heavy Greaves"],"Foot Gear":["Armored Boots"],"Gear":["Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Backpack, common","Pouch, waist","Sack","Barrel","Basket","Box, scroll","Bucket","Case, scroll","Chest, Small","Chest, Medium","Chest, Large","Cooler","Pot","Bottle","Canteen","Cauldron","Coffee pot","Flask","Jug","Pitcher","Vial","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Lock, average","Lock, good","Lock, superior","Light Orb"],"Medicine":["Steroid Juice","Steroid Juice HQ","Compress Balm","Compress Balm HQ","Stability"]},"subGroup":{},"action":{},"skill":{"":["Weapons","Tool","Chest Slot","Head Slot","Arms Slot","Legs Slot","Foot Slot","Gear","Steroid Juice","Steroid Juice HQ","Compress Balm","Compress Balm HQ","Stability"],"Build":["Handaxe","Battleaxe","Great Axe","Club","Warhammer","Maul","Javelin","Spear","Lance","Half-Staff","Full-Staff","Dagger","Rapier","Shortsword","Longsword","Great Sword","Whip","Shortbow","Longbow","Pistol","Revolver","Sniper Rifle","HI. Sniper Rifle","Blunderbuss","Shotgun","Flamethrower","Impact Bomb","Blast Bomb","HI. Blast Bomb","Medkit","Etherlink","Mirror","Compass","Torch","Lanturn","Flashlight","Rope","Manacles","Magic Restraints","Ladder","Shovel","Spyglass","Umbrella","Camera","Light Breastplate","Heavy Breastplate","Light Helmet","Heavy Helmet","Etherlink Headset","Light Vambraces","Heavy Vambraces","Light Greaves","Heavy Greaves","Armored Boots","Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Backpack, common","Pouch, waist","Sack","Barrel","Basket","Box, scroll","Bucket","Case, scroll","Chest, Small","Chest, Medium","Chest, Large","Cooler","Pot","Bottle","Canteen","Cauldron","Coffee pot","Flask","Jug","Pitcher","Vial","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Lock, average","Lock, good","Lock, superior","Light Orb"]},"range":{}},
-
-        get = function (key) {
-            if (values[key] == undefined) {
-                let itemData = new ItemData();
-                itemData.name = `${key} Not Found`;
-                return itemData;
-            }
-            return new UsableItemData(values[key]);
-        },
-        getValues = function (keyArray, delimiter, prefix) {
-            if (keyArray == undefined || keyArray == "") {
-                return [];
-            }
-            if (typeof keyArray == "string") {
-                keyArray = keyArray.split(delimiter);
-            }
-            if (prefix == undefined) {
-                prefix = "";
-            }
-
-            let output = [];
-            let name = "";
-            let lookup = "";
-            let dataInfo;
-
-            for (let i = 0; i < keyArray.length; i++) {
-                name = `${prefix}${keyArray[i].trim()}`;
-
-                lookup = name;
-                if (lookup.indexOf("(") >= 0) {
-                    lookup = lookup.replace(/\([^)]*\)/g, "(X)");
-                }
-
-                dataInfo = get(lookup);
-                if (dataInfo != undefined) {
-                    dataInfo.name = name;
-                    output.push(dataInfo);
-                }
-            }
-
-            return output;
-        },
-        has = function (key) {
-            return keys.includes(key);
-        },
-        iterate = function (callback) {
-            for (let i = 0; i < keys.length; i++) {
-                callback(values[keys[i]]);
-            }
-        },
-        filter = function (filterData) {
-            let filteredGroup;
-            if (Array.isArray(filterData)) {
-                filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
-                let nextFilter = [];
-                for (let i = 1; i < filterData.length; i++) {
-                    if (filteredGroup == undefined || filteredGroup.length == 0) {
-                        return [];
+                    dataInfo = get(lookup);
+                    if (dataInfo != undefined) {
+                        dataInfo.name = name;
+                        output.push(dataInfo);
                     }
-                    nextFilter = getSortedGroup(filterData[i].property, filterData[i].value);
-                    filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
                 }
-            } else {
-                filteredGroup = getSortedGroup(filterData.property, filterData.value);
-            }
-            if (filteredGroup == undefined || filteredGroup.length == 0) {
-                return [];
-            }
-            return getGroupData(filteredGroup);
-        },
-        getSortedGroup = function (property, propertyValue) {
-            if (!sortingGroups.hasOwnProperty(property)) {
-                let keys = "";
-                for (let key in sortingGroups) {
-                    keys += `${key}, `;
+
+                return output;
+            },
+            has = function (key) {
+                return keys.includes(key);
+            },
+            iterate = function (callback) {
+                for (let i = 0; i < keys.length; i++) {
+                    callback(values[keys[i]]);
                 }
-                Debug.Log (`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
-            }
-            if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
-                let keys = "";
+            },
+            filter = function (filterData) {
+                let filteredGroup;
+                if (Array.isArray(filterData)) {
+                    filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
+                    let nextFilter = [];
+                    for (let i = 1; i < filterData.length; i++) {
+                        if (filteredGroup == undefined || filteredGroup.length == 0) {
+                            return [];
+                        }
+                        nextFilter = getSortedGroup(filterData[i].property, filterData[i].value);
+                        filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
+                    }
+                } else {
+                    filteredGroup = getSortedGroup(filterData.property, filterData.value);
+                }
+                if (filteredGroup == undefined || filteredGroup.length == 0) {
+                    return [];
+                }
+                return getGroupData(filteredGroup);
+            },
+            getSortedGroup = function (property, propertyValue) {
+                if (!sortingGroups.hasOwnProperty(property)) {
+                    let keys = "";
+                    for (let key in sortingGroups) {
+                        keys += `${key}, `;
+                    }
+                    Debug.Log (`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
+                }
+                if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
+                    let keys = "";
+                    for (let key in sortingGroups[property]) {
+                        keys += `${key}, `;
+                    }
+                    Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
+                }
+                return sortingGroups[property][propertyValue];
+            },
+            getGroupData = function (group) {
+                let output = [];
+                for (let i = 0; i < group.length; i++) {
+                    output.push(get(group[i]));
+                }
+                return output;
+            },
+            getPropertyValues = function (property) {
+                let output = [];
                 for (let key in sortingGroups[property]) {
-                    keys += `${key}, `;
+                    output.push(key);
                 }
-                Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
+                return output;
             }
-            return sortingGroups[property][propertyValue];
-        },
-        getGroupData = function (group) {
-            let output = [];
-            for (let i = 0; i < group.length; i++) {
-                output.push(get(group[i]));
+            ;
+            return {
+                Get: get,
+                GetValues: getValues,
+                Has: has,
+                Iterate: iterate,
+                Filter: filter,
+                GetSortedGroup: getSortedGroup
+            };
+        }());
+
+    var WuxItems = WuxItems || (function() {
+        'use strict';
+
+        var
+            keys = ["Weapons","Handaxe","Battleaxe","Great Axe","Club","Warhammer","Maul","Javelin","Spear","Lance","Half-Staff","Full-Staff","Dagger","Rapier","Shortsword","Longsword","Great Sword","Whip","Shortbow","Longbow","Pistol","Revolver","Sniper Rifle","HI. Sniper Rifle","Blunderbuss","Shotgun","Flamethrower","Impact Bomb","Blast Bomb","HI. Blast Bomb","Tool","Etherlink","Soundnest","Echonode","Torch","Lanturn","Flashlight","Rope","Manacles","Magic Restraints","Medkit","Mirror","Compass","Ladder","Shovel","Spyglass","Umbrella","Camera","Chest Slot","Light Breastplate","Heavy Breastplate","Head Slot","Light Helmet","Heavy Helmet","Etherlink Headset","Echonode Headset","Face Slot","Darkvision Goggles","Arms Slot","Light Vambraces","Heavy Vambraces","Legs Slot","Light Greaves","Heavy Greaves","Foot Slot","Armored Boots","Gear","Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Backpack, common","Pouch, waist","Sack","Barrel","Basket","Box, scroll","Bucket","Case, scroll","Chest, Small","Chest, Medium","Chest, Large","Cooler","Pot","Bottle","Canteen","Cauldron","Coffee pot","Flask","Jug","Pitcher","Vial","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film","Lock, average","Lock, good","Lock, superior","Light Orb","Steroid Juice","Steroid Juice HQ","Compress Balm","Compress Balm HQ","Stability"],
+            values = {"Weapons":{"name":"Weapons","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Weapons","fieldName":"weapons","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Handaxe":{"name":"Handaxe","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":5,"value":150,"traits":"Axe; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Handaxe","fieldName":"handaxe","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Battleaxe":{"name":"Battleaxe","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":8,"value":240,"traits":"Axe; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Battleaxe","fieldName":"battleaxe","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"3","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Great Axe":{"name":"Great Axe","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":15,"value":450,"traits":"Axe; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Great Axe","fieldName":"great_axe","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Might","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"4","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":9,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Club":{"name":"Club","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":4,"value":120,"traits":"Hammer","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Club","fieldName":"club","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Warhammer":{"name":"Warhammer","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":8,"value":240,"traits":"Hammer","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Warhammer","fieldName":"warhammer","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"3","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Maul":{"name":"Maul","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":15,"value":null,"traits":"Hammer","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Maul","fieldName":"maul","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Might","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"4","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":9,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Javelin":{"name":"Javelin","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":5,"value":150,"traits":"Polearm; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Javelin","fieldName":"javelin","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Skirmish","range":"1-2","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Spear":{"name":"Spear","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":8,"value":240,"traits":"Polearm; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Spear","fieldName":"spear","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Skirmish","range":"1-2","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Lance":{"name":"Lance","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":15,"value":450,"traits":"Polearm; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Lance","fieldName":"lance","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Might","range":"1-2","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"3","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":9,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Half-Staff":{"name":"Half-Staff","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":4,"value":120,"traits":"Polearm","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Half-Staff","fieldName":"half-staff","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Skirmish","range":"1-2","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Full-Staff":{"name":"Full-Staff","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":8,"value":240,"traits":"Polearm","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Full-Staff","fieldName":"full-staff","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Skirmish","range":"1-2","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Dagger":{"name":"Dagger","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":3,"value":null,"traits":"Knife; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Dagger","fieldName":"dagger","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Finesse","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Rapier":{"name":"Rapier","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":5,"value":null,"traits":"Sword; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Rapier","fieldName":"rapier","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Finesse","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Shortsword":{"name":"Shortsword","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":4,"value":null,"traits":"Sword; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Shortsword","fieldName":"shortsword","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Longsword":{"name":"Longsword","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":7,"value":null,"traits":"Sword; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Longsword","fieldName":"longsword","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Skirmish","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":9,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Great Sword":{"name":"Great Sword","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":15,"value":450,"traits":"Sword; Sharp","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Great Sword","fieldName":"great_sword","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Might","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":16,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Whip":{"name":"Whip","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":3,"value":135,"traits":"Whip","valMod":3,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Whip","fieldName":"whip","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Finesse","range":"1-3","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-power","definitionName":"Power","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Force","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Shortbow":{"name":"Shortbow","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":5,"value":null,"traits":"Bow; Ammunition","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Shortbow","fieldName":"shortbow","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"Arcing","resourceCost":"","limits":"","skill":"Shoot","range":"2-5","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Longbow":{"name":"Longbow","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":8,"value":null,"traits":"Bow; Ammunition","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Longbow","fieldName":"longbow","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"Arcing","resourceCost":"2 EN","limits":"","skill":"Shoot","range":"2-5","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"4","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":8,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Pistol":{"name":"Pistol","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":3,"value":300,"traits":"Handgun; Ammunition","valMod":4,"skill":"Build","dc":12,"time":1,"components":"1 Goods_Component","technique":{"name":"Pistol","fieldName":"pistol","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Shoot","range":"2-6","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Revolver":{"name":"Revolver","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":4,"value":360,"traits":"Handgun; Ammunition","valMod":4,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component","technique":{"name":"Revolver","fieldName":"revolver","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Shoot","range":"2-6","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Sniper Rifle":{"name":"Sniper Rifle","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":12,"value":1020,"traits":"Longshot; Ammunition","valMod":5,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component","technique":{"name":"Sniper Rifle","fieldName":"sniper_rifle","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Shoot","range":"3-10","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"5","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "HI. Sniper Rifle":{"name":"HI. Sniper Rifle","fieldName":"","group":"Tool","description":"A High Impact version of the Sniper Rifle. Takes time to setup a shot, but the power is often worth it.","variable":"","category":"Weapon","itemType":"UsableItem","bulk":12,"value":null,"traits":"Longshot; Ammunition","valMod":9,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component","technique":{"name":"HI. Sniper Rifle","fieldName":"hi._sniper_rifle","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"Holdout","resourceCost":"3 EN","limits":"","skill":"Shoot","range":"3-10","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0},
+                                            {"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"6","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":10,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Blunderbuss":{"name":"Blunderbuss","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":9,"value":660,"traits":"Scattershot; Ammunition","valMod":4,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component","technique":{"name":"Blunderbuss","fieldName":"blunderbuss","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"2 EN","limits":"","skill":"Shoot","range":"2-3","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"7","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":8,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Shotgun":{"name":"Shotgun","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":10,"value":1020,"traits":"Scattershot; Ammunition","valMod":6,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component","technique":{"name":"Shotgun","fieldName":"shotgun","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"3 EN","limits":"","skill":"Shoot","range":"2-3","target":"Cone","size":3,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"5","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Piercing","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Flamethrower":{"name":"Flamethrower","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":10,"value":1200,"traits":"Scattershot","valMod":6,"skill":"Build","dc":12,"time":2,"components":"1 Goods_Component; 1 Goods_Pnevmarite","technique":{"name":"Flamethrower","fieldName":"flamethrower","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"3 EN; 1 WILL","limits":"","skill":"Shoot","range":"2-3","target":"Cone","size":3,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Evasion","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Fire","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"4","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":4,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Fire","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Impact Bomb":{"name":"Impact Bomb","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":2,"value":105,"traits":"Bomb","valMod":3,"skill":"Build","dc":10,"time":1,"components":"1 Goods_Black Powder","technique":{"name":"Impact Bomb","fieldName":"impact_bomb","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"Throw","range":"2-5","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Reflex","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0},
+                                            {"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Fire","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0"]}}}},
+                    "hasTechnique":true},
+                "Blast Bomb":{"name":"Blast Bomb","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":2,"value":135,"traits":"Bomb","valMod":4,"skill":"Build","dc":10,"time":1,"components":"1 Goods_Black Powder","technique":{"name":"Blast Bomb","fieldName":"blast_bomb","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"Throw","range":"2-5","target":"Blast","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[]},
+                                    "effect":"Dmg_Fire","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Warding","target":"","type":"HP","subType":"","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Fire","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "HI. Blast Bomb":{"name":"HI. Blast Bomb","fieldName":"","group":"Tool","description":"","variable":"","category":"Weapon","itemType":"UsableItem","bulk":2,"value":165,"traits":"Bomb","valMod":5,"skill":"Build","dc":10,"time":1,"components":"1 Goods_Black Powder","technique":{"name":"HI. Blast Bomb","fieldName":"hi._blast_bomb","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"Holdout","resourceCost":"3 EN","limits":"","skill":"Throw","range":"2-5","target":"Blast","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Fire","traits":""},
+                                "T1":{"name":"T1","defense":"Def_Warding","target":"","type":"HP","subType":"","duration":"","dVal":"4","dType":"6","formula":{"workers":[{"variableName":"gen-accuracy","definitionName":"Accuracy","value":0,"multiplier":1,"max":0},
+                                            {"variableName":"","definitionName":"","value":4,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_Fire","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Tool":{"name":"Tool","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Tool","fieldName":"tool","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Etherlink":{"name":"Etherlink","fieldName":"","group":"Tool","description":"A magitech device that allows one to communicate at great distances with another Etherlink. All Etherlink are callibrated with an ID, a frequency created by the Ventu Stone, to ensure only one device receives messages.","variable":"","category":"Comms","itemType":"UsableItem","bulk":2,"value":825,"traits":"Magitech","valMod":10,"skill":"Build","dc":15,"time":12,"components":"2 Goods_Component; 1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite; 1 Goods_Ventu Stone","technique":{"name":"Etherlink","fieldName":"etherlink","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"Seeking","resourceCost":"1 WILL","limits":"","skill":"","range":"50 miles","target":"Target","size":1,"requirement":"The target must be another Etherlink which you know the frequency ID.","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"The target hears a message you speak.","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":true},
+                "Soundnest":{"name":"Soundnest","fieldName":"","group":"Tool","description":"A device that blocks sounds from entering or leaving its area of effect. Great to ensure no one and no spirit are able to overhear a private conversation. ","variable":"","category":"Comms","itemType":"UsableItem","bulk":2,"value":1065,"traits":"Magitech","valMod":20,"skill":"Build","dc":15,"time":18,"components":"2 Goods_Component; 1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite","technique":{"name":"Soundnest","fieldName":"soundnest","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"1 WILL","limits":"","skill":"","range":"0","target":"Blast","size":5,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"Sound cannot pass through the bounds of the area. Those within the area can only hear sounds produced within the area and sounds made in the area cannot be heard outside of the area.","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":true},
+                "Echonode":{"name":"Echonode","fieldName":"","group":"Tool","description":"A magical handheld device that can record and playback sounds that are recorded on Echotapes. ","variable":"","category":"Comms","itemType":"UsableItem","bulk":2,"value":1020,"traits":"Magitech","valMod":16,"skill":"Build","dc":15,"time":18,"components":"2 Goods_Component; 1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite; 1 Goods_Magnet","technique":{"name":"Echonode","fieldName":"echonode","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"1 WILL","limits":"","skill":"","range":"0","target":"Blast","size":3,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"The ethernode can either be used to play an echotape or record to an echotape. The ethernode can only record sounds clearly up to 1 ft. away and has a maximum range of 3 ft.","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]
+                                }}}},
+                    "hasTechnique":true},
+                "Torch":{"name":"Torch","fieldName":"","group":"Tool","description":"A torch burns for 1 hour.","variable":"","category":"Light","itemType":"UsableItem","bulk":3,"value":45,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Torch","fieldName":"torch","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"Envoke","resourceCost":"","limits":"","skill":"","range":"","target":"Blast","size":1,"requirement":"The area created is always focused on this item.","itemTraits":"","trigger":"","flavorText":"","definitions":["Ter_Light"],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Terrain","subType":"Add","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"Ter_Light","traits":""}},
+                            "sortingGroups":{"type":{"Terrain":["T0"]}}}},
+                    "hasTechnique":true},
+                "Lanturn":{"name":"Lanturn","fieldName":"","group":"Tool","description":"A lanturn burns for 6 hours on 1 pint of oil. You can carry a lanturn in one hand.","variable":"","category":"Light","itemType":"UsableItem","bulk":3,"value":135,"traits":"","valMod":3,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Lanturn","fieldName":"lanturn","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"Envoke","resourceCost":"","limits":"","skill":"","range":"","target":"Blast","size":2,"requirement":"The area created is always focused on this item.","itemTraits":"","trigger":"","flavorText":"","definitions":["Ter_Light"],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Terrain","subType":"Add","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"Ter_Light","traits":""}},
+                            "sortingGroups":{"type":{"Terrain":["T0"]}}}},
+                    "hasTechnique":true},
+                "Flashlight":{"name":"Flashlight","fieldName":"","group":"Tool","description":"A handheld cylinder that holds a light orb within. Creates light. ","variable":"","category":"Light","itemType":"UsableItem","bulk":2,"value":525,"traits":"Magitech","valMod":10,"skill":"Build","dc":15,"time":2,"components":"1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite","technique":{"name":"Flashlight","fieldName":"flashlight","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"Envoke","resourceCost":"1 WILL","limits":"","skill":"","range":"","target":"Cone","size":6,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":["Ter_Light"],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Terrain","subType":"Add","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"Ter_Light","traits":""}},
+                            "sortingGroups":{"type":{"Terrain":["T0"]}}}},
+                    "hasTechnique":true},
+                "Rope":{"name":"Rope","fieldName":"","group":"Tool","description":"Flexible material that can help you climb, tie things up, and other useful things. This value represents 10 ft of rope.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":4,"value":120,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Rope","fieldName":"rope","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"","limits":"","skill":"Finesse","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Reflex","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"You bind an end of the rope to the target. This may cause the rope to cause the restrained status if another end of the rope is secured to an immovable object.","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"A knot in the rope can be removed with a successful DC 12 Physique or Agility Quick-skill check.","traits":""}},
+                            "sortingGroups":{"type":{"":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Manacles":{"name":"Manacles","fieldName":"","group":"Tool","description":"Manacles are a binding tool, usually with two clasps to secure it between two objects or limbs. Usually these clasps are secured by a locking mechanism requiring a key to open them.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":2,"value":null,"traits":"","valMod":4,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Manacles","fieldName":"manacles","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"","limits":"","skill":"Finesse","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Reflex","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"You successfully secure one clasp of the manacles. This may cause the manacles to cause the restrained status if a second clasp is secured to an immovable object.","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"One manacle clasp can be removed with access to the key for the restraint or with a successful DC 16 Tinker Quick-skill check.","traits":""}},
+                            "sortingGroups":{"type":{"":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Magic Restraints":{"name":"Magic Restraints","fieldName":"","group":"Tool","description":"These chain bindings wrap around the chest, arms, and legs. These chains are linked to metal bindings meant to clamp around the arms and legs that contain sealing stone.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":2,"value":null,"traits":"","valMod":5,"skill":"Build","dc":12,"time":4,"components":"1 Goods_Sigilite","technique":{"name":"Magic Restraints","fieldName":"magic_restraints","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"","limits":"","skill":"Finesse","range":"1","target":"Target","size":1,"requirement":"The target must have the Restrained status.","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1","T2","T3"],
+                            "values":{"T0":{"name":"T0","defense":"Def_Reflex","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"You successfully secure one Magic Restraint. This on its own does nothing until five have been secured.","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"A Magic Restraint can be removed with access to the key for the restraint or with a successful DC 16 Tinker Quick-skill check.","traits":""},
+                                "T2":{"name":"T2","defense":"TechNewTargets","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"Five magic restraints are secured on one character.","traits":""},
+                                "T3":{"name":"T3","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"The target's ki generation is disrupted. The target cannot use any techniques that consume Will as a resource.","traits":""}},
+                            "sortingGroups":{"type":{"":["T0","T1","T2","T3"]}}}},
+                    "hasTechnique":true},
+                "Medkit":{"name":"Medkit","fieldName":"","group":"Tool","description":"A kit full of supplies for performing first aid and preventing others from dying. Expires after 5 uses. ","variable":"","category":"","itemType":"UsableItem","bulk":3,"value":64,"traits":"","valMod":1,"skill":"Build","dc":2,"time":3,"components":"2 Goods_Cotton; 2 Goods_Water; 1 Goods_Alcohol","technique":{"name":"Medkit","fieldName":"medkit","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Full","traits":"","resourceCost":"","limits":"","skill":"Heal","range":"1","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":["Stat_Dying"],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"10","target":"","type":"Status","subType":"Remove","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"Stat_Dying","traits":""}},
+                            "sortingGroups":{"type":{"Status":["T0"]}}}},
+                    "hasTechnique":true},
+                "Mirror":{"name":"Mirror","fieldName":"","group":"Tool","description":"A small mirror with a frame to hold it.","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":35,"traits":"","valMod":2,"skill":"Build","dc":12,"time":1,"components":"1 Goods_Glass","technique":{"name":"Mirror","fieldName":"mirror","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Compass":{"name":"Compass","fieldName":"","group":"Tool","description":"An ordinary compass that points to the magnetic north pole.","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":50,"traits":"","valMod":3,"skill":"Build","dc":12,"time":1,"components":"1 Goods_Magnet","technique":{"name":"Compass","fieldName":"compass","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"You know which direction is north.","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":true},
+                "Ladder":{"name":"Ladder","fieldName":"","group":"Tool","description":"Ladders can be climbed. Most ladders are 30 feet tall.","variable":"","category":"","itemType":"UsableItem","bulk":15,"value":null,"traits":"","valMod":5,"skill":"Build","dc":0,"time":2,"components":"","technique":{"name":"Ladder","fieldName":"ladder","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Shovel":{"name":"Shovel","fieldName":"","group":"Tool","description":"A shovel helps with digging.","variable":"","category":"","itemType":"UsableItem","bulk":5,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Shovel","fieldName":"shovel","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Spyglass":{"name":"Spyglass","fieldName":"","group":"Tool","description":"Objects viewed through a spyglass are magnified to twice their size.","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"1 Goods_Glass","technique":{"name":"Spyglass","fieldName":"spyglass","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Umbrella":{"name":"Umbrella","fieldName":"","group":"Tool","description":"An umbrella is a heavier, waterproof parasol made of waxed cloth. It is intended to keep you dry in the rain or snow, but can still protect against sunlight just like a standard parasol.","variable":"","category":"","itemType":"UsableItem","bulk":5,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"1 Goods_Bee's wax","technique":{"name":"Umbrella","fieldName":"umbrella","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Camera":{"name":"Camera","fieldName":"","group":"Tool","description":"A device that captures images onto a still canvas. ","variable":"","category":"","itemType":"UsableItem","bulk":2,"value":null,"traits":"","valMod":8,"skill":"Build","dc":15,"time":5,"components":"2 Goods_Component","technique":{"name":"Camera","fieldName":"camera","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Chest Slot":{"name":"Chest Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Chest Slot","fieldName":"chest_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Light Breastplate":{"name":"Light Breastplate","fieldName":"","group":"Chest Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":15,"value":null,"traits":"","valMod":2,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Light Breastplate","fieldName":"light_breastplate","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1","T2","T3","T4"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0}]},
+                                    "effect":"HP","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":4,"multiplier":1,"max":0}]},
+                                    "effect":"Cmb_Armor","traits":""},
+                                "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Evasion","traits":""},
+                                "T3":{"name":"T3","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Reflex","traits":""},
+                                "T4":{"name":"T4","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Cmb_Mv","traits":""}},
+                            "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3","T4"]}}}},
+                    "hasTechnique":true},
+                "Heavy Breastplate":{"name":"Heavy Breastplate","fieldName":"","group":"Chest Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":25,"value":1125,"traits":"","valMod":3,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Heavy Breastplate","fieldName":"heavy_breastplate","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1","T2","T3","T4"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":30,"multiplier":1,"max":0}]},
+                                    "effect":"HP","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":6,"multiplier":1,"max":0}]},
+                                    "effect":"Cmb_Armor","traits":""},
+                                "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-4,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Evasion","traits":""},
+                                "T3":{"name":"T3","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-4,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Reflex","traits":""},
+                                "T4":{"name":"T4","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Cmb_Mv","traits":""}},
+                            "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3","T4"]}}}},
+                    "hasTechnique":true},
+                "Head Slot":{"name":"Head Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Head Slot","fieldName":"head_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Light Helmet":{"name":"Light Helmet","fieldName":"","group":"Head Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":4,"value":120,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Light Helmet","fieldName":"light_helmet","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0}]},
+                                    "effect":"HP","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Evasion","traits":""}},
+                            "sortingGroups":{"type":{"Boost":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Heavy Helmet":{"name":"Heavy Helmet","fieldName":"","group":"Head Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":7,"value":210,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Heavy Helmet","fieldName":"heavy_helmet","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1","T2","T3"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0}]},
+                                    "effect":"HP","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
+                                    "effect":"Cmb_Armor","traits":""},
+                                "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Evasion","traits":""},
+                                "T3":{"name":"T3","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Reflex","traits":""}},
+                            "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3"]}}}},
+                    "hasTechnique":true},
+                "Etherlink Headset":{"name":"Etherlink Headset","fieldName":"","group":"Head Gear","description":"A head mounted version of an Etherlink. This is a magitech device that allows one to communicate at great distances with another Etherlink. All Etherlink are callibrated with an ID, a frequency created by the Ventu Stone, to ensure only one device receives messages.","variable":"","category":"","itemType":"UsableItem","bulk":2,"value":1425,"traits":"","valMod":30,"skill":"Build","dc":15,"time":12,"components":"2 Goods_Component; 1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite; 1 Goods_Ventu Stone","technique":{"name":"Etherlink Headset","fieldName":"etherlink_headset","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"Seeking","resourceCost":"1 WILL","limits":"","skill":"","range":"50 miles","target":"Target","size":1,"requirement":"The target must be another Etherlink which you know the frequency ID.","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"The target hears a message you speak.","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":true},
+                "Echonode Headset":{"name":"Echonode Headset","fieldName":"","group":"Head Gear","description":"A headset to listen to an echonode without using its speaker. This device attaches to an echonode via a cable.","variable":"","category":"","itemType":"UsableItem","bulk":2,"value":110,"traits":"","valMod":3,"skill":"Build","dc":12,"time":4,"components":"1 Goods_Nickel; 1 Goods_Magnet","technique":{"name":"Echonode Headset","fieldName":"echonode_headset","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Face Slot":{"name":"Face Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Face Slot","fieldName":"face_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Darkvision Goggles":{"name":"Darkvision Goggles","fieldName":"","group":"Face Gear","description":"These magitech goggles grant the wearer the ability to see in the dark. ","variable":"","category":"Eyewear","itemType":"UsableItem","bulk":1,"value":630,"traits":"","valMod":15,"skill":"Build","dc":15,"time":12,"components":"1 Goods_Component; 1 Goods_Pnevmarite; 1 Goods_Morillite; 1 Goods_Glass","technique":{"name":"Darkvision Goggles","fieldName":"darkvision_goggles","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"You can see in the dark out to 10 spaces.","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":true},
+                "Arms Slot":{"name":"Arms Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Arms Slot","fieldName":"arms_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Light Vambraces":{"name":"Light Vambraces","fieldName":"","group":"Arm Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":4,"value":null,"traits":"","valMod":2,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Light Vambraces","fieldName":"light_vambraces","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
+                                    "effect":"Cmb_Armor","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Evasion","traits":""}},
+                            "sortingGroups":{"type":{"Boost":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Heavy Vambraces":{"name":"Heavy Vambraces","fieldName":"","group":"Arm Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":7,"value":null,"traits":"","valMod":2,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Heavy Vambraces","fieldName":"heavy_vambraces","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1","T2"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0}]},
+                                    "effect":"Cmb_Armor","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-2,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Evasion","traits":""},
+                                "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Reflex","traits":""}},
+                            "sortingGroups":{"type":{"Boost":["T0","T1","T2"]}}}},
+                    "hasTechnique":true},
+                "Legs Slot":{"name":"Legs Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Legs Slot","fieldName":"legs_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Light Greaves":{"name":"Light Greaves","fieldName":"","group":"Leg Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":10,"value":null,"traits":"","valMod":2,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Light Greaves","fieldName":"light_greaves","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1","T2","T3"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0}]},
+                                    "effect":"HP","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
+                                    "effect":"Cmb_Armor","traits":""},
+                                "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Evasion","traits":""},
+                                "T3":{"name":"T3","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Reflex","traits":""}},
+                            "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3"]}}}},
+                    "hasTechnique":true},
+                "Heavy Greaves":{"name":"Heavy Greaves","fieldName":"","group":"Leg Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":15,"value":null,"traits":"","valMod":3,"skill":"Build","dc":10,"time":1,"components":"","technique":{"name":"Heavy Greaves","fieldName":"heavy_greaves","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1","T2","T3","T4"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":30,"multiplier":1,"max":0}]},
+                                    "effect":"HP","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":4,"multiplier":1,"max":0}]},
+                                    "effect":"Cmb_Armor","traits":""},
+                                "T2":{"name":"T2","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-2,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Evasion","traits":""},
+                                "T3":{"name":"T3","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-2,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Reflex","traits":""},
+                                "T4":{"name":"T4","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Cmb_Mv","traits":""}},
+                            "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3","T4"]}}}},
+                    "hasTechnique":true},
+                "Foot Slot":{"name":"Foot Slot","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Foot Slot","fieldName":"foot_slot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Armored Boots":{"name":"Armored Boots","fieldName":"","group":"Foot Gear","description":"","variable":"","category":"Armor","itemType":"UsableItem","bulk":5,"value":150,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Armored Boots","fieldName":"armored_boots","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Passive","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0","T1"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0}]},
+                                    "effect":"HP","traits":""},
+                                "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"Penalty","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"","definitionName":"","value":-1,"multiplier":1,"max":0}]},
+                                    "effect":"Def_Evasion","traits":""}},
+                            "sortingGroups":{"type":{"Boost":["T0","T1"]}}}},
+                    "hasTechnique":true},
+                "Gear":{"name":"Gear","fieldName":"","group":"","description":"","variable":"","category":"","itemType":"UsableItem","bulk":null,"value":null,"traits":"","valMod":null,"skill":"","dc":0,"time":1,"components":"","technique":{"name":"Gear","fieldName":"gear","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Bedroll":{"name":"Bedroll","fieldName":"","group":"Gear","description":"This consists of two woolen sheets sewn together along the bottom and one side to create a bag for sleeping in. Some have cloth straps along the open side so the bedroll can be tied closed while you are sleeping. It can be rolled and tied into a tight coil for storage or transport.","variable":"","category":"Camping","itemType":"UsableItem","bulk":8,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Bedroll","fieldName":"bedroll","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Blanket":{"name":"Blanket","fieldName":"","group":"Gear","description":"This warm, woven blanket has straps so it can be rolled up and tied. Blankets are often used in conjunction with bedrolls to provide additional warmth or a ground cushion.","variable":"","category":"Camping","itemType":"UsableItem","bulk":7,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Blanket","fieldName":"blanket","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Cot":{"name":"Cot","fieldName":"","group":"Gear","description":"This elevated camp bed is made of wood and canvas, and is particularly useful when the ground is wet or rocky. It is large enough for a full-grown human, but folds down into a 4-foot-by-9-inch cylindrical bag.","variable":"","category":"Camping","itemType":"UsableItem","bulk":15,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Cot","fieldName":"cot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Hammock":{"name":"Hammock","fieldName":"","group":"Gear","description":"This blanket or net is attached to strong ropes, allowing you to hang it from a heavy branch or two trees and sleep above the ground.","variable":"","category":"Camping","itemType":"UsableItem","bulk":10,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Hammock","fieldName":"hammock","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Tent":{"name":"Tent","fieldName":"","group":"Gear","description":"A tent holds two Medium creature and takes 10 minutes to assemble.","variable":"","category":"Camping","itemType":"UsableItem","bulk":25,"value":null,"traits":"","valMod":3,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Tent","fieldName":"tent","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Pavillion Tent":{"name":"Pavillion Tent","fieldName":"","group":"Gear","description":"A huge open-air canopy, plus stakes, poles, and ropes. A pavilion holds 10 creatures and takes 60 minutes to assemble. Pavilion tents are large enough to accommodate a small fire in the center.","variable":"","category":"Camping","itemType":"UsableItem","bulk":40,"value":null,"traits":"","valMod":5,"skill":"Build","dc":12,"time":8,"components":"","technique":{"name":"Pavillion Tent","fieldName":"pavillion_tent","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Backpack, common":{"name":"Backpack, common","fieldName":"","group":"Gear","description":"This cloth knapsack has one large pocket that closes with a buckled strap and holds about 2 cubic feet of material. Some may have one or more smaller pockets on the sides.","variable":"","category":"Container","itemType":"UsableItem","bulk":8,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Backpack, common","fieldName":"backpack,_common","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Pouch, waist":{"name":"Pouch, waist","fieldName":"","group":"Gear","description":"This pack is supported by two straps that can be loosened or tightened to fit most body types. It can be adjusted to any facing along its wearer’s waist. The pack can store up to 1/2 cubic foot of material.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":1,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Pouch, waist","fieldName":"pouch,_waist","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Sack":{"name":"Sack","fieldName":"","group":"Gear","description":"A sack is a cloth bag that weighs 1/2 lb. empty and holds 1 cubic ft. or 60 lbs. of contents full.","variable":"","category":"Container","itemType":"UsableItem","bulk":4,"value":null,"traits":"","valMod":1,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Sack","fieldName":"sack","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Barrel":{"name":"Barrel","fieldName":"","group":"Gear","description":"A common barrel is constructed of wood with metal ring reinforcements and holds 10 cubic ft. or 650 lb. of materials. A barrel filled with liquid holds about 75 gallons.","variable":"","category":"Container","itemType":"UsableItem","bulk":25,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Barrel","fieldName":"barrel","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Basket":{"name":"Basket","fieldName":"","group":"Gear","description":"This large basket has a lid and holds about 2 cubic feet.","variable":"","category":"Container","itemType":"UsableItem","bulk":3,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Basket","fieldName":"basket","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Box, scroll":{"name":"Box, scroll","fieldName":"","group":"Gear","description":"This wooden box easily holds 10 scrolls and has small clips or bookmarks for easier indexing. Retrieving a scroll from a held scroll box is a move action.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Box, scroll","fieldName":"box,_scroll","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]
+                                }}}},
+                    "hasTechnique":false},
+                "Bucket":{"name":"Bucket","fieldName":"","group":"Gear","description":"A simple bucket holds 1 cubic ft. or up to 65 lb. of liquid or material and when full. A bucket filled with liquid holds about 7 gallons.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Bucket","fieldName":"bucket","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Case, scroll":{"name":"Case, scroll","fieldName":"","group":"Gear","description":"A leather or wooden scroll case easily holds four scrolls.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Case, scroll","fieldName":"case,_scroll","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Chest, Small":{"name":"Chest, Small","fieldName":"","group":"Gear","description":"A common, wooden chest.","variable":"","category":"Container","itemType":"UsableItem","bulk":15,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Chest, Small","fieldName":"chest,_small","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Chest, Medium":{"name":"Chest, Medium","fieldName":"","group":"Gear","description":"A common, wooden chest.","variable":"","category":"Container","itemType":"UsableItem","bulk":25,"value":null,"traits":"","valMod":3,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Chest, Medium","fieldName":"chest,_medium","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Chest, Large":{"name":"Chest, Large","fieldName":"","group":"Gear","description":"A common, wooden chest.","variable":"","category":"Container","itemType":"UsableItem","bulk":35,"value":null,"traits":"","valMod":4,"skill":"Build","dc":12,"time":1,"components":"","technique":{"name":"Chest, Large","fieldName":"chest,_large","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Cooler":{"name":"Cooler","fieldName":"","group":"Gear","description":"This chest can contain up to 4 cubic feet of goods, and it has a lining of insulating material between two sheets of wood. As long as the chest is partially filled with a cold substance—such as cold water or ice—items stored within decompose at half their regular rate. Ice melts on a consistent basis (typically four to six times in a 24-hour period) and must be regularly replenished to maintain the effectiveness of this chest.","variable":"","category":"Container","itemType":"UsableItem","bulk":25,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":3,"components":"1 Insulation","technique":{"name":"Cooler","fieldName":"cooler","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Pot":{"name":"Pot","fieldName":"","group":"Gear","description":"Pots come in a variety of materials, but the most common is formed of iron.","variable":"","category":"Container","itemType":"UsableItem","bulk":2,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Pot","fieldName":"pot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Bottle":{"name":"Bottle","fieldName":"","group":"Gear","description":"This glass bottle holds about a pint and includes a cork.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Bottle","fieldName":"bottle","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Canteen":{"name":"Canteen","fieldName":"","group":"Gear","description":"This hollow container is made of wood, a gourd, or metal, and carries liquid.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Canteen","fieldName":"canteen","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Cauldron":{"name":"Cauldron","fieldName":"","group":"Gear","description":"This larger version of an iron pot holds approximately 1 gallon—enough to fill the bellies of four hungry humans for one meal.","variable":"","category":"Container","itemType":"UsableItem","bulk":8,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Cauldron","fieldName":"cauldron","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Coffee pot":{"name":"Coffee pot","fieldName":"","group":"Gear","description":"This tall, teapot-like device contains a small chamber for coffee grounds and a large chamber for water, connected by a small tube. Heating the pot forces boiling water through the tube and into the grounds. A glass knob at the top of the tube allows you to see the color of the brew and stop when it is sufficiently strong. It can brew up to 4 cups of coffee at a time. It can also be used to make tea, steep medicinal herbs, or just boil water.","variable":"","category":"Container","itemType":"UsableItem","bulk":3,"value":null,"traits":"","valMod":2,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Coffee pot","fieldName":"coffee_pot","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Flask":{"name":"Flask","fieldName":"","group":"Gear","description":"A flask holds 1 pint of liquid and weighs 1 lb. when full.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Flask","fieldName":"flask","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Jug":{"name":"Jug","fieldName":"","group":"Gear","description":"This basic jug is fitted with a stopper and holds 1 gallon of liquid.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Jug","fieldName":"jug","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Pitcher":{"name":"Pitcher","fieldName":"","group":"Gear","description":"A clay pitcher.","variable":"","category":"Container","itemType":"UsableItem","bulk":3,"value":null,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Pitcher","fieldName":"pitcher","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Vial":{"name":"Vial","fieldName":"","group":"Gear","description":"A vial is made out of glass or steel and holds 1 ounce of liquid.","variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Vial","fieldName":"vial","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Canvas (1 sq. yd)":{"name":"Canvas (1 sq. yd)","fieldName":"","group":"Gear","description":"This square yard of heavy cloth is suitable for painting, for covering items in a rainstorm, for creating a sail, or as an improvised bag. It is not waterproof but can be treated with oil, wax, or resin to make it water-resistant.","variable":"","category":"Comms","itemType":"UsableItem","bulk":1,"value":15,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Canvas (1 sq. yd)","fieldName":"canvas_(1_sq._yd)","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Inkpen":{"name":"Inkpen","fieldName":"","group":"Gear","description":"This is a wooden stylus with a metal tip that retains a small amount of ink after you dip it in a vial of ink.","variable":"","category":"Comms","itemType":"UsableItem","bulk":1,"value":15,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Inkpen","fieldName":"inkpen","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Paper (30 sheets)":{"name":"Paper (30 sheets)","fieldName":"","group":"Gear","description":"A sheet of ordinary paper typically measures 9 inches by 6 inches and is unsuitable for making magical scrolls. ","variable":"","category":"Comms","itemType":"UsableItem","bulk":1,"value":15,"traits":"","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","technique":{"name":"Paper (30 sheets)","fieldName":"paper_(30_sheets)","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Echotape":{"name":"Echotape","fieldName":"","group":"Gear","description":"A film that can be used to record sounds via an Echonode.","variable":"","category":"Comms","itemType":"UsableItem","bulk":1,"value":50,"traits":"","valMod":3,"skill":"Build","dc":10,"time":1,"components":"1 Goods_Magnet","technique":{"name":"Echotape","fieldName":"echotape","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Camera Film":{"name":"Camera Film","fieldName":"","group":"Gear","description":"A film that stores images from a camera.","variable":"","category":"Comms","itemType":"UsableItem","bulk":1,"value":75,"traits":"","valMod":3,"skill":"Build","dc":10,"time":1,"components":"1 Goods_Silver","technique":{"name":"Camera Film","fieldName":"camera_film","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Lock, average":{"name":"Lock, average","fieldName":"","group":"Gear","description":"A simple lock can be unlocked with a standard Mechanical check.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":8,"skill":"Build","dc":12,"time":2,"components":"","technique":{"name":"Lock, average","fieldName":"lock,_average","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Lock, good":{"name":"Lock, good","fieldName":"","group":"Gear","description":"A good lock can be unlocked with a difficult Mechanical check.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":12,"skill":"Build","dc":15,"time":3,"components":"","technique":{"name":"Lock, good","fieldName":"lock,_good","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Lock, superior":{"name":"Lock, superior","fieldName":"","group":"Gear","description":"A superior lock can be unlocked with a risky Mechanical check.","variable":"","category":"Bindings","itemType":"UsableItem","bulk":1,"value":null,"traits":"","valMod":16,"skill":"Build","dc":18,"time":4,"components":"","technique":{"name":"Lock, superior","fieldName":"lock,_superior","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"","traits":"","resourceCost":"","limits":"","skill":"","range":"","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"","traits":""}},
+                            "sortingGroups":{"type":{"":["T0"]}}}},
+                    "hasTechnique":false},
+                "Light Orb":{"name":"Light Orb","fieldName":"","group":"Gear","description":"A magitech device that creates light with a little energy.","variable":"","category":"Light","itemType":"UsableItem","bulk":1,"value":375,"traits":"Magitech","valMod":10,"skill":"Build","dc":15,"time":2,"components":"1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite","technique":{"name":"Light Orb","fieldName":"light_orb","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Swift","traits":"Envoke","resourceCost":"1 WILL","limits":"","skill":"","range":"","target":"Blast","size":2,"requirement":"The area created is always focused on this item.","itemTraits":"","trigger":"","flavorText":"","definitions":["Ter_Light"],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Terrain","subType":"Add","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"Ter_Light","traits":""}},
+                            "sortingGroups":{"type":{"Terrain":["T0"]}}}},
+                    "hasTechnique":true},
+                "Steroid Juice":{"name":"Steroid Juice","fieldName":"","group":"Medicine","description":"This stimulant helps to quickly allieviate pain and promote healing.","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":74,"traits":"Ingested","valMod":1,"skill":"","dc":12,"time":3,"components":"1 Goods_Water; 2 Goods_Schizandra; 4 Goods_Brahmi","technique":{"name":"Steroid Juice","fieldName":"steroid_juice","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"","range":"1","target":"Target or Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"Surge","duration":"","dVal":"","dType":"","formula":{"workers":[{"variableName":"cmb-hv","definitionName":"Cmb_HV","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0"]}}}},
+                    "hasTechnique":true},
+                "Steroid Juice HQ":{"name":"Steroid Juice HQ","fieldName":"","group":"Medicine","description":"This powerful stimulant helps to quickly allieviate pain and promote healing.","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":147,"traits":"Ingested","valMod":4,"skill":"","dc":15,"time":3,"components":"1 Goods_Water; 3 Goods_Schizandra; 6 Goods_Brahmi","technique":{"name":"Steroid Juice HQ","fieldName":"steroid_juice_hq","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"2 EN","limits":"","skill":"","range":"1","target":"Target or Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"Surge","duration":"","dVal":"2","dType":"6","formula":{"workers":[{"variableName":"cmb-hv","definitionName":"Cmb_HV","value":0,"multiplier":1,"max":0},
+                                            {"variableName":"","definitionName":"","value":2,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0"]}}}},
+                    "hasTechnique":true},
+                "Compress Balm":{"name":"Compress Balm","fieldName":"","group":"Medicine","description":"A cooling ointment is applied to a compress bandage to quickly heal a wound. ","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":76,"traits":"","valMod":1,"skill":"","dc":12,"time":3,"components":"1 Goods_Bee's wax; 2 Goods_Schizandra; 4 Goods_Shepherd's Purse","technique":{"name":"Compress Balm","fieldName":"compress_balm","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"1 EN","limits":"","skill":"","range":"1","target":"Target or Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"Surge","duration":"","dVal":"1","dType":"6","formula":{"workers":[{"variableName":"cmb-hv","definitionName":"Cmb_HV","value":0,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0"]}}}},
+                    "hasTechnique":true},
+                "Compress Balm HQ":{"name":"Compress Balm HQ","fieldName":"","group":"Medicine","description":"A powerful cooling ointment is applied to a compress bandage to quickly heal a wound. ","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":154,"traits":"","valMod":4,"skill":"","dc":12,"time":3,"components":"2 Goods_Bee's wax; 3 Goods_Schizandra; 6 Goods_Shepherd's Purse","technique":{"name":"Compress Balm HQ","fieldName":"compress_balm_hq","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"3 EN","limits":"","skill":"","range":"1","target":"Target or Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":[],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"HP","subType":"Surge","duration":"","dVal":"3","dType":"6","formula":{"workers":[{"variableName":"cmb-hv","definitionName":"Cmb_HV","value":0,"multiplier":1,"max":0},
+                                            {"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0}]},
+                                    "effect":"Dmg_","traits":""}},
+                            "sortingGroups":{"type":{"HP":["T0"]}}}},
+                    "hasTechnique":true},
+                "Stability":{"name":"Stability","fieldName":"","group":"Medicine","description":"This drug eliminates feels of sickness and nausea instantly. ","variable":"","category":"","itemType":"UsableItem","bulk":1,"value":82,"traits":"Inhalent","valMod":1,"skill":"","dc":12,"time":3,"components":"1 Goods_Water; 2 Goods_Astragalus; 4 Goods_Schizandra","technique":{"name":"Stability","fieldName":"stability","group":"","description":"","variable":"","techSet":"Item","affinity":"","tier":0,"isFree":true,"action":"Quick","traits":"","resourceCost":"","limits":"","skill":"","range":"1","target":"Target or Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","definitions":["Stat_Sickened"],
+                        "effects":{"keys":["T0"],
+                            "values":{"T0":{"name":"T0","defense":"","target":"","type":"Status","subType":"Remove","duration":"","dVal":"","dType":"","formula":{"workers":[]},
+                                    "effect":"Stat_Sickened","traits":""}},
+                            "sortingGroups":{"type":{"Status":["T0"]}}}},
+                    "hasTechnique":true}},
+            sortingGroups = {"group":{"":["Weapons","Tool","Chest Slot","Head Slot","Face Slot","Arms Slot","Legs Slot","Foot Slot","Gear"],"Tool":["Handaxe","Battleaxe","Great Axe","Club","Warhammer","Maul","Javelin","Spear","Lance","Half-Staff","Full-Staff","Dagger","Rapier","Shortsword","Longsword","Great Sword","Whip","Shortbow","Longbow","Pistol","Revolver","Sniper Rifle","HI. Sniper Rifle","Blunderbuss","Shotgun","Flamethrower","Impact Bomb","Blast Bomb","HI. Blast Bomb","Etherlink","Soundnest","Echonode","Torch","Lanturn","Flashlight","Rope","Manacles","Magic Restraints","Medkit","Mirror","Compass","Ladder","Shovel","Spyglass","Umbrella","Camera"],"Chest Gear":["Light Breastplate","Heavy Breastplate"],"Head Gear":["Light Helmet","Heavy Helmet","Etherlink Headset","Echonode Headset"],"Face Gear":["Darkvision Goggles"],"Arm Gear":["Light Vambraces","Heavy Vambraces"],"Leg Gear":["Light Greaves","Heavy Greaves"],"Foot Gear":["Armored Boots"],"Gear":["Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Backpack, common","Pouch, waist","Sack","Barrel","Basket","Box, scroll","Bucket","Case, scroll","Chest, Small","Chest, Medium","Chest, Large","Cooler","Pot","Bottle","Canteen","Cauldron","Coffee pot","Flask","Jug","Pitcher","Vial","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film","Lock, average","Lock, good","Lock, superior","Light Orb"],"Medicine":["Steroid Juice","Steroid Juice HQ","Compress Balm","Compress Balm HQ","Stability"]},"subGroup":{},"action":{},"skill":{"":["Weapons","Tool","Chest Slot","Head Slot","Face Slot","Arms Slot","Legs Slot","Foot Slot","Gear","Steroid Juice","Steroid Juice HQ","Compress Balm","Compress Balm HQ","Stability"],"Build":["Handaxe","Battleaxe","Great Axe","Club","Warhammer","Maul","Javelin","Spear","Lance","Half-Staff","Full-Staff","Dagger","Rapier","Shortsword","Longsword","Great Sword","Whip","Shortbow","Longbow","Pistol","Revolver","Sniper Rifle","HI. Sniper Rifle","Blunderbuss","Shotgun","Flamethrower","Impact Bomb","Blast Bomb","HI. Blast Bomb","Etherlink","Soundnest","Echonode","Torch","Lanturn","Flashlight","Rope","Manacles","Magic Restraints","Medkit","Mirror","Compass","Ladder","Shovel","Spyglass","Umbrella","Camera","Light Breastplate","Heavy Breastplate","Light Helmet","Heavy Helmet","Etherlink Headset","Echonode Headset","Darkvision Goggles","Light Vambraces","Heavy Vambraces","Light Greaves","Heavy Greaves","Armored Boots","Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Backpack, common","Pouch, waist","Sack","Barrel","Basket","Box, scroll","Bucket","Case, scroll","Chest, Small","Chest, Medium","Chest, Large","Cooler","Pot","Bottle","Canteen","Cauldron","Coffee pot","Flask","Jug","Pitcher","Vial","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film","Lock, average","Lock, good","Lock, superior","Light Orb"]},"range":{}},
+
+            get = function (key) {
+                if (values[key] == undefined) {
+                    let itemData = new ItemData();
+                    itemData.name = `${key} Not Found`;
+                    return itemData;
+                }
+                return new UsableItemData(values[key]);
+            },
+            getValues = function (keyArray, delimiter, prefix) {
+                if (keyArray == undefined || keyArray == "") {
+                    return [];
+                }
+                if (typeof keyArray == "string") {
+                    keyArray = keyArray.split(delimiter);
+                }
+                if (prefix == undefined) {
+                    prefix = "";
+                }
+
+                let output = [];
+                let name = "";
+                let lookup = "";
+                let dataInfo;
+
+                for (let i = 0; i < keyArray.length; i++) {
+                    name = `${prefix}${keyArray[i].trim()}`;
+
+                    lookup = name;
+                    if (lookup.indexOf("(") >= 0) {
+                        lookup = lookup.replace(/\([^)]*\)/g, "(X)");
+                    }
+
+                    dataInfo = get(lookup);
+                    if (dataInfo != undefined) {
+                        dataInfo.name = name;
+                        output.push(dataInfo);
+                    }
+                }
+
+                return output;
+            },
+            has = function (key) {
+                return keys.includes(key);
+            },
+            iterate = function (callback) {
+                for (let i = 0; i < keys.length; i++) {
+                    callback(values[keys[i]]);
+                }
+            },
+            filter = function (filterData) {
+                let filteredGroup;
+                if (Array.isArray(filterData)) {
+                    filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
+                    let nextFilter = [];
+                    for (let i = 1; i < filterData.length; i++) {
+                        if (filteredGroup == undefined || filteredGroup.length == 0) {
+                            return [];
+                        }
+                        nextFilter = getSortedGroup(filterData[i].property, filterData[i].value);
+                        filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
+                    }
+                } else {
+                    filteredGroup = getSortedGroup(filterData.property, filterData.value);
+                }
+                if (filteredGroup == undefined || filteredGroup.length == 0) {
+                    return [];
+                }
+                return getGroupData(filteredGroup);
+            },
+            getSortedGroup = function (property, propertyValue) {
+                if (!sortingGroups.hasOwnProperty(property)) {
+                    let keys = "";
+                    for (let key in sortingGroups) {
+                        keys += `${key}, `;
+                    }
+                    Debug.Log (`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
+                }
+                if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
+                    let keys = "";
+                    for (let key in sortingGroups[property]) {
+                        keys += `${key}, `;
+                    }
+                    Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
+                }
+                return sortingGroups[property][propertyValue];
+            },
+            getGroupData = function (group) {
+                let output = [];
+                for (let i = 0; i < group.length; i++) {
+                    output.push(get(group[i]));
+                }
+                return output;
+            },
+            getPropertyValues = function (property) {
+                let output = [];
+                for (let key in sortingGroups[property]) {
+                    output.push(key);
+                }
+                return output;
             }
-            return output;
-        },
-        getPropertyValues = function (property) {
-            let output = [];
-            for (let key in sortingGroups[property]) {
-                output.push(key);
-            }
-            return output;
-        }
-    ;
-    return {
-        Get: get,
-        GetValues: getValues,
-        Has: has,
-        Iterate: iterate,
-        Filter: filter,
-        GetSortedGroup: getSortedGroup
-    };
-}());
+        ;
+        return {
+            Get: get,
+            GetValues: getValues,
+            Has: has,
+            Iterate: iterate,
+            Filter: filter,
+            GetSortedGroup: getSortedGroup
+        };
+    }());
 

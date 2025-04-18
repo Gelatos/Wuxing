@@ -260,11 +260,17 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerOpenItemInspectPopup();
             output += listenerCloseInspectPopup();
             output += listenerUpdateRepeatingItemInspectPopupItems();
+            output += listenerInspectPopupAddButton();
             return output;
         },
         listenerOpenItemInspectPopup = function () {
-            let groupVariableNames = [`${WuxDef.GetVariable("Popup_AddHeadGear")}`];
-            let output = `WuxWorkerInspectPopup.OpenItemInspection(eventinfo)`;
+            let groupVariableNames = [WuxDef.GetVariable("Page_AddHeadGear"), 
+                WuxDef.GetVariable("Page_AddFaceGear"), 
+                WuxDef.GetVariable("Page_AddChestGear"),
+                WuxDef.GetVariable("Page_AddArmGear"), 
+                WuxDef.GetVariable("Page_AddLegGear"), 
+                WuxDef.GetVariable("Page_AddFootGear")];
+            let output = `WuxWorkerInspectPopup.OpenWearableAdditionItemInspection(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -273,6 +279,12 @@ var PopupBuilder = PopupBuilder || (function () {
             let output = `WuxWorkerInspectPopup.ClosePopup(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerInspectPopupAddButton = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Popup_InspectAddClick")}`];
+            let output = `WuxWorkerInspectPopup.AddSelectedInspectElement()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerUpdateRepeatingItemInspectPopupItems = function () {
             let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
