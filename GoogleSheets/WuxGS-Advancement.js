@@ -57,6 +57,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += TrainingBackend.Print(sheetsDb);
             output += AdvancementBackend.Print(sheetsDb);
             output += OverviewBuilder.Print();
+            output += GearBuilder.Print();
             output += PopupBuilder.Print();
             output += ChatBuilder.Print();
             return `<script type="text/worker">

@@ -28495,27 +28495,47 @@
                                     <div class="wuxHeader2">
                                         <div class="wuxGearType">Actions</div>
                                         <div class="wuxGearType">Bulk</div>
-                                        <div class="wuxGearType">Name</div>
+                                        <div class="wuxGearName">Name</div>
                                     </div>
                                     <div class="wuxNoRepControl">
                                         <fieldset class="repeating_wearables">
-                                            <div class="wuxRow">
+                                            <div class="wuxMultiRow">
                                                 <div class="wuxGearType">
                                                     <div class="wuxSubMenuButton">
                                                         <input type="checkbox" name="attr_gear-wearableactions">
                                                         <span class="wuxSubMenuText">l</span>
                                                         <input type="hidden" class="wuxSubMenu-flag" name="attr_gear-wearableactions" value="0">
                                                         <div class="wuxSubMenuContent">
+                                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_gear-wearableisequipped" value="0">
+                                                            <div class="wuxHiddenField">
+                                                                <div class="wuxButton wuxSubMenuOptionButton">
+                                                                    <input type="checkbox" name="attr_gear-wearableisequipped">
+                                                                    <span>Unequip</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_gear-wearableisequipped" value="0">
+                                                            <div class="wuxHiddenAuxField">
+                                                                <div class="wuxButton wuxSubMenuOptionButton">
+                                                                    <input type="checkbox" name="attr_gear-wearableisequipped">
+                                                                    <span name="attr_gear-wearableequipmenu"></span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="wuxButton wuxSubMenuOptionButton">
+                                                                <input type="checkbox" name="attr_gear-delete">
+                                                                <span>Delete Entry</span>
+                                                            </div>
+                                                            <div class="wuxButton wuxSubMenuOptionButton">
+                                                                <input type="checkbox" name="attr_gear-inspect">
+                                                                <span>Inspect</span>
+                                                            </div>
 
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="wuxGearType">
-                                                    <span class="wuxDescription" name="attr_gear-wearablebulk">0</span>
-                                                </div>
-                                                <div class="wuxGearName">
-                                                    <span class="wuxDescription" name="attr_gear-wearablename"></span>
-                                                </div>
+                                                <div class="wuxGearType"><span class="wuxDescription" name="attr_gear-wearablebulk">0</span></div>
+                                                <div class="wuxGearName"><span class="wuxDescription" name="attr_gear-wearablename"></span></div>
                                             </div>
                                         </fieldset>
                                     </div>
@@ -29577,6 +29597,18 @@
     });
     on("change:pag-addheadgear change:pag-addfacegear change:pag-addchestgear change:pag-addarmgear change:pag-addleggear change:pag-addfootgear", function (eventinfo) {
     WuxWorkerInspectPopup.OpenWearableAdditionItemInspection(eventinfo)
+    });
+    on("change:repeating_wearables:gear-wearableactions", function (eventinfo) {
+    WuxWorkerGear.CloseSubMenus(eventinfo)
+    });
+    on("change:repeating_wearables:gear-wearableisequipped", function (eventinfo) {
+    WuxWorkerGear.EquipWearable(eventinfo)
+    });
+    on("change:repeating_wearables:gear-delete", function (eventinfo) {
+    WuxWorkerGear.DeleteWearable(eventinfo)
+    });
+    on("change:repeating_wearables:gear-inspect", function (eventinfo) {
+    WuxWorkerGear.InspectWearable(eventinfo)
     });
     on("change:popup-inspectpopupactive", function (eventinfo) {
     WuxWorkerInspectPopup.ClosePopup(eventinfo)

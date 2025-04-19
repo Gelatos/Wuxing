@@ -945,14 +945,25 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         },
                         
                         addRepeaterContentsWearables = function (actionDef, bulkDef, nameDef) {
-                            let equipDef = WuxDef.Get("Gear_WearableIsEquipped");
-                            let subMenuContents = "";
-                            
                             return WuxSheetMain.MultiRow(`
-                                <div class="wuxGearType">${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), subMenuContents)}</div>
+                                <div class="wuxGearType">${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsWearables())}</div>
                                 <div class="wuxGearType"><span class="wuxDescription" name="${bulkDef.getAttribute()}">0</span></div>
                                 <div class="wuxGearName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
                             );
+                        },
+                        
+                        addSubmenuContentsWearables = function() {
+                            let equippedDef = WuxDef.Get("Gear_WearableIsEquipped");
+                            let deleteDef = WuxDef.Get("Gear_Delete");
+                            let inspectDef = WuxDef.Get("Gear_Inspect");
+                            
+                            return `${WuxSheetMain.HiddenField(equippedDef.getAttribute(),
+                                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Gear_Unequip")}</span>`)}`)}
+                                ${WuxSheetMain.HiddenAuxField(equippedDef.getAttribute(),
+                                    `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), WuxSheetMain.Span(WuxDef.GetAttribute("Gear_WearableEquipMenu")))}`)}
+                                ${WuxSheetMain.SubMenuOptionButton(deleteDef.getAttribute(), `<span>${deleteDef.getTitle()}</span>`)}
+                                ${WuxSheetMain.SubMenuOptionButton(inspectDef.getAttribute(), `<span>${inspectDef.getTitle()}</span>`)}
+                            `;
                         },
                         
                         addRepeaterHeaderWearables = function (actionsDef, bulkDef, nameDef) {
@@ -1662,7 +1673,8 @@ var DisplayPopups = DisplayPopups || (function () {
                 
                 buildAddButton = function () {
                     return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"), 
-                        WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"), `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`));
+                        WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"), 
+                            `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`));
                 },
 
                 buildItemRepeater = function () {

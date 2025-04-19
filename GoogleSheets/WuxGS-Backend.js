@@ -251,28 +251,73 @@ var OverviewBuilder = OverviewBuilder || (function () {
     }
 }());
 
-var PopupBuilder = PopupBuilder || (function () {
+var GearBuilder = GearBuilder || (function () {
     'use strict';
 
     var
         print = function () {
             let output = "";
             output += listenerOpenItemInspectPopup();
-            output += listenerCloseInspectPopup();
-            output += listenerUpdateRepeatingItemInspectPopupItems();
-            output += listenerInspectPopupAddButton();
+            output += listenerOpenSubMenuRepeatingWearable();
+            output += listenerEquipRepeatingWearable();
+            output += listenerDeleteRepeatingWearable();
+            output += listenerInspectRepeatingWearable();
             return output;
         },
         listenerOpenItemInspectPopup = function () {
-            let groupVariableNames = [WuxDef.GetVariable("Page_AddHeadGear"), 
-                WuxDef.GetVariable("Page_AddFaceGear"), 
+            let groupVariableNames = [WuxDef.GetVariable("Page_AddHeadGear"),
+                WuxDef.GetVariable("Page_AddFaceGear"),
                 WuxDef.GetVariable("Page_AddChestGear"),
-                WuxDef.GetVariable("Page_AddArmGear"), 
-                WuxDef.GetVariable("Page_AddLegGear"), 
+                WuxDef.GetVariable("Page_AddArmGear"),
+                WuxDef.GetVariable("Page_AddLegGear"),
                 WuxDef.GetVariable("Page_AddFootGear")];
             let output = `WuxWorkerInspectPopup.OpenWearableAdditionItemInspection(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerOpenSubMenuRepeatingWearable = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingWearables");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_WearablesActions")}`];
+            let output = `WuxWorkerGear.CloseSubMenus(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerEquipRepeatingWearable = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingWearables");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_WearableIsEquipped")}`];
+            let output = `WuxWorkerGear.EquipWearable(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerDeleteRepeatingWearable = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingWearables");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_Delete")}`];
+            let output = `WuxWorkerGear.DeleteWearable(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerInspectRepeatingWearable = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingWearables");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_Inspect")}`];
+            let output = `WuxWorkerGear.InspectWearable(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        }
+    return {
+        Print: print
+    }
+}());
+
+var PopupBuilder = PopupBuilder || (function () {
+    'use strict';
+
+    var
+        print = function () {
+            let output = "";
+            output += listenerCloseInspectPopup();
+            output += listenerUpdateRepeatingItemInspectPopupItems();
+            output += listenerInspectPopupAddButton();
+            return output;
         },
         listenerCloseInspectPopup = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Popup_InspectPopupActive")}`];
@@ -289,6 +334,27 @@ var PopupBuilder = PopupBuilder || (function () {
         listenerUpdateRepeatingItemInspectPopupItems = function () {
             let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
             let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Popup_ItemSelectIsOn")}`];
+            let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerEquipRepeatingWearable = function () {
+            let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_WearableIsEquipped")}`];
+            let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerDeleteRepeatingWearable = function () {
+            let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_Delete")}`];
+            let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerInspectRepeatingWearable = function () {
+            let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_Inspect")}`];
             let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);

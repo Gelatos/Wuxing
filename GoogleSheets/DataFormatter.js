@@ -1258,6 +1258,13 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 <div class="wuxSubMenuContent">\n${contents}\n</div>
             </div>`;
         },
+        
+        subMenuOptionButton = function (fieldName, contents) {
+            return `<div class="wuxButton wuxSubMenuOptionButton">
+                <input type="checkbox" name="${fieldName}">
+                ${contents}
+            </div>`;
+        },
 
         info = info || (function () {
             'use strict';
@@ -1598,6 +1605,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         HiddenField: hiddenField,
         HiddenAuxField: hiddenAuxField,
         SubMenuButton: subMenuButton,
+        SubMenuOptionButton: subMenuOptionButton,
         Info: info,
         Tooltip: tooltip,
         Table: table,
