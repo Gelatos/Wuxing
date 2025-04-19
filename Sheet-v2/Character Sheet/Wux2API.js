@@ -7341,7 +7341,7 @@ class ItemDisplayData {
         this.sheetname = item.sheetname;
         this.group = `${item.group}${item.category != "" ? ` (${item.category})` : ""}`;
         this.stats = `Base Value: ${item.value}; Bulk: ${item.bulk}`;
-        this.traits = WuxDef.GetValues(item.traits, ";");
+        this.traits = WuxDef.GetValues(item.traits, ";", "Trait_");
         this.description = item.description;
         
         if (item.itemType == "UsableItem") {
