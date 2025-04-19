@@ -8238,8 +8238,8 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
 .wuxSubMenuButton .wuxSubMenuContent
 {
     position: absolute;
-    width: 160px;
-    padding: 5px;
+    width: 180px;
+    padding: 10px;
     top: 24px;
     left: 0px;
     z-index: 90000;
@@ -8283,8 +8283,6 @@ input[type=hidden].wuxSubMenu-flag:not([value="0"]) + .wuxSubMenuContent
 {
     position: relative;
     display: block;
-    width: 138px;
-    padding: 0px 10px;
 
     background: #DDDDDD;
     text-shadow: none;

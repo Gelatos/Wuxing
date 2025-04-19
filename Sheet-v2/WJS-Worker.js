@@ -1320,7 +1320,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemStats"), displayData.stats);
             
             if (displayData.traits.length > 0) {
-                addDefinitions(attrHandler, displayData.traits, "Popup_ItemTrait", 3);
+                addDefinitions(attrHandler, displayData.traits, WuxDef.GetVariable("Popup_ItemTrait"), 3);
             }
             if (displayData.description != "") {
                 attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemDescription"), displayData.description);
@@ -1382,7 +1382,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechResourceData"), displayData.resourceData);
             attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTargetingData"), displayData.targetData);
             if (displayData.traits.length > 0) {
-                addDefinitions(attrHandler, displayData.traits, "Popup_TechTrait", 3);
+                addDefinitions(attrHandler, displayData.traits, WuxDef.GetVariable("Popup_TechTrait"), 3);
             }
 
             if (displayData.trigger != "") {
@@ -1392,7 +1392,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechRequirements"), displayData.requirements);
             }
             if (displayData.itemTraits.length > 0) {
-                addDefinitions(attrHandler, displayData.itemTraits, "Popup_TechItemReq", 2);
+                addDefinitions(attrHandler, displayData.itemTraits, WuxDef.GetVariable("Popup_TechItemReq"), 2);
             }
             if (displayData.flavorText != "") {
                 attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechFlavorText"), displayData.flavorText);
@@ -1401,21 +1401,21 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 addTechniqueEffects(attrHandler, displayData.effects);
             }
             if (displayData.definitions.length > 0) {
-                addDefinitions(attrHandler, displayData.definitions, "Popup_TechDef", 3);
+                addDefinitions(attrHandler, displayData.definitions, WuxDef.GetVariable("Popup_TechDef"), 3);
             }
         },
         
         addDefinitions = function (attrHandler, definitionData, prefix, descriptionMaxIndex) {
             for (let i = 0; i < definitionData.length; i++) {
-                attrHandler.addUpdate(WuxDef.GetVariable(`${prefix}${i}`), definitionData[i].getTitle());
+                attrHandler.addUpdate(`${prefix}${i}`, definitionData[i].getTitle());
                 
                 let description;
                 for(let j = 0; j < definitionData[i].descriptions.length; j++) {
                     if (j <= descriptionMaxIndex) {
-                        attrHandler.addUpdate(WuxDef.GetVariable(`${prefix}${i}Desc${j}`), definitionData[i].descriptions[j]);
+                        attrHandler.addUpdate(`${prefix}${i}desc${j}`, definitionData[i].descriptions[j]);
                     }
                     else {
-                        attrHandler.addUpdate(WuxDef.GetVariable(`${prefix}${i}Desc${descriptionMaxIndex}`), definitionData[i].descriptions[j]);
+                        attrHandler.addUpdate(`${prefix}${i}desc${descriptionMaxIndex}`, definitionData[i].descriptions[j]);
                     }
                 }
             }
@@ -1538,8 +1538,17 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         performAddSelectedInspectElementWearable = function (attrHandler, item) {
             let repeater = new WorkerRepeatingSectionHandler("RepeatingWearables");
             let newrowid = repeater.generateRowId();
-            attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableName")), item.name);
-            attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearablesBulk")), item.bulk);
+            let displayData = new ItemDisplayData(item);
+            attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableName")), displayData.name);
+            attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableGroup")), displayData.group);
+            attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableStats")), displayData.stats);
+
+            if (displayData.traits.length > 0) {
+                addDefinitions(attrHandler, displayData.traits, repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableTrait")), 3);
+            }
+            if (displayData.description != "") {
+                attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableDescription")), displayData.description);
+            }
         }
 
     return {
