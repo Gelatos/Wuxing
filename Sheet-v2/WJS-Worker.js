@@ -798,18 +798,18 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 let item = WuxItems.Get(itemName);
                 Debug.Log(`Item is named ${itemName} which is in group ${item.group}`);
                 if (item.group != "") {
-                    let newrowid = itemPopupRepeater.generateRowId();
-                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectName")), item.name);
-                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectType")), "Item");
+                    let newRowId = itemPopupRepeater.generateRowId();
+                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), item.name);
+                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "Item");
 
                     if (id == selectedId) {
                         selectedItem = {
                             item: item,
-                            id: newrowid
+                            id: newRowId
                         }
-                        attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
+                        attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
                     } else {
-                        attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
+                        attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
                     }
                 }
             });
@@ -913,13 +913,13 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             let emotesVar = WuxDef.GetVariable("Chat_Emotes");
             attrHandler.addUpdate(emotesVar, JSON.stringify(outfitEmotes));
 
-            let newrowid;
+            let newRowId;
             let postNameVar = WuxDef.GetVariable("Chat_PostName");
             let postUrlVar = WuxDef.GetVariable("Chat_PostURL");
             outfitEmotes.iterate(function (emote) {
-                newrowid = generateRowID();
-                attrHandler.addUpdate(emoteButtonRepeater.getFieldName(newrowid, postNameVar), emote.name);
-                attrHandler.addUpdate(emoteButtonRepeater.getFieldName(newrowid, postUrlVar), emote.url);
+                newRowId = generateRowID();
+                attrHandler.addUpdate(emoteButtonRepeater.getFieldName(newRowId, postNameVar), emote.name);
+                attrHandler.addUpdate(emoteButtonRepeater.getFieldName(newRowId, postUrlVar), emote.url);
             });
         },
         updateNameOutfit = function (eventinfo) {
@@ -1140,19 +1140,19 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             }
             
             itemFilter.forEach(function (item) {
-                let newrowid = itemPopupRepeater.generateRowId();
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectName")), item.name);
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectType")), itemGroup.type);
+                let newRowId = itemPopupRepeater.generateRowId();
+                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), item.name);
+                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), itemGroup.type);
                 
                 if (firstItem == null) {
                     firstItem = {
                         item: item,
-                        id: newrowid
+                        id: newRowId
                     }
-                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
+                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
                 }
                 else {
-                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newrowid, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
+                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
                 }
             });
             
@@ -1537,18 +1537,40 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         
         performAddSelectedInspectElementWearable = function (attrHandler, item) {
             let repeater = new WorkerRepeatingSectionHandler("RepeatingWearables");
-            let newrowid = repeater.generateRowId();
+            let newRowId = repeater.generateRowId();
             let displayData = new ItemDisplayData(item);
-            attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableName")), displayData.name);
-            attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableGroup")), displayData.group);
-            attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableStats")), displayData.stats);
+
+            let equipMenuText = getEquipMenuText(item);
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_WearableEquipMenu")), equipMenuText);
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_WearableName")), displayData.name);
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_WearableGroup")), displayData.group);
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_WearableStats")), displayData.stats);
 
             if (displayData.traits.length > 0) {
-                addDefinitions(attrHandler, displayData.traits, repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableTrait")), 3);
+                addDefinitions(attrHandler, displayData.traits, repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_WearableTrait")), 3);
             }
             if (displayData.description != "") {
-                attrHandler.addUpdate(repeater.getFieldName(newrowid, WuxDef.GetVariable("Gear_WearableDescription")), displayData.description);
+                attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_WearableDescription")), displayData.description);
             }
+        },
+        
+        getEquipMenuText = function (item) {
+            switch(item.group) {
+                case "Head Gear":
+                    return WuxDef.GetTitle("Gear_EquipHead");
+                case "Face Gear":
+                    return WuxDef.GetTitle("Gear_EquipFace");
+                case "Chest Gear":
+                    return WuxDef.GetTitle("Gear_EquipChest");
+                case "Arm Gear":
+                    return WuxDef.GetTitle("Gear_EquipArm");
+                case "Leg Gear":
+                    return WuxDef.GetTitle("Gear_EquipLeg");
+                case "Foot Gear":
+                    return WuxDef.GetTitle("Gear_EquipFoot");
+            }
+            
+            return WuxDef.GetTitle("Gear_Equip");
         }
 
     return {

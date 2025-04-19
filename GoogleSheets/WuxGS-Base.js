@@ -1073,14 +1073,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             `;
                         },
                         
-                        addRepeaterHeaderWearables = function (actionsDef, bulkDef, nameDef) {
-                            return `<div class="wuxHeader2">
-                                <div class="wuxGearType">${actionsDef.getTitle()}</div>
-                                <div class="wuxGearType">${bulkDef.getTitle()}</div>
-                                <div class="wuxGearName">${nameDef.getTitle()}</div>
-                            </div>`;
-                        },
-                        
                         addPopupWearables = function () {
                             let headPopupDef = WuxDef.Get("Page_AddHeadGear");
                             let facePopupDef = WuxDef.Get("Page_AddFaceGear");
@@ -1117,33 +1109,36 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         },
 
                         equippedTools = function () {
-                            let contents = "";
-
                             let equippedGearDef = WuxDef.Get("Page_GearTools");
-                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
-
-                            let definition = WuxDef.Get("ToolSlot");
+                            let weaponSlotDefinition = WuxDef.Get("ToolSlot_Weapon");
+                            let weaponDamageAttribute = WuxDef.GetAttribute("WeaponDamage");
+                            let toolSlotDefinition = WuxDef.Get("ToolSlot");
                             let emptyName = WuxDef.GetTitle("Page_GearEmpty");
-                            for (let i = 1; i <= 6; i++) {
-                                contents += WuxSheetMain.Header2(`${definition.title} ${i}`) + "\n" +
-                                    WuxSheetMain.Desc(WuxSheetMain.Span(definition.getAttribute(i)));
-                                contents += WuxSheetMain.Input("hidden", definition.getAttribute(i), emptyName);
+                            
+                            let contents = `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
+                            contents += WuxSheetMain.Header2(`${weaponSlotDefinition.getTitle()}`) + "\n" +
+                                WuxSheetMain.Desc(`${WuxSheetMain.Span(weaponSlotDefinition.getAttribute())} (${WuxSheetMain.Span(weaponDamageAttribute)})`);
+                            contents += WuxSheetMain.Input("hidden", weaponSlotDefinition.getAttribute(), emptyName);
+                            contents += WuxSheetMain.Input("hidden", weaponDamageAttribute, emptyName);
+
+                            for (let i = 1; i <= 5; i++) {
+                                contents += WuxSheetMain.Header2(`${toolSlotDefinition.title} ${i}`) + "\n" +
+                                    WuxSheetMain.Desc(WuxSheetMain.Span(toolSlotDefinition.getAttribute(i)));
+                                contents += WuxSheetMain.Input("hidden", toolSlotDefinition.getAttribute(i), emptyName);
                             }
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
 
                         equippedConsumables = function () {
-                            let contents = "";
-
                             let equippedGearDef = WuxDef.Get("Page_GearConsumables");
-                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
-
-                            let definition = WuxDef.Get("ConsumableSlot");
                             let emptyName = WuxDef.GetTitle("Page_GearEmpty");
+                            let consumablesSlotDefinition = WuxDef.Get("ConsumableSlot");
+                            
+                            let contents = `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
                             for (let i = 1; i <= 6; i++) {
-                                contents += WuxSheetMain.Header2(`${definition.title} ${i}`) + "\n" +
-                                    WuxSheetMain.Desc(WuxSheetMain.Span(definition.getAttribute(i)));
-                                contents += WuxSheetMain.Input("hidden", definition.getAttribute(i), emptyName);
+                                contents += WuxSheetMain.Header2(`${consumablesSlotDefinition.title} ${i}`) + "\n" +
+                                    WuxSheetMain.Desc(WuxSheetMain.Span(consumablesSlotDefinition.getAttribute(i)));
+                                contents += WuxSheetMain.Input("hidden", consumablesSlotDefinition.getAttribute(i), emptyName);
                             }
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
