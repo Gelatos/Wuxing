@@ -7840,7 +7840,7 @@ input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxRepeatingCheckboxAuxI
 
 .wuxButton:hover
 {
-    background: linear-gradient(to bottom, #f4f6f8 0%, #cacbcf 50%, #535353 100%);
+    background: linear-gradient(to bottom, #f4f6f8 0%, #cacbcf 70%, #535353 100%);
     box-shadow: #1d1e1f 0px 0px 5px;
 }
 

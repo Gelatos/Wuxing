@@ -747,7 +747,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.addUpdate()
             let wearablesRepeater = new WorkerRepeatingSectionHandler("RepeatingWearables");
             let selectedId = wearablesRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
-            attributeHandler.addUpdate("popup-submenuactive", "on");
+            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "on");
 
             wearablesRepeater.getIds(function (wearRepeater) {
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -764,8 +764,11 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         deleteWearable = function (eventinfo) {
             let wearablesRepeater = new WorkerRepeatingSectionHandler("RepeatingWearables");
             let selectedId = wearablesRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
-            Debug.Log("Deleting Wearable " + selectedId);
             wearablesRepeater.removeId(selectedId);
+            
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+            attributeHandler.run();
         },
 
         inspectWearable = function (eventinfo) {
@@ -779,6 +782,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                         });
                     },
                 function (attrHandler, itemPopupRepeater) {
+                        attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
                         attrHandler.addUpdate(wearRepeater.getFieldName(selectedId, WuxDef.GetVariable("Gear_WearablesActions")), "0");
                         return populateItemInspectionItems(attrHandler, itemPopupRepeater, wearRepeater, selectedId);
                     }
