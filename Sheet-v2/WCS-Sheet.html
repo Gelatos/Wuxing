@@ -28667,6 +28667,7 @@
 </div><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-popupactive" value="0">
 <div class="wuxHiddenField">
     <div class="wuxPopupOverlay">
+        <input type="checkbox" class="wuxInput wuxPopupOverlayClose" name="attr_popup-popupactive" value="0" />
         <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectpopupactive" value="0">
         <div class="wuxHiddenField">
             <div class="wuxPopup">
@@ -28679,7 +28680,14 @@
                 </div>
                 <div class="wuxInspectionPopupContents"><input type="hidden" class="wuxInput" name="attr_popup-inspectselecttype" value="" />
                     <input type="hidden" class="wuxInput" name="attr_popup-inspectselectid" value="" />
-                    <div class="wuxInspectionPopupContentData">
+                    <div class="wuxInspectionPopupContentData"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectshowadd" value="0">
+                        <div class="wuxHiddenField">
+                            <div class="wuxButton">
+                                <input type="checkbox" name="attr_popup-inspectaddclick">
+                                <span><span name="attr_popup-inspectaddtype">Add</span></span>
+                            </div>
+                        </div>
+
                         <input type="hidden" class="wuxHiddenField-flag" name="attr_popup-itemname">
                         <div class="wuxHiddenField">
                             <div class="wuxHeader">Item Data</div>
@@ -29227,12 +29235,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectshowadd" value="0">
-                        <div class="wuxHiddenField">
-                            <div class="wuxButton">
-                                <input type="checkbox" name="attr_popup-inspectaddclick">
-                                <span><span name="attr_popup-inspectaddtype">Add</span></span>
-                            </div>
                         </div>
                     </div>
                     <div class="wuxInspectionPopupContentData">
@@ -29620,6 +29622,9 @@
     });
     on("change:popup-submenuactive", function (eventinfo) {
     WuxWorkerGeneral.CloseSubMenu()
+    });
+    on("change:popup-popupactive", function (eventinfo) {
+    WuxWorkerGeneral.ClosePopup()
     });
     on("change:popup-inspectpopupactive", function (eventinfo) {
     WuxWorkerInspectPopup.ClosePopup(eventinfo)

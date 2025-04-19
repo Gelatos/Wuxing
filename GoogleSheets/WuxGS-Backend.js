@@ -308,6 +308,7 @@ var PopupBuilder = PopupBuilder || (function () {
             let output = "";
             output += listenerOpenSubMenu();
             output += listenerCloseSubMenu();
+            output += listenerClosePopup();
             output += listenerCloseInspectPopup();
             output += listenerUpdateRepeatingItemInspectPopupItems();
             output += listenerInspectPopupAddButton();
@@ -323,6 +324,12 @@ var PopupBuilder = PopupBuilder || (function () {
         listenerCloseSubMenu = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Popup_SubMenuActive")}`];
             let output = `WuxWorkerGeneral.CloseSubMenu()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        listenerClosePopup = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Popup_PopupActive")}`];
+            let output = `WuxWorkerGeneral.ClosePopup()`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },

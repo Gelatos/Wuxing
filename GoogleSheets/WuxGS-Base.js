@@ -1075,11 +1075,13 @@ var DisplayPopups = DisplayPopups || (function () {
         },
 
         printBasePopupSheet = function (contents) {
-            contents = ` <div class="wuxPopupOverlay">
+            let popupActiveAttr = WuxDef.GetAttribute("Popup_PopupActive");
+            contents = `<div class="wuxPopupOverlay">
+                <input type="checkbox" class="wuxInput wuxPopupOverlayClose" name="${popupActiveAttr}" value="0" />
                 ${contents}
             </div>`;
             
-            return `${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_PopupActive"), contents)}
+            return `${WuxSheetMain.HiddenField(popupActiveAttr, contents)}
             ${printSubMenuOverlay()}`;
         },
         
@@ -1116,7 +1118,7 @@ var DisplayPopups = DisplayPopups || (function () {
                     let contents = "";
                     contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Popup_InspectSelectType"), "") + "\n";
                     contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Popup_InspectSelectId"), "") + "\n";
-                    contents += buildInspectionPopupContentData(buildItemTemplate() + buildTechniqueTemplate() + buildAddButton());
+                    contents += buildInspectionPopupContentData(buildAddButton()+ buildItemTemplate() + buildTechniqueTemplate());
                     contents += buildInspectionPopupContentData(buildItemRepeater());
                     return `<div class="wuxInspectionPopupContents">${contents}</div>`;
                 },

@@ -84,6 +84,20 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
             });
             attributeHandler.run();
+        },
+        closePopup = function () {
+            let nameFieldName = WuxDef.GetVariable("Popup_InspectPopupName");
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(nameFieldName);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                switch (attrHandler.parseString(nameFieldName)) {
+                    case WuxDef.GetTitle("Popup_ItemInspectionName"):
+                    case WuxDef.GetTitle("Popup_TechniqueInspectionName"):
+                        WuxWorkerInspectPopup.ClosePopup();
+                        break;
+                }
+            });
+            attributeHandler.run();
         }
         
     return {
@@ -93,7 +107,8 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         UpdateStatus: updateStatus,
         UpdateCR: updateCR,
         OpenSubMenu: openSubMenu,
-        CloseSubMenu: closeSubMenu
+        CloseSubMenu: closeSubMenu,
+        ClosePopup: closePopup
     };
 }());
 
@@ -1088,7 +1103,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let itemPopupValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
             itemPopupValuesRepeatingSection.getIds(function (itemPopupRepeater) {
                 showPopup(updateCallback, function (attrHandler) {
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupName"), "Item Inspection");
+                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupName"), WuxDef.GetTitle("Popup_ItemInspectionName"));
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
                     itemPopupRepeater.removeAllIds();
 
