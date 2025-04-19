@@ -258,7 +258,6 @@ var GearBuilder = GearBuilder || (function () {
         print = function () {
             let output = "";
             output += listenerOpenItemInspectPopup();
-            output += listenerOpenSubMenuRepeatingWearable();
             output += listenerEquipRepeatingWearable();
             output += listenerDeleteRepeatingWearable();
             output += listenerInspectRepeatingWearable();
@@ -272,13 +271,6 @@ var GearBuilder = GearBuilder || (function () {
                 WuxDef.GetVariable("Page_AddLegGear"),
                 WuxDef.GetVariable("Page_AddFootGear")];
             let output = `WuxWorkerInspectPopup.OpenWearableAdditionItemInspection(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
-        },
-        listenerOpenSubMenuRepeatingWearable = function () {
-            let repeatingSection = WuxDef.GetVariable("RepeatingWearables");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_WearablesActions")}`];
-            let output = `WuxWorkerGear.CloseSubMenus(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -314,10 +306,25 @@ var PopupBuilder = PopupBuilder || (function () {
     var
         print = function () {
             let output = "";
+            output += listenerOpenSubMenu();
+            output += listenerCloseSubMenu();
             output += listenerCloseInspectPopup();
             output += listenerUpdateRepeatingItemInspectPopupItems();
             output += listenerInspectPopupAddButton();
             return output;
+        },
+        listenerOpenSubMenu = function () {
+            let repeatingWearables = WuxDef.GetVariable("RepeatingWearables");
+            let groupVariableNames = [`${repeatingWearables}:${WuxDef.GetVariable("Gear_WearablesActions")}`];
+            let output = `WuxWorkerGeneral.OpenSubMenu(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerCloseSubMenu = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Popup_SubMenuActive")}`];
+            let output = `WuxWorkerGeneral.CloseSubMenu()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerCloseInspectPopup = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Popup_InspectPopupActive")}`];
@@ -334,27 +341,6 @@ var PopupBuilder = PopupBuilder || (function () {
         listenerUpdateRepeatingItemInspectPopupItems = function () {
             let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
             let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Popup_ItemSelectIsOn")}`];
-            let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
-        },
-        listenerEquipRepeatingWearable = function () {
-            let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_WearableIsEquipped")}`];
-            let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
-        },
-        listenerDeleteRepeatingWearable = function () {
-            let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_Delete")}`];
-            let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
-        },
-        listenerInspectRepeatingWearable = function () {
-            let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_Inspect")}`];
             let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);

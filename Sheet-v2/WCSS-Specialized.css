@@ -1391,6 +1391,29 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
    Sub Menu
 ========================================*/
 
+.wuxSubMenuOverlay {
+    display: block;
+    position: fixed;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 89999;
+}
+
+.wuxSubMenuOverlay input[type=checkbox]
+{
+    position: fixed;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    z-index: 89999;
+    opacity: 0;
+}
+
 .wuxSubMenuButton
 {
     display: inline-block;
@@ -1467,7 +1490,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     padding: 5px;
     top: 24px;
     left: 0px;
-    z-index: 9999;
+    z-index: 90000;
 
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;

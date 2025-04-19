@@ -1078,7 +1078,17 @@ var DisplayPopups = DisplayPopups || (function () {
             contents = ` <div class="wuxPopupOverlay">
                 ${contents}
             </div>`;
-            return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_PopupActive"), contents);
+            
+            return `${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_PopupActive"), contents)}
+            ${printSubMenuOverlay()}`;
+        },
+        
+        printSubMenuOverlay = function() {
+            let submenuActiveAttr = WuxDef.GetAttribute("Popup_SubMenuActive");
+            return WuxSheetMain.HiddenField(submenuActiveAttr, `<div class="wuxSubMenuOverlay">
+            ${WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Popup_SubMenuActiveId"), "")}
+            ${WuxSheetMain.Input("checkbox", submenuActiveAttr, "0")}
+            </div>`);
         },
 
         printInspectionPopup = function () {

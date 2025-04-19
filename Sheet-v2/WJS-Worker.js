@@ -67,6 +67,23 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 combatDetailsHandler.onUpdateCR(attrHandler, cr);
             });
             attributeHandler.run();
+        },
+        openSubMenu = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "on");
+            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActiveId"), eventinfo.sourceAttribute);
+            attributeHandler.run();
+        },
+        closeSubMenu = function () {
+            let idFieldName = WuxDef.GetVariable("Popup_SubMenuActiveId");
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(idFieldName);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attrHandler.addUpdate(attrHandler.parseString(idFieldName), "0");
+                attrHandler.addUpdate(idFieldName, "");
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+            });
+            attributeHandler.run();
         }
         
     return {
@@ -74,7 +91,9 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         UpdateStats: updateStats,
         UpdateDisplayName: updateDisplayName,
         UpdateStatus: updateStatus,
-        UpdateCR: updateCR
+        UpdateCR: updateCR,
+        OpenSubMenu: openSubMenu,
+        CloseSubMenu: closeSubMenu
     };
 }());
 
@@ -707,11 +726,13 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let selectedId = wearablesRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
 
         },
-        
-        closeSubMenus = function (eventinfo) {
+
+        openSubMenu = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addUpdate()
             let wearablesRepeater = new WorkerRepeatingSectionHandler("RepeatingWearables");
             let selectedId = wearablesRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            attributeHandler.addUpdate("popup-submenuactive", "on");
 
             wearablesRepeater.getIds(function (wearRepeater) {
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -779,7 +800,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
     return {
         EquipWearable: equipWearable,
-        CloseSubMenus: closeSubMenus,
+        OpenSubMenu: openSubMenu,
         DeleteWearable: deleteWearable,
         InspectWearable: inspectWearable
     };

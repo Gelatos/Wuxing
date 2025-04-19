@@ -29256,6 +29256,14 @@
     </div>
 </div>
 
+<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-submenuactive" value="0">
+<div class="wuxHiddenField">
+    <div class="wuxSubMenuOverlay">
+        <input type="hidden" class="wuxInput" name="attr_popup-submenuactiveid" value="" />
+        <input type="checkbox" class="wuxInput" name="attr_popup-submenuactive" value="0" />
+    </div>
+</div>
+
 </div>
 <div class="wuxHiddenFields">
     <input type="hidden" class="wuxInput" name="attr_tch_page_learn" /><input type="hidden" class="wuxInput" name="attr_cmbdtls" /><input type="hidden" class="wuxInput" name="attr_sts" /><input type="hidden" class="wuxInput" name="attr_soc-favor" /><input type="hidden" class="wuxInput" name="attr_soc-influence" /><input type="hidden" class="wuxInput" name="attr_soc-influencetype" /><input type="hidden" class="wuxInput" name="attr_soc-severity" /><input type="hidden" class="wuxInput" name="attr_soc-requestcheck" /><input type="hidden" class="wuxInput" name="attr_soc-support_influence" /><input type="hidden" class="wuxInput" name="attr_soc-oppose_influence" /><input type="hidden" class="wuxInput" name="attr_soc-patience" />
@@ -29598,9 +29606,6 @@
     on("change:pag-addheadgear change:pag-addfacegear change:pag-addchestgear change:pag-addarmgear change:pag-addleggear change:pag-addfootgear", function (eventinfo) {
     WuxWorkerInspectPopup.OpenWearableAdditionItemInspection(eventinfo)
     });
-    on("change:repeating_wearables:gear-wearableactions", function (eventinfo) {
-    WuxWorkerGear.CloseSubMenus(eventinfo)
-    });
     on("change:repeating_wearables:gear-wearableisequipped", function (eventinfo) {
     WuxWorkerGear.EquipWearable(eventinfo)
     });
@@ -29609,6 +29614,12 @@
     });
     on("change:repeating_wearables:gear-inspect", function (eventinfo) {
     WuxWorkerGear.InspectWearable(eventinfo)
+    });
+    on("change:repeating_wearables:gear-wearableactions", function (eventinfo) {
+    WuxWorkerGeneral.OpenSubMenu(eventinfo)
+    });
+    on("change:popup-submenuactive", function (eventinfo) {
+    WuxWorkerGeneral.CloseSubMenu()
     });
     on("change:popup-inspectpopupactive", function (eventinfo) {
     WuxWorkerInspectPopup.ClosePopup(eventinfo)
