@@ -148,6 +148,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
             output += listenerSetLevel();
             output += listenerSetAdvancementPoints();
             output += listenerUpdateJobBuildPoints();
+            output += listenerSeeJobTechniques();
             output += listenerUpdateSkillBuildPoints();
             output += listenerUpdateAttributeBuildPoints();
 
@@ -193,6 +194,12 @@ var AdvancementBackend = AdvancementBackend || (function () {
         listenerUpdateJobBuildPoints = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"), WuxDef._rank);
             let output = `WuxWorkerJobs.UpdateBuildPoints(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerSeeJobTechniques = function () {
+            let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"), WuxDef._info);
+            let output = `WuxWorkerJobs.SeeTechniques(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -270,7 +277,7 @@ var GearBuilder = GearBuilder || (function () {
                 WuxDef.GetVariable("Page_AddArmGear"),
                 WuxDef.GetVariable("Page_AddLegGear"),
                 WuxDef.GetVariable("Page_AddFootGear")];
-            let output = `WuxWorkerInspectPopup.OpenWearableAdditionItemInspection(eventinfo)`;
+            let output = `WuxWorkerGear.OpenWearableAdditionItemInspection(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -315,10 +322,11 @@ var PopupBuilder = PopupBuilder || (function () {
             return output;
         },
         listenerOpenSubMenu = function () {
-            let repeatingWearables = WuxDef.GetVariable("RepeatingWearables");
-            let groupVariableNames = [`${repeatingWearables}:${WuxDef.GetVariable("Gear_WearablesActions")}`];
+            let groupVariableNames = [];
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingWearables")}:${WuxDef.GetVariable("Gear_WearablesActions")}`]);
+            groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"), WuxDef._expand));
+            
             let output = `WuxWorkerGeneral.OpenSubMenu(eventinfo)`;
-
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerCloseSubMenu = function () {
@@ -333,6 +341,7 @@ var PopupBuilder = PopupBuilder || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
+        
         listenerCloseInspectPopup = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Popup_InspectPopupActive")}`];
             let output = `WuxWorkerInspectPopup.ClosePopup(eventinfo)`;

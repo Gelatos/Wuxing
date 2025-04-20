@@ -247,6 +247,64 @@ class ExtendedTechniqueDatabase extends Database {
     }
 }
 
+class ExtendedTechniqueStyleDatabase extends Database {
+
+    constructor(data, techDb) {
+        let filters = ["group", "mainGroup", "subGroup", "cr"];
+        let dataCreation = function (data) {
+            return new TechniqueStyle(data);
+        };
+        super(data, filters, dataCreation);
+        this.techDb = techDb;
+
+        this.importStyles(data, dataCreation);
+    }
+    
+    import(data, dataCreationCallback) {
+        // overriding the import process
+    }
+    
+    importStyles(data, dataCreationCallback) {
+        if (data != undefined) {
+            if (Array.isArray(data)) {
+                this.importSheets(data, dataCreationCallback);
+            } else if (typeof data == "string") {
+                this.importStringifiedJson(data, dataCreationCallback);
+            } else {
+                this.importJson(data, dataCreationCallback);
+            }
+        }
+    }
+
+    importJson(json) {
+        let dataCreationCallback = function (data) {
+            return new TechniqueStyle(data);
+        }
+        super.importJson(json, dataCreationCallback);
+    }
+
+    importSheets(dataArray) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = new TechniqueStyle(dataArray[i]);
+            this.setMaxTier(data);
+            this.add(data.name, data);
+        }
+    }
+    
+    setMaxTier(techniqueStyle) {
+        let tier = 0;
+        let filterData = this.techDb.filter(new DatabaseFilterData("techSet", techniqueStyle.name));
+        for (let i = 0; i < filterData.length; i++) {
+            if (filterData[i].cr > tier) {
+                tier = filterData[i].cr;
+            }
+        }
+        techniqueStyle.maxTier = tier;
+    }
+    
+}
+
 class ExtendedUsableItemDatabase extends Database {
 
     constructor(data) {
@@ -781,6 +839,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.description = json.description;
         this.affinity = json.affinity;
         this.cr = json.cr;
+        this.maxTier = json.maxTier;
     }
 
     importSheets(dataArray) {
@@ -810,6 +869,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.description = "";
         this.affinity = "";
         this.cr = 0;
+        this.maxTier = 0;
     }
 
     createDefinition(baseDefinition) {

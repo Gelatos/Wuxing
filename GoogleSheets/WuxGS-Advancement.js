@@ -615,19 +615,19 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                     'use strict';
 
                     var
-                        build = function (jobsDictionary, techDictionary) {
+                        build = function (jobsDictionary) {
                             let output = "";
                             let groups = WuxDef.Filter([new DatabaseFilterData("group", "JobGroup")]);
                             for (let i = 0; i < groups.length; i++) {
-                                output += buildJobGroup(jobsDictionary.filter([new DatabaseFilterData("group", groups[i].title)]), groups[i], techDictionary);
+                                output += buildJobGroup(jobsDictionary.filter([new DatabaseFilterData("group", groups[i].title)]), groups[i]);
                             }
                             return output;
                         },
 
-                        buildJobGroup = function (jobs, jobGroup, techDictionary) {
+                        buildJobGroup = function (jobs, jobGroup) {
                             let jobData = [];
                             for (let i = 0; i < jobs.length; i++) {
-                                jobData.push(buildJob(jobs[i], techDictionary));
+                                jobData.push(buildJob(jobs[i]));
                             }
 
                             let output = WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2);
@@ -637,71 +637,33 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         },
 
-                        buildJob = function (job, techDictionary) {
+                        buildJob = function (job) {
                             let jobDef = job.createDefinition(WuxDef.Get("Job"));
 
                             let contents = `${buildJobHeader(jobDef, job)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
-							${WuxSheetMain.InteractionElement.ExpandableBlockContents(jobDef.getAttribute(WuxDef._expand),
-                                WuxSheetMain.SectionBlockContents(buildJobContents(job, jobDef, techDictionary)))}
                             ${buildJobShortDescription(job)}`;
 
                             return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
                         },
 
                         buildJobHeader = function (jobDef, job) {
-                            return WuxSheetMain.Header2(`${WuxSheetMain.InteractionElement.ExpandableBlockIcon(jobDef.getAttribute(WuxDef._expand))}
+                            return WuxSheetMain.Header2(`${WuxSheetMain.SubMenuButton(jobDef.getAttribute(WuxDef._expand), addSubmenuContents(jobDef, job))}
 								${WuxSheetMain.Select(jobDef.getAttribute(WuxDef._rank),
                                 WuxDef.Filter([new DatabaseFilterData("group", "JobTier")]), false, "wuxWidth70 wuxMarginRight10")}
 								${job.name}`
                             );
                         },
 
+                        addSubmenuContents = function(jobDef, job) {
+                            return `${WuxSheetMain.Header2("Description")}
+                                ${WuxSheetMain.Span("", job.description)}
+                                ${WuxSheetMain.SubMenuOptionButton(jobDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Tech_SeeTechniques")}</span>`, job.name)}
+                            `;
+                        },
+
                         buildJobShortDescription = function (job) {
                             return WuxSheetMain.Desc(job.shortDescription);
-                        },
-
-                        buildJobContents = function (job, jobDef, techDictionary) {
-                            let output = "";
-
-                            output += WuxSheetMain.Header2("Description") + WuxSheetMain.Desc(job.description);
-                            output += buildJobContentsLevels(jobDef.getAttribute(WuxDef._rank));
-                            output += buildJobContentsTechniques(job, techDictionary, WuxDef.Get("Technique"));
-
-                            return output;
-                        },
-
-                        buildJobContentsLevels = function (fieldName) {
-                            return WuxDefinition.BuildSelect(WuxDef.Get("JobTier"), fieldName, WuxDef.Filter([new DatabaseFilterData("group", "JobTier")]), false);
-                        },
-
-                        buildJobContentsTechniques = function (job, techDictionary, techniqueDefinition) {
-                            let definition = WuxDef.Get("JobTechniques");
-                            return `${WuxSheetMain.Header(`${job.name} Techniques${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`)}
-							${buildJobContentsTechniquesData(job, techDictionary, techniqueDefinition)}`;
-                        },
-
-                        buildJobContentsTechniquesData = function (job, techDictionary, techniqueDefinition) {
-                            let output = "";
-                            let displayOptions = getDisplayOptions(techniqueDefinition);
-                            let techniques;
-                            for (let i = 1; i <= 3; i++) {
-                                output += `${WuxSheetMain.Header2(`Tier ${i} Techniques`)}\n`;
-                                techniques = techDictionary.filter([new DatabaseFilterData("style", job.name), new DatabaseFilterData("tier", i)]);
-                                for (let j = 0; j < techniques.length; j++) {
-                                    output += WuxPrintTechnique.Get(techniques[j], displayOptions) + "\n";
-                                }
-                            }
-                            return output;
-                        },
-
-                        getDisplayOptions = function (techniqueDefinition) {
-                            var displayOptions = WuxPrintTechnique.GetDisplayOptions();
-
-                            displayOptions.techniqueDefinition = techniqueDefinition;
-                            displayOptions.autoExpand = true;
-                            displayOptions.hasCSS = true;
-                            return displayOptions;
                         }
                     ;
                     return {

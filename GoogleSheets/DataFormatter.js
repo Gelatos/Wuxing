@@ -43,10 +43,6 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
         }
         return definition;
     });
-    definitionDatabase.importSheets(styleArray, function (arr) {
-        let style = new TechniqueStyle(arr);
-        return style.createDefinition(definitionDatabase.get("Style"));
-    });
     definitionDatabase.importSheets(skillsArray, function (arr) {
         let skill = new SkillData(arr);
         if (skill.group == "") {
@@ -92,6 +88,7 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
     definitionClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
     definitionClassData.addPublicFunction("getTitle", WuxDefinition.GetTitle);
     definitionClassData.addPublicFunction("getDescription", WuxDefinition.GetDescription);
+    definitionClassData.addPublicFunction("getName", WuxDefinition.GetName);
     let variableMods = definitionDatabase.filter(new DatabaseFilterData("group", "VariableMod"));
     for (let i = 0; i < variableMods.length; i++) {
         definitionClassData.addPublicVariable(variableMods[i].variable, `"${variableMods[i].variable}"`);
@@ -102,8 +99,15 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
     return PrintLargeEntry(output, "]");
 }
 
-function SetItemTechDatabase(techniqueArray, goodsArray, gearArray, consumablesArray) {
+function SetItemTechDatabase(styleArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
     let output = "";
+
+    let techDb = SheetsDatabase.CreateTechniques(techniqueArray);
+    let techniqueClassData = JavascriptDatabase.Create(techDb, WuxDefinition.GetTechnique);
+    output += techniqueClassData.print("WuxTechs") + "\n";
+    
+    let styleClassData = JavascriptDatabase.Create(SheetsDatabase.CreateStyles(styleArray, techDb), WuxDefinition.GetStyle);
+    output += styleClassData.print("WuxStyles") + "\n";
 
     let goodsClassData = JavascriptDatabase.Create(SheetsDatabase.CreateGoods(goodsArray), WuxDefinition.GetGoods);
     output += goodsClassData.print("WuxGoods") + "\n";
@@ -160,9 +164,10 @@ var SheetsDatabase = SheetsDatabase || (function () {
     var
         createDatabaseCollection = function (stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
 
+            let techDb = createTechniques(techniqueArray);
             return {
-                techniques: createTechniques(techniqueArray),
-                styles: createStyles(stylesArray),
+                techniques: techDb,
+                styles: createStyles(stylesArray, techDb),
                 skills: createSkills(skillsArray),
                 language: createLanguages(languageArray),
                 lore: createLores(loreArray),
@@ -183,10 +188,8 @@ var SheetsDatabase = SheetsDatabase || (function () {
             });
         },
 
-        createStyles = function (arr) {
-            return new Database(arr, ["group", "mainGroup", "subGroup", "cr"], function (arr) {
-                return new TechniqueStyle(arr);
-            });
+        createStyles = function (arr, techDb) {
+            return new ExtendedTechniqueStyleDatabase(arr, techDb);
         },
 
         createLanguages = function (arr) {
@@ -723,6 +726,22 @@ var WuxDefinition = WuxDefinition || (function () {
                     return new DefinitionData(values[key]);
             }
         },
+        getStyle = function (key) {
+            if (values[key] == undefined) {
+                let itemData = new ItemData();
+                itemData.name = `${key} Not Found`;
+                return itemData;
+            }
+            return new TechniqueStyle(values[key]);
+        },
+        getTechnique = function (key) {
+            if (values[key] == undefined) {
+                let itemData = new ItemData();
+                itemData.name = `${key} Not Found`;
+                return itemData;
+            }
+            return new TechniqueData(values[key]);
+        },
         getItem = function (key) {
             if (values[key] == undefined) {
                 let itemData = new ItemData();
@@ -778,6 +797,9 @@ var WuxDefinition = WuxDefinition || (function () {
         getDescription = function (key) {
             let data = get(key);
             return data.getDescription();
+        },
+        getName = function (name, baseDefinition) {
+            return baseDefinition.isResource ? `${name}` : `${baseDefinition.abbreviation}_${name}`;
         },
 
         displayEntry = function (dictionary, key) {
@@ -874,6 +896,8 @@ var WuxDefinition = WuxDefinition || (function () {
     ;
     return {
         GetDefinition: getDefinition,
+        GetStyle: getStyle,
+        GetTechnique: getTechnique,
         GetItem: getItem,
         GetGoods: getGoods,
         GetAttribute: getAttribute,
@@ -883,6 +907,7 @@ var WuxDefinition = WuxDefinition || (function () {
         GetGroupVariables: getGroupVariables,
         GetTitle: getTitle,
         GetDescription: getDescription,
+        GetName: getName,
         DisplayEntry: displayEntry,
         TooltipDescription: tooltipDescription,
         DefinitionContents: definitionContents,
@@ -1259,9 +1284,9 @@ var WuxSheetMain = WuxSheetMain || (function () {
             </div>`;
         },
         
-        subMenuOptionButton = function (fieldName, contents) {
+        subMenuOptionButton = function (fieldName, contents, checkboxValue) {
             return `<div class="wuxButton wuxSubMenuOptionButton">
-                <input type="checkbox" name="${fieldName}">
+                <input type="checkbox" name="${fieldName}"${checkboxValue != undefined ? ` value="${checkboxValue}"` : ""}>
                 ${contents}
             </div>`;
         },

@@ -7674,7 +7674,7 @@ Quest Box
 
 .wuxNoPadding
 {
-    padding: 0px;
+    padding: 0;
 }
 
 .wuxWidth50
@@ -7755,7 +7755,7 @@ Quest Box
 
 .wuxPictos
 {
-    font-family: pictos;
+    font-family: pictos, serif;
 }
 
 .wuxTextCenter
@@ -7786,9 +7786,9 @@ input[type="checkbox"].wuxCheckbox-flag
     position: absolute;
 	display: block;
     pointer-events: inherit;
-    top: 0px;
-	left: 0px;
-	right: 0px;
+    top: 0;
+	left: 0;
+	right: 0;
     min-height: 25px;
     z-index: 100;
 }
@@ -7800,7 +7800,7 @@ input[type="checkbox"].wuxCheckbox-flag
 {
 	display: none;
     position: relative;
-    bottom: 0px;
+    bottom: 0;
 
     color: #d0d0d0;
     font-size: 20px;
@@ -7830,7 +7830,7 @@ input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxRepeatingCheckboxAuxI
     display: inline-block;
 	width: auto;
     min-width: 98px;
-	padding: 0px 10px;
+	padding: 0 10px;
 
     background: linear-gradient(to bottom, #f4f6f8 0%, #cacbcf 50%);
     text-shadow: none;
@@ -7841,14 +7841,14 @@ input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxRepeatingCheckboxAuxI
 .wuxButton:hover
 {
     background: linear-gradient(to bottom, #f4f6f8 0%, #cacbcf 70%, #535353 100%);
-    box-shadow: #1d1e1f 0px 0px 5px;
+    box-shadow: #1d1e1f 0 0 5px;
 }
 
 .wuxButton.wuxSizePercent
 {
-	padding: 0px;
+	padding: 0;
 	width: 90%;
-    min-width: 0px;
+    min-width: 0;
 }
 
 .wuxButton input[type=checkbox]
@@ -7856,10 +7856,10 @@ input[type=hidden].wuxCheckbox-flag:not([value="0"]) + .wuxRepeatingCheckboxAuxI
     position: absolute;
     display: block;
     opacity: 0;    
-    left: 0px;
-	right: 0px;
-	top: 0px;
-	bottom: 0px;
+    left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
     z-index: 100;
 }
 
@@ -7867,8 +7867,8 @@ button[type=roll].wuxButton,
 .wuxButton span
 {
     height: 24px;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 button[type=roll].wuxButton::before
@@ -7908,7 +7908,7 @@ button[type=roll].wuxButton span span,
 {
     opacity: 0;    
     position: absolute;
-    left: 0px;
+    left: 0;
     width: 18px;
     height: 18px;
     z-index: 100;
@@ -8035,13 +8035,12 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     margin-bottom: 15px;
     width: calc(100% - 15px);
     height: 22px;
-    padding: 3px;
-    padding-left: 6px;
+    padding: 3px 3px 3px 6px;
     z-index: 1;
 
     border-bottom: 3px solid;
     border-color: transparent transparent #71B9DE transparent;
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 10px 10px 0 0;
 }
 
 .wuxPopupHeader .wuxPopupInnerHeader
@@ -8093,7 +8092,7 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     position: relative;
     display: block;
     width: 80%;
-    padding: 0px 10px;
+    padding: 0 10px;
 
     background: #DDDDDD;
     text-shadow: none;
@@ -8104,7 +8103,7 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
 input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInspectionPopupSelectContainer {
 
     background: #9fa0a3;
-    box-shadow: #1d1e1f 0px 0px 5px;
+    box-shadow: #1d1e1f 0 0 5px;
 }
 
 .wuxInspectionPopupSelectContainer:hover {
@@ -8116,10 +8115,10 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
     position: absolute;
     display: block;
     opacity: 0;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     z-index: 100;
 }
 
@@ -8145,7 +8144,7 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
 
 .wuxSubMenuOverlay {
     display: block;
-    position: fixed;
+    position: absolute;
     top: 20px;
     left: 0;
     width: 100%;
@@ -8171,11 +8170,11 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
     display: inline-block;
     width: 18px;
     height: 18px;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     z-index: 900;
 
-    border-width: 0px;
+    border-width: 0;
 }
 
 .wuxSubMenuButton.wuxFloatRight
@@ -8188,11 +8187,10 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
 .wuxSubMenuButton input[type=checkbox]
 {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    width: 100%;
-    height: 100%;
+    bottom: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
 
     z-index: 999;
 
@@ -8224,7 +8222,7 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
     height: 100%;
     z-index: 900;
 
-    font-family: pictos;
+    font-family: pictos, serif;
     font-size: 18px;
     color: #f4f6f8;
     text-decoration: none;
@@ -8241,7 +8239,10 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
     width: 180px;
     padding: 10px;
     top: 24px;
-    left: 0px;
+    left: 0;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: auto;
     z-index: 90000;
 
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -8260,7 +8261,7 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
 
 .wuxSubMenuButton.wuxFloatRight .wuxSubMenuContent
 {
-    right: 0px;
+    right: 0;
 }
 
 .wuxSubMenu .wuxSubMenuContent .wuxHeader2,
@@ -8293,7 +8294,7 @@ input[type=hidden].wuxSubMenu-flag:not([value="0"]) + .wuxSubMenuContent
 input[type=hidden].wuxSubMenuOptionButton-flag[value="on"] + .wuxSubMenuOptionButton {
 
     background: #9fa0a3;
-    box-shadow: #1d1e1f 0px 0px 5px;
+    box-shadow: #1d1e1f 0 0 5px;
 }
 
 .wuxSubMenuOptionButton input[type=checkbox]
@@ -8301,11 +8302,15 @@ input[type=hidden].wuxSubMenuOptionButton-flag[value="on"] + .wuxSubMenuOptionBu
     position: absolute;
     display: block;
     opacity: 0;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     z-index: 100;
+    
+    width: 100%;
+    height: 100%;
+
 }
 
 .wuxSubMenuOptionButton span

@@ -14,6 +14,13 @@ var Debug = Debug || (function () {
 	};
 }());
 
+class eventinfo {
+	constructor(sourceAttribute, newValue) {
+		this.sourceAttribute = sourceAttribute;
+		this.newValue = newValue;
+	}
+}
+
 class WorkerAttributeHandler extends AttributeHandler {
 	run() {
 		let attributeHandler = this;

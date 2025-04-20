@@ -74,7 +74,7 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                     return WuxSheetMain.Build(buildTechniquesByGroup(stylesDatabase, jobDatabase, techniqueDatabase, gearDatabase, consumableDatabase));
                 },
 
-                buildTechniquesByGroup = function (stylesDatabase, jobDatabase, techniqueDatabase, gearDatabase, consumableDatabase) {
+                buildTechniquesByGroup = function (stylesDatabase, jobDatabase, techniqueDatabase, gearDatabase) {
                     let techniqueDefinition = WuxDef.Get("Technique");
                     let displayOptions = getDisplayOptions(techniqueDefinition);
                     let output = "";
@@ -104,16 +104,6 @@ var DisplayTechniquesSheet = DisplayTechniquesSheet || (function () {
                     }
 
                     return buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), "EqGear", "Equipped Gear Techniques");
-                },
-
-                buildConsumablesStyle = function (consumablesDatabase, displayOptions) {
-                    let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "ConsumableGroup")]);
-                    let techStyles = [];
-                    for (let i = 0; i < filteredData.length; i++) {
-                        techStyles.push(buildUsableItemGroupFlexTableEntry(filteredData[i], consumablesDatabase, displayOptions));
-                    }
-
-                    return buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), "EqConsumables", "Packed Consumables");
                 },
 
                 buildJobStyle = function (jobDatabase, techniqueDatabase, displayOptions) {
@@ -1242,89 +1232,14 @@ var DisplayPopups = DisplayPopups || (function () {
                                     <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Popup_ItemStats")}"></span></div>
                                     <div class="wuxFeatureHeaderInfo">
                                         <span><strong>Traits: </strong></span>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait0")}" value="0" />
+                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait", 0)}" value="0" />
                                         <div class="wuxHiddenInlineAuxField">
                                             <span>None</span>
                                         </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait0")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_ItemTrait0")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_ItemTrait0")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Item Trait</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait0Desc0")}"></span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait0Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait0Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait0Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait0Desc2")}"></span>
-                                                    </div>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait1")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span>; </span>
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_ItemTrait1")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_ItemTrait1")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Item Trait</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait1Desc0")}"></span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait1Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait1Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait1Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait1Desc2")}"></span>
-                                                    </div>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait2")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span>; </span>
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_ItemTrait2")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_ItemTrait2")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Item Trait</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait2Desc0")}"></span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait2Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait2Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait2Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait2Desc2")}"></span>
-                                                    </div>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait3")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span>; </span>
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_ItemTrait3")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_ItemTrait3")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Item Trait</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait3Desc0")}"></span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait3Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait3Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemTrait3Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemTrait3Desc2")}"></span>
-                                                    </div>
-                                                </div>
-                                            </span>
-                                        </div>
+                                        ${buildTooltipSection("Popup_ItemTrait", 0)}
+                                        ${buildTooltipSection("Popup_ItemTrait", 1)}
+                                        ${buildTooltipSection("Popup_ItemTrait", 2)}
+                                        ${buildTooltipSection("Popup_ItemTrait", 3)}
                                     </div>
                                 </div>
                             </div>
@@ -1343,67 +1258,24 @@ var DisplayPopups = DisplayPopups || (function () {
                                 <div class="wuxFeatureHeaderInfoReq">
                                     <div class="wuxFeatureHeaderInfo"><strong>Crafting Recipe</strong></div>
                                     <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Popup_ItemCraftSkill")}"></span></div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemCraftStats")}" value="0" />
+                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemCraftMats")}" value="0" />
                                     <div class="wuxHiddenField">
                                         <div class="wuxFeatureHeaderInfo">
                                             <span><strong>Base Materials:</strong></span>
-                                            <span name="${WuxDef.GetAttribute("Popup_ItemCraftStats")}"></span>
+                                            <span name="${WuxDef.GetAttribute("Popup_ItemCraftMats")}"></span>
                                         </div>
                                     </div>
                                     
                                     <div class="wuxFeatureHeaderInfo">
                                         <span><strong>Components: </strong></span>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemCraft0")}" value="0" />
+                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemCraft", 0)}" value="0" />
                                         <div class="wuxHiddenInlineAuxField">
                                             <span>None</span>
                                         </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemCraft0")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_ItemCraft0")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_ItemCraft0")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Item</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemCraft0Desc")}"></span>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemCraft1")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span>; </span>
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_ItemCraft1")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_ItemCraft1")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Item</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemCraft1Desc")}"></span>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemCraft2")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span>; </span>
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_ItemCraft2")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_ItemCraft2")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Item</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemCraft2Desc")}"></span>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_ItemCraft3")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span>; </span>
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_ItemCraft3")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_ItemCraft3")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Item</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_ItemCraft3Desc")}"></span>
-                                                </div>
-                                            </span>
-                                        </div>
+                                        ${buildTooltipSection("Popup_ItemCraft", 0)}
+                                        ${buildTooltipSection("Popup_ItemCraft", 1)}
+                                        ${buildTooltipSection("Popup_ItemCraft", 2)}
+                                        ${buildTooltipSection("Popup_ItemCraft", 3)}
                                     </div>
                                 </div>
                             </div>
@@ -1426,89 +1298,15 @@ var DisplayPopups = DisplayPopups || (function () {
                                     <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Popup_TechTargetingData")}"></span></div>
                                     <div class="wuxFeatureHeaderInfo">
                                         <span><strong>Traits: </strong></span>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait0")}" value="0" />
+                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait", 0)}" value="0" />
                                         <div class="wuxHiddenInlineAuxField">
                                             <span>None</span>
                                         </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait0")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait0")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechTrait0")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Technique Trait</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait0Desc0")}"></span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait0Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait0Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait0Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait0Desc2")}"></span>
-                                                    </div>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait1")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span>; </span>
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait1")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechTrait1")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Technique Trait</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait1Desc0")}"></span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait1Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait1Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait1Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait1Desc2")}"></span>
-                                                    </div>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait2")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span>; </span>
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait2")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechTrait2")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Technique Trait</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait2Desc0")}"></span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait2Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait2Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait2Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait2Desc2")}"></span>
-                                                    </div>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait3")}" value="0" />
-                                        <div class="wuxHiddenInlineField">
-                                            <span>; </span>
-                                            <span class="wuxTooltip">
-                                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechTrait3")}">-</span>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechTrait3")}">-</span></div>
-                                                    <span class="wuxDescription"><em>Technique Trait</em></span>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait3Desc0")}"></span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait3Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait3Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrait3Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechTrait3Desc2")}"></span>
-                                                    </div>
-                                                </div>
-                                            </span>
-                                        </div>
+                                        ${buildTooltipSection("Popup_TechTrait", 0)}
+                                        ${buildTooltipSection("Popup_TechTrait", 1)}
+                                        ${buildTooltipSection("Popup_TechTrait", 2)}
+                                        ${buildTooltipSection("Popup_TechTrait", 3)}
+                                        ${buildTooltipSection("Popup_TechTrait", 4)}
                                     </div>
                                 </div>
                             </div>
@@ -1526,66 +1324,13 @@ var DisplayPopups = DisplayPopups || (function () {
                                     <span name="${WuxDef.GetAttribute("Popup_TechRequirements")}"></span>
                                 </div>
                             </div>
-                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq0")}" value="0" />
+                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq", 0)}" value="0" />
                             <div class="wuxHiddenField">
                                 <div class="wuxFeatureHeaderInfoReq">
                                     <span><strong>Item Traits: </strong></span>
-                                    <span class="wuxTooltip">
-                                        <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechItemReq0")}">-</span>
-                                        <div class="wuxTooltipContent">
-                                            <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechItemReq0")}">-</span></div>
-                                            <span class="wuxDescription"><em>Item Trait</em></span>
-                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc0")}"></span>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc1")}" value="0" />
-                                            <div class="wuxHiddenField">
-                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc1")}"></span>
-                                            </div>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc2")}" value="0" />
-                                            <div class="wuxHiddenField">
-                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq0Desc2")}"></span>
-                                            </div>
-                                        </div>
-                                    </span>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq1")}" value="0" />
-                                    <div class="wuxHiddenInlineField">
-                                        <span> and </span>
-                                        <span class="wuxTooltip">
-                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechItemReq1")}">-</span>
-                                            <div class="wuxTooltipContent">
-                                                <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechItemReq1")}">-</span></div>
-                                                <span class="wuxDescription"><em>Item Trait</em></span>
-                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc0")}"></span>
-                                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc1")}" value="0" />
-                                                <div class="wuxHiddenField">
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc1")}"></span>
-                                                </div>
-                                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc2")}" value="0" />
-                                                <div class="wuxHiddenField">
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq1Desc2")}"></span>
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq2")}" value="0" />
-                                    <div class="wuxHiddenInlineField">
-                                        <span> and </span>
-                                        <span class="wuxTooltip">
-                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechItemReq2")}">-</span>
-                                            <div class="wuxTooltipContent">
-                                                <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechItemReq2")}">-</span></div>
-                                                <span class="wuxDescription"><em>Item Trait</em></span>
-                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc0")}"></span>
-                                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc1")}" value="0" />
-                                                <div class="wuxHiddenField">
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc1")}"></span>
-                                                </div>
-                                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc2")}" value="0" />
-                                                <div class="wuxHiddenField">
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechItemReq2Desc2")}"></span>
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </div>
+                                        ${buildTooltipSection("Popup_TechItemReq", 0)}
+                                        ${buildTooltipSection("Popup_TechItemReq", 1)}
+                                        ${buildTooltipSection("Popup_TechItemReq", 2)}
                                 </div>
                             </div>
                             
@@ -1599,188 +1344,74 @@ var DisplayPopups = DisplayPopups || (function () {
                             </div>
                             
                             <div class="wuxFeatureEffectsBlock">
-                                <div class="wuxFeatureCheckHeader">
-                                    <span class="wuxTooltip">
-                                        <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect0Name")}">Name</span>
-                                        <div class="wuxTooltipContent">
-                                            <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechEffect0Name")}">Name</div>
-                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechEffect0Desc")}">Desc</span>
-                                        </div>
-                                    </span>
-                                </div>
-                                <div class="wuxFeatureCheckBlock">
-                                    <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect0")}">Effect</span>
-                                </div>
-                                
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect1Name")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <div class="wuxFeatureCheckHeader">
-                                        <span class="wuxTooltip">
-                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect1Name")}">Name</span>
-                                            <div class="wuxTooltipContent">
-                                                <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechEffect1Name")}">Name</div>
-                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechEffect1Desc")}">Desc</span>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect1")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <div class="wuxFeatureCheckBlock">
-                                        <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect1")}">Effect</span>
-                                    </div>
-                                </div>
-                                
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect2Name")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <div class="wuxFeatureCheckHeader">
-                                        <span class="wuxTooltip">
-                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect2Name")}">Name</span>
-                                            <div class="wuxTooltipContent">
-                                                <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechEffect2Name")}">Name</div>
-                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechEffect2Desc")}">Desc</span>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect2")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <div class="wuxFeatureCheckBlock">
-                                        <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect2")}">Effect</span>
-                                    </div>
-                                </div>
-                                
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect3Name")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <div class="wuxFeatureCheckHeader">
-                                        <span class="wuxTooltip">
-                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect3Name")}">Name</span>
-                                            <div class="wuxTooltipContent">
-                                                <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechEffect3Name")}">Name</div>
-                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechEffect3Desc")}">Desc</span>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect3")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <div class="wuxFeatureCheckBlock">
-                                        <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect3")}">Effect</span>
-                                    </div>
-                                </div>
-                                
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect4Name")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <div class="wuxFeatureCheckHeader">
-                                        <span class="wuxTooltip">
-                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect4Name")}">Name</span>
-                                            <div class="wuxTooltipContent">
-                                                <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechEffect4Name")}">Name</div>
-                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechEffect4Desc")}">Desc</span>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect4")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <div class="wuxFeatureCheckBlock">
-                                        <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect4")}">Effect</span>
-                                    </div>
-                                </div>
-                                
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect5Name")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <div class="wuxFeatureCheckHeader">
-                                        <span class="wuxTooltip">
-                                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect5Name")}">Name</span>
-                                            <div class="wuxTooltipContent">
-                                                <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechEffect5Name")}">Name</div>
-                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechEffect5Desc")}">Desc</span>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect5")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <div class="wuxFeatureCheckBlock">
-                                        <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect5")}">Effect</span>
-                                    </div>
-                                </div>
+                                ${addTechEffect(0)}
+                                ${addTechEffect(1)}
+                                ${addTechEffect(2)}
+                                ${addTechEffect(3)}
+                                ${addTechEffect(4)}
+                                ${addTechEffect(5)}
+                                ${addTechEffect(6)}
+                                ${addTechEffect(7)}
+                                ${addTechEffect(8)}
+                                ${addTechEffect(9)}
                             </div>
                             
-                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef0")}" value="0" />
+                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef", 0)}" value="0" />
                             <div class="wuxHiddenField">
                                 <div class="wuxFeatureFunctionBlock">
                                     <div class="wuxFeatureFunctionBlockRow">
                                         <span><strong>Definitions: </strong></span>
-                                        <span class="wuxTooltip"><span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechDef0")}">Name</span>
-                                            <span class="wuxTooltipContent">
-                                                <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechDef0")}">Name</span></div>
-                                                <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef0Desc0")}">Desc0</span>
-                                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef0Desc1")}" value="0" />
-                                                <div class="wuxHiddenField">
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef0Desc1")}"></span>
-                                                </div>
-                                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef0Desc2")}" value="0" />
-                                                <div class="wuxHiddenField">
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef0Desc2")}"></span>
-                                                </div>
-                                            </span>
-                                        </span>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef1")}" value="0" />
-                                        <div class="wuxHiddenInlineAuxField">
-                                            <span class="wuxTooltip"><span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechDef1")}">Name</span>
-                                                <span class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechDef1")}">Name</span></div>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef1Desc0")}">Desc0</span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef1Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef1Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef1Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef1Desc2")}"></span>
-                                                    </div>
-                                                </span>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef2")}" value="0" />
-                                        <div class="wuxHiddenInlineAuxField">
-                                            <span class="wuxTooltip"><span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechDef2")}">Name</span>
-                                                <span class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechDef2")}">Name</span></div>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef2Desc0")}">Desc0</span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef2Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef2Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef2Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef2Desc2")}"></span>
-                                                    </div>
-                                                </span>
-                                            </span>
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef3")}" value="0" />
-                                        <div class="wuxHiddenInlineAuxField">
-                                            <span class="wuxTooltip"><span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechDef3")}">Name</span>
-                                                <span class="wuxTooltipContent">
-                                                    <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Popup_TechDef3")}">Name</span></div>
-                                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef3Desc0")}">Desc0</span>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef3Desc1")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef3Desc1")}"></span>
-                                                    </div>
-                                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechDef3Desc2")}" value="0" />
-                                                    <div class="wuxHiddenField">
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechDef3Desc2")}"></span>
-                                                    </div>
-                                                </span>
-                                            </span>
-                                        </div>
+                                        ${buildTooltipSection("Popup_TechDef", 0)}
+                                        ${buildTooltipSection("Popup_TechDef", 1)}
+                                        ${buildTooltipSection("Popup_TechDef", 2)}
+                                        ${buildTooltipSection("Popup_TechDef", 3)}
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>`;
+                },
+                
+                buildTooltipSection = function (baseAttribute, index) {
+                    return `<input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute(baseAttribute, index)}" value="0" />
+                    <div class="wuxHiddenInlineField">
+                        <span>; </span>
+                        <span class="wuxTooltip">
+                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute(baseAttribute, index)}">-</span>
+                            <div class="wuxTooltipContent">
+                                <div class="wuxHeader2"><span name="${WuxDef.GetAttribute(baseAttribute, index)}">-</span></div>
+                                <span class="wuxDescription"><em>Technique Trait</em></span>
+                                <span class="wuxDescription" name="${WuxDef.GetAttribute(baseAttribute, index + "desc0")}"></span>
+                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute(baseAttribute, index + "desc1")}" value="0" />
+                                <div class="wuxHiddenField">
+                                    <span class="wuxDescription" name="${WuxDef.GetAttribute(baseAttribute, index + "desc1")}"></span>
+                                </div>
+                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute(baseAttribute, index + "desc2")}" value="0" />
+                                <div class="wuxHiddenField">
+                                    <span class="wuxDescription" name="${WuxDef.GetAttribute(baseAttribute, index + "desc2")}"></span>
+                                </div>
+                            </div>
+                        </span>
+                    </div>`;
+                },
+                
+                addTechEffect = function (index) {
+                    return `<input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect", `${index}name`)}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureCheckHeader">
+                            <span class="wuxTooltip">
+                                <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Popup_TechEffect", `${index}name`)}">Name</span>
+                                <div class="wuxTooltipContent">
+                                    <div class="wuxHeader2" name="${WuxDef.GetAttribute("Popup_TechEffect", `${index}name`)}">Name</div>
+                                    <span class="wuxDescription" name="${WuxDef.GetAttribute("Popup_TechEffect", `${index}desc`)}">Desc</span>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechEffect", index)}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureCheckBlock">
+                            <span class="wuxFeatureCheckBlockRow" name="${WuxDef.GetAttribute("Popup_TechEffect", index)}">Effect</span>
                         </div>
                     </div>`;
                 },
@@ -1792,15 +1423,22 @@ var DisplayPopups = DisplayPopups || (function () {
                 },
 
                 buildItemRepeater = function () {
-                    let itemData = `<input type="hidden" class="wuxInspectionPopupSelectContainer-flag" name="${WuxDef.GetAttribute("Popup_ItemSelectIsOn")}">
+                    let itemSelectNameAttr = WuxDef.GetAttribute("Popup_ItemSelectName");
+                    let itemSelectTypeAttr = WuxDef.GetAttribute("Popup_ItemSelectType");
+                    let itemSelectDescAttr = WuxDef.GetAttribute("Popup_ItemSelectDesc");
+                    let itemSelectIsOnAttr = WuxDef.GetAttribute("Popup_ItemSelectIsOn");
+                    let itemData = `${WuxSheetMain.HiddenField(itemSelectTypeAttr,
+                        `<input type="hidden" class="wuxInspectionPopupSelectContainer-flag" name="${itemSelectIsOnAttr}">
+                        <div class="wuxButton wuxInspectionPopupSelectContainer">
+                            <input type="checkbox" name="${itemSelectIsOnAttr}">
+                            <span name="${itemSelectNameAttr}"></span>
+                        </div>`)}
+                        ${WuxSheetMain.HiddenAuxField(itemSelectTypeAttr, `${WuxSheetMain.Header(WuxSheetMain.Span(itemSelectNameAttr))}
+                        ${WuxSheetMain.HiddenField(itemSelectDescAttr, WuxSheetMain.Desc(WuxSheetMain.Span(itemSelectDescAttr)))}`)}
+                    `;
 
-                    <div class="wuxButton wuxInspectionPopupSelectContainer">
-                        <input type="checkbox" name="${WuxDef.GetAttribute("Popup_ItemSelectIsOn")}">
-                        <span name="${WuxDef.GetAttribute("Popup_ItemSelectName")}"></span>
-                        <input type="hidden" name="${WuxDef.GetAttribute("Popup_ItemSelectType")}">
-                    </div>`;
-
-                    return `${WuxSheetMain.Header("Items in Group")}
+                    let groupDef = WuxDef.Get("Popup_InspectSelectGroup")
+                    return `${WuxSheetMain.Header(`<span name="${groupDef.getAttribute()}">${groupDef.getTitle()}</span>`)}
                     ${buildRepeater(WuxDef.GetVariable("ItemPopupValues"), itemData)}`;
                 },
 
