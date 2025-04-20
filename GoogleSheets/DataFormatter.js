@@ -104,6 +104,7 @@ function SetItemTechDatabase(styleArray, techniqueArray, goodsArray, gearArray, 
 
     let techDb = SheetsDatabase.CreateTechniques(techniqueArray);
     let techniqueClassData = JavascriptDatabase.Create(techDb, WuxDefinition.GetTechnique);
+    techniqueClassData.addPublicFunction("filterAndSortTechniquesByRequirement", WuxDefinition.FilterAndSortTechniquesByRequirement);
     output += techniqueClassData.print("WuxTechs") + "\n";
     
     let styleClassData = JavascriptDatabase.Create(SheetsDatabase.CreateStyles(styleArray, techDb), WuxDefinition.GetStyle);
@@ -117,7 +118,7 @@ function SetItemTechDatabase(styleArray, techniqueArray, goodsArray, gearArray, 
     let itemClassData = JavascriptDatabase.Create(itemsDatabase, WuxDefinition.GetItem);
     output += itemClassData.print("WuxItems") + "\n";
 
-    return PrintLargeEntry(output, "]");
+    return PrintLargeEntry(output, "}");
 }
 
 function Test() {
@@ -802,6 +803,29 @@ var WuxDefinition = WuxDefinition || (function () {
             return baseDefinition.isResource ? `${name}` : `${baseDefinition.abbreviation}_${name}`;
         },
 
+        filterAndSortTechniquesByRequirement = function (techniquesFilterData) {
+            let techniquesFilter = filter(techniquesFilterData);
+            let technique = {};
+
+            let techniquesByRequirements = new Dictionary();
+            for (let i = 0; i <= 9; i++) {
+                techniquesByRequirements.add(i, new Dictionary());
+            }
+
+            for (let i = 0; i < techniquesFilter.length; i++) {
+                technique = new TechniqueData(techniquesFilter[i]);
+                let techniqueTierArray = techniquesByRequirements.get(technique.tier);
+                if (techniquesByRequirements.get(technique.tier) != undefined) {
+                    if (!techniquesByRequirements.get(technique.tier).has(technique.affinity)) {
+                        techniquesByRequirements.get(technique.tier).add(technique.affinity, []);
+                    }
+                    techniquesByRequirements.get(technique.tier).get(technique.affinity).push(technique);
+                }
+            }
+
+            return techniquesByRequirements;
+        },
+
         displayEntry = function (dictionary, key) {
             let output = "";
             let entryData = dictionary.get(key).descriptions;
@@ -908,6 +932,7 @@ var WuxDefinition = WuxDefinition || (function () {
         GetTitle: getTitle,
         GetDescription: getDescription,
         GetName: getName,
+        FilterAndSortTechniquesByRequirement: filterAndSortTechniquesByRequirement,
         DisplayEntry: displayEntry,
         TooltipDescription: tooltipDescription,
         DefinitionContents: definitionContents,
@@ -2013,7 +2038,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             jsClassData.addFunction("filter", filter);
             jsClassData.addFunction("getSortedGroup", getSortedGroup);
             jsClassData.addFunction("getGroupData", getGroupData);
-            jsClassData.addFunction("getPropertyValues", getPropertyValues);
+            // jsClassData.addFunction("getPropertyValues", getPropertyValues);
             jsClassData.addPublicData("get");
             jsClassData.addPublicData("getValues");
             jsClassData.addPublicData("has");

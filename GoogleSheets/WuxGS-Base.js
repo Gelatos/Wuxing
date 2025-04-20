@@ -1328,9 +1328,9 @@ var DisplayPopups = DisplayPopups || (function () {
                             <div class="wuxHiddenField">
                                 <div class="wuxFeatureHeaderInfoReq">
                                     <span><strong>Item Traits: </strong></span>
-                                        ${buildTooltipSection("Popup_TechItemReq", 0)}
-                                        ${buildTooltipSection("Popup_TechItemReq", 1)}
-                                        ${buildTooltipSection("Popup_TechItemReq", 2)}
+                                        ${buildTooltipSection("Popup_TechItemReq", 0, " and ")}
+                                        ${buildTooltipSection("Popup_TechItemReq", 1, " and ")}
+                                        ${buildTooltipSection("Popup_TechItemReq", 2, " and ")}
                                 </div>
                             </div>
                             
@@ -1372,10 +1372,10 @@ var DisplayPopups = DisplayPopups || (function () {
                     </div>`;
                 },
                 
-                buildTooltipSection = function (baseAttribute, index) {
+                buildTooltipSection = function (baseAttribute, index, delimiter) {
                     return `<input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute(baseAttribute, index)}" value="0" />
                     <div class="wuxHiddenInlineField">
-                        <span>; </span>
+                        ${index == 0 ? "" : `<span>${delimiter == undefined ? "; " : delimiter}</span>`}
                         <span class="wuxTooltip">
                             <span class="wuxTooltipText" name="${WuxDef.GetAttribute(baseAttribute, index)}">-</span>
                             <div class="wuxTooltipContent">
@@ -1433,7 +1433,7 @@ var DisplayPopups = DisplayPopups || (function () {
                             <input type="checkbox" name="${itemSelectIsOnAttr}">
                             <span name="${itemSelectNameAttr}"></span>
                         </div>`)}
-                        ${WuxSheetMain.HiddenAuxField(itemSelectTypeAttr, `${WuxSheetMain.Header(WuxSheetMain.Span(itemSelectNameAttr))}
+                        ${WuxSheetMain.HiddenAuxField(itemSelectTypeAttr, `${WuxSheetMain.Header2(WuxSheetMain.Span(itemSelectNameAttr))}
                         ${WuxSheetMain.HiddenField(itemSelectDescAttr, WuxSheetMain.Desc(WuxSheetMain.Span(itemSelectDescAttr)))}`)}
                     `;
 

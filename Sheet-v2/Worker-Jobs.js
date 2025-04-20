@@ -3,26 +3,54 @@
 var WuxWorkerJobs = WuxWorkerJobs || (function () {
     
     const populateJobInspectionTechniques = function (attrHandler, itemPopupRepeater, job) {
-        
+        Debug.Log(`Populate Job Inspection Techniques for ${job}`);
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `${job} Techniques`);
+        let maxTier = 6;
         
         let selectedElement = null;
-        let jobTechniques = WuxTechs.Filter(new DatabaseFilterData("techSet", job));
-        jobTechniques.forEach(function (jobTechnique) {
-            let newRowId = itemPopupRepeater.generateRowId();
-            attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), jobTechnique.name);
-            attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "Tech");
+        let jobTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(new DatabaseFilterData("techSet", job));
+        
+        for (let tier = 1; tier <= maxTier; tier++) {
 
-            if (selectedElement == null) {
-                selectedElement = {
-                    item: jobTechnique,
-                    id: newRowId
+            let tierData = jobTechniques.get(tier);
+            tierData.iterate(function (techsByAffinity, affinity) {
+                if (techsByAffinity.length == 0) {
+                    return;
                 }
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
-            } else {
+                let techHeader = "";
+                let techDesc = "";
+                if (tier != 0) {
+                    techHeader += `Tier ${tier}`;
+                    techDesc += `These techniques are learned upon reaching ${job} Tier ${tier}`;
+                }
+                if (affinity != "") {
+                    techHeader += (techHeader == "" ? "" : "; ") + `${affinity} Affinity`;
+                    techDesc +=  (techDesc == "" ? "" : " ") + `and require ${affinity} affinity`;
+                }
+
+                let newRowId = itemPopupRepeater.generateRowId();
+                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), techHeader);
+                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "");
+                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectDesc")), techDesc);
                 attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
-            }
-        });
+                
+                techsByAffinity.forEach(function (jobTechnique) {
+                    newRowId = itemPopupRepeater.generateRowId();
+                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), jobTechnique.name);
+                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "Tech");
+
+                    if (selectedElement == null) {
+                        selectedElement = {
+                            item: jobTechnique,
+                            id: newRowId
+                        }
+                        attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
+                    } else {
+                        attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
+                    }
+                });
+            });
+        }
 
         return selectedElement;
     };
