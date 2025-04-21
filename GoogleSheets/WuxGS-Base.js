@@ -845,12 +845,12 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
     };
 }());
 
-var DisplayFormSheet = DisplayFormSheet || (function () {
+var DisplayFormeSheet = DisplayFormeSheet || (function () {
     'use strict';
 
     var
         print = function () {
-            let output = WuxSheetNavigation.BuildGearPageNavigation("Forme") +
+            let output = WuxSheetNavigation.BuildFormePageNavigation("Forme") +
                 SideBarData.PrintForme() +
                 MainContentData.Print();
             return WuxSheet.PageDisplay("Forme", output);
@@ -882,88 +882,71 @@ var DisplayFormSheet = DisplayFormSheet || (function () {
             var
                 print = function () {
                     let contents = "";
-                    contents += buildJobsSection();
+                    contents += buildStyleSection("RepeatingJobStyles", "Page_JobStyles", 
+                        ["Style_JobSlot"]);
+                    contents += buildStyleSection("RepeatingArteformStyles", "Page_ArteformStyles", 
+                        ["Style_ArteformSlot"]);
+                    contents += buildStyleSection("RepeatingAdvancedStyles", "Page_AdvancedStyles", 
+                        ["Style_AdvancedSlot1", "Style_AdvancedSlot2", "Style_AdvancedSlot3"]);
                     return WuxSheetMain.Build(contents);
                 },
 
-                buildJobsSection = function () {
+                buildStyleSection = function (repeatingSectionName, sectionDefName, slotDefNames) {
                     let contents = "";
 
-                    contents += WuxSheetMain.MultiRowGroup([ownedWearables(), equippedWearables()], WuxSheetMain.Table.FlexTable, 2);
+                    contents += WuxSheetMain.MultiRowGroup([learnedStyles(repeatingSectionName), 
+                        addEquippedSection(slotDefNames)], WuxSheetMain.Table.FlexTable, 2);
 
                     contents = WuxSheetMain.TabBlock(contents);
 
-                    let definition = WuxDef.Get("Page_GearWearables");
-                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                    let sectionDefinition = WuxDef.Get(sectionDefName);
+                    return WuxSheetMain.CollapsibleTab(sectionDefinition.getAttribute(WuxDef._tab, WuxDef._expand), sectionDefinition.getTitle(), contents);
                 },
 
-                ownedWearables = function () {
-                    let repeatingDef = WuxDef.Get("RepeatingWearables");
-                    let nameDef = WuxDef.Get("Gear_WearableName");
-                    let actionsDef = WuxDef.Get("Gear_WearablesActions");
+                learnedStyles = function (repeatingSectionName) {
+                    let repeatingDef = WuxDef.Get(repeatingSectionName);
+                    let nameDef = WuxDef.Get("Style_Name");
+                    let actionsDef = WuxDef.Get("Style_Actions");
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsWearables(actionsDef, nameDef))}
+                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsStyles(actionsDef, nameDef))}
                         ${WuxSheetMain.Row("&nbsp;")}
-                        ${addPopupWearables()}
                     </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
-                addRepeaterContentsWearables = function (actionDef, nameDef) {
+                addRepeaterContentsStyles = function (actionDef, nameDef) {
                     return WuxSheetMain.MultiRow(`
-                        ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsWearables())}
-                        <div class="wuxGearName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
+                        ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsStyles())}
+                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
                     );
                 },
 
-                addSubmenuContentsWearables = function() {
-                    let equippedDef = WuxDef.Get("Gear_WearableIsEquipped");
-                    let deleteDef = WuxDef.Get("Gear_Delete");
-                    let inspectDef = WuxDef.Get("Gear_Inspect");
+                addSubmenuContentsStyles = function() {
+                    let equippedDef = WuxDef.Get("Style_IsEquipped");
+                    let seeTechniquesDef = WuxDef.Get("Style_SeeTechniques");
 
                     return `${WuxSheetMain.HiddenField(equippedDef.getAttribute(),
-                        `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Gear_Unequip")}</span>`)}`)}
+                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Style_Unequip")}</span>`)}`)}
                         ${WuxSheetMain.HiddenAuxField(equippedDef.getAttribute(),
-                        `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), WuxSheetMain.Span(WuxDef.GetAttribute("Gear_WearableEquipMenu")))}`)}
-                        ${WuxSheetMain.SubMenuOptionButton(deleteDef.getAttribute(), `<span>${deleteDef.getTitle()}</span>`)}
-                        ${WuxSheetMain.SubMenuOptionButton(inspectDef.getAttribute(), `<span>${inspectDef.getTitle()}</span>`)}
+                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Style_Equip")}</span>`)}`)}
+                        ${WuxSheetMain.SubMenuOptionButton(seeTechniquesDef.getAttribute(), `<span>${seeTechniquesDef.getTitle()}</span>`)}
                     `;
                 },
-
-                addPopupWearables = function () {
-                    let headPopupDef = WuxDef.Get("Page_AddHeadGear");
-                    let facePopupDef = WuxDef.Get("Page_AddFaceGear");
-                    let chestPopupDef = WuxDef.Get("Page_AddChestGear");
-                    let armPopupDef = WuxDef.Get("Page_AddArmGear");
-                    let legPopupDef = WuxDef.Get("Page_AddLegGear");
-                    let footPopupDef = WuxDef.Get("Page_AddFootGear");
-
-                    return `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_AddItem")}`)}
-                    ${WuxSheetMain.MultiRowGroup([
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(headPopupDef.getAttribute(), headPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(facePopupDef.getAttribute(), facePopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(chestPopupDef.getAttribute(), chestPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(armPopupDef.getAttribute(), armPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(legPopupDef.getAttribute(), legPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(footPopupDef.getAttribute(), footPopupDef.getTitle()))],
-                        WuxSheetMain.Table.FlexTable, 3)}`;
-
-                },
-
-                equippedWearables = function () {
+                
+                addEquippedSection = function(slotDefNames) {
                     let contents = "";
-
-                    let equippedGearDef = WuxDef.Get("Page_GearEquippedGear");
-                    contents += `${WuxSheetMain.Header(`${equippedGearDef.title}`)}`;
-
-                    let filterData = WuxDef.Filter([new DatabaseFilterData("group", "GearGroup")]);
-                    let emptyName = WuxDef.GetTitle("Page_GearEmpty");
-                    for (let i = 0; i < filterData.length; i++) {
-                        contents += WuxDefinition.BuildText(filterData[i], WuxSheetMain.Span(filterData[i].getAttribute()));
-                        contents += WuxSheetMain.Input("hidden", filterData[i].getAttribute(), emptyName);
+                    contents += `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_Equipped")}`)}`;
+                    let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
+                    if (!Array.isArray(slotDefNames)) {
+                        slotDefNames = [slotDefNames];
                     }
+                    slotDefNames.forEach((name) => {
+                        let slotDef = WuxDef.Get(name);
+                        contents += WuxDefinition.BuildText(slotDef, WuxSheetMain.Span(slotDef.getAttribute()));
+                        contents += WuxSheetMain.Input("hidden", slotDef.getAttribute(), emptyName);
+                    })
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                 },
 
@@ -990,15 +973,9 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
     var
         print = function () {
-            let output = "";
-            output += printEquipment();
-            return output;
-        },
-
-        printEquipment = function () {
             let output = WuxSheetNavigation.BuildGearPageNavigation("Gear") +
                 SideBarData.PrintEquipment() +
-                MainContentData.PrintEquipment();
+                MainContentData.Print();
             return WuxSheet.PageDisplay("Gear", output);
         },
 
@@ -1026,7 +1003,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
             'use strict';
 
             var
-                printEquipment = function () {
+                print = function () {
                     let contents = Equipment.Build();
                     return WuxSheetMain.Build(contents);
                 },
@@ -1069,7 +1046,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         addRepeaterContentsWearables = function (actionDef, nameDef) {
                             return WuxSheetMain.MultiRow(`
                                 ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsWearables())}
-                                <div class="wuxGearName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
+                                <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
                             );
                         },
                         
@@ -1220,11 +1197,11 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         equippedWearables = function () {
                             let contents = "";
 
-                            let equippedGearDef = WuxDef.Get("Page_GearEquippedGear");
+                            let equippedGearDef = WuxDef.Get("Page_Equipped");
                             contents += `${WuxSheetMain.Header(`${equippedGearDef.title}`)}`;
 
                             let filterData = WuxDef.Filter([new DatabaseFilterData("group", "GearGroup")]);
-                            let emptyName = WuxDef.GetTitle("Page_GearEmpty");
+                            let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
                             for (let i = 0; i < filterData.length; i++) {
                                 contents += WuxDefinition.BuildText(filterData[i], WuxSheetMain.Span(filterData[i].getAttribute()));
                                 contents += WuxSheetMain.Input("hidden", filterData[i].getAttribute(), emptyName);
@@ -1237,7 +1214,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             let weaponSlotDefinition = WuxDef.Get("ToolSlot_Weapon");
                             let weaponDamageAttribute = WuxDef.GetAttribute("WeaponDamage");
                             let toolSlotDefinition = WuxDef.Get("ToolSlot");
-                            let emptyName = WuxDef.GetTitle("Page_GearEmpty");
+                            let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
                             
                             let contents = `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
                             contents += WuxSheetMain.Header2(`${weaponSlotDefinition.getTitle()}`) + "\n" +
@@ -1255,7 +1232,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                         equippedConsumables = function () {
                             let equippedGearDef = WuxDef.Get("Page_GearConsumables");
-                            let emptyName = WuxDef.GetTitle("Page_GearEmpty");
+                            let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
                             let consumablesSlotDefinition = WuxDef.Get("ConsumableSlot");
                             
                             let contents = `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
@@ -1281,7 +1258,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 }())
 
             return {
-                PrintEquipment: printEquipment
+                Print: print
             }
         }());
 

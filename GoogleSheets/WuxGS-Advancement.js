@@ -32,6 +32,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayStylesSheet.Print(sheetsDb);
             output += DisplayArteformSheet.Print(sheetsDb);
             output += DisplayCoreCharacterSheet.Print(sheetsDb);
+            output += DisplayFormeSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
             output += DisplayPopups.Print();
             return `${output}\n</div>`;
@@ -657,7 +658,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         addSubmenuContents = function(jobDef, job) {
                             return `${WuxSheetMain.Header2("Description")}
                                 ${WuxSheetMain.Span("", job.description)}
-                                ${WuxSheetMain.SubMenuOptionButton(jobDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Tech_SeeTechniques")}</span>`, job.name)}
+                                ${WuxSheetMain.SubMenuOptionButton(jobDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Style_SeeTechniques")}</span>`, job.name)}
                             `;
                         },
 
@@ -933,7 +934,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                 },
 
                 addSubmenuContents = function(styleDef, style) {
-                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Tech_SeeTechniques")}</span>`, style.name)}
+                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Style_SeeTechniques")}</span>`, style.name)}
                     `;
                 },
 
@@ -964,7 +965,7 @@ var DisplayArteformSheet = DisplayArteformSheet || (function () {
 
     var
         print = function (sheetsDb) {
-            let output = WuxSheetNavigation.BuildStylesNavigation("Page_LearnArteform") +
+            let output = WuxSheetNavigation.BuildStylesNavigation("Page_Arteforms") +
                 SideBarData.Print() +
                 MainContentData.Print(sheetsDb.styles);
             return WuxSheet.PageDisplay("Arteforms", output);
@@ -1061,7 +1062,7 @@ var DisplayArteformSheet = DisplayArteformSheet || (function () {
                 },
 
                 addSubmenuContents = function(styleDef, style) {
-                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Tech_SeeTechniques")}</span>`, style.name)}
+                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Style_SeeTechniques")}</span>`, style.name)}
                     `;
                 },
 

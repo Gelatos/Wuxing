@@ -1766,6 +1766,11 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
                 overviewInfoContents(definition.getAttribute(WuxDef._info), tabFieldName));
         },
 
+        buildFormePageNavigation = function () {
+            let definition = WuxDef.Get("Page_Forme");
+            return buildSection(mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
+        },
+
         buildGearPageNavigation = function () {
             let definition = WuxDef.Get("Page_Gear");
             return buildSection(mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
@@ -1820,6 +1825,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         };
     return {
         BuildOverviewPageNavigation: buildOverviewPageNavigation,
+        BuildFormePageNavigation: buildFormePageNavigation,
         BuildGearPageNavigation: buildGearPageNavigation,
         BuildActionsPageNavigation: buildActionsPageNavigation,
         BuildOriginPageNavigation: buildOriginPageNavigation,

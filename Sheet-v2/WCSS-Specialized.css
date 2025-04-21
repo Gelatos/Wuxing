@@ -373,16 +373,16 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 }
 
 /*========================================
-    Gear
+    Equipables
 ========================================*/
 
-.wuxGearType
+.wuxEquipableType
 {
     display: inline-block;
     width: 60px;
 }
 
-.wuxGearName
+.wuxEquipableName
 {
     display: inline-block;
     margin-left: 5px;
