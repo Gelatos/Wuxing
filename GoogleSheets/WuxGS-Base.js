@@ -691,12 +691,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                         buildOriginStats = function () {
                             let contents = "";
                             contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
-                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedAffinity"), WuxDef.GetAttribute("AdvancedAffinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).concat(WuxDef.Filter([new DatabaseFilterData("group", "BranchType")])), true);
-                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn));
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedBranch"), WuxDef.GetAttribute("AdvancedBranch"), WuxDef.Filter([new DatabaseFilterData("group", "BranchType")]), true);
-                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedBranch", WuxDef._learn));
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max), 1);
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusAttributePoints"), WuxDef.GetAttribute("BonusAttributePoints"), 0);
                             return WuxSheetMain.Table.FlexTableGroup(contents);

@@ -29,6 +29,8 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayOriginSheet.Print(sheetsDb);
             output += DisplayTrainingSheet.Print(sheetsDb);
             output += DisplayAdvancementSheet.Print(sheetsDb);
+            output += DisplayStylesSheet.Print(sheetsDb);
+            output += DisplayArteformSheet.Print(sheetsDb);
             output += DisplayCoreCharacterSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
             output += DisplayPopups.Print();
@@ -153,13 +155,6 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                         buildOriginStats = function () {
                             let contents = "";
                             contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
-                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedAffinity"), WuxDef.GetAttribute("AdvancedAffinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).concat(WuxDef.Filter([new DatabaseFilterData("group", "BranchType")])), true);
-                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn));
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedBranch"), WuxDef.GetAttribute("AdvancedBranch"), WuxDef.Filter([new DatabaseFilterData("group", "BranchType")]), true);
-                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedBranch", WuxDef._learn));
-
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max), 1);
                             contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusAttributePoints"), WuxDef.GetAttribute("BonusAttributePoints"), 0);
 
@@ -809,5 +804,273 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
     return {
         Print: print
+    };
+}());
+
+var DisplayStylesSheet = DisplayStylesSheet || (function () {
+    'use strict';
+
+    var
+        print = function (sheetsDb) {
+            let output = WuxSheetNavigation.BuildStylesNavigation("Page_LearnTechniques") +
+                SideBarData.Print() +
+                MainContentData.Print(sheetsDb.styles);
+            return WuxSheet.PageDisplay("Styles", output);
+        },
+
+        printTest = function (stylesDatabase) {
+            let filters = [new DatabaseFilterData("group", "Advanced")];
+            let filteredData = stylesDatabase.filter(filters);
+
+            let output = "";
+            for (let i = 0; i < filteredData.length; i++) {
+                output += `${filteredData[i].name}, `;
+            }
+            return output;
+        },
+
+        SideBarData = SideBarData || (function () {
+            'use strict';
+
+            var
+                print = function () {
+                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique")));
+                },
+
+                buildTechPointsSection = function (fieldName, header) {
+                    return WuxSheetSidebar.BuildPointsSection(fieldName, header);
+                }
+
+            return {
+                Print: print
+            };
+
+        }()),
+
+        MainContentData = MainContentData || (function () {
+            'use strict';
+
+            var
+                
+                print = function (stylesDatabase) {
+                    return WuxSheetMain.Build(build(stylesDatabase));
+                },
+                
+                build = function (stylesDatabase) {
+                    let contents = buildOriginStats();
+                    contents = WuxSheetMain.TabBlock(contents);
+
+                    let definition = WuxDef.Get("Page_Origin");
+                    contents = WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+
+                    contents += buildStyleGroups(stylesDatabase);
+                    return contents;
+                },
+
+                buildOriginStats = function () {
+                    let contents = "";
+                    contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
+                    contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
+                    contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
+                    // contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedAffinity"), WuxDef.GetAttribute("AdvancedAffinity"), WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).concat(WuxDef.Filter([new DatabaseFilterData("group", "BranchType")])), true);
+                    // contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn));
+                    // contents += WuxDefinition.BuildSelect(WuxDef.Get("AdvancedBranch"), WuxDef.GetAttribute("AdvancedBranch"), WuxDef.Filter([new DatabaseFilterData("group", "BranchType")]), true);
+                    // contents += WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedBranch", WuxDef._learn));
+
+                    return contents;
+                },
+
+                buildStyleGroups = function (stylesDatabase) {
+                    let contents = "";
+                    let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "StyleGroup")]);
+                    for (let i = 0; i < filteredData.length; i++) {
+                        let techFilterData = stylesDatabase.filter([new DatabaseFilterData("subGroup", filteredData[i].getTitle())]);
+                        let techStyles = [];
+                        for (let i = 0; i < techFilterData.length; i++) {
+                            techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[i]));
+                        }
+                        contents += buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), filteredData[i].name, filteredData[i].getTitle());
+                    }
+
+                    return contents;
+                },
+
+                buildStyleGroupFlexTableEntry = function (style) {
+                    let styleDef = style.createDefinition(WuxDef.Get("Style"));
+                    
+                    let contents = `${buildStyleHeader(styleDef, style)}
+							${WuxSheetMain.SectionBlockHeaderFooter()}
+                            ${buildStyleDescription(styleDef)}`;
+
+                    return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
+                },
+
+                buildStyleHeader = function (styleDef, style) {
+                    let tierValues = [];
+                    let def = new DefinitionData();
+                    def.title = "-";
+                    def.variable = 0;
+                    tierValues.push(def);
+                    for (let i = 1; i <= style.maxTier; i++) {
+                        def = new DefinitionData();
+                        def.title = `Tier ${i}`;
+                        def.variable = i;
+                        tierValues.push(def);
+                    }
+                    return WuxSheetMain.Header2(`${WuxSheetMain.SubMenuButton(styleDef.getAttribute(WuxDef._expand), addSubmenuContents(styleDef, style))}
+                        ${WuxSheetMain.Select(styleDef.getAttribute(), tierValues, false, "wuxWidth70 wuxMarginRight10")}
+                        ${style.name}`
+                    );
+                },
+
+                addSubmenuContents = function(styleDef, style) {
+                    return `${WuxSheetMain.Header2("Description")}
+                        ${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Tech_SeeTechniques")}</span>`, style.name)}
+                    `;
+                },
+
+                buildStyleDescription = function (styleDef) {
+                    return WuxSheetMain.Desc(styleDef.getDescription());
+                },
+
+                buildTechniqueStyleGroupTab = function (contents, groupName, title) {
+                    let styleDefinition = WuxDef.Get("StyleType");
+
+                    return `${WuxSheetMain.CustomInput("hidden", styleDefinition.getAttribute(groupName, WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
+					${WuxSheetMain.CollapsibleTab(styleDefinition.getAttribute(groupName, WuxDef._expand), title, WuxSheetMain.TabBlock(contents))}`;
+                }
+
+            return {
+                Print: print
+            };
+        }())
+    ;
+    return {
+        Print: print,
+        PrintTest: printTest
+    };
+}());
+
+var DisplayArteformSheet = DisplayArteformSheet || (function () {
+    'use strict';
+
+    var
+        print = function (sheetsDb) {
+            let output = WuxSheetNavigation.BuildStylesNavigation("Page_LearnArteform") +
+                SideBarData.Print() +
+                MainContentData.Print(sheetsDb.styles);
+            return WuxSheet.PageDisplay("Arteforms", output);
+        },
+
+        printTest = function (stylesDatabase) {
+            let filters = [new DatabaseFilterData("group", "Advanced")];
+            let filteredData = stylesDatabase.filter(filters);
+
+            let output = "";
+            for (let i = 0; i < filteredData.length; i++) {
+                output += `${filteredData[i].name}, `;
+            }
+            return output;
+        },
+
+        SideBarData = SideBarData || (function () {
+            'use strict';
+
+            var
+                print = function () {
+                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique")));
+                },
+
+                buildTechPointsSection = function (fieldName, header) {
+                    return WuxSheetSidebar.BuildPointsSection(fieldName, header);
+                }
+
+            return {
+                Print: print
+            };
+
+        }()),
+
+        MainContentData = MainContentData || (function () {
+            'use strict';
+
+            var
+
+                print = function (stylesDatabase) {
+                    return WuxSheetMain.Build(build(stylesDatabase));
+                },
+
+                build = function (stylesDatabase) {
+                    return buildStyleGroups(stylesDatabase);
+                },
+
+                buildStyleGroups = function (stylesDatabase) {
+                    let contents = "";
+                    let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "ArteformGroup")]);
+                    for (let i = 0; i < filteredData.length; i++) {
+                        let techFilterData = stylesDatabase.filter([new DatabaseFilterData("subGroup", filteredData[i].getTitle())]);
+                        let techStyles = [];
+                        for (let i = 0; i < techFilterData.length; i++) {
+                            techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[i]));
+                        }
+                        contents += buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), filteredData[i].name, filteredData[i].getTitle());
+                    }
+
+                    return contents;
+                },
+
+                buildStyleGroupFlexTableEntry = function (style) {
+                    let styleDef = style.createDefinition(WuxDef.Get("Style"));
+
+                    let contents = `${buildStyleHeader(styleDef, style)}
+							${WuxSheetMain.SectionBlockHeaderFooter()}
+                            ${buildStyleDescription(styleDef)}`;
+
+                    return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
+                },
+
+                buildStyleHeader = function (styleDef, style) {
+                    let tierValues = [];
+                    let def = new DefinitionData();
+                    def.title = "-";
+                    def.variable = 0;
+                    tierValues.push(def);
+                    for (let i = 1; i <= style.maxTier; i++) {
+                        def = new DefinitionData();
+                        def.title = `Tier ${i}`;
+                        def.variable = i;
+                        tierValues.push(def);
+                    }
+                    return WuxSheetMain.Header2(`${WuxSheetMain.SubMenuButton(styleDef.getAttribute(WuxDef._expand), addSubmenuContents(styleDef, style))}
+                        ${WuxSheetMain.Select(styleDef.getAttribute(), tierValues, false, "wuxWidth70 wuxMarginRight10")}
+                        ${style.name}`
+                    );
+                },
+
+                addSubmenuContents = function(styleDef, style) {
+                    return `${WuxSheetMain.Header2("Description")}
+                        ${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Tech_SeeTechniques")}</span>`, style.name)}
+                    `;
+                },
+
+                buildStyleDescription = function (styleDef) {
+                    return WuxSheetMain.Desc(styleDef.getDescription());
+                },
+
+                buildTechniqueStyleGroupTab = function (contents, groupName, title) {
+                    let styleDefinition = WuxDef.Get("StyleType");
+
+                    return `${WuxSheetMain.CustomInput("hidden", styleDefinition.getAttribute(groupName, WuxDef._filter), "wuxFilterSegment-flag", ` value="0"`)}
+					${WuxSheetMain.CollapsibleTab(styleDefinition.getAttribute(groupName, WuxDef._expand), title, WuxSheetMain.TabBlock(contents))}`;
+                }
+
+            return {
+                Print: print
+            };
+        }())
+    ;
+    return {
+        Print: print,
+        PrintTest: printTest
     };
 }());

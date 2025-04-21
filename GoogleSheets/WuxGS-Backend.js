@@ -6,7 +6,6 @@ var BuilderBackend = BuilderBackend || (function () {
     var
         print = function () {
             let output = "";
-            output += listenerUpdatePageState();
             output += listenerCharacterCreationFinishButton();
             output += listenerCharacterCreationSetAffinity();
             output += listenerCharacterCreationBonusAttributes();
@@ -14,13 +13,6 @@ var BuilderBackend = BuilderBackend || (function () {
             output += listenerUpdateStyleBuildPoints();
             output += listenerUpdateJobStyleBuildPoints();
             return output;
-        },
-
-        listenerUpdatePageState = function () {
-            let groupVariableNames = [WuxDef.GetVariable("Page")];
-            let output = `WuxWorkerGeneral.UpdatePageState(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
 
         listenerCharacterCreationFinishButton = function () {
@@ -325,6 +317,7 @@ var PopupBuilder = PopupBuilder || (function () {
             let groupVariableNames = [];
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingWearables")}:${WuxDef.GetVariable("Gear_WearablesActions")}`]);
             groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"), WuxDef._expand));
+            groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"), WuxDef._expand));
             
             let output = `WuxWorkerGeneral.OpenSubMenu(eventinfo)`;
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);

@@ -2,20 +2,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
     'use strict';
 
     var
-        updatePageState = function (eventinfo) {
-            Debug.Log("Update Page State");
-            let attributeHandler = new WorkerAttributeHandler();
-            switch (eventinfo.newValue) {
-                case "Styles":
-                    WuxWorkerTechniques.FilterTechniquesForStyleSet(attributeHandler);
-                    attributeHandler.run();
-                    break;
-                case "Actions":
-                    WuxWorkerTechniques.FilterTechniquesForActions(attributeHandler);
-                    attributeHandler.run();
-                    break;
-            }
-        },
         updateStats = function (attributeHandler) {
             let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", "CR"));
             formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", "Level")));
@@ -101,7 +87,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         }
         
     return {
-        UpdatePageState: updatePageState,
         UpdateStats: updateStats,
         UpdateDisplayName: updateDisplayName,
         UpdateStatus: updateStatus,

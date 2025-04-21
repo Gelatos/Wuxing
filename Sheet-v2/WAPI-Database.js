@@ -296,8 +296,8 @@ class ExtendedTechniqueStyleDatabase extends Database {
         let tier = 0;
         let filterData = this.techDb.filter(new DatabaseFilterData("techSet", techniqueStyle.name));
         for (let i = 0; i < filterData.length; i++) {
-            if (filterData[i].cr > tier) {
-                tier = filterData[i].cr;
+            if (filterData[i].tier > tier) {
+                tier = filterData[i].tier;
             }
         }
         techniqueStyle.maxTier = tier;
