@@ -160,8 +160,10 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
                 if (effect.effects != undefined) {
                     effect.effects.forEach(function (desc) {
-                        attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}`), desc);
-                        incrementer++;
+                        if (desc != undefined) {
+                            attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}`), desc);
+                            incrementer++;
+                        }
                     });
                 }
                 incrementer++;
@@ -194,7 +196,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         for (let i = 0; i < 10; i++) {
             attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect", i), 0);
             attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect", `${i}name`), 0);
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect", `${i}desc`), 0);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect", `${i}desc`), "");
         }
     };
     const performAddSelectedInspectElement = function (attrHandler) {

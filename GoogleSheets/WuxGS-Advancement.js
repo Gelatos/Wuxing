@@ -637,6 +637,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                             let contents = `${buildJobHeader(jobDef, job)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
+                            ${buildTierSelect(jobDef)}
                             ${buildJobShortDescription(job)}`;
 
                             return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
@@ -644,10 +645,13 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         buildJobHeader = function (jobDef, job) {
                             return WuxSheetMain.Header2(`${WuxSheetMain.SubMenuButton(jobDef.getAttribute(WuxDef._expand), addSubmenuContents(jobDef, job))}
-								${WuxSheetMain.Select(jobDef.getAttribute(WuxDef._rank),
-                                WuxDef.Filter([new DatabaseFilterData("group", "JobTier")]), false, "wuxWidth70 wuxMarginRight10")}
 								${job.name}`
                             );
+                        },
+
+                        buildTierSelect = function (jobDef) {
+                            return WuxSheetMain.Select(jobDef.getAttribute(WuxDef._rank),
+                                WuxDef.Filter([new DatabaseFilterData("group", "JobTier")]), false);
                         },
 
                         addSubmenuContents = function(jobDef, job) {
@@ -834,7 +838,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
 
             var
                 print = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique")));
+                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Style")));
                 },
 
                 buildTechPointsSection = function (fieldName, header) {
@@ -900,15 +904,22 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     
                     let contents = `${buildStyleHeader(styleDef, style)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
+                            ${buildTierSelect(styleDef, style)}
                             ${buildStyleDescription(styleDef)}`;
 
                     return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
                 },
 
                 buildStyleHeader = function (styleDef, style) {
+                    return WuxSheetMain.Header2(`${WuxSheetMain.SubMenuButton(styleDef.getAttribute(WuxDef._expand), addSubmenuContents(styleDef, style))}
+                        ${style.name}`
+                    );
+                },
+
+                buildTierSelect = function (styleDef, style) {
                     let tierValues = [];
                     let def = new DefinitionData();
-                    def.title = "-";
+                    def.title = "Unranked";
                     def.variable = 0;
                     tierValues.push(def);
                     for (let i = 1; i <= style.maxTier; i++) {
@@ -917,10 +928,8 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                         def.variable = i;
                         tierValues.push(def);
                     }
-                    return WuxSheetMain.Header2(`${WuxSheetMain.SubMenuButton(styleDef.getAttribute(WuxDef._expand), addSubmenuContents(styleDef, style))}
-                        ${WuxSheetMain.Select(styleDef.getAttribute(), tierValues, false, "wuxWidth70 wuxMarginRight10")}
-                        ${style.name}`
-                    );
+
+                    return WuxSheetMain.Select(styleDef.getAttribute(), tierValues, false);
                 },
 
                 addSubmenuContents = function(styleDef, style) {
@@ -977,7 +986,7 @@ var DisplayArteformSheet = DisplayArteformSheet || (function () {
 
             var
                 print = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique")));
+                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Style")));
                 },
 
                 buildTechPointsSection = function (fieldName, header) {
@@ -1023,15 +1032,22 @@ var DisplayArteformSheet = DisplayArteformSheet || (function () {
 
                     let contents = `${buildStyleHeader(styleDef, style)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
+							${buildTierSelect(styleDef, style)}
                             ${buildStyleDescription(styleDef)}`;
 
                     return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
                 },
 
                 buildStyleHeader = function (styleDef, style) {
+                    return WuxSheetMain.Header2(`${WuxSheetMain.SubMenuButton(styleDef.getAttribute(WuxDef._expand), addSubmenuContents(styleDef, style))}
+                        ${style.name}`
+                    );
+                },
+                
+                buildTierSelect = function (styleDef, style) {
                     let tierValues = [];
                     let def = new DefinitionData();
-                    def.title = "-";
+                    def.title = "Unranked";
                     def.variable = 0;
                     tierValues.push(def);
                     for (let i = 1; i <= style.maxTier; i++) {
@@ -1040,10 +1056,8 @@ var DisplayArteformSheet = DisplayArteformSheet || (function () {
                         def.variable = i;
                         tierValues.push(def);
                     }
-                    return WuxSheetMain.Header2(`${WuxSheetMain.SubMenuButton(styleDef.getAttribute(WuxDef._expand), addSubmenuContents(styleDef, style))}
-                        ${WuxSheetMain.Select(styleDef.getAttribute(), tierValues, false, "wuxWidth70 wuxMarginRight10")}
-                        ${style.name}`
-                    );
+                    
+                    return WuxSheetMain.Select(styleDef.getAttribute(), tierValues, false);
                 },
 
                 addSubmenuContents = function(styleDef, style) {

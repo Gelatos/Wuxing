@@ -1470,6 +1470,7 @@ input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInterac
 .wuxPageDisplay-Techniques,
 .wuxPageDisplay-Styles,
 .wuxPageDisplay-Arteforms,
+.wuxPageDisplay-Forme,
 .wuxPageDisplay-Actions,
 .wuxPageDisplay-Character,
 .wuxPageDisplay-Overview,
@@ -1496,6 +1497,7 @@ input[type=hidden].wuxPageDisplay-Flag[value="Techniques"] ~ .wuxPageDisplay-Tec
 input[type=hidden].wuxPageDisplay-Flag[value="Techniques"] ~ .wuxPageDisplay-Techniques,
 input[type=hidden].wuxPageDisplay-Flag[value="Styles"] ~ .wuxPageDisplay-Styles,
 input[type=hidden].wuxPageDisplay-Flag[value="Arteforms"] ~ .wuxPageDisplay-Arteforms,
+input[type=hidden].wuxPageDisplay-Flag[value="Forme"] ~ .wuxPageDisplay-Forme,
 input[type=hidden].wuxPageDisplay-Flag[value="Actions"] ~ .wuxPageDisplay-Technique,
 input[type=hidden].wuxPageDisplay-Flag[value="Actions"] ~ .wuxPageDisplay-Actions,
 input[type=hidden].wuxPageDisplay-Flag[value="Character"] ~ .wuxPageDisplay-Character,
@@ -8207,7 +8209,7 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 18px;
+    width: 100%;
     height: 18px;
 
     z-index: 999;

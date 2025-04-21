@@ -1996,43 +1996,43 @@ class TechniqueEffectDisplayData {
         if (isNaN(parseInt(defense))) {
             if (defense == "") {
                 definition = WuxDef.Get("Title_TechEffect");
-                this.check = definition.title;
+                this.check = definition.getTitle();
                 this.checkDescription = definition.getDescription();
             }
             else if (defense == "Def_Evasion") {
                 definition = WuxDef.Get("Title_TechEvasion");
-                this.check = definition.title;
-                this.checkDescription = definition.effect;
+                this.check = definition.getTitle();
+                this.checkDescription = definition.getDescription();
             }
             else if (defense == "TechOnEnter") {
                 definition = WuxDef.Get("Title_TechOnEnter");
-                this.check = definition.title;
+                this.check = definition.getTitle();
                 this.checkDescription = definition.getDescription();
             }
             else if (defense == "TechOnEndFocus") {
                 definition = WuxDef.Get("Title_TechOnEndFocus");
-                this.check = definition.title;
+                this.check = definition.getTitle();
                 this.checkDescription = definition.getDescription();
             }
             else if (defense == "TechNewTargets") {
                 definition = WuxDef.Get("Title_TechNewTargets");
-                this.check = definition.title;
+                this.check = techniqueEffect.effect;
                 this.checkDescription = definition.getDescription();
             }
             else {
                 definition = WuxDef.Get(defense);
                 if (definition.group == "Result") {
-                    this.check = `${definition.title}`;
+                    this.check = `${definition.getTitle()}`;
                     this.checkDescription = `${definition.getDescription()}`;
                 } else {
                     let definition2 = WuxDef.Get("Title_TechDefense");
-                    this.check = `${definition2.title}${definition.title}`;
+                    this.check = `${definition2.getTitle()}${definition.getTitle()}`;
                     this.checkDescription = `${definition2.getDescription()}\n${definition.getDescription()}`;
                 }
             }
         } else {
             definition = WuxDef.Get("Title_TechDC");
-            this.check = `${definition.title}${defense}`;
+            this.check = `${definition.getTitle()}${defense}`;
             this.checkDescription = definition.getDescription();
         }
     }
@@ -2272,11 +2272,12 @@ class TechniqueEffectDisplayData {
     }
 
     formatTerrainEffect(effect) {
+        let terrainType = WuxDef.GetTitle(effect.effect);
         switch (effect.subType) {
             case "Add":
-                return `The area is considered [${effect.effect}].`;
+                return `The area is considered [${terrainType}].`;
             case "Remove":
-                return `Any effects in the area considered [${effect.effect}] are removed.`;
+                return `Any effects in the area considered [${terrainType}] are removed.`;
         }
     }
 
@@ -3093,6 +3094,10 @@ class AttributeHandler {
     }
 
     addUpdate(attr, value) {
+        if (value == undefined) {
+            Debug.LogError(`[AttributeHandler][addUpdate] Tried to add undefined value for ${attr}. This is not allowed.`);
+            return;
+        }
         this.update[attr] = value;
     }
 
