@@ -1306,7 +1306,7 @@ var DisplayPopups = DisplayPopups || (function () {
                             </div>
                             <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Popup_TechTrigger")}" value="0" />
                             <div class="wuxHiddenField">
-                                <div class="wuxFeatureHeaderInfoReq">
+                                <div class="wuxFeatureHeaderInfoTrigger">
                                     <span><strong>Trigger: </strong></span>
                                     <span name="${WuxDef.GetAttribute("Popup_TechTrigger")}"></span>
                                 </div>

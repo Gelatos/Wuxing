@@ -11,7 +11,7 @@ var BuilderBackend = BuilderBackend || (function () {
             output += listenerCharacterCreationBonusAttributes();
             output += listenerUpdateTechniqueBuildPoints();
             output += listenerUpdateStyleBuildPoints();
-            output += listenerUpdateJobStyleBuildPoints();
+            output += listenerSeeStyleTechniques();
             return output;
         },
 
@@ -46,15 +46,13 @@ var BuilderBackend = BuilderBackend || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
-        listenerUpdateJobStyleBuildPoints = function () {
-            let output = "";
-            let jobs = WuxDef.Filter([new DatabaseFilterData("group", "Job")]);
-            for (let i = 0; i < jobs.length; i++) {
-                let groupVariableNames = [(jobs[i].getVariable())];
-                output += "\n" + WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerTechniques.UpdateJobStyleBuildPoints("${jobs[i].name}", eventinfo)`, true);
-            }
-            return output;
+        listenerSeeStyleTechniques = function () {
+            let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"), WuxDef._info);
+            let output = `WuxWorkerStyles.SeeTechniques(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
+        
 
     return {
         Print: print

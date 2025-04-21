@@ -924,8 +924,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                 },
 
                 addSubmenuContents = function(styleDef, style) {
-                    return `${WuxSheetMain.Header2("Description")}
-                        ${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Tech_SeeTechniques")}</span>`, style.name)}
+                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Tech_SeeTechniques")}</span>`, style.name)}
                     `;
                 },
 
@@ -1048,8 +1047,7 @@ var DisplayArteformSheet = DisplayArteformSheet || (function () {
                 },
 
                 addSubmenuContents = function(styleDef, style) {
-                    return `${WuxSheetMain.Header2("Description")}
-                        ${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Tech_SeeTechniques")}</span>`, style.name)}
+                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Tech_SeeTechniques")}</span>`, style.name)}
                     `;
                 },
 
