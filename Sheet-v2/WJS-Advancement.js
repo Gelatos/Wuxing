@@ -6,7 +6,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			Debug.Log("Finish Character Creation Build");
 			let attributeHandler = new WorkerAttributeHandler();
 
-			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Technique"]);
+			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Style"]);
 			pointManagers.commitChanges(attributeHandler);
 
 			let trainingWorker = new WuxTrainingWorkerBuild();
@@ -18,7 +18,8 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
 			WuxWorkerKnowledges.UpdateStats(attributeHandler);
-			WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+			WuxWorkerJobs.UpdateStats(attributeHandler);
+			WuxWorkerStyles.UpdateStats(attributeHandler);
 			WuxWorkerAdvancement.UpdateStats(attributeHandler);
 			WuxWorkerGeneral.UpdateStats(attributeHandler);
 
@@ -29,7 +30,6 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
 			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
 			attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
-			WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
 		},
 		setAffinityValue = function (eventinfo) {
 			Debug.Log(`Setting ${eventinfo.sourceAttribute}`);
@@ -43,7 +43,6 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 				Debug.Log(`Setting ${variable} to ${desc}`);
 				attrHandler.addUpdate(variable, desc);
 			});
-			WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
 			attributeHandler.run();
 		},
 		setBonusAttributes = function () {
@@ -206,7 +205,6 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 				worker.revertBuildStatsDraft(attrHandler);
 			});
 
-			WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
 			attributeHandler.run();
 		},
 		finishBuild = function () {
@@ -220,7 +218,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 			trainingWorker.commitChanges(attributeHandler);
 
 			WuxWorkerKnowledges.UpdateStats(attributeHandler);
-			WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+			WuxWorkerStyles.UpdateStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
 			attributeHandler.run();
@@ -236,7 +234,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 			trainingWorker.resetChanges(attributeHandler);
 
 			WuxWorkerKnowledges.UpdateStats(attributeHandler);
-			WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+			WuxWorkerStyles.UpdateStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
 			attributeHandler.run();
@@ -245,7 +243,6 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
 			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
 			attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
-			WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
 		},
 
 		convertPp = function () {
@@ -300,7 +297,6 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 				worker.revertBuildStatsDraft(attrHandler);
 			});
 
-			WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
 			attributeHandler.run();
 		},
 		finishBuild = function () {
@@ -315,7 +311,8 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
-			WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+			WuxWorkerJobs.UpdateStats(attributeHandler);
+			WuxWorkerStyles.UpdateStats(attributeHandler);
 			updateStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
@@ -333,7 +330,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
-			WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+			WuxWorkerStyles.UpdateStats(attributeHandler);
 			updateStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
@@ -343,7 +340,6 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
 			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
 			attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
-			WuxWorkerTechniques.FilterTechniquesForCore(attributeHandler);
 		},
 
 		convertXp = function () {

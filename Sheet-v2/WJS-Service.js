@@ -135,6 +135,12 @@ class WuxWorkerBuild {
 		this.buildStats = new WorkerBuildStats();
 		this.buildStats.import(attributeHandler.parseJSON(buildStatVersion));
 	}
+	
+	iterateBuildStats(callback) {
+		this.buildStats.iterate(function (buildStat) {
+			callback(buildStat);
+		});
+	}
 
 	setPointsMax(attributeHandler) {
 		let max = this.definition.formula.getValue(attributeHandler, this.definition.getTitle());
@@ -185,7 +191,7 @@ class WuxWorkerBuild {
 	}
 
 	setVariablesToBuildStats(attributeHandler) {
-		this.buildStats.iterate(function (buildStat) {
+		this.iterateBuildStats(function (buildStat) {
 			attributeHandler.addUpdate(buildStat.name, buildStat.value);
 		});
 	}
@@ -243,6 +249,10 @@ class WuxWorkerBuild {
 	}
 }
 
+class WuxBasicWorkerBuild extends WuxWorkerBuild {
+	
+}
+
 class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 	constructor() {
 		super("Advancement");
@@ -284,7 +294,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(crDefinition.getVariable(WuxDef._max));
 		let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
-		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute"]);
+		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Style", "Attribute"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -303,7 +313,6 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 			worker.updatePoints(attrHandler);
 			manager.setAttributeHandlerPoints(attrHandler);
 		});
-		WuxWorkerTechniques.FilterTechniquesForLearn(attributeHandler);
 	}
 
 	convertXp(attributeHandler) {
@@ -442,7 +451,7 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(worker.attrMax);
 		attributeHandler.addMod(worker.attrBuildDraft);
 
-		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		let manager = new WuxWorkerBuildManager(["Knowledge", "Style"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {

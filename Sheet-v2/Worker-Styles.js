@@ -56,6 +56,32 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
 
         return selectedElement;
     };
+    const addStyles = function (attrHandler, styleWorker, advancedRepeater, arteformRepeater) {
+        let arteformSlot = WuxDef.GetVariable("Style_ArteformSlot");
+        let advancedSlots = [WuxDef.GetVariable("Style_AdvancedSlot1"),
+            WuxDef.GetVariable("Style_AdvancedSlot2"), WuxDef.GetVariable("Style_AdvancedSlot3")];
+
+        styleWorker.iterateBuildStats(function (styleVariableData) {
+
+            let style = WuxStyles.GetByVariableName(styleVariableData.name);
+            if (style.group != "") {
+                if (style.group == "Advanced") {
+                    let newRowId = advancedRepeater.generateRowId();
+                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Name")), style.name);
+                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Actions")), style.name);
+                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_SeeTechniques")), style.name);
+                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_IsEquipped")), arteformSlot == style.name ? "on" : 0);
+                }
+                else if (style.group == "Arteform") {
+                    let newRowId = arteformRepeater.generateRowId();
+                    attrHandler.addUpdate(arteformRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Name")), style.name);
+                    attrHandler.addUpdate(arteformRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Actions")), style.name);
+                    attrHandler.addUpdate(arteformRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_SeeTechniques")), style.name);
+                    attrHandler.addUpdate(arteformRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_IsEquipped")), advancedSlots.includes(style.name) ? "on" : 0);
+                }
+            }
+        });
+    };
     'use strict';
 
     const updateBuildPoints = function (eventinfo) {
@@ -64,6 +90,28 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let worker = new WuxWorkerBuildManager("Style");
             worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
             attributeHandler.run();
+        },
+
+        updateStats = function (attributeHandler) {
+            let styleWorker = new WuxBasicWorkerBuild("Style");
+            attributeHandler.addMod(styleWorker.attrBuildDraft);
+            attributeHandler.addMod([WuxDef.GetVariable("Style_ArteformSlot"), WuxDef.GetVariable("Style_AdvancedSlot1"), 
+                WuxDef.GetVariable("Style_AdvancedSlot2"), WuxDef.GetVariable("Style_AdvancedSlot3")]);
+
+            let advancedStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingAdvancedStyles");
+            let arteformStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingArteformStyles");
+            advancedStyleValuesRepeatingSection.getIds(function (advancedRepeater) {
+                arteformStyleValuesRepeatingSection.getIds(function (arteformRepeater) {
+                    attributeHandler.addGetAttrCallback(function (attrHandler) {
+                        styleWorker.setBuildStatsDraft(attrHandler);
+
+                        arteformRepeater.removeAllIds();
+                        advancedRepeater.removeAllIds();
+                        addStyles(attrHandler, styleWorker, advancedRepeater, arteformRepeater);
+                    });
+                    attributeHandler.run();
+                });
+            });
         },
 
         seeTechniques = function (eventinfo) {
@@ -84,6 +132,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
 
     return {
         UpdateBuildPoints: updateBuildPoints,
+        UpdateStats: updateStats,
         SeeTechniques: seeTechniques
     };
 }());

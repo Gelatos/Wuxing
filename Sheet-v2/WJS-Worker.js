@@ -46,7 +46,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             WuxWorkerAttributes.UpdateStats(attributeHandler);
             WuxWorkerSkills.UpdateStats(attributeHandler);
             WuxWorkerKnowledges.UpdateStats(attributeHandler);
-            WuxWorkerTechniques.UpdateLearnedStats(attributeHandler);
+            WuxWorkerStyles.UpdateStats(attributeHandler);
             WuxWorkerAdvancement.UpdateStats(attributeHandler);
             updateStats(attributeHandler);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -140,7 +140,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                             }
                         }
 
-                        let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Branched")]);
+                        let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Arteform")]);
                         for (let i = 0; i < specStyleDefinitions.length; i++) {
                             workerVariableName = specStyleDefinitions[i].getVariable();
                             if (workerVariableName == eventinfo.sourceAttribute) {
@@ -187,7 +187,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "EqGear", WuxDef._filter), "1");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Job", WuxDef._filter), "1");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Advanced", WuxDef._filter), "0");
-                attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Branched", WuxDef._filter), "0");
+                attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Arteform", WuxDef._filter), "0");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Basic", WuxDef._filter), "1");
                 attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._filter), "1");
                 attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._subfilter), "1");
@@ -218,7 +218,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                     filterStyleTechniquesForLearn(advStyleDefinitions[i], styleValue.toString(), cr, affinities, attrHandler, techniqueWorker);
                 }
 
-                let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Branched")]);
+                let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Arteform")]);
                 for (let i = 0; i < specStyleDefinitions.length; i++) {
                     workerVariableName = specStyleDefinitions[i].getVariable();
                     styleValue = techniqueWorker.buildStats.has(workerVariableName) ? techniqueWorker.buildStats.get(workerVariableName).value : "0";
@@ -262,7 +262,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
             let advStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), 
                 new DatabaseFilterData("mainGroup", "Advanced")]);
             let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), 
-                new DatabaseFilterData("mainGroup", "Branched")]);
+                new DatabaseFilterData("mainGroup", "Arteform")]);
             let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
             let gearDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Gear"));
 
@@ -346,14 +346,14 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "EqGear", WuxDef._filter), "0");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Job", WuxDef._filter), "0");
                 attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Advanced", WuxDef._filter), "0");
-                attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Branched", WuxDef._filter), "0");
+                attrHandler.addUpdate(WuxDef.GetVariable("StyleType", "Arteform", WuxDef._filter), "0");
                 attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._filter), "0");
             });
         },
         filterTechniquesForStyleSet = function (attributeHandler) {
             Debug.Log("Filter Techniques for Style Set");
             let advStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Advanced")]);
-            let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Branched")]);
+            let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Arteform")]);
             let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 
             let styleWorker = new WuxWorkerBuild("Style");
@@ -451,7 +451,7 @@ var WuxWorkerTechniques = WuxWorkerTechniques || (function () {
         filterTechniquesForActions = function (attributeHandler) {
             Debug.Log("Filter Techniques For Actions");
             let advStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Advanced")]);
-            let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Branched")]);
+            let specStyleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Style"), new DatabaseFilterData("mainGroup", "Arteform")]);
             let jobDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Job"));
 
             let styleWorker = new WuxWorkerBuild("Style");

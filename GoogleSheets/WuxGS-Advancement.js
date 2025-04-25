@@ -651,7 +651,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildTierSelect = function (jobDef) {
-                            return WuxSheetMain.Select(jobDef.getAttribute(WuxDef._rank),
+                            return WuxSheetMain.Select(jobDef.getAttribute(),
                                 WuxDef.Filter([new DatabaseFilterData("group", "JobTier")]), false);
                         },
 

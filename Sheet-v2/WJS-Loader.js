@@ -21,18 +21,18 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 	attributeHandler.addUpdate(WuxDef.GetVariable("Training", WuxDef._max), 0);
 	trainingWorker.updateTrainingPoints(attributeHandler);
 
-	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Technique", "Attribute", "Style", "JobStyle"]);
+	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Style"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+	Debug.Log(`Updating points`);
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
 		manager.iterate(function(worker) {
+			Debug.Log(`Updating ${worker.name} points`);
 			worker.setBuildStatsDraft(attrHandler);
 			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
 			worker.setPointsMax(attributeHandler);
 			worker.updatePoints(attributeHandler);
 		});
 	});
-
-	WuxWorkerTechniques.UpdateTechniquesPageToLearn(attributeHandler);
 	
 	attributeHandler.run();
 };

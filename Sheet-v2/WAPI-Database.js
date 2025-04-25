@@ -1095,6 +1095,19 @@ class JobData extends WuxDatabaseData {
         }
         return output;
     }
+    
+    convertToStyle() {
+        let style = new TechniqueStyle();
+        style.createEmpty();
+        style.name = this.name;
+        style.fieldName = this.fieldName;
+        style.group = "Job";
+        style.subGroup = this.group;
+        style.description = this.description;
+        style.affinity = "";
+        style.cr = 0;
+        return style;
+    }
 }
 
 class ArchetypeData extends WuxDatabaseData {

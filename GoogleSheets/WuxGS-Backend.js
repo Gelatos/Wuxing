@@ -9,7 +9,6 @@ var BuilderBackend = BuilderBackend || (function () {
             output += listenerCharacterCreationFinishButton();
             output += listenerCharacterCreationSetAffinity();
             output += listenerCharacterCreationBonusAttributes();
-            output += listenerUpdateTechniqueBuildPoints();
             output += listenerUpdateStyleBuildPoints();
             output += listenerSeeStyleTechniques();
             return output;
@@ -33,16 +32,10 @@ var BuilderBackend = BuilderBackend || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
-        listenerUpdateTechniqueBuildPoints = function () {
-            let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Technique"));
-            let output = `WuxWorkerTechniques.UpdateTechniqueBuildPoints(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
-        },
 
         listenerUpdateStyleBuildPoints = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"));
-            let output = `WuxWorkerTechniques.UpdateStyleBuildPoints(eventinfo)`;
+            let output = `WuxWorkerStyles.UpdateBuildPoints(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -182,7 +175,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
         },
 
         listenerUpdateJobBuildPoints = function () {
-            let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"), WuxDef._rank);
+            let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));
             let output = `WuxWorkerJobs.UpdateBuildPoints(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);

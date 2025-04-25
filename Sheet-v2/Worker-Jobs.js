@@ -54,6 +54,23 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
 
         return selectedElement;
     };
+    const addStyles = function (attrHandler, jobWorker, jobStylesRepeater) {
+        let jobSlot = WuxDef.GetVariable("Style_JobSlot");
+        Debug.Log(`Here with ${JSON.stringify(jobWorker.buildStats)}`);
+
+        jobWorker.iterateBuildStats(function (jobStyleVariableData) {
+            let jobStyle = WuxStyles.GetByVariableName(jobStyleVariableData.name);
+            Debug.Log(`Adding ${JSON.stringify(jobStyleVariableData)} to repeater`);
+
+            if (jobStyle.group != "") {
+                let newRowId = jobStylesRepeater.generateRowId();
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Name")), jobStyle.name);
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_IsEquipped")), jobSlot == jobStyle.name ? "on" : 0);
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Actions")), jobStyle.name);
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_SeeTechniques")), jobStyle.name);
+            }
+        });
+    };
     'use strict';
 
     const updateBuildPoints = function (eventinfo) {
@@ -62,6 +79,23 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             let worker = new WuxWorkerBuildManager("Job");
             worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
             attributeHandler.run();
+        },
+        
+        updateStats = function (attributeHandler) {
+            let jobWorker = new WuxBasicWorkerBuild("Job");
+            attributeHandler.addMod(jobWorker.attrBuildDraft);
+            attributeHandler.addMod(WuxDef.GetVariable("Style_JobSlot"));
+
+            let repeaterName = "RepeatingJobStyles";
+            let jobStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
+            jobStyleValuesRepeatingSection.getIds(function (jobStylesRepeater) {
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    jobWorker.setBuildStatsDraft(attrHandler);
+                    jobStylesRepeater.removeAllIds();
+                    addStyles(attrHandler, jobWorker, jobStylesRepeater);
+                });
+                attributeHandler.run();
+            });
         },
 
         seeTechniques = function (eventinfo) {
@@ -82,6 +116,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
 
     return {
         UpdateBuildPoints: updateBuildPoints,
+        UpdateStats: updateStats,
         SeeTechniques: seeTechniques
     };
 }());

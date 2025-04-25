@@ -102,15 +102,33 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
     return PrintLargeEntry(output, "]");
 }
 
-function SetItemTechDatabase(styleArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
+function SetItemTechDatabase(styleArray, jobArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
     let output = "";
 
     let techDb = SheetsDatabase.CreateTechniques(techniqueArray);
     let techniqueClassData = JavascriptDatabase.Create(techDb, WuxDefinition.GetTechnique);
     techniqueClassData.addPublicFunction("filterAndSortTechniquesByRequirement", WuxDefinition.FilterAndSortTechniquesByRequirement);
     output += techniqueClassData.print("WuxTechs") + "\n";
-    
-    let styleClassData = JavascriptDatabase.Create(SheetsDatabase.CreateStyles(styleArray, techDb), WuxDefinition.GetStyle);
+
+    let styleDb = SheetsDatabase.CreateStyles(styleArray, techDb);
+    let variableNameKeys = {};
+    styleDb.iterate(function (value, key) {
+        let definition = value.createDefinition(WuxDef.Get("Style"));
+        variableNameKeys[definition.getVariable()] = key;
+    });
+    let jobDb = SheetsDatabase.CreateJobs(jobArray);
+    jobDb.iterate(function (job, key) {
+        let jobStyle = job.convertToStyle();
+        styleDb.add(jobStyle.name, jobStyle);
+        let definition = job.createDefinition(WuxDef.Get("Job"));
+        variableNameKeys[definition.getVariable()] = key;
+    });
+    let styleClassData = JavascriptDatabase.Create(styleDb, WuxDefinition.GetStyle);
+    styleClassData.addVariable("variableNameKeys", JSON.stringify(variableNameKeys));
+    styleClassData.addPublicFunction("getByVariableName", function (variableName) {
+        let key = variableNameKeys[variableName];
+        return get(key);
+    });
     output += styleClassData.print("WuxStyles") + "\n";
 
     let goodsClassData = JavascriptDatabase.Create(SheetsDatabase.CreateGoods(goodsArray), WuxDefinition.GetGoods);
@@ -818,6 +836,9 @@ var WuxDefinition = WuxDefinition || (function () {
             }
 
             return techniquesByRequirements;
+        },
+        getByVariable = function (key) {
+            
         },
 
         displayEntry = function (dictionary, key) {
