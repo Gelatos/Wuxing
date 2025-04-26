@@ -234,6 +234,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 			trainingWorker.resetChanges(attributeHandler);
 
 			WuxWorkerKnowledges.UpdateStats(attributeHandler);
+			WuxWorkerJobs.UpdateStats(attributeHandler);
 			WuxWorkerStyles.UpdateStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
@@ -330,6 +331,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
+			WuxWorkerJobs.UpdateStats(attributeHandler);
 			WuxWorkerStyles.UpdateStats(attributeHandler);
 			updateStats(attributeHandler);
 

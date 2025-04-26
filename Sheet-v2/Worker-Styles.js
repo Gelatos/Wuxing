@@ -57,26 +57,27 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         return selectedElement;
     };
     const addStyles = function (attrHandler, styleWorker, advancedRepeater, arteformRepeater) {
+        Debug.Log("Add Styles");
         let arteformSlot = WuxDef.GetVariable("Style_ArteformSlot");
         let advancedSlots = [WuxDef.GetVariable("Style_AdvancedSlot1"),
             WuxDef.GetVariable("Style_AdvancedSlot2"), WuxDef.GetVariable("Style_AdvancedSlot3")];
 
         styleWorker.iterateBuildStats(function (styleVariableData) {
-
             let style = WuxStyles.GetByVariableName(styleVariableData.name);
+            Debug.Log(`Style is named ${style.name} which is in group ${style.group}`);
             if (style.group != "") {
                 if (style.group == "Advanced") {
                     let newRowId = advancedRepeater.generateRowId();
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Name")), style.name);
-                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Actions")), style.name);
-                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_SeeTechniques")), style.name);
+                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Actions")), 0);
+                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_SeeTechniques")), 0);
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_IsEquipped")), arteformSlot == style.name ? "on" : 0);
                 }
                 else if (style.group == "Arteform") {
                     let newRowId = arteformRepeater.generateRowId();
                     attrHandler.addUpdate(arteformRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Name")), style.name);
-                    attrHandler.addUpdate(arteformRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Actions")), style.name);
-                    attrHandler.addUpdate(arteformRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_SeeTechniques")), style.name);
+                    attrHandler.addUpdate(arteformRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Actions")), 0);
+                    attrHandler.addUpdate(arteformRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_SeeTechniques")), 0);
                     attrHandler.addUpdate(arteformRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_IsEquipped")), advancedSlots.includes(style.name) ? "on" : 0);
                 }
             }
@@ -93,6 +94,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         },
 
         updateStats = function (attributeHandler) {
+            Debug.Log("Update Style Stats");
             let styleWorker = new WuxBasicWorkerBuild("Style");
             attributeHandler.addMod(styleWorker.attrBuildDraft);
             attributeHandler.addMod([WuxDef.GetVariable("Style_ArteformSlot"), WuxDef.GetVariable("Style_AdvancedSlot1"), 
@@ -101,16 +103,20 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let advancedStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingAdvancedStyles");
             let arteformStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingArteformStyles");
             advancedStyleValuesRepeatingSection.getIds(function (advancedRepeater) {
-                arteformStyleValuesRepeatingSection.getIds(function (arteformRepeater) {
-                    attributeHandler.addGetAttrCallback(function (attrHandler) {
-                        styleWorker.setBuildStatsDraft(attrHandler);
+                advancedRepeater.removeAllIds();
+            });
+            arteformStyleValuesRepeatingSection.getIds(function (arteformRepeater) {
+                arteformRepeater.removeAllIds();
+            });
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                Debug.Log("Adding Style Stats");
+                styleWorker.setBuildStatsDraft(attrHandler);
 
-                        arteformRepeater.removeAllIds();
-                        advancedRepeater.removeAllIds();
-                        addStyles(attrHandler, styleWorker, advancedRepeater, arteformRepeater);
-                    });
-                    attributeHandler.run();
-                });
+                addStyles(attrHandler, styleWorker, advancedStyleValuesRepeatingSection, arteformStyleValuesRepeatingSection);
+
+                styleWorker.cleanBuildStats();
+                styleWorker.setBuildStatVariables(attrHandler);
+                styleWorker.saveBuildStatsToFinal(attrHandler);
             });
         },
 

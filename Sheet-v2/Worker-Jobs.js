@@ -55,19 +55,19 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
         return selectedElement;
     };
     const addStyles = function (attrHandler, jobWorker, jobStylesRepeater) {
+        Debug.Log("Add Job Styles from addStyles");
         let jobSlot = WuxDef.GetVariable("Style_JobSlot");
-        Debug.Log(`Here with ${JSON.stringify(jobWorker.buildStats)}`);
 
         jobWorker.iterateBuildStats(function (jobStyleVariableData) {
             let jobStyle = WuxStyles.GetByVariableName(jobStyleVariableData.name);
-            Debug.Log(`Adding ${JSON.stringify(jobStyleVariableData)} to repeater`);
+            Debug.Log(`Adding Job Style ${jobStyleVariableData.name}`);
 
             if (jobStyle.group != "") {
                 let newRowId = jobStylesRepeater.generateRowId();
                 attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Name")), jobStyle.name);
                 attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_IsEquipped")), jobSlot == jobStyle.name ? "on" : 0);
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Actions")), jobStyle.name);
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_SeeTechniques")), jobStyle.name);
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Actions")), 0);
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_SeeTechniques")), 0);
             }
         });
     };
@@ -82,6 +82,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
         },
         
         updateStats = function (attributeHandler) {
+            Debug.Log("Update Job Stats");
             let jobWorker = new WuxBasicWorkerBuild("Job");
             attributeHandler.addMod(jobWorker.attrBuildDraft);
             attributeHandler.addMod(WuxDef.GetVariable("Style_JobSlot"));
@@ -89,12 +90,17 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             let repeaterName = "RepeatingJobStyles";
             let jobStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
             jobStyleValuesRepeatingSection.getIds(function (jobStylesRepeater) {
-                attributeHandler.addGetAttrCallback(function (attrHandler) {
-                    jobWorker.setBuildStatsDraft(attrHandler);
-                    jobStylesRepeater.removeAllIds();
-                    addStyles(attrHandler, jobWorker, jobStylesRepeater);
-                });
-                attributeHandler.run();
+                jobStylesRepeater.removeAllIds();
+            });
+            
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                jobWorker.setBuildStatsDraft(attrHandler);
+                
+                addStyles(attrHandler, jobWorker, jobStyleValuesRepeatingSection);
+
+                jobWorker.cleanBuildStats();
+                jobWorker.setBuildStatVariables(attrHandler);
+                jobWorker.saveBuildStatsToFinal(attrHandler);
             });
         },
 
