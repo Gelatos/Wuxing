@@ -282,6 +282,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 
 	var
 		goToPageSet = function () {
+			Debug.Log("Go to Advancement Page");
 			let attributeHandler = new WorkerAttributeHandler();
 			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Advancement");
 			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Advancement");
@@ -422,7 +423,8 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			});
 		},
 		updateStats = function (attributeHandler) {
-			let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", "CR"));
+			let formulaDefinitions = [];
+			formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", "CR"));
 			formulaDefinitions = formulaDefinitions.concat(WuxDef.Filter(new DatabaseFilterData("formulaMods", "Level")));
 
 			for (let i = 0; i < formulaDefinitions.length; i++) {

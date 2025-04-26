@@ -879,6 +879,7 @@ class TechniqueStyle extends WuxDatabaseData {
         definition.tier = this.cr;
         definition.affinity = this.affinity;
         definition.requirements = this.getRequirements();
+        definition.formula = new FormulaData();
         return definition;
     }
 
@@ -943,7 +944,7 @@ class SkillData extends WuxDatabaseData {
         let definition = super.createDefinition(baseDefinition);
         definition.subGroup = this.subGroup;
         definition.formula = new FormulaData(`${this.abilityScore}`);
-        definition.formula.addAttributes(definition.getFormulaMods(WuxDef._rank));
+        definition.formula.addAttributes(definition.getFormulaMods(`${WuxDef._rank}`));
         return definition;
     }
 }
@@ -1072,6 +1073,7 @@ class JobData extends WuxDatabaseData {
         let definition = new JobDefinitionData(super.createDefinition(baseDefinition));
         definition.subGroup = this.group;
         definition.requirements = this.getRequirements();
+        definition.formula = new FormulaData();
         return definition;
     }
 
