@@ -883,11 +883,9 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                 print = function () {
                     let contents = "";
                     contents += buildStyleSection("RepeatingJobStyles", "Page_JobStyles", 
-                        ["Style_JobSlot"]);
-                    contents += buildStyleSection("RepeatingArteformStyles", "Page_ArteformStyles", 
-                        ["Style_ArteformSlot"]);
+                        ["Forme_JobSlot"]);
                     contents += buildStyleSection("RepeatingAdvancedStyles", "Page_AdvancedStyles", 
-                        ["Style_AdvancedSlot1", "Style_AdvancedSlot2", "Style_AdvancedSlot3"]);
+                        ["Forme_ArteformSlot", "Forme_AdvancedSlot2", "Forme_AdvancedSlot3"]);
                     return WuxSheetMain.Build(contents);
                 },
 
@@ -905,32 +903,34 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
 
                 learnedStyles = function (repeatingSectionName) {
                     let repeatingDef = WuxDef.Get(repeatingSectionName);
-                    let nameDef = WuxDef.Get("Style_Name");
-                    let actionsDef = WuxDef.Get("Style_Actions");
+                    let nameDef = WuxDef.Get("Forme_Name");
+                    let tierDef = WuxDef.Get("Forme_Tier");
+                    let actionsDef = WuxDef.Get("Forme_Actions");
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsStyles(actionsDef, nameDef))}
+                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsStyles(actionsDef, nameDef, tierDef))}
                         ${WuxSheetMain.Row("&nbsp;")}
                     </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
-                addRepeaterContentsStyles = function (actionDef, nameDef) {
+                addRepeaterContentsStyles = function (actionDef, nameDef, tierDef) {
                     return WuxSheetMain.MultiRow(`
                         ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsStyles())}
+                        <div class="wuxEquipableType"><span class="wuxDescription"><span>Tier </span><span name="${tierDef.getAttribute()}"></span></span></div>
                         <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
                     );
                 },
 
                 addSubmenuContentsStyles = function() {
-                    let equippedDef = WuxDef.Get("Style_IsEquipped");
-                    let seeTechniquesDef = WuxDef.Get("Style_SeeTechniques");
+                    let equippedDef = WuxDef.Get("Forme_IsEquipped");
+                    let seeTechniquesDef = WuxDef.Get("Forme_SeeTechniques");
 
                     return `${WuxSheetMain.HiddenField(equippedDef.getAttribute(),
-                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Style_Unequip")}</span>`)}`)}
+                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Forme_Unequip")}</span>`)}`)}
                         ${WuxSheetMain.HiddenAuxField(equippedDef.getAttribute(),
-                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Style_Equip")}</span>`)}`)}
+                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Forme_Equip")}</span>`)}`)}
                         ${WuxSheetMain.SubMenuOptionButton(seeTechniquesDef.getAttribute(), `<span>${seeTechniquesDef.getTitle()}</span>`)}
                     `;
                 },
@@ -1014,18 +1014,18 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     var
                         build = function () {
                             let contents = "";
-                            contents += buildWearablesSection();
+                            contents += buildEquipment();
                             return contents;
                         },
 
-                        buildWearablesSection = function () {
+                        buildEquipment = function () {
                             let contents = "";
 
                             contents += WuxSheetMain.MultiRowGroup([ownedWearables(), equippedWearables()], WuxSheetMain.Table.FlexTable, 2);
 
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definition = WuxDef.Get("Page_GearWearables");
+                            let definition = WuxDef.Get("Page_GearEquipment");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 

@@ -35,7 +35,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayFormeSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
             output += DisplayPopups.Print();
-            return `${output}\n</div>`;
+            return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n</div>`;
         },
 
         buildHiddenFields = function () {
@@ -60,6 +60,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += TrainingBackend.Print(sheetsDb);
             output += AdvancementBackend.Print(sheetsDb);
             output += OverviewBuilder.Print();
+            output += FormeBuilder.Print();
             output += GearBuilder.Print();
             output += PopupBuilder.Print();
             output += ChatBuilder.Print();
@@ -658,7 +659,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         addSubmenuContents = function(jobDef, job) {
                             return `${WuxSheetMain.Header2("Description")}
                                 ${WuxSheetMain.Span("", job.description)}
-                                ${WuxSheetMain.SubMenuOptionButton(jobDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Style_SeeTechniques")}</span>`, job.name)}
+                                ${WuxSheetMain.SubMenuOptionButton(jobDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`, job.name)}
                             `;
                         },
 
@@ -934,7 +935,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                 },
 
                 addSubmenuContents = function(styleDef, style) {
-                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Style_SeeTechniques")}</span>`, style.name)}
+                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`, style.name)}
                     `;
                 },
 
@@ -1062,7 +1063,7 @@ var DisplayArteformSheet = DisplayArteformSheet || (function () {
                 },
 
                 addSubmenuContents = function(styleDef, style) {
-                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Style_SeeTechniques")}</span>`, style.name)}
+                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`, style.name)}
                     `;
                 },
 

@@ -1108,6 +1108,7 @@ class JobData extends WuxDatabaseData {
         style.description = this.description;
         style.affinity = "";
         style.cr = 0;
+        style.maxTier = 6;
         return style;
     }
 }

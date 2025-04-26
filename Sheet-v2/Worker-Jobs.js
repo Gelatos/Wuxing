@@ -56,7 +56,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
     };
     const addStyles = function (attrHandler, jobWorker, jobStylesRepeater) {
         Debug.Log("Add Job Styles from addStyles");
-        let jobSlot = WuxDef.GetVariable("Style_JobSlot");
+        let jobSlot = WuxDef.GetVariable("Forme_JobSlot");
 
         jobWorker.iterateBuildStats(function (jobStyleVariableData) {
             let jobStyle = WuxStyles.GetByVariableName(jobStyleVariableData.name);
@@ -64,10 +64,11 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
 
             if (jobStyle.group != "") {
                 let newRowId = jobStylesRepeater.generateRowId();
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Name")), jobStyle.name);
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_IsEquipped")), jobSlot == jobStyle.name ? "on" : 0);
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_Actions")), 0);
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Style_SeeTechniques")), 0);
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Name")), jobStyle.name);
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), jobStyleVariableData.value);
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsEquipped")), jobSlot == jobStyle.name ? "on" : 0);
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Actions")), 0);
+                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_SeeTechniques")), 0);
             }
         });
     };
@@ -85,7 +86,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             Debug.Log("Update Job Stats");
             let jobWorker = new WuxBasicWorkerBuild("Job");
             attributeHandler.addMod(jobWorker.attrBuildDraft);
-            attributeHandler.addMod(WuxDef.GetVariable("Style_JobSlot"));
+            attributeHandler.addMod(WuxDef.GetVariable("Forme_JobSlot"));
 
             let repeaterName = "RepeatingJobStyles";
             let jobStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);

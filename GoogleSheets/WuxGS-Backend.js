@@ -241,6 +241,35 @@ var OverviewBuilder = OverviewBuilder || (function () {
     }
 }());
 
+var FormeBuilder = FormeBuilder || (function () {
+    'use strict';
+
+    var
+        print = function () {
+            let output = "";
+            output += listenerInspectRepeatingForme();
+            return output;
+        },
+        listenerEquipRepeatingForme = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingWearables");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_WearableIsEquipped")}`];
+            let output = `WuxWorkerGear.EquipWearable(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerInspectRepeatingForme = function () {
+            return `${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingJobStyles")}:${WuxDef.GetVariable("Forme_SeeTechniques")}`],
+                `WuxWorkerStyles.SeeJobTechniques(eventinfo)`, true)}
+                    ${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingAdvancedStyles")}:${WuxDef.GetVariable("Forme_SeeTechniques")}`],
+                `WuxWorkerStyles.SeeAdvancedTechniques(eventinfo)`, true)}`;
+        }
+    return {
+        Print: print
+    }
+}());
+
 var GearBuilder = GearBuilder || (function () {
     'use strict';
 
@@ -306,6 +335,9 @@ var PopupBuilder = PopupBuilder || (function () {
         },
         listenerOpenSubMenu = function () {
             let groupVariableNames = [];
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingArteformStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvancedStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingWearables")}:${WuxDef.GetVariable("Gear_WearablesActions")}`]);
             groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"), WuxDef._expand));
             groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"), WuxDef._expand));
