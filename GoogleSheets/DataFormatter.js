@@ -1209,7 +1209,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         collapsibleTab = function (fieldName, title, contents) {
             return `<div class="wuxSegment">
             ${customInput("checkbox", fieldName, "wuxTab-flag", ` checked="checked"`)}
-            ${tabHeader(interactionElement.ExpandableBlockIcon(fieldName) + `<span>${title}</span>`)}
+            ${tabHeader(interactionElement.ExpandableBlockIcon(fieldName) + (title.startsWith("<") ? title : `<span>${title}</span>`))}
             ${tab(contents)}
             </div>`;
         },

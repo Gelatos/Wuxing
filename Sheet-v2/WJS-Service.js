@@ -521,3 +521,200 @@ class WuxAttributeWorkerBuild extends WuxWorkerBuild {
 		return points;
 	}
 }
+
+class DatabaseItemAttributeHandler {
+	constructor(attrHandler, baseDefinitionName, repeater, id) {
+		this.attrHandler = attrHandler;
+		this.baseDefinition = baseDefinitionName != undefined ? WuxDef.Get(baseDefinitionName) : undefined;
+		this.repeater = repeater != undefined ? repeater : undefined;
+		this.id = id != undefined ? id : "";
+	}
+	
+	setId (id) {
+		this.id = id;
+	}
+	
+	getVariable (key, suffix) {
+		let output = WuxDef.GetVariable(key, suffix);
+		if (this.baseDefinition != undefined) {
+			output = this.baseDefinition.getVariable(`-${output}`);
+		}
+		if (this.repeater != undefined) {
+			output = this.repeater.getFieldName(this.id, output);
+		}
+		return output;
+	}
+	
+	clearDefinition (baseAttribute, index) {
+		this.attrHandler.addUpdate(this.getVariable(baseAttribute, index), 0);
+		this.attrHandler.addUpdate(this.getVariable(baseAttribute, `${index}desc0`), 0);
+		this.attrHandler.addUpdate(this.getVariable(baseAttribute, `${index}desc1`), 0);
+		this.attrHandler.addUpdate(this.getVariable(baseAttribute, `${index}desc2`), 0);
+	};
+	addDefinitions (definitionData, prefix, descriptionMaxIndex) {
+		for (let i = 0; i < definitionData.length; i++) {
+			this.attrHandler.addUpdate(`${prefix}${i}`, definitionData[i].getTitle());
+
+			for (let j = 0; j < definitionData[i].descriptions.length; j++) {
+				if (j <= descriptionMaxIndex) {
+					this.attrHandler.addUpdate(`${prefix}${i}desc${j}`, definitionData[i].descriptions[j]);
+				} else {
+					this.attrHandler.addUpdate(`${prefix}${i}desc${descriptionMaxIndex}`, definitionData[i].descriptions[j]);
+				}
+			}
+		}
+	};
+}
+
+class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
+	constructor(attrHandler, baseDefinitionName) {
+		super(attrHandler, baseDefinitionName);
+	}
+	
+	setTechniqueInfo (technique) {
+		this.clearTechniqueInfo();
+
+		let displayData = new TechniqueDisplayData(technique);
+		this.attrHandler.addUpdate(this.getVariable("TechName"), displayData.name);
+		this.attrHandler.addUpdate(this.getVariable("TechActionType"), displayData.actionType);
+		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), displayData.resourceData);
+		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), displayData.targetData);
+		if (displayData.traits.length > 0) {
+			this.addDefinitions(displayData.traits, this.getVariable("TechTrait"), 3);
+		}
+
+		if (displayData.trigger != "") {
+			this.attrHandler.addUpdate(this.getVariable("TechTrigger"), displayData.trigger);
+		}
+		if (displayData.requirements != "") {
+			this.attrHandler.addUpdate(this.getVariable("TechRequirements"), displayData.requirements);
+		}
+		if (displayData.itemTraits.length > 0) {
+			this.addDefinitions(displayData.itemTraits, this.getVariable("TechItemReq"), 2);
+		}
+		if (displayData.flavorText != "") {
+			this.attrHandler.addUpdate(this.getVariable("TechFlavorText"), displayData.flavorText);
+		}
+		if (displayData.effects.length > 0) {
+			this.addTechniqueEffects(displayData.effects);
+		}
+		if (displayData.definitions.length > 0) {
+			this.addDefinitions(displayData.definitions, this.getVariable("TechDef"), 3);
+		}
+	}
+	addTechniqueEffects (effects) {
+		let incrementer = 0;
+		let attrSetter = this;
+		effects.forEach(function (effect) {
+			if (effect.check != undefined) {
+				attrSetter.attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}name`), effect.check);
+				attrSetter.attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}desc`), effect.checkDescription);
+
+				if (effect.effects != undefined) {
+					effect.effects.forEach(function (desc) {
+						if (desc != undefined) {
+							attrSetter.attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}`), desc);
+							incrementer++;
+						}
+					});
+				}
+				incrementer++;
+			}
+		});
+	}
+	clearTechniqueInfo () {
+		this.attrHandler.addUpdate(this.getVariable("TechActionType"), "");
+		this.attrHandler.addUpdate(this.getVariable("TechName"), 0);
+		this.attrHandler.addUpdate(this.getVariable("TechDisplayName"), "");
+		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), "");
+		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), "");
+		this.clearDefinition("TechTrait", 0);
+		this.clearDefinition("TechTrait", 1);
+		this.clearDefinition("TechTrait", 2);
+		this.clearDefinition("TechTrait", 3);
+		this.attrHandler.addUpdate(this.getVariable("TechTrigger"), 0);
+		this.attrHandler.addUpdate(this.getVariable("TechRequirements"), 0);
+		this.clearDefinition("TechItemReq", 0);
+		this.clearDefinition("TechItemReq", 1);
+		this.clearDefinition("TechItemReq", 2);
+		this.attrHandler.addUpdate(this.getVariable("TechFlavorText"), 0);
+		this.clearTechEffects();
+		this.clearDefinition("TechDef", 0);
+		this.clearDefinition("TechDef", 1);
+		this.clearDefinition("TechDef", 2);
+		this.clearDefinition("TechDef", 3);
+	}
+	clearTechEffects () {
+		for (let i = 0; i < 10; i++) {
+			this.attrHandler.addUpdate(this.getVariable("TechEffect", i), 0);
+			this.attrHandler.addUpdate(this.getVariable("TechEffect", `${i}name`), 0);
+			this.attrHandler.addUpdate(this.getVariable("TechEffect", `${i}desc`), "");
+		}
+	}
+}
+
+class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
+
+	setItemInfo (item) {
+		this.clearItemInfo();
+		this.setSharedItemInfo(item);
+
+		// set the technique info
+		let techData = new TechniqueDataAttributeHandler(this.attrHandler);
+		if (item.itemType == "UsableItem" && item.hasTechnique) {
+			techData.setTechniqueInfo(item.technique);
+		} else {
+			techData.clearTechniqueInfo();
+		}
+	}
+	setGoodsInfo (item) {
+		this.clearItemInfo();
+		this.setSharedItemInfo(item);
+		let techData = new TechniqueDataAttributeHandler(this.attrHandler);
+		techData.clearTechniqueInfo();
+	}
+	setSharedItemInfo (item) {
+		let displayData = new ItemDisplayData(item);
+		Debug.Log(`Setting item info for ${displayData.name}`);
+
+		this.attrHandler.addUpdate(this.getVariable("ItemName"), displayData.name);
+		this.attrHandler.addUpdate(this.getVariable("ItemGroup"), displayData.group);
+		this.attrHandler.addUpdate(this.getVariable("ItemStats"), displayData.stats);
+
+		if (displayData.traits.length > 0) {
+			this.addDefinitions(displayData.traits, this.getVariable("ItemTrait"), 3);
+		}
+		if (displayData.description != "") {
+			this.attrHandler.addUpdate(this.getVariable("ItemDescription"), displayData.description);
+		}
+		if (displayData.craftSkill != "") {
+			this.attrHandler.addUpdate(this.getVariable("ItemCraftSkill"), displayData.craftSkill);
+		}
+		if (displayData.craftMaterials != "") {
+			this.attrHandler.addUpdate(this.getVariable("ItemCraftMats"), displayData.craftMaterials);
+		}
+		if (displayData.craftComponents.length > 0) {
+			for (let i = 0; i < displayData.craftComponents.length; i++) {
+				let component = displayData.craftComponents[i];
+				this.attrHandler.addUpdate(WuxDef.GetVariable(`Popup_ItemCraft`, i), component.name);
+				this.attrHandler.addUpdate(WuxDef.GetVariable(`Popup_ItemCraft`, i + "desc0"), component.desc);
+			}
+		}
+	}
+	clearItemInfo () {
+		this.attrHandler.addUpdate(this.getVariable("ItemName"), 0);
+		this.attrHandler.addUpdate(this.getVariable("ItemGroup"), "");
+		this.attrHandler.addUpdate(this.getVariable("ItemStats"), "");
+		this.clearDefinition("ItemTrait", 0);
+		this.clearDefinition("ItemCraft", 1);
+		this.clearDefinition("ItemCraft", 2);
+		this.clearDefinition("ItemCraft", 3);
+		this.attrHandler.addUpdate(this.getVariable("ItemDescription"), 0);
+		this.attrHandler.addUpdate(this.getVariable("ItemCraftSkill"), 0);
+		this.attrHandler.addUpdate(this.getVariable("ItemCraftMats"), "");
+		this.clearDefinition("ItemCraft", 0);
+		this.clearDefinition("ItemCraft", 1);
+		this.clearDefinition("ItemCraft", 2);
+		this.clearDefinition("ItemCraft", 3);
+	}
+}

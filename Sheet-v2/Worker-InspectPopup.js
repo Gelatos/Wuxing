@@ -41,164 +41,6 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), repeaterName);
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), id);
     };
-    const setItemInfo = function (attrHandler, item) {
-        clearItemInfo(attrHandler);
-        setSharedItemInfo(attrHandler, item);
-
-        // set the technique info
-        if (item.itemType == "UsableItem" && item.hasTechnique) {
-            setTechniqueInfo(attrHandler, item.technique);
-        } else {
-            clearTechniqueInfo(attrHandler);
-        }
-    };
-    const setGoodsInfo = function (attrHandler, item) {
-        clearItemInfo(attrHandler);
-        setSharedItemInfo(attrHandler, item);
-        clearTechniqueInfo(attrHandler);
-    };
-    const setSharedItemInfo = function (attrHandler, item) {
-        let displayData = new ItemDisplayData(item);
-        Debug.Log(`Setting item info for ${displayData.name}`);
-
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemName"), displayData.name);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemGroup"), displayData.group);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemStats"), displayData.stats);
-
-        if (displayData.traits.length > 0) {
-            addDefinitions(attrHandler, displayData.traits, WuxDef.GetVariable("Popup_ItemTrait"), 3);
-        }
-        if (displayData.description != "") {
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemDescription"), displayData.description);
-        }
-        if (displayData.craftSkill != "") {
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemCraftSkill"), displayData.craftSkill);
-        }
-        if (displayData.craftMaterials != "") {
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemCraftMats"), displayData.craftMaterials);
-        }
-        if (displayData.craftComponents.length > 0) {
-            for (let i = 0; i < displayData.craftComponents.length; i++) {
-                let component = displayData.craftComponents[i];
-                attrHandler.addUpdate(WuxDef.GetVariable(`Popup_ItemCraft`, i), component.name);
-                attrHandler.addUpdate(WuxDef.GetVariable(`Popup_ItemCraft`, i + "desc0"), component.desc);
-            }
-        }
-    };
-    const clearItemInfo = function (attrHandler) {
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemName"), 0);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemGroup"), "");
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemStats"), "");
-        clearDefinition(attrHandler, "Popup_ItemTrait", 0);
-        clearDefinition(attrHandler, "Popup_ItemCraft", 1);
-        clearDefinition(attrHandler, "Popup_ItemCraft", 2);
-        clearDefinition(attrHandler, "Popup_ItemCraft", 3);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemDescription"), 0);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemCraftSkill"), 0);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_ItemCraftMats"), "");
-        clearDefinition(attrHandler, "Popup_ItemCraft", 0);
-        clearDefinition(attrHandler, "Popup_ItemCraft", 1);
-        clearDefinition(attrHandler, "Popup_ItemCraft", 2);
-        clearDefinition(attrHandler, "Popup_ItemCraft", 3);
-    };
-    const setTechniqueInfo = function (attrHandler, technique) {
-        clearTechniqueInfo(attrHandler);
-
-        let displayData = new TechniqueDisplayData(technique);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechName"), displayData.name);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechActionType"), displayData.actionType);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechResourceData"), displayData.resourceData);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTargetingData"), displayData.targetData);
-        if (displayData.traits.length > 0) {
-            addDefinitions(attrHandler, displayData.traits, WuxDef.GetVariable("Popup_TechTrait"), 3);
-        }
-
-        if (displayData.trigger != "") {
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrigger"), displayData.trigger);
-        }
-        if (displayData.requirements != "") {
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechRequirements"), displayData.requirements);
-        }
-        if (displayData.itemTraits.length > 0) {
-            addDefinitions(attrHandler, displayData.itemTraits, WuxDef.GetVariable("Popup_TechItemReq"), 2);
-        }
-        if (displayData.flavorText != "") {
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechFlavorText"), displayData.flavorText);
-        }
-        if (displayData.effects.length > 0) {
-            addTechniqueEffects(attrHandler, displayData.effects);
-        }
-        if (displayData.definitions.length > 0) {
-            addDefinitions(attrHandler, displayData.definitions, WuxDef.GetVariable("Popup_TechDef"), 3);
-        }
-    };
-    const clearDefinition = function (attrHandler, baseAttribute, index) {
-        attrHandler.addUpdate(WuxDef.GetVariable(baseAttribute, index), 0);
-        attrHandler.addUpdate(WuxDef.GetVariable(baseAttribute, `${index}desc0`), 0);
-        attrHandler.addUpdate(WuxDef.GetVariable(baseAttribute, `${index}desc1`), 0);
-        attrHandler.addUpdate(WuxDef.GetVariable(baseAttribute, `${index}desc2`), 0);
-    };
-    const addDefinitions = function (attrHandler, definitionData, prefix, descriptionMaxIndex) {
-        for (let i = 0; i < definitionData.length; i++) {
-            attrHandler.addUpdate(`${prefix}${i}`, definitionData[i].getTitle());
-
-            for (let j = 0; j < definitionData[i].descriptions.length; j++) {
-                if (j <= descriptionMaxIndex) {
-                    attrHandler.addUpdate(`${prefix}${i}desc${j}`, definitionData[i].descriptions[j]);
-                } else {
-                    attrHandler.addUpdate(`${prefix}${i}desc${descriptionMaxIndex}`, definitionData[i].descriptions[j]);
-                }
-            }
-        }
-    };
-    const addTechniqueEffects = function (attrHandler, effects) {
-        let incrementer = 0;
-        effects.forEach(function (effect) {
-            if (effect.check != undefined) {
-                attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}name`), effect.check);
-                attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}desc`), effect.checkDescription);
-
-                if (effect.effects != undefined) {
-                    effect.effects.forEach(function (desc) {
-                        if (desc != undefined) {
-                            attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}`), desc);
-                            incrementer++;
-                        }
-                    });
-                }
-                incrementer++;
-            }
-        });
-    };
-    const clearTechniqueInfo = function (attrHandler) {
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechActionType"), "");
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechName"), 0);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechDisplayName"), "");
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechResourceData"), "");
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTargetingData"), "");
-        clearDefinition(attrHandler, "Popup_TechTrait", 0);
-        clearDefinition(attrHandler, "Popup_TechTrait", 1);
-        clearDefinition(attrHandler, "Popup_TechTrait", 2);
-        clearDefinition(attrHandler, "Popup_TechTrait", 3);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechTrigger"), 0);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechRequirements"), 0);
-        clearDefinition(attrHandler, "Popup_TechItemReq", 0);
-        clearDefinition(attrHandler, "Popup_TechItemReq", 1);
-        clearDefinition(attrHandler, "Popup_TechItemReq", 2);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechFlavorText"), 0);
-        clearTechEffects(attrHandler);
-        clearDefinition(attrHandler, "Popup_TechDef", 0);
-        clearDefinition(attrHandler, "Popup_TechDef", 1);
-        clearDefinition(attrHandler, "Popup_TechDef", 2);
-        clearDefinition(attrHandler, "Popup_TechDef", 3);
-    };
-    const clearTechEffects = function (attrHandler) {
-        for (let i = 0; i < 10; i++) {
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect", i), 0);
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect", `${i}name`), 0);
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_TechEffect", `${i}desc`), "");
-        }
-    };
     const performAddSelectedInspectElement = function (attrHandler) {
         switch (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType"))) {
             case "Add Wearable":
@@ -220,7 +62,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_WearableStats")), displayData.stats);
 
         if (displayData.traits.length > 0) {
-            addDefinitions(attrHandler, displayData.traits, repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_WearableTrait")), 3);
+            let databaseAttributeHandler = new DatabaseItemAttributeHandler(attrHandler);
+            databaseAttributeHandler.addDefinitions(displayData.traits, repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_WearableTrait")), 3);
         }
         if (displayData.description != "") {
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_WearableDescription")), displayData.description);
@@ -263,7 +106,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                         closePopup();
                     } else {
                         setInspectionSelection(attrHandler, repeaterName, selectedItem.id);
-                        setItemInfo(attrHandler, selectedItem.item);
+                        let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler);
+                        itemAttributeHandler.setItemInfo(selectedItem.item);
                     }
                 });
             });
@@ -286,8 +130,10 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                         closePopup();
                     } else {
                         setInspectionSelection(attrHandler, repeaterName, selectedItem.id);
-                        clearItemInfo(attrHandler);
-                        setTechniqueInfo(attrHandler, selectedItem.item);
+                        let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
+                        itemAttributeHandler.clearItemInfo(attrHandler);
+                        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Popup");
+                        techniqueAttributeHandler.setTechniqueInfo(selectedItem.item);
                     }
                 });
             });
@@ -324,14 +170,18 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                         Debug.Log(`Got item ${itemName} with type ${itemType}`);
                         if (itemType == "Item") {
                             let item = WuxItems.Get(itemName);
-                            setItemInfo(attrHandler, item);
+                            let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
+                            itemAttributeHandler.setItemInfo(item);
                         } else if (itemType == "Goods") {
                             let goods = WuxGoods.Get(itemName);
-                            setGoodsInfo(attrHandler, goods);
+                            let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
+                            itemAttributeHandler.setGoodsInfo(goods);
                         } else if (itemType == "Tech") {
                             let technique = WuxTechs.Get(itemName);
-                            clearItemInfo(attrHandler);
-                            setTechniqueInfo(attrHandler, technique);
+                            let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
+                            itemAttributeHandler.clearItemInfo();
+                            let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Popup");
+                            techniqueAttributeHandler.setTechniqueInfo(technique);
                         }
                         setInspectionSelection(attrHandler, repeaterName, selectedId);
                     });

@@ -20,7 +20,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
 
         buildCharacterSheetTechHtml = function (sheetsDb) {
             let output = "";
-            output += DisplayTechniquesSheet.Print(sheetsDb);
+            // output += DisplayTechniquesSheet.Print(sheetsDb);
             return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n`;
         },
 
@@ -34,6 +34,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayCoreCharacterSheet.Print(sheetsDb);
             output += DisplayFormeSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
+            output += DisplayActionSheet.Print(sheetsDb);
             output += DisplayPopups.Print();
             return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n</div>`;
         },

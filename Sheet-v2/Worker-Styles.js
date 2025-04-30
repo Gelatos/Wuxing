@@ -1,5 +1,3 @@
-
-
 var WuxWorkerStyles = WuxWorkerStyles || (function () {
 
     const populateStyleInspectionTechniques = function (attrHandler, itemPopupRepeater, styleName, maxDisplayTier, showTierHeaders) {
