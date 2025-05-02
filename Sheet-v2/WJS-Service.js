@@ -567,9 +567,6 @@ class DatabaseItemAttributeHandler {
 }
 
 class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
-	constructor(attrHandler, baseDefinitionName) {
-		super(attrHandler, baseDefinitionName);
-	}
 	
 	setTechniqueInfo (technique) {
 		this.clearTechniqueInfo();

@@ -34,6 +34,8 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 		});
 	});
 	
+	WuxWorkerActions.PopulateBasicActions(attributeHandler);
+	
 	attributeHandler.run();
 };
 

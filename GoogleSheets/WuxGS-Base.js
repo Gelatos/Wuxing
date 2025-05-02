@@ -1003,7 +1003,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         contents += repeatingFormeTechniquesSection(repeaterData);
                     });
                     contents += repeatingBasicTechniquesSection("RepeatingGearTech");
-                    contents += repeatingBasicTechniquesSection("RepeatingBasicTech");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicActions");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicRecovery");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicAttack");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicSocial");
                     contents = WuxSheetMain.TabBlock(contents);
 
                     let sectionDef = WuxDef.Get(sectionDefName);
@@ -1016,7 +1019,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let repeatingFieldName = WuxDef.GetVariable(repeaterData.repeater);
                     let slotFieldName = WuxDef.GetVariable(repeaterData.slot);
 
-                    let contents = repeatingTechniquesSection(slotFieldName, repeatingFieldName);
+                    let contents = repeatingTechniquesSection(`<span name="${slotFieldName}"></span>`, repeatingFieldName);
                     contents = WuxSheetMain.HiddenField(slotFieldName, contents);
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
@@ -1029,7 +1032,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 },
                 
                 repeatingTechniquesSection = function (header, repeaterFieldName) {
-                    return `${WuxSheetMain.Header(`<span name="${header}"></span>`)}
+                    return `${WuxSheetMain.Header(header)}
                         <div>
                         ${buildRepeater(repeaterFieldName, addRepeaterContentsStyles())}
                         ${WuxSheetMain.Row("&nbsp;")}
