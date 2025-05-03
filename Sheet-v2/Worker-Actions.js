@@ -10,7 +10,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     };
     const populateStyleTechniques = function (attrHandler, sectionRepeater, styleName, maxTier) {
 
-        sectionRepeater.removeAllIds();
         let styleTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(new DatabaseFilterData("style", styleName));
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", sectionRepeater);
         let affinities = getAffinities(attrHandler);
@@ -31,32 +30,34 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             });
         }
     };
-    'use strict';
 
-    const populateBasicActions = function (attributeHandler)
+    const populateBasicActions = function (attributeHandler, repeatingSectionName, styleName)
     {
+        let repeatingWorker = new WorkerRepeatingSectionHandler(repeatingSectionName);
+
+        repeatingWorker.getIds(function (repeater) {
+            repeater.removeAllIds();
+        });
+
         addAffinityVariables(attributeHandler);
         let crFieldName = WuxDef.GetVariable("CR");
         attributeHandler.addMod(crFieldName);
-        attributeHandler.addGetAttrCallback(function (attrHandler) {
-            populateStyleTechniques(attrHandler,
-                new WorkerRepeatingSectionHandler("RepeatingBasicActions"),
-                "Basic Action", attrHandler.parseInt(crFieldName));
-            populateStyleTechniques(attrHandler,
-                new WorkerRepeatingSectionHandler("RepeatingBasicRecovery"),
-                "Basic Recovery", attrHandler.parseInt(crFieldName));
-            populateStyleTechniques(attrHandler,
-                new WorkerRepeatingSectionHandler("RepeatingBasicAttack"),
-                "Basic Attack", attrHandler.parseInt(crFieldName));
-            populateStyleTechniques(attrHandler,
-                new WorkerRepeatingSectionHandler("RepeatingBasicSocial"),
-                "Basic Social", attrHandler.parseInt(crFieldName));
-        });
         
-        attributeHandler.run();
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            populateStyleTechniques(attrHandler, repeatingWorker, styleName, attrHandler.parseInt(crFieldName));
+        });
+    };
+    'use strict';
+
+    const populateAllBasicActions = function (attributeHandler)
+    {
+        populateBasicActions(attributeHandler, "RepeatingBasicActions", "Basic Action");
+        populateBasicActions(attributeHandler, "RepeatingBasicRecovery", "Basic Recovery");
+        populateBasicActions(attributeHandler, "RepeatingBasicAttack", "Basic Attack");
+        populateBasicActions(attributeHandler, "RepeatingBasicSocial", "Basic Social");
     };
 
     return {
-        PopulateBasicActions: populateBasicActions
+        PopulateAllBasicActions: populateAllBasicActions
     };
 }());

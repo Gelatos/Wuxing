@@ -23,10 +23,8 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Style"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-	Debug.Log(`Updating points`);
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
 		manager.iterate(function(worker) {
-			Debug.Log(`Updating ${worker.name} points`);
 			worker.setBuildStatsDraft(attrHandler);
 			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
 			worker.setPointsMax(attributeHandler);
@@ -34,7 +32,7 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 		});
 	});
 	
-	WuxWorkerActions.PopulateBasicActions(attributeHandler);
+	WuxWorkerActions.PopulateAllBasicActions(attributeHandler);
 	
 	attributeHandler.run();
 };

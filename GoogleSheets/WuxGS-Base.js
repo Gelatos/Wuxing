@@ -1010,8 +1010,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents = WuxSheetMain.TabBlock(contents);
 
                     let sectionDef = WuxDef.Get(sectionDefName);
-                    let sectionDefinition = WuxDef.Get(sectionDef);
-                    return WuxSheetMain.CollapsibleTab(sectionDefinition.getAttribute(WuxDef._tab, WuxDef._expand),
+                    return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
                         `${sectionDef.getTitle()}`, contents);
                 },
 
@@ -1040,13 +1039,22 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 },
 
                 addRepeaterContentsStyles = function () {
-                    let actionFieldName = WuxDef.GetAttribute("Action_Actions");
+                    let submenuFieldName = WuxDef.GetAttribute("Action_Actions");
 
-                    return `<div class="wuxSubMenuButton">
-                        <input type="checkbox" name="${actionFieldName}">
-                        ${buildBaseTechniqueTemplate()}
-                        <input type="hidden" class="wuxSubMenu-flag" name="${actionFieldName}" value="0">
-                        <div class="wuxSubMenuContent">\n${addSubmenuContentsStyles()}\n</div>
+                    return buildListedTechniqueTemplate(submenuFieldName);
+                },
+
+                buildListedTechniqueTemplate = function (submenuFieldName) {
+                    return `
+                    <div class="wuxFeature wuxMinWidth220">
+                        <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionAttribute("TechActionType")}">
+                        <div class="wuxFeatureHeader wuxSubMenuSection">
+                            <input type="checkbox" name="${submenuFieldName}">
+                            ${buildBaseTechniqueHeaderContents(`<span class="wuxSubMenuText">l&nbsp;</span>`)}
+                            <input type="hidden" class="wuxSubMenu-flag" name="${submenuFieldName}" value="0">
+                            <div class="wuxSubMenuContent">\n${addSubmenuContentsStyles()}\n</div>
+                        </div>
+                        ${buildBaseTechniqueRequirements()}
                     </div>`;
                 },
 
@@ -1054,23 +1062,21 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let useTechniqueDef = WuxDef.Get("Action_Use");
                     let inspectTechniqueDef = WuxDef.Get("Action_Inspect");
 
-                    return `${buildFullTechniqueTemplate()}
-                        ${WuxSheetMain.SubMenuOptionButton(useTechniqueDef.getAttribute(), `<span>${useTechniqueDef.getTitle()}</span>`)}
+                    return `${WuxSheetMain.SubMenuOptionButton(useTechniqueDef.getAttribute(), `<span>${useTechniqueDef.getTitle()}</span>`)}
                         ${WuxSheetMain.SubMenuOptionButton(inspectTechniqueDef.getAttribute(), `<span>${inspectTechniqueDef.getTitle()}</span>`)}
+                        ${WuxSheetMain.Header2("Full Technique Details")}
+                        ${buildSubmenuTechniqueTemplate()}
                     `;
                 },
 
-                buildBaseTechniqueTemplate = function () {
+                buildSubmenuTechniqueTemplate = function () {
                     return `
                     <div class="wuxFeature">
-                        ${buildBaseTechniqueData()}
-                    </div>`;
-                },
-
-                buildFullTechniqueTemplate = function () {
-                    return `
-                    <div class="wuxFeature">
-                        ${buildBaseTechniqueData()}
+                        <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionAttribute("TechActionType")}">
+                        <div class="wuxFeatureHeader">
+                            ${buildBaseTechniqueHeaderContents()}
+                        </div>
+                        ${buildBaseTechniqueRequirements()}
                         ${buildExtendedTechniqueData()}
                     </div>`;
                         
@@ -1080,29 +1086,29 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let baseDefinition = WuxDef.Get("Action");
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
                 },
-
-                buildBaseTechniqueData = function () {
-                    return `<input type="hidden" class="wuxFeatureHeader-flag" name="${getActionAttribute("TechActionType")}">
-                    <div class="wuxFeatureHeader">
-                        <div class="wuxFeatureHeaderDisplayBlock">
-                            <span class="wuxFeatureHeaderName" name="${getActionAttribute("TechName")}"></span>
-                            <div class="wuxFeatureHeaderInfo"><span name="${getActionAttribute("TechResourceData")}"></span></div>
-                            <div class="wuxFeatureHeaderInfo"><span name="${getActionAttribute("TechTargetingData")}"></span></div>
-                            <div class="wuxFeatureHeaderInfo">
-                                <span><strong>Traits: </strong></span>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${getActionAttribute("TechTrait", 0)}" value="0" />
-                                <div class="wuxHiddenInlineAuxField">
-                                    <span>None</span>
-                                </div>
-                                ${buildTooltipSection("TechTrait", 0)}
-                                ${buildTooltipSection("TechTrait", 1)}
-                                ${buildTooltipSection("TechTrait", 2)}
-                                ${buildTooltipSection("TechTrait", 3)}
-                                ${buildTooltipSection("TechTrait", 4)}
+                
+                buildBaseTechniqueHeaderContents = function (headerPrefix) {
+                    return `<div class="wuxFeatureHeaderDisplayBlock">
+                        <div class="wuxFeatureHeaderName">${headerPrefix != undefined ? headerPrefix : ""}<span name="${getActionAttribute("TechName")}"></span></div>
+                        <div class="wuxFeatureHeaderInfo"><span name="${getActionAttribute("TechResourceData")}"></span></div>
+                        <div class="wuxFeatureHeaderInfo"><span name="${getActionAttribute("TechTargetingData")}"></span></div>
+                        <div class="wuxFeatureHeaderInfo">
+                            <span><strong>Traits: </strong></span>
+                            <input type="hidden" class="wuxHiddenField-flag" name="${getActionAttribute("TechTrait", 0)}" value="0" />
+                            <div class="wuxHiddenInlineAuxField">
+                                <span>None</span>
                             </div>
+                            ${buildTooltipSection("TechTrait", 0)}
+                            ${buildTooltipSection("TechTrait", 1)}
+                            ${buildTooltipSection("TechTrait", 2)}
+                            ${buildTooltipSection("TechTrait", 3)}
+                            ${buildTooltipSection("TechTrait", 4)}
                         </div>
-                    </div>
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionAttribute("TechTrigger")}" value="0" />
+                    </div>`;
+                },
+                
+                buildBaseTechniqueRequirements = function () {
+                    return `<input type="hidden" class="wuxHiddenField-flag" name="${getActionAttribute("TechTrigger")}" value="0" />
                     <div class="wuxHiddenField">
                         <div class="wuxFeatureHeaderInfoTrigger">
                             <span><strong>Trigger: </strong></span>
@@ -1124,8 +1130,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                                 ${buildTooltipSection("TechItemReq", 1, " and ")}
                                 ${buildTooltipSection("TechItemReq", 2, " and ")}
                         </div>
-                    </div>
-                    `;
+                    </div>`;
                 },
 
                 buildExtendedTechniqueData = function () {
@@ -1211,7 +1216,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {
-                    return `<div class="wuxNoRepControl">
+                    return `<div class="wuxNoRepControl wuxRepeatingFlexSection">
                         <fieldset class="${repeaterName}">
                             ${repeaterData}
                         </fieldset>

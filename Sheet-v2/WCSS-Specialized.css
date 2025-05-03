@@ -606,7 +606,7 @@ input.wuxFeatureType-flag[value="Standard"] + .wuxFeatureType,
     position: relative;
 	display: inline-block;
 	width: 25px;
-	height: 20px;
+	height: 100%;
 }
 
 input[type=hidden].wuxFeatureInteraction-flag[value="1"] + .wuxFeatureHeaderInteractBlock 

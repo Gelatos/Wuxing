@@ -143,7 +143,7 @@ class WuxWorkerBuild {
 	}
 
 	setPointsMax(attributeHandler) {
-		let max = this.definition.formula.getValue(attributeHandler, this.definition.getTitle());
+		let max = this.definition.formula.getValue(attributeHandler);
 		attributeHandler.addUpdate(this.attrMax, max);
 	}
 
@@ -207,7 +207,7 @@ class WuxWorkerBuild {
 	changeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
 		let worker = this;
 
-		Debug.Log(`Updating ${worker.definition.name} variable ${updatingAttr} to ${newValue}`);
+		// Debug.Log(`Updating ${worker.definition.name} variable ${updatingAttr} to ${newValue}`);
 		attributeHandler.addMod(worker.attrMax);
 		attributeHandler.addMod(worker.attrBuildDraft);
 
@@ -604,13 +604,13 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		let attrSetter = this;
 		effects.forEach(function (effect) {
 			if (effect.check != undefined) {
-				attrSetter.attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}name`), effect.check);
-				attrSetter.attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}desc`), effect.checkDescription);
+				attrSetter.attrHandler.addUpdate(attrSetter.getVariable(`TechEffect`, `${incrementer}name`), effect.check);
+				attrSetter.attrHandler.addUpdate(attrSetter.getVariable(`TechEffect`, `${incrementer}desc`), effect.checkDescription);
 
 				if (effect.effects != undefined) {
 					effect.effects.forEach(function (desc) {
 						if (desc != undefined) {
-							attrSetter.attrHandler.addUpdate(WuxDef.GetVariable(`Popup_TechEffect`, `${incrementer}`), desc);
+							attrSetter.attrHandler.addUpdate(attrSetter.getVariable(`TechEffect`, `${incrementer}`), desc);
 							incrementer++;
 						}
 					});
