@@ -251,9 +251,9 @@ var FormeBuilder = FormeBuilder || (function () {
             return output;
         },
         listenerEquipRepeatingForme = function () {
-            let repeatingSection = WuxDef.GetVariable("RepeatingWearables");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_WearableIsEquipped")}`];
-            let output = `WuxWorkerGear.EquipWearable(eventinfo)`;
+            let repeatingSection = WuxDef.GetVariable("RepeatingEquipment");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_ItemIsEquipped")}`];
+            let output = `WuxWorkerGear.EquipEquipment(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -277,9 +277,9 @@ var GearBuilder = GearBuilder || (function () {
         print = function () {
             let output = "";
             output += listenerOpenItemInspectPopup();
-            output += listenerEquipRepeatingWearable();
-            output += listenerDeleteRepeatingWearable();
-            output += listenerInspectRepeatingWearable();
+            output += listenerEquipRepeatingEquipment();
+            output += listenerDeleteRepeatingEquipment();
+            output += listenerInspectRepeatingEquipment();
             return output;
         },
         listenerOpenItemInspectPopup = function () {
@@ -289,28 +289,28 @@ var GearBuilder = GearBuilder || (function () {
                 WuxDef.GetVariable("Page_AddArmGear"),
                 WuxDef.GetVariable("Page_AddLegGear"),
                 WuxDef.GetVariable("Page_AddFootGear")];
-            let output = `WuxWorkerGear.OpenWearableAdditionItemInspection(eventinfo)`;
+            let output = `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
-        listenerEquipRepeatingWearable = function () {
-            let repeatingSection = WuxDef.GetVariable("RepeatingWearables");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_WearableIsEquipped")}`];
-            let output = `WuxWorkerGear.EquipWearable(eventinfo)`;
+        listenerEquipRepeatingEquipment = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingEquipment");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_ItemIsEquipped")}`];
+            let output = `WuxWorkerGear.EquipEquipment(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
-        listenerDeleteRepeatingWearable = function () {
-            let repeatingSection = WuxDef.GetVariable("RepeatingWearables");
+        listenerDeleteRepeatingEquipment = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingEquipment");
             let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_Delete")}`];
-            let output = `WuxWorkerGear.DeleteWearable(eventinfo)`;
+            let output = `WuxWorkerGear.DeleteEquipment(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
-        listenerInspectRepeatingWearable = function () {
-            let repeatingSection = WuxDef.GetVariable("RepeatingWearables");
+        listenerInspectRepeatingEquipment = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingEquipment");
             let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_Inspect")}`];
-            let output = `WuxWorkerGear.InspectWearable(eventinfo)`;
+            let output = `WuxWorkerGear.InspectEquipment(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
@@ -338,7 +338,7 @@ var PopupBuilder = PopupBuilder || (function () {
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingArteformStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvancedStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
-            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingWearables")}:${WuxDef.GetVariable("Gear_WearablesActions")}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_ItemActions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobTech")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvTech")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvTech2")}:${WuxDef.GetVariable("Action_Actions")}`]);

@@ -525,6 +525,7 @@ class WuxAttributeWorkerBuild extends WuxWorkerBuild {
 class DatabaseItemAttributeHandler {
 	constructor(attrHandler, baseDefinitionName, repeater, id) {
 		this.attrHandler = attrHandler;
+		this.baseDefinitionName = baseDefinitionName;
 		this.baseDefinition = baseDefinitionName != undefined ? WuxDef.Get(baseDefinitionName) : undefined;
 		this.repeater = repeater != undefined ? repeater : undefined;
 		this.id = id != undefined ? id : "";
@@ -672,7 +673,7 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.setSharedItemInfo(item);
 
 		// set the technique info
-		let techData = new TechniqueDataAttributeHandler(this.attrHandler);
+		let techData = new TechniqueDataAttributeHandler(this.attrHandler, this.baseDefinitionName, this.repeater, this.id);
 		if (item.itemType == "UsableItem" && item.hasTechnique) {
 			techData.setTechniqueInfo(item.technique);
 		} else {

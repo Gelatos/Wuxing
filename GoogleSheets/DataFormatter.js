@@ -86,6 +86,8 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
     let definitionClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.GetDefinition);
     definitionClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
     definitionClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
+    definitionClassData.addPublicFunction("getUntypedAttribute", WuxDefinition.GetUntypedAttribute);
+    definitionClassData.addPublicFunction("getUntypedVariable", WuxDefinition.GetUntypedVariable);
     definitionClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
     definitionClassData.addPublicFunction("getVariables", WuxDefinition.GetVariables);
     definitionClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
@@ -780,6 +782,14 @@ var WuxDefinition = WuxDefinition || (function () {
             let data = get(key);
             return data.getVariable(mod, mod1);
         },
+        getUntypedAttribute = function (baseKey, key, mod, mod1) {
+            let baseDefinition = get(baseKey);
+            return baseDefinition.getAttribute(`-${getVariable(key, mod, mod1)}`);
+        },
+        getUntypedVariable = function (baseKey, key, mod, mod1) {
+            let baseDefinition = get(baseKey);
+            return baseDefinition.getVariable(`-${getVariable(key, mod, mod1)}`);
+        },
         getAbbreviation = function (key) {
             let data = get(key);
             if (data.abbreviation == "") {
@@ -815,6 +825,7 @@ var WuxDefinition = WuxDefinition || (function () {
         getName = function (name, baseDefinition) {
             return baseDefinition.isResource ? `${name}` : `${baseDefinition.abbreviation}_${name}`;
         },
+        
 
         filterAndSortTechniquesByRequirement = function (techniquesFilterData) {
             let techniquesFilter = filter(techniquesFilterData);
@@ -915,6 +926,8 @@ var WuxDefinition = WuxDefinition || (function () {
         GetGoods: getGoods,
         GetAttribute: getAttribute,
         GetVariable: getVariable,
+        GetUntypedAttribute: getUntypedAttribute,
+        GetUntypedVariable: getUntypedVariable,
         GetAbbreviation: getAbbreviation,
         GetVariables: getVariables,
         GetGroupVariables: getGroupVariables,

@@ -704,7 +704,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         buildEquipment = function () {
                             let contents = "";
 
-                            contents += WuxSheetMain.MultiRowGroup([ownedWearables(), equippedWearables()], WuxSheetMain.Table.FlexTable, 2);
+                            contents += WuxSheetMain.MultiRowGroup([ownedEquipment(), equippedEquipment()], WuxSheetMain.Table.FlexTable, 2);
 
                             contents = WuxSheetMain.TabBlock(contents);
 
@@ -712,29 +712,29 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
-                        ownedWearables = function () {
-                            let repeatingDef = WuxDef.Get("RepeatingWearables");
-                            let nameDef = WuxDef.Get("Gear_WearableName");
-                            let actionsDef = WuxDef.Get("Gear_WearablesActions");
+                        ownedEquipment = function () {
+                            let repeatingDef = WuxDef.Get("RepeatingEquipment");
+                            let nameDef = WuxDef.Get("Gear_ItemName");
+                            let actionsDef = WuxDef.Get("Gear_ItemActions");
 
                             let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                                 <div>
-								${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsWearables(actionsDef, nameDef))}
+								${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsEquipment(actionsDef, nameDef))}
 								${WuxSheetMain.Row("&nbsp;")}
-								${addPopupWearables()}
+								${addPopupEquipment()}
 							</div>`;
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                         },
 
-                        addRepeaterContentsWearables = function (actionDef, nameDef) {
+                        addRepeaterContentsEquipment = function (actionDef, nameDef) {
                             return WuxSheetMain.MultiRow(`
-                                ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsWearables())}
+                                ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsEquipment())}
                                 <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
                             );
                         },
 
-                        addSubmenuContentsWearables = function () {
-                            let equippedDef = WuxDef.Get("Gear_WearableIsEquipped");
+                        addSubmenuContentsEquipment = function () {
+                            let equippedDef = WuxDef.Get("Gear_ItemIsEquipped");
                             let deleteDef = WuxDef.Get("Gear_Delete");
                             let inspectDef = WuxDef.Get("Gear_Inspect");
 
@@ -742,7 +742,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 ${WuxSheetMain.HiddenField(equippedDef.getAttribute(),
                                 `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Gear_Unequip")}</span>`)}`)}
                                 ${WuxSheetMain.HiddenAuxField(equippedDef.getAttribute(),
-                                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), WuxSheetMain.Span(WuxDef.GetAttribute("Gear_WearableEquipMenu")))}`)}
+                                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), WuxSheetMain.Span(WuxDef.GetAttribute("Gear_ItemEquipMenu")))}`)}
                                 ${WuxSheetMain.SubMenuOptionButton(deleteDef.getAttribute(), `<span>${deleteDef.getTitle()}</span>`)}
                                 ${WuxSheetMain.SubMenuOptionButton(inspectDef.getAttribute(), `<span>${inspectDef.getTitle()}</span>`)}
                             `;
@@ -753,103 +753,28 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             <div class="wuxFeature">
                                 <div class="wuxFeatureHeader wuxFeatureHeader-Item">
                                     <div class="wuxFeatureHeaderDisplayBlock">
-                                        <span class="wuxFeatureHeaderName" name="${WuxDef.GetAttribute("Gear_WearableName")}"></span>
-                                        <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Gear_WearableGroup")}"></span></div>
-                                        <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Gear_WearableStats")}"></span></div>
+                                        <span class="wuxFeatureHeaderName" name="${WuxDef.GetAttribute("Gear_ItemName")}"></span>
+                                        <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Gear_ItemGroup")}"></span></div>
+                                        <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Gear_ItemStats")}"></span></div>
                                         <div class="wuxFeatureHeaderInfo">
                                             <span><strong>Traits: </strong></span>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait0")}" value="0" />
+                                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_ItemTrait", 0)}" value="0" />
                                             <div class="wuxHiddenInlineAuxField">
                                                 <span>None</span>
                                             </div>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait0")}" value="0" />
-                                            <div class="wuxHiddenInlineField">
-                                                <span class="wuxTooltip">
-                                                    <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Gear_WearableTrait0")}">-</span>
-                                                    <div class="wuxTooltipContent">
-                                                        <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Gear_WearableTrait0")}">-</span></div>
-                                                        <span class="wuxDescription"><em>Item Trait</em></span>
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait0Desc0")}"></span>
-                                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait0Desc1")}" value="0" />
-                                                        <div class="wuxHiddenField">
-                                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait0Desc1")}"></span>
-                                                        </div>
-                                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait0Desc2")}" value="0" />
-                                                        <div class="wuxHiddenField">
-                                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait0Desc2")}"></span>
-                                                        </div>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait1")}" value="0" />
-                                            <div class="wuxHiddenInlineField">
-                                                <span>; </span>
-                                                <span class="wuxTooltip">
-                                                    <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Gear_WearableTrait1")}">-</span>
-                                                    <div class="wuxTooltipContent">
-                                                        <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Gear_WearableTrait1")}">-</span></div>
-                                                        <span class="wuxDescription"><em>Item Trait</em></span>
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait1Desc0")}"></span>
-                                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait1Desc1")}" value="0" />
-                                                        <div class="wuxHiddenField">
-                                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait1Desc1")}"></span>
-                                                        </div>
-                                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait1Desc2")}" value="0" />
-                                                        <div class="wuxHiddenField">
-                                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait1Desc2")}"></span>
-                                                        </div>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait2")}" value="0" />
-                                            <div class="wuxHiddenInlineField">
-                                                <span>; </span>
-                                                <span class="wuxTooltip">
-                                                    <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Gear_WearableTrait2")}">-</span>
-                                                    <div class="wuxTooltipContent">
-                                                        <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Gear_WearableTrait2")}">-</span></div>
-                                                        <span class="wuxDescription"><em>Item Trait</em></span>
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait2Desc0")}"></span>
-                                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait2Desc1")}" value="0" />
-                                                        <div class="wuxHiddenField">
-                                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait2Desc1")}"></span>
-                                                        </div>
-                                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait2Desc2")}" value="0" />
-                                                        <div class="wuxHiddenField">
-                                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait2Desc2")}"></span>
-                                                        </div>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait3")}" value="0" />
-                                            <div class="wuxHiddenInlineField">
-                                                <span>; </span>
-                                                <span class="wuxTooltip">
-                                                    <span class="wuxTooltipText" name="${WuxDef.GetAttribute("Gear_WearableTrait3")}">-</span>
-                                                    <div class="wuxTooltipContent">
-                                                        <div class="wuxHeader2"><span name="${WuxDef.GetAttribute("Gear_WearableTrait3")}">-</span></div>
-                                                        <span class="wuxDescription"><em>Item Trait</em></span>
-                                                        <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait3Desc0")}"></span>
-                                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait3Desc1")}" value="0" />
-                                                        <div class="wuxHiddenField">
-                                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait3Desc1")}"></span>
-                                                        </div>
-                                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableTrait3Desc2")}" value="0" />
-                                                        <div class="wuxHiddenField">
-                                                            <span class="wuxDescription" name="${WuxDef.GetAttribute("Gear_WearableTrait3Desc2")}"></span>
-                                                        </div>
-                                                    </div>
-                                                </span>
-                                            </div>
+                                            ${buildTooltipSection("Gear_ItemTrait", 0)}
+                                            ${buildTooltipSection("Gear_ItemTrait", 1)}
+                                            ${buildTooltipSection("Gear_ItemTrait", 2)}
+                                            ${buildTooltipSection("Gear_ItemTrait", 3)}
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_WearableDescription")}" value="0" />
+                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_ItemDescription")}" value="0" />
                                 <div class="wuxHiddenField">
                                     <div class="wuxFeatureFunctionBlock">
                                         <div class="wuxFeatureFunctionBlockFlavorText">
-                                            <span name="${WuxDef.GetAttribute("Gear_WearableDescription")}"></span>
+                                            <span name="${WuxDef.GetAttribute("Gear_ItemDescription")}"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -857,7 +782,30 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             `;
                         },
 
-                        addPopupWearables = function () {
+                        buildTooltipSection = function (baseAttribute, index, delimiter) {
+                            return `<input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute(baseAttribute, index)}" value="0" />
+                            <div class="wuxHiddenInlineField">
+                                ${index == 0 ? "" : `<span>${delimiter == undefined ? "; " : delimiter}</span>`}
+                                <span class="wuxTooltip">
+                                    <span class="wuxTooltipText" name="${WuxDef.GetAttribute(baseAttribute, index)}">-</span>
+                                    <div class="wuxTooltipContent">
+                                        <div class="wuxHeader2"><span name="${WuxDef.GetAttribute(baseAttribute, index)}">-</span></div>
+                                        <span class="wuxDescription"><em>Technique Trait</em></span>
+                                        <span class="wuxDescription" name="${WuxDef.GetAttribute(baseAttribute, index + "desc0")}"></span>
+                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute(baseAttribute, index + "desc1")}" value="0" />
+                                        <div class="wuxHiddenField">
+                                            <span class="wuxDescription" name="${WuxDef.GetAttribute(baseAttribute, index + "desc1")}"></span>
+                                        </div>
+                                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute(baseAttribute, index + "desc2")}" value="0" />
+                                        <div class="wuxHiddenField">
+                                            <span class="wuxDescription" name="${WuxDef.GetAttribute(baseAttribute, index + "desc2")}"></span>
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>`;
+                        },
+
+                        addPopupEquipment = function () {
                             let headPopupDef = WuxDef.Get("Page_AddHeadGear");
                             let facePopupDef = WuxDef.Get("Page_AddFaceGear");
                             let chestPopupDef = WuxDef.Get("Page_AddChestGear");
@@ -877,7 +825,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                         },
 
-                        equippedWearables = function () {
+                        equippedEquipment = function () {
                             let contents = "";
 
                             let equippedGearDef = WuxDef.Get("Page_Equipped");

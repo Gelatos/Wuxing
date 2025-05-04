@@ -1,33 +1,32 @@
 var WuxWorkerGear = WuxWorkerGear || (function () {
-    let populateInspectionElements = function (attrHandler, itemPopupRepeater, wearRepeater, selectedId) {
+    let populateInspectionElements = function (attrHandler, popupRepeater, sectionRepeater, selectedId) {
         
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `All Owned Wearables`);
+        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `All Owned Equipment`);
         
         let selectedElement = null;
-        wearRepeater.iterate(function (id) {
-            let itemName = attrHandler.parseString(wearRepeater.getFieldName(id, WuxDef.GetVariable("Gear_WearableName")));
+        sectionRepeater.iterate(function (id) {
+            let itemName = attrHandler.parseString(sectionRepeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemName")));
             let item = WuxItems.Get(itemName);
-            Debug.Log(`Item is named ${itemName} which is in group ${item.group}`);
             if (item.group != "") {
-                let newRowId = itemPopupRepeater.generateRowId();
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), item.name);
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "Item");
+                let newRowId = popupRepeater.generateRowId();
+                attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), item.name);
+                attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "Item");
 
                 if (id == selectedId) {
                     selectedElement = {
                         item: item,
                         id: newRowId
                     }
-                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
+                    attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
                 } else {
-                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
+                    attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
                 }
             }
         });
 
         return selectedElement;
     };
-    let populateItemInspectionWearables = function (attrHandler, itemPopupRepeater, eventinfo) {
+    let populateItemInspectionEquipment = function (attrHandler, itemPopupRepeater, eventinfo) {
         let itemGroup = getItemGroupType(eventinfo);
         if (itemGroup == "") {
             return null;
@@ -97,25 +96,25 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
     };
     'use strict';
 
-    const equipWearable = function (eventinfo) {
+    const equipEquipment = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
-            let wearablesRepeater = new WorkerRepeatingSectionHandler("RepeatingWearables");
-            let selectedId = wearablesRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let EquipmentRepeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
+            let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
 
         },
 
         openSubMenu = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addUpdate()
-            let wearablesRepeater = new WorkerRepeatingSectionHandler("RepeatingWearables");
-            let selectedId = wearablesRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let EquipmentRepeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
+            let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "on");
 
-            wearablesRepeater.getIds(function (wearRepeater) {
+            EquipmentRepeater.getIds(function (wearRepeater) {
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
                     wearRepeater.iterate(function (id) {
                         if (id != selectedId) {
-                            attrHandler.addUpdate(wearRepeater.getFieldName(id, WuxDef.GetVariable("Gear_WearablesActions")), "0");
+                            attrHandler.addUpdate(wearRepeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemActions")), "0");
                         }
                     });
                 });
@@ -123,52 +122,52 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             });
         },
 
-        deleteWearable = function (eventinfo) {
-            let wearablesRepeater = new WorkerRepeatingSectionHandler("RepeatingWearables");
-            let selectedId = wearablesRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
-            wearablesRepeater.removeId(selectedId);
+        deleteEquipment = function (eventinfo) {
+            let EquipmentRepeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
+            let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            EquipmentRepeater.removeId(selectedId);
 
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
             attributeHandler.run();
         },
 
-        inspectWearable = function (eventinfo) {
-            let wearablesRepeater = new WorkerRepeatingSectionHandler("RepeatingWearables");
-            let selectedId = wearablesRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+        inspectEquipment = function (eventinfo) {
+            let EquipmentRepeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
+            let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
 
-            wearablesRepeater.getIds(function (wearRepeater) {
+            EquipmentRepeater.getIds(function (wearRepeater) {
                 WuxWorkerInspectPopup.OpenItemInspection(function (attrHandler) {
                         wearRepeater.iterate(function (id) {
-                            attrHandler.addMod(wearRepeater.getFieldName(id, WuxDef.GetVariable("Gear_WearableName")));
+                            attrHandler.addMod(wearRepeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemName")));
                         });
                     },
                     function (attrHandler, itemPopupRepeater) {
                         attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-                        attrHandler.addUpdate(wearRepeater.getFieldName(selectedId, WuxDef.GetVariable("Gear_WearablesActions")), "0");
+                        attrHandler.addUpdate(wearRepeater.getFieldName(selectedId, WuxDef.GetVariable("Gear_ItemActions")), "0");
                         return populateInspectionElements(attrHandler, itemPopupRepeater, wearRepeater, selectedId);
                     }
                 );
             });
         },
 
-        openWearableAdditionItemInspection = function (eventinfo) {
+        openEquipmentAdditionItemInspection = function (eventinfo) {
             WuxWorkerInspectPopup.OpenItemInspection(function () {
                 },
                 function (attrHandler, itemPopupRepeater) {
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "on");
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "Add Wearable");
+                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "Add Equipment");
 
-                    return populateItemInspectionWearables(attrHandler, itemPopupRepeater, eventinfo);
+                    return populateItemInspectionEquipment(attrHandler, itemPopupRepeater, eventinfo);
                 });
         };
 
     return {
-        EquipWearable: equipWearable,
+        EquipEquipment: equipEquipment,
         OpenSubMenu: openSubMenu,
-        DeleteWearable: deleteWearable,
-        InspectWearable: inspectWearable,
-        OpenWearableAdditionItemInspection: openWearableAdditionItemInspection
+        DeleteEquipment: deleteEquipment,
+        InspectEquipment: inspectEquipment,
+        OpenEquipmentAdditionItemInspection: openEquipmentAdditionItemInspection
     };
 }());
 
