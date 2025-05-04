@@ -606,9 +606,10 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
     color: #000;
 }
 
-.wuxSubMenuSection input[type=radio]:hover + span
+.wuxSubMenuSection input[type=checkbox]:hover + .wuxFeatureHeaderDisplayBlock .wuxFeatureHeaderName,
+.wuxSubMenuSection input[type=checkbox]:hover + .wuxFeatureHeaderDisplayBlock .wuxSubMenuText
 {
-    color: #979898;
+    color: #6b6b6b;
 }
 
 .wuxSubMenu .wuxSubMenuContent,

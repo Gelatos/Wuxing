@@ -1916,18 +1916,25 @@ input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature
     border-bottom: 1px solid #efefef; 
 }
 
+input.wuxFeatureHeader-flag[value="Swift"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Swift,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Swift
+{
+    background-color: #ffeded;
+}
+
 input.wuxFeatureHeader-flag[value="Quick"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Quick,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Quick
 {
-    background-color: #fbe5e5;
+    background-color: #ffc0c0;
 }
 
 input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Full,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Full
 {
-    background-color: #d7a0a0;
+    background-color: #e18181;
 }
 
 input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeader,
@@ -1935,13 +1942,6 @@ input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeader,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction
 {
     background-color: #96a4d3;
-}
-
-input.wuxFeatureHeader-flag[value="Swift"] + .wuxFeatureHeader,
-.wuxFeatureHeader-Swift,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Swift
-{
-    background-color: #97ceb5;
 }
 
 input.wuxFeatureHeader-flag[value="Free"] + .wuxFeatureHeader,
@@ -1998,41 +1998,6 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
     background: #666;
     border: 0px solid #000;
     border-width: 0px 0px 3px 3px;
-}
-
-input.wuxFeatureType-flag[value="Active"] + .wuxFeatureType,
-.wuxFeatureType-Active,
-.sheet-rolltemplate-technique .sheet-wuxFeatureType-Active
-{
-    background-color: #b60003;
-}
-
-input.wuxFeatureType-flag[value="Passive"] + .wuxFeatureType,
-.wuxFeatureType-Passive,
-.sheet-rolltemplate-technique .sheet-wuxFeatureType-Passive
-{
-    background-color: #4db600;
-}
-
-input.wuxFeatureType-flag[value="Support"] + .wuxFeatureType,
-.wuxFeatureType-Support,
-.sheet-rolltemplate-technique .sheet-wuxFeatureType-Support
-{
-    background-color: #00b0b6;
-}
-
-input.wuxFeatureType-flag[value="Job"] + .wuxFeatureType,
-.wuxFeatureType-Job,
-.sheet-rolltemplate-technique .sheet-wuxFeatureType-Job
-{
-    background-color: #7800b6;
-}
-
-input.wuxFeatureType-flag[value="Standard"] + .wuxFeatureType,
-.wuxFeatureType-Standard,
-.sheet-rolltemplate-technique .sheet-wuxFeatureType-Standard
-{
-    background-color: #b66f00;
 }
 
 .wuxFeatureType .wuxFeatureTypeHeader,
@@ -2222,7 +2187,7 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoReq,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoReq
 {
-    background: #e77a7a;
+    background: #d34444;
 }
 
 .wuxFeatureHeaderInfoTrigger,
@@ -8264,9 +8229,10 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
     color: #000;
 }
 
-.wuxSubMenuSection input[type=radio]:hover + span
+.wuxSubMenuSection input[type=checkbox]:hover + .wuxFeatureHeaderDisplayBlock .wuxFeatureHeaderName,
+.wuxSubMenuSection input[type=checkbox]:hover + .wuxFeatureHeaderDisplayBlock .wuxSubMenuText
 {
-    color: #979898;
+    color: #6b6b6b;
 }
 
 .wuxSubMenu .wuxSubMenuContent,
