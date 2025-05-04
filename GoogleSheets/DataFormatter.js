@@ -1381,6 +1381,13 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 <input type="checkbox" name="${fieldName}"${checkboxValue != undefined ? ` value="${checkboxValue}"` : ""}>
                 ${contents}
             </div>`;
+        },
+        
+        subMenuOptionRollButton = function (fieldName, variableName, contents) {
+            return `<input type="hidden" name="${fieldName}" value="0"/>
+            <button class="wuxButton wuxSubMenuOptionButton" type="roll" value="@{${variableName}}">
+                <span name="${WuxDef.GetAttribute("Chat_PostName")}">${contents}</span>
+            </button>`;
         };
 
         var info = info || (function () {
@@ -1632,6 +1639,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         HiddenAuxField: hiddenAuxField,
         SubMenuButton: subMenuButton,
         SubMenuOptionButton: subMenuOptionButton,
+        SubMenuOptionRollButton: subMenuOptionRollButton,
         Info: info,
         Tooltip: tooltip,
         Table: table,

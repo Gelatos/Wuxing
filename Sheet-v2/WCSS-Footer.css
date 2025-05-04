@@ -665,7 +665,8 @@ input[type=hidden].wuxSubMenu-flag:not([value="0"]) + .wuxSubMenuContent
     visibility: visible;
 }
 
-.wuxSubMenuOptionButton
+.wuxSubMenuOptionButton,
+button.wuxSubMenuOptionButton[type=roll]
 {
     position: relative;
     display: block;
@@ -674,6 +675,15 @@ input[type=hidden].wuxSubMenu-flag:not([value="0"]) + .wuxSubMenuContent
     text-shadow: none;
     box-shadow: none;
     border: 1px solid black;
+}
+
+button.wuxSubMenuOptionButton[type=roll]
+{
+    left: -3px;
+    width: calc(100% - 8px);
+    height: 24px;
+    
+    border-radius: 0;
 }
 
 input[type=hidden].wuxSubMenuOptionButton-flag[value="on"] + .wuxSubMenuOptionButton {
@@ -698,7 +708,8 @@ input[type=hidden].wuxSubMenuOptionButton-flag[value="on"] + .wuxSubMenuOptionBu
 
 }
 
-.wuxSubMenuOptionButton span
+.wuxSubMenuOptionButton span,
+button.wuxSubMenuOptionButton[type=roll] span 
 {
     pointer-events: none;
     position: relative;
@@ -714,12 +725,18 @@ input[type=hidden].wuxSubMenuOptionButton-flag[value="on"] + .wuxSubMenuOptionBu
     font-weight: normal;
 }
 
-.wuxSubMenuOptionButton:hover {
+button.wuxSubMenuOptionButton[type=roll] span {
+    padding-left: 5px;
+}
+
+.wuxSubMenuOptionButton:hover,
+button.wuxSubMenuOptionButton[type=roll]:hover {
 
     background: #9fa0a3;
 }
 
-.wuxSubMenuOptionButton:hover span {
+.wuxSubMenuOptionButton:hover span,
+button.wuxSubMenuOptionButton[type=roll]:hover span {
 
     color: #000;
 }

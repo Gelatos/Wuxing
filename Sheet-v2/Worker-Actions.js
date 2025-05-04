@@ -25,7 +25,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 
                 techsByAffinity.forEach(function (technique) {
                     techniqueAttributeHandler.setId(sectionRepeater.generateRowId());
-                    techniqueAttributeHandler.setTechniqueInfo(technique);
+                    techniqueAttributeHandler.setTechniqueInfo(technique, true);
                 });
             });
         }

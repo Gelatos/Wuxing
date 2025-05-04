@@ -1062,7 +1062,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let useTechniqueDef = WuxDef.Get("Action_Use");
                     let inspectTechniqueDef = WuxDef.Get("Action_Inspect");
 
-                    return `${WuxSheetMain.SubMenuOptionButton(useTechniqueDef.getAttribute(), `<span>${useTechniqueDef.getTitle()}</span>`)}
+                    return `${WuxSheetMain.SubMenuOptionRollButton(useTechniqueDef.getAttribute(), useTechniqueDef.getVariable(), useTechniqueDef.getTitle())}
                         ${WuxSheetMain.SubMenuOptionButton(inspectTechniqueDef.getAttribute(), `<span>${inspectTechniqueDef.getTitle()}</span>`)}
                         ${WuxSheetMain.Header2("Full Technique Details")}
                         ${buildSubmenuTechniqueTemplate()}

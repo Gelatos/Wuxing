@@ -533,7 +533,7 @@ class DatabaseItemAttributeHandler {
 	setId (id) {
 		this.id = id;
 	}
-	
+
 	getVariable (key, suffix) {
 		let output = WuxDef.GetVariable(key, suffix);
 		if (this.baseDefinition != undefined) {
@@ -543,7 +543,15 @@ class DatabaseItemAttributeHandler {
 			output = this.repeater.getFieldName(this.id, output);
 		}
 		return output;
-	}
+	};
+
+	getVariableWithoutBase (key, suffix) {
+		let output = WuxDef.GetVariable(key, suffix);
+		if (this.repeater != undefined) {
+			output = this.repeater.getFieldName(this.id, output);
+		}
+		return output;
+	};
 	
 	clearDefinition (baseAttribute, index) {
 		this.attrHandler.addUpdate(this.getVariable(baseAttribute, index), 0);
@@ -568,7 +576,7 @@ class DatabaseItemAttributeHandler {
 
 class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 	
-	setTechniqueInfo (technique) {
+	setTechniqueInfo (technique, setUse) {
 		this.clearTechniqueInfo();
 
 		let displayData = new TechniqueDisplayData(technique);
@@ -597,6 +605,13 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		}
 		if (displayData.definitions.length > 0) {
 			this.addDefinitions(displayData.definitions, this.getVariable("TechDef"), 3);
+		}
+		
+		if (setUse) {
+			displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
+			displayData.technique.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
+			displayData.technique.displayname = displayData.displayname;
+			this.attrHandler.addUpdate(this.getVariableWithoutBase("Action_Use"), displayData.getRollTemplate(true));
 		}
 	}
 	addTechniqueEffects (effects) {
