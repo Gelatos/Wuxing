@@ -136,16 +136,16 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let EquipmentRepeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
             let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
 
-            EquipmentRepeater.getIds(function (wearRepeater) {
+            EquipmentRepeater.getIds(function (equipRepeater) {
                 WuxWorkerInspectPopup.OpenItemInspection(function (attrHandler) {
-                        wearRepeater.iterate(function (id) {
-                            attrHandler.addMod(wearRepeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemName")));
+                        equipRepeater.iterate(function (id) {
+                            attrHandler.addMod(equipRepeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemName")));
                         });
                     },
                     function (attrHandler, itemPopupRepeater) {
                         attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-                        attrHandler.addUpdate(wearRepeater.getFieldName(selectedId, WuxDef.GetVariable("Gear_ItemActions")), "0");
-                        return populateInspectionElements(attrHandler, itemPopupRepeater, wearRepeater, selectedId);
+                        attrHandler.addUpdate(equipRepeater.getFieldName(selectedId, WuxDef.GetVariable("Gear_ItemActions")), "0");
+                        return populateInspectionElements(attrHandler, itemPopupRepeater, equipRepeater, selectedId);
                     }
                 );
             });

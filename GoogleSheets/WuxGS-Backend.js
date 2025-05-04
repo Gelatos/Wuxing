@@ -319,6 +319,30 @@ var GearBuilder = GearBuilder || (function () {
     }
 }());
 
+var ActionBuilder = ActionBuilder || (function () {
+    'use strict';
+
+    var
+        print = function () {
+            let output = "";
+            output += listenerInspectRepeatingStyles();
+            return output;
+        },
+        listenerInspectRepeatingStyles = function () {
+            return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicActions")}:${WuxDef.GetVariable("Action_Inspect")}`],
+                `WuxWorkerActions.InspectTechniqueBasicAction(eventinfo)`, true)}
+                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicRecovery")}:${WuxDef.GetVariable("Action_Inspect")}`],
+                `WuxWorkerActions.InspectTechniqueBasicRecovery(eventinfo)`, true)}
+                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicAttack")}:${WuxDef.GetVariable("Action_Inspect")}`],
+                `WuxWorkerActions.InspectTechniqueBasicAttack(eventinfo)`, true)}
+                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicSocial")}:${WuxDef.GetVariable("Action_Inspect")}`],
+                `WuxWorkerActions.InspectTechniqueBasicSocial(eventinfo)`, true)}`;
+        }
+    return {
+        Print: print
+    }
+}());
+
 var PopupBuilder = PopupBuilder || (function () {
     'use strict';
 

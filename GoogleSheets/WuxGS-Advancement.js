@@ -63,6 +63,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += OverviewBuilder.Print();
             output += FormeBuilder.Print();
             output += GearBuilder.Print();
+            output += ActionBuilder.Print();
             output += PopupBuilder.Print();
             output += ChatBuilder.Print();
             return `<script type="text/worker">

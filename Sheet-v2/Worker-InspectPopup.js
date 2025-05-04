@@ -156,7 +156,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
                 itemPopupRepeater.iterate(function (id) {
                     if (selectedId == id) {
-                        selectedItemNameFieldName = itemPopupRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Popup", "ItemSelectName"));
+                        selectedItemNameFieldName = itemPopupRepeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName"));
                         selectedItemTypeFieldName = itemPopupRepeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectType"));
                     }
                 });
