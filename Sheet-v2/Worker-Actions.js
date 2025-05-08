@@ -44,9 +44,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             populateStyleTechniques(attrHandler, repeatingWorker, styleName, attrHandler.parseInt(crFieldName));
         });
     };
-    const populateInspectionElements = function (attrHandler, popupRepeater, sectionRepeater, selectedId) {
+    const populateInspectionElements = function (attrHandler, popupRepeater, sectionRepeater, inspectionTitle, selectedId) {
 
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `All Owned Equipment`);
+        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), inspectionTitle);
 
         let selectedElement = null;
         sectionRepeater.iterate(function (id) {
@@ -72,7 +72,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         return selectedElement;
     };
 
-    const inspectTechnique = function (repeatingSectionName, inspectionField) {
+    const inspectTechnique = function (repeatingSectionName, inspectionField, inspectionTitle) {
         let styleRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
         let selectedId = styleRepeater.getIdFromFieldName(inspectionField);
 
@@ -85,7 +85,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 function (attrHandler, itemPopupRepeater) {
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
                     attrHandler.addUpdate(techRepeater.getFieldName(selectedId, WuxDef.GetVariable("Action_Actions")), "0");
-                    return populateInspectionElements(attrHandler, itemPopupRepeater, techRepeater, selectedId);
+                    return populateInspectionElements(attrHandler, itemPopupRepeater, techRepeater, inspectionTitle, selectedId);
                 }
             );
         });
@@ -101,16 +101,16 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     },
 
     inspectTechniqueBasicAction = function (eventinfo) {
-        inspectTechnique("RepeatingBasicActions", eventinfo.sourceAttribute);
+        inspectTechnique("RepeatingBasicActions", eventinfo.sourceAttribute, "All Basic Action Techniques");
     },
     inspectTechniqueBasicRecovery = function (eventinfo) {
-        inspectTechnique("RepeatingBasicRecovery", eventinfo.sourceAttribute);
+        inspectTechnique("RepeatingBasicRecovery", eventinfo.sourceAttribute, "All Basic Recovery Techniques");
     },
     inspectTechniqueBasicAttack = function (eventinfo) {
-        inspectTechnique("RepeatingBasicAttack", eventinfo.sourceAttribute);
+        inspectTechnique("RepeatingBasicAttack", eventinfo.sourceAttribute, "All Basic Attack Techniques");
     },
     inspectTechniqueBasicSocial = function (eventinfo) {
-        inspectTechnique("RepeatingBasicSocial", eventinfo.sourceAttribute);
+        inspectTechnique("RepeatingBasicSocial", eventinfo.sourceAttribute, "All Basic Social Techniques");
     };
 
     return {

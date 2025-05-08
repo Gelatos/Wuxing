@@ -36,7 +36,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         let currentId = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectId"));
         if (currentType != "" && currentId != "") {
             let oldRepeater = new WorkerRepeatingSectionHandler(currentType);
-            attrHandler.addUpdate(oldRepeater.getFieldName(currentId, WuxDef.GetUntypedVariable("Popup", "ItemSelectIsOn")), "0");
+            attrHandler.addUpdate(oldRepeater.getFieldName(currentId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
         }
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), repeaterName);
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), id);
