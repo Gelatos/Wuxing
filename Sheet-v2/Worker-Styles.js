@@ -81,6 +81,9 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         });
     };
     
+    const equipStyle = function (attrHandler, styleName, tier) {
+        
+    };
     const seeFormeTechniques = function (eventinfo, repeaterName) {
         Debug.Log("See Forme Techniques");
         
@@ -138,6 +141,16 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 styleWorker.saveBuildStatsToFinal(attrHandler);
             });
         },
+        
+        equipJobStyle = function (eventinfo) {
+            Debug.Log("Equip Style");
+            let attributeHandler = new WorkerAttributeHandler();
+            let styleRepeater = new WorkerRepeatingSectionHandler("RepeatingJobStyles");
+            let selectedId = styleRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            attributeHandler.addUpdate(WuxDef.GetVariable("Forme_ArteformSlot"), eventinfo.newValue);
+            attributeHandler.addUpdate(styleRepeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
+            attributeHandler.run();
+        },
 
         seeTechniques = function (eventinfo) {
             Debug.Log("See Techniques");
@@ -167,6 +180,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
     return {
         UpdateBuildPoints: updateBuildPoints,
         UpdateStats: updateStats,
+        EquipJobStyle: equipJobStyle,
         SeeTechniques: seeTechniques,
         SeeJobTechniques: seeJobTechniques,
         SeeAdvancedTechniques: seeAdvancedTechniques

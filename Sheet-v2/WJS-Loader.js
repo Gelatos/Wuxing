@@ -21,12 +21,24 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 	attributeHandler.addUpdate(WuxDef.GetVariable("Training", WuxDef._max), 0);
 	trainingWorker.updateTrainingPoints(attributeHandler);
 
+	// basic actions
 	WuxWorkerActions.PopulateAllBasicActions(attributeHandler);
 
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Style"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 	
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
+			
+		// update all slots
+		let jobDef = WuxDef.Get("JobSlots");
+		attrHandler.addUpdate(jobDef.getVariable(), jobDef.formula.getValue(attrHandler));
+		let arteformDef = WuxDef.Get("ArteformSlots");
+		attrHandler.addUpdate(arteformDef.getVariable(), arteformDef.formula.getValue(attrHandler));
+		let advancedDef = WuxDef.Get("AdvancedSlots");
+		attrHandler.addUpdate(advancedDef.getVariable(), advancedDef.formula.getValue(attrHandler));
+		let equipmentDef = WuxDef.Get("EquipmentSlots");
+		attrHandler.addUpdate(equipmentDef.getVariable(), equipmentDef.formula.getValue(attrHandler));
+		
 		manager.iterate(function(worker) {
 			worker.setBuildStatsDraft(attrHandler);
 			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));

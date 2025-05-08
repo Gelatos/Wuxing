@@ -1380,6 +1380,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
             <div class="wuxHiddenAuxField">\n${contents}\n</div>\n`;
         },
 
+        hiddenIndexField = function (fieldName, index, contents) {
+            return `<input type="hidden" class="wuxHiddenIndexField-flag" name="${fieldName}" value="0">
+            <div class="wuxHiddenIndexField${index}">\n${contents}\n</div>\n`;
+        },
+
         subMenuButton = function (fieldName, contents) {
             return `<div class="wuxSubMenuButton">
                 <input type="checkbox" name="${fieldName}">
@@ -1650,6 +1655,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,
         HiddenAuxField: hiddenAuxField,
+        HiddenIndexField: hiddenIndexField,
         SubMenuButton: subMenuButton,
         SubMenuOptionButton: subMenuOptionButton,
         SubMenuOptionRollButton: subMenuOptionRollButton,

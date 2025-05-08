@@ -44,6 +44,10 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Technique", WuxDef._page, WuxDef._learn));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("CombatDetails"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Status"));
+            output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("JobSlots"));
+            output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("ArteformSlots"));
+            output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("AdvancedSlots"));
+            output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("EquipmentSlots"));
 
             let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", "Social")]);
             for (let i = 0; i < filteredStats.length; i++) {

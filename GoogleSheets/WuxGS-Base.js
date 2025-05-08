@@ -565,17 +565,18 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                 print = function () {
                     let contents = "";
                     contents += buildStyleSection("RepeatingJobStyles", "Page_JobStyles",
-                        ["Forme_JobSlot"]);
+                        [{def: "Forme_JobSlot", countAttr:WuxDef.GetAttribute("JobSlots")}], 3);
                     contents += buildStyleSection("RepeatingAdvancedStyles", "Page_AdvancedStyles",
-                        ["Forme_ArteformSlot", "Forme_AdvancedSlot2", "Forme_AdvancedSlot3"]);
+                        [{def: "Forme_ArteformSlot", countAttr:WuxDef.GetAttribute("ArteformSlots")},
+                            {def: "Forme_AdvancedSlot", countAttr:WuxDef.GetAttribute("AdvancedSlots")}], 3);
                     return WuxSheetMain.Build(contents);
                 },
 
-                buildStyleSection = function (repeatingSectionName, sectionDefName, slotDefNames) {
+                buildStyleSection = function (repeatingSectionName, sectionDefName, slotDefNames, maxSlots) {
                     let contents = "";
 
                     contents += WuxSheetMain.MultiRowGroup([learnedStyles(repeatingSectionName),
-                        addEquippedSection(slotDefNames)], WuxSheetMain.Table.FlexTable, 2);
+                        addEquippedSection(slotDefNames, maxSlots)], WuxSheetMain.Table.FlexTable, 2);
 
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -618,17 +619,21 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                     `;
                 },
 
-                addEquippedSection = function (slotDefNames) {
+                addEquippedSection = function (slotDefNames, maxSlots) {
                     let contents = "";
                     contents += `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_Equipped")}`)}`;
                     let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
                     if (!Array.isArray(slotDefNames)) {
                         slotDefNames = [slotDefNames];
                     }
-                    slotDefNames.forEach((name) => {
-                        let slotDef = WuxDef.Get(name);
-                        contents += WuxDefinition.BuildText(slotDef, WuxSheetMain.Span(slotDef.getAttribute()));
-                        contents += WuxSheetMain.Input("hidden", slotDef.getAttribute(), emptyName);
+                    slotDefNames.forEach((slotInfo) => {
+                        let slotDef = WuxDef.Get(slotInfo.def);
+                        for (let i = 1; i <= maxSlots; i++) {
+                            contents += WuxSheetMain.HiddenIndexField(slotInfo.countAttr, i, 
+                                `${WuxDefinition.BuildText(slotDef, WuxSheetMain.Span(slotDef.getAttribute(i)))}
+                                ${WuxSheetMain.Input("hidden", slotDef.getAttribute(i), emptyName)}
+                            `);
+                        }
                     })
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                 },
@@ -827,36 +832,23 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                         equippedEquipment = function () {
                             let contents = "";
-
-                            let equippedGearDef = WuxDef.Get("Page_Equipped");
-                            contents += `${WuxSheetMain.Header(`${equippedGearDef.title}`)}`;
-
-                            let filterData = WuxDef.Filter([new DatabaseFilterData("group", "GearGroup")]);
+                            contents += `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_Equipped")}`)}`;
                             let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
-                            for (let i = 0; i < filterData.length; i++) {
-                                contents += WuxDefinition.BuildText(filterData[i], WuxSheetMain.Span(filterData[i].getAttribute()));
-                                contents += WuxSheetMain.Input("hidden", filterData[i].getAttribute(), emptyName);
-                            }
-                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-                        },
-
-                        equippedTools = function () {
-                            let equippedGearDef = WuxDef.Get("Page_GearTools");
-                            let weaponSlotDefinition = WuxDef.Get("ToolSlot_Weapon");
-                            let weaponDamageAttribute = WuxDef.GetAttribute("WeaponDamage");
-                            let toolSlotDefinition = WuxDef.Get("ToolSlot");
-                            let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
-
-                            let contents = `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(equippedGearDef.getAttribute(WuxDef._info))}${equippedGearDef.title}`)}`;
-                            contents += WuxSheetMain.Header2(`${weaponSlotDefinition.getTitle()}`) + "\n" +
-                                WuxSheetMain.Desc(`${WuxSheetMain.Span(weaponSlotDefinition.getAttribute())} (${WuxSheetMain.Span(weaponDamageAttribute)})`);
-                            contents += WuxSheetMain.Input("hidden", weaponSlotDefinition.getAttribute(), emptyName);
-                            contents += WuxSheetMain.Input("hidden", weaponDamageAttribute, emptyName);
-
-                            for (let i = 1; i <= 5; i++) {
-                                contents += WuxSheetMain.Header2(`${toolSlotDefinition.title} ${i}`) + "\n" +
-                                    WuxSheetMain.Desc(WuxSheetMain.Span(toolSlotDefinition.getAttribute(i)));
-                                contents += WuxSheetMain.Input("hidden", toolSlotDefinition.getAttribute(i), emptyName);
+                            
+                            let weaponSlot = WuxDef.Get("Gear_WeaponSlot");
+                            contents += `${WuxDefinition.BuildText(weaponSlot, WuxSheetMain.Span(weaponSlot.getAttribute()))}
+                                ${WuxSheetMain.Input("hidden", weaponSlot.getAttribute(), emptyName)}
+                            `;
+                            
+                            let slotDef = WuxDef.Get("Gear_EquipmentSlot");
+                            let countAttr = WuxDef.GetAttribute("EquipmentSlots");
+                            let maxSlots = 9;
+                            
+                            for (let i = 1; i <= maxSlots; i++) {
+                                contents += WuxSheetMain.HiddenIndexField(countAttr, i,
+                                    `${WuxDefinition.BuildText(slotDef, WuxSheetMain.Span(slotDef.getAttribute(i)))}
+                                    ${WuxSheetMain.Input("hidden", slotDef.getAttribute(i), emptyName)}
+                                `);
                             }
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
