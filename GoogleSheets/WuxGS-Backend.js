@@ -254,7 +254,10 @@ var FormeBuilder = FormeBuilder || (function () {
         listenerEquipRepeatingForme = function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingJobStyles")}:${WuxDef.GetVariable("Forme_IsEquipped")}`],
-                `WuxWorkerStyles.EquipJobStyle(eventinfo)`, true)}
+                `WuxWorkerStyles.ToggleEquipJobStyle(eventinfo)`, true)}
+                ${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingAdvancedStyles")}:${WuxDef.GetVariable("Forme_IsEquipped")}`],
+                `WuxWorkerStyles.ToggleEquipAdvancedStyle(eventinfo)`, true)}
                 `;
         },
         listenerInspectRepeatingForme = function () {
@@ -363,10 +366,11 @@ var PopupBuilder = PopupBuilder || (function () {
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingArteformStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvancedStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_ItemActions")}`]);
-            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobTech")}:${WuxDef.GetVariable("Action_Actions")}`]);
-            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvTech")}:${WuxDef.GetVariable("Action_Actions")}`]);
-            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvTech2")}:${WuxDef.GetVariable("Action_Actions")}`]);
-            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvTech3")}:${WuxDef.GetVariable("Action_Actions")}`]);
+            
+            for (let i = 1; i <= 3; i++) {
+                groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobTech", i)}:${WuxDef.GetVariable("Action_Actions")}`]);
+                groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvTech", i)}:${WuxDef.GetVariable("Action_Actions")}`]);
+            }
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingGearTech")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingBasicActions")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingBasicRecovery")}:${WuxDef.GetVariable("Action_Actions")}`]);

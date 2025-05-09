@@ -565,18 +565,18 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                 print = function () {
                     let contents = "";
                     contents += buildStyleSection("RepeatingJobStyles", "Page_JobStyles",
-                        [{def: "Forme_JobSlot", countAttr:WuxDef.GetAttribute("JobSlots")}], 3);
+                        [{def: "Forme_JobSlot", countAttr:WuxDef.GetAttribute("JobSlots"), max: 3}]);
                     contents += buildStyleSection("RepeatingAdvancedStyles", "Page_AdvancedStyles",
-                        [{def: "Forme_ArteformSlot", countAttr:WuxDef.GetAttribute("ArteformSlots")},
-                            {def: "Forme_AdvancedSlot", countAttr:WuxDef.GetAttribute("AdvancedSlots")}], 3);
+                        [{def: "Forme_ArteformSlot", countAttr:WuxDef.GetAttribute("ArteformSlots"), max: 3},
+                            {def: "Forme_AdvancedSlot", countAttr:WuxDef.GetAttribute("AdvancedSlots"), max: 6}]);
                     return WuxSheetMain.Build(contents);
                 },
 
-                buildStyleSection = function (repeatingSectionName, sectionDefName, slotDefNames, maxSlots) {
+                buildStyleSection = function (repeatingSectionName, sectionDefName, slotDefNames) {
                     let contents = "";
 
                     contents += WuxSheetMain.MultiRowGroup([learnedStyles(repeatingSectionName),
-                        addEquippedSection(slotDefNames, maxSlots)], WuxSheetMain.Table.FlexTable, 2);
+                        addEquippedSection(slotDefNames)], WuxSheetMain.Table.FlexTable, 2);
 
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -623,7 +623,7 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                     `;
                 },
 
-                addEquippedSection = function (slotDefNames, maxSlots) {
+                addEquippedSection = function (slotDefNames) {
                     let contents = "";
                     contents += `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_Equipped")}`)}`;
                     let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
@@ -632,15 +632,23 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                     }
                     slotDefNames.forEach((slotInfo) => {
                         let slotDef = WuxDef.Get(slotInfo.def);
-                        for (let i = 1; i <= maxSlots; i++) {
-                            contents += WuxSheetMain.HiddenIndexField(slotInfo.countAttr, i,
-                                `${WuxSheetMain.HiddenField(slotDef.getAttribute(i), WuxDefinition.BuildText(slotDef, WuxSheetMain.Span(slotDef.getAttribute(i))))}
-                                ${WuxSheetMain.HiddenAuxField(slotDef.getAttribute(i), WuxDefinition.BuildText(slotDef, `<span>${emptyName}</span>`))}
-                                ${WuxSheetMain.Input("hidden", slotDef.getAttribute(i))}`
-                            );
+                        for (let i = 1; i <= slotInfo.max; i++) {
+                            contents += WuxSheetMain.HiddenIndexField(slotInfo.countAttr, i, buildEquipSlot(slotDef, i, emptyName));
                         }
                     })
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
+                },
+                
+                buildEquipSlot = function (definition, index, emptyName) {
+                    let contents = WuxSheetMain.Header2(`${definition.title} ${index}`);
+                    contents += "\n" + WuxSheetMain.HiddenField(definition.getAttribute(index), 
+                        WuxSheetMain.Desc(
+                            // TODO: Add submenu
+                            WuxSheetMain.Span(definition.getAttribute(index))
+                        )
+                    );
+                    contents += "\n" + WuxSheetMain.HiddenAuxField(definition.getAttribute(index), WuxSheetMain.Desc(`<span>${emptyName}</span>`));
+                    return contents;
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {
@@ -919,8 +927,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 print = function () {
                     let contents = "";
                     contents += buildActionSection([
-                            {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: 3},
-                            {repeater: "RepeatingAdvTech", slot: "RepeatingAdvTech", max: 3}],
+                            {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: 3, slotMod: 0},
+                            {repeater: "RepeatingAdvTech", slot: "Forme_ArteformSlot", max: 3, slotMod: 0},
+                            {repeater: "RepeatingAdvTech", slot: "Forme_AdvancedSlot", max: 9, slotMod: 3}],
                         "Action_Techniques");
                     return WuxSheetMain.Build(contents);
                 },
@@ -946,7 +955,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 repeatingFormeTechniquesSection = function (repeaterData) {
                     let contents = "";
                     for (let i = 1; i <= repeaterData.max; i++) {
-                        let repeatingFieldName = WuxDef.GetVariable(repeaterData.repeater, i);
+                        let repeatingFieldName = WuxDef.GetVariable(repeaterData.repeater, i + repeaterData.slotMod);
                         let slotFieldName = WuxDef.GetAttribute(repeaterData.slot, i);
                         contents += WuxSheetMain.HiddenField(slotFieldName, 
                             repeatingTechniquesSection(`<span name="${slotFieldName}"></span>`, repeatingFieldName)

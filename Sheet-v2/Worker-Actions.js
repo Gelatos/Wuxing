@@ -1,6 +1,21 @@
 var WuxWorkerActions = WuxWorkerActions || (function () {
+    const tryAddTechniqueToBoosters = function (attrHandler, technique, boosterFieldName) {
+        if (technique.action == "Passive") {
+            let passiveStyleTechniques = attrHandler.parseJSON(boosterFieldName);
+            if (passiveStyleTechniques == "0" || passiveStyleTechniques == "") {
+                passiveStyleTechniques = [];
+            }
+            if (!passiveStyleTechniques.includes(technique.name)) {
+                passiveStyleTechniques.push(technique.name);
+                attrHandler.addUpdate(boosterFieldName, JSON.stringify(passiveStyleTechniques));
+            }
+        }
+    };
     const addAffinityVariables = function (attrHandler) {
         attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("AdvancedBranch")]);
+    };
+    const addBoosterVariables = function (attrHandler) {
+        attrHandler.addMod([WuxDef.GetVariable("BoostStyleTech"), WuxDef.GetVariable("BoostGearTech")]);
     };
     const getAffinities = function (attrHandler) {
         return [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
@@ -12,6 +27,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let styleTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(new DatabaseFilterData("style", styleName));
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", sectionRepeater);
         let affinities = getAffinities(attrHandler);
+        let boosterFieldName = WuxDef.GetVariable("BoostStyleTech");
         for (let tier = 1; tier <= maxTier; tier++) {
             let tierData = styleTechniques.get(tier);
             tierData.iterate(function (techsByAffinity, affinity) {
@@ -25,6 +41,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 techsByAffinity.forEach(function (technique) {
                     techniqueAttributeHandler.setId(sectionRepeater.generateRowId());
                     techniqueAttributeHandler.setTechniqueInfo(technique, true);
+                    tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName);
                 });
             });
         }
@@ -37,6 +54,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
 
         addAffinityVariables(attributeHandler);
+        addBoosterVariables(attributeHandler);
         let crFieldName = WuxDef.GetVariable("CR");
         attributeHandler.addMod(crFieldName);
         
@@ -121,6 +139,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
 
         addAffinityVariables(attributeHandler);
+        addBoosterVariables(attributeHandler);
         let crFieldName = WuxDef.GetVariable("CR");
         attributeHandler.addMod(crFieldName);
 
