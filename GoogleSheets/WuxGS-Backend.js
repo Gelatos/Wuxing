@@ -247,15 +247,15 @@ var FormeBuilder = FormeBuilder || (function () {
     var
         print = function () {
             let output = "";
+            output += listenerEquipRepeatingForme();
             output += listenerInspectRepeatingForme();
             return output;
         },
         listenerEquipRepeatingForme = function () {
-            let repeatingSection = WuxDef.GetVariable("RepeatingEquipment");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_ItemIsEquipped")}`];
-            let output = `WuxWorkerGear.EquipEquipment(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+            return `${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingJobStyles")}:${WuxDef.GetVariable("Forme_IsEquipped")}`],
+                `WuxWorkerStyles.EquipJobStyle(eventinfo)`, true)}
+                `;
         },
         listenerInspectRepeatingForme = function () {
             return `${WuxSheetBackend.OnChange(

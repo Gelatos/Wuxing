@@ -1,6 +1,118 @@
+class EquipStyleWorker {
+    constructor(eventinfo, repeatingSectionName) {
+        this.attributeHandler = new WorkerAttributeHandler();
+        this.styleRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
+        this.selectedId = this.styleRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+
+        this.actionFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_Actions"));
+        this.seeTechniqueFieldName = eventinfo.sourceAttribute;
+    }
+    
+    setupForEquip (countFieldNames, slotNames, maxSlots) {
+        // get the selected style data
+        this.styleFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_Name"));
+        this.attributeHandler.addMod(this.styleFieldName);
+        this.tierFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_Tier"));
+        this.attributeHandler.addMod(this.tierFieldName);
+        this.maxSlots = maxSlots;
+
+        countFieldNames.forEach(fieldName => {
+            let countField = WuxDef.GetVariable(fieldName);
+            this.attributeHandler.addMod(countField);
+        })
+        slotNames.forEach(name => {
+            let slotDef = WuxDef.Get(name);
+            for (let i = 1; i <= maxSlots; i++) {
+                let slotFieldName = slotDef.getVariable(i);
+                this.attributeHandler.addMod(slotFieldName);
+            }
+        });
+    }
+    
+    slotIsEmpty(slotContents) {
+        return slotContents == "" || slotContents == "0";
+    }
+    
+    closeMenu(attrHandler) {
+        attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+        attrHandler.addUpdate(this.seeTechniqueFieldName, "0");
+        attrHandler.addUpdate(this.actionFieldName, "0");
+    }
+
+    performEquipSlot(countFieldName, slotName, maxSlots, actionFieldName) {
+        let equipWorker = this;
+        this.setupForEquip([countFieldName], [slotName], maxSlots);
+
+        this.styleRepeater.getIds(function (equipRepeater) {
+
+            equipRepeater.iterate(function (id) {
+                equipWorker.attributeHandler.addMod(equipRepeater.getFieldName(id, WuxDef.GetVariable("Forme_Name")), 0);
+            });
+
+            equipWorker.attributeHandler.addGetAttrCallback(function (attrHandler) {
+                equipWorker.closeMenu(attrHandler);
+                let emptyEquipSlot = equipWorker.getEmptyEquipSlotFieldName(attrHandler, WuxDef.Get(slotName), WuxDef.GetVariable(countFieldName));
+                if (emptyEquipSlot == undefined) {
+                    emptyEquipSlot = equipWorker.getLastEquipSlotFieldName(attrHandler, WuxDef.Get(slotName), WuxDef.GetVariable(countFieldName));
+                    let equippedId = equipWorker.findMatchingEquippedSlot(attrHandler, equipRepeater, attrHandler.parseString(emptyEquipSlot.slotFieldName));
+                    if (equippedId != undefined) {
+                        equipWorker.unequipStyleAtId(attrHandler, equippedId);
+                    }
+                }
+                equipWorker.equipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
+            });
+            equipWorker.attributeHandler.run();
+        });
+    }
+    
+    equipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName) {
+        attrHandler.addUpdate(this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
+        let styleName = attrHandler.parseString(this.styleFieldName);
+
+        Debug.Log(`Equipping ${styleName} to ${emptySlotFieldName}`);
+        attrHandler.addUpdate(emptySlotFieldName, styleName);
+        
+        let newAttributeHandler = new WorkerAttributeHandler();
+        WuxWorkerActions.PopulateStyleActions(newAttributeHandler, actionFieldName, slotIndex, 
+            attrHandler.parseString(this.styleFieldName), attrHandler.parseString(this.tierFieldName));
+        newAttributeHandler.run();
+    }
+    
+    findMatchingEquippedSlot(attrHandler, repeater, slotContents) {
+        repeater.iterate(function (id) {
+            let slotFieldName = repeater.getFieldName(id, WuxDef.GetVariable("Forme_Name"));
+            let indexContent = attrHandler.parseString(slotFieldName);
+            if (slotContents == indexContent) {
+                return id;
+            }
+        });
+        return undefined;
+    }
+    
+    getEmptyEquipSlotFieldName(attrHandler, slotDef, countFieldName) {
+        let maxCount = Math.min(attrHandler.parseInt(countFieldName), this.maxSlots);
+        for (let i = 1; i <= maxCount; i++) {
+            let slotFieldName = slotDef.getVariable(i);
+            let slotContents = attrHandler.parseString(slotFieldName);
+            if (this.slotIsEmpty(slotContents)) {
+                return {slotFieldName: slotFieldName, index: i};
+            }
+        }
+        return undefined;
+    }
+    getLastEquipSlotFieldName(attrHandler, slotDef, countFieldName) {
+        let maxCount = Math.min(attrHandler.parseInt(countFieldName), this.maxSlots);
+        return {slotFieldName: slotDef.getVariable(maxCount), index: maxCount};
+    }
+    
+    unequipStyleAtId(attrHandler, id) {
+        attrHandler.addUpdate(this.styleRepeater.getFieldName(id, WuxDef.GetVariable("Forme_IsEquipped")), 0);
+    }
+}
+
 var WuxWorkerStyles = WuxWorkerStyles || (function () {
 
-    const populateStyleInspectionTechniques = function (attrHandler, itemPopupRepeater, styleName, maxDisplayTier, showTierHeaders) {
+    const populateStyleInspectionTechniques = function (attrHandler, itemPopupRepeater, styleName, maxDisplayTier, affinities, showTierHeaders) {
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `${styleName} Techniques`);
         let style = WuxStyles.Get(styleName);
         let maxTier = Math.min(style.maxTier, maxDisplayTier);
@@ -81,9 +193,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         });
     };
     
-    const equipStyle = function (attrHandler, styleName, tier) {
-        
-    };
+   
     const seeFormeTechniques = function (eventinfo, repeaterName) {
         Debug.Log("See Forme Techniques");
         
@@ -98,6 +208,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         WuxWorkerInspectPopup.OpenTechniqueInspection(
             function (attrHandler) {
                 attrHandler.addMod([nameFieldName, tierFieldName, crFieldName]);
+                attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("AdvancedBranch")]);
             },
             function (attrHandler, itemPopupRepeater) {
                 attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
@@ -105,9 +216,12 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 attrHandler.addUpdate(actionFieldName, "0");
                 let maxTier = attrHandler.parseInt(tierFieldName);
                 let cr = attrHandler.parseInt(crFieldName);
+                let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+                attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
+                attrHandler.parseString(WuxDef.GetVariable("AdvancedBranch"))];
                 
                 return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, 
-                    attrHandler.parseString(nameFieldName), Math.min(maxTier, cr), false);
+                    attrHandler.parseString(nameFieldName), Math.min(maxTier, cr), affinities, false);
             });
     }
     'use strict';
@@ -141,16 +255,16 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 styleWorker.saveBuildStatsToFinal(attrHandler);
             });
         },
-        
+
         equipJobStyle = function (eventinfo) {
-            Debug.Log("Equip Style");
-            let attributeHandler = new WorkerAttributeHandler();
-            let styleRepeater = new WorkerRepeatingSectionHandler("RepeatingJobStyles");
-            let selectedId = styleRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
-            attributeHandler.addUpdate(WuxDef.GetVariable("Forme_ArteformSlot"), eventinfo.newValue);
-            attributeHandler.addUpdate(styleRepeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
-            attributeHandler.run();
+            let equipStyleWorker = new EquipStyleWorker(eventinfo, "RepeatingJobStyles");
+            equipStyleWorker.performEquipSlot("JobSlots", "Forme_JobSlot", 3, "RepeatingJobTech");
         },
+
+        // equipAdvancedStyle = function (eventinfo) {
+        //     let equipStyleWorker = new EquipStyleWorker(eventinfo, "RepeatingJobStyles");
+        //     equipStyleWorker.performEquipSlot("JobSlots", "Forme_JobSlot", 3, "RepeatingJobTech");
+        // },
 
         seeTechniques = function (eventinfo) {
             Debug.Log("See Techniques");

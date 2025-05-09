@@ -111,6 +111,24 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     },
     inspectTechniqueBasicSocial = function (eventinfo) {
         inspectTechnique("RepeatingBasicSocial", eventinfo.sourceAttribute, "All Basic Social Techniques");
+    }, 
+        
+    populateStyleActions = function (attributeHandler, repeatingSectionName, repeatingSectionIndex, styleName, tier) {
+        let repeatingWorker = new WorkerRepeatingSectionHandler(repeatingSectionName, repeatingSectionIndex);
+
+        repeatingWorker.getIds(function (repeater) {
+            repeater.removeAllIds();
+        });
+
+        addAffinityVariables(attributeHandler);
+        let crFieldName = WuxDef.GetVariable("CR");
+        attributeHandler.addMod(crFieldName);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let cr = attrHandler.parseInt(crFieldName);
+            let maxRank = Math.min(tier, cr);
+            populateStyleTechniques(attrHandler, repeatingWorker, styleName, maxRank);
+        });
     };
 
     return {
@@ -118,6 +136,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         InspectTechniqueBasicAction: inspectTechniqueBasicAction,
         InspectTechniqueBasicRecovery: inspectTechniqueBasicRecovery,
         InspectTechniqueBasicAttack: inspectTechniqueBasicAttack,
-        InspectTechniqueBasicSocial: inspectTechniqueBasicSocial
+        InspectTechniqueBasicSocial: inspectTechniqueBasicSocial,
+        PopulateStyleActions: populateStyleActions
     };
 }());

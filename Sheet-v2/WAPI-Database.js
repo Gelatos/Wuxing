@@ -3361,9 +3361,9 @@ class SandboxAttributeHandler extends AttributeHandler {
 
 
 class RepeatingSectionHandler {
-    constructor(definitionId) {
+    constructor(definitionId, variableId) {
         this.definition = WuxDef.Get(definitionId);
-        this.repeatingSection = this.definition.getVariable();
+        this.repeatingSection = this.definition.getVariable(variableId);
         this.ids = [];
         this.fieldNames = [];
     }
@@ -3432,8 +3432,8 @@ class RepeatingSectionHandler {
 
 class SandboxRepeatingSectionHandler extends RepeatingSectionHandler {
     
-    constructor(definitionId, characterId) {
-        super(definitionId);
+    constructor(definitionId, characterId, variableId) {
+        super(definitionId, variableId);
         this.characterId = characterId;
     }
 
