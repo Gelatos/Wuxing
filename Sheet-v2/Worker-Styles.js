@@ -5,7 +5,7 @@ class EquipStyleWorker {
         this.selectedId = this.styleRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
 
         this.actionFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_Actions"));
-        this.seeTechniqueFieldName = eventinfo.sourceAttribute;
+        this.subMenuOptionFieldName = eventinfo.sourceAttribute;
     }
     
     setupForEquip (countFieldNames, slotNames, maxSlots) {
@@ -42,7 +42,7 @@ class EquipStyleWorker {
     
     closeMenu(attrHandler) {
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-        attrHandler.addUpdate(this.seeTechniqueFieldName, "0");
+        attrHandler.addUpdate(this.subMenuOptionFieldName, "0");
         attrHandler.addUpdate(this.actionFieldName, "0");
     }
     
@@ -51,10 +51,8 @@ class EquipStyleWorker {
         let styleName = attrHandler.parseString(this.styleFieldName);
         attrHandler.addUpdate(emptySlotFieldName, styleName);
         
-        let newAttributeHandler = new WorkerAttributeHandler();
-        WuxWorkerActions.PopulateStyleActions(newAttributeHandler, actionFieldName, slotIndex, 
+        WuxWorkerActions.PopulateStyleActions(actionFieldName, slotIndex, 
             attrHandler.parseString(this.styleFieldName), attrHandler.parseString(this.tierFieldName));
-        newAttributeHandler.run();
     }
     
     unequipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName) {

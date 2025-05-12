@@ -11,6 +11,139 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             }
         }
     };
+    const removeOldTechniqueActions = function (attrHandler, actionRepeater, boosterFieldName) {
+        
+        let passiveStyleTechniques = attrHandler.parseJSON(boosterFieldName);
+        if (passiveStyleTechniques == "0" || passiveStyleTechniques == "") {
+            passiveStyleTechniques = [];
+        }
+        
+        actionRepeater.iterate(function (id) {
+            let techniqueName = attrHandler.parseString(actionRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Action", "TechName")));
+            let technique = WuxTechs.Get(techniqueName);
+            if (technique.action == "Passive") {
+                let index = passiveStyleTechniques.indexOf(technique.name);
+                if (index >= 0) {
+                    passiveStyleTechniques.splice(index, 1);
+                    attrHandler.addUpdate(boosterFieldName, JSON.stringify(passiveStyleTechniques));
+                }
+            }
+        });
+        
+        actionRepeater.removeAllIds();
+    }
+    const setTechniqueBoosters = function (attrHandler) {
+        let techBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostStyleTech"));
+        let gearBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostGearTech"));
+        
+        let attributeHandler = new WorkerAttributeHandler();
+        // grab all formulas that get modified based on techniques (_tech)
+        let techniqueModifierDefs = WuxDef.Filter(new DatabaseFilterData("techMods", WuxDef._tech));
+        for (let i = 0; i < techniqueModifierDefs.length; i++) {
+            attributeHandler.addFormulaMods(techniqueModifierDefs[i]);
+        }
+        let techniqueSetModifierDefs = WuxDef.Filter(new DatabaseFilterData("techMods", WuxDef._techset));
+        for (let i = 0; i < techniqueSetModifierDefs.length; i++) {
+            attributeHandler.addFormulaMods(techniqueSetModifierDefs[i]);
+        }
+
+        addBoostStyleTechFormulaMods(attributeHandler, techBoosters);
+        addBoostGearTechFormulaMods(attributeHandler, gearBoosters);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+
+            // reset all techniques that have modifiers
+            for (let i = 0; i < techniqueModifierDefs.length; i++) {
+                attrHandler.addUpdate(techniqueModifierDefs[i].getVariable(WuxDef._tech), 0);
+            }
+            for (let i = 0; i < techniqueSetModifierDefs.length; i++) {
+                attrHandler.addUpdate(techniqueSetModifierDefs[i].getVariable(WuxDef._techset), 0);
+            }
+
+            addBoostStyleTechModifiers(attrHandler, techBoosters);
+            addBoostGearTechModifiers(attrHandler, gearBoosters);
+
+            // recalculate all techniques that have modifiers
+            for (let i = 0; i < techniqueModifierDefs.length; i++) {
+                if (techniqueModifierDefs[i].isResource) {
+                    attrHandler.addUpdate(techniqueModifierDefs[i].getVariable(WuxDef._max), techniqueModifierDefs[i].formula.getValue(attrHandler));
+                } else {
+                    attrHandler.addUpdate(techniqueModifierDefs[i].getVariable(), techniqueModifierDefs[i].formula.getValue(attrHandler));
+                }
+            }
+        });
+        attributeHandler.run();
+    }
+    
+    const addBoostStyleTechFormulaMods = function (attrHandler, techBoosters) {
+        iteratePassiveStyleTechniques(techBoosters, function (technique) {
+            addBoostTechniqueFormulaMods(attrHandler, technique);
+        });
+    }
+    const addBoostGearTechFormulaMods = function (attrHandler, gearBoosters) {
+        iteratePassiveGearTechniques(gearBoosters, function (technique) {
+            addBoostTechniqueFormulaMods(attrHandler, technique);
+        });
+    }
+    const addBoostTechniqueFormulaMods = function (attrHandler, technique) {
+        technique.effects.iterate(function (techEffect) {
+            if (techEffect.type == "Boost") {
+                attrHandler.addFormulaMods(techEffect);
+            }
+        });
+    }
+    
+    const addBoostStyleTechModifiers = function (attrHandler, techBoosters) {
+        iteratePassiveStyleTechniques(techBoosters, function (technique) {
+            addBoostTechniqueModifiers(attrHandler, technique);
+        });
+    }
+    const addBoostGearTechModifiers = function (attrHandler, gearBoosters) {
+        iteratePassiveGearTechniques(gearBoosters, function (technique) {
+            addBoostTechniqueModifiers(attrHandler, technique);
+        });
+    }
+    const addBoostTechniqueModifiers = function (attrHandler, technique) {
+        technique.effects.iterate(function (techEffect) {
+            if (techEffect.type == "Boost") {
+                let boostDef = WuxDef.Get(techEffect.effect);
+
+                switch (techEffect.subType) {
+                    case "Set":
+                        Debug.Log(`Setting ${boostDef.getVariable()} to ${techEffect.formula.getValue(attrHandler)}`);
+                        attrHandler.addUpdate(boostDef.getVariable(WuxDef._techset), techEffect.formula.getValue(attrHandler) - boostDef.formula.getValue(attrHandler));
+                        break;
+                    default:
+                        Debug.Log(`Setting ${boostDef.getVariable(WuxDef._tech)} to ${attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + techEffect.formula.getValue(attrHandler)}`);
+                        attrHandler.addUpdate(boostDef.getVariable(WuxDef._tech),
+                            attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + techEffect.formula.getValue(attrHandler));
+                        break;
+                }
+            }
+        });
+    }
+    
+    const iteratePassiveStyleTechniques = function (techBoosters, callback) {
+        iteratePassiveTechniques(techBoosters, function (techniqueName) {
+            let technique = WuxTechs.Get(techniqueName);
+            callback(technique);
+        });
+    }
+    const iteratePassiveGearTechniques = function (gearBoosters, callback) {
+        iteratePassiveTechniques(gearBoosters, function (itemName) {
+            let item = WuxItems.Get(itemName);
+            callback(item.technique);
+        });
+    }
+    const iteratePassiveTechniques = function (passiveTechniqueArray, callback) {
+        if (!Array.isArray(passiveTechniqueArray)) {
+            return;
+        }
+        
+        passiveTechniqueArray.forEach(function (techniqueName) {
+            callback(techniqueName);
+        });
+    }
     const addAffinityVariables = function (attrHandler) {
         attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("AdvancedBranch")]);
     };
@@ -47,9 +180,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         }
     };
     const populateBasicActions = function (attributeHandler, repeatingSectionName, styleName) {
-        let repeatingWorker = new WorkerRepeatingSectionHandler(repeatingSectionName);
+        let actionRepeatingWorker = new WorkerRepeatingSectionHandler(repeatingSectionName);
 
-        repeatingWorker.getIds(function (repeater) {
+        actionRepeatingWorker.getIds(function (repeater) {
             repeater.removeAllIds();
         });
 
@@ -59,7 +192,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         attributeHandler.addMod(crFieldName);
         
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            populateStyleTechniques(attrHandler, repeatingWorker, styleName, attrHandler.parseInt(crFieldName));
+            populateStyleTechniques(attrHandler, actionRepeatingWorker, styleName, attrHandler.parseInt(crFieldName));
         });
     };
     const populateInspectionElements = function (attrHandler, popupRepeater, sectionRepeater, inspectionTitle, selectedId) {
@@ -131,22 +264,29 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         inspectTechnique("RepeatingBasicSocial", eventinfo.sourceAttribute, "All Basic Social Techniques");
     }, 
         
-    populateStyleActions = function (attributeHandler, repeatingSectionName, repeatingSectionIndex, styleName, tier) {
-        let repeatingWorker = new WorkerRepeatingSectionHandler(repeatingSectionName, repeatingSectionIndex);
+    populateStyleActions = function (repeatingSectionName, repeatingSectionIndex, styleName, tier) {
+        let actionsRepeatingWorker = new WorkerRepeatingSectionHandler(repeatingSectionName, repeatingSectionIndex);
 
-        repeatingWorker.getIds(function (repeater) {
-            repeater.removeAllIds();
-        });
+        actionsRepeatingWorker.getIds(function (actionsRepeater) {
+            let attributeHandler = new WorkerAttributeHandler();
+            actionsRepeater.iterate(function (id) {
+                attributeHandler.addMod(actionsRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Action", "TechName")));
+            });
 
-        addAffinityVariables(attributeHandler);
-        addBoosterVariables(attributeHandler);
-        let crFieldName = WuxDef.GetVariable("CR");
-        attributeHandler.addMod(crFieldName);
+            addAffinityVariables(attributeHandler);
+            addBoosterVariables(attributeHandler);
+            let crFieldName = WuxDef.GetVariable("CR");
+            attributeHandler.addMod(crFieldName);
 
-        attributeHandler.addGetAttrCallback(function (attrHandler) {
-            let cr = attrHandler.parseInt(crFieldName);
-            let maxRank = Math.min(tier, cr);
-            populateStyleTechniques(attrHandler, repeatingWorker, styleName, maxRank);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let cr = attrHandler.parseInt(crFieldName);
+                let maxRank = Math.min(tier, cr);
+                
+                removeOldTechniqueActions(attrHandler, actionsRepeater, WuxDef.GetVariable("BoostStyleTech"));
+                populateStyleTechniques(attrHandler, actionsRepeatingWorker, styleName, maxRank);
+                setTechniqueBoosters(attrHandler);
+            });
+            attributeHandler.run();
         });
     };
 
