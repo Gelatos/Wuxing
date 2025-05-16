@@ -381,15 +381,11 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         });
         equipStyleWorker.attributeHandler.run();
     };
-    const seeFormeTechniques = function (eventinfo, repeaterName) {
+    const seeFormeTechniques = function (repeater, selectedId, actionFieldName, seeTechniqueFieldName) {
         Debug.Log("See Forme Techniques");
         
-        let repeater = new WorkerRepeatingSectionHandler(repeaterName);
-        let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
         let nameFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Name"));
         let tierFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Tier"));
-        let actionFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Actions"));
-        let seeTechniqueFieldName = eventinfo.sourceAttribute;
         let crFieldName = WuxDef.GetVariable("CR");
 
         WuxWorkerInspectPopup.OpenTechniqueInspection(
@@ -409,7 +405,31 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 
                 return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, 
                     attrHandler.parseString(nameFieldName), Math.min(maxTier, cr), affinities, false);
+            }
+        );
+    }
+    const seeSetFormeTechniques = function (eventinfo, repeaterName, styleFieldName) {
+        Debug.Log("See Forme Techniques");
+
+        let formeRepeatingWorker = new WorkerRepeatingSectionHandler(repeaterName);
+        formeRepeatingWorker.getIds(function (formeRepeater) {
+            let attributeHandler = new WorkerAttributeHandler();
+            formeRepeater.iterate(function (id) {
+                attributeHandler.addMod(formeRepeater.getFieldName(id, WuxDef.GetVariable("Forme_Name")), 0);
             });
+            attributeHandler.addMod(styleFieldName);
+            
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let styleName = attrHandler.parseString(styleFieldName);
+                formeRepeater.iterate(function (id) {
+                    let idName = attrHandler.parseString(formeRepeater.getFieldName(id, WuxDef.GetVariable("Forme_Name")));
+                    if (styleName == idName) {
+                        seeFormeTechniques(formeRepeater, id, styleFieldName + WuxDef._expand, eventinfo.sourceAttribute);
+                    }
+                });
+            });
+            attributeHandler.run();
+        });
     }
     const unequipSetTechSet = function (eventinfo, slotIndex, equipSlotFieldName, actionFieldName, repeatingSectionName) {
         let equipStyleWorker = new EquipStyleWorker(eventinfo.sourceAttribute, repeatingSectionName);
@@ -513,12 +533,30 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         },
 
         seeJobTechniques = function (eventinfo) {
-            seeFormeTechniques(eventinfo, "RepeatingJobStyles");
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingJobStyles");
+            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let actionFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Actions"));
+            let seeTechniqueFieldName = eventinfo.sourceAttribute;
+            seeFormeTechniques(repeater, selectedId, actionFieldName, seeTechniqueFieldName);
         },
 
         seeStyleTechniques = function (eventinfo) {
-            seeFormeTechniques(eventinfo, "RepeatingStyles");
-        };
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingStyles");
+            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let actionFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Actions"));
+            let seeTechniqueFieldName = eventinfo.sourceAttribute;
+            seeFormeTechniques(repeater, selectedId, actionFieldName, seeTechniqueFieldName);
+        },
+
+        inspectSetJobStyle = function (eventinfo, slotIndex, equipSlotFieldName) {
+            seeSetFormeTechniques(eventinfo, "RepeatingJobStyles", equipSlotFieldName);
+        },
+        
+        inspectSetStyle = function (eventinfo, slotIndex, equipSlotFieldName) {
+            seeSetFormeTechniques(eventinfo, "RepeatingStyles", equipSlotFieldName);
+        }
+    
+    ;
 
     return {
         UpdateBuildPoints: updateBuildPoints,
@@ -529,7 +567,9 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         UnequipSetStyle: unequipSetStyle,
         SeeTechniques: seeTechniques,
         SeeJobTechniques: seeJobTechniques,
-        SeeStyleTechniques: seeStyleTechniques
+        SeeStyleTechniques: seeStyleTechniques,
+        InspectSetJobStyle: inspectSetJobStyle,
+        InspectSetStyle: inspectSetStyle
     };
 }());
 
