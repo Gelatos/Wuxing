@@ -76,12 +76,8 @@ class EquipStyleWorker {
     unequipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName) {
         attrHandler.addUpdate(this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "0");
         attrHandler.addUpdate(emptySlotFieldName, "0");
-        
-        // remove all items from a slot
-        let repeatingWorker = new WorkerRepeatingSectionHandler(actionFieldName, slotIndex);
-        repeatingWorker.getIds(function (repeater) {
-            repeater.removeAllIds();
-        });
+
+        WuxWorkerActions.RemoveStyleActions(actionFieldName, slotIndex);
     }
     
     findMatchingEquippedSlot(attrHandler, repeater, slotContents) {

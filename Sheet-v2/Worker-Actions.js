@@ -9,7 +9,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 passiveStyleTechniques.push(technique.name);
                 attrHandler.addUpdate(boosterFieldName, JSON.stringify(passiveStyleTechniques));
             }
+            return true;
         }
+        return false;
     };
     const removeOldTechniqueActions = function (attrHandler, actionRepeater, boosterFieldName) {
         
@@ -17,6 +19,10 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         if (passiveStyleTechniques == "0" || passiveStyleTechniques == "") {
             passiveStyleTechniques = [];
         }
+        if (passiveStyleTechniques.length == 0) {
+            return false;
+        }
+        let hasRemovedPassive = false;
         
         actionRepeater.iterate(function (id) {
             let techniqueName = attrHandler.parseString(actionRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Action", "TechName")));
@@ -24,6 +30,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             if (technique.action == "Passive") {
                 let index = passiveStyleTechniques.indexOf(technique.name);
                 if (index >= 0) {
+                    hasRemovedPassive = true;
                     passiveStyleTechniques.splice(index, 1);
                     attrHandler.addUpdate(boosterFieldName, JSON.stringify(passiveStyleTechniques));
                 }
@@ -31,8 +38,10 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
         
         actionRepeater.removeAllIds();
+        return hasRemovedPassive;
     }
     const setTechniqueBoosters = function (attrHandler) {
+        Debug.Log("Setting technique boosters");
         let techBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostStyleTech"));
         let gearBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostGearTech"));
         
@@ -156,7 +165,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             attrHandler.parseString(WuxDef.GetVariable("AdvancedBranch"))];
     };
     const populateStyleTechniques = function (attrHandler, sectionRepeater, styleName, maxTier) {
-
+        let hasAddedPassives = false;
         let styleTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(new DatabaseFilterData("style", styleName));
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", sectionRepeater);
         let affinities = getAffinities(attrHandler);
@@ -174,10 +183,13 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 techsByAffinity.forEach(function (technique) {
                     techniqueAttributeHandler.setId(sectionRepeater.generateRowId());
                     techniqueAttributeHandler.setTechniqueInfo(technique, true);
-                    tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName);
+                    if(tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName)) {
+                        hasAddedPassives = true;
+                    }
                 });
             });
         }
+        return hasAddedPassives;
     };
     const populateBasicActions = function (attributeHandler, repeatingSectionName, styleName) {
         let actionRepeatingWorker = new WorkerRepeatingSectionHandler(repeatingSectionName);
@@ -282,13 +294,36 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 let cr = attrHandler.parseInt(crFieldName);
                 let maxRank = Math.min(tier, cr);
                 
-                removeOldTechniqueActions(attrHandler, actionsRepeater, WuxDef.GetVariable("BoostStyleTech"));
-                populateStyleTechniques(attrHandler, actionsRepeatingWorker, styleName, maxRank);
-                setTechniqueBoosters(attrHandler);
+                let hasRemovedPassives= removeOldTechniqueActions(attrHandler, actionsRepeater, WuxDef.GetVariable("BoostStyleTech"));
+                let hasAddedPassives = populateStyleTechniques(attrHandler, actionsRepeatingWorker, styleName, maxRank);
+                if (hasRemovedPassives || hasAddedPassives) {
+                    setTechniqueBoosters(attrHandler);
+                }
             });
             attributeHandler.run();
         });
-    };
+    },
+
+    removeStyleActions = function (repeatingSectionName, repeatingSectionIndex) {
+        let actionsRepeatingWorker = new WorkerRepeatingSectionHandler(repeatingSectionName, repeatingSectionIndex);
+
+        actionsRepeatingWorker.getIds(function (actionsRepeater) {
+            let attributeHandler = new WorkerAttributeHandler();
+            actionsRepeater.iterate(function (id) {
+                attributeHandler.addMod(actionsRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Action", "TechName")));
+            });
+            addBoosterVariables(attributeHandler);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                actionsRepeater.removeAllIds();
+                if(removeOldTechniqueActions(attrHandler, actionsRepeater, WuxDef.GetVariable("BoostStyleTech"))) {
+                    setTechniqueBoosters(attrHandler);
+                }
+            });
+            attributeHandler.run();
+        });
+    }
+    ;
 
     return {
         PopulateAllBasicActions: populateAllBasicActions,
@@ -296,6 +331,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         InspectTechniqueBasicRecovery: inspectTechniqueBasicRecovery,
         InspectTechniqueBasicAttack: inspectTechniqueBasicAttack,
         InspectTechniqueBasicSocial: inspectTechniqueBasicSocial,
-        PopulateStyleActions: populateStyleActions
+        PopulateStyleActions: populateStyleActions,
+        RemoveStyleActions: removeStyleActions
     };
 }());
