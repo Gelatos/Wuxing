@@ -271,7 +271,7 @@ var FormeBuilder = FormeBuilder || (function () {
         },
         listenerSetFormeOptions = function () {
             let jobEquipSlotDef = WuxDef.Get("Forme_JobSlot");
-            let arteformSlotDef = WuxDef.Get("Forme_ArteformSlot");
+            let arteformSlotDef = WuxDef.Get("Forme_AdvancedSlot");
             let advancedSlotDef = WuxDef.Get("Forme_StyleSlot");
             let output = "";
             for (let i = 1; i <= 6; i++) {
@@ -388,10 +388,10 @@ var PopupBuilder = PopupBuilder || (function () {
         listenerOpenSubMenu = function () {
             let groupVariableNames = [];
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
-            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingArteformStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvancedStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             let jobEquipSlotDef = WuxDef.Get("Forme_JobSlot");
-            let arteformSlotDef = WuxDef.Get("Forme_ArteformSlot");
+            let arteformSlotDef = WuxDef.Get("Forme_AdvancedSlot");
             let advancedSlotDef = WuxDef.Get("Forme_StyleSlot");
             for (let i = 1; i <= 6; i++) {
                 if (i <= 3) {

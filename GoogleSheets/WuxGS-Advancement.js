@@ -30,7 +30,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayTrainingSheet.Print(sheetsDb);
             output += DisplayAdvancementSheet.Print(sheetsDb);
             output += DisplayStylesSheet.Print(sheetsDb);
-            output += DisplayArteformSheet.Print(sheetsDb);
+            output += DisplayAdvancedSheet.Print(sheetsDb);
             output += DisplayCoreCharacterSheet.Print(sheetsDb);
             output += DisplayFormeSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
@@ -45,7 +45,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("CombatDetails"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Status"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("JobSlots"));
-            output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("ArteformSlots"));
+            output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("AdvancedSlots"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("StyleSlots"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("EquipmentSlots"));
 
@@ -967,15 +967,15 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
     };
 }());
 
-var DisplayArteformSheet = DisplayArteformSheet || (function () {
+var DisplayAdvancedSheet = DisplayAdvancedSheet || (function () {
     'use strict';
 
     var
         print = function (sheetsDb) {
-            let output = WuxSheetNavigation.BuildStylesNavigation("Page_Arteforms") +
+            let output = WuxSheetNavigation.BuildStylesNavigation("Page_AdvancedStyles") +
                 SideBarData.Print() +
                 MainContentData.Print(sheetsDb.styles);
-            return WuxSheet.PageDisplay("Arteforms", output);
+            return WuxSheet.PageDisplay("Adv. Styles", output);
         },
 
         printTest = function (stylesDatabase) {
@@ -1022,7 +1022,7 @@ var DisplayArteformSheet = DisplayArteformSheet || (function () {
 
                 buildStyleGroups = function (stylesDatabase) {
                     let contents = "";
-                    let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "ArteformGroup")]);
+                    let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "AdvancedGroup")]);
                     for (let i = 0; i < filteredData.length; i++) {
                         let techFilterData = stylesDatabase.filter([new DatabaseFilterData("subGroup", filteredData[i].getTitle())]);
                         let techStyles = [];

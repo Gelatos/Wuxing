@@ -1695,14 +1695,14 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     const trainingPageNavigation = function (definition, subheader) {
         let fieldName = WuxDef.GetAttribute("PageSet_Training");
         let mainContents = "";
-        mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Knowledge", "Arteforms", "Styles", "Training"]);
+        mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Knowledge", "Adv. Styles", "Styles", "Training"]);
         mainContents += buildExitStickyButtons(fieldName, true);
         mainContents += buildHeader("Training", subheader, definition.getAttribute(WuxDef._info));
         return mainContents;
     };
     const advancementPageNavigation = function (definition, subheader) {
         let fieldName = WuxDef.GetAttribute("PageSet_Advancement");
-        let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Attributes", "Skills", "Arteforms", "Styles", "Jobs", "Advancement"]);
+        let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Attributes", "Skills", "Adv. Styles", "Styles", "Jobs", "Advancement"]);
         mainContents += buildExitStickyButtons(fieldName, true);
         mainContents += buildHeader("Advancement", subheader, definition.getAttribute(WuxDef._info));
         return mainContents;
@@ -1738,7 +1738,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     };
     const buildCharacterCreationTabs = function (sheetName) {
         let output = "";
-        let tabNames = ["Attributes", "Knowledge", "Skills", "Arteforms", "Styles", "Jobs", "Origin"];
+        let tabNames = ["Attributes", "Knowledge", "Skills", "Adv. Styles", "Styles", "Jobs", "Origin"];
 
         for (let i = 0; i < tabNames.length; i++) {
             output += buildTabButton("radio", WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
@@ -1897,7 +1897,7 @@ var WuxSheet = WuxSheet || (function () {
             return `<input type="hidden" class="wuxPageDisplay-Flag" name="${fieldName}"${value} />`
         },
         pageDisplay = function (fieldName, contents) {
-            return `<div class="wuxPageDisplay-${fieldName}">\n${contents}\n</div>`;
+            return `<div class="wuxPageDisplay-${fieldName.replace(/[ .]/g, '')}">\n${contents}\n</div>`;
         }
     ;
     return {

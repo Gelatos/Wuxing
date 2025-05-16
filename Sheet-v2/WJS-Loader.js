@@ -29,7 +29,7 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 		// update all slots
 		let jobDef = WuxDef.Get("JobSlots");
 		attrHandler.addUpdate(jobDef.getVariable(), jobDef.formula.getValue(attrHandler));
-		let arteformDef = WuxDef.Get("ArteformSlots");
+		let arteformDef = WuxDef.Get("AdvancedSlots");
 		attrHandler.addUpdate(arteformDef.getVariable(), arteformDef.formula.getValue(attrHandler));
 		let advancedDef = WuxDef.Get("StyleSlots");
 		attrHandler.addUpdate(advancedDef.getVariable(), advancedDef.formula.getValue(attrHandler));
