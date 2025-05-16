@@ -566,9 +566,9 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                     let contents = "";
                     contents += buildStyleSection("RepeatingJobStyles", "Page_JobStyles",
                         [{def: "Forme_JobSlot", countAttr:WuxDef.GetAttribute("JobSlots"), max: 3}]);
-                    contents += buildStyleSection("RepeatingAdvancedStyles", "Page_AdvancedStyles",
+                    contents += buildStyleSection("RepeatingStyles", "Page_Styles",
                         [{def: "Forme_ArteformSlot", countAttr:WuxDef.GetAttribute("ArteformSlots"), max: 3},
-                            {def: "Forme_AdvancedSlot", countAttr:WuxDef.GetAttribute("AdvancedSlots"), max: 6}]);
+                            {def: "Forme_StyleSlot", countAttr:WuxDef.GetAttribute("StyleSlots"), max: 6}]);
                     return WuxSheetMain.Build(contents);
                 },
 
@@ -936,7 +936,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents += buildActionSection([
                             {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: 3, slotMod: 0},
                             {repeater: "RepeatingAdvTech", slot: "Forme_ArteformSlot", max: 3, slotMod: 0},
-                            {repeater: "RepeatingAdvTech", slot: "Forme_AdvancedSlot", max: 9, slotMod: 3}],
+                            {repeater: "RepeatingAdvTech", slot: "Forme_StyleSlot", max: 9, slotMod: 3}],
                         "Action_Techniques");
                     return WuxSheetMain.Build(contents);
                 },

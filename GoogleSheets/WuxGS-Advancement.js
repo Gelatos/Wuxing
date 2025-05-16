@@ -46,7 +46,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Status"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("JobSlots"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("ArteformSlots"));
-            output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("AdvancedSlots"));
+            output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("StyleSlots"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("EquipmentSlots"));
 
             let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", "Social")]);
@@ -831,7 +831,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
         },
 
         printTest = function (stylesDatabase) {
-            let filters = [new DatabaseFilterData("group", "Advanced")];
+            let filters = [new DatabaseFilterData("group", "Style")];
             let filteredData = stylesDatabase.filter(filters);
 
             let output = "";

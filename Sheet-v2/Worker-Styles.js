@@ -48,7 +48,7 @@ class EquipStyleWorker {
         });
     }
     
-    setupForEquipAdvanced (countFieldNames, slotNames, maxSlots) {
+    setupForEquipStyle (countFieldNames, slotNames, maxSlots) {
         this.setupForEquip(countFieldNames, slotNames, maxSlots);
         this.arteformFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_IsArteform"));
         this.attributeHandler.addMod(this.arteformFieldName);
@@ -198,7 +198,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         let arteformSlots = [];
         let advancedSlots = [];
         let arteformDef = WuxDef.Get("Forme_ArteformSlot");
-        let advancedDef = WuxDef.Get("Forme_AdvancedSlot");
+        let advancedDef = WuxDef.Get("Forme_StyleSlot");
         let maxSlots = 3;
         for (let i = 1; i <= maxSlots; i++) {
             arteformSlots.push(attrHandler.parseString(arteformDef.getVariable(i)));
@@ -217,7 +217,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsArteform")), "on");
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsEquipped")), arteformSlots.includes(style.name) ? "on" : 0);
                 }
-                else if (style.group == "Advanced") {
+                else if (style.group == "Style") {
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsArteform")), 0);
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsEquipped")), advancedSlots.includes(style.name) ? "on" : 0);
                 }
@@ -283,18 +283,18 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         equipStyleWorker.attributeHandler.run();
     };
 
-    const equipAdvancedStyle = function (eventinfo) {
+    const equipStyle = function (eventinfo) {
         let arteformCountFieldName = "ArteformSlots";
-        let advancedCountFieldName = "AdvancedSlots";
+        let advancedCountFieldName = "StyleSlots";
         let arteformSlotName = "Forme_ArteformSlot";
-        let advancedSlotName = "Forme_AdvancedSlot";
+        let advancedSlotName = "Forme_StyleSlot";
         let arteformMaxSlots = 3;
         let advancedMaxSlots = 6;
         let actionFieldName = "RepeatingAdvTech";
 
-        let equipStyleWorker = new EquipStyleWorker(eventinfo.sourceAttribute, "RepeatingAdvancedStyles");
+        let equipStyleWorker = new EquipStyleWorker(eventinfo.sourceAttribute, "RepeatingStyles");
         equipStyleWorker.setSelectIdFromEventinfo(eventinfo);
-        equipStyleWorker.setupForEquipAdvanced([arteformCountFieldName, advancedCountFieldName], 
+        equipStyleWorker.setupForEquipStyle([arteformCountFieldName, advancedCountFieldName], 
             [arteformSlotName, advancedSlotName], [arteformMaxSlots, advancedMaxSlots]);
 
         equipStyleWorker.styleRepeater.getIds(function (equipRepeater) {
@@ -331,7 +331,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                                 equipStyleWorker.unequipStyleAtId(attrHandler, equippedId);
                             }
                         }
-                        Debug.Log(`Equipping to Advanced Slot ${emptyEquipSlot.slotFieldName} `);
+                        Debug.Log(`Equipping to Style Slot ${emptyEquipSlot.slotFieldName} `);
                         
                         // arteform and advanced slots share the same repeaters. So this increments by the max count
                         emptyEquipSlot.index += arteformMaxSlots;
@@ -345,18 +345,18 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             equipStyleWorker.attributeHandler.run();
         });
     };
-    const unequipAdvancedStyle = function (eventinfo) {
+    const unequipStyle = function (eventinfo) {
         let arteformCountFieldName = "ArteformSlots";
-        let advancedCountFieldName = "AdvancedSlots";
+        let advancedCountFieldName = "StyleSlots";
         let arteformSlotName = "Forme_ArteformSlot";
-        let advancedSlotName = "Forme_AdvancedSlot";
+        let advancedSlotName = "Forme_StyleSlot";
         let arteformMaxSlots = 3;
         let advancedMaxSlots = 6;
         let actionFieldName = "RepeatingAdvTech";
 
-        let equipStyleWorker = new EquipStyleWorker(eventinfo.sourceAttribute, "RepeatingAdvancedStyles");
+        let equipStyleWorker = new EquipStyleWorker(eventinfo.sourceAttribute, "RepeatingStyles");
         equipStyleWorker.setSelectIdFromEventinfo(eventinfo);
-        equipStyleWorker.setupForEquipAdvanced([arteformCountFieldName, advancedCountFieldName], 
+        equipStyleWorker.setupForEquipStyle([arteformCountFieldName, advancedCountFieldName], 
             [arteformSlotName, advancedSlotName], [arteformMaxSlots, advancedMaxSlots]);
 
         equipStyleWorker.attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -374,12 +374,12 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 emptyEquipSlot = equipStyleWorker.getEquippedSlotFieldName(attrHandler, WuxDef.Get(advancedSlotName),
                     styleName, advancedMaxSlots);
                 if (emptyEquipSlot != undefined) {
-                    Debug.Log(`Found Advanced Slot ${emptyEquipSlot.slotFieldName} `);
+                    Debug.Log(`Found Style Slot ${emptyEquipSlot.slotFieldName} `);
                     equipStyleWorker.unequipSlot(attrHandler, actionFieldName, emptyEquipSlot.index + arteformMaxSlots, emptyEquipSlot.slotFieldName);
                 }
                 else {
                     // attrHandler.addUpdate(equipStyleWorker.styleRepeater.getFieldName(equipStyleWorker.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
-                    Debug.Log(`No Advanced Slot found for ${styleName}`);
+                    Debug.Log(`No Style Slot found for ${styleName}`);
                 }
             }
         });
@@ -415,7 +415,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     attrHandler.parseString(nameFieldName), Math.min(maxTier, cr), affinities, false);
             });
     }
-    const unequipSetStyle = function (eventinfo, slotIndex, equipSlotFieldName, actionFieldName, repeatingSectionName) {
+    const unequipSetTechSet = function (eventinfo, slotIndex, equipSlotFieldName, actionFieldName, repeatingSectionName) {
         let equipStyleWorker = new EquipStyleWorker(eventinfo.sourceAttribute, repeatingSectionName);
         equipStyleWorker.attributeHandler.addMod(equipSlotFieldName);
 
@@ -450,12 +450,12 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             
             let maxSlots = 3;
             let arteformDef = WuxDef.Get("Forme_ArteformSlot");
-            let advancedDef = WuxDef.Get("Forme_AdvancedSlot");
+            let advancedDef = WuxDef.Get("Forme_StyleSlot");
             for (let i = 1; i <= maxSlots; i++) {
                 attributeHandler.addMod([arteformDef.getVariable(i), advancedDef.getVariable(i)]);
             }
             
-            let advancedStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingAdvancedStyles");
+            let advancedStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingStyles");
             advancedStyleValuesRepeatingSection.getIds(function (advancedRepeater) {
                 advancedRepeater.removeAllIds();
             });
@@ -480,23 +480,23 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             }
         },
 
-        toggleEquipAdvancedStyle = function (eventinfo) {
+        toggleEquipStyle = function (eventinfo) {
             if (eventinfo.newValue == "on") {
-                equipAdvancedStyle(eventinfo);
+                equipStyle(eventinfo);
             }
             else {
-                unequipAdvancedStyle(eventinfo);
+                unequipStyle(eventinfo);
             }
         },
 
-        unequipSetJobStyle = function (eventinfo, slotIndex, equipSlotFieldName) {
-            unequipSetStyle(eventinfo, slotIndex, equipSlotFieldName,
+        unequipSetJob = function (eventinfo, slotIndex, equipSlotFieldName) {
+            unequipSetTechSet(eventinfo, slotIndex, equipSlotFieldName,
                 "RepeatingJobTech", "RepeatingJobStyles");
         },
 
-        unequipSetAdvancedStyle = function (eventinfo, slotIndex, equipSlotFieldName) {
-            unequipSetStyle(eventinfo, slotIndex, equipSlotFieldName,
-                "RepeatingAdvTech", "RepeatingAdvancedStyles");
+        unequipSetStyle = function (eventinfo, slotIndex, equipSlotFieldName) {
+            unequipSetTechSet(eventinfo, slotIndex, equipSlotFieldName,
+                "RepeatingAdvTech", "RepeatingStyles");
         },
 
         seeTechniques = function (eventinfo) {
@@ -520,20 +520,20 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             seeFormeTechniques(eventinfo, "RepeatingJobStyles");
         },
 
-        seeAdvancedTechniques = function (eventinfo) {
-            seeFormeTechniques(eventinfo, "RepeatingAdvancedStyles");
+        seeStyleTechniques = function (eventinfo) {
+            seeFormeTechniques(eventinfo, "RepeatingStyles");
         };
 
     return {
         UpdateBuildPoints: updateBuildPoints,
         UpdateStats: updateStats,
         ToggleEquipJobStyle: toggleEquipJobStyle,
-        ToggleEquipAdvancedStyle: toggleEquipAdvancedStyle,
-        UnequipSetJobStyle: unequipSetJobStyle,
-        UnequipSetAdvancedStyle: unequipSetAdvancedStyle,
+        ToggleEquipStyle: toggleEquipStyle,
+        UnequipSetJobStyle: unequipSetJob,
+        UnequipSetStyle: unequipSetStyle,
         SeeTechniques: seeTechniques,
         SeeJobTechniques: seeJobTechniques,
-        SeeAdvancedTechniques: seeAdvancedTechniques
+        SeeStyleTechniques: seeStyleTechniques
     };
 }());
 

@@ -257,8 +257,8 @@ var FormeBuilder = FormeBuilder || (function () {
                 [`${WuxDef.GetVariable("RepeatingJobStyles")}:${WuxDef.GetVariable("Forme_IsEquipped")}`],
                 `WuxWorkerStyles.ToggleEquipJobStyle(eventinfo)`, true)}
                 ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingAdvancedStyles")}:${WuxDef.GetVariable("Forme_IsEquipped")}`],
-                `WuxWorkerStyles.ToggleEquipAdvancedStyle(eventinfo)`, true)}
+                [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_IsEquipped")}`],
+                `WuxWorkerStyles.ToggleEquipStyle(eventinfo)`, true)}
                 `;
         },
         listenerInspectRepeatingForme = function () {
@@ -266,13 +266,13 @@ var FormeBuilder = FormeBuilder || (function () {
                 [`${WuxDef.GetVariable("RepeatingJobStyles")}:${WuxDef.GetVariable("Forme_SeeTechniques")}`],
                 `WuxWorkerStyles.SeeJobTechniques(eventinfo)`, true)}
                     ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingAdvancedStyles")}:${WuxDef.GetVariable("Forme_SeeTechniques")}`],
-                `WuxWorkerStyles.SeeAdvancedTechniques(eventinfo)`, true)}`;
+                [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_SeeTechniques")}`],
+                `WuxWorkerStyles.SeeStyleTechniques(eventinfo)`, true)}`;
         },
         listenerSetFormeOptions = function () {
             let jobEquipSlotDef = WuxDef.Get("Forme_JobSlot");
             let arteformSlotDef = WuxDef.Get("Forme_ArteformSlot");
-            let advancedSlotDef = WuxDef.Get("Forme_AdvancedSlot");
+            let advancedSlotDef = WuxDef.Get("Forme_StyleSlot");
             let output = "";
             for (let i = 1; i <= 6; i++) {
                 if (i <= 3) {
@@ -281,14 +281,14 @@ var FormeBuilder = FormeBuilder || (function () {
                     output += WuxSheetBackend.OnChange([jobEquipSlotDef.getVariable(i + WuxDef._info)],
                         `WuxWorkerStyles.InspectSetJobStyle(eventinfo, ${i}, "${jobEquipSlotDef.getVariable(i)}")`, true);
                     output += WuxSheetBackend.OnChange([arteformSlotDef.getVariable(i + WuxDef._build)],
-                        `WuxWorkerStyles.UnequipSetAdvancedStyle(eventinfo, ${i}, "${arteformSlotDef.getVariable(i)}")`, true);
+                        `WuxWorkerStyles.UnequipSetStyle(eventinfo, ${i}, "${arteformSlotDef.getVariable(i)}")`, true);
                     output += WuxSheetBackend.OnChange([arteformSlotDef.getVariable(i + WuxDef._info)],
-                        `WuxWorkerStyles.InspectSetAdvancedStyle(eventinfo, ${i}, "${arteformSlotDef.getVariable(i)}")`, true);
+                        `WuxWorkerStyles.InspectSetStyle(eventinfo, ${i}, "${arteformSlotDef.getVariable(i)}")`, true);
                 }
                 output += WuxSheetBackend.OnChange([advancedSlotDef.getVariable(i + WuxDef._build)],
-                    `WuxWorkerStyles.UnequipSetAdvancedStyle(eventinfo, ${i}, "${advancedSlotDef.getVariable(i)}")`, true);
+                    `WuxWorkerStyles.UnequipSetStyle(eventinfo, ${i}, "${advancedSlotDef.getVariable(i)}")`, true);
                 output += WuxSheetBackend.OnChange([advancedSlotDef.getVariable(i + WuxDef._info)],
-                    `WuxWorkerStyles.InspectSetAdvancedStyle(eventinfo, ${i}, "${advancedSlotDef.getVariable(i)}")`, true);
+                    `WuxWorkerStyles.InspectSetStyle(eventinfo, ${i}, "${advancedSlotDef.getVariable(i)}")`, true);
             }
 
             return output;
@@ -389,10 +389,10 @@ var PopupBuilder = PopupBuilder || (function () {
             let groupVariableNames = [];
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingArteformStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
-            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvancedStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             let jobEquipSlotDef = WuxDef.Get("Forme_JobSlot");
             let arteformSlotDef = WuxDef.Get("Forme_ArteformSlot");
-            let advancedSlotDef = WuxDef.Get("Forme_AdvancedSlot");
+            let advancedSlotDef = WuxDef.Get("Forme_StyleSlot");
             for (let i = 1; i <= 6; i++) {
                 if (i <= 3) {
                     groupVariableNames = groupVariableNames.concat([jobEquipSlotDef.getVariable(i + WuxDef._expand), 
