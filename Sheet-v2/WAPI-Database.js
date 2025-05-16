@@ -2063,8 +2063,7 @@ class TechniqueEffectDisplayData {
     }
 
     formatEffect(effect) {
-        let output = "";
-        output = this.formatTemporaryEffect(effect);
+        let output= this.formatTemporaryEffect(effect);
         switch (effect.type) {
             case "HP":
                 output += this.formatHpEffect(effect);
@@ -2250,7 +2249,6 @@ class TechniqueEffectDisplayData {
         if (effect.target == "Self") {
             target = "You";
             plural = "";
-            copulas = "are";
         }
         let resistance = WuxDef.GetTitle("Resistance");
         let damageType = WuxDef.GetTitle(effect.effect);
@@ -2868,35 +2866,44 @@ class StatusHandler {
     constructor(attributeHandler) {
         this.attributeHandler = attributeHandler;
         this.statusDef = WuxDef.Get("Status");
-        this.attributeHandler.addMod(statusDef.getVariable());
+        this.attributeHandler.addMod(this.statusDef.getVariable());
         this.combatDetailsHandler = new CombatDetailsHandler(this.attributeHandler);
     }
 
     changeStatus(statusName, newValue) {
+        let statusHandler = this;
         let status = WuxDef.Get(statusName);
         if (status == undefined) {
             Debug.LogError(`[StatusHandler][addStatus] Tried to add incorrect status ${statusName}`);
             return;
         }
         this.attributeHandler.addUpdate(status.getVariable(), newValue);
+        this.attributeHandler.addMod(this.statusDef.getVariable());
+        
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
-            let statuses = this.parseJSON(this.statusDef.getVariable());
+            let statuses = attrHandler.parseJSON(statusHandler.statusDef.getVariable());
+            if (statuses == undefined || statuses == "" || statuses == "0") {
+                statuses = [];
+            }
+            if (!Array.isArray(statuses)) {
+                statuses = [statuses];
+            }
             if (newValue == "on") {
                 if (statuses.includes(statusName)) {
                     return;
                 }
                 statuses.push(statusName);
-                attrHandler.addUpdate(statusDef.getVariable(), statuses);
+                attrHandler.addUpdate(statusHandler.statusDef.getVariable(), JSON.stringify(statuses));
             } else if (newValue == 0) {
                 let statusIndex = statuses.indexOf(statusName);
                 if (statusIndex == -1) {
                     return;
                 }
                 statuses.splice(statusIndex, 1);
-                attrHandler.addUpdate(statusDef.getVariable(), statuses);
+                attrHandler.addUpdate(statusHandler.statusDef.getVariable(), JSON.stringify(statuses));
             }
 
-            this.combatDetailsHandler.onUpdateStatus(attrHandler, statuses);
+            statusHandler.combatDetailsHandler.onUpdateStatus(attrHandler, statuses);
         });
         this.attributeHandler.run();
     }
@@ -3208,9 +3215,19 @@ class AttributeHandler {
 
     databaseParseJSON(fieldName) {
         if (this.update[fieldName] != undefined && this.update[fieldName] != "") {
-            return JSON.parse(this.getUpdateValue(fieldName));
+            try {
+                return JSON.parse(this.getUpdateValue(fieldName));
+            }
+            catch {
+                return undefined;
+            }
         } else if (this.current[fieldName] != undefined && this.current[fieldName] != "") {
-            return JSON.parse(this.getCurrentValue(fieldName));
+            try {
+                return JSON.parse(this.getCurrentValue(fieldName));
+            }
+            catch {
+                return undefined;
+            }
         }
         return undefined;
     }
@@ -4162,9 +4179,9 @@ function CharacterClassGenerator(venueClass) {
     let highMod = 9;
     let mediumMod = 60;
     let lowMod = 120;
+    
 
-
-    // first we need to determine the maxRoll value which represents the highest possible roll
+    // first, we need to determine the maxRoll value which represents the highest possible roll
     maxRoll += eliteMod;
     eliteRoll = maxRoll;
     maxRoll += highMod;
