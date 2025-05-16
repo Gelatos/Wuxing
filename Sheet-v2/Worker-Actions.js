@@ -255,14 +255,22 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     };
     'use strict';
 
-    const populateAllBasicActions = function (attributeHandler)
+    const updateStats = function (attributeHandler) {
+        addBoosterVariables(attributeHandler);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            setTechniqueBoosters(attrHandler);
+        });
+    },
+        
+    populateAllBasicActions = function (attributeHandler)
     {
         populateBasicActions(attributeHandler, "RepeatingBasicActions", "Basic Action");
         populateBasicActions(attributeHandler, "RepeatingBasicRecovery", "Basic Recovery");
         populateBasicActions(attributeHandler, "RepeatingBasicAttack", "Basic Attack");
         populateBasicActions(attributeHandler, "RepeatingBasicSocial", "Basic Social");
     },
-
+        
     inspectTechniqueBasicAction = function (eventinfo) {
         inspectTechnique("RepeatingBasicActions", eventinfo.sourceAttribute, "All Basic Action Techniques");
     },
@@ -303,7 +311,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             attributeHandler.run();
         });
     },
-
     removeStyleActions = function (repeatingSectionName, repeatingSectionIndex) {
         let actionsRepeatingWorker = new WorkerRepeatingSectionHandler(repeatingSectionName, repeatingSectionIndex);
 
@@ -326,6 +333,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     ;
 
     return {
+        UpdateStats: updateStats,
         PopulateAllBasicActions: populateAllBasicActions,
         InspectTechniqueBasicAction: inspectTechniqueBasicAction,
         InspectTechniqueBasicRecovery: inspectTechniqueBasicRecovery,

@@ -55,8 +55,10 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             WuxWorkerAttributes.UpdateStats(attributeHandler);
             WuxWorkerSkills.UpdateStats(attributeHandler);
             WuxWorkerKnowledges.UpdateStats(attributeHandler);
+            WuxWorkerJobs.UpdateStats(attributeHandler);
             WuxWorkerStyles.UpdateStats(attributeHandler);
             WuxWorkerAdvancement.UpdateStats(attributeHandler);
+            WuxWorkerActions.UpdateStats(attributeHandler);
             updateStats(attributeHandler);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 combatDetailsHandler.onUpdateCR(attrHandler, cr);

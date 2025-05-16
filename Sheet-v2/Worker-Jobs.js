@@ -86,7 +86,13 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             Debug.Log("Update Job Stats");
             let jobWorker = new WuxBasicWorkerBuild("Job");
             attributeHandler.addMod(jobWorker.attrBuildDraft);
-            attributeHandler.addMod(WuxDef.GetVariable("Forme_JobSlot"));
+            
+            let maxJobSlots = 3;
+            let jobSlotDef = WuxDef.Get("Forme_JobSlot");
+            for (let i = 1; i <= maxJobSlots; i++) {
+                attributeHandler.addMod(jobSlotDef.getVariable(i));
+            }
+            attributeHandler.addMod(jobSlotDef.getVariable());
 
             let repeaterName = "RepeatingJobStyles";
             let jobStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
@@ -96,8 +102,8 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 jobWorker.setBuildStatsDraft(attrHandler);
-                
-                addStyles(attrHandler, jobWorker, jobStyleValuesRepeatingSection);
+
+                WuxWorkerStyles.AddStyles(attrHandler, jobWorker, jobStyleValuesRepeatingSection);
 
                 jobWorker.cleanBuildStats();
                 jobWorker.setBuildStatVariables(attrHandler);
