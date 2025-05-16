@@ -640,15 +640,22 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                 },
                 
                 buildEquipSlot = function (definition, index, emptyName) {
-                    let contents = WuxSheetMain.Header2(`${definition.title} ${index}`);
-                    contents += "\n" + WuxSheetMain.HiddenField(definition.getAttribute(index), 
-                        WuxSheetMain.Desc(
-                            // TODO: Add submenu
-                            WuxSheetMain.Span(definition.getAttribute(index))
-                        )
-                    );
-                    contents += "\n" + WuxSheetMain.HiddenAuxField(definition.getAttribute(index), WuxSheetMain.Desc(`<span>${emptyName}</span>`));
-                    return contents;
+                    return `${WuxSheetMain.Header2(`${definition.title} ${index}`)}
+                    ${WuxSheetMain.Input("hidden", definition.getAttribute(index + WuxDef._expand), "0")}
+                    ${WuxSheetMain.HiddenField(definition.getAttribute(index), `<div class="wuxDescription">
+                        ${WuxSheetMain.SubMenuButton(definition.getAttribute(index + WuxDef._expand),
+                        addSubmenuContentsEquippedSlots(definition, index))}
+                        ${WuxSheetMain.Span(definition.getAttribute(index))}
+                    </div>`)}
+                    ${WuxSheetMain.HiddenAuxField(definition.getAttribute(index), WuxSheetMain.Desc(`<span>${emptyName}</span>`))}`;
+                },
+
+                addSubmenuContentsEquippedSlots = function (definition, index) {
+                    return `${WuxSheetMain.SubMenuOptionButton(definition.getAttribute(index + WuxDef._build), 
+                        `<span>${WuxDef.GetTitle("Forme_Unequip")}</span>`)}
+                        ${WuxSheetMain.SubMenuOptionButton(definition.getAttribute(index + WuxDef._info), 
+                        `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`)}
+                    `;
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {

@@ -869,6 +869,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 
 .wuxDescription
 {
+    position: relative;
     color: #f4f6f8;
     font-size: 12px;
     line-height: 13px;
