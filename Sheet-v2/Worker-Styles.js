@@ -1,142 +1,142 @@
-class EquipStyleWorker {
-    constructor() {
-        this.attributeHandler = {};
-        this.styleRepeater = {};
-        this.selectedId = "";
-        this.actionFieldName = "";
-        this.subMenuOptionFieldName = "";
-    }
-    
-    setEquipSetterValues(subMenuOptionFieldName, repeatingSectionName) {
-        this.attributeHandler = new WorkerAttributeHandler();
-        this.styleRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
-        this.subMenuOptionFieldName = subMenuOptionFieldName;
-    }
-    
-    setSelectIdFromEventinfo (eventinfo) {
-        this.selectedId = this.styleRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
-        this.actionFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_Actions"));
-    }
-    setSelectIdFromName (attrHandler, styleRepeater, name) {
-        let equipWorker = this;
-        styleRepeater.iterate(function (id) {
-            let styleName = styleRepeater.getFieldName(id, WuxDef.GetVariable("Forme_Name"));
-            if (name == attrHandler.parseString(styleName)) {
-                equipWorker.selectedId = id;
-                return true;
-            }
-        });
-        
-        return equipWorker.selectedId != "";
-    }
-    setActionFieldName (actionFieldName) {
-        this.actionFieldName = actionFieldName;
-    }
-    
-    setupForEquip (countFieldNames, slotNames, maxSlots) {
-        // get the selected style data
-        this.styleFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_Name"));
-        this.attributeHandler.addMod(this.styleFieldName);
-        this.tierFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_Tier"));
-        this.attributeHandler.addMod(this.tierFieldName);
-
-        countFieldNames.forEach(fieldName => {
-            let countField = WuxDef.GetVariable(fieldName);
-            this.attributeHandler.addMod(countField);
-        })
-        let slotIndex = 0;
-        slotNames.forEach(name => {
-            let slotDef = WuxDef.Get(name);
-            for (let i = 1; i <= maxSlots[slotIndex]; i++) {
-                let slotFieldName = slotDef.getVariable(i);
-                this.attributeHandler.addMod(slotFieldName);
-            }
-            slotIndex++;
-        });
-    }
-    
-    setupForEquipStyle (countFieldNames, slotNames, maxSlots) {
-        this.setupForEquip(countFieldNames, slotNames, maxSlots);
-        this.arteformFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_IsAdvanced"));
-        this.attributeHandler.addMod(this.arteformFieldName);
-    }
-    
-    slotIsEmpty(slotContents) {
-        return slotContents == "" || slotContents == "0";
-    }
-    
-    closeMenu(attrHandler) {
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-        attrHandler.addUpdate(this.subMenuOptionFieldName, "0");
-        attrHandler.addUpdate(this.actionFieldName, "0");
-    }
-    
-    equipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName, styleName, tier) {
-        attrHandler.addUpdate(this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
-        if (styleName == undefined) {
-            styleName = attrHandler.parseString(this.styleFieldName);
-            attrHandler.addUpdate(emptySlotFieldName, styleName);
-        }
-        if (tier == undefined) {
-            tier = attrHandler.parseString(this.tierFieldName);
-        }
-        
-        WuxWorkerActions.PopulateStyleActions(actionFieldName, slotIndex, styleName, tier);
-    }
-    
-    unequipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName) {
-        attrHandler.addUpdate(this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "0");
-        attrHandler.addUpdate(emptySlotFieldName, "0");
-
-        WuxWorkerActions.RemoveStyleActions(actionFieldName, slotIndex);
-    }
-    
-    findMatchingEquippedSlot(attrHandler, repeater, slotContents) {
-        let returnable = undefined;
-        repeater.iterate(function (id) {
-            let slotFieldName = repeater.getFieldName(id, WuxDef.GetVariable("Forme_Name"));
-            if (slotContents == attrHandler.parseString(slotFieldName)) {
-                returnable = id;
-                return returnable;
-            }
-        });
-        return returnable;
-    }
-    
-    getEmptyEquipSlotFieldName(attrHandler, slotDef, countFieldName) {
-        let maxCount = attrHandler.parseInt(countFieldName);
-        for (let i = 1; i <= maxCount; i++) {
-            let slotFieldName = slotDef.getVariable(i);
-            let slotContents = attrHandler.parseString(slotFieldName);
-            if (this.slotIsEmpty(slotContents)) {
-                return {slotFieldName: slotFieldName, index: i};
-            }
-        }
-        return undefined;
-    }
-    
-    getEquippedSlotFieldName(attrHandler, slotDef, styleName, maxCount) {
-        for (let i = 1; i <= maxCount; i++) {
-            let slotFieldName = slotDef.getVariable(i);
-            let slotContents = attrHandler.parseString(slotFieldName);
-            if (slotContents == styleName) {
-                return {slotFieldName: slotFieldName, index: i};
-            }
-        }
-        return undefined;
-    }
-    
-    getLastEquipSlotFieldName(attrHandler, slotDef, countFieldName) {
-        let maxCount = attrHandler.parseInt(countFieldName);
-        return {slotFieldName: slotDef.getVariable(maxCount), index: maxCount};
-    }
-    
-    unequipStyleAtId(attrHandler, id) {
-        attrHandler.addUpdate(this.styleRepeater.getFieldName(id, WuxDef.GetVariable("Forme_IsEquipped")), 0);
-    }
-}
-
 var WuxWorkerStyles = WuxWorkerStyles || (function () {
+
+    class EquipStyleWorker {
+        constructor() {
+            this.attributeHandler = {};
+            this.styleRepeater = {};
+            this.selectedId = "";
+            this.actionFieldName = "";
+            this.subMenuOptionFieldName = "";
+        }
+
+        setEquipSetterValues(subMenuOptionFieldName, repeatingSectionName) {
+            this.attributeHandler = new WorkerAttributeHandler();
+            this.styleRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
+            this.subMenuOptionFieldName = subMenuOptionFieldName;
+        }
+
+        setSelectIdFromEventinfo (eventinfo) {
+            this.selectedId = this.styleRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            this.actionFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_Actions"));
+        }
+        setSelectIdFromName (attrHandler, styleRepeater, name) {
+            let equipWorker = this;
+            styleRepeater.iterate(function (id) {
+                let styleName = styleRepeater.getFieldName(id, WuxDef.GetVariable("Forme_Name"));
+                if (name == attrHandler.parseString(styleName)) {
+                    equipWorker.selectedId = id;
+                    return true;
+                }
+            });
+
+            return equipWorker.selectedId != "";
+        }
+        setActionFieldName (actionFieldName) {
+            this.actionFieldName = actionFieldName;
+        }
+
+        setupForEquip (countFieldNames, slotNames, maxSlots) {
+            // get the selected style data
+            this.styleFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_Name"));
+            this.attributeHandler.addMod(this.styleFieldName);
+            this.tierFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_Tier"));
+            this.attributeHandler.addMod(this.tierFieldName);
+
+            countFieldNames.forEach(fieldName => {
+                let countField = WuxDef.GetVariable(fieldName);
+                this.attributeHandler.addMod(countField);
+            })
+            let slotIndex = 0;
+            slotNames.forEach(name => {
+                let slotDef = WuxDef.Get(name);
+                for (let i = 1; i <= maxSlots[slotIndex]; i++) {
+                    let slotFieldName = slotDef.getVariable(i);
+                    this.attributeHandler.addMod(slotFieldName);
+                }
+                slotIndex++;
+            });
+        }
+
+        setupForEquipStyle (countFieldNames, slotNames, maxSlots) {
+            this.setupForEquip(countFieldNames, slotNames, maxSlots);
+            this.arteformFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_IsAdvanced"));
+            this.attributeHandler.addMod(this.arteformFieldName);
+        }
+
+        slotIsEmpty(slotContents) {
+            return slotContents == "" || slotContents == "0";
+        }
+
+        closeMenu(attrHandler) {
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+            attrHandler.addUpdate(this.subMenuOptionFieldName, "0");
+            attrHandler.addUpdate(this.actionFieldName, "0");
+        }
+
+        equipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName, styleName, tier) {
+            attrHandler.addUpdate(this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
+            if (styleName == undefined) {
+                styleName = attrHandler.parseString(this.styleFieldName);
+                attrHandler.addUpdate(emptySlotFieldName, styleName);
+            }
+            if (tier == undefined) {
+                tier = attrHandler.parseString(this.tierFieldName);
+            }
+
+            WuxWorkerActions.PopulateStyleActions(actionFieldName, slotIndex, styleName, tier);
+        }
+
+        unequipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName) {
+            attrHandler.addUpdate(this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "0");
+            attrHandler.addUpdate(emptySlotFieldName, "0");
+
+            WuxWorkerActions.RemoveStyleActions(actionFieldName, slotIndex);
+        }
+
+        findMatchingEquippedSlot(attrHandler, repeater, slotContents) {
+            let returnable = undefined;
+            repeater.iterate(function (id) {
+                let slotFieldName = repeater.getFieldName(id, WuxDef.GetVariable("Forme_Name"));
+                if (slotContents == attrHandler.parseString(slotFieldName)) {
+                    returnable = id;
+                    return returnable;
+                }
+            });
+            return returnable;
+        }
+
+        getEmptyEquipSlotFieldName(attrHandler, slotDef, countFieldName) {
+            let maxCount = attrHandler.parseInt(countFieldName);
+            for (let i = 1; i <= maxCount; i++) {
+                let slotFieldName = slotDef.getVariable(i);
+                let slotContents = attrHandler.parseString(slotFieldName);
+                if (this.slotIsEmpty(slotContents)) {
+                    return {slotFieldName: slotFieldName, index: i};
+                }
+            }
+            return undefined;
+        }
+
+        getEquippedSlotFieldName(attrHandler, slotDef, styleName, maxCount) {
+            for (let i = 1; i <= maxCount; i++) {
+                let slotFieldName = slotDef.getVariable(i);
+                let slotContents = attrHandler.parseString(slotFieldName);
+                if (slotContents == styleName) {
+                    return {slotFieldName: slotFieldName, index: i};
+                }
+            }
+            return undefined;
+        }
+
+        getLastEquipSlotFieldName(attrHandler, slotDef, countFieldName) {
+            let maxCount = attrHandler.parseInt(countFieldName);
+            return {slotFieldName: slotDef.getVariable(maxCount), index: maxCount};
+        }
+
+        unequipStyleAtId(attrHandler, id) {
+            attrHandler.addUpdate(this.styleRepeater.getFieldName(id, WuxDef.GetVariable("Forme_IsEquipped")), 0);
+        }
+    }
 
     const populateStyleInspectionTechniques = function (attrHandler, itemPopupRepeater, styleName, maxDisplayTier, affinities, showTierHeaders) {
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `${styleName} Techniques`);
