@@ -9830,7 +9830,7 @@ var WuxDef = WuxDef || (function() {
                 "linkedGroups":[],
                 "isResource":""},
             "EquipmentSlots":{"name":"EquipmentSlots","fieldName":"equipmentslots","group":"OriginStat","description":"","variable":"equipmentslotcount","title":"Equipment Slots","subGroup":"","descriptions":[""],
-                "abbreviation":"","baseFormula":"5","modifiers":"_expertise","formula":{"workers":[{"variableName":"","definitionName":"","value":5,"multiplier":1,"max":0},
+                "abbreviation":"","baseFormula":"5","modifiers":"_expertise","formula":{"workers":[{"variableName":"","definitionName":"","value":6,"multiplier":1,"max":0},
                         {"variableName":"equipmentslotcount","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
