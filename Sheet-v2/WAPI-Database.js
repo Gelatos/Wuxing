@@ -307,25 +307,19 @@ class ExtendedTechniqueStyleDatabase extends Database {
 
 class ExtendedUsableItemDatabase extends Database {
 
-    constructor(data) {
+    constructor(data, dataCreationCallback) {
         let filters = ["group", "subGroup", "action", "skill", "range"];
-        let dataCreation = function (data) {
-            return new UsableItemData(data);
-        };
-        super(data, filters, dataCreation);
+        super(data, filters, dataCreationCallback);
     }
 
-    importJson(json) {
-        let dataCreationCallback = function (data) {
-            return new UsableItemData(data);
-        }
+    importJson(json, dataCreationCallback) {
         super.importJson(json, dataCreationCallback);
     }
 
-    importSheets(dataArray) {
+    importSheets(dataArray, dataCreationCallback) {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
-            data = new UsableItemData(dataArray[i]);
+            data = dataCreationCallback(dataArray[i]);
             if (this.has(data.name)) {
                 this.get(data.name).technique.importEffectsFromTechnique(data.technique);
             } else {

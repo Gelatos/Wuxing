@@ -137,7 +137,12 @@ function SetItemTechDatabase(styleArray, jobArray, techniqueArray, goodsArray, g
     output += goodsClassData.print("WuxGoods") + "\n";
 
     let itemsDatabase = SheetsDatabase.CreateGear(gearArray);
-    itemsDatabase.importSheets(consumablesArray);
+    itemsDatabase.importSheets(consumablesArray, function (data) {
+        let item = new UsableItemData(data);
+        let valueAssessment = new GearValueAssessment(item);
+        item.value = valueAssessment.assessment;
+        return item;
+    });
     let itemClassData = JavascriptDatabase.Create(itemsDatabase, WuxDefinition.GetItem);
     output += itemClassData.print("WuxItems") + "\n";
 
@@ -215,10 +220,21 @@ var SheetsDatabase = SheetsDatabase || (function () {
         });
     };
     const createGear = function (arr) {
-        return new ExtendedUsableItemDatabase(arr);
+        return new ExtendedUsableItemDatabase(arr, function (data) {
+            let item = new UsableItemData(data);
+            let valueAssessment = new GearValueAssessment(item);
+            item.value = valueAssessment.assessment;
+            return item;
+        });
+
     };
     const createConsumables = function (arr) {
-        return new ExtendedUsableItemDatabase(arr);
+        return new ExtendedUsableItemDatabase(arr, function (data) {
+            let item = new UsableItemData(data);
+            let valueAssessment = new GearValueAssessment(item);
+            item.value = valueAssessment.assessment;
+            return item;
+        });
     };
     'use strict';
 
@@ -2224,20 +2240,14 @@ function AssessGearAtRow(sheet, rowIndex) {
     let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
     assessingCell.setValue("Calculating...")
 
-    let valueCell = sheet.getRange(rowIndex, valueColumn, 1, 1);
-    valueCell.setValue("Calc.")
-
     let itemData = GetGearForAssessment(sheet, rowIndex, assessColumn);
     if (itemData != undefined) {
         if (itemData.item.hasTechnique) {
             let techniqueAssessment = new TechniqueAssessment(itemData.item.technique, sheet, itemData.row, assessColumn);
             techniqueAssessment.printCellValues();
         }
-        let valueAssessment = new GearValueAssessment(itemData.item, sheet, itemData.row, valueColumn);
-        valueAssessment.printCellValues();
         if (rowIndex != itemData.row) {
             assessingCell.setValue("");
-            valueCell.setValue("");
         }
         return itemData.finalRow;
     } else {
@@ -3158,9 +3168,9 @@ class TechniqueAssessment {
 class GearValueAssessment {
     constructor(item, sheet, row, valueColumn) {
         this.item = item;
-        this.sheet = sheet;
-        this.row = row;
-        this.valueColumn = valueColumn;
+        this.sheet = sheet == undefined ? "" : sheet;
+        this.row = row == undefined ? 0 : row;
+        this.valueColumn = valueColumn == undefined ? 0 : valueColumn;
         this.baseMaterialValue = 15;
 
         this.materialCost = 0;
@@ -3209,9 +3219,11 @@ class GearValueAssessment {
                 component = WuxItems.Get(componentName)
             }
             
-            let val = count * component.value;
-            this.componentCostCalc += `\n${count}[${component.name}] * ${component.value}[${component.name}] = ${val}`;
-            this.componentCost += val;
+            if (component != undefined && component.group != "") {
+                let val = count * component.value;
+                this.componentCostCalc += `\n${count}[${component.name}] * ${component.value}[${component.name}] = ${val}`;
+                this.componentCost += val;
+            }
         });
     }
 }
