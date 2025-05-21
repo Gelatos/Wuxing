@@ -33,6 +33,8 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 		attrHandler.addUpdate(arteformDef.getVariable(), arteformDef.formula.getValue(attrHandler));
 		let advancedDef = WuxDef.Get("StyleSlots");
 		attrHandler.addUpdate(advancedDef.getVariable(), advancedDef.formula.getValue(attrHandler));
+		let weaponDef = WuxDef.Get("WeaponSlots");
+		attrHandler.addUpdate(weaponDef.getVariable(), weaponDef.formula.getValue(attrHandler));
 		let equipmentDef = WuxDef.Get("EquipmentSlots");
 		attrHandler.addUpdate(equipmentDef.getVariable(), equipmentDef.formula.getValue(attrHandler));
 		

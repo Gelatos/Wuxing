@@ -322,11 +322,13 @@ var GearBuilder = GearBuilder || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerEquipRepeatingEquipment = function () {
-            let repeatingSection = WuxDef.GetVariable("RepeatingEquipment");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_ItemIsEquipped")}`];
-            let output = `WuxWorkerGear.EquipEquipment(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+            return `${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_ItemIsEquipped")}`],
+                `WuxWorkerGear.ToggleEquipItem(eventinfo)`, true)}
+                ${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_EquipWeapon")}`],
+                `WuxWorkerGear.EquipWeapon(eventinfo)`, true)}
+                `;
         },
         listenerDeleteRepeatingEquipment = function () {
             let repeatingSection = WuxDef.GetVariable("RepeatingEquipment");

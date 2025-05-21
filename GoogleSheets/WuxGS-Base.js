@@ -760,6 +760,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                         addSubmenuContentsEquipment = function () {
                             let equippedDef = WuxDef.Get("Gear_ItemIsEquipped");
+                            let equipWeaponDef = WuxDef.Get("Gear_EquipWeapon");
                             let deleteDef = WuxDef.Get("Gear_Delete");
                             let inspectDef = WuxDef.Get("Gear_Inspect");
 
@@ -767,7 +768,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 ${WuxSheetMain.HiddenField(equippedDef.getAttribute(),
                                 `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Gear_Unequip")}</span>`)}`)}
                                 ${WuxSheetMain.HiddenAuxField(equippedDef.getAttribute(),
-                                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), WuxSheetMain.Span(WuxDef.GetAttribute("Gear_ItemEquipMenu")))}`)}
+                                `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), WuxSheetMain.Span(WuxDef.GetAttribute("Gear_ItemEquipMenu")))}
+                                    ${WuxSheetMain.SubMenuOptionButton(equipWeaponDef.getAttribute(), `<span>${equipWeaponDef.getTitle()}</span>`)}`)}
                                 ${WuxSheetMain.SubMenuOptionButton(deleteDef.getAttribute(), `<span>${deleteDef.getTitle()}</span>`)}
                                 ${WuxSheetMain.SubMenuOptionButton(inspectDef.getAttribute(), `<span>${inspectDef.getTitle()}</span>`)}
                             `;
