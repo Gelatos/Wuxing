@@ -568,16 +568,6 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             }
         },
 
-        unequipSetJob = function (eventinfo, slotIndex, equipSlotFieldName) {
-            unequipSetTechSet(eventinfo, slotIndex, equipSlotFieldName,
-                "RepeatingJobTech", "RepeatingJobStyles");
-        },
-
-        unequipSetStyle = function (eventinfo, slotIndex, equipSlotFieldName) {
-            unequipSetTechSet(eventinfo, slotIndex, equipSlotFieldName,
-                "RepeatingAdvTech", "RepeatingStyles");
-        },
-
         seeTechniques = function (eventinfo) {
             Debug.Log("See Techniques");
             
@@ -609,6 +599,16 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let actionFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Actions"));
             let seeTechniqueFieldName = eventinfo.sourceAttribute;
             seeFormeTechniques(repeater, selectedId, actionFieldName, seeTechniqueFieldName);
+        },
+
+        unequipSetJob = function (eventinfo, slotIndex, equipSlotFieldName) {
+            unequipSetTechSet(eventinfo, slotIndex, equipSlotFieldName,
+                "RepeatingJobTech", "RepeatingJobStyles");
+        },
+
+        unequipSetStyle = function (eventinfo, slotIndex, equipSlotFieldName) {
+            unequipSetTechSet(eventinfo, slotIndex, equipSlotFieldName,
+                "RepeatingAdvTech", "RepeatingStyles");
         },
 
         inspectSetJobStyle = function (eventinfo, slotIndex, equipSlotFieldName) {

@@ -308,6 +308,7 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerEquipRepeatingEquipment();
             output += listenerDeleteRepeatingEquipment();
             output += listenerInspectRepeatingEquipment();
+            output += listenerSetGearOptions();
             return output;
         },
         listenerOpenItemInspectPopup = function () {
@@ -343,6 +344,25 @@ var GearBuilder = GearBuilder || (function () {
             let output = `WuxWorkerGear.InspectEquipment(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerSetGearOptions = function () {
+            let output = "";
+            
+            let weaponSlotDef = WuxDef.Get("Gear_WeaponSlot");
+            output += WuxSheetBackend.OnChange([weaponSlotDef.getVariable(1 + WuxDef._build)],
+                `WuxWorkerGear.UnequipSetGear(eventinfo, 1, "${weaponSlotDef.getVariable(1)}")`, true);
+            output += WuxSheetBackend.OnChange([weaponSlotDef.getVariable(1 + WuxDef._info)],
+                `WuxWorkerGear.InspectSetGear(eventinfo, 1, "${weaponSlotDef.getVariable(1)}")`, true);
+            
+            let equipSlotDef = WuxDef.Get("Gear_EquipmentSlot");
+            for (let i = 1; i <= 9; i++) {
+                output += WuxSheetBackend.OnChange([equipSlotDef.getVariable(i + WuxDef._build)],
+                    `WuxWorkerGear.UnequipSetGear(eventinfo, ${i}, "${equipSlotDef.getVariable(i)}")`, true);
+                output += WuxSheetBackend.OnChange([equipSlotDef.getVariable(i + WuxDef._info)],
+                    `WuxWorkerGear.InspectSetGear(eventinfo, ${i}, "${equipSlotDef.getVariable(i)}")`, true);
+            }
+
+            return output;
         }
     return {
         Print: print
