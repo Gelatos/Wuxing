@@ -875,6 +875,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             
                             let weaponSlotDef = WuxDef.Get("Gear_WeaponSlot");
                             contents += buildEquipSlot(weaponSlotDef, 1, emptyName); 
+                            contents += buildWeaponDamage();
                             
                             let slotDef = WuxDef.Get("Gear_EquipmentSlot");
                             let countAttr = WuxDef.GetAttribute("EquipmentSlots");
@@ -895,6 +896,18 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 ${WuxSheetMain.Span(definition.getAttribute(index))}
                             </div>`)}
                             ${WuxSheetMain.HiddenAuxField(definition.getAttribute(index), WuxSheetMain.Desc(`<span>${emptyName}</span>`))}`;
+                        },
+                        buildWeaponDamage = function () {
+                            let damageDefField = WuxDef.GetAttribute("WeaponDamage");
+                            let damageValField = WuxDef.GetAttribute("WeaponDamageVal");
+                            return `${WuxSheetMain.Input("Hidden", damageDefField, "0")}
+                            ${WuxSheetMain.Input("Hidden", damageValField, "0")}
+                            ${WuxSheetMain.HiddenField(damageDefField, `<div class="wuxDescription">
+                                ${WuxSheetMain.Span(damageValField)}
+                            </div>`)}
+                            ${WuxSheetMain.HiddenAuxField(damageDefField, `<div class="wuxDescription">
+                                <span>Force Damage</span>
+                            </div>`)}`;
                         },
 
                         addSubmenuContentsEquippedSlots = function (definition, index) {

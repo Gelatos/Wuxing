@@ -127,7 +127,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         }
     }
 
-    const equipItem = function (eventinfo, countFieldName, slotName, maxSlots) {
+    const equipItem = function (eventinfo, countFieldName, slotName, maxSlots, setWeaponDamage) {
         let actionFieldName = "RepeatingGearTech";
 
         let equipItemWorker = new EquipItemWorker();
@@ -154,10 +154,30 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                     }
                 }
                 equipItemWorker.equipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
+                if (setWeaponDamage) {
+                    setWeaponDamageValues(attrHandler, attrHandler.parseString(emptyEquipSlot.slotFieldName));
+                }
             });
             equipItemWorker.attributeHandler.run();
         });
     };
+    
+    const setWeaponDamageValues = function (attrHandler, itemName) {
+        let item = WuxItems.Get(itemName);
+        if (item.hasTechnique) {
+            for (let i = 0; i < item.technique.effects.keys.length; i++) {
+                let techEffect = item.technique.effects.get(item.technique.effects.keys[i]);
+                if (techEffect.type == "HP" && techEffect.subType == "") {
+                    attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamage"), techEffect.effect);
+                    attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamageVal"), `${WuxDef.GetTitle(techEffect.effect)} Damage`);
+                    return;
+                }
+            }
+        }
+
+        attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamage"), "0");
+        attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamageVal"), "Force Damage");
+    }
     const unequipItem = function (eventinfo, countFieldNames, slotNames, maxSlots) {
         let actionFieldName = "RepeatingGearTech";
 
@@ -416,7 +436,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         },
 
         equipWeapon = function (eventinfo) {
-            equipItem(eventinfo, "WeaponSlots", "Gear_WeaponSlot", 1);
+            equipItem(eventinfo, "WeaponSlots", "Gear_WeaponSlot", 1, true);
         },
 
         openSubMenu = function (eventinfo) {
