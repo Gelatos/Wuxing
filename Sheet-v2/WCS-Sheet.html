@@ -6045,22 +6045,28 @@
                                     <div class="wuxSectionBlock">
                                         <div class="wuxHeader2">
                                             <div class="wuxSubMenuButton">
-                                                <input type="checkbox" name="attr_sty-crestfall_arte_expand">
+                                                <input type="checkbox" name="attr_sty-chargestrike_arte_expand">
                                                 <span class="wuxSubMenuText">l</span>
-                                                <input type="hidden" class="wuxSubMenu-flag" name="attr_sty-crestfall_arte_expand" value="0">
+                                                <input type="hidden" class="wuxSubMenu-flag" name="attr_sty-chargestrike_arte_expand" value="0">
                                                 <div class="wuxSubMenuContent">
                                                     <div class="wuxButton wuxSubMenuOptionButton">
-                                                        <input type="checkbox" name="attr_sty-crestfall_arte_info" value="Crestfall Arte">
+                                                        <input type="checkbox" name="attr_sty-chargestrike_arte_info" value="Chargestrike Arte">
                                                         <span>See Techniques</span>
                                                     </div>
 
                                                 </div>
                                             </div>
-                                            Crestfall Arte
+                                            Chargestrike Arte
                                         </div>
                                         <div class="wuxSectionHeaderFooter"></div>
-                                        <select class="wuxInput" name="attr_sty-crestfall_arte" value="0">
+                                        <select class="wuxInput" name="attr_sty-chargestrike_arte" value="0">
                                             <option value="0">Unranked</option>
+                                            <option value="1">Tier 1</option>
+                                            <option value="2">Tier 2</option>
+                                            <option value="3">Tier 3</option>
+                                            <option value="4">Tier 4</option>
+                                            <option value="5">Tier 5</option>
+                                            <option value="6">Tier 6</option>
                                         </select>
                                         <span class="wuxDescription">A Skirmish-focused style that charges ki into a weapon to release it in one large blow.
                                         </span>
@@ -22168,6 +22174,68 @@
             </div>
         </div><input type="hidden" class="wuxSideBarExtend-flag" name="attr_pag-sidebar" />
         <div class="wuxMainContent">
+            <div class="wuxSegment">
+                <input type="checkbox" class="wuxTab-flag" name="attr_pag-gearcurrency_tab" checked="checked" />
+                <div class="wuxTabHeader">
+                    <div class="wuxInteractiveInnerExpandBlock">
+                        <input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_pag-gearcurrency_tab" />
+                        <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_pag-gearcurrency_tab" />
+                        <span class="wuxInteractiveExpandIcon">&#9662;</span>
+                        <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_pag-gearcurrency_tab" />
+                        <span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+                    </div><span>Currency</span>
+                </div>
+                <div class="wuxTab">
+                    <div class="wuxSectionBlock wuxLayoutItem">
+                        <div class="wuxTabContent">
+                            <div class="wuxFlexTable">
+                                <div class="wuxFlexTableItemGroup wuxMinWidth150">
+                                    <div class="wuxHeader2">Jin<div class="wuxTooltipButtonContainer">
+                                            <div class="wuxTooltipButton wuxFloatRight">
+                                                <div class="wuxTooltipText">i</div>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2">Jin</div>
+
+                                                    <span class="wuxDescription">The currency of Minerva. This is paper money accepted throughout the continent of Wuxing due to Minerva's trade agreements throughout the land.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="number" class="wuxInput" name="attr_crn-jin" />
+                                </div>
+                                <div class="wuxFlexTableItemGroup wuxMinWidth150">
+                                    <div class="wuxHeader2">Gold<div class="wuxTooltipButtonContainer">
+                                            <div class="wuxTooltipButton wuxFloatRight">
+                                                <div class="wuxTooltipText">i</div>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2">Gold</div>
+
+                                                    <span class="wuxDescription">A rare resource known for its usages in magical material building. It was the preferred trading material until its use as a magical binding made it more scarse. Still, many small communities will use it for trade.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="number" class="wuxInput" name="attr_crn-gold" />
+                                </div>
+                                <div class="wuxFlexTableItemGroup wuxMinWidth150">
+                                    <div class="wuxHeader2">CP<div class="wuxTooltipButtonContainer">
+                                            <div class="wuxTooltipButton wuxFloatRight">
+                                                <div class="wuxTooltipText">i</div>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2">CP</div>
+
+                                                    <span class="wuxDescription">A coin currency that is popular in Apollo, Juno, and smaller civilizations. It is largely being replaced by the Minervan Jin due to the inconvenience of coins, but change at this scale is often difficult.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="number" class="wuxInput" name="attr_crn-cp" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="wuxSegment">
                 <input type="checkbox" class="wuxTab-flag" name="attr_pag-gearequipment_tab" checked="checked" />
                 <div class="wuxTabHeader">
