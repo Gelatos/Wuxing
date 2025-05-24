@@ -286,12 +286,18 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         if (itemGroup == "") {
             return null;
         }
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `${itemGroup.group} Items`);
+        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), 
+            `${itemGroup.group}${itemGroup.category != undefined ? ` ${itemGroup.category}` : ""} Items`);
 
         let firstItem = null;
         let itemFilter;
         if (itemGroup.type == "Item") {
-            itemFilter = WuxItems.Filter([new DatabaseFilterData("group", itemGroup.group)]);
+            if (itemGroup.category == undefined) {
+                itemFilter = WuxItems.Filter([new DatabaseFilterData("group", itemGroup.group)]);
+            }
+            else {
+                itemFilter = WuxItems.Filter([new DatabaseFilterData("group", itemGroup.group), new DatabaseFilterData("category", itemGroup.category)]);
+            }
         } else if (itemGroup.type == "Goods") {
             itemFilter = WuxGoods.Filter([new DatabaseFilterData("group", itemGroup.group)]);
         }
@@ -315,35 +321,84 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         return firstItem;
     };
     const getItemGroupType = function (eventinfo) {
+
         switch (eventinfo.sourceAttribute) {
+            case WuxDef.GetVariable("Page_AddMeleeWeapon"):
+                return {
+                    group: "Weapon",
+                    category: "Melee",
+                    type: "Item"
+                };
+            case WuxDef.GetVariable("Page_AddRangedWeapon"):
+                return {
+                    group: "Weapon",
+                    category: "Ranged",
+                    type: "Item"
+                };
+            case WuxDef.GetVariable("Page_AddCommsTool"):
+                return {
+                    group: "Tool",
+                    category: "Comms",
+                    type: "Item"
+                };
+            case WuxDef.GetVariable("Page_AddLightTool"):
+                return {
+                    group: "Tool",
+                    category: "Light",
+                    type: "Item"
+                };
+            case WuxDef.GetVariable("Page_AddBindingsTool"):
+                return {
+                    group: "Tool",
+                    category: "Bindings",
+                    type: "Item"
+                };
+            case WuxDef.GetVariable("Page_AddMiscTool"):
+                return {
+                    group: "Tool",
+                    category: "",
+                    type: "Item"
+                };
             case WuxDef.GetVariable("Page_AddHeadGear"):
                 return {
                     group: "Head Gear",
+                    category: undefined,
                     type: "Item"
                 };
             case WuxDef.GetVariable("Page_AddFaceGear"):
                 return {
                     group: "Face Gear",
+                    category: undefined,
                     type: "Item"
                 };
             case WuxDef.GetVariable("Page_AddChestGear"):
                 return {
                     group: "Chest Gear",
+                    category: undefined,
                     type: "Item"
                 };
             case WuxDef.GetVariable("Page_AddArmGear"):
                 return {
                     group: "Arm Gear",
+                    category: undefined,
                     type: "Item"
                 };
             case WuxDef.GetVariable("Page_AddLegGear"):
                 return {
                     group: "Leg Gear",
+                    category: undefined,
                     type: "Item"
                 };
             case WuxDef.GetVariable("Page_AddFootGear"):
                 return {
                     group: "Foot Gear",
+                    category: undefined,
+                    type: "Item"
+                };
+            case WuxDef.GetVariable("Page_AddMiscGear"):
+                return {
+                    group: "Gear",
+                    category: undefined,
                     type: "Item"
                 };
         }

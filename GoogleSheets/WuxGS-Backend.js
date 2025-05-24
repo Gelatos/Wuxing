@@ -312,12 +312,23 @@ var GearBuilder = GearBuilder || (function () {
             return output;
         },
         listenerOpenItemInspectPopup = function () {
-            let groupVariableNames = [WuxDef.GetVariable("Page_AddHeadGear"),
-                WuxDef.GetVariable("Page_AddFaceGear"),
-                WuxDef.GetVariable("Page_AddChestGear"),
-                WuxDef.GetVariable("Page_AddArmGear"),
-                WuxDef.GetVariable("Page_AddLegGear"),
-                WuxDef.GetVariable("Page_AddFootGear")];
+            
+            let groupVariableNames = 
+                [
+                    WuxDef.GetVariable("Page_AddMeleeWeapon"),
+                    WuxDef.GetVariable("Page_AddRangedWeapon"),
+                    WuxDef.GetVariable("Page_AddCommsTool"),
+                    WuxDef.GetVariable("Page_AddLightTool"),
+                    WuxDef.GetVariable("Page_AddBindingsTool"),
+                    WuxDef.GetVariable("Page_AddMiscTool"),
+                    WuxDef.GetVariable("Page_AddHeadGear"),
+                    WuxDef.GetVariable("Page_AddFaceGear"),
+                    WuxDef.GetVariable("Page_AddChestGear"),
+                    WuxDef.GetVariable("Page_AddArmGear"),
+                    WuxDef.GetVariable("Page_AddLegGear"),
+                    WuxDef.GetVariable("Page_AddFootGear"),
+                    WuxDef.GetVariable("Page_AddMiscGear"),
+                ];
             let output = `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);

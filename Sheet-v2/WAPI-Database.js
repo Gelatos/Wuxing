@@ -308,7 +308,7 @@ class ExtendedTechniqueStyleDatabase extends Database {
 class ExtendedUsableItemDatabase extends Database {
 
     constructor(data, dataCreationCallback) {
-        let filters = ["group", "subGroup", "action", "skill", "range"];
+        let filters = ["group", "subGroup", "category", "action", "skill", "range"];
         super(data, filters, dataCreationCallback);
     }
 

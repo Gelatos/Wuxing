@@ -746,7 +746,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <div>
 								${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsEquipment(actionsDef, nameDef))}
 								${WuxSheetMain.Row("&nbsp;")}
-								${addPopupEquipment()}
+								${addEquipmentButtons()}
 							</div>`;
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                         },
@@ -832,22 +832,38 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             </div>`;
                         },
 
-                        addPopupEquipment = function () {
+                        addEquipmentButtons = function () {
+                            let weaponsPopupDef = WuxDef.Get("Page_AddMeleeWeapon");
+                            let rangedPopupDef = WuxDef.Get("Page_AddRangedWeapon");
+                            let commsPopupDef = WuxDef.Get("Page_AddCommsTool");
+                            let lightPopupDef = WuxDef.Get("Page_AddLightTool");
+                            let bindingsPopupDef = WuxDef.Get("Page_AddBindingsTool");
+                            let miscPopupDef = WuxDef.Get("Page_AddMiscTool");
                             let headPopupDef = WuxDef.Get("Page_AddHeadGear");
                             let facePopupDef = WuxDef.Get("Page_AddFaceGear");
                             let chestPopupDef = WuxDef.Get("Page_AddChestGear");
                             let armPopupDef = WuxDef.Get("Page_AddArmGear");
                             let legPopupDef = WuxDef.Get("Page_AddLegGear");
                             let footPopupDef = WuxDef.Get("Page_AddFootGear");
+                            let miscGearPopupDef = WuxDef.Get("Page_AddMiscGear");
 
                             return `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_AddItem")}`)}
-                            ${WuxSheetMain.MultiRowGroup([
+                            ${WuxSheetMain.MultiRowGroup(
+                                [
+                                    WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(weaponsPopupDef.getAttribute(), weaponsPopupDef.getTitle())),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(rangedPopupDef.getAttribute(), rangedPopupDef.getTitle())),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(commsPopupDef.getAttribute(), commsPopupDef.getTitle())),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(lightPopupDef.getAttribute(), lightPopupDef.getTitle())),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(bindingsPopupDef.getAttribute(), bindingsPopupDef.getTitle())),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(miscPopupDef.getAttribute(), miscPopupDef.getTitle())),
                                     WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(headPopupDef.getAttribute(), headPopupDef.getTitle())),
                                     WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(facePopupDef.getAttribute(), facePopupDef.getTitle())),
                                     WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(chestPopupDef.getAttribute(), chestPopupDef.getTitle())),
                                     WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(armPopupDef.getAttribute(), armPopupDef.getTitle())),
                                     WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(legPopupDef.getAttribute(), legPopupDef.getTitle())),
-                                    WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(footPopupDef.getAttribute(), footPopupDef.getTitle()))],
+                                    WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(footPopupDef.getAttribute(), footPopupDef.getTitle())),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(miscGearPopupDef.getAttribute(), miscGearPopupDef.getTitle()))
+                                ],
                                 WuxSheetMain.Table.FlexTable, 3)}`;
 
                         },
