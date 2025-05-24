@@ -63,24 +63,21 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attrHandler.addUpdate(this.actionFieldName, "0");
         }
 
-        equipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName, styleName, tier) {
+        equipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName, styleName) {
             attrHandler.addUpdate(this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Gear_ItemIsEquipped")), "on");
             if (styleName == undefined) {
                 styleName = attrHandler.parseString(this.styleFieldName);
                 attrHandler.addUpdate(emptySlotFieldName, styleName);
             }
-            if (tier == undefined) {
-                tier = attrHandler.parseString(this.tierFieldName);
-            }
 
-            // WuxWorkerActions.PopulateStyleActions(actionFieldName, slotIndex, styleName, tier);
+            WuxWorkerActions.PopulateGearActions();
         }
 
         unequipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName) {
             attrHandler.addUpdate(this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Gear_ItemIsEquipped")), "0");
             attrHandler.addUpdate(emptySlotFieldName, "0");
 
-            // WuxWorkerActions.RemoveStyleActions(actionFieldName, slotIndex);
+            WuxWorkerActions.PopulateGearActions();
         }
 
         findMatchingEquippedSlot(attrHandler, repeater, slotContents) {
@@ -209,8 +206,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
         let weaponSlotDef = WuxDef.Get("Gear_WeaponSlot");
         let equipSlotDef = WuxDef.Get("Gear_EquipmentSlot");
-
-
+        
         WuxWorkerInspectPopup.OpenItemInspection(function (attrHandler) {
                 attrHandler.addMod(weaponSlotDef.getVariable(1));
                 for (let i = 1; i <= 9; i++) {
