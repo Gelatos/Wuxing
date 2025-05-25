@@ -2495,8 +2495,26 @@ class TechniqueAssessment {
             this.assessment = "Weak";
         } else if (value < 60) {
             this.assessment = "Average";
+            if (value > 52) {
+                this.assessment += " 3";
+            }
+            else if (value > 46) {
+                this.assessment += " 2";
+            }
+            else {
+                this.assessment += " 1";
+            }
         } else if (value < 80) {
             this.assessment = "Strong";
+            if (value > 72) {
+                this.assessment += " 3";
+            }
+            else if (value > 66) {
+                this.assessment += " 2";
+            }
+            else {
+                this.assessment += " 1";
+            }
         } else {
             this.assessment = "Too Strong";
         }
@@ -2506,14 +2524,12 @@ class TechniqueAssessment {
         let range = this.sheet.getRange(this.row, this.assessColumn, 1, 1);
         range.setNote(this.printNotes());
         range = this.sheet.getRange(this.row, this.assessColumn, 1, 2);
-        range.setValues([[this.assessment, this.points]]);
+        range.setValues([[this.assessment, `${this.pointVarianceRange()}\n${this.points}`]]);
     }
 
     printNotes() {
-        let farPts = Math.floor(this.averagePoints * 3 / 10);
-        let closePts = Math.floor(this.averagePoints / 10);
         let output = `Point ${this.pointsCalc != "" ? this.pointsCalc : " (Avg)"}: `;
-        output += `${this.averagePoints - farPts} > ${closePts == 0 ? this.averagePoints : `${this.averagePoints - closePts} < ${this.averagePoints + closePts}`} < ${this.averagePoints + farPts}`;
+        output += this.pointVarianceRange();
         output += `\nTotal Points: ${this.points}\n${this.pointsRubric}`;
         if (this.willbreakPoints > 0) {
             output += `\nWill Break: ${this.willbreakPoints}\n${this.willbreakPointsRubric}`;
@@ -2545,6 +2561,12 @@ class TechniqueAssessment {
             }
         }
         return output;
+    }
+    
+    pointVarianceRange() {
+        let farPts = Math.floor(this.averagePoints * 3 / 10);
+        let closePts = Math.floor(this.averagePoints / 10);
+        return `${this.averagePoints - farPts} > ${closePts == 0 ? this.averagePoints : `${this.averagePoints - closePts} < ${this.averagePoints + closePts}`} < ${this.averagePoints + farPts}`;
     }
 
     assessTechnique() {
