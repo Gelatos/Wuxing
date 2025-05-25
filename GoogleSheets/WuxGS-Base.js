@@ -848,6 +848,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 addEquipmentButtons = function () {
                     let weaponsPopupDef = WuxDef.Get("Page_AddMeleeWeapon");
                     let rangedPopupDef = WuxDef.Get("Page_AddRangedWeapon");
+                    let toolPopupDef = WuxDef.Get("Page_AddTool");
                     let commsPopupDef = WuxDef.Get("Page_AddCommsTool");
                     let lightPopupDef = WuxDef.Get("Page_AddLightTool");
                     let bindingsPopupDef = WuxDef.Get("Page_AddBindingsTool");
@@ -865,10 +866,11 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         [
                             WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(weaponsPopupDef.getAttribute(), weaponsPopupDef.getTitle())),
                             WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(rangedPopupDef.getAttribute(), rangedPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(commsPopupDef.getAttribute(), commsPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(lightPopupDef.getAttribute(), lightPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(bindingsPopupDef.getAttribute(), bindingsPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(miscPopupDef.getAttribute(), miscPopupDef.getTitle())),
+                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(toolPopupDef.getAttribute(), toolPopupDef.getTitle())),
+                            // WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(commsPopupDef.getAttribute(), commsPopupDef.getTitle())),
+                            // WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(lightPopupDef.getAttribute(), lightPopupDef.getTitle())),
+                            // WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(bindingsPopupDef.getAttribute(), bindingsPopupDef.getTitle())),
+                            // WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(miscPopupDef.getAttribute(), miscPopupDef.getTitle())),
                             WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(headPopupDef.getAttribute(), headPopupDef.getTitle())),
                             WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(facePopupDef.getAttribute(), facePopupDef.getTitle())),
                             WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(chestPopupDef.getAttribute(), chestPopupDef.getTitle())),

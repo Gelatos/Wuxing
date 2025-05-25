@@ -317,6 +317,7 @@ var GearBuilder = GearBuilder || (function () {
                 [
                     WuxDef.GetVariable("Page_AddMeleeWeapon"),
                     WuxDef.GetVariable("Page_AddRangedWeapon"),
+                    WuxDef.GetVariable("Page_AddTool"),
                     WuxDef.GetVariable("Page_AddCommsTool"),
                     WuxDef.GetVariable("Page_AddLightTool"),
                     WuxDef.GetVariable("Page_AddBindingsTool"),

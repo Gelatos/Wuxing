@@ -355,6 +355,12 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                     category: "Ranged",
                     type: "Item"
                 };
+            case WuxDef.GetVariable("Page_AddTool"):
+                return {
+                    group: "Tool",
+                    category: undefined,
+                    type: "Item"
+                };
             case WuxDef.GetVariable("Page_AddCommsTool"):
                 return {
                     group: "Tool",
