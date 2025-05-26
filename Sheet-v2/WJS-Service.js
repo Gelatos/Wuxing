@@ -488,7 +488,7 @@ class WuxAttributeWorkerBuild extends WuxWorkerBuild {
 		super("Attribute");
 	}
 
-	updatePoints(attributeHandler) {
+	updatePoints(attributeHandler, perkCost) {
 		let buildPoints = this.getPointsTotal();
 		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
 
@@ -516,6 +516,41 @@ class WuxAttributeWorkerBuild extends WuxWorkerBuild {
 					}
 
 				}
+			}
+		}
+		return points;
+	}
+}
+
+class WuxPerkWorkerBuild extends WuxWorkerBuild {
+	constructor() {
+		super("Perk");
+	}
+
+	changeWorkerAttribute(attributeHandler, updatingAttr, newValue, perkCost) {
+		if (newValue == "on" && perkCost > 0) {
+			newValue = perkCost;
+		}
+		super.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
+	}
+
+	updatePoints(attributeHandler) {
+		let buildPoints = this.getPointsTotal();
+		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
+
+		attributeHandler.addUpdate(this.definition.getVariable(), buildPointsMax - buildPoints);
+		attributeHandler.addUpdate(this.definition.getVariable(WuxDef._error), buildPoints == buildPointsMax ? "0" : buildPoints < buildPointsMax ? "1" : "-1");
+	}
+
+	getPointsTotal() {
+		let points = 0;
+		if (this.buildStats.keys == undefined) {
+			return points;
+		}
+		for (let i = 0; i < this.buildStats.keys.length; i++) {
+			if (this.buildStats.values[this.buildStats.keys[i]].value != "on") {
+				// "on" is effectively 0 points 
+				points += isNaN(parseInt(this.buildStats.values[this.buildStats.keys[i]].value)) ? 0 : parseInt(this.buildStats.values[this.buildStats.keys[i]].value);
 			}
 		}
 		return points;

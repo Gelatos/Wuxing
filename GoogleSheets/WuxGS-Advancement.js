@@ -241,7 +241,6 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             
                             let perkTables = ["", ""];
                             for (let i = 0; i < perkTechniques.length; i++) {
-                                Debug.Log(`Perk Technique: ${perkTechniques[i].name}`);
                                 let perkDef = perkTechniques[i].createDefinition(WuxDef.Get("Technique"));
                                 perkTables[i%2] += printPerkTechnique(perkDef, perkTechniques[i]);
                             }
@@ -260,17 +259,19 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
                             if (technique.name == "Affinity") {
                                 descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(WuxDef._rank),
-                                    `${WuxSheetMain.Select(WuxDef.GetAttribute("Affinity"),
-                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]),
-                                        " wuxMarginLeft50")}
-                                    ${WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn))}`);
+                                    `<div class="wuxMarginLeft50">
+                                        ${WuxSheetMain.Select(WuxDef.GetAttribute("Affinity"),
+                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
+                                        ${WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn))}
+                                    </div>`);
                             }
                             if (technique.name == "Second Affinity") {
                                 descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(WuxDef._rank),
-                                    `${WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"),
-                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]),
-                                        " wuxMarginLeft50")}
-                                    ${WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn))}`);
+                                    `<div class="wuxMarginLeft50">
+                                        ${WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"),
+                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
+                                        ${WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn))}
+                                    </div>`);
                             }
 
                             return WuxSheetMain.MultiRow(headerContents) + WuxSheetMain.MultiRow(descContents);
@@ -707,17 +708,19 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             
                             if (technique.name == "Affinity") {
                                 descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(WuxDef._rank),
-                                    `${WuxSheetMain.Select(WuxDef.GetAttribute("Affinity"), 
-                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]),
-                                        " wuxMarginLeft50")}
-                                    ${WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn))}`);
+                                    `<div class="wuxMarginLeft50">
+                                        ${WuxSheetMain.Select(WuxDef.GetAttribute("Affinity"), 
+                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
+                                        ${WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn))}
+                                    </div>`);
                             }
                             if (technique.name == "Second Affinity") {
                                 descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(WuxDef._rank),
-                                    `${WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"), 
-                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]),
-                                        " wuxMarginLeft50")}
-                                    ${WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn))}`);
+                                    `<div class="wuxMarginLeft50">
+                                        ${WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"), 
+                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
+                                        ${WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn))}
+                                    </div>`);
                             }
                             
                             return WuxSheetMain.MultiRow(headerContents) + WuxSheetMain.MultiRow(descContents);

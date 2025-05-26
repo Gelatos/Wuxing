@@ -373,7 +373,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         WuxWorkerInspectPopup.OpenTechniqueInspection(
             function (attrHandler) {
                 attrHandler.addMod([nameFieldName, tierFieldName, crFieldName]);
-                attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("AdvancedBranch")]);
+                attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity")]);
             },
             function (attrHandler, itemPopupRepeater) {
                 attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
@@ -382,8 +382,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 let maxTier = attrHandler.parseInt(tierFieldName);
                 let cr = attrHandler.parseInt(crFieldName);
                 let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
-                attrHandler.parseString(WuxDef.GetVariable("AdvancedBranch"))];
+                attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"))];
                 
                 return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, 
                     attrHandler.parseString(nameFieldName), Math.min(maxTier, cr), affinities, false);

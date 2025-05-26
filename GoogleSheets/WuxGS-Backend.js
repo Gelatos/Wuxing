@@ -21,7 +21,7 @@ var BuilderBackend = BuilderBackend || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerCharacterCreationSetAffinity = function () {
-            let groupVariableNames = [WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("AdvancedBranch")];
+            let groupVariableNames = [WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity")];
             let output = `WuxWorkerCharacterCreation.SetAffinityValue(eventinfo);\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -130,6 +130,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
             output += listenerConvertXp();
             output += listenerSetLevel();
             output += listenerSetAdvancementPoints();
+            output += listenerUpdatePerkPoints();
             output += listenerUpdateJobBuildPoints();
             output += listenerSeeJobTechniques();
             output += listenerUpdateSkillBuildPoints();
@@ -174,6 +175,19 @@ var AdvancementBackend = AdvancementBackend || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
 
+        listenerUpdatePerkPoints = function () {
+            let output = "";
+            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("techSet", "Perk"));
+            let techniqueDefinition = WuxDef.Get("Technique");
+
+            for (let i = 0; i < perkTechniques.length; i++) {
+                let perkDef = perkTechniques[i].createDefinition(techniqueDefinition);
+                output += WuxSheetBackend.OnChange([perkDef.getVariable(WuxDef._rank)],
+                    `WuxWorkerPerks.UpdateBuildPoints(eventinfo, ${perkTechniques[i].resourceCost})`, true);
+            }
+
+            return output;
+        },
         listenerUpdateJobBuildPoints = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));
             let output = `WuxWorkerJobs.UpdateBuildPoints(eventinfo)`;

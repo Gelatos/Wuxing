@@ -16,6 +16,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			advancementWorker.commitChanges(attributeHandler);
 
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
+			WuxWorkerPerks.UpdateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
 			WuxWorkerKnowledges.UpdateStats(attributeHandler);
 			WuxWorkerJobs.UpdateStats(attributeHandler);
@@ -315,6 +316,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			advancementWorker.commitChanges(attributeHandler);
 
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
+			WuxWorkerPerks.UpdateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
 			WuxWorkerJobs.UpdateStats(attributeHandler);
 			WuxWorkerStyles.UpdateStats(attributeHandler);
@@ -327,13 +329,14 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			Debug.Log("Exit Advancement Build");
 			let attributeHandler = new WorkerAttributeHandler();
 
-			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
+			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique", "Perk"]);
 			pointManagers.resetChanges(attributeHandler);
 
 			let advancementWorker = new WuxAdvancementWorkerBuild();
 			advancementWorker.resetChanges(attributeHandler);
 
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
+			WuxWorkerPerks.UpdateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
 			WuxWorkerJobs.UpdateStats(attributeHandler);
 			WuxWorkerStyles.UpdateStats(attributeHandler);
@@ -454,6 +457,27 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		SetLevel: setLevel,
 		SetAdvancementPointsUpdate: setAdvancementPointsUpdate,
 		SetAffinityStats: setAffinityStats,
+		UpdateStats: updateStats
+	};
+}());
+
+var WuxWorkerPerks = WuxWorkerPerks || (function () {
+	'use strict';
+
+	var
+		updateBuildPoints = function (eventinfo, perkCost) {
+			Debug.Log("Update Perks");
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxPerkWorkerBuild();
+			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue, perkCost);
+			attributeHandler.run();
+		},
+		updateStats = function (attributeHandler) {
+			WuxWorkerActions.PopulatePerkTechniques(attributeHandler);
+		}
+
+	return {
+		UpdateBuildPoints: updateBuildPoints,
 		UpdateStats: updateStats
 	};
 }());

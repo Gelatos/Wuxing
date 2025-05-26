@@ -53,6 +53,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let cr = parseInt(eventinfo.newValue);
 
             WuxWorkerAttributes.UpdateStats(attributeHandler);
+            WuxWorkerPerks.UpdateStats(attributeHandler);
             WuxWorkerSkills.UpdateStats(attributeHandler);
             WuxWorkerKnowledges.UpdateStats(attributeHandler);
             WuxWorkerJobs.UpdateStats(attributeHandler);

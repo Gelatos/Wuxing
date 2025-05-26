@@ -44,6 +44,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         Debug.Log("Setting technique boosters");
         let techBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostStyleTech"));
         let gearBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostGearTech"));
+        let perkBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostPerkTech"));
+        Debug.Log(`Boost Perk Tech: ${perkBoosters}`);
 
         let attributeHandler = new WorkerAttributeHandler();
         // grab all formulas that get modified based on techniques (_tech)
@@ -58,6 +60,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
         addBoostStyleTechFormulaMods(attributeHandler, techBoosters);
         addBoostGearTechFormulaMods(attributeHandler, gearBoosters);
+        addBoostStyleTechFormulaMods(attributeHandler, perkBoosters);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
 
@@ -71,6 +74,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
             addBoostStyleTechModifiers(attrHandler, techBoosters);
             addBoostGearTechModifiers(attrHandler, gearBoosters);
+            addBoostStyleTechModifiers(attrHandler, perkBoosters);
 
             // recalculate all techniques that have modifiers
             for (let i = 0; i < techniqueModifierDefs.length; i++) {
@@ -86,6 +90,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
     const addBoostStyleTechFormulaMods = function (attrHandler, techBoosters) {
         iteratePassiveStyleTechniques(techBoosters, function (technique) {
+            Debug.Log(`Adding boost formula mods for ${technique.name}`);
             addBoostTechniqueFormulaMods(attrHandler, technique);
         });
     }
@@ -155,15 +160,14 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
     }
     const addAffinityVariables = function (attrHandler) {
-        attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("AdvancedBranch")]);
+        attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity")]);
     };
     const addBoosterVariables = function (attrHandler) {
-        attrHandler.addMod([WuxDef.GetVariable("BoostStyleTech"), WuxDef.GetVariable("BoostGearTech")]);
+        attrHandler.addMod([WuxDef.GetVariable("BoostStyleTech"), WuxDef.GetVariable("BoostGearTech"), WuxDef.GetVariable("BoostPerkTech")]);
     };
     const getAffinities = function (attrHandler) {
         return [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-            attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
-            attrHandler.parseString(WuxDef.GetVariable("AdvancedBranch"))];
+            attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"))];
     };
     const populateStyleTechniques = function (attrHandler, sectionRepeater, styleName, maxTier) {
         let hasAddedPassives = false;
@@ -196,12 +200,12 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let hasAddedPassives = false;
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", sectionRepeater);
         let boosterFieldName = WuxDef.GetVariable("BoostGearTech");
-        
+
         let itemName = attrHandler.parseString(weaponSlotDef.getVariable(1));
         if (tryAddItemTechnique(attrHandler, techniqueAttributeHandler, sectionRepeater, boosterFieldName, itemName)) {
             hasAddedPassives = true;
         }
-        
+
         for (let i = 1; i <= 9; i++) {
             itemName = attrHandler.parseString(equipSlotDef.getVariable(i));
             if (tryAddItemTechnique(attrHandler, techniqueAttributeHandler, sectionRepeater, boosterFieldName, itemName)) {
@@ -301,6 +305,43 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             populateBasicActions(attributeHandler, "RepeatingBasicSocial", "Basic Social");
         },
 
+        populatePerkTechniques = function (attributeHandler) {
+            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("techSet", "Perk"));
+            let techniqueDef = WuxDef.Get("Technique");
+            for (let i = 0; i < perkTechniques.length; i++) {
+                let perkDef = perkTechniques[i].createDefinition(techniqueDef);
+                attributeHandler.addMod(perkDef.getVariable(WuxDef._rank));
+            }
+
+            let boosterFieldName = WuxDef.GetVariable("BoostPerkTech");
+            addBoosterVariables(attributeHandler);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                
+                let perkBoosters = [];
+                for (let i = 0; i < perkTechniques.length; i++) {
+                    let technique = perkTechniques[i];
+                    let perkDef = technique.createDefinition(techniqueDef);
+                    let techRank = attrHandler.parseString(perkDef.getVariable(WuxDef._rank));
+                    if (technique.name == "Affinity") {
+                        if (techRank == "0") {
+                            attrHandler.addUpdate(WuxDef.GetVariable("Affinity"), "0");
+                        }
+                    } else if (technique.name == "Second Affinity") {
+                        if (techRank == "0") {
+                            attrHandler.addUpdate(WuxDef.GetVariable("AdvancedAffinity"), "0");
+                        }
+                    }
+                    else if (techRank != "0") {
+                        Debug.Log(`Adding technique ${technique.name} with rank ${techRank} to boosters`);
+                        perkBoosters.push(technique.name);
+                    }
+                }
+
+                attrHandler.addUpdate(boosterFieldName, JSON.stringify(perkBoosters));
+                setTechniqueBoosters(attrHandler);
+            });
+        },
+
         inspectTechniqueBasicAction = function (eventinfo) {
             inspectTechnique("RepeatingBasicActions", eventinfo.sourceAttribute, "All Basic Action Techniques");
         },
@@ -389,6 +430,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     return {
         UpdateStats: updateStats,
         PopulateAllBasicActions: populateAllBasicActions,
+        PopulatePerkTechniques: populatePerkTechniques,
         InspectTechniqueBasicAction: inspectTechniqueBasicAction,
         InspectTechniqueBasicRecovery: inspectTechniqueBasicRecovery,
         InspectTechniqueBasicAttack: inspectTechniqueBasicAttack,
