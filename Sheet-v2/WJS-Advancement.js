@@ -6,7 +6,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			Debug.Log("Finish Character Creation Build");
 			let attributeHandler = new WorkerAttributeHandler();
 
-			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Style"]);
+			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Style", "Perk"]);
 			pointManagers.commitChanges(attributeHandler);
 
 			let trainingWorker = new WuxTrainingWorkerBuild();
@@ -308,7 +308,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			Debug.Log("Finish Advancement Build");
 			let attributeHandler = new WorkerAttributeHandler();
 
-			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
+			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique", "Perk"]);
 			pointManagers.commitChanges(attributeHandler);
 
 			let advancementWorker = new WuxAdvancementWorkerBuild();

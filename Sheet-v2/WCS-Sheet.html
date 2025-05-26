@@ -103,19 +103,20 @@
                 <div class="wuxTab">
                     <div class="wuxSectionBlock wuxLayoutItem">
                         <div class="wuxTabContent">
+                            <div class="wuxHeader">
+                                <div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-origin_info"><span>?</span></div>Origin
+                            </div>
+                            <input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-origin_info" value="0">
+                            <div class="wuxHiddenField">
+                                <div class="wuxInfoContent">
+                                    <div class="wuxHeader2">Origin</div>
+
+                                    <span class="wuxDescription">These are the origin details of your character. They make no mechanical differences to your character, however may impact how you roleplay your character.</span>
+                                </div>
+                            </div>
+
                             <div class="wuxFlexTable">
                                 <div class="wuxFlexTableItemGroup">
-                                    <div class="wuxHeader">
-                                        <div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-origin_info"><span>?</span></div>Origin
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-origin_info" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInfoContent">
-                                            <div class="wuxHeader2">Origin</div>
-
-                                            <span class="wuxDescription">These are the origin details of your character. They make no mechanical differences to your character, however may impact how you roleplay your character.</span>
-                                        </div>
-                                    </div>
                                     <div class="wuxHeader2">Sheet Name<div class="wuxTooltipButtonContainer">
                                             <div class="wuxTooltipButton wuxFloatRight">
                                                 <div class="wuxTooltipText">i</div>
@@ -201,6 +202,8 @@
                                         </div>
                                     </div>
                                     <input type="text" class="wuxInput" name="attr_gender" />
+                                </div>
+                                <div class="wuxFlexTableItemGroup">
                                     <div class="wuxHeader2">Background<div class="wuxTooltipButtonContainer">
                                             <div class="wuxTooltipButton wuxFloatRight">
                                                 <div class="wuxTooltipText">i</div>
@@ -213,49 +216,6 @@
                                         </div>
                                     </div>
                                     <textarea class="wuxInput wuxHeight150" name="attr_background"></textarea>
-                                </div>
-                                <div class="wuxFlexTableItemGroup">
-                                    <div class="wuxHeader">
-                                        <div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-originstats_info"><span>?</span></div>Origin Statistics
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-originstats_info" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInfoContent">
-                                            <div class="wuxHeader2">Origin Statistics</div>
-
-                                            <span class="wuxDescription">These are your characters core statistics that are set at character creation and cannot change. Each stat can affect how your character plays. </span>
-                                        </div>
-                                    </div>
-                                    <div class="wuxHeader2">Vitality<div class="wuxTooltipButtonContainer">
-                                            <div class="wuxTooltipButton wuxFloatRight">
-                                                <div class="wuxTooltipText">i</div>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2">Vitality</div>
-                                                    <span class="wuxDescription"><em>Life</em></span>
-                                                    <span class="wuxDescription">Whenever you are reduced to zero HP, your HP restores to full and you lose one vitality. Unlike most resources, vitality can be reduced below 0.</span>
-                                                    <span class="wuxDescription">Whenever vitality is lost check if it is below 1. If it is, you gain the Downed status. If the character already had the Downed status, they also gain the Dying and Unconscious statuses which may ultimately kill them.</span>
-                                                    <span class="wuxDescription">Most characters will have a max vitality of 1. Player characters will usually start with 3 while special characters can have any amount.</span>
-                                                    <span class="wuxDescription">After completing a full rest, 1 vitality is healed.</span>
-                                                    <span class="wuxDescription">Vitality is calculated as:
-                                                        1</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="number" class="wuxInput" name="attr_cmb-vitality_max" value="1" />
-                                    <div class="wuxHeader2">Bonus Attribute Points<div class="wuxTooltipButtonContainer">
-                                            <div class="wuxTooltipButton wuxFloatRight">
-                                                <div class="wuxTooltipText">i</div>
-                                                <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2">Bonus Attribute Points</div>
-
-                                                    <span class="wuxDescription">These are bonus points granted to spend on Attributes. </span>
-                                                    <span class="wuxDescription">Player characters typically start with 1 point here</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="number" class="wuxInput" name="attr_bonusattrpt" value="0" />
                                 </div>
                             </div>
                             <div class="wuxHeader">
@@ -344,30 +304,22 @@
                                                 <div class="wuxTooltipContent">
                                                     <div class="wuxHeader2">Character Rank</div>
 
-                                                    <span class="wuxDescription">Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level.</span>
-                                                    <span class="wuxDescription">Your Character rank begins at 1.
-                                                        At 5th Level it increases to 2.
-                                                        At 9th Level it increases to 3.
-                                                        At 15th Level it increases to 4.
-                                                        At 22nd Level it increases to 5.
-                                                        At 30th Level it increases to 6.
-                                                        At 39th Level it increases to 7.
-                                                        At 49th Level it increases to 8.
-                                                        At 60th Level it increases to 9.</span>
+                                                    <span class="wuxDescription">Your character rank applies to many of the values you record on your character sheet. This value limits the maximum tier of techniques a style can grant and also increases many statistics.</span>
+                                                    <span class="wuxDescription">Usually, this value is equal to its maximum value. It may be reduced in special situations where power is restricted. For example, a character may have the experience of a higher leveled character but lacks the power. Alternatively they may simply be holding back or are depowered for whatever reason.</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
-                                    <div class="wuxHeader2">Advancement<div class="wuxTooltipButtonContainer">
+                                    <div class="wuxHeader2">Advancement Points<div class="wuxTooltipButtonContainer">
                                             <div class="wuxTooltipButton wuxFloatRight">
                                                 <div class="wuxTooltipText">i</div>
                                                 <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2">Advancement</div>
+                                                    <div class="wuxHeader2">Advancement Points</div>
 
                                                     <span class="wuxDescription">Advancement Points are gained whenever you level. </span>
                                                     <span class="wuxDescription">Every level you gain grants you one advancement point.</span>
-                                                    <span class="wuxDescription">Advancement is calculated as:
+                                                    <span class="wuxDescription">Advancement Points is calculated as:
                                                         [Character Level]</span>
                                                 </div>
                                             </div>
@@ -472,6 +424,318 @@
                                     </div>
                                     <div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_technique" value="" placeholder="0" />
                                         <div class="wuxInputLabel">cost: 1 training point</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wuxFlexTableItemGroup wuxMinWidth350">
+                                <div class="wuxHeader">Perks</div>
+                                <div class="wuxHeader2">Perk Points<div class="wuxTooltipButtonContainer">
+                                        <div class="wuxTooltipButton wuxFloatRight">
+                                            <div class="wuxTooltipText">i</div>
+                                            <div class="wuxTooltipContent">
+                                                <div class="wuxHeader2">Perk Points</div>
+
+                                                <span class="wuxDescription">Perks are bonuses granted to a character to represent special aspects of how they function as a character. To purchase a perk, select it from the list by checking its checkbox.</span>
+                                                <span class="wuxDescription">There is a limit as to how many perks a character may have based on the points they have gained. </span>
+                                                <span class="wuxDescription">Perk Points is calculated as:
+                                                    [Character Rank x 2]</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="wuxDescription"><span name="attr_perk"></span> / <span name="attr_perk_max"></span></span>
+                                <div class="wuxFlexTable">
+                                    <div class="wuxFlexTableItemGroup wuxMinWidth350">
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-affinity_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
+                                                        <span class="wuxHeader">Affinity</span>
+                                                        <span class="wuxSubheader">[Cost 0 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain an elemental affinity. Most humans and all spirits should start with an elemental affinity.</div><input type="hidden" class="wuxHiddenField-flag" name="attr_tch-affinity_rank" value="0">
+                                            <div class="wuxHiddenField">
+                                                <select class="wuxInput" name="attr_affinity" value="0">
+                                                    <option value="0">-</option>
+                                                    <option value="Wood">Wood Affinity</option>
+                                                    <option value="Fire">Fire Affinity</option>
+                                                    <option value="Earth">Earth Affinity</option>
+                                                    <option value="Metal">Metal Affinity</option>
+                                                    <option value="Water">Water Affinity</option>
+                                                </select>
+                                                <span class="wuxDescription" name="attr_affinity_learn"></span>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-heroic_vitality_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+                                                        <span class="wuxHeader">Heroic Vitality</span>
+                                                        <span class="wuxSubheader">[Cost 0 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +2 Vitality. Player characters should start with this perk unless the GM states otherwise.</div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-equipment_slots_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_rank" />
+                                                        <span class="wuxHeader">Equipment Slots</span>
+                                                        <span class="wuxSubheader">[Cost 1 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +1 Equipment Slot.</div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-equipment_slots_iii_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iii_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iii_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iii_rank" />
+                                                        <span class="wuxHeader">Equipment Slots III</span>
+                                                        <span class="wuxSubheader">[Cost 2 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +1 Equipment Slot.</div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-style_slots_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_rank" />
+                                                        <span class="wuxHeader">Style Slots</span>
+                                                        <span class="wuxSubheader">[Cost 3 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +1 Style Slot.</div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-style_slots_iii_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iii_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iii_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iii_rank" />
+                                                        <span class="wuxHeader">Style Slots III</span>
+                                                        <span class="wuxSubheader">[Cost 4 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +1 Style Slot.</div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-advanced_style_slots_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_rank" />
+                                                        <span class="wuxHeader">Advanced Style Slots</span>
+                                                        <span class="wuxSubheader">[Cost 5 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +1 Advanced Style Slot.</div>
+                                        </div>
+                                    </div>
+                                    <div class="wuxFlexTableItemGroup wuxMinWidth350">
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-second_affinity_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-second_affinity_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-second_affinity_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-second_affinity_rank" />
+                                                        <span class="wuxHeader">Second Affinity</span>
+                                                        <span class="wuxSubheader">[Cost 1 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain a second elemental affinity.</div><input type="hidden" class="wuxHiddenField-flag" name="attr_tch-second_affinity_rank" value="0">
+                                            <div class="wuxHiddenField">
+                                                <select class="wuxInput" name="attr_affinity2" value="0">
+                                                    <option value="0">-</option>
+                                                    <option value="Wood">Wood Affinity</option>
+                                                    <option value="Fire">Fire Affinity</option>
+                                                    <option value="Earth">Earth Affinity</option>
+                                                    <option value="Metal">Metal Affinity</option>
+                                                    <option value="Water">Water Affinity</option>
+                                                </select>
+                                                <span class="wuxDescription" name="attr_affinity2_learn"></span>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-extra_hp_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-extra_hp_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-extra_hp_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-extra_hp_rank" />
+                                                        <span class="wuxHeader">Extra HP</span>
+                                                        <span class="wuxSubheader">[Cost 2 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain [5 x Character Rank] HP</div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-equipment_slots_ii_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_ii_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_ii_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_ii_rank" />
+                                                        <span class="wuxHeader">Equipment Slots II</span>
+                                                        <span class="wuxSubheader">[Cost 1 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +1 Equipment Slot.</div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-equipment_slots_iv_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iv_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iv_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iv_rank" />
+                                                        <span class="wuxHeader">Equipment Slots IV</span>
+                                                        <span class="wuxSubheader">[Cost 2 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +1 Equipment Slot.</div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-style_slots_ii_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_ii_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_ii_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_ii_rank" />
+                                                        <span class="wuxHeader">Style Slots II</span>
+                                                        <span class="wuxSubheader">[Cost 4 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +1 Style Slot.</div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-style_slots_iv_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iv_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iv_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iv_rank" />
+                                                        <span class="wuxHeader">Style Slots IV</span>
+                                                        <span class="wuxSubheader">[Cost 5 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +1 Style Slot.</div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxInteractiveBlock">
+                                                <div class="wuxInteractiveInnerBlock">
+                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-advanced_style_slots_ii_rank" />
+                                                    <div class="wuxInteractiveContent">
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_ii_rank" />
+                                                        <span class="wuxInteractiveIcon">&#9635;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_ii_rank" />
+                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_ii_rank" />
+                                                        <span class="wuxHeader">Advanced Style Slots II</span>
+                                                        <span class="wuxSubheader">[Cost 7 Perk Point]</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxMultiRow">
+                                            <div class="wuxDescription wuxMarginLeft50">Gain +1 Advanced Style Slot.</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -3093,15 +3357,17 @@
                                         </div>
                                     </div>
                                     <input type="number" class="wuxInput" name="attr_adv-level" />
-                                    <div class="wuxHeader2">Character Rank<div class="wuxTooltipButtonContainer">
+                                    <div class="wuxHeader2">Max Character Rank<div class="wuxTooltipButtonContainer">
                                             <div class="wuxTooltipButton wuxFloatRight">
                                                 <div class="wuxTooltipText">i</div>
                                                 <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2">Character Rank</div>
+                                                    <div class="wuxHeader2">Max Character Rank</div>
 
-                                                    <span class="wuxDescription">Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level.</span>
-                                                    <span class="wuxDescription">Your Character rank begins at 1.
-                                                        At 5th Level it increases to 2.
+                                                    <span class="wuxDescription">Your character rank applies to many of the values you record on your character sheet. </span>
+                                                    <span class="wuxDescription">Your max character rank also increases many of the points given at character creation and through advancement. </span>
+                                                    <span class="wuxDescription">Max character rank increases as you level.
+                                                        At 1st level, it begins at 1.
+                                                        At 4th Level it increases to 2.
                                                         At 9th Level it increases to 3.
                                                         At 15th Level it increases to 4.
                                                         At 22nd Level it increases to 5.
@@ -3114,15 +3380,15 @@
                                         </div>
                                     </div>
                                     <span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
-                                    <div class="wuxHeader2">Advancement<div class="wuxTooltipButtonContainer">
+                                    <div class="wuxHeader2">Advancement Points<div class="wuxTooltipButtonContainer">
                                             <div class="wuxTooltipButton wuxFloatRight">
                                                 <div class="wuxTooltipText">i</div>
                                                 <div class="wuxTooltipContent">
-                                                    <div class="wuxHeader2">Advancement</div>
+                                                    <div class="wuxHeader2">Advancement Points</div>
 
                                                     <span class="wuxDescription">Advancement Points are gained whenever you level. </span>
                                                     <span class="wuxDescription">Every level you gain grants you one advancement point.</span>
-                                                    <span class="wuxDescription">Advancement is calculated as:
+                                                    <span class="wuxDescription">Advancement Points is calculated as:
                                                         [Character Level]</span>
                                                 </div>
                                             </div>
@@ -3170,6 +3436,338 @@
                                     </div>
                                     <div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_technique" value="" placeholder="0" />
                                         <div class="wuxInputLabel">cost: 1 advancement point</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wuxSegment">
+                <input type="checkbox" class="wuxTab-flag" name="attr_pag-perks_tab" checked="checked" />
+                <div class="wuxTabHeader">
+                    <div class="wuxInteractiveInnerExpandBlock">
+                        <input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_pag-perks_tab" />
+                        <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_pag-perks_tab" />
+                        <span class="wuxInteractiveExpandIcon">&#9662;</span>
+                        <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_pag-perks_tab" />
+                        <span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+                    </div><span>Perks</span>
+                </div>
+                <div class="wuxTab">
+                    <div class="wuxSectionBlock wuxLayoutItem">
+                        <div class="wuxTabContent">
+                            <div class="wuxFlexTable">
+                                <div class="wuxFlexTableItemGroup wuxMinWidth350">
+                                    <div class="wuxHeader">Perks</div>
+                                    <div class="wuxHeader2">Perk Points<div class="wuxTooltipButtonContainer">
+                                            <div class="wuxTooltipButton wuxFloatRight">
+                                                <div class="wuxTooltipText">i</div>
+                                                <div class="wuxTooltipContent">
+                                                    <div class="wuxHeader2">Perk Points</div>
+
+                                                    <span class="wuxDescription">Perks are bonuses granted to a character to represent special aspects of how they function as a character. To purchase a perk, select it from the list by checking its checkbox.</span>
+                                                    <span class="wuxDescription">There is a limit as to how many perks a character may have based on the points they have gained. </span>
+                                                    <span class="wuxDescription">Perk Points is calculated as:
+                                                        [Character Rank x 2]</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="wuxDescription"><span name="attr_perk"></span> / <span name="attr_perk_max"></span></span>
+                                    <div class="wuxFlexTable">
+                                        <div class="wuxFlexTableItemGroup wuxMinWidth350">
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-affinity_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
+                                                            <span class="wuxHeader">Affinity</span>
+                                                            <span class="wuxSubheader">[Cost 0 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain an elemental affinity. Most humans and all spirits should start with an elemental affinity.</div><input type="hidden" class="wuxHiddenField-flag" name="attr_tch-affinity_rank" value="0">
+                                                <div class="wuxHiddenField">
+                                                    <select class="wuxInput" name="attr_affinity" value="0">
+                                                        <option value="0">-</option>
+                                                        <option value="Wood">Wood Affinity</option>
+                                                        <option value="Fire">Fire Affinity</option>
+                                                        <option value="Earth">Earth Affinity</option>
+                                                        <option value="Metal">Metal Affinity</option>
+                                                        <option value="Water">Water Affinity</option>
+                                                    </select>
+                                                    <span class="wuxDescription" name="attr_affinity_learn"></span>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-heroic_vitality_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+                                                            <span class="wuxHeader">Heroic Vitality</span>
+                                                            <span class="wuxSubheader">[Cost 0 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +2 Vitality. Player characters should start with this perk unless the GM states otherwise.</div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-equipment_slots_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_rank" />
+                                                            <span class="wuxHeader">Equipment Slots</span>
+                                                            <span class="wuxSubheader">[Cost 1 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +1 Equipment Slot.</div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-equipment_slots_iii_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iii_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iii_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iii_rank" />
+                                                            <span class="wuxHeader">Equipment Slots III</span>
+                                                            <span class="wuxSubheader">[Cost 2 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +1 Equipment Slot.</div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-style_slots_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_rank" />
+                                                            <span class="wuxHeader">Style Slots</span>
+                                                            <span class="wuxSubheader">[Cost 3 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +1 Style Slot.</div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-style_slots_iii_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iii_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iii_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iii_rank" />
+                                                            <span class="wuxHeader">Style Slots III</span>
+                                                            <span class="wuxSubheader">[Cost 4 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +1 Style Slot.</div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-advanced_style_slots_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_rank" />
+                                                            <span class="wuxHeader">Advanced Style Slots</span>
+                                                            <span class="wuxSubheader">[Cost 5 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +1 Advanced Style Slot.</div>
+                                            </div>
+                                        </div>
+                                        <div class="wuxFlexTableItemGroup wuxMinWidth350">
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-second_affinity_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-second_affinity_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-second_affinity_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-second_affinity_rank" />
+                                                            <span class="wuxHeader">Second Affinity</span>
+                                                            <span class="wuxSubheader">[Cost 1 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain a second elemental affinity.</div><input type="hidden" class="wuxHiddenField-flag" name="attr_tch-second_affinity_rank" value="0">
+                                                <div class="wuxHiddenField">
+                                                    <select class="wuxInput" name="attr_affinity2" value="0">
+                                                        <option value="0">-</option>
+                                                        <option value="Wood">Wood Affinity</option>
+                                                        <option value="Fire">Fire Affinity</option>
+                                                        <option value="Earth">Earth Affinity</option>
+                                                        <option value="Metal">Metal Affinity</option>
+                                                        <option value="Water">Water Affinity</option>
+                                                    </select>
+                                                    <span class="wuxDescription" name="attr_affinity2_learn"></span>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-extra_hp_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-extra_hp_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-extra_hp_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-extra_hp_rank" />
+                                                            <span class="wuxHeader">Extra HP</span>
+                                                            <span class="wuxSubheader">[Cost 2 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain [5 x Character Rank] HP</div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-equipment_slots_ii_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_ii_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_ii_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_ii_rank" />
+                                                            <span class="wuxHeader">Equipment Slots II</span>
+                                                            <span class="wuxSubheader">[Cost 1 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +1 Equipment Slot.</div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-equipment_slots_iv_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iv_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iv_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-equipment_slots_iv_rank" />
+                                                            <span class="wuxHeader">Equipment Slots IV</span>
+                                                            <span class="wuxSubheader">[Cost 2 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +1 Equipment Slot.</div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-style_slots_ii_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_ii_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_ii_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_ii_rank" />
+                                                            <span class="wuxHeader">Style Slots II</span>
+                                                            <span class="wuxSubheader">[Cost 4 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +1 Style Slot.</div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-style_slots_iv_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iv_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iv_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-style_slots_iv_rank" />
+                                                            <span class="wuxHeader">Style Slots IV</span>
+                                                            <span class="wuxSubheader">[Cost 5 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +1 Style Slot.</div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxInteractiveBlock">
+                                                    <div class="wuxInteractiveInnerBlock">
+                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-advanced_style_slots_ii_rank" />
+                                                        <div class="wuxInteractiveContent">
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_ii_rank" />
+                                                            <span class="wuxInteractiveIcon">&#9635;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_ii_rank" />
+                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
+                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-advanced_style_slots_ii_rank" />
+                                                            <span class="wuxHeader">Advanced Style Slots II</span>
+                                                            <span class="wuxSubheader">[Cost 7 Perk Point]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wuxMultiRow">
+                                                <div class="wuxDescription wuxMarginLeft50">Gain +1 Advanced Style Slot.</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -5806,55 +6404,7 @@
             </div>
         </div><input type="hidden" class="wuxSideBarExtend-flag" name="attr_pag-sidebar" />
         <div class="wuxMainContent">
-            <div class="wuxSegment">
-                <input type="checkbox" class="wuxTab-flag" name="attr_pag-origin_tab" checked="checked" />
-                <div class="wuxTabHeader">
-                    <div class="wuxInteractiveInnerExpandBlock">
-                        <input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_pag-origin_tab" />
-                        <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_pag-origin_tab" />
-                        <span class="wuxInteractiveExpandIcon">&#9662;</span>
-                        <input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_pag-origin_tab" />
-                        <span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-                    </div><span>Origin</span>
-                </div>
-                <div class="wuxTab">
-                    <div class="wuxSectionBlock wuxLayoutItem">
-                        <div class="wuxTabContent">
-                            <div class="wuxHeader">
-                                <div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-originstats_info"><span>?</span></div>Origin Statistics
-                            </div>
-                            <input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-originstats_info" value="0">
-                            <div class="wuxHiddenField">
-                                <div class="wuxInfoContent">
-                                    <div class="wuxHeader2">Origin Statistics</div>
-
-                                    <span class="wuxDescription">These are your characters core statistics that are set at character creation and cannot change. Each stat can affect how your character plays. </span>
-                                </div>
-                            </div>
-                            <div class="wuxHeader2">Elemental Affinity<div class="wuxTooltipButtonContainer">
-                                    <div class="wuxTooltipButton wuxFloatRight">
-                                        <div class="wuxTooltipText">i</div>
-                                        <div class="wuxTooltipContent">
-                                            <div class="wuxHeader2">Elemental Affinity</div>
-
-                                            <span class="wuxDescription">Characters that are able to cast spells have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity before they may be taken.</span>
-                                            <span class="wuxDescription">Your chosen affinity grants weaknesses and resistances to certain elemental damage types.</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <select class="wuxInput" name="attr_affinity" value="0">
-                                <option value="0">-</option>
-                                <option value="Wood">Wood Affinity</option>
-                                <option value="Fire">Fire Affinity</option>
-                                <option value="Earth">Earth Affinity</option>
-                                <option value="Metal">Metal Affinity</option>
-                                <option value="Water">Water Affinity</option>
-                            </select><span class="wuxDescription" name="attr_affinity_learn"></span>
-                        </div>
-                    </div>
-                </div>
-            </div><input type="hidden" class="wuxFilterSegment-flag" name="attr_sttStyleGroup_Mighty Weapons_filter" value="0" />
+            <input type="hidden" class="wuxFilterSegment-flag" name="attr_sttStyleGroup_Mighty Weapons_filter" value="0" />
             <div class="wuxSegment">
                 <input type="checkbox" class="wuxTab-flag" name="attr_sttStyleGroup_Mighty Weapons_expand" checked="checked" />
                 <div class="wuxTabHeader">
@@ -9202,36 +9752,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-disgusted" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-disgusted_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-disgusted" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <div class="wuxHeader2">Disgusted</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-disgusted_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-doubt" value="0">
                                     <div class="wuxHiddenField">
                                         <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
@@ -9407,66 +9927,6 @@
                                                 </div>
                                             </div>
                                             <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-receptive_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-joyful" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-joyful_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-joyful" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <div class="wuxHeader2">Joyful</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-joyful_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-saddened" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-saddened_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-saddened" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <div class="wuxHeader2">Saddened</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-saddened_info">
                                             <div class="wuxInteractiveExpandingContent">
                                                 <span class="wuxDescription"></span>
                                             </div>
@@ -9833,16 +10293,8 @@
                                                     <div class="wuxTooltipContent">
                                                         <div class="wuxHeader2">Character Rank</div>
 
-                                                        <span class="wuxDescription">Your character rank applies to many of the numbers you’ll be recording on your character sheet. This bonus increases as you gain character level.</span>
-                                                        <span class="wuxDescription">Your Character rank begins at 1.
-                                                            At 5th Level it increases to 2.
-                                                            At 9th Level it increases to 3.
-                                                            At 15th Level it increases to 4.
-                                                            At 22nd Level it increases to 5.
-                                                            At 30th Level it increases to 6.
-                                                            At 39th Level it increases to 7.
-                                                            At 49th Level it increases to 8.
-                                                            At 60th Level it increases to 9.</span>
+                                                        <span class="wuxDescription">Your character rank applies to many of the values you record on your character sheet. This value limits the maximum tier of techniques a style can grant and also increases many statistics.</span>
+                                                        <span class="wuxDescription">Usually, this value is equal to its maximum value. It may be reduced in special situations where power is restricted. For example, a character may have the experience of a higher leveled character but lacks the power. Alternatively they may simply be holding back or are depowered for whatever reason.</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -10732,31 +11184,6 @@
                                     </div>
                                     <div class="wuxFlexTableItemGroup wuxMinWidth150">
                                         <div class="wuxInteractiveBlock">
-                                            <div class="wuxInfoButton"><input type="checkbox" name="attr_sts-disgusted_info"><span>?</span></div>
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-disgusted" />
-                                                <div class="wuxInteractiveContent">
-                                                    <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                    <span class="wuxInteractiveIcon">&#9635;</span>
-                                                    <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                    <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                    <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                    <div class="wuxHeader">Disgusted</div>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-disgusted_info" value="0">
-                                            <div class="wuxHiddenField">
-                                                <div class="wuxInfoContent">
-                                                    <div class="wuxHeader2">Disgusted</div>
-                                                    <span class="wuxDescription"><em>Emotion</em></span>
-                                                    <span class="wuxDescription">-</span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="wuxFlexTableItemGroup wuxMinWidth150">
-                                        <div class="wuxInteractiveBlock">
                                             <div class="wuxInfoButton"><input type="checkbox" name="attr_sts-doubt_info"><span>?</span></div>
                                             <div class="wuxInteractiveInnerBlock">
                                                 <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-doubt" />
@@ -10780,8 +11207,6 @@
 
                                         </div>
                                     </div>
-                                </div>
-                                <div class="wuxFlexTable">
                                     <div class="wuxFlexTableItemGroup wuxMinWidth150">
                                         <div class="wuxInteractiveBlock">
                                             <div class="wuxInfoButton"><input type="checkbox" name="attr_sts-encouraged_info"><span>?</span></div>
@@ -10807,6 +11232,8 @@
 
                                         </div>
                                     </div>
+                                </div>
+                                <div class="wuxFlexTable">
                                     <div class="wuxFlexTableItemGroup wuxMinWidth150">
                                         <div class="wuxInteractiveBlock">
                                             <div class="wuxInfoButton"><input type="checkbox" name="attr_sts-frightened_info"><span>?</span></div>
@@ -10857,8 +11284,6 @@
 
                                         </div>
                                     </div>
-                                </div>
-                                <div class="wuxFlexTable">
                                     <div class="wuxFlexTableItemGroup wuxMinWidth150">
                                         <div class="wuxInteractiveBlock">
                                             <div class="wuxInfoButton"><input type="checkbox" name="attr_sts-persevering_info"><span>?</span></div>
@@ -10884,6 +11309,8 @@
 
                                         </div>
                                     </div>
+                                </div>
+                                <div class="wuxFlexTable">
                                     <div class="wuxFlexTableItemGroup wuxMinWidth150">
                                         <div class="wuxInteractiveBlock">
                                             <div class="wuxInfoButton"><input type="checkbox" name="attr_sts-receptive_info"><span>?</span></div>
@@ -10904,58 +11331,6 @@
                                                     <div class="wuxHeader2">Receptive</div>
                                                     <span class="wuxDescription"><em>Emotion</em></span>
                                                     <span class="wuxDescription">All persuade checks against the target increase by 4.</span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="wuxFlexTableItemGroup wuxMinWidth150">
-                                        <div class="wuxInteractiveBlock">
-                                            <div class="wuxInfoButton"><input type="checkbox" name="attr_sts-joyful_info"><span>?</span></div>
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-joyful" />
-                                                <div class="wuxInteractiveContent">
-                                                    <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                    <span class="wuxInteractiveIcon">&#9635;</span>
-                                                    <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                    <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                    <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                    <div class="wuxHeader">Joyful</div>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-joyful_info" value="0">
-                                            <div class="wuxHiddenField">
-                                                <div class="wuxInfoContent">
-                                                    <div class="wuxHeader2">Joyful</div>
-                                                    <span class="wuxDescription"><em>Emotion</em></span>
-                                                    <span class="wuxDescription">-</span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="wuxFlexTable">
-                                    <div class="wuxFlexTableItemGroup wuxMinWidth150">
-                                        <div class="wuxInteractiveBlock">
-                                            <div class="wuxInfoButton"><input type="checkbox" name="attr_sts-saddened_info"><span>?</span></div>
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-saddened" />
-                                                <div class="wuxInteractiveContent">
-                                                    <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                    <span class="wuxInteractiveIcon">&#9635;</span>
-                                                    <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                    <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                    <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                    <div class="wuxHeader">Saddened</div>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-saddened_info" value="0">
-                                            <div class="wuxHiddenField">
-                                                <div class="wuxInfoContent">
-                                                    <div class="wuxHeader2">Saddened</div>
-                                                    <span class="wuxDescription"><em>Emotion</em></span>
-                                                    <span class="wuxDescription">-</span>
                                                 </div>
                                             </div>
 
@@ -12048,36 +12423,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-disgusted" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-disgusted_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-disgusted" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <div class="wuxHeader2">Disgusted</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-disgusted_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-doubt" value="0">
                                     <div class="wuxHiddenField">
                                         <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
@@ -12253,66 +12598,6 @@
                                                 </div>
                                             </div>
                                             <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-receptive_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-joyful" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-joyful_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-joyful" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <div class="wuxHeader2">Joyful</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-joyful_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-saddened" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-saddened_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-saddened" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <div class="wuxHeader2">Saddened</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-saddened_info">
                                             <div class="wuxInteractiveExpandingContent">
                                                 <span class="wuxDescription"></span>
                                             </div>
@@ -14894,36 +15179,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-disgusted" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-disgusted_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-disgusted" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <div class="wuxHeader2">Disgusted</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-disgusted_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-doubt" value="0">
                                     <div class="wuxHiddenField">
                                         <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
@@ -15104,66 +15359,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-joyful" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-joyful_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-joyful" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <div class="wuxHeader2">Joyful</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-joyful_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-saddened" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-saddened_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-saddened" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <div class="wuxHeader2">Saddened</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-saddened_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-surprised" value="0">
                                     <div class="wuxHiddenField">
                                         <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
@@ -15246,149 +15441,119 @@
                     <div class="wuxTab">
                         <div class="wuxSectionBlock wuxLayoutItem">
                             <div class="wuxTabContent">
+                                <div class="wuxHeader">
+                                    <div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-origin_info"><span>?</span></div>Origin
+                                </div>
+                                <input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-origin_info" value="0">
+                                <div class="wuxHiddenField">
+                                    <div class="wuxInfoContent">
+                                        <div class="wuxHeader2">Origin</div>
+
+                                        <span class="wuxDescription">These are the origin details of your character. They make no mechanical differences to your character, however may impact how you roleplay your character.</span>
+                                    </div>
+                                </div>
+
                                 <div class="wuxFlexTable">
                                     <div class="wuxFlexTableItemGroup">
-                                        <div class="wuxFlexTableItemGroup">
-                                            <div class="wuxHeader">
-                                                <div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-origin_info"><span>?</span></div>Origin
-                                            </div>
-                                            <input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-origin_info" value="0">
-                                            <div class="wuxHiddenField">
-                                                <div class="wuxInfoContent">
-                                                    <div class="wuxHeader2">Origin</div>
+                                        <div class="wuxHeader2">Sheet Name<div class="wuxTooltipButtonContainer">
+                                                <div class="wuxTooltipButton wuxFloatRight">
+                                                    <div class="wuxTooltipText">i</div>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2">Sheet Name</div>
 
-                                                    <span class="wuxDescription">These are the origin details of your character. They make no mechanical differences to your character, however may impact how you roleplay your character.</span>
-                                                </div>
-                                            </div>
-                                            <div class="wuxHeader2">Sheet Name<div class="wuxTooltipButtonContainer">
-                                                    <div class="wuxTooltipButton wuxFloatRight">
-                                                        <div class="wuxTooltipText">i</div>
-                                                        <div class="wuxTooltipContent">
-                                                            <div class="wuxHeader2">Sheet Name</div>
-
-                                                            <span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
-                                                        </div>
+                                                        <span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <input type="text" class="wuxInput" name="attr_sheetname" />
-                                            <div class="wuxHeader2">Full Name<div class="wuxTooltipButtonContainer">
-                                                    <div class="wuxTooltipButton wuxFloatRight">
-                                                        <div class="wuxTooltipText">i</div>
-                                                        <div class="wuxTooltipContent">
-                                                            <div class="wuxHeader2">Full Name</div>
-
-                                                            <span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input type="text" class="wuxInput" name="attr_full_name" />
-                                            <div class="wuxHeader2">Intro Name<div class="wuxTooltipButtonContainer">
-                                                    <div class="wuxTooltipButton wuxFloatRight">
-                                                        <div class="wuxTooltipText">i</div>
-                                                        <div class="wuxTooltipContent">
-                                                            <div class="wuxHeader2">Intro Name</div>
-
-                                                            <span class="wuxDescription">This is the name Display Name will change to when an Introduction call is made</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input type="text" class="wuxInput" name="attr_intro_name" />
-                                            <div class="wuxHeader2">Title<div class="wuxTooltipButtonContainer">
-                                                    <div class="wuxTooltipButton wuxFloatRight">
-                                                        <div class="wuxTooltipText">i</div>
-                                                        <div class="wuxTooltipContent">
-                                                            <div class="wuxHeader2">Title</div>
-
-                                                            <span class="wuxDescription"></span>
-                                                            <span class="wuxDescription">This is a title given to the character to briefly describe them. Shown when an introduction call is made.</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input type="text" class="wuxInput" name="attr_ttl" />
-                                            <div class="wuxHeader2">Age<div class="wuxTooltipButtonContainer">
-                                                    <div class="wuxTooltipButton wuxFloatRight">
-                                                        <div class="wuxTooltipText">i</div>
-                                                        <div class="wuxTooltipContent">
-                                                            <div class="wuxHeader2">Age</div>
-
-                                                            <span class="wuxDescription">This represents how old the character is in years.</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input type="text" class="wuxInput" name="attr_age" />
-                                            <div class="wuxHeader2">Gender<div class="wuxTooltipButtonContainer">
-                                                    <div class="wuxTooltipButton wuxFloatRight">
-                                                        <div class="wuxTooltipText">i</div>
-                                                        <div class="wuxTooltipContent">
-                                                            <div class="wuxHeader2">Gender</div>
-
-                                                            <span class="wuxDescription">The gender the character identifies as.</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input type="text" class="wuxInput" name="attr_gender" />
-                                            <div class="wuxHeader2">Background<div class="wuxTooltipButtonContainer">
-                                                    <div class="wuxTooltipButton wuxFloatRight">
-                                                        <div class="wuxTooltipText">i</div>
-                                                        <div class="wuxTooltipContent">
-                                                            <div class="wuxHeader2">Background</div>
-
-                                                            <span class="wuxDescription">This is the background story of your character. Add any details on the character's past here.</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <textarea class="wuxInput wuxHeight150" name="attr_background"></textarea>
                                         </div>
+                                        <input type="text" class="wuxInput" name="attr_sheetname" />
+                                        <div class="wuxHeader2">Full Name<div class="wuxTooltipButtonContainer">
+                                                <div class="wuxTooltipButton wuxFloatRight">
+                                                    <div class="wuxTooltipText">i</div>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2">Full Name</div>
+
+                                                        <span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="wuxInput" name="attr_full_name" />
+                                        <div class="wuxHeader2">Display Name<div class="wuxTooltipButtonContainer">
+                                                <div class="wuxTooltipButton wuxFloatRight">
+                                                    <div class="wuxTooltipText">i</div>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2">Display Name</div>
+
+                                                        <span class="wuxDescription">This is the name that is displayed when your character speaks.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="wuxInput" name="attr_display_name" />
+                                        <div class="wuxHeader2">Intro Name<div class="wuxTooltipButtonContainer">
+                                                <div class="wuxTooltipButton wuxFloatRight">
+                                                    <div class="wuxTooltipText">i</div>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2">Intro Name</div>
+
+                                                        <span class="wuxDescription">This is the name Display Name will change to when an Introduction call is made</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="wuxInput" name="attr_intro_name" />
+                                        <div class="wuxHeader2">Title<div class="wuxTooltipButtonContainer">
+                                                <div class="wuxTooltipButton wuxFloatRight">
+                                                    <div class="wuxTooltipText">i</div>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2">Title</div>
+
+                                                        <span class="wuxDescription"></span>
+                                                        <span class="wuxDescription">This is a title given to the character to briefly describe them. Shown when an introduction call is made.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="wuxInput" name="attr_ttl" />
+                                        <div class="wuxHeader2">Age<div class="wuxTooltipButtonContainer">
+                                                <div class="wuxTooltipButton wuxFloatRight">
+                                                    <div class="wuxTooltipText">i</div>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2">Age</div>
+
+                                                        <span class="wuxDescription">This represents how old the character is in years.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="wuxInput" name="attr_age" />
+                                        <div class="wuxHeader2">Gender<div class="wuxTooltipButtonContainer">
+                                                <div class="wuxTooltipButton wuxFloatRight">
+                                                    <div class="wuxTooltipText">i</div>
+                                                    <div class="wuxTooltipContent">
+                                                        <div class="wuxHeader2">Gender</div>
+
+                                                        <span class="wuxDescription">The gender the character identifies as.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="wuxInput" name="attr_gender" />
                                     </div>
                                     <div class="wuxFlexTableItemGroup">
-                                        <div class="wuxHeader">
-                                            <div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-originstats_info"><span>?</span></div>Origin Statistics
-                                        </div>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-originstats_info" value="0">
-                                        <div class="wuxHiddenField">
-                                            <div class="wuxInfoContent">
-                                                <div class="wuxHeader2">Origin Statistics</div>
-
-                                                <span class="wuxDescription">These are your characters core statistics that are set at character creation and cannot change. Each stat can affect how your character plays. </span>
-                                            </div>
-                                        </div>
-                                        <div class="wuxHeader2">Vitality<div class="wuxTooltipButtonContainer">
+                                        <div class="wuxHeader2">Background<div class="wuxTooltipButtonContainer">
                                                 <div class="wuxTooltipButton wuxFloatRight">
                                                     <div class="wuxTooltipText">i</div>
                                                     <div class="wuxTooltipContent">
-                                                        <div class="wuxHeader2">Vitality</div>
-                                                        <span class="wuxDescription"><em>Life</em></span>
-                                                        <span class="wuxDescription">Whenever you are reduced to zero HP, your HP restores to full and you lose one vitality. Unlike most resources, vitality can be reduced below 0.</span>
-                                                        <span class="wuxDescription">Whenever vitality is lost check if it is below 1. If it is, you gain the Downed status. If the character already had the Downed status, they also gain the Dying and Unconscious statuses which may ultimately kill them.</span>
-                                                        <span class="wuxDescription">Most characters will have a max vitality of 1. Player characters will usually start with 3 while special characters can have any amount.</span>
-                                                        <span class="wuxDescription">After completing a full rest, 1 vitality is healed.</span>
-                                                        <span class="wuxDescription">Vitality is calculated as:
-                                                            1</span>
+                                                        <div class="wuxHeader2">Background</div>
+
+                                                        <span class="wuxDescription">This is the background story of your character. Add any details on the character's past here.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <input type="number" class="wuxInput" name="attr_cmb-vitality_max" value="1" />
-                                        <div class="wuxHeader2">Bonus Attribute Points<div class="wuxTooltipButtonContainer">
-                                                <div class="wuxTooltipButton wuxFloatRight">
-                                                    <div class="wuxTooltipText">i</div>
-                                                    <div class="wuxTooltipContent">
-                                                        <div class="wuxHeader2">Bonus Attribute Points</div>
-
-                                                        <span class="wuxDescription">These are bonus points granted to spend on Attributes. </span>
-                                                        <span class="wuxDescription">Player characters typically start with 1 point here</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input type="number" class="wuxInput" name="attr_bonusattrpt" value="0" />
+                                        <textarea class="wuxInput wuxHeight150" name="attr_background"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -16427,36 +16592,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-disgusted" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-disgusted_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-disgusted" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <div class="wuxHeader2">Disgusted</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-disgusted_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-doubt" value="0">
                                     <div class="wuxHiddenField">
                                         <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
@@ -16632,66 +16767,6 @@
                                                 </div>
                                             </div>
                                             <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-receptive_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-joyful" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-joyful_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-joyful" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <div class="wuxHeader2">Joyful</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-joyful_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-saddened" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-saddened_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-saddened" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <div class="wuxHeader2">Saddened</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-saddened_info">
                                             <div class="wuxInteractiveExpandingContent">
                                                 <span class="wuxDescription"></span>
                                             </div>
@@ -18603,36 +18678,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-disgusted" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-disgusted_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-disgusted" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                            <div class="wuxHeader2">Disgusted</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-disgusted_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-doubt" value="0">
                                     <div class="wuxHiddenField">
                                         <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
@@ -18808,66 +18853,6 @@
                                                 </div>
                                             </div>
                                             <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-receptive_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-joyful" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-joyful_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-joyful" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                            <div class="wuxHeader2">Joyful</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-joyful_info">
-                                            <div class="wuxInteractiveExpandingContent">
-                                                <span class="wuxDescription"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-saddened" value="0">
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                            <div class="wuxInteractiveInnerBlock">
-                                                <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-saddened_info">
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                                <span class="wuxInteractiveIcon">&#9662;</span>
-                                                <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                                <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                                <div class="wuxSubheader">
-                                                    <div class="wuxInteractiveInnerBlock">
-                                                        <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-saddened" />
-                                                        <div class="wuxInteractiveContent">
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <span class="wuxInteractiveIcon">&#9635;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                            <div class="wuxHeader2">Saddened</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-saddened_info">
                                             <div class="wuxInteractiveExpandingContent">
                                                 <span class="wuxDescription"></span>
                                             </div>
@@ -19953,36 +19938,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-disgusted" value="0">
-                                <div class="wuxHiddenField">
-                                    <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                        <div class="wuxInteractiveInnerBlock">
-                                            <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-disgusted_info">
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                            <span class="wuxInteractiveIcon">&#9662;</span>
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                            <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                            <div class="wuxSubheader">
-                                                <div class="wuxInteractiveInnerBlock">
-                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-disgusted" />
-                                                    <div class="wuxInteractiveContent">
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                        <span class="wuxInteractiveIcon">&#9635;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                        <div class="wuxHeader2">Disgusted</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-disgusted_info">
-                                        <div class="wuxInteractiveExpandingContent">
-                                            <span class="wuxDescription"></span>
-                                        </div>
-                                    </div>
-                                </div>
                                 <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-doubt" value="0">
                                 <div class="wuxHiddenField">
                                     <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
@@ -20158,66 +20113,6 @@
                                             </div>
                                         </div>
                                         <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-receptive_info">
-                                        <div class="wuxInteractiveExpandingContent">
-                                            <span class="wuxDescription"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-joyful" value="0">
-                                <div class="wuxHiddenField">
-                                    <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                        <div class="wuxInteractiveInnerBlock">
-                                            <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-joyful_info">
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                            <span class="wuxInteractiveIcon">&#9662;</span>
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                            <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                            <div class="wuxSubheader">
-                                                <div class="wuxInteractiveInnerBlock">
-                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-joyful" />
-                                                    <div class="wuxInteractiveContent">
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                        <span class="wuxInteractiveIcon">&#9635;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                        <div class="wuxHeader2">Joyful</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-joyful_info">
-                                        <div class="wuxInteractiveExpandingContent">
-                                            <span class="wuxDescription"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-saddened" value="0">
-                                <div class="wuxHiddenField">
-                                    <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                        <div class="wuxInteractiveInnerBlock">
-                                            <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-saddened_info">
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                            <span class="wuxInteractiveIcon">&#9662;</span>
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                            <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                            <div class="wuxSubheader">
-                                                <div class="wuxInteractiveInnerBlock">
-                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-saddened" />
-                                                    <div class="wuxInteractiveContent">
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                        <span class="wuxInteractiveIcon">&#9635;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                        <div class="wuxHeader2">Saddened</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-saddened_info">
                                         <div class="wuxInteractiveExpandingContent">
                                             <span class="wuxDescription"></span>
                                         </div>
@@ -21836,36 +21731,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-disgusted" value="0">
-                                <div class="wuxHiddenField">
-                                    <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                        <div class="wuxInteractiveInnerBlock">
-                                            <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-disgusted_info">
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                            <span class="wuxInteractiveIcon">&#9662;</span>
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                            <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                            <div class="wuxSubheader">
-                                                <div class="wuxInteractiveInnerBlock">
-                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-disgusted" />
-                                                    <div class="wuxInteractiveContent">
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                        <span class="wuxInteractiveIcon">&#9635;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                        <div class="wuxHeader2">Disgusted</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-disgusted_info">
-                                        <div class="wuxInteractiveExpandingContent">
-                                            <span class="wuxDescription"></span>
-                                        </div>
-                                    </div>
-                                </div>
                                 <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-doubt" value="0">
                                 <div class="wuxHiddenField">
                                     <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
@@ -22041,66 +21906,6 @@
                                             </div>
                                         </div>
                                         <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-receptive_info">
-                                        <div class="wuxInteractiveExpandingContent">
-                                            <span class="wuxDescription"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-joyful" value="0">
-                                <div class="wuxHiddenField">
-                                    <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                        <div class="wuxInteractiveInnerBlock">
-                                            <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-joyful_info">
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                            <span class="wuxInteractiveIcon">&#9662;</span>
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                            <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                            <div class="wuxSubheader">
-                                                <div class="wuxInteractiveInnerBlock">
-                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-joyful" />
-                                                    <div class="wuxInteractiveContent">
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                        <span class="wuxInteractiveIcon">&#9635;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                        <div class="wuxHeader2">Joyful</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-joyful_info">
-                                        <div class="wuxInteractiveExpandingContent">
-                                            <span class="wuxDescription"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-saddened" value="0">
-                                <div class="wuxHiddenField">
-                                    <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                        <div class="wuxInteractiveInnerBlock">
-                                            <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-saddened_info">
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                            <span class="wuxInteractiveIcon">&#9662;</span>
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                            <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                            <div class="wuxSubheader">
-                                                <div class="wuxInteractiveInnerBlock">
-                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-saddened" />
-                                                    <div class="wuxInteractiveContent">
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                        <span class="wuxInteractiveIcon">&#9635;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                        <div class="wuxHeader2">Saddened</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-saddened_info">
                                         <div class="wuxInteractiveExpandingContent">
                                             <span class="wuxDescription"></span>
                                         </div>
@@ -23821,36 +23626,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-disgusted" value="0">
-                                <div class="wuxHiddenField">
-                                    <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                        <div class="wuxInteractiveInnerBlock">
-                                            <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-disgusted_info">
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                            <span class="wuxInteractiveIcon">&#9662;</span>
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted_info">
-                                            <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                            <div class="wuxSubheader">
-                                                <div class="wuxInteractiveInnerBlock">
-                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-disgusted" />
-                                                    <div class="wuxInteractiveContent">
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                        <span class="wuxInteractiveIcon">&#9635;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-disgusted" />
-                                                        <div class="wuxHeader2">Disgusted</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-disgusted_info">
-                                        <div class="wuxInteractiveExpandingContent">
-                                            <span class="wuxDescription"></span>
-                                        </div>
-                                    </div>
-                                </div>
                                 <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-doubt" value="0">
                                 <div class="wuxHiddenField">
                                     <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
@@ -24026,66 +23801,6 @@
                                             </div>
                                         </div>
                                         <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-receptive_info">
-                                        <div class="wuxInteractiveExpandingContent">
-                                            <span class="wuxDescription"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-joyful" value="0">
-                                <div class="wuxHiddenField">
-                                    <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                        <div class="wuxInteractiveInnerBlock">
-                                            <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-joyful_info">
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                            <span class="wuxInteractiveIcon">&#9662;</span>
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful_info">
-                                            <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                            <div class="wuxSubheader">
-                                                <div class="wuxInteractiveInnerBlock">
-                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-joyful" />
-                                                    <div class="wuxInteractiveContent">
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                        <span class="wuxInteractiveIcon">&#9635;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-joyful" />
-                                                        <div class="wuxHeader2">Joyful</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-joyful_info">
-                                        <div class="wuxInteractiveExpandingContent">
-                                            <span class="wuxDescription"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="attr_sts-saddened" value="0">
-                                <div class="wuxHiddenField">
-                                    <div class="wuxInteractiveBlock wuxInteractiveExpandingBlock wuxSizeTiny">
-                                        <div class="wuxInteractiveInnerBlock">
-                                            <input class="wuxInteractiveContent-flag" type="checkbox" name="attr_sts-saddened_info">
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                            <span class="wuxInteractiveIcon">&#9662;</span>
-                                            <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened_info">
-                                            <span class="wuxInteractiveAuxIcon">&#9656;</span>
-
-                                            <div class="wuxSubheader">
-                                                <div class="wuxInteractiveInnerBlock">
-                                                    <input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-saddened" />
-                                                    <div class="wuxInteractiveContent">
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                        <span class="wuxInteractiveIcon">&#9635;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                        <span class="wuxInteractiveAuxIcon">&#9634;</span>
-                                                        <input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-saddened" />
-                                                        <div class="wuxHeader2">Saddened</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_sts-saddened_info">
                                         <div class="wuxInteractiveExpandingContent">
                                             <span class="wuxDescription"></span>
                                         </div>

@@ -21,7 +21,7 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 	attributeHandler.addUpdate(WuxDef.GetVariable("Training", WuxDef._max), 0);
 	trainingWorker.updateTrainingPoints(attributeHandler);
 
-	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Style"]);
+	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Style", "Perk"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 	
 	attributeHandler.addGetAttrCallback(function (attrHandler) {

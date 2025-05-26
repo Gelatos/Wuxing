@@ -349,7 +349,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                     var
                         build = function () {
-                            let contents = WuxSheetMain.MultiRowGroup([buildOrigin(), buildOriginStats()], WuxSheetMain.Table.FlexTable, 2);
+                            let contents = buildOrigin();
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Origin");
@@ -358,24 +358,22 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                         buildOrigin = function () {
                             let contents = "";
-                            contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
+                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), WuxDef.GetAttribute("DisplayName"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("IntroName"), WuxDef.GetAttribute("IntroName"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title"), WuxDef.GetAttribute("Title"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
-                            contents += WuxDefinition.BuildTextarea(WuxDef.Get("Background"), WuxDef.GetAttribute("Background"), "wuxInput wuxHeight150");
                             contents = WuxSheetMain.Table.FlexTableGroup(contents);
-                            return WuxSheetMain.Table.FlexTableGroup(contents);
-                        },
 
-                        buildOriginStats = function () {
-                            let contents = "";
-                            contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginStats"));
-                            contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Cmb_Vitality"), WuxDef.GetAttribute("Cmb_Vitality", WuxDef._max), 1);
-                            contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusAttributePoints"), WuxDef.GetAttribute("BonusAttributePoints"), 0);
-                            return WuxSheetMain.Table.FlexTableGroup(contents);
+                            let backgroundContents = "";
+                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("Background"), WuxDef.GetAttribute("Background"),
+                                "wuxInput wuxHeight150");
+                            backgroundContents = WuxSheetMain.Table.FlexTableGroup(backgroundContents)
+
+                            return `${WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"))}
+                            ${WuxSheetMain.MultiRowGroup([contents, backgroundContents], WuxSheetMain.Table.FlexTable, 2)}`;
                         }
 
                     return {
