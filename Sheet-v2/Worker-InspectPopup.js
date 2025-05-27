@@ -49,26 +49,55 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                     WuxItems.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
                 );
                 break;
+            case "Add Consumable":
+                performAddSelectedInspectElementConsumable(attrHandler,
+                    WuxItems.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
+                );
+                break;
+            case "Add Good":
+                performAddSelectedInspectElementGoods(attrHandler,
+                    WuxItems.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
+                );
+                break;
         }
     };
+
+    const getGearVariable = function (variable, suffix) {
+        let baseDefinition = WuxDef.Get("Gear");
+        return baseDefinition.getVariable(`-${WuxDef.GetVariable(variable, suffix)}`);
+    };
+
     const performAddSelectedInspectElementEquipment = function (attrHandler, item) {
         Debug.Log(`Adding Equipment ${item.name}`);
         let repeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
+        performAddSelectedInspectElementItem(attrHandler, repeater, item);
+    };
+    const performAddSelectedInspectElementConsumable = function (attrHandler, item) {
+        Debug.Log(`Adding Consumable ${item.name}`);
+        let repeater = new WorkerRepeatingSectionHandler("RepeatingConsumables");
+        performAddSelectedInspectElementItem(attrHandler, repeater, item);
+    };
+    const performAddSelectedInspectElementGoods = function (attrHandler, item) {
+        Debug.Log(`Adding Goods ${item.name}`);
+        let repeater = new WorkerRepeatingSectionHandler("RepeatingGoods");
+        performAddSelectedInspectElementItem(attrHandler, repeater, item);
+    };
+    const performAddSelectedInspectElementItem = function (attrHandler, repeater, item) {
         let newRowId = repeater.generateRowId();
         let displayData = new ItemDisplayData(item);
 
         let equipMenuText = getEquipMenuText(item);
         attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_ItemEquipMenu")), equipMenuText);
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_ItemName")), displayData.name);
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_ItemGroup")), displayData.group);
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_ItemStats")), displayData.stats);
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemName")), displayData.name);
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemGroup")), displayData.group);
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemStats")), displayData.stats);
 
         if (displayData.traits.length > 0) {
             let databaseAttributeHandler = new DatabaseItemAttributeHandler(attrHandler);
-            databaseAttributeHandler.addDefinitions(displayData.traits, repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_ItemTrait")), 3);
+            databaseAttributeHandler.addDefinitions(displayData.traits, repeater.getFieldName(newRowId, getGearVariable("ItemTrait")), 3);
         }
         if (displayData.description != "") {
-            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_ItemDescription")), displayData.description);
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemDescription")), displayData.description);
         }
     };
     const getEquipMenuText = function (item) {
@@ -170,7 +199,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                         let itemType = attrHandler.parseString(selectedItemTypeFieldName);
 
                         Debug.Log(`Got item ${itemName} with type ${itemType}`);
-                        if (itemType == "Item") {
+                        if (itemType == "Equipment" || itemType == "Consumable") {
                             let item = WuxItems.Get(itemName);
                             let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
                             itemAttributeHandler.setItemInfo(item);

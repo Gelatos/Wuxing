@@ -326,27 +326,23 @@ var GearBuilder = GearBuilder || (function () {
             return output;
         },
         listenerOpenItemInspectPopup = function () {
-            
-            let groupVariableNames = 
-                [
-                    WuxDef.GetVariable("Page_AddMeleeWeapon"),
-                    WuxDef.GetVariable("Page_AddRangedWeapon"),
-                    WuxDef.GetVariable("Page_AddTool"),
-                    WuxDef.GetVariable("Page_AddCommsTool"),
-                    WuxDef.GetVariable("Page_AddLightTool"),
-                    WuxDef.GetVariable("Page_AddBindingsTool"),
-                    WuxDef.GetVariable("Page_AddMiscTool"),
-                    WuxDef.GetVariable("Page_AddHeadGear"),
-                    WuxDef.GetVariable("Page_AddFaceGear"),
-                    WuxDef.GetVariable("Page_AddChestGear"),
-                    WuxDef.GetVariable("Page_AddArmGear"),
-                    WuxDef.GetVariable("Page_AddLegGear"),
-                    WuxDef.GetVariable("Page_AddFootGear"),
-                    WuxDef.GetVariable("Page_AddMiscGear"),
-                ];
-            let output = `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Page_AddMeleeWeapon"), WuxDef.GetVariable("Page_AddRangedWeapon"),
+                    WuxDef.GetVariable("Page_AddTool"), WuxDef.GetVariable("Page_AddCommsTool"),
+                    WuxDef.GetVariable("Page_AddLightTool"), WuxDef.GetVariable("Page_AddBindingsTool"),
+                    WuxDef.GetVariable("Page_AddMiscTool"), WuxDef.GetVariable("Page_AddHeadGear"),
+                    WuxDef.GetVariable("Page_AddFaceGear"), WuxDef.GetVariable("Page_AddChestGear"),
+                    WuxDef.GetVariable("Page_AddArmGear"), WuxDef.GetVariable("Page_AddLegGear"),
+                    WuxDef.GetVariable("Page_AddFootGear"), WuxDef.GetVariable("Page_AddMiscGear")],
+                `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Equipment")`, true)}
+                ${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Page_AddRecoveryItem")],
+                `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Consumable")`, true)}
+                ${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Page_AddMaterial"), WuxDef.GetVariable("Page_AddCompound"),
+                    WuxDef.GetVariable("Page_AddSupplement"), WuxDef.GetVariable("Page_AddAnimalGood"),
+                    WuxDef.GetVariable("Page_AddFruit"), WuxDef.GetVariable("Page_AddVegetable"), WuxDef.GetVariable("Page_AddStarch")],
+                `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Good")`, true)}`;
         },
         listenerEquipRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
@@ -358,18 +354,26 @@ var GearBuilder = GearBuilder || (function () {
                 `;
         },
         listenerDeleteRepeatingEquipment = function () {
-            let repeatingSection = WuxDef.GetVariable("RepeatingEquipment");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_Delete")}`];
-            let output = `WuxWorkerGear.DeleteEquipment(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+            return `${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Delete")}`],
+                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingEquipment")`, true)}
+                ${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Delete")}`],
+                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingConsumables")`, true)}
+                ${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Delete")}`],
+                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingGoods")`, true)}`;
         },
         listenerInspectRepeatingEquipment = function () {
-            let repeatingSection = WuxDef.GetVariable("RepeatingEquipment");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Gear_Inspect")}`];
-            let output = `WuxWorkerGear.InspectEquipment(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+            return `${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")`, true)}
+                ${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingConsumables")`, true)}
+                ${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingGoods")`, true)}`;
         },
         listenerSetGearOptions = function () {
             let output = "";
@@ -448,8 +452,11 @@ var PopupBuilder = PopupBuilder || (function () {
                 }
                 groupVariableNames = groupVariableNames.concat([advancedSlotDef.getVariable(i + WuxDef._expand)]);
             }
-            
-            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_ItemActions")}`]);
+
+            let actionFieldName = `${WuxDef.GetVariable("Gear")}-${WuxDef.GetVariable("ItemActions")}`;
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingEquipment")}:${actionFieldName}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingConsumables")}:${actionFieldName}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingGoods")}:${actionFieldName}`]);
             
             for (let i = 1; i <= 3; i++) {
                 groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobTech", i)}:${WuxDef.GetVariable("Action_Actions")}`]);

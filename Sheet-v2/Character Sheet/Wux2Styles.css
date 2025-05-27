@@ -13,6 +13,9 @@ input[type=number]
 {
     -moz-appearance: textfield;
     appearance: textfield;
+    min-width: 80px;
+    max-width: none;
+    width: 80px;
 }
 
 input[type=number]::-webkit-outer-spin-button,
@@ -930,7 +933,9 @@ textarea.wuxInput
 
 input[type="number"].wuxInput
 {
-    min-width: 80px;
+    min-width: 30px;
+    max-width: none;
+    width: 80px;
 }
 
 /*========================================
@@ -5682,6 +5687,11 @@ Quest Box
 .wuxNoPadding
 {
     padding: 0;
+}
+
+.wuxWidth25
+{
+    width: 25px;
 }
 
 .wuxWidth50

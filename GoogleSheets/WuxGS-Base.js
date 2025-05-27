@@ -713,6 +713,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = "";
                     contents += buildCurrency();
                     contents += buildEquipment();
+                    contents += buildItems();
                     return WuxSheetMain.Build(contents);
                 },
 
@@ -750,30 +751,39 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                 ownedEquipment = function () {
                     let repeatingDef = WuxDef.Get("RepeatingEquipment");
-                    let nameDef = WuxDef.Get("Gear_ItemName");
-                    let actionsDef = WuxDef.Get("Gear_ItemActions");
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsEquipment(actionsDef, nameDef))}
+                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsEquipment())}
                         ${WuxSheetMain.Row("&nbsp;")}
                         ${addEquipmentButtons()}
                     </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
-                addRepeaterContentsEquipment = function (actionDef, nameDef) {
+                addRepeaterContentsEquipment = function () {
+                    let nameFieldName = getGearAttribute("ItemName");
+                    let actionFieldName = getGearAttribute("ItemAction");
                     return WuxSheetMain.MultiRow(`
-                        ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsEquipment())}
-                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
+                        ${WuxSheetMain.SubMenuButton(actionFieldName, addSubmenuContentsEquipment())}
+                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameFieldName}"></span></div>`
                     );
+                },
+
+                addRepeaterContentsItem = function () {
+                    let nameFieldName = getGearAttribute("ItemName");
+                    let actionFieldName = getGearAttribute("ItemAction");
+                    let countFieldName = getGearAttribute("ItemCount");
+                    return `
+                        <div class="wuxEquipableType">${WuxSheetMain.SubMenuButton(actionFieldName, addSubmenuContentsItem())}</div>
+                        <div class="wuxEquipableType">${WuxSheetMain.CustomInput("Number", countFieldName, "wuxInput wuxWidth25")}</div>
+                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameFieldName}"></span></div>`
+                    ;
                 },
 
                 addSubmenuContentsEquipment = function () {
                     let equippedDef = WuxDef.Get("Gear_ItemIsEquipped");
                     let equipWeaponDef = WuxDef.Get("Gear_EquipWeapon");
-                    let deleteDef = WuxDef.Get("Gear_Delete");
-                    let inspectDef = WuxDef.Get("Gear_Inspect");
 
                     return `${buildItemTemplate()}
                         ${WuxSheetMain.HiddenField(equippedDef.getAttribute(),
@@ -781,6 +791,21 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         ${WuxSheetMain.HiddenAuxField(equippedDef.getAttribute(),
                         `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), WuxSheetMain.Span(WuxDef.GetAttribute("Gear_ItemEquipMenu")))}
                             ${WuxSheetMain.SubMenuOptionButton(equipWeaponDef.getAttribute(), `<span>${equipWeaponDef.getTitle()}</span>`)}`)}
+                        ${addSubmenuContents()}
+                    `;
+                },
+
+                addSubmenuContentsItem = function () {
+                    return `${buildItemTemplate()}
+                        ${addSubmenuContents()}
+                    `;
+                },
+
+                addSubmenuContents = function () {
+                    let deleteDef = WuxDef.Get("Gear_Delete");
+                    let inspectDef = WuxDef.Get("Gear_Inspect");
+
+                    return `
                         ${WuxSheetMain.SubMenuOptionButton(deleteDef.getAttribute(), `<span>${deleteDef.getTitle()}</span>`)}
                         ${WuxSheetMain.SubMenuOptionButton(inspectDef.getAttribute(), `<span>${inspectDef.getTitle()}</span>`)}
                     `;
@@ -791,28 +816,28 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     <div class="wuxFeature">
                         <div class="wuxFeatureHeader wuxFeatureHeader-Item">
                             <div class="wuxFeatureHeaderDisplayBlock">
-                                <span class="wuxFeatureHeaderName" name="${WuxDef.GetAttribute("Gear_ItemName")}"></span>
-                                <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Gear_ItemGroup")}"></span></div>
-                                <div class="wuxFeatureHeaderInfo"><span name="${WuxDef.GetAttribute("Gear_ItemStats")}"></span></div>
+                                <span class="wuxFeatureHeaderName" name="${getGearAttribute("ItemName")}"></span>
+                                <div class="wuxFeatureHeaderInfo"><span name="${getGearAttribute("ItemGroup")}"></span></div>
+                                <div class="wuxFeatureHeaderInfo"><span name="${getGearAttribute("ItemStats")}"></span></div>
                                 <div class="wuxFeatureHeaderInfo">
                                     <span><strong>Traits: </strong></span>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_ItemTrait", 0)}" value="0" />
+                                    <input type="hidden" class="wuxHiddenField-flag" name="${getGearAttribute("ItemTrait", 0)}" value="0" />
                                     <div class="wuxHiddenInlineAuxField">
                                         <span>None</span>
                                     </div>
-                                    ${buildTooltipSection("Gear_ItemTrait", 0)}
-                                    ${buildTooltipSection("Gear_ItemTrait", 1)}
-                                    ${buildTooltipSection("Gear_ItemTrait", 2)}
-                                    ${buildTooltipSection("Gear_ItemTrait", 3)}
+                                    ${buildTooltipSection("ItemTrait", 0)}
+                                    ${buildTooltipSection("ItemTrait", 1)}
+                                    ${buildTooltipSection("ItemTrait", 2)}
+                                    ${buildTooltipSection("ItemTrait", 3)}
                                 </div>
                             </div>
                         </div>
                         
-                        <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute("Gear_ItemDescription")}" value="0" />
+                        <input type="hidden" class="wuxHiddenField-flag" name="${getGearAttribute("ItemDescription")}" value="0" />
                         <div class="wuxHiddenField">
                             <div class="wuxFeatureFunctionBlock">
                                 <div class="wuxFeatureFunctionBlockFlavorText">
-                                    <span name="${WuxDef.GetAttribute("Gear_ItemDescription")}"></span>
+                                    <span name="${getGearAttribute("ItemDescription")}"></span>
                                 </div>
                             </div>
                         </div>
@@ -821,22 +846,22 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 buildTooltipSection = function (baseAttribute, index, delimiter) {
-                    return `<input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute(baseAttribute, index)}" value="0" />
+                    return `<input type="hidden" class="wuxHiddenField-flag" name="${getGearAttribute(baseAttribute, index)}" value="0" />
                     <div class="wuxHiddenInlineField">
                         ${index == 0 ? "" : `<span>${delimiter == undefined ? "; " : delimiter}</span>`}
                         <span class="wuxTooltip">
-                            <span class="wuxTooltipText" name="${WuxDef.GetAttribute(baseAttribute, index)}">-</span>
+                            <span class="wuxTooltipText" name="${getGearAttribute(baseAttribute, index)}">-</span>
                             <div class="wuxTooltipContent">
-                                <div class="wuxHeader2"><span name="${WuxDef.GetAttribute(baseAttribute, index)}">-</span></div>
+                                <div class="wuxHeader2"><span name="${getGearAttribute(baseAttribute, index)}">-</span></div>
                                 <span class="wuxDescription"><em>Technique Trait</em></span>
-                                <span class="wuxDescription" name="${WuxDef.GetAttribute(baseAttribute, index + "desc0")}"></span>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute(baseAttribute, index + "desc1")}" value="0" />
+                                <span class="wuxDescription" name="${getGearAttribute(baseAttribute, index + "desc0")}"></span>
+                                <input type="hidden" class="wuxHiddenField-flag" name="${getGearAttribute(baseAttribute, index + "desc1")}" value="0" />
                                 <div class="wuxHiddenField">
-                                    <span class="wuxDescription" name="${WuxDef.GetAttribute(baseAttribute, index + "desc1")}"></span>
+                                    <span class="wuxDescription" name="${getGearAttribute(baseAttribute, index + "desc1")}"></span>
                                 </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${WuxDef.GetAttribute(baseAttribute, index + "desc2")}" value="0" />
+                                <input type="hidden" class="wuxHiddenField-flag" name="${getGearAttribute(baseAttribute, index + "desc2")}" value="0" />
                                 <div class="wuxHiddenField">
-                                    <span class="wuxDescription" name="${WuxDef.GetAttribute(baseAttribute, index + "desc2")}"></span>
+                                    <span class="wuxDescription" name="${getGearAttribute(baseAttribute, index + "desc2")}"></span>
                                 </div>
                             </div>
                         </span>
@@ -858,27 +883,12 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let legPopupDef = WuxDef.Get("Page_AddLegGear");
                     let footPopupDef = WuxDef.Get("Page_AddFootGear");
                     let miscGearPopupDef = WuxDef.Get("Page_AddMiscGear");
-
-                    return `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_AddItem")}`)}
-                    ${WuxSheetMain.MultiRowGroup(
-                        [
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(weaponsPopupDef.getAttribute(), weaponsPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(rangedPopupDef.getAttribute(), rangedPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(toolPopupDef.getAttribute(), toolPopupDef.getTitle())),
-                            // WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(commsPopupDef.getAttribute(), commsPopupDef.getTitle())),
-                            // WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(lightPopupDef.getAttribute(), lightPopupDef.getTitle())),
-                            // WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(bindingsPopupDef.getAttribute(), bindingsPopupDef.getTitle())),
-                            // WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(miscPopupDef.getAttribute(), miscPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(headPopupDef.getAttribute(), headPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(facePopupDef.getAttribute(), facePopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(chestPopupDef.getAttribute(), chestPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(armPopupDef.getAttribute(), armPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(legPopupDef.getAttribute(), legPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(footPopupDef.getAttribute(), footPopupDef.getTitle())),
-                            WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(miscGearPopupDef.getAttribute(), miscGearPopupDef.getTitle()))
-                        ],
-                        WuxSheetMain.Table.FlexTable, 3)}`;
-
+                    return addItemGenerationButtons([
+                        weaponsPopupDef, rangedPopupDef, toolPopupDef, 
+                        // commsPopupDef, lightPopupDef, bindingsPopupDef, miscPopupDef, 
+                        headPopupDef, facePopupDef, chestPopupDef, armPopupDef, legPopupDef,
+                        footPopupDef, miscGearPopupDef
+                    ]);
                 },
 
                 equippedEquipment = function () {
@@ -930,6 +940,71 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         ${WuxSheetMain.SubMenuOptionButton(definition.getAttribute(index + WuxDef._info),
                         `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`)}
             `;
+                },
+
+                buildItems = function () {
+                    let contents = "";
+
+                    contents += WuxSheetMain.MultiRowGroup([ownedConsumables(), ownedGoods()], WuxSheetMain.Table.FlexTable, 2);
+
+                    contents = WuxSheetMain.TabBlock(contents);
+
+                    let definition = WuxDef.Get("Page_GearItems");
+                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                },
+
+                ownedConsumables = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingConsumables");
+
+                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                        <div>
+                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsItem())}
+                        ${WuxSheetMain.Row("&nbsp;")}
+                        ${addConsumablesButtons()}
+                    </div>`;
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                ownedGoods = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingGoods");
+
+                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                        <div>
+                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsItem())}
+                        ${WuxSheetMain.Row("&nbsp;")}
+                        ${addGoodsButtons()}
+                    </div>`;
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                addConsumablesButtons = function () {
+                    return addItemGenerationButtons([
+                        WuxDef.Get("Page_AddRecoveryItem")
+                    ]);
+                },
+
+                addGoodsButtons = function () {
+                    return addItemGenerationButtons([
+                        WuxDef.Get("Page_AddMaterial"), WuxDef.Get("Page_AddCompound"),
+                        WuxDef.Get("Page_AddSupplement"), WuxDef.Get("Page_AddAnimalGood"),
+                        WuxDef.Get("Page_AddFruit"), WuxDef.Get("Page_AddVegetable"), WuxDef.Get("Page_AddStarch")
+                    ]);
+                },
+                
+                addItemGenerationButtons = function (definitions) {
+                    let contents = [];
+                    for (let i = 0; i < definitions.length; i++) {
+                        contents.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(definitions[i].getAttribute(), definitions[i].getTitle())));
+                    }
+
+                    return `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_AddItem")}`)}
+                    ${WuxSheetMain.MultiRowGroup(
+                        contents, WuxSheetMain.Table.FlexTable, 3)}`;
+                },
+
+                getGearAttribute = function (attribute, suffix) {
+                    let baseDefinition = WuxDef.Get("Gear");
+                    return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {
@@ -1086,6 +1161,11 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 getActionAttribute = function (attribute, suffix) {
                     let baseDefinition = WuxDef.Get("Action");
+                    return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
+                },
+
+                getGearAttribute = function (attribute, suffix) {
+                    let baseDefinition = WuxDef.Get("Gear");
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
                 },
 
