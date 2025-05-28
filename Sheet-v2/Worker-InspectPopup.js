@@ -56,7 +56,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 break;
             case "Add Good":
                 performAddSelectedInspectElementGoods(attrHandler,
-                    WuxItems.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
+                    WuxGoods.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
                 );
                 break;
         }

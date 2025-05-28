@@ -13,9 +13,6 @@ input[type=number]
 {
     -moz-appearance: textfield;
     appearance: textfield;
-    min-width: 80px;
-    max-width: none;
-    width: 80px;
 }
 
 input[type=number]::-webkit-outer-spin-button,
@@ -931,13 +928,6 @@ textarea.wuxInput
 	background: #9e9fa1;
 }
 
-input[type="number"].wuxInput
-{
-    min-width: 30px;
-    max-width: none;
-    width: 80px;
-}
-
 /*========================================
     Flex Table
 ========================================*/
@@ -1841,8 +1831,16 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     Equipables
 ========================================*/
 
+.wuxEquipableSubMenu
+{
+    position: relative;
+    display: inline-block;
+    width: 30px;
+}
+
 .wuxEquipableType
 {
+    position: relative;
     display: inline-block;
     width: 60px;
 }

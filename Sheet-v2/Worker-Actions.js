@@ -181,7 +181,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 if (techsByAffinity.length == 0) {
                     return;
                 }
-                if (!affinities.includes(affinity)) {
+                if (affinity != "" && !affinities.includes(affinity)) {
                     return;
                 }
 

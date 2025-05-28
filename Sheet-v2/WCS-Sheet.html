@@ -6979,7 +6979,6 @@
                                             <option value="3">Tier 3</option>
                                             <option value="4">Tier 4</option>
                                             <option value="5">Tier 5</option>
-                                            <option value="6">Tier 6</option>
                                         </select>
                                         <span class="wuxDescription">A Skirmish and Enchant-focused style that allows enchanting one's own attacks with magic before striking.
                                         </span>
@@ -7029,6 +7028,7 @@
                                             <option value="2">Tier 2</option>
                                             <option value="3">Tier 3</option>
                                             <option value="4">Tier 4</option>
+                                            <option value="5">Tier 5</option>
                                         </select>
                                         <span class="wuxDescription">A Finesse-focused style that allows you to attack both Brace and Reflex defenses.
                                         </span>
@@ -22279,8 +22279,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <input type="number" class="wuxInput" name="attr_crn-jin" />
+                                    </div><input type="number" class="wuxInput wuxMinWidth100" name="attr_crn-jin" />
                                 </div>
                                 <div class="wuxFlexTableItemGroup wuxMinWidth150">
                                     <div class="wuxHeader2">Gold<div class="wuxTooltipButtonContainer">
@@ -22293,8 +22292,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <input type="number" class="wuxInput" name="attr_crn-gold" />
+                                    </div><input type="number" class="wuxInput wuxMinWidth100" name="attr_crn-gold" />
                                 </div>
                                 <div class="wuxFlexTableItemGroup wuxMinWidth150">
                                     <div class="wuxHeader2">CP<div class="wuxTooltipButtonContainer">
@@ -22307,8 +22305,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <input type="number" class="wuxInput" name="attr_crn-cp" />
+                                    </div><input type="number" class="wuxInput wuxMinWidth100" name="attr_crn-cp" />
                                 </div>
                             </div>
                         </div>
@@ -22928,7 +22925,7 @@
                                         <div class="wuxNoRepControl">
                                             <fieldset class="repeating_consumables">
 
-                                                <div class="wuxEquipableType">
+                                                <div class="wuxEquipableSubMenu">
                                                     <div class="wuxSubMenuButton">
                                                         <input type="checkbox" name="attr_gear-itemaction">
                                                         <span class="wuxSubMenuText">l</span>
@@ -23055,7 +23052,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="wuxEquipableType"><input type="Number" class="wuxInput wuxWidth50" name="attr_gear-itemcount" /></div>
+                                                <input type="number" class="wuxInput wuxWidth25" name="attr_gear-itemcount" />
                                                 <div class="wuxEquipableName"><span class="wuxDescription" name="attr_gear-itemname"></span></div>
                                             </fieldset>
                                         </div>
@@ -23077,7 +23074,7 @@
                                         <div class="wuxNoRepControl">
                                             <fieldset class="repeating_goods">
 
-                                                <div class="wuxEquipableType">
+                                                <div class="wuxEquipableSubMenu">
                                                     <div class="wuxSubMenuButton">
                                                         <input type="checkbox" name="attr_gear-itemaction">
                                                         <span class="wuxSubMenuText">l</span>
@@ -23204,7 +23201,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="wuxEquipableType"><input type="Number" class="wuxInput wuxWidth50" name="attr_gear-itemcount" /></div>
+                                                <input type="number" class="wuxInput wuxWidth25" name="attr_gear-itemcount" />
                                                 <div class="wuxEquipableName"><span class="wuxDescription" name="attr_gear-itemname"></span></div>
                                             </fieldset>
                                         </div>
@@ -40040,7 +40037,7 @@ WuxWorkerActions.InspectTechniqueBasicAttack(eventinfo)
 on("change:repeating_basicsocial:act-inspect", function (eventinfo) {
 WuxWorkerActions.InspectTechniqueBasicSocial(eventinfo)
 });
-on("change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_expand change:forme-advancedslot1_expand change:forme-styleslot1_expand change:forme-jobslot2_expand change:forme-advancedslot2_expand change:forme-styleslot2_expand change:forme-jobslot3_expand change:forme-advancedslot3_expand change:forme-styleslot3_expand change:forme-styleslot4_expand change:forme-styleslot5_expand change:forme-styleslot6_expand change:repeating_equipment:gear- change:repeating_consumables:gear- change:repeating_goods:gear- change:repeating_jobtech1:act-actions change:repeating_advtech1:act-actions change:repeating_jobtech2:act-actions change:repeating_advtech2:act-actions change:repeating_jobtech3:act-actions change:repeating_advtech3:act-actions change:repeating_geartech:act-actions change:repeating_basicaction:act-actions change:repeating_basicrecovery:act-actions change:repeating_basicattack:act-actions change:repeating_basicsocial:act-actions change:job-fighter_expand change:job-sentinel_expand change:job-bulwark_expand change:job-warden_expand change:job-hunter_expand change:job-sniper_expand change:job-trooper_expand change:job-warmage_expand change:job-rogue_expand change:job-brawler_expand change:job-kineticist_expand change:job-labourer_expand change:job-bard_expand change:job-medic_expand change:job-spellwright_expand change:job-scholar_expand change:job-tactician_expand change:job-detective_expand change:job-magus_expand change:job-empath_expand change:job-merchant_expand change:job-orator_expand change:job-etherealist_expand change:sty-hammering_arte_expand change:sty-cleaving_arte_expand change:sty-battering_arte_expand change:sty-berserker_arte_expand change:sty-duelist_arte_expand change:sty-chargestrike_arte_expand change:sty-overwhelming_arte_expand change:sty-phalanx_arte_expand change:sty-spellblade_arte_expand change:sty-finesse_blade_arte_expand change:sty-whip_arte_expand change:sty-forceful_fist_arte_expand change:sty-wrestling_arte_expand change:sty-stepflow_arte_expand change:sty-bow_arte_expand change:sty-midrange_arte_expand change:sty-longsight_arte_expand change:sty-scatterpoint_arte_expand change:sty-arcane_conduit_expand change:sty-arcane_spellshot_expand change:sty-arcane_blast_expand change:sty-arcane_bomb_expand change:sty-arcane_storm_expand change:sty-remote_messaging_expand change:sty-propelling_force_expand change:sty-area_force_expand change:sty-levitation_expand change:sty-surging_dust_expand change:sty-structural_magic_expand change:sty-dust_shaping_expand change:sty-conjure_blades_expand change:sty-clouded_shroud_expand change:sty-geomancy_expand change:sty-healing_hands_expand change:sty-surging_power_expand change:sty-traversal_expand change:sty-bounding_leap_expand change:sty-freeform_flight_expand change:sty-balance_expand change:sty-sensory_control_expand change:sty-evasive_maneuvers_expand change:sty-hidden_footing_expand change:sty-charm_unrestrained_expand change:sty-inspiring_presence_expand change:sty-deft_negotiator_expand change:sty-abrasive_wit_expand change:sty-tyrannical_voice_expand change:sty-calming_empathy_expand change:sty-toxic_material_expand change:sty-mana_control_expand change:sty-soul_surge_expand change:sty-light_control_expand change:sty-shadow_control_expand change:sty-gravity_force_expand change:sty-ether_magic_expand change:sty-blood_flux_expand change:sty-sound_control_expand change:sty-time_control_expand change:sty-sky_pike_arte_expand change:sty-skyfall_arte_expand change:sty-heavens_reach_arte_expand change:sty-swaying_palm_arte_expand change:sty-flashcut_arte_expand", function (eventinfo) {
+on("change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_expand change:forme-advancedslot1_expand change:forme-styleslot1_expand change:forme-jobslot2_expand change:forme-advancedslot2_expand change:forme-styleslot2_expand change:forme-jobslot3_expand change:forme-advancedslot3_expand change:forme-styleslot3_expand change:forme-styleslot4_expand change:forme-styleslot5_expand change:forme-styleslot6_expand change:repeating_equipment:gear-itemaction change:repeating_consumables:gear-itemaction change:repeating_goods:gear-itemaction change:repeating_jobtech1:act-actions change:repeating_advtech1:act-actions change:repeating_jobtech2:act-actions change:repeating_advtech2:act-actions change:repeating_jobtech3:act-actions change:repeating_advtech3:act-actions change:repeating_geartech:act-actions change:repeating_basicaction:act-actions change:repeating_basicrecovery:act-actions change:repeating_basicattack:act-actions change:repeating_basicsocial:act-actions change:job-fighter_expand change:job-sentinel_expand change:job-bulwark_expand change:job-warden_expand change:job-hunter_expand change:job-sniper_expand change:job-trooper_expand change:job-warmage_expand change:job-rogue_expand change:job-brawler_expand change:job-kineticist_expand change:job-labourer_expand change:job-bard_expand change:job-medic_expand change:job-spellwright_expand change:job-scholar_expand change:job-tactician_expand change:job-detective_expand change:job-magus_expand change:job-empath_expand change:job-merchant_expand change:job-orator_expand change:job-etherealist_expand change:sty-hammering_arte_expand change:sty-cleaving_arte_expand change:sty-battering_arte_expand change:sty-berserker_arte_expand change:sty-duelist_arte_expand change:sty-chargestrike_arte_expand change:sty-overwhelming_arte_expand change:sty-phalanx_arte_expand change:sty-spellblade_arte_expand change:sty-finesse_blade_arte_expand change:sty-whip_arte_expand change:sty-forceful_fist_arte_expand change:sty-wrestling_arte_expand change:sty-stepflow_arte_expand change:sty-bow_arte_expand change:sty-midrange_arte_expand change:sty-longsight_arte_expand change:sty-scatterpoint_arte_expand change:sty-arcane_conduit_expand change:sty-arcane_spellshot_expand change:sty-arcane_blast_expand change:sty-arcane_bomb_expand change:sty-arcane_storm_expand change:sty-remote_messaging_expand change:sty-propelling_force_expand change:sty-area_force_expand change:sty-levitation_expand change:sty-surging_dust_expand change:sty-structural_magic_expand change:sty-dust_shaping_expand change:sty-conjure_blades_expand change:sty-clouded_shroud_expand change:sty-geomancy_expand change:sty-healing_hands_expand change:sty-surging_power_expand change:sty-traversal_expand change:sty-bounding_leap_expand change:sty-freeform_flight_expand change:sty-balance_expand change:sty-sensory_control_expand change:sty-evasive_maneuvers_expand change:sty-hidden_footing_expand change:sty-charm_unrestrained_expand change:sty-inspiring_presence_expand change:sty-deft_negotiator_expand change:sty-abrasive_wit_expand change:sty-tyrannical_voice_expand change:sty-calming_empathy_expand change:sty-toxic_material_expand change:sty-mana_control_expand change:sty-soul_surge_expand change:sty-light_control_expand change:sty-shadow_control_expand change:sty-gravity_force_expand change:sty-ether_magic_expand change:sty-blood_flux_expand change:sty-sound_control_expand change:sty-time_control_expand change:sty-sky_pike_arte_expand change:sty-skyfall_arte_expand change:sty-heavens_reach_arte_expand change:sty-swaying_palm_arte_expand change:sty-flashcut_arte_expand", function (eventinfo) {
 WuxWorkerGeneral.OpenSubMenu(eventinfo)
 });
 on("change:popup-submenuactive", function (eventinfo) {

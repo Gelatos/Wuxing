@@ -928,10 +928,3 @@ textarea.wuxInput
 	background: #9e9fa1;
 }
 
-input[type="number"].wuxInput
-{
-    min-width: 30px;
-    max-width: none;
-    width: 80px;
-}
-

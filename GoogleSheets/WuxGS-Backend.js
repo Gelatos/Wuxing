@@ -453,7 +453,7 @@ var PopupBuilder = PopupBuilder || (function () {
                 groupVariableNames = groupVariableNames.concat([advancedSlotDef.getVariable(i + WuxDef._expand)]);
             }
 
-            let actionFieldName = `${WuxDef.GetVariable("Gear")}-${WuxDef.GetVariable("ItemActions")}`;
+            let actionFieldName = `${WuxDef.GetVariable("Gear")}-${WuxDef.GetVariable("ItemAction")}`;
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingEquipment")}:${actionFieldName}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingConsumables")}:${actionFieldName}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingGoods")}:${actionFieldName}`]);

@@ -732,7 +732,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let resourceDefs = WuxDef.Filter([new DatabaseFilterData("group", "Currency")]);
 
                     for (let i = 0; i < resourceDefs.length; i++) {
-                        let contents = WuxDefinition.BuildNumberInput(resourceDefs[i], resourceDefs[i].getAttribute());
+                        let contents = WuxDefinition.BuildHeader(resourceDefs[i]) + 
+                            WuxSheetMain.CustomInput("number", resourceDefs[i].getAttribute(), "wuxInput wuxMinWidth100");
                         output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
                     }
                     return output;
@@ -775,8 +776,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let actionFieldName = getGearAttribute("ItemAction");
                     let countFieldName = getGearAttribute("ItemCount");
                     return `
-                        <div class="wuxEquipableType">${WuxSheetMain.SubMenuButton(actionFieldName, addSubmenuContentsItem())}</div>
-                        <div class="wuxEquipableType">${WuxSheetMain.CustomInput("Number", countFieldName, "wuxInput wuxWidth25")}</div>
+                        <div class="wuxEquipableSubMenu">${WuxSheetMain.SubMenuButton(actionFieldName, addSubmenuContentsItem())}</div>
+                        ${WuxSheetMain.CustomInput("number", countFieldName, "wuxInput wuxWidth25")}
                         <div class="wuxEquipableName"><span class="wuxDescription" name="${nameFieldName}"></span></div>`
                     ;
                 },
