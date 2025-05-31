@@ -138,7 +138,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         }
     }
 
-    const populateStyleInspectionTechniques = function (attrHandler, itemPopupRepeater, styleName, maxDisplayTier, affinities, showTierHeaders) {
+    const populateStyleInspectionTechniques = function (attrHandler, itemPopupRepeater, styleName, maxDisplayTier, affinities, showTierHeaders, restrictToAffinities) {
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `${styleName} Techniques`);
         let style = WuxStyles.Get(styleName);
         let maxTier = Math.min(style.maxTier, maxDisplayTier);
@@ -154,6 +154,18 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             tierData.iterate(function (techsByAffinity, affinity) {
                 if (techsByAffinity.length == 0) {
                     return;
+                }
+                
+                if (restrictToAffinities) {
+                    if (affinity.includes(";")) {
+                        let affinityParts = affinity.split(";");
+                        if (affinity != "" && !affinityParts.some(part => affinities.includes(part))) {
+                            return;
+                        }
+                    }
+                    else if (affinity != "" && !affinities.includes(affinity)) {
+                        return;
+                    }
                 }
                 
                 if (showTierHeaders) {
@@ -188,8 +200,27 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             techDesc += `These techniques are learned upon reaching ${styleName} Tier ${tier}`;
         }
         if (affinity != "") {
-            techHeader += (techHeader == "" ? "" : "; ") + `${affinity} Affinity`;
-            techDesc +=  (techDesc == "" ? "" : " ") + `and require ${affinity} affinity`;
+            if (affinity.includes(";")) {
+                let affinities = affinity.split(";");
+                let affinityOutput = "";
+                for (let i = 0; i < affinities.length; i++) {
+                    if (i == affinities.length - 1) {
+                        if (affinityOutput != "") {
+                            affinityOutput += " or ";
+                        }
+                    }
+                    else if (affinityOutput != "") {
+                        affinityOutput += ", ";
+                    }
+                    affinityOutput += affinities[i].trim();
+                }
+                techHeader += (techHeader == "" ? "" : "; ") + `${affinityOutput} Affinity`;
+                techDesc +=  (techDesc == "" ? "" : " ") + `and require ${affinityOutput} affinity`;
+            }
+            else {
+                techHeader += (techHeader == "" ? "" : "; ") + `${affinity} Affinity`;
+                techDesc +=  (techDesc == "" ? "" : " ") + `and require ${affinity} affinity`;
+            }
         }
 
         let newRowId = itemPopupRepeater.generateRowId();
@@ -385,7 +416,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"))];
                 
                 return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, 
-                    attrHandler.parseString(nameFieldName), Math.min(maxTier, cr), affinities, false);
+                    attrHandler.parseString(nameFieldName), Math.min(maxTier, cr), affinities, false, true);
             }
         );
     }
@@ -578,8 +609,10 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
                     attrHandler.addUpdate(eventinfo.sourceAttribute, "0");
                     attrHandler.addUpdate(WuxDef.GetVariable(WuxDef.GetName(style, WuxDef.Get("Style")), WuxDef._expand), "0");
+                    let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+                        attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"))];
 
-                    return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, style, 9, true);
+                    return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, style, 9, affinities, true, false);
                 }
             );
         },

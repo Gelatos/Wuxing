@@ -154,7 +154,9 @@ class Database extends Dictionary {
                     return [];
                 }
                 nextFilter = this.getSortedGroup(filterData[i].property, filterData[i].value);
-                filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
+                if (nextFilter != undefined && nextFilter.length > 0) {
+                    filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
+                }
             }
         } else {
             filteredGroup = this.getSortedGroup(filterData.property, filterData.value);
@@ -887,7 +889,25 @@ class TechniqueStyle extends WuxDatabaseData {
             if (requirements != "") {
                 requirements += "\n";
             }
-            requirements += `You must have a ${this.affinity} affinity`;
+            if (this.affinity.includes(";")) {
+                let affinities = this.affinity.split(";");
+                let affinityOutput = "";
+                for (let i = 0; i < affinities.length; i++) {
+                    if (i == affinities.length - 1) {
+                        if (affinityOutput != "") {
+                            affinityOutput += " or ";
+                        }
+                    }
+                    else if (affinityOutput != "") {
+                        affinityOutput += ", ";
+                    }
+                    affinityOutput += affinities[i].trim();
+                }
+                requirements += `You must have ${affinityOutput} affinity`;
+            }
+            else {
+                requirements += `You must have ${this.affinity} affinity`;
+            }
         }
         if (requirements == "") {
             requirements = "None";

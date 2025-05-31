@@ -998,12 +998,29 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     let contents = "";
                     let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "StyleGroup")]);
                     for (let i = 0; i < filteredData.length; i++) {
-                        let techFilterData = stylesDatabase.filter([new DatabaseFilterData("subGroup", filteredData[i].getTitle())]);
-                        let techStyles = [];
-                        for (let i = 0; i < techFilterData.length; i++) {
-                            techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[i]));
+                        let subFilteredData = WuxDef.Filter([
+                            new DatabaseFilterData("subGroup", filteredData[i].getTitle()),
+                            new DatabaseFilterData("group", "StyleSubGroup")
+                        ]);
+
+                        let styleOutput = "";
+                        for (let j = 0; j < subFilteredData.length; j++) {
+
+                            let techFilterData = stylesDatabase.filter([
+                                new DatabaseFilterData("group", "Style"),
+                                new DatabaseFilterData("subGroup", subFilteredData[j].getTitle())
+                            ]);
+                            let techStyles = [];
+                            for (let k = 0; k < techFilterData.length; k++) {
+                                techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[k]));
+                            }
+                            if (techStyles.length == 0) {
+                                continue;
+                            }
+                            styleOutput += WuxSheetMain.Header(subFilteredData[j].getTitle());
+                            styleOutput += WuxSheetMain.Table.FlexTable(techStyles);
                         }
-                        contents += buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), filteredData[i].name, filteredData[i].getTitle());
+                        contents += buildTechniqueStyleGroupTab(styleOutput, filteredData[i].name, filteredData[i].getTitle());
                     }
 
                     return contents;
@@ -1124,14 +1141,31 @@ var DisplayAdvancedSheet = DisplayAdvancedSheet || (function () {
 
                 buildStyleGroups = function (stylesDatabase) {
                     let contents = "";
-                    let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "AdvancedGroup")]);
+                    let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "StyleGroup")]);
                     for (let i = 0; i < filteredData.length; i++) {
-                        let techFilterData = stylesDatabase.filter([new DatabaseFilterData("subGroup", filteredData[i].getTitle())]);
-                        let techStyles = [];
-                        for (let i = 0; i < techFilterData.length; i++) {
-                            techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[i]));
+                        let subFilteredData = WuxDef.Filter([
+                            new DatabaseFilterData("subGroup", filteredData[i].getTitle()),
+                            new DatabaseFilterData("group", "StyleSubGroup")
+                        ]);
+
+                        let styleOutput = "";
+                        for (let j = 0; j < subFilteredData.length; j++) {
+
+                            let techFilterData = stylesDatabase.filter([
+                                new DatabaseFilterData("group", "Advanced"),
+                                new DatabaseFilterData("subGroup", subFilteredData[j].getTitle())
+                            ]);
+                            let techStyles = [];
+                            for (let k = 0; k < techFilterData.length; k++) {
+                                techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[k]));
+                            }
+                            if (techStyles.length == 0) {
+                                continue;
+                            }
+                            styleOutput += WuxSheetMain.Header(subFilteredData[j].getTitle());
+                            styleOutput += WuxSheetMain.Table.FlexTable(techStyles);
                         }
-                        contents += buildTechniqueStyleGroupTab(WuxSheetMain.Table.FlexTable(techStyles), filteredData[i].name, filteredData[i].getTitle());
+                        contents += buildTechniqueStyleGroupTab(styleOutput, filteredData[i].name, filteredData[i].getTitle());
                     }
 
                     return contents;

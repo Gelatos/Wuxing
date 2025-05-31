@@ -181,7 +181,13 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 if (techsByAffinity.length == 0) {
                     return;
                 }
-                if (affinity != "" && !affinities.includes(affinity)) {
+                if (affinity.includes(";")) {
+                    let affinityParts = affinity.split(";");
+                    if (affinity != "" && !affinityParts.some(part => affinities.includes(part))) {
+                        return;
+                    }
+                }
+                else if (affinity != "" && !affinities.includes(affinity)) {
                     return;
                 }
 
