@@ -143,7 +143,7 @@ class WuxWorkerBuild {
 	}
 
 	setPointsMax(attributeHandler) {
-		let max = this.definition.formula.getValue(attributeHandler);
+		let max = this.definition.formula.getValue(attributeHandler, "max");
 		attributeHandler.addUpdate(this.attrMax, max);
 	}
 
@@ -379,11 +379,6 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 		super("Training");
 	}
 
-	setPointsMax(attributeHandler) {
-		// do nothing
-
-	}
-
 	updatePoints(attributeHandler) {
 		let buildPoints = 0;
 		let advKnowledge = WuxDef.GetVariable("TrainingKnowledge");
@@ -409,12 +404,26 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 			WuxDef.GetVariable("TrainingKnowledge"), WuxDef.GetVariable("TrainingTechniques")];
 	}
 
+	updateLevel(attributeHandler) {
+		let worker = this;
+		attributeHandler.addMod(worker.attrBuildDraft);
+		attributeHandler.addMod(WuxDef.GetVariable("BonusTraining"));
+		
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			worker.setBuildStatsDraft(attrHandler);
+			worker.setPointsMax(attrHandler);
+			worker.updatePoints(attrHandler);
+		});
+	}
+
 	convertPp(attributeHandler) {
 		let worker = this;
 		let ppDefinition = WuxDef.Get("PP");
+		let bonusTrainingVariable = WuxDef.GetVariable("BonusTraining");
 		attributeHandler.addMod(ppDefinition.getVariable());
 		attributeHandler.addMod(worker.attrBuildDraft);
 		attributeHandler.addMod(worker.attrBuildFinal);
+		attributeHandler.addMod(bonusTrainingVariable);
 
 		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
@@ -422,10 +431,7 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
 			worker.setBuildStatsFinal(attrHandler);
 
-			let trainingPoints = 0;
-			if (worker.buildStats.has(worker.attrMax)) {
-				trainingPoints = worker.buildStats.get(worker.attrMax).value;
-			}
+			let trainingPoints = attrHandler.parseInt(bonusTrainingVariable);
 			let pp = attrHandler.parseInt(ppDefinition.getVariable());
 			let xpNeeded = ppDefinition.formula.getValue(attrHandler);
 
@@ -436,10 +442,10 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 				pp -= xpNeeded;
 			}
 			attrHandler.addUpdate(ppDefinition.getVariable(), pp);
-			attrHandler.addUpdate(worker.attrMax, trainingPoints);
+			attrHandler.addUpdate(bonusTrainingVariable, trainingPoints);
 
 			worker.updateBuildStats(attrHandler, ppDefinition.getVariable(), pp);
-			worker.updateBuildStats(attrHandler, worker.attrMax, trainingPoints);
+			worker.updateBuildStats(attrHandler, bonusTrainingVariable, trainingPoints);
 			worker.setPointsMax(attrHandler);
 			worker.updatePoints(attrHandler);
 			manager.setAttributeHandlerPoints(attrHandler);
@@ -450,6 +456,8 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 		let worker = this;
 		attributeHandler.addMod(worker.attrMax);
 		attributeHandler.addMod(worker.attrBuildDraft);
+		attributeHandler.addMod(WuxDef.GetVariable("BonusTraining"));
+		attributeHandler.addMod(WuxDef.GetVariable("Level"));
 
 		let manager = new WuxWorkerBuildManager(["Knowledge", "Style"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
@@ -480,6 +488,19 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 			worker.updatePoints(attrHandler);
 			manager.setAttributeHandlerPoints(attrHandler);
 		});
+	}
+}
+
+class WuxStyleWorkerBuild extends WuxWorkerBuild {
+	constructor() {
+		super("Style");
+	}
+
+	changeWorkerAttribute(attributeHandler, updatingAttr, newValue, perkCost) {
+		if (newValue == "on" && perkCost > 0) {
+			newValue = perkCost;
+		}
+		super.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
 	}
 }
 

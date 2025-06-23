@@ -34,10 +34,21 @@ var BuilderBackend = BuilderBackend || (function () {
         },
 
         listenerUpdateStyleBuildPoints = function () {
-            let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"));
-            let output = `WuxWorkerStyles.UpdateBuildPoints(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+            let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "Style")]);
+            let normalStyles = [];
+            let advancedStyles = [];
+            for (let i = 0; i < filteredData.length; i++) {
+                if (filteredData[i].mainGroup === "Style") {
+                    normalStyles.push(filteredData[i].getVariable());
+                } else if (filteredData[i].mainGroup === "Advanced") {
+                    advancedStyles.push(filteredData[i].getVariable());
+                }
+            }
+        
+            let output = "";
+            output += WuxSheetBackend.OnChange(normalStyles,`WuxWorkerStyles.UpdateBuildPoints(eventinfo, 1)`, true);
+            output += WuxSheetBackend.OnChange(advancedStyles,`WuxWorkerStyles.UpdateBuildPoints(eventinfo, 2)`, true);
+            return output;
         },
         listenerSeeStyleTechniques = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"), WuxDef._info);
@@ -94,7 +105,7 @@ var TrainingBackend = TrainingBackend || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerSetTrainingPoints = function () {
-            let groupVariableNames = [WuxDef.GetVariable("Training", WuxDef._max)];
+            let groupVariableNames = [WuxDef.GetVariable("BonusTraining")];
             let output = `WuxWorkerTraining.SetTrainingPoints(eventinfo);\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -336,7 +347,7 @@ var GearBuilder = GearBuilder || (function () {
                     WuxDef.GetVariable("Page_AddFootGear"), WuxDef.GetVariable("Page_AddMiscGear")],
                 `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Equipment")`, true)}
                 ${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Page_AddRecoveryItem")],
+                [WuxDef.GetVariable("Page_AddRecoveryItem"), WuxDef.GetVariable("Page_AddBombItem")],
                 `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Consumable")`, true)}
                 ${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Page_AddMaterial"), WuxDef.GetVariable("Page_AddCompound"),

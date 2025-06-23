@@ -478,11 +478,15 @@ class WuxDatabaseData extends dbObj {
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.subGroup = "";
-        definition.descriptions = [this.description];
+        definition.descriptions = this.getDescriptions();
         definition.formula = baseDefinition.formula;
         definition.linkedGroups = [];
         definition.isResource = baseDefinition.isResource;
         return definition;
+    }
+
+    getDescriptions() {
+        return [this.description];
     }
 
 }
@@ -1048,6 +1052,7 @@ class JobData extends WuxDatabaseData {
         this.name = "";
         this.fieldName = "";
         this.group = "";
+        this.category = "";
         this.description = "";
         this.shortDescription = "";
         this.defenses = "";
@@ -1059,6 +1064,7 @@ class JobData extends WuxDatabaseData {
         this.name = json.name;
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
+        this.category = json.category;
         this.description = json.description;
         this.shortDescription = json.shortDescription;
         this.defenses = json.defenses;
@@ -1072,6 +1078,8 @@ class JobData extends WuxDatabaseData {
         i++;
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i];
+        i++;
+        this.category = "" + dataArray[i];
         i++;
         this.description = "" + dataArray[i];
         i++;
@@ -1141,6 +1149,7 @@ class StatusData extends WuxDatabaseData {
         this.shortDescription = json.shortDescription;
         this.points = json.points;
         this.endsOnRoundStart = json.endsOnRoundStart;
+        this.endsOnTrigger = json.endsOnTrigger;
     }
 
     importSheets(dataArray) {
@@ -1159,6 +1168,8 @@ class StatusData extends WuxDatabaseData {
         i++;
         this.endsOnRoundStart = ("" + dataArray[i]) != "";
         i++;
+        this.endsOnTrigger = ("" + dataArray[i]) != "";
+        i++;
     }
 
     createEmpty() {
@@ -1170,15 +1181,32 @@ class StatusData extends WuxDatabaseData {
         this.shortDescription = "";
         this.points = 0;
         this.endsOnRoundStart = false;
+        this.endsOnTrigger = false;
     }
 
     createDefinition(baseDefinition) {
         let definition = new StatusDefinitionData(super.createDefinition(baseDefinition));
+        
         definition.subGroup = this.group;
         definition.shortDescription = this.shortDescription;
         definition.points = this.points;
         definition.endsOnRoundStart = this.endsOnRoundStart;
+        definition.endsOnTrigger = this.endsOnTrigger;
         return definition;
+    }
+    
+    getDescriptions() {
+        let output = [this.description];
+        if (this.endsOnRoundStart && this.endsOnTrigger) {
+            output.push(`This ${this.group} ends when it is triggered or at the start of the next round.`);
+        }
+        else if (this.endsOnRoundStart) {
+            output.push(`This ${this.group} ends at the start of the next round.`);
+        }
+        else if (this.endsOnTrigger) {
+            output.push(`This ${this.group} ends when it is triggered.`);
+        }
+        return output;
     }
 }
 
@@ -1724,12 +1752,16 @@ class StatusDefinitionData extends DefinitionData {
         this.shortDescription = json.shortDescription;
         this.points = json.points;
         this.endsOnRoundStart = json.endsOnRoundStart;
+        this.endsOnTrigger = json.endsOnTrigger;
     }
 
     setImportSheetExtraData(property, value) {
         switch (property) {
             case "endsOnRoundStart":
                 this.endsOnRoundStart = value.toLowerCase() == "true";
+                break;
+            case "endsOnTrigger":
+                this.endsOnTrigger = value.toLowerCase() == "true";
                 break;
             case "shortDescription":
                 this.shortDescription = value;
@@ -1742,6 +1774,7 @@ class StatusDefinitionData extends DefinitionData {
         this.shortDescription = "";
         this.points = 0;
         this.endsOnRoundStart = false;
+        this.endsOnTrigger = false;
     }
 }
 
@@ -1799,12 +1832,15 @@ class TechniqueDisplayData {
     }
 
     setTechSetResourceData(technique) {
-        this.resourceData = technique.action;
-        if (technique.group != "") {
-            this.resourceData += ` ${technique.group}`;
+        this.resourceData = "";
+        if (technique.action == "Brief" || technique.action == "Short" || technique.action == "Long") {
+            this.resourceData = `During a ${technique.action} Rest`;
+        }
+        else if (technique.group != "") {
+            this.resourceData = `${technique.action} ${technique.group}`;
         }
         else {
-            this.resourceData += ` Action`;
+            this.resourceData = `${technique.action} Action`;
         }
         if (technique.limits != "") {
             if (this.resourceData != "") {
@@ -2046,7 +2082,7 @@ class TechniqueEffectDisplayData {
             }
             else if (defense == "TechNewTargets") {
                 definition = WuxDef.Get("Title_TechNewTargets");
-                this.check = techniqueEffect.effect;
+                this.check = definition.getTitle();
                 this.checkDescription = definition.getDescription();
             }
             else {

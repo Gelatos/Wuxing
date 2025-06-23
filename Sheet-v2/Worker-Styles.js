@@ -465,7 +465,6 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
     'use strict';
 
     const
-
         addStyles = function (attrHandler, styleWorker, advancedRepeater) {
             let jobSlots = [];
             let advancedSlots = [];
@@ -540,11 +539,11 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             });
         },
         
-        updateBuildPoints = function (eventinfo) {
+        updateBuildPoints = function (eventinfo, points) {
             Debug.Log("Update Styles Build Points");
             let attributeHandler = new WorkerAttributeHandler();
-            let worker = new WuxWorkerBuildManager("Style");
-            worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+            let worker = new WuxStyleWorkerBuild();
+            worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue * points);
             attributeHandler.run();
         },
 

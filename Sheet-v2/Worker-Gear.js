@@ -433,6 +433,12 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                     category: undefined,
                     type: "Consumable"
                 };
+            case WuxDef.GetVariable("Page_AddBombItem"):
+                return {
+                    group: "Bomb",
+                    category: undefined,
+                    type: "Consumable"
+                };
             case WuxDef.GetVariable("Page_AddMaterial"):
                 return {
                     group: "Material",

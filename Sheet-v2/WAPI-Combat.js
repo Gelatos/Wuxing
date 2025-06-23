@@ -78,7 +78,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
             }
             rollInitiative();
             setActiveTokensForConflict();
-            startRound();
+            startRound(true);
         },
         endConflict = function () {
             TargetReference.IterateOverActiveTargetData(function (tokenTargetData) {
@@ -131,15 +131,22 @@ var WuxConflictManager = WuxConflictManager || (function () {
         },
 
         // round start
-        startRound = function () {
+        startRound = function (startConflict) {
             state.WuxConflictManager.round++;
-            setStartRoundTokens();
+            setStartRoundTokens(startConflict);
             sendStartRoundMessage();
         },
-        setStartRoundTokens = function () {
+        
+        setStartRoundTokens = function (startConflict) {
             TargetReference.IterateOverActiveTargetData(function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                tokenTargetData.addEnergy(attributeHandler, 1);
+                if (startConflict) {
+                    tokenTargetData.setEnergyToStart(attributeHandler);
+                }
+                else {
+                    tokenTargetData.addEnergy(attributeHandler, 1);
+                }
+                
                 switch (state.WuxConflictManager.conflictType) {
                     case "Battle":
                         tokenTargetData.setDash(attributeHandler);

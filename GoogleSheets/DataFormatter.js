@@ -2861,14 +2861,14 @@ class TechniqueAssessment {
         let message;
         switch (effect.subType) {
             case "Heal":
-                output.value *= 5;
+                output.value *= 6;
                 message = `${output.value}(Heal Favor)`;
                 break;
             default:
                 this.favor += output.value;
                 this.lowFavor += output.lowValue;
                 this.highFavor += output.highValue;
-                output.value *= 3;
+                output.value *= 4;
                 message = `${output.value}(Favor)`;
                 break;
         }
@@ -2903,8 +2903,15 @@ class TechniqueAssessment {
                 this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
                 break;
             case "Add":
-                points = 17;
-                this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
+                if (subTypes.length > 1) {
+                    if (subTypes[1] == "Low") {
+                        points = 17;
+                    }
+                    else if (subTypes[1] == "Moderate") {
+                        points = 30;
+                    }
+                }
+                this.addPointsRubric(points, `${points}(Add ${subTypes[1]} Influence)`);
                 break;
         }
     }

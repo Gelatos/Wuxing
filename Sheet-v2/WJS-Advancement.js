@@ -361,8 +361,10 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		setLevel = function (eventinfo) {
 			Debug.Log("Setting Level");
 			let attributeHandler = new WorkerAttributeHandler();
-			let worker = new WuxAdvancementWorkerBuild();
-			worker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			let advWorker = new WuxAdvancementWorkerBuild();
+			advWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			let trnWorker = new WuxTrainingWorkerBuild();
+			trnWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 			attributeHandler.run();
 		},
 		setAdvancementPointsUpdate = function (eventinfo) {

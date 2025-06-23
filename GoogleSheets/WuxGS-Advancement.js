@@ -216,8 +216,9 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                         buildTraining = function () {
                             let contents = "";
                             contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginTraining"));
-                            contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Training"), WuxDef.GetAttribute("Training", WuxDef._max));
-                            contents += WuxSheetMain.Desc(`${WuxSheetMain.Span(WuxDef.GetAttribute("Training"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Training", WuxDef._max))}`);
+                            contents += WuxDefinition.BuildText(WuxDef.Get("Training"),
+                                `${WuxSheetMain.Span(WuxDef.GetAttribute("Training"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Training", WuxDef._max))}`);
+                            contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusTraining"), WuxDef.GetAttribute("BonusTraining"));
 
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 training point`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingTechniques"), WuxDef.GetAttribute("TrainingTechniques"), `cost: 1 training point`);
@@ -375,8 +376,9 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
                         buildTraining = function () {
                             let contents = "";
                             contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginTraining"));
-                            contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Training"), WuxDef.GetAttribute("Training", WuxDef._max));
-                            contents += WuxSheetMain.Desc(`${WuxSheetMain.Span(WuxDef.GetAttribute("Training"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Training", WuxDef._max))}`);
+                            contents += WuxDefinition.BuildText(WuxDef.Get("Training"),
+                                `${WuxSheetMain.Span(WuxDef.GetAttribute("Training"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Training", WuxDef._max))}`);
+                            contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusTraining"), WuxDef.GetAttribute("BonusTraining"));
 
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 training point`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingTechniques"), WuxDef.GetAttribute("TrainingTechniques"), `cost: 1 training point`);
@@ -791,7 +793,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildJobShortDescription = function (job) {
-                            return WuxSheetMain.Desc(job.shortDescription);
+                            return WuxSheetMain.Desc(`<div>${job.category}</div><div>${job.shortDescription}</div>`);
                         }
                     ;
                     return {
@@ -1165,7 +1167,9 @@ var DisplayAdvancedSheet = DisplayAdvancedSheet || (function () {
                             styleOutput += WuxSheetMain.Header(subFilteredData[j].getTitle());
                             styleOutput += WuxSheetMain.Table.FlexTable(techStyles);
                         }
-                        contents += buildTechniqueStyleGroupTab(styleOutput, filteredData[i].name, filteredData[i].getTitle());
+                        if (styleOutput != "") {
+                            contents += buildTechniqueStyleGroupTab(styleOutput, filteredData[i].name, filteredData[i].getTitle());
+                        }
                     }
 
                     return contents;

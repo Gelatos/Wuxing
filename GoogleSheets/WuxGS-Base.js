@@ -980,7 +980,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                 addConsumablesButtons = function () {
                     return addItemGenerationButtons([
-                        WuxDef.Get("Page_AddRecoveryItem")
+                        WuxDef.Get("Page_AddRecoveryItem"),
+                        WuxDef.Get("Page_AddBombItem")
                     ]);
                 },
 

@@ -498,19 +498,25 @@ input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeader,
     background-color: #96a4d3;
 }
 
-input.wuxFeatureHeader-flag[value="Free"] + .wuxFeatureHeader,
-.wuxFeatureHeader-Free,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Free
-{
-    background-color: #f0e5fb;
-}
-
 input.wuxFeatureHeader-flag[value="Passive"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Passive,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Passive
 {
     background-color: #6b6b6b;
     color: #f0e5fb;
+}
+
+input.wuxFeatureHeader-flag[value="Brief"] + .wuxFeatureHeader,
+input.wuxFeatureHeader-flag[value="Short"] + .wuxFeatureHeader,
+input.wuxFeatureHeader-flag[value="Long"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Brief,
+.wuxFeatureHeader-Short,
+.wuxFeatureHeader-Long,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Brief,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Short,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Long
+{
+    background-color: #f0e5fb;
 }
 
 input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeader,

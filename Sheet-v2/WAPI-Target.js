@@ -301,12 +301,30 @@ class TokenTargetData extends TargetData {
     }
     addEnergy(attributeHandler, value, resultsCallback) {
         let tokenTargetData = this;
-        let chakraVar = WuxDef.GetVariable("Cmb_Chakra");
         attributeHandler.addMod(chakraVar);
         this.modifyResourceAttribute(attributeHandler, "EN", value,
-            function (results, value, attrHandler) {
-                results.max = attrHandler.parseInt(chakraVar, 0, false);
+            function (results, value) {
                 tokenTargetData.addModifierToAttribute(results, value);
+            },
+            function (results, attrHandler, attributeVar) {
+                if (resultsCallback != undefined) {
+                    resultsCallback(results, attrHandler, attributeVar);
+                }
+                else {
+                    attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    tokenTargetData.setEnergy(results.newValue);
+                }
+                return results;
+            }
+        );
+    }
+    setEnergyToStart(attributeHandler, resultsCallback) {
+        let tokenTargetData = this;
+        let startEnVar = WuxDef.GetVariable("StartEN");
+        attributeHandler.addMod(startEnVar);
+        this.modifyResourceAttribute(attributeHandler, "EN", 0,
+            function (results, value, attrHandler) {
+                tokenTargetData.setModifierToAttribute(results, attrHandler.parseInt(startEnVar));
             },
             function (results, attrHandler, attributeVar) {
                 if (resultsCallback != undefined) {
@@ -395,6 +413,22 @@ class TokenTargetData extends TargetData {
         }
         else {
             results.newValue = results.current + parseInt(value);
+            if (results.newValue < 0) {
+                results.remainder = results.newValue;
+                results.newValue = 0;
+            }
+            else if (results.newValue > results.max) {
+                results.remainder = results.newValue - results.max;
+                results.newValue = results.max;
+            }
+        }
+    }
+    setModifierToAttribute(results, value) {
+        if (value == "max") {
+            results.newValue = results.max;
+        }
+        else {
+            results.newValue = parseInt(value);
             if (results.newValue < 0) {
                 results.remainder = results.newValue;
                 results.newValue = 0;
