@@ -1422,6 +1422,12 @@ var WuxSheetMain = WuxSheetMain || (function () {
             <button class="wuxButton wuxSubMenuOptionButton" type="roll" value="@{${variableName}}">
                 <span name="${WuxDef.GetAttribute("Chat_PostName")}">${contents}</span>
             </button>`;
+        },
+
+        subMenuOptionText = function (fieldName, placeholder) {
+            return `<div class="wuxButton wuxSubMenuOptionButton">
+                <input type="text" name="${fieldName}"${placeholder != undefined ? ` placeholder="${placeholder}"` : ""}>
+            </div>`;
         };
 
         var info = info || (function () {
@@ -1675,6 +1681,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         SubMenuButton: subMenuButton,
         SubMenuOptionButton: subMenuOptionButton,
         SubMenuOptionRollButton: subMenuOptionRollButton,
+        SubMenuOptionText: subMenuOptionText,
         Info: info,
         Tooltip: tooltip,
         Table: table,
@@ -2165,7 +2172,7 @@ function onEdit(e) {
 }
 
 function TryTechniqueAssessment(sheet, e) {
-    if (sheet.getSheetName() == "Techniques") {
+    if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
         AssessTechniqueAtRow(sheet, e.range.getRow());
         return true;
     }
@@ -2191,7 +2198,7 @@ function TryConsumableAssessment(sheet, e) {
 function AssessAllTechniques() {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getActiveSheet();
-    if (sheet.getSheetName() == "Techniques") {
+    if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
         AssessAllTechniquesByStartRow(sheet, 2);
     }
 }
@@ -2199,7 +2206,7 @@ function AssessAllTechniques() {
 function AssessAllTechniquesFromPosition() {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getActiveSheet();
-    if (sheet.getSheetName() == "Techniques") {
+    if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
         const range = sheet.getActiveRange();
         let row = range.getRow();
         row = AssessTechniqueAtRow(sheet, row);
@@ -2220,6 +2227,9 @@ function AssessTechniqueAtRow(sheet, rowIndex) {
     if (techniqueData != undefined) {
         let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, assessColumn);
         assessment.printCellValues();
+        if (sheet.getSheetName() == "CustomTechniques") {
+            assessment.printCellJson();
+        }
         if (rowIndex != techniqueData.row) {
             assessingCell.setValue("");
         }
@@ -2339,7 +2349,7 @@ function GetTechniqueForAssessment(sheet, row, assessColumn) {
 
 function GetTechniqueFromSheetRow(sheet, row, assessColumn) {
     let techLine = sheet.getRange(row, 1, 1, assessColumn - 1).getValues()[0];
-    if (sheet.getSheetName() == "Techniques") {
+    if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
         return new TechniqueData(techLine);
     }
     else if (sheet.getSheetName() == "Items") {
@@ -2525,6 +2535,12 @@ class TechniqueAssessment {
         range.setNote(this.printNotes());
         range = this.sheet.getRange(this.row, this.assessColumn, 1, 2);
         range.setValues([[this.assessment, `${this.pointVarianceRange()}\n${this.points}`]]);
+    }
+    
+    printCellJson() {
+        Debug.Log("Printing JSON for technique");
+        let range = this.sheet.getRange(this.row, this.assessColumn + 4, 1, 1);
+        range.setValue(JSON.stringify(this.technique));
     }
 
     printNotes() {

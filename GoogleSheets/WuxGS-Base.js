@@ -1088,6 +1088,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents += repeatingBasicTechniquesSection("RepeatingBasicRecovery");
                     contents += repeatingBasicTechniquesSection("RepeatingBasicAttack");
                     contents += repeatingBasicTechniquesSection("RepeatingBasicSocial");
+                    contents += repeatingCustomTechniquesSection();
                     contents = WuxSheetMain.TabBlock(contents);
 
                     let sectionDef = WuxDef.Get(sectionDefName);
@@ -1114,10 +1115,25 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
+                repeatingCustomTechniquesSection = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingCustomTech");
+
+                    let contents = `${WuxSheetMain.Header(repeatingDef.getTitle())}
+                        <div>
+                            <div class="wuxRepeatingFlexSection">
+                                <fieldset class="${repeatingDef.getVariable()}">
+                                ${addRepeaterContentsStyles(true)}
+                                </fieldset>
+                            </div>
+                        ${WuxSheetMain.Row("&nbsp;")}
+                    </div>`;
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
                 repeatingTechniquesSection = function (header, repeaterFieldName) {
                     return `${WuxSheetMain.Header(header)}
                         <div>
-                        ${buildRepeater(repeaterFieldName, addRepeaterContentsStyles())}
+                        ${buildRepeater(repeaterFieldName, addRepeaterContentsStyles(false))}
                         ${WuxSheetMain.Row("&nbsp;")}
                     </div>`;
                 },
@@ -1127,13 +1143,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
                 },
                 
-                addRepeaterContentsStyles = function () {
+                addRepeaterContentsStyles = function (isCustom) {
                     let submenuFieldName = WuxDef.GetAttribute("Action_Actions");
-
-                    return buildListedTechniqueTemplate(submenuFieldName);
-                },
-
-                buildListedTechniqueTemplate = function (submenuFieldName) {
+                    
                     return `
                     <div class="wuxFeature wuxMinWidth220">
                         <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
@@ -1141,7 +1153,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             <input type="checkbox" name="${submenuFieldName}">
                             ${buildBaseTechniqueHeaderContents(`<span class="wuxSubMenuText">l&nbsp;</span>`)}
                             <input type="hidden" class="wuxSubMenu-flag" name="${submenuFieldName}" value="0">
-                            <div class="wuxSubMenuContent">\n${addSubmenuContentsStyles()}\n</div>
+                            <div class="wuxSubMenuContent">\n${isCustom ? addCustomSubmenuContentsStyles() : addSubmenuContentsStyles()}\n</div>
                         </div>
                         ${buildBaseTechniqueRequirements()}
                     </div>`;
@@ -1153,6 +1165,17 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                     return `${WuxSheetMain.SubMenuOptionRollButton(useTechniqueDef.getAttribute(), useTechniqueDef.getVariable(), useTechniqueDef.getTitle())}
                         ${WuxSheetMain.SubMenuOptionButton(inspectTechniqueDef.getAttribute(), `<span>${inspectTechniqueDef.getTitle()}</span>`)}
+                        ${WuxSheetMain.Header2("Full Technique Details")}
+                        ${buildSubmenuTechniqueTemplate()}
+                    `;
+                },
+
+                addCustomSubmenuContentsStyles = function () {
+                    let useTechniqueDef = WuxDef.Get("Action_Use");
+                    let setDataTechniqueDef = WuxDef.Get("Action_SetData");
+
+                    return `${WuxSheetMain.SubMenuOptionRollButton(useTechniqueDef.getAttribute(), useTechniqueDef.getVariable(), useTechniqueDef.getTitle())}
+                        ${WuxSheetMain.SubMenuOptionText(setDataTechniqueDef.getAttribute(), setDataTechniqueDef.getTitle())}
                         ${WuxSheetMain.Header2("Full Technique Details")}
                         ${buildSubmenuTechniqueTemplate()}
                     `;

@@ -391,6 +391,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         populateGearActions = function () {
             let actionsRepeatingWorker = new WorkerRepeatingSectionHandler("RepeatingGearTech");
             actionsRepeatingWorker.getIds(function (actionsRepeater) {
+                actionsRepeater.removeAllIds();
                 let attributeHandler = new WorkerAttributeHandler();
                 
                 let weaponSlotDef = WuxDef.Get("Gear_WeaponSlot");
@@ -430,6 +431,22 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 });
                 attributeHandler.run();
             });
+        },
+
+        setCustomTechnique = function (eventinfo) {
+            Debug.Log(`Setting custom technique for ${eventinfo.sourceAttribute} to ${eventinfo.newValue}`);
+            let attributeHandler = new WorkerAttributeHandler();
+            let actionRepeater = new WorkerRepeatingSectionHandler("RepeatingCustomTech");
+            
+            let techniqueAttributeHandler = 
+                new TechniqueDataAttributeHandler(attributeHandler, "Action", actionRepeater);
+
+            let selectedId = actionRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let technique = new TechniqueData(eventinfo.newValue);
+            Debug.Log(`Setting technique ${technique.name} with id ${selectedId}`);
+            techniqueAttributeHandler.setId(selectedId);
+            techniqueAttributeHandler.setTechniqueInfo(technique, true);
+            attributeHandler.run();
         }
     ;
 
@@ -443,6 +460,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         InspectTechniqueBasicSocial: inspectTechniqueBasicSocial,
         PopulateStyleActions: populateStyleActions,
         PopulateGearActions: populateGearActions,
-        RemoveStyleActions: removeStyleActions
+        RemoveStyleActions: removeStyleActions,
+        SetCustomTechnique: setCustomTechnique,
     };
 }());

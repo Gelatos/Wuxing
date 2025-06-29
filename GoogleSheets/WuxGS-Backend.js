@@ -430,6 +430,7 @@ var ActionBuilder = ActionBuilder || (function () {
         print = function () {
             let output = "";
             output += listenerInspectRepeatingStyles();
+            output += listenerSetDataRepeatingStyles();
             return output;
         },
         listenerInspectRepeatingStyles = function () {
@@ -441,6 +442,10 @@ var ActionBuilder = ActionBuilder || (function () {
                 `WuxWorkerActions.InspectTechniqueBasicAttack(eventinfo)`, true)}
                 ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicSocial")}:${WuxDef.GetVariable("Action_Inspect")}`],
                 `WuxWorkerActions.InspectTechniqueBasicSocial(eventinfo)`, true)}`;
+        },
+        listenerSetDataRepeatingStyles = function () {
+            return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingCustomTech")}:${WuxDef.GetVariable("Action_SetData")}`],
+                `WuxWorkerActions.SetCustomTechnique(eventinfo)`, true)}`;
         }
     return {
         Print: print
@@ -492,6 +497,7 @@ var PopupBuilder = PopupBuilder || (function () {
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingBasicRecovery")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingBasicAttack")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingBasicSocial")}:${WuxDef.GetVariable("Action_Actions")}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingCustomTech")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"), WuxDef._expand));
             groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"), WuxDef._expand));
             
