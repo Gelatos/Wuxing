@@ -92,6 +92,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
         let equipMenuText = getEquipMenuText(item);
         attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_ItemEquipMenu")), equipMenuText);
+        let purchaseMenuText = `${WuxDef.GetTitle("Gear_Purchase")} (${item.value})`;
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Purchase", WuxDef._tab)), purchaseMenuText);
         attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemName")), displayData.name);
         attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemGroup")), displayData.group);
         attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemStats")), displayData.stats);

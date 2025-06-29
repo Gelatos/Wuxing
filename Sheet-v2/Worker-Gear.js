@@ -16,12 +16,12 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
         setSelectIdFromEventinfo (eventinfo) {
             this.selectedId = this.styleRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
-            this.actionFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Gear_ItemActions"));
+            this.actionFieldName = this.styleRepeater.getFieldName(this.selectedId, getGearVariable("ItemAction"));
         }
         setSelectIdFromName (attrHandler, styleRepeater, name) {
             let equipWorker = this;
             styleRepeater.iterate(function (id) {
-                let styleName = styleRepeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemName"));
+                let styleName = styleRepeater.getFieldName(id, getGearVariable("ItemName"));
                 if (name == attrHandler.parseString(styleName)) {
                     equipWorker.selectedId = id;
                     return true;
@@ -36,7 +36,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
         setupForEquip (countFieldNames, slotNames, maxSlots) {
             // get the selected style data
-            this.styleFieldName = this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Gear_ItemName"));
+            this.styleFieldName = this.styleRepeater.getFieldName(this.selectedId, getGearVariable("ItemName"));
             this.attributeHandler.addMod(this.styleFieldName);
 
             countFieldNames.forEach(fieldName => {
@@ -83,7 +83,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         findMatchingEquippedSlot(attrHandler, repeater, slotContents) {
             let returnable = undefined;
             repeater.iterate(function (id) {
-                let slotFieldName = repeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemName"));
+                let slotFieldName = repeater.getFieldName(id, getGearVariable("ItemName"));
                 if (slotContents == attrHandler.parseString(slotFieldName)) {
                     returnable = id;
                     return returnable;
@@ -138,7 +138,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         equipItemWorker.styleRepeater.getIds(function (equipRepeater) {
 
             equipRepeater.iterate(function (id) {
-                equipItemWorker.attributeHandler.addMod(equipRepeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemName")), 0);
+                equipItemWorker.attributeHandler.addMod(equipRepeater.getFieldName(id, getGearVariable("ItemName")), 0);
             });
 
             equipItemWorker.attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -208,7 +208,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
         equipStyleWorker.styleRepeater.getIds(function (equipRepeater) {
             equipRepeater.iterate(function (id) {
-                equipStyleWorker.attributeHandler.addMod(equipRepeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemName")), 0);
+                equipStyleWorker.attributeHandler.addMod(equipRepeater.getFieldName(id, getGearVariable("ItemName")), 0);
             });
             equipStyleWorker.attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let equippedStyleName = attrHandler.parseString(equipSlotFieldName);
@@ -278,7 +278,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         
         let selectedElement = null;
         sectionRepeater.iterate(function (id) {
-            let itemName = attrHandler.parseString(sectionRepeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemName")));
+            let itemName = attrHandler.parseString(sectionRepeater.getFieldName(id, getGearVariable("ItemName")));
             let item = WuxItems.Get(itemName);
             if (item.group != "") {
                 let isOn = id == selectedId;
@@ -496,6 +496,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         }
         return "";
     };
+    const getGearVariable = function (attribute, suffix) {
+        let baseDefinition = WuxDef.Get("Gear");
+        return baseDefinition.getVariable(`-${WuxDef.GetVariable(attribute, suffix)}`);
+    };
     'use strict';
 
     const toggleEquipItem = function (eventinfo) {
@@ -509,6 +513,56 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
         equipWeapon = function (eventinfo) {
             equipItem(eventinfo, "WeaponSlots", "Gear_WeaponSlot", 1, true);
+        },
+        
+        purchaseGear = function (eventinfo, repeatingSectionName) {
+            let attributeHandler = new WorkerAttributeHandler();
+            let EquipmentRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
+            let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+
+            attributeHandler.addMod(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemName")));
+            let itemType = "";
+            let hasItemCount = false;
+            switch (repeatingSectionName) {
+                case "RepeatingEquipment":
+                    itemType = "Equipment";
+                    break;
+                case "RepeatingConsumables":
+                    itemType = "Consumable";
+                    hasItemCount = true;
+                    attributeHandler.addMod(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemCount")));
+                    break;
+                case "RepeatingGoods":
+                    itemType = "Goods";
+                    hasItemCount = true;
+                    attributeHandler.addMod(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemCount")));
+                    break;
+            }
+            
+            let jinVar = WuxDef.GetVariable("Currency_Jin");
+            attributeHandler.addMod(jinVar);
+            
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let itemName = attrHandler.parseString(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemName")));
+                let item = WuxItems.Get(itemName);
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+                attrHandler.addUpdate(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemAction")), "0");
+                
+                let cost = parseInt(item.value);
+                if (isNaN(cost)) {
+                    cost = 0;
+                }
+                let jin = attrHandler.parseInt(jinVar);
+                jin -= cost;
+                attrHandler.addUpdate(jinVar, jin.toString());
+                
+                if (hasItemCount) {
+                    let count = attrHandler.parseInt(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemCount")), 0);
+                    count++;
+                    attrHandler.addUpdate(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemCount")), count.toString());
+                }
+            });
+            attributeHandler.run();
         },
 
         deleteGear = function (eventinfo, repeatingSectionName) {
@@ -541,12 +595,12 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             EquipmentRepeater.getIds(function (equipRepeater) {
                 WuxWorkerInspectPopup.OpenItemInspection(function (attrHandler) {
                         equipRepeater.iterate(function (id) {
-                            attrHandler.addMod(equipRepeater.getFieldName(id, WuxDef.GetVariable("Gear_ItemName")));
+                            attrHandler.addMod(equipRepeater.getFieldName(id, getGearVariable("ItemName")));
                         });
                     },
                     function (attrHandler, itemPopupRepeater) {
                         attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-                        attrHandler.addUpdate(equipRepeater.getFieldName(selectedId, WuxDef.GetVariable("Gear_ItemActions")), "0");
+                        attrHandler.addUpdate(equipRepeater.getFieldName(selectedId, getGearVariable("ItemAction")), "0");
                         return populateInspectionElements(attrHandler, itemPopupRepeater, equipRepeater, selectedId, itemType);
                     }
                 );
@@ -575,6 +629,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
     return {
         ToggleEquipItem: toggleEquipItem,
         EquipWeapon: equipWeapon,
+        PurchaseGear: purchaseGear,
         DeleteGear: deleteGear,
         InspectGear: inspectGear,
         OpenEquipmentAdditionItemInspection: openEquipmentAdditionItemInspection,

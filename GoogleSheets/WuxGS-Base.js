@@ -803,10 +803,12 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 addSubmenuContents = function () {
+                    let purchaseeDef = WuxDef.Get("Gear_Purchase");
                     let deleteDef = WuxDef.Get("Gear_Delete");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
 
                     return `
+                        ${WuxSheetMain.SubMenuOptionButton(purchaseeDef.getAttribute(), WuxSheetMain.Span(purchaseeDef.getAttribute(WuxDef._tab), "Purchase"))}
                         ${WuxSheetMain.SubMenuOptionButton(deleteDef.getAttribute(), `<span>${deleteDef.getTitle()}</span>`)}
                         ${WuxSheetMain.SubMenuOptionButton(inspectDef.getAttribute(), `<span>${inspectDef.getTitle()}</span>`)}
                     `;
