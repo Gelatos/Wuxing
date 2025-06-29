@@ -3208,7 +3208,7 @@ class GearValueAssessment {
         this.componentCostCalc = "";
         this.getBaseMaterialValue();
         this.getComponentValues();
-        this.assessment = this.materialCost + this.componentCost;
+        this.assessment = this.smoothCost(this.materialCost + this.componentCost);
     }
 
     printCellValues() {
@@ -3243,9 +3243,12 @@ class GearValueAssessment {
             
             let component;
             if (componentType == "Goods") {
-                component = WuxGoods.Get(componentName)
+                component = WuxGoods.Get(componentName);
+            } else if (componentType == "GoodsCat") {
+                let filteredGoods = WuxGoods.Filter([new DatabaseFilterData("category", name)]);
+                component = WuxGoods.Get(filteredGoods[0]);
             } else if (componentType == "Item") {
-                component = WuxItems.Get(componentName)
+                component = WuxItems.Get(componentName);
             }
             
             if (component != undefined && component.group != "") {
@@ -3254,6 +3257,26 @@ class GearValueAssessment {
                 this.componentCost += val;
             }
         });
+    }
+
+    smoothCost(num) {
+        if (num < 20) {
+            return num; // Leave small values unchanged
+        } else if (num < 120) {
+            return Math.ceil(num / 5) * 5;
+        } else if (num < 300) {
+            return Math.ceil(num / 10) * 10;
+        } else if (num < 500) {
+            return Math.ceil(num / 20) * 20;
+        } else if (num < 1000) {
+            return Math.ceil(num / 25) * 25;
+        } else if (num < 2000) {
+            return Math.ceil(num / 50) * 50;
+        } else if (num < 5000) {
+            return Math.ceil(num / 100) * 100;
+        } else {
+            return Math.ceil(num / 250) * 250;
+        }
     }
 }
 

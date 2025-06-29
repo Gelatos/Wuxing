@@ -347,7 +347,8 @@ var GearBuilder = GearBuilder || (function () {
                     WuxDef.GetVariable("Page_AddFootGear"), WuxDef.GetVariable("Page_AddMiscGear")],
                 `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Equipment")`, true)}
                 ${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Page_AddRecoveryItem"), WuxDef.GetVariable("Page_AddBombItem")],
+                [WuxDef.GetVariable("Page_AddRecoveryItem"), WuxDef.GetVariable("Page_AddTonicItem"), 
+                    WuxDef.GetVariable("Page_AddBombItem"), WuxDef.GetVariable("Page_AddBeverageItem")],
                 `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Consumable")`, true)}
                 ${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Page_AddMaterial"), WuxDef.GetVariable("Page_AddCompound"),
@@ -474,6 +475,7 @@ var PopupBuilder = PopupBuilder || (function () {
                 groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvTech", i)}:${WuxDef.GetVariable("Action_Actions")}`]);
             }
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingGearTech")}:${WuxDef.GetVariable("Action_Actions")}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingBasicActions")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingBasicRecovery")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingBasicAttack")}:${WuxDef.GetVariable("Action_Actions")}`]);

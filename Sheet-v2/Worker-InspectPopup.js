@@ -70,20 +70,24 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
     const performAddSelectedInspectElementEquipment = function (attrHandler, item) {
         Debug.Log(`Adding Equipment ${item.name}`);
         let repeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
-        performAddSelectedInspectElementItem(attrHandler, repeater, item);
+        let newRowId = repeater.generateRowId();
+        performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
     };
     const performAddSelectedInspectElementConsumable = function (attrHandler, item) {
         Debug.Log(`Adding Consumable ${item.name}`);
         let repeater = new WorkerRepeatingSectionHandler("RepeatingConsumables");
-        performAddSelectedInspectElementItem(attrHandler, repeater, item);
+        let newRowId = repeater.generateRowId();
+        performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+        performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, item.technique);
+        
     };
     const performAddSelectedInspectElementGoods = function (attrHandler, item) {
         Debug.Log(`Adding Goods ${item.name}`);
         let repeater = new WorkerRepeatingSectionHandler("RepeatingGoods");
-        performAddSelectedInspectElementItem(attrHandler, repeater, item);
-    };
-    const performAddSelectedInspectElementItem = function (attrHandler, repeater, item) {
         let newRowId = repeater.generateRowId();
+        performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+    };
+    const performAddSelectedInspectElementItem = function (attrHandler, repeater, newRowId, item) {
         let displayData = new ItemDisplayData(item);
 
         let equipMenuText = getEquipMenuText(item);
@@ -99,6 +103,11 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         if (displayData.description != "") {
             attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemDescription")), displayData.description);
         }
+    };
+    const performAddSelectedInspectElementTechnique = function (attrHandler, repeater, newRowId, technique) {
+        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
+        techniqueAttributeHandler.setId(newRowId);
+        techniqueAttributeHandler.setTechniqueInfo(technique, true);
     };
     const getEquipMenuText = function (item) {
         switch (item.group) {

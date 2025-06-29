@@ -530,7 +530,7 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Item,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Item
 {
-    background-color: #ad8ac2;
+    background-color: #d3b4e8;
     border-top: 1px solid #000;
     border-bottom: 1px solid #000;
 }
@@ -747,7 +747,7 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoReq,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoReq
 {
-    background: #d34444;
+    background: #f37b7b;
 }
 
 .wuxFeatureHeaderInfoTrigger,

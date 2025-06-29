@@ -433,9 +433,21 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                     category: undefined,
                     type: "Consumable"
                 };
+            case WuxDef.GetVariable("Page_AddTonicItem"):
+                return {
+                    group: "Tonic",
+                    category: undefined,
+                    type: "Consumable"
+                };
             case WuxDef.GetVariable("Page_AddBombItem"):
                 return {
                     group: "Bomb",
+                    category: undefined,
+                    type: "Consumable"
+                };
+            case WuxDef.GetVariable("Page_AddBeverageItem"):
+                return {
+                    group: "Beverage",
                     category: undefined,
                     type: "Consumable"
                 };

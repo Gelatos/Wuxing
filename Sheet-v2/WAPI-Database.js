@@ -2494,6 +2494,15 @@ class ItemDisplayData {
                 case "Goods":
                     item = WuxGoods.Get(name);
                     break;
+                case "GoodsCat":
+                    output.push({
+                        quantity: quantity,
+                        type: "Goods Category",
+                        item: item,
+                        name: `${quantity} ${item.name}`,
+                        desc: item.description
+                    });
+                    break;
                 default:
                     item = WuxItems.Get(name);
                     break;
