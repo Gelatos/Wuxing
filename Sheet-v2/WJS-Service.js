@@ -143,7 +143,7 @@ class WuxWorkerBuild {
 	}
 
 	setPointsMax(attributeHandler) {
-		let max = this.definition.formula.getValue(attributeHandler, "max");
+		let max = this.definition.formula.getValue(attributeHandler);
 		attributeHandler.addUpdate(this.attrMax, max);
 	}
 
@@ -294,7 +294,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(crDefinition.getVariable(WuxDef._max));
 		let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
-		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Style", "Attribute"]);
+		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Style", "Attribute", "Perk"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {

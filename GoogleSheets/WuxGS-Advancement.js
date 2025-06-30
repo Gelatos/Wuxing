@@ -238,7 +238,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                         },
 
                         addPerkData = function () {
-                            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("techSet", "Perk"));
+                            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", "Perk"));
                             
                             let perkTables = ["", ""];
                             for (let i = 0; i < perkTechniques.length; i++) {
@@ -687,7 +687,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         addPerkData = function () {
-                            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("techSet", "Perk"));
+                            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", "Perk"));
 
                             let perkTables = ["", ""];
                             for (let i = 0; i < perkTechniques.length; i++) {

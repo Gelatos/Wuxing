@@ -312,7 +312,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         },
 
         populatePerkTechniques = function (attributeHandler) {
-            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("techSet", "Perk"));
+            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", "Perk"));
             let techniqueDef = WuxDef.Get("Technique");
             for (let i = 0; i < perkTechniques.length; i++) {
                 let perkDef = perkTechniques[i].createDefinition(techniqueDef);

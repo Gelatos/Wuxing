@@ -174,6 +174,7 @@ class Database extends Dictionary {
                 keys += `${key}, `;
             }
             Debug.Log (`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
+            return [];
         }
         if (!this.sortingGroups[property].hasOwnProperty(propertyValue)) {
             let keys = "";
@@ -181,6 +182,7 @@ class Database extends Dictionary {
                 keys += `${key}, `;
             }
             Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
+            return [];
         }
         return this.sortingGroups[property][propertyValue];
     }
@@ -213,7 +215,7 @@ class Database extends Dictionary {
 class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
-        let filters = ["techSet", "style", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
+        let filters = ["style", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
         let dataCreation = function (data) {
             return new TechniqueData(data);
         };
@@ -296,7 +298,7 @@ class ExtendedTechniqueStyleDatabase extends Database {
     
     setMaxTier(techniqueStyle) {
         let tier = 0;
-        let filterData = this.techDb.filter(new DatabaseFilterData("techSet", techniqueStyle.name));
+        let filterData = this.techDb.filter(new DatabaseFilterData("style", techniqueStyle.name));
         for (let i = 0; i < filterData.length; i++) {
             if (filterData[i].tier > tier) {
                 tier = filterData[i].tier;

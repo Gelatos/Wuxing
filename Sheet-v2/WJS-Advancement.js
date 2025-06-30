@@ -268,6 +268,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 			let attributeHandler = new WorkerAttributeHandler();
 			let worker = new WuxTrainingWorkerBuild();
 			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			worker.updateTrainingPoints(attributeHandler);
 			attributeHandler.run();
 		}
 
@@ -365,6 +366,10 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			advWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 			let trnWorker = new WuxTrainingWorkerBuild();
 			trnWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			// let perkDef = WuxDef.Get("Perk");
+			// attributeHandler.addGetAttrCallback(function (attrHandler) {
+			// 	attrHandler.addUpdate(perkDef.getVariable(WuxDef._max), perkDef.formula.getValue(attrHandler));
+			// });
 			attributeHandler.run();
 		},
 		setAdvancementPointsUpdate = function (eventinfo) {

@@ -188,7 +188,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
 
         listenerUpdatePerkPoints = function () {
             let output = "";
-            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("techSet", "Perk"));
+            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", "Perk"));
             let techniqueDefinition = WuxDef.Get("Technique");
 
             for (let i = 0; i < perkTechniques.length; i++) {

@@ -486,7 +486,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             styleWorker.iterateBuildStats(function (styleVariableData) {
                 let style = WuxStyles.GetByVariableName(styleVariableData.name);
                 Debug.Log(`Adding Style ${styleVariableData.name} which is part of group ${style.group}`);
-                if (style.group != "") {
+                if (style.group != "" && styleVariableData.value > 0) {
                     let newRowId = advancedRepeater.generateRowId();
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Name")), style.name);
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), styleVariableData.value);
