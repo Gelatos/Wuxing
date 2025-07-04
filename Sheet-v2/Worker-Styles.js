@@ -260,7 +260,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 }
                 equipStyleWorker.equipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
             });
-            equipStyleWorker.attributeHandler.run();
+            let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
+            loader.run();
         });
     };
     const unequipJobStyle = function (eventinfo) {
@@ -287,7 +288,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 // attrHandler.addUpdate(equipStyleWorker.styleRepeater.getFieldName(equipStyleWorker.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
             }
         });
-        equipStyleWorker.attributeHandler.run();
+        let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
+        loader.run();
     };
 
     const equipStyle = function (eventinfo) {
@@ -350,7 +352,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 }
                 equipStyleWorker.equipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
             });
-            equipStyleWorker.attributeHandler.run();
+            let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
+            loader.run();
         });
     };
     const unequipStyle = function (eventinfo) {
@@ -392,7 +395,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 }
             }
         });
-        equipStyleWorker.attributeHandler.run();
+        let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
+        loader.run();
     };
     const seeFormeTechniques = function (repeater, selectedId, actionFieldName, seeTechniqueFieldName) {
         Debug.Log("See Forme Techniques");
@@ -459,7 +463,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 equipStyleWorker.closeMenu(attrHandler);
                 equipStyleWorker.unequipSlot(attrHandler, actionFieldName, slotIndex, equipSlotFieldName);
             });
-            equipStyleWorker.attributeHandler.run();
+            let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
+            loader.run();
         });
     }
     'use strict';

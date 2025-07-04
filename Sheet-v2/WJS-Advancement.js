@@ -28,7 +28,9 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			WuxWorkerActions.PopulateAllBasicActions(attributeHandler);
 
 			leavePageVariables(attributeHandler);
-			attributeHandler.run();
+			
+			let loader = new LoadingScreenHandler(attributeHandler);
+			loader.run();
 		},
 		leavePageVariables = function (attributeHandler) {
 			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
@@ -225,7 +227,9 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 			WuxWorkerStyles.UpdateStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
-			attributeHandler.run();
+
+			let loader = new LoadingScreenHandler(attributeHandler);
+			loader.run();
 		},
 		exitBuild = function () {
 			Debug.Log("Exit Training Build");
@@ -242,7 +246,9 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 			WuxWorkerStyles.UpdateStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
-			attributeHandler.run();
+
+			let loader = new LoadingScreenHandler(attributeHandler);
+			loader.run();
 		},
 		leavePageVariables = function (attributeHandler) {
 			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
@@ -324,7 +330,9 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			updateStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
-			attributeHandler.run();
+
+			let loader = new LoadingScreenHandler(attributeHandler);
+			loader.run();
 		},
 		exitBuild = function () {
 			Debug.Log("Exit Advancement Build");
@@ -344,7 +352,9 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			updateStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
-			attributeHandler.run();
+
+			let loader = new LoadingScreenHandler(attributeHandler);
+			loader.run();
 		},
 		leavePageVariables = function (attributeHandler) {
 			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");

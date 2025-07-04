@@ -6083,6 +6083,17 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     opacity: 0;
 }
 
+.wuxLoading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100000;
+    
+    font-size: 50px;
+    color: white;
+}
+
 .wuxPopup {
     position: absolute;
     top: 50%;

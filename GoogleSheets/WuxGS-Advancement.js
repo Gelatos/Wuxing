@@ -36,6 +36,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayGearSheet.Print(sheetsDb);
             output += DisplayActionSheet.Print(sheetsDb);
             output += DisplayPopups.Print();
+            output += DisplayLoadingScreen.Print();
             return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n</div>`;
         },
 

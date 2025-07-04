@@ -21,20 +21,41 @@ class eventinfo {
 	}
 }
 
+class LoadingScreenHandler {
+	constructor(attributeHandler) {
+		this.attributeHandler = attributeHandler;
+	}
+
+	async run() {
+		let loadingScreenAttr = WuxDef.GetVariable("Loading");
+		let update = {};
+		update[loadingScreenAttr] = "1";
+		await setAttrsAsync(update, {silent: true});
+		await this.sleep(1000);
+
+		await this.attributeHandler.run();
+		
+		update[loadingScreenAttr] = "0";
+		await setAttrsAsync(update, {silent: true});
+	}
+
+	async sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+}
+
 class WorkerAttributeHandler extends AttributeHandler {
-	run() {
+	async run() {
 		let attributeHandler = this;
-		getAttrs(attributeHandler.mods, function (v) {
-			attributeHandler.current = v;
-			attributeHandler.getCallbacks.forEach((callback) => {
-				callback(attributeHandler);
-			});
-			setAttrs(attributeHandler.update, {silent: true}, function () {
-				attributeHandler.finishCallbacks.forEach((callback) => {
-					callback(attributeHandler);
-				});
-			});
-		})
+		attributeHandler.current = await getAttrsAsync(attributeHandler.mods);
+		
+		attributeHandler.getCallbacks.forEach((callback) => {
+			callback(attributeHandler);
+		});
+		await setAttrsAsync(attributeHandler.update, {silent: true});
+		attributeHandler.finishCallbacks.forEach((callback) => {
+			callback(attributeHandler);
+		});
 	}
 }
 

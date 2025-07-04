@@ -158,7 +158,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                     setWeaponDamageValues(attrHandler, attrHandler.parseString(emptyEquipSlot.slotFieldName));
                 }
             });
-            equipItemWorker.attributeHandler.run();
+            let loader = new LoadingScreenHandler(equipItemWorker.attributeHandler);
+            loader.run();
         });
     };
     
@@ -198,7 +199,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 }
             }
         });
-        equipStyleWorker.attributeHandler.run();
+        let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
+        loader.run();
     };
     const unequipSetItem = function (eventinfo, slotIndex, equipSlotFieldName) {
         let actionFieldName = "RepeatingGearTech";
@@ -217,7 +219,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 equipStyleWorker.closeMenu(attrHandler);
                 equipStyleWorker.unequipSlot(attrHandler, actionFieldName, slotIndex, equipSlotFieldName);
             });
-            equipStyleWorker.attributeHandler.run();
+            let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
+            loader.run();
         });
     };;
 

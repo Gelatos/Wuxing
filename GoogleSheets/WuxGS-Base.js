@@ -1649,3 +1649,27 @@ var DisplayPopups = DisplayPopups || (function () {
         Print: print
     };
 }());
+
+var DisplayLoadingScreen = DisplayLoadingScreen || (function () {
+    'use strict';
+
+    var
+        print = function () {
+            return printLoadingScreen();
+        },
+
+        printLoadingScreen = function () {
+            let popupActiveAttr = WuxDef.GetAttribute("Loading");
+            let contents = `<div class="wuxPopupOverlay">
+                <div class="wuxLoading">
+                    Loading&nbsp;<img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif" height="100px" width="100px">
+                </div>
+            </div>`;
+
+            return `${WuxSheetMain.HiddenField(popupActiveAttr, contents)}`;
+        }
+
+    return {
+        Print: print
+    };
+}());
