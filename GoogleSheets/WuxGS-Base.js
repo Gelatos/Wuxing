@@ -107,8 +107,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                         buildCharacterSection = function () {
                             let contents = "";
-                            contents += basics();
-                            contents += influences();
+                            contents += WuxSheetMain.MultiRowGroup([basics(), influences()], WuxSheetMain.Table.FlexTable, 2);
                             contents += WuxSheetMain.MultiRowGroup([advancement(), training()], WuxSheetMain.Table.FlexTable, 2);
 
                             contents = WuxSheetMain.TabBlock(contents);
@@ -143,39 +142,42 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                         basics = function () {
                             let contents = "";
                             contents += WuxDefinition.BuildText(WuxDef.Get("FullName"), WuxSheetMain.Span(WuxDef.GetAttribute("FullName")));
-                            return contents;
+                            return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
 
                         influences = function () {
                             let contents = "";
                             let influenceDef = WuxDef.Get("Soc_Influence");
-                            let influenceTypeDef = WuxDef.Get("Soc_InfluenceType");
-                            let severityDef = WuxDef.Get("Soc_Severity");
+                            let usingInfluences = WuxDef.Get("Title_UsingInfluences");
 
                             let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
-                            influenceInfo += WuxDefinition.TooltipDescription(severityDef);
-                            influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_LowSeverity"));
-                            influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_ModerateSeverity"));
-                            influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_HighSeverity"));
+                            influenceInfo += WuxDefinition.TooltipDescription(usingInfluences);
                             influenceInfo = WuxSheetMain.Info.Contents(influenceDef.getAttribute(WuxDef._info), influenceInfo);
 
                             contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(influenceDef.getAttribute(WuxDef._info))}${influenceDef.title}`)}
 							${influenceInfo}`;
 
                             let influenceContents = WuxSheetMain.MultiRow(
-                                WuxSheetMain.Select(influenceTypeDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "InfluenceType")]), false, "wuxInfluenceType") +
-                                WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]), false, "wuxInfluenceType") +
-                                WuxSheetMain.CustomInput("text", influenceDef.getAttribute(), "wuxInput wuxInfluenceDescription", ` placeholder="Influence Description"`)
+                                WuxSheetMain.Select(
+                                    WuxDef.GetAttribute("Soc_Severity"),
+                                    WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]),
+                                    false,
+                                    "wuxInfluenceType") +
+                                WuxSheetMain.CustomInput(
+                                    "text",
+                                    influenceDef.getAttribute(),
+                                    "wuxInput wuxInfluenceDescription",
+                                    ` placeholder="Influence"`)
                             );
-                            let influenceHeaders = WuxSheetMain.Header2(`<div class="wuxInfluenceType">Type</div><div class="wuxInfluenceType">Severity</div><div class="wuxInfluenceType">Description</div>`);
+                            influenceContents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Soc_InfluenceDesc"),
+                                "wuxInput wuxHeight30", WuxDef.GetTitle("Soc_InfluenceDesc"));
 
                             contents += `<div>
-								${influenceHeaders}
 								<fieldset class="${WuxDef.GetVariable("RepeatingInfluences")}">
 									${influenceContents}
 								</fieldset>
 							</div>`;
-                            return contents;
+                            return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
 
                         advancement = function () {
@@ -368,11 +370,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents = WuxSheetMain.Table.FlexTableGroup(contents);
 
                             let backgroundContents = "";
-                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("Background"), WuxDef.GetAttribute("Background"),
+                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
                                 "wuxInput wuxHeight150");
                             backgroundContents = WuxSheetMain.Table.FlexTableGroup(backgroundContents)
 
-                            return `${WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"))}
+                            return `${WuxDefinition.InfoHeader(WuxDef.Get("Title_Background"))}
                             ${WuxSheetMain.MultiRowGroup([contents, backgroundContents], WuxSheetMain.Table.FlexTable, 2)}`;
                         }
 

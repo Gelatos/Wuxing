@@ -47,11 +47,20 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attrHandler.addUpdate("character_name", eventinfo.newValue);
                 attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), eventinfo.newValue);
                 attrHandler.addUpdate(WuxDef.GetVariable("FullName"), eventinfo.newValue);
                 attrHandler.addUpdate(WuxDef.GetVariable("DisplayName"), eventinfo.newValue);
                 attrHandler.addUpdate(WuxDef.GetVariable("IntroName"), eventinfo.newValue);
                 combatDetailsHandler.onUpdateDisplayName(attrHandler, eventinfo.newValue);
+            });
+            attributeHandler.run();
+        },
+        updateSheetName = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attrHandler.addUpdate("character_name", eventinfo.newValue);
             });
             attributeHandler.run();
         },
@@ -115,6 +124,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         UpdateStats: updateStats,
         UpdateDisplayName: updateDisplayName,
         UpdateCharacterSheetName: updateCharacterSheetName,
+        UpdateSheetName: updateSheetName,
         UpdateStatus: updateStatus,
         UpdateCR: updateCR,
         OpenSubMenu: openSubMenu,
