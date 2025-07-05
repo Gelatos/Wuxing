@@ -235,6 +235,7 @@ var OverviewBuilder = OverviewBuilder || (function () {
         print = function () {
             let output = "";
             output += listenerUpdateDisplayName();
+            output += listenerUpdateCharacterSheetName();
             output += listenerUpdateStatus();
             output += listenerUpdateCR();
             return output;
@@ -242,6 +243,12 @@ var OverviewBuilder = OverviewBuilder || (function () {
         listenerUpdateDisplayName = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("DisplayName")}`];
             let output = `WuxWorkerGeneral.UpdateDisplayName(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateCharacterSheetName = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("CharSheetName")}`];
+            let output = `WuxWorkerGeneral.UpdateCharacterSheetName(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },

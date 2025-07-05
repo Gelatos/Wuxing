@@ -268,7 +268,7 @@ input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-P
 {
     display: inline-block;
     margin-left: 5px;
-    width: calc(95% - 205px);
+    width: calc(95% - 101px);
 }
 
 /*========================================

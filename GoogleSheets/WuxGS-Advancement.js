@@ -102,12 +102,14 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
             var
                 print = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Advancement"))
-                        + buildTechPointsSection(WuxDef.GetAttribute("Training")));
+                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Advancement"), "Adv. Pts")
+                        + buildTechPointsSection(WuxDef.GetAttribute("Training"), "Trn. Pts")
+                        + buildTechPointsSection(WuxDef.GetAttribute("Perk"), "Perk Pts")
+                    );
                 },
 
-                buildTechPointsSection = function (fieldName) {
-                    return WuxSheetSidebar.BuildPointsSection(fieldName);
+                buildTechPointsSection = function (fieldName, headerText) {
+                    return WuxSheetSidebar.BuildPointsSection(fieldName, headerText);
                 }
 
             return {
@@ -139,10 +141,10 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                     var
                         build = function () {
                             let contents = "";
-                            contents += buildOrigin();
-                            contents += influences();
+                            contents += WuxSheetMain.MultiRowGroup([buildOrigin(), influences()], WuxSheetMain.Table.FlexTable, 2);
                             contents += WuxSheetMain.MultiRowGroup([buildAdvancement(), buildTraining()], WuxSheetMain.Table.FlexTable, 2);
                             contents += buildPerks();
+                            contents += buildBackground();
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Origin");
@@ -151,54 +153,45 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
                         buildOrigin = function () {
                             let contents = "";
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName"));
+                            contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"));
+                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("CharSheetName"), WuxDef.GetAttribute("CharSheetName"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), WuxDef.GetAttribute("DisplayName"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("IntroName"), WuxDef.GetAttribute("IntroName"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title"), WuxDef.GetAttribute("Title"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
-                            contents = WuxSheetMain.Table.FlexTableGroup(contents);
-
-                            let backgroundContents = "";
-                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("Background"), WuxDef.GetAttribute("Background"),
-                                "wuxInput wuxHeight150");
-                            backgroundContents = WuxSheetMain.Table.FlexTableGroup(backgroundContents)
-
-                            return `${WuxDefinition.InfoHeader(WuxDef.Get("Title_Origin"))}
-                            ${WuxSheetMain.MultiRowGroup([contents, backgroundContents], WuxSheetMain.Table.FlexTable, 2)}`;
+                            return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
 
                         influences = function () {
                             let contents = "";
                             let influenceDef = WuxDef.Get("Soc_Influence");
-                            let influenceTypeDef = WuxDef.Get("Soc_InfluenceType");
-                            let severityDef = WuxDef.Get("Soc_Severity");
+                            let usingInfluences = WuxDef.Get("Title_UsingInfluences");
 
                             let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
-                            influenceInfo += WuxDefinition.TooltipDescription(severityDef);
-                            influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_LowSeverity"));
-                            influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_ModerateSeverity"));
-                            influenceInfo += WuxDefinition.TooltipDescription(WuxDef.Get("Svr_HighSeverity"));
+                            influenceInfo += WuxDefinition.TooltipDescription(usingInfluences);
                             influenceInfo = WuxSheetMain.Info.Contents(influenceDef.getAttribute(WuxDef._info), influenceInfo);
 
                             contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(influenceDef.getAttribute(WuxDef._info))}${influenceDef.title}`)}
 							${influenceInfo}`;
 
                             let influenceContents = WuxSheetMain.MultiRow(
-                                WuxSheetMain.Select(influenceTypeDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "InfluenceType")]), false, "wuxInfluenceType") +
-                                WuxSheetMain.Select(severityDef.getAttribute(), WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]), false, "wuxInfluenceType") +
-                                WuxSheetMain.CustomInput("text", influenceDef.getAttribute(), "wuxInput wuxInfluenceDescription", ` placeholder="Influence Description"`)
+                                WuxSheetMain.Select(
+                                    WuxDef.GetAttribute("Soc_Severity"), 
+                                    WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]), 
+                                    false, 
+                                    "wuxInfluenceType") + 
+                                WuxSheetMain.CustomInput(
+                                    "text", 
+                                    influenceDef.getAttribute(), 
+                                    "wuxInput wuxInfluenceDescription", 
+                                    ` placeholder="Influence"`)
                             );
-                            let influenceHeaders = WuxSheetMain.Header2(`<div class="wuxInfluenceType">Type</div><div class="wuxInfluenceType">Severity</div><div class="wuxInfluenceType">Description</div>`);
-
+                            influenceContents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Soc_InfluenceDesc"), 
+                                "wuxInput wuxHeight30", WuxDef.GetTitle("Soc_InfluenceDesc"));
+                            
                             contents += `<div>
-								${influenceHeaders}
 								<fieldset class="${WuxDef.GetVariable("RepeatingInfluences")}">
 									${influenceContents}
 								</fieldset>
 							</div>`;
-                            return contents;
+                            return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
 
                         buildAdvancement = function () {
@@ -277,6 +270,24 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             }
 
                             return WuxSheetMain.MultiRow(headerContents) + WuxSheetMain.MultiRow(descContents);
+                        },
+                        
+                        buildBackground = function () {
+                            let contents = "";
+                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), WuxDef.GetAttribute("DisplayName"));
+                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("IntroName"), WuxDef.GetAttribute("IntroName"));
+                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title"), WuxDef.GetAttribute("Title"));
+                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
+                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
+                            contents = WuxSheetMain.Table.FlexTableGroup(contents);
+
+                            let backgroundContents = "";
+                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
+                                "wuxInput wuxHeight150");
+                            backgroundContents = WuxSheetMain.Table.FlexTableGroup(backgroundContents)
+
+                            return `${WuxDefinition.InfoHeader(WuxDef.Get("Title_Background"))}
+                            ${WuxSheetMain.MultiRowGroup([contents, backgroundContents], WuxSheetMain.Table.FlexTable, 2)}`;
                         }
 
                     return {

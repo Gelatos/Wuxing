@@ -93,6 +93,11 @@
     max-width: 220px;
 }
 
+.wuxHeight30
+{
+    max-height: 30px;
+}
+
 .wuxHeight60
 {
     height: 60px;
