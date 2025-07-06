@@ -47,8 +47,10 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                attrHandler.addUpdate("character_name", eventinfo.newValue);
-                attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), eventinfo.newValue);
+                let spacesLessName = eventinfo.newValue.replace(/\s+/g, '');
+                attrHandler.addUpdate("character_name", spacesLessName);
+                attrHandler.addUpdate(WuxDef.GetVariable("CharSheetName"), spacesLessName);
+                attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), spacesLessName);
                 attrHandler.addUpdate(WuxDef.GetVariable("FullName"), eventinfo.newValue);
                 attrHandler.addUpdate(WuxDef.GetVariable("DisplayName"), eventinfo.newValue);
                 attrHandler.addUpdate(WuxDef.GetVariable("IntroName"), eventinfo.newValue);
@@ -60,7 +62,9 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let attributeHandler = new WorkerAttributeHandler();
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                attrHandler.addUpdate("character_name", eventinfo.newValue);
+                let spacesLessName = eventinfo.newValue.replace(/\s+/g, '');
+                attrHandler.addUpdate("character_name", spacesLessName);
+                attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), spacesLessName);
             });
             attributeHandler.run();
         },

@@ -148,7 +148,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                         },
 
                         buildOrigin = function () {
-                            let contents = WuxSheetMain.MultiRowGroup([buildName(), influences()], WuxSheetMain.Table.FlexTable, 2);
+                            let contents = WuxSheetMain.MultiRowGroup([buildBasics(), influences()], WuxSheetMain.Table.FlexTable, 2);
                             contents += WuxSheetMain.MultiRowGroup([buildAdvancement(), buildTraining()], WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
@@ -156,11 +156,13 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
-                        buildName = function () {
+                        buildBasics = function () {
                             let contents = "";
-                            contents += WuxSheetMain.Header("Name");
+                            contents += WuxSheetMain.Header("Basics");
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("CharSheetName"), WuxDef.GetAttribute("CharSheetName"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Ancestry"), WuxDef.GetAttribute("Ancestry"),
+                                WuxDef.Filter([new DatabaseFilterData("group", "AncestryType")]));
                             return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
 
@@ -215,9 +217,9 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                         buildTraining = function () {
                             let contents = "";
                             contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginTraining"));
+                            contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusTraining"), WuxDef.GetAttribute("BonusTraining"));
                             contents += WuxDefinition.BuildText(WuxDef.Get("Training"),
                                 `${WuxSheetMain.Span(WuxDef.GetAttribute("Training"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Training", WuxDef._max))}`);
-                            contents += WuxDefinition.BuildNumberInput(WuxDef.Get("BonusTraining"), WuxDef.GetAttribute("BonusTraining"));
 
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 training point`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingTechniques"), WuxDef.GetAttribute("TrainingTechniques"), `cost: 1 training point`);
@@ -269,7 +271,12 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                                     <span class="wuxSubheader">[Cost ${technique.resourceCost} Perk Point]</span>`
                             )}
                             </div>`;
-                            let descContents = `<div class="wuxDescription wuxMarginLeft50">${technique.flavorText}</div>`;
+
+                            let descContents = "";
+                            if (technique.requirement) {
+                                descContents += `<div class="wuxDescription wuxMarginLeft50"><em>${technique.requirement}</em></div>`;
+                            }
+                            descContents += `<div class="wuxDescription wuxMarginLeft50">${technique.flavorText}</div>`;
 
                             if (technique.name == "Affinity") {
                                 descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(WuxDef._rank),
@@ -615,7 +622,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
             var
                 printAdvancement = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Advancement")));
+                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Advancement"), "Adv. Pts")
+                        + buildTechPointsSection(WuxDef.GetAttribute("Perk"), "Perk Pts")
+                    );
                 },
 
                 printJobs = function () {
@@ -630,8 +639,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                     return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Attribute")));
                 },
 
-                buildTechPointsSection = function (fieldName) {
-                    return WuxSheetSidebar.BuildPointsSection(fieldName);
+                buildTechPointsSection = function (fieldName, headerText) {
+                    return WuxSheetSidebar.BuildPointsSection(fieldName, headerText);
                 }
 
             return {
