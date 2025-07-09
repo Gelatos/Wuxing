@@ -2284,7 +2284,7 @@ class TechniqueEffectDisplayData {
             case "Remove All":
                 return `${target} lose${plural} all conditions of your choice`;
             case "Remove Will":
-                return `${target} lose${plural} all emotions of your choice`;
+                return `${target} lose${plural} all emotions of their choice`;
             case "Self":
                 return `${target} gain${plural} the ${state.title} ${state.group} targeted towards the caster`;
             case "Choose":
