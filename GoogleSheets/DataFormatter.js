@@ -2612,7 +2612,7 @@ class TechniqueAssessment {
         }
 
         this.averagePoints = this.getAveragePoint(this.getEnergy(), this.technique);
-        this.averagePoints = this.addPatiencePointMod(this.averagePoints);
+        this.averagePoints = this.addImpatiencePointMod(this.averagePoints);
 
         if (this.points == 0) {
             this.setAssessment();
@@ -2695,7 +2695,7 @@ class TechniqueAssessment {
         return points;
     }
 
-    addPatiencePointMod(points) {
+    addImpatiencePointMod(points) {
         return Math.floor(points * (1 + (this.patience * 0.1)));
     }
 
@@ -2739,8 +2739,8 @@ class TechniqueAssessment {
             case "Vitality":
                 this.getVitalityAssessment(effect, attributeHandler);
                 break;
-            case "Patience":
-                this.getPatienceAssessment(effect, attributeHandler);
+            case "Impatience":
+                this.getImpatienceAssessment(effect, attributeHandler);
                 break;
             case "Favor":
                 this.getFavorAssessment(effect, attributeHandler);
@@ -2871,12 +2871,12 @@ class TechniqueAssessment {
         this.addTargetedPointsRubric(effect, output.value);
     }
 
-    getPatienceAssessment(effect, attributeHandler) {
+    getImpatienceAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
         switch (effect.subType) {
             case "Heal":
                 output.value *= 10;
-                this.addPointsRubric(output.value, `${output.value}(Heal Patience)`);
+                this.addPointsRubric(output.value, `${output.value}(Heal Impatience)`);
                 break;
             default:
                 this.patience += output.value;

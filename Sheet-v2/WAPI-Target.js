@@ -241,8 +241,8 @@ class TokenTargetData extends TargetData {
         });
         attributeHandler.run();
     }
-    setPatience(attributeHandler, value) {
-        let patienceVar = WuxDef.GetVariable("Soc_Patience");
+    setImpatience(attributeHandler, value) {
+        let patienceVar = WuxDef.GetVariable("Soc_Impatience");
         attributeHandler.addUpdate(patienceVar);
         attributeHandler.addUpdate(patienceVar, value, false);
         attributeHandler.addUpdate(patienceVar, value, true);
@@ -250,9 +250,9 @@ class TokenTargetData extends TargetData {
         this.token.set(`bar1_value`, value);
         this.token.set(`bar1_max`, value);
     }
-    addPatience(attributeHandler, value) {
+    addImpatience(attributeHandler, value) {
         let tokenTargetData = this;
-        this.modifyResourceAttribute(attributeHandler, "Soc_Patience", value, this.addModifierToAttribute, function (results, attrHandler, attributeVar) {
+        this.modifyResourceAttribute(attributeHandler, "Soc_Impatience", value, this.addModifierToAttribute, function (results, attrHandler, attributeVar) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.setBarValue(1, results.newValue);
             return results;
@@ -375,7 +375,7 @@ class TokenTargetData extends TargetData {
     }
     resetSocialTracks(attributeHandler, patienceVal) {
         let favorVar = WuxDef.GetVariable("Soc_Favor");
-        let patienceVar = WuxDef.GetVariable("Soc_Patience");
+        let patienceVar = WuxDef.GetVariable("Soc_Impatience");
         let willpowerVar = WuxDef.GetVariable("WILL");
         let enVar = WuxDef.GetVariable("EN");
         attributeHandler.addAttribute(favorVar);
@@ -553,7 +553,7 @@ var TargetReference = TargetReference || (function () {
             let contents = content.split(",");
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                tokenTargetData.setPatience(attributeHandler, contents[0]);
+                tokenTargetData.setImpatience(attributeHandler, contents[0]);
                 tokenTargetData.setFavor(attributeHandler, contents[1]);
                 attributeHandler.run();
             });
@@ -905,7 +905,7 @@ var TokenReference = TokenReference || (function () {
             });
         },
         setTokenForSocialBattle = function (tokenTargetData, attributeHandler) {
-            let patienceVar = WuxDef.GetVariable("Soc_Patience");
+            let patienceVar = WuxDef.GetVariable("Soc_Impatience");
             let willpowerVar = WuxDef.GetVariable("WILL");
             let favorVar = WuxDef.GetVariable("Soc_Favor");
             let enVar = WuxDef.GetVariable("EN");

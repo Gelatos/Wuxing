@@ -2126,8 +2126,8 @@ class TechniqueEffectDisplayData {
             case "Vitality":
                 output += this.formatVitalityEffect(effect);
                 break;
-            case "Patience":
-                output += this.formatPatienceMeterEffect(effect);
+            case "Impatience":
+                output += this.formatImpatienceMeterEffect(effect);
                 break;
             case "Favor":
                 output += this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Favor"));
@@ -2251,8 +2251,8 @@ class TechniqueEffectDisplayData {
         }
     }
 
-    formatPatienceMeterEffect(effect) {
-        let patience = WuxDef.GetTitle("Soc_Patience");
+    formatImpatienceMeterEffect(effect) {
+        let patience = WuxDef.GetTitle("Soc_Impatience");
         switch (effect.subType) {
             case "Heal":
                 return `Increase target's ${patience} by ${this.formatCalcBonus(effect)}`;

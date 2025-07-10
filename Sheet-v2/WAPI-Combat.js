@@ -152,7 +152,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
                         tokenTargetData.setDash(attributeHandler);
                         break;
                     case "Social":
-                        tokenTargetData.addPatience(attributeHandler, -1);
+                        tokenTargetData.addImpatience(attributeHandler, -1);
                         tokenTargetData.setTurnIcon(true);
                         break;
                 }
