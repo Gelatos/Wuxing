@@ -628,7 +628,7 @@ class TechniqueData extends WuxDatabaseData {
             case "Move":
                 effect.setName(`T${this.effects.keys.length}`);
                 this.effects.add(effect.name, effect);
-                let moveTypes = ["Pushed", "Pulled", "ForceMove", "Flight", "Float", "FreeMove"];
+                let moveTypes = ["Pushed", "Pulled", "ForceMove", "Fly", "Float", "FreeMove", "Teleport"];
                 if (!moveTypes.some(moveType => effect.subType.includes(moveType))) {
                     this.addDefinition(effect.subType);
                 }

@@ -1090,6 +1090,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents += repeatingBasicTechniquesSection("RepeatingBasicRecovery");
                     contents += repeatingBasicTechniquesSection("RepeatingBasicAttack");
                     contents += repeatingBasicTechniquesSection("RepeatingBasicSocial");
+                    contents += WuxSheetMain.HiddenAncestryField("Spirit", 
+                        repeatingBasicTechniquesSection("RepeatingBasicSpirit"));
                     contents += repeatingCustomTechniquesSection();
                     contents = WuxSheetMain.TabBlock(contents);
 

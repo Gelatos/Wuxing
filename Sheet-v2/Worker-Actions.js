@@ -160,14 +160,15 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
     }
     const addAffinityVariables = function (attrHandler) {
-        attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity")]);
+        attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry")]);
     };
     const addBoosterVariables = function (attrHandler) {
         attrHandler.addMod([WuxDef.GetVariable("BoostStyleTech"), WuxDef.GetVariable("BoostGearTech"), WuxDef.GetVariable("BoostPerkTech")]);
     };
     const getAffinities = function (attrHandler) {
         return [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-            attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"))];
+            attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
+            attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
     };
     const populateStyleTechniques = function (attrHandler, sectionRepeater, styleName, maxTier) {
         let hasAddedPassives = false;
@@ -309,6 +310,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             populateBasicActions(attributeHandler, "RepeatingBasicRecovery", "Basic Recovery");
             populateBasicActions(attributeHandler, "RepeatingBasicAttack", "Basic Attack");
             populateBasicActions(attributeHandler, "RepeatingBasicSocial", "Basic Social");
+            populateBasicActions(attributeHandler, "RepeatingBasicSpirit", "Basic Spirit");
         },
 
         populatePerkTechniques = function (attributeHandler) {
@@ -359,6 +361,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         },
         inspectTechniqueBasicSocial = function (eventinfo) {
             inspectTechnique("RepeatingBasicSocial", eventinfo.sourceAttribute, "All Basic Social Techniques");
+        },
+        inspectTechniqueBasicSpirit = function (eventinfo) {
+            inspectTechnique("RepeatingBasicSpirit", eventinfo.sourceAttribute, "All Basic Spirit Techniques");
         },
 
         populateStyleActions = function (repeatingSectionName, repeatingSectionIndex, styleName, tier) {
@@ -458,6 +463,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         InspectTechniqueBasicRecovery: inspectTechniqueBasicRecovery,
         InspectTechniqueBasicAttack: inspectTechniqueBasicAttack,
         InspectTechniqueBasicSocial: inspectTechniqueBasicSocial,
+        InspectTechniqueBasicSpirit: inspectTechniqueBasicSpirit,
         PopulateStyleActions: populateStyleActions,
         PopulateGearActions: populateGearActions,
         RemoveStyleActions: removeStyleActions,

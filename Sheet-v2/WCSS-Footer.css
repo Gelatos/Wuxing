@@ -300,7 +300,8 @@ button[type=roll].wuxButton span span,
 .wuxHiddenIndexField6,
 .wuxHiddenIndexField7,
 .wuxHiddenIndexField8,
-.wuxHiddenIndexField9
+.wuxHiddenIndexField9,
+.wuxHiddenAncestrySpirit
 {
     display: none;
 }
@@ -352,7 +353,8 @@ input[type=hidden].wuxHiddenIndexField-flag[value="9"] + .wuxHiddenIndexField6,
 input[type=hidden].wuxHiddenIndexField-flag[value="9"] + .wuxHiddenIndexField7,
 input[type=hidden].wuxHiddenIndexField-flag[value="9"] + .wuxHiddenIndexField8,
 input[type=hidden].wuxHiddenIndexField-flag[value="9"] + .wuxHiddenIndexField9,
-.wuxHiddenAuxField
+.wuxHiddenAuxField,
+input[type=hidden].wuxHiddenAncestry-flag[value="Spirit"] + .wuxHiddenAncestrySpirit
 {
     display: inherit;
 }

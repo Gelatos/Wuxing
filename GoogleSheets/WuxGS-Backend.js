@@ -455,7 +455,9 @@ var ActionBuilder = ActionBuilder || (function () {
                 ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicAttack")}:${WuxDef.GetVariable("Action_Inspect")}`],
                 `WuxWorkerActions.InspectTechniqueBasicAttack(eventinfo)`, true)}
                 ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicSocial")}:${WuxDef.GetVariable("Action_Inspect")}`],
-                `WuxWorkerActions.InspectTechniqueBasicSocial(eventinfo)`, true)}`;
+                `WuxWorkerActions.InspectTechniqueBasicSocial(eventinfo)`, true)}
+                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicSpirit")}:${WuxDef.GetVariable("Action_Inspect")}`],
+                `WuxWorkerActions.InspectTechniqueBasicSpirit(eventinfo)`, true)}`;
         },
         listenerSetDataRepeatingStyles = function () {
             return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingCustomTech")}:${WuxDef.GetVariable("Action_SetData")}`],

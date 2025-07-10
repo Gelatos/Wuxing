@@ -1401,6 +1401,17 @@ var WuxSheetMain = WuxSheetMain || (function () {
             <div class="wuxHiddenIndexField${index}">\n${contents}\n</div>\n`;
         },
 
+        hiddenAncestryField = function (ancestryType, contents) {
+            let fieldName = "";
+            switch (ancestryType) {
+                case "Spirit":
+                    fieldName = "wuxHiddenAncestrySpirit"; 
+                    break;
+            }
+            return `<input type="hidden" class="wuxHiddenAncestry-flag" name="${WuxDef.GetAttribute("Ancestry")}" value="0">
+            <div class="${fieldName}">\n${contents}\n</div>\n`;
+        },
+
         subMenuButton = function (fieldName, contents) {
             return `<div class="wuxSubMenuButton">
                 <input type="checkbox" name="${fieldName}">
@@ -1678,6 +1689,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         HiddenField: hiddenField,
         HiddenAuxField: hiddenAuxField,
         HiddenIndexField: hiddenIndexField,
+        HiddenAncestryField: hiddenAncestryField,
         SubMenuButton: subMenuButton,
         SubMenuOptionButton: subMenuOptionButton,
         SubMenuOptionRollButton: subMenuOptionRollButton,
@@ -2993,6 +3005,9 @@ class TechniqueAssessment {
         let output = this.getDiceFormula(effect, attributeHandler);
         Debug.Log("assessing Effect Move " + effect.formula.getString());
         switch (effect.subType) {
+            case "Teleport":
+                output.value = Math.floor(output.value * 2);
+                break;
             case "Fly":
             case "FreeMove":
             case "Invis":

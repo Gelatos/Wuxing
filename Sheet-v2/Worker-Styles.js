@@ -408,7 +408,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         WuxWorkerInspectPopup.OpenTechniqueInspection(
             function (attrHandler) {
                 attrHandler.addMod([nameFieldName, tierFieldName, crFieldName]);
-                attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity")]);
+                attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry")]);
             },
             function (attrHandler, itemPopupRepeater) {
                 attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
@@ -417,7 +417,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 let maxTier = attrHandler.parseInt(tierFieldName);
                 let cr = attrHandler.parseInt(crFieldName);
                 let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"))];
+                    attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
+                    attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
                 
                 return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, 
                     attrHandler.parseString(nameFieldName), Math.min(maxTier, cr), affinities, false, true);
@@ -614,7 +615,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     attrHandler.addUpdate(eventinfo.sourceAttribute, "0");
                     attrHandler.addUpdate(WuxDef.GetVariable(WuxDef.GetName(style, WuxDef.Get("Style")), WuxDef._expand), "0");
                     let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                        attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"))];
+                        attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
+                        attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
 
                     return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, style, 9, affinities, true, false);
                 }
