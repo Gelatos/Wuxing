@@ -188,13 +188,16 @@ var AdvancementBackend = AdvancementBackend || (function () {
 
         listenerUpdatePerkPoints = function () {
             let output = "";
-            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", "Perk"));
             let techniqueDefinition = WuxDef.Get("Technique");
+            let styleGroups = WuxDef.Filter([new DatabaseFilterData("group", "PerkGroup")]);
+            for (let index = 0; index < styleGroups.length; index++) {
+                let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", styleGroups[index].getTitle()));
 
-            for (let i = 0; i < perkTechniques.length; i++) {
-                let perkDef = perkTechniques[i].createDefinition(techniqueDefinition);
-                output += WuxSheetBackend.OnChange([perkDef.getVariable(WuxDef._rank)],
-                    `WuxWorkerPerks.UpdateBuildPoints(eventinfo, ${perkTechniques[i].resourceCost})`, true);
+                for (let i = 0; i < perkTechniques.length; i++) {
+                    let perkDef = perkTechniques[i].createDefinition(techniqueDefinition);
+                    output += WuxSheetBackend.OnChange([perkDef.getVariable(WuxDef._rank)],
+                        `WuxWorkerPerks.UpdateBuildPoints(eventinfo, ${perkTechniques[i].resourceCost})`, true);
+                }
             }
 
             return output;

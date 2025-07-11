@@ -314,8 +314,14 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         },
 
         populatePerkTechniques = function (attributeHandler) {
-            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", "Perk"));
+
+            let perkTechniques = [];
             let techniqueDef = WuxDef.Get("Technique");
+            let styleGroups = WuxDef.Filter([new DatabaseFilterData("group", "PerkGroup")]);
+            for (let index = 0; index < styleGroups.length; index++) {
+                perkTechniques = perkTechniques.concat(WuxTechs.Filter(new DatabaseFilterData("style", styleGroups[index].getTitle())));
+            }
+        
             for (let i = 0; i < perkTechniques.length; i++) {
                 let perkDef = perkTechniques[i].createDefinition(techniqueDef);
                 attributeHandler.addMod(perkDef.getVariable(WuxDef._rank));
