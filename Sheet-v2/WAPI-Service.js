@@ -189,10 +189,6 @@ on("chat:message", function (msg) {
                     CommandCastNPC(msg);
 
                     return;
-                case "!intro":
-                    IntroduceNPC(msg);
-
-                    return;
                 case "!showname":
                     ShowNameplates(msg);
 
@@ -320,21 +316,11 @@ function GetCharacterAttribute(charId, attrName) {
     return returnVal;
 }
 
-function AttrParseInt(charId, fieldName, defaultValue) {
-
-    return ParseIntValue(getAttrByName(charId, fieldName), defaultValue);
-}
-
 function ParseIntValue(value, defaultValue) {
     if (defaultValue == undefined) {
         defaultValue = 0;
     }
     return isNaN(parseInt(value)) ? defaultValue : parseInt(value);
-}
-
-function AttrParseFloat(charId, fieldName, defaultValue) {
-
-    return ParseFloatValue(getAttrByName(charId, fieldName), defaultValue);
 }
 
 

@@ -68,6 +68,14 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             });
             attributeHandler.run();
         },
+        updateFullName = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attrHandler.addUpdate(WuxDef.GetVariable("IntroName"), eventinfo.newValue);
+            });
+            attributeHandler.run();
+        },
         updateStatus = function (statusName, eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             let statusHandler = new StatusHandler(attributeHandler);
@@ -129,6 +137,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         UpdateDisplayName: updateDisplayName,
         UpdateCharacterSheetName: updateCharacterSheetName,
         UpdateSheetName: updateSheetName,
+        UpdateFullName: updateFullName,
         UpdateStatus: updateStatus,
         UpdateCR: updateCR,
         OpenSubMenu: openSubMenu,

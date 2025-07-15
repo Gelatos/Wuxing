@@ -496,15 +496,18 @@ var TargetReference = TargetReference || (function () {
                     content = getCharacterSheetTarget(content);
                     commandRollSkillGroupCheck(content.targets, content.content);
                     break;
-            };
+                case "!intro":
+                    commandIntroduce(msg, TokenReference.GetTokenTargetDataArray(msg));
+                    break;
+            }
         },
 
         commandAddCharacter = function (msg, teamIndex) {
             let message = "";
             TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
-                tokenTargetData.setTeamIndex(teamIndex);
-                addToActiveCharacters(tokenTargetData);
                 if (tokenTargetData != undefined) {
+                    tokenTargetData.setTeamIndex(teamIndex);
+                    addToActiveCharacters(tokenTargetData);
                     if (message != "") {
                         message += ", ";
                     }
@@ -619,6 +622,51 @@ var TargetReference = TargetReference || (function () {
                 });
             }
         },
+        
+        commandIntroduce = function (msg, targets) {
+            let characters, charObj = {};
+            let sender = msg.who;
+            let introNameVar = WuxDef.GetVariable("IntroName");
+            let emotesVar = WuxDef.GetVariable("Chat_Emotes");
+            let titleVar = WuxDef.GetVariable("Title");
+            let ageVar = WuxDef.GetVariable("Age");
+            let genderVar = WuxDef.GetVariable("Gender");
+            let quickDescVar = WuxDef.GetVariable("QuickDescription");
+
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+    
+                attributeHandler.addMod([introNameVar, emotesVar, titleVar, ageVar, genderVar, quickDescVar]);
+                attributeHandler.addFinishCallback(function (attrHandler) {
+                    let outfitEmoteSetData = new EmoteSetData(attrHandler.parseJSON(emotesVar));
+                    let messageObject = new IntroEmoteMessage(sender, msg);
+                    messageObject.setTitle(attrHandler.parseString(introNameVar));
+                    messageObject.message = `${attrHandler.parseString(titleVar)}\nAge ${attrHandler.parseString(ageVar)}; ${attrHandler.parseString(genderVar)}`;
+                    messageObject.url = outfitEmoteSetData.defaultEmote;
+                    messageObject.setSender(sender);
+                    WuxMessage.Send(messageObject);
+    
+                    // set character data
+                    characters = findObjs({
+                        _id: tokenTargetData.charId,
+                        _type: "character"
+                    }, {caseInsensitive: true});
+    
+                    if (characters.length > 0) {
+                        charObj = characters[0];
+                        let bio = `<p><b>${attrHandler.parseString(introNameVar)}</b><br><i>${attrHandler.parseString(titleVar)}</i></p>`;
+                        bio += `<p>Age ${attrHandler.parseString(ageVar)}; ${attrHandler.parseString(genderVar)}</p>`;
+                        bio += `<p>${attrHandler.parseString(quickDescVar)}</p>`;
+                        charObj.set("bio", bio);
+                        charObj.set("inplayerjournals", "all");
+                    }
+                });
+                attributeHandler.run();
+            });
+
+        },
+
+        // Data Checkers
 
         checkModifiers = function (tableName, tokenTargetData, definitions, addSkillCheck, advantage) {
             let tableData = new TableMessage([tokenTargetData.displayName, tableName]);
@@ -650,7 +698,6 @@ var TargetReference = TargetReference || (function () {
         },
 
         // Active Characters
-        // ---------------------------
 
         getDefaultActiveCharacters = function () {
             return {
@@ -813,7 +860,7 @@ var TokenReference = TokenReference || (function () {
                         return undefined;
                     }
                     tokenData = new TokenTargetData(token);
-                    if (token == undefined) {
+                    if (tokenData == undefined) {
                         Debug.LogError(`[TokenReference][getToken] Tokendata for id ${data} could not be created`);
                         return undefined;
                     }
@@ -2760,4 +2807,3 @@ function GetTokenStatusMarkerName(status) {
 function TokenHasStatusMarker(token, condition) {
     return token.get("statusmarkers").indexOf(GetTokenStatusMarkerName(condition)) > -1;
 }
-

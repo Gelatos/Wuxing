@@ -2252,12 +2252,12 @@ class TechniqueEffectDisplayData {
     }
 
     formatImpatienceMeterEffect(effect) {
-        let patience = WuxDef.GetTitle("Soc_Impatience");
+        let impatience = WuxDef.GetTitle("Soc_Impatience");
         switch (effect.subType) {
             case "Heal":
-                return `Increase target's ${patience} by ${this.formatCalcBonus(effect)}`;
+                return `Reduce target's ${impatience} by ${this.formatCalcBonus(effect)}`;
             default:
-                return `Reduce target's ${patience} by ${this.formatCalcBonus(effect)}`;
+                return `Increase target's ${impatience} by ${this.formatCalcBonus(effect)}`;
         }
     }
 

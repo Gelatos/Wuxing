@@ -10,7 +10,6 @@ var WuxMessage = WuxMessage || (function () {
                 case "!t": return new ThinkEmoteMessage(textMessage);
                 case "!d":
                 case "!de": return new DescEmoteMessage(textMessage);
-                case "!intro": return new IntroEmoteMessage(textMessage);
                 case "!a": return new AttackMessage(textMessage);
                 case "!r": return new ResponseMessage(textMessage);
                 case "!ry": return new ResponseYellMessage(textMessage);
@@ -120,7 +119,7 @@ var WuxMessage = WuxMessage || (function () {
         },
 
         createImagePreview = function (url) {
-            return `<div class="sheet-wuxTooltipButton"><div class="sheet-wuxTooltipText">i</div><img class="sheet-wuxTooltipImagePreview" src="${url}"/></div>`;
+            return `<div class="sheet-wuxTooltipButton"><div class="sheet-wuxTooltipText">i</div><img class="sheet-wuxTooltipImagePreview" src="${url}" alt="Emote"/></div>`;
         },
 
         send = function (messageObject, targets, archive) {

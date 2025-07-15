@@ -308,6 +308,8 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             contents = WuxSheetMain.Table.FlexTableGroup(contents);
 
                             let backgroundContents = "";
+                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
+                                "wuxInput wuxHeight30");
                             backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
                                 "wuxInput wuxHeight150");
                             backgroundContents = WuxSheetMain.Table.FlexTableGroup(backgroundContents)

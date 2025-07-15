@@ -240,6 +240,7 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerUpdateDisplayName();
             output += listenerUpdateCharacterSheetName();
             output += listenerUpdateSheetName();
+            output += listenerUpdateFullName();
             output += listenerUpdateStatus();
             output += listenerUpdateCR();
             return output;
@@ -259,6 +260,12 @@ var OverviewBuilder = OverviewBuilder || (function () {
         listenerUpdateSheetName = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("SheetName")}`];
             let output = `WuxWorkerGeneral.UpdateSheetName(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateFullName = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("FullName")}`];
+            let output = `WuxWorkerGeneral.UpdateFullName(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },

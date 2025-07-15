@@ -370,6 +370,8 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents = WuxSheetMain.Table.FlexTableGroup(contents);
 
                             let backgroundContents = "";
+                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
+                                "wuxInput wuxHeight30");
                             backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
                                 "wuxInput wuxHeight150");
                             backgroundContents = WuxSheetMain.Table.FlexTableGroup(backgroundContents)
@@ -433,7 +435,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxDefinition.InfoHeader(titleDefinition);
                             contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_SetId"));
                             contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Emotes"));
-                            contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_DefaultEmote"));
 
                             let outfitNameDef = WuxDef.Get("Chat_OutfitName");
                             let emoteContents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(outfitNameDef.getAttribute(WuxDef._expand))}
