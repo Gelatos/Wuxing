@@ -23,8 +23,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
             output += WuxSheet.PageDisplayInput(WuxDef.GetAttribute("PageSet_Core", WuxDef._tab));
             output += printOverview(sheetsDb);
             output += printDetails(sheetsDb);
-            output += printOrigin();
-            output += printChat();
+            output += printPost();
             output += printOptions();
             return WuxSheet.PageDisplay("Character", output);
         },
@@ -43,18 +42,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
             return WuxSheet.PageDisplay("Details", output);
         },
 
-        printOrigin = function () {
-            let output = WuxSheetNavigation.BuildOverviewPageNavigation("Origin") +
+        printPost = function () {
+            let output = WuxSheetNavigation.BuildOverviewPageNavigation("Post") +
                 SideBarData.PrintSidebar() +
-                MainContentData.PrintOrigin();
-            return WuxSheet.PageDisplay("Origin", output);
-        },
-
-        printChat = function () {
-            let output = WuxSheetNavigation.BuildOverviewPageNavigation("Chat") +
-                SideBarData.PrintSidebar() +
-                MainContentData.PrintChat();
-            return WuxSheet.PageDisplay("Chat", output);
+                MainContentData.PrintPost();
+            return WuxSheet.PageDisplay("Post", output);
         },
 
         printOptions = function () {
@@ -293,6 +285,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                     var
                         build = function () {
                             let contents = "";
+                            contents += buildOrigin();
                             contents += createStatGroup("Attribute");
                             contents += createStatGroup("Defense");
                             contents += createStatGroup("Sense");
@@ -302,62 +295,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             return contents;
                         },
 
-                        createStatGroup = function (groupName) {
-                            let definition = WuxDef.Get(groupName);
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, createStatTable(groupName));
-                        },
-
-                        createStatTable = function (groupName) {
-                            let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
-                            let output = "";
-                            for (let i = 0; i < filteredStats.length; i++) {
-                                output += createStatBlock(filteredStats[i]);
-                            }
-                            return WuxSheetMain.TabBlock(WuxSheetMain.Table.FlexTable(output));
-                        },
-
-                        createStatBlock = function (statDefinition) {
-                            let header = `${statDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(statDefinition))}`;
-                            let contents = "";
-                            if (statDefinition.isResource) {
-                                // contents += createStatBlockValueWithHeader("Current", statDefinition.getAttribute());
-                                // contents += createStatBlockValueWithHeader("Max", statDefinition.getAttribute(WuxDef._max));
-                                contents += createStatBlockValue(statDefinition.getAttribute(WuxDef._max));
-                            } else {
-                                contents += createStatBlockValue(statDefinition.getAttribute());
-                            }
-                            contents = WuxSheetMain.Table.FlexTable(contents);
-
-                            let output = WuxSheetMain.Table.FlexTableHeader(header);
-                            output += WuxSheetMain.Table.FlexTableData(contents);
-                            return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
-                        },
-
-                        createStatBlockValue = function (fieldName) {
-                            return WuxSheetMain.Table.FlexTableGroup(`<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, " wuxMinWidth100");
-                        }
-
-                    return {
-                        Build: build
-                    }
-                }()),
-
-                printOrigin = function () {
-                    let contents = Origin.Build();
-                    return WuxSheetMain.Build(contents);
-                },
-                Origin = Origin || (function () {
-                    'use strict';
-
-                    var
-                        build = function () {
-                            let contents = buildOrigin();
-                            contents = WuxSheetMain.TabBlock(contents);
-
-                            let definition = WuxDef.Get("Page_Origin");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                        },
-
                         buildOrigin = function () {
                             let contents = "";
                             contents += WuxSheetMain.Header("Basics");
@@ -365,7 +302,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxSheetMain.Header("Background Generator");
                             contents += backgroundGenerator();
 
-                            let definition = WuxDef.Get("Title_Background")
+                            let definition = WuxDef.Get("Page_Origin")
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, WuxSheetMain.TabBlock(contents));
                         },
 
@@ -415,6 +352,41 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             rightColumn = WuxSheetMain.Table.FlexTableGroup(rightColumn);
 
                             return `${WuxSheetMain.MultiRowGroup([leftColmun, rightColumn], WuxSheetMain.Table.FlexTable, 2)}`;
+                        },
+
+                        createStatGroup = function (groupName) {
+                            let definition = WuxDef.Get(groupName);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, createStatTable(groupName));
+                        },
+
+                        createStatTable = function (groupName) {
+                            let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
+                            let output = "";
+                            for (let i = 0; i < filteredStats.length; i++) {
+                                output += createStatBlock(filteredStats[i]);
+                            }
+                            return WuxSheetMain.TabBlock(WuxSheetMain.Table.FlexTable(output));
+                        },
+
+                        createStatBlock = function (statDefinition) {
+                            let header = `${statDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(statDefinition))}`;
+                            let contents = "";
+                            if (statDefinition.isResource) {
+                                // contents += createStatBlockValueWithHeader("Current", statDefinition.getAttribute());
+                                // contents += createStatBlockValueWithHeader("Max", statDefinition.getAttribute(WuxDef._max));
+                                contents += createStatBlockValue(statDefinition.getAttribute(WuxDef._max));
+                            } else {
+                                contents += createStatBlockValue(statDefinition.getAttribute());
+                            }
+                            contents = WuxSheetMain.Table.FlexTable(contents);
+
+                            let output = WuxSheetMain.Table.FlexTableHeader(header);
+                            output += WuxSheetMain.Table.FlexTableData(contents);
+                            return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
+                        },
+
+                        createStatBlockValue = function (fieldName) {
+                            return WuxSheetMain.Table.FlexTableGroup(`<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, " wuxMinWidth100");
                         }
 
                     return {
@@ -422,11 +394,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                     }
                 }()),
 
-                printChat = function () {
-                    let contents = Chat.Build();
+                printPost = function () {
+                    let contents = Post.Build();
                     return WuxSheetMain.Build(contents);
                 },
-                Chat = Chat || (function () {
+                Post = Post || (function () {
                     'use strict';
 
                     var
@@ -440,7 +412,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             let contents = WuxSheetMain.MultiRowGroup([outfitCollection(), languageSelect()], WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definition = WuxDef.Get("Page_Chat");
+                            let definition = WuxDef.Get("Title_Emotes");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
@@ -481,7 +453,9 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 							${WuxSheetMain.InteractionElement.ExpandableBlockContents(outfitNameDef.getAttribute(WuxDef._expand),
                                 WuxSheetMain.SectionBlockContents(buildOutfitContents()))}`;
 
-                            emoteContents = `<div class="wuxSectionBlock wuxMaxWidth220">\n${WuxSheetMain.InteractionElement.Build(true, emoteContents)}\n</div>`;
+                            emoteContents = `<div class="wuxSectionBlock wuxMinWidth200 wuxMaxWidth220">
+                                ${WuxSheetMain.InteractionElement.Build(true, emoteContents)}
+                            </div>`;
 
                             contents += `<div class="wuxRepeatingFlexSection">
 								<fieldset class="${WuxDef.GetVariable("RepeatingOutfits")}">
@@ -554,8 +528,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
             return {
                 PrintOverview: printOverview,
                 PrintDetails: printDetails,
-                PrintOrigin: printOrigin,
-                PrintChat: printChat,
+                PrintPost: printPost,
                 PrintOptions: printOptions
             }
         }());

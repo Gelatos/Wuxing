@@ -1220,7 +1220,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         },
 
         buildChatSection = function () {
-            let titleDefinition = WuxDef.Get("Page_Chat");
+            let titleDefinition = WuxDef.Get("Title_Chat");
             return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), WuxSheetMain.Chat.Build(), true);
         },
 
@@ -1867,8 +1867,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         output += WuxSheet.PageDisplayInput(tabFieldName, "Overview");
         output += WuxSheet.PageDisplay("Overview", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Overview")));
         output += WuxSheet.PageDisplay("Details", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Details")));
-        output += WuxSheet.PageDisplay("Origin", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Origin")));
-        output += WuxSheet.PageDisplay("Chat", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Chat")));
+        output += WuxSheet.PageDisplay("Post", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Post")));
         // output += WuxSheet.PageDisplay("Options", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Options")));
         return WuxSheetMain.Info.Contents(fieldName, output);
     };
@@ -2004,8 +2003,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             let sideBarButtons = "";
             let tabFieldName = WuxDef.GetAttribute("PageSet_Core", WuxDef._tab);
             // sideBarButtons += buildTabButton("radio", tabFieldName, "Options", "Options", selectedTab == "Options", "") + "\n";
-            sideBarButtons += buildTabButton("radio", tabFieldName, "Chat", "Chat", selectedTab == "Chat", "") + "\n";
-            sideBarButtons += buildTabButton("radio", tabFieldName, "Origin", "Origin", selectedTab == "Origin", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Post", "Post", selectedTab == "Post", "") + "\n";
             sideBarButtons += buildTabButton("radio", tabFieldName, "Details", "Details", selectedTab == "Details", "") + "\n";
             sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", selectedTab == "Overview", "") + "\n";
 
