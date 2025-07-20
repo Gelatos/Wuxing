@@ -300,25 +300,60 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                         
                         buildBackground = function () {
                             let contents = "";
+                            contents += WuxSheetMain.Header("Basics");
+                            contents += `${WuxSheetMain.MultiRowGroup([backgroundBasics(), backgroundBackstory()], WuxSheetMain.Table.FlexTable, 2)}`;
+                            contents += WuxSheetMain.Header("Background Generator");
+                            contents += backgroundGenerator();
+
+                            let definition = WuxDef.Get("Title_Background")
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, WuxSheetMain.TabBlock(contents));
+                        },
+                        
+                        backgroundBasics = function () {
+                            let contents = "";
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), WuxDef.GetAttribute("DisplayName"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("IntroName"), WuxDef.GetAttribute("IntroName"));
+                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title"), WuxDef.GetAttribute("Title"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("HomeRegion"), WuxDef.GetAttribute("HomeRegion"),
+                                WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
                             contents = WuxSheetMain.Table.FlexTableGroup(contents);
-
-                            let backgroundContents = "";
-                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
+                            return contents;
+                        },
+                        
+                        backgroundBackstory = function () {
+                            let contents = "";
+                            contents += WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
                                 "wuxInput wuxHeight30");
-                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
+                            contents += WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
                                 "wuxInput wuxHeight150");
-                            backgroundContents = WuxSheetMain.Table.FlexTableGroup(backgroundContents)
+                            contents = WuxSheetMain.Table.FlexTableGroup(contents);
+                            return contents;
+                        },
+                        
+                        backgroundGenerator = function () {
+                            let leftColmun = "";
+                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenName"), WuxDef.GetAttribute("Note_GenName"));
+                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenFullName"), WuxDef.GetAttribute("Note_GenFullName"));
+                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenGender"), WuxDef.GetAttribute("Note_GenGender"));
+                            leftColmun += WuxDefinition.BuildSelect(WuxDef.Get("Note_GenHomeRegion"), WuxDef.GetAttribute("Note_GenHomeRegion"),
+                                WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
+                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenRace"), WuxDef.GetAttribute("Note_GenRace"));
+                            leftColmun = WuxSheetMain.Table.FlexTableGroup(leftColmun);
 
-                            let definition = WuxDef.Get("Title_Background");
-                            contents = `${WuxSheetMain.MultiRowGroup([contents, backgroundContents], WuxSheetMain.Table.FlexTable, 2)}`;
-                            contents = WuxSheetMain.TabBlock(contents);
+                            let rightColumn = "";
+                            let generatorDefinition = WuxDef.Get("Note_GenerateCharacter");
+                            let useDefinition = WuxDef.Get("Note_UseGeneration");
+                            let clearDefinition = WuxDef.Get("Note_ClearBackground");
+                            rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenPersonality"), WuxDef.GetAttribute("Note_GenPersonality"));
+                            rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenMotivation"), WuxDef.GetAttribute("Note_GenMotivation"));
+                            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(generatorDefinition.getAttribute(), generatorDefinition.getTitle()));
+                            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(useDefinition.getAttribute(), useDefinition.getTitle()));
+                            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(clearDefinition.getAttribute(), clearDefinition.getTitle()));
+                            rightColumn = WuxSheetMain.Table.FlexTableGroup(rightColumn);
 
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return `${WuxSheetMain.MultiRowGroup([leftColmun, rightColumn], WuxSheetMain.Table.FlexTable, 2)}`;
                         }
 
                     return {

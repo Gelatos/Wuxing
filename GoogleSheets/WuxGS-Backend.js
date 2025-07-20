@@ -240,7 +240,9 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerUpdateDisplayName();
             output += listenerUpdateCharacterSheetName();
             output += listenerUpdateSheetName();
-            output += listenerUpdateFullName();
+            output += listenerGenerateCharacter();
+            output += listenerUseGeneration();
+            output += listenerClearBackground();
             output += listenerUpdateStatus();
             output += listenerUpdateCR();
             return output;
@@ -263,11 +265,23 @@ var OverviewBuilder = OverviewBuilder || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
-        listenerUpdateFullName = function () {
-            let groupVariableNames = [`${WuxDef.GetVariable("FullName")}`];
-            let output = `WuxWorkerGeneral.UpdateFullName(eventinfo)`;
+        listenerGenerateCharacter = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Note_GenerateCharacter")}`];
+            let output = `WuxWorkerGeneral.GenerateCharacter()`;
 
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        listenerUseGeneration = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Note_UseGeneration")}`];
+            let output = `WuxWorkerGeneral.UseGeneration()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        listenerClearBackground = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Note_ClearBackground")}`];
+            let output = `WuxWorkerGeneral.ClearBackground()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerUpdateStatus = function () {
             let output = "";

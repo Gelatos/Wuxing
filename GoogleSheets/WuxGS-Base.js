@@ -360,24 +360,61 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                         buildOrigin = function () {
                             let contents = "";
+                            contents += WuxSheetMain.Header("Basics");
+                            contents += `${WuxSheetMain.MultiRowGroup([backgroundBasics(), backgroundBackstory()], WuxSheetMain.Table.FlexTable, 2)}`;
+                            contents += WuxSheetMain.Header("Background Generator");
+                            contents += backgroundGenerator();
+
+                            let definition = WuxDef.Get("Title_Background")
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, WuxSheetMain.TabBlock(contents));
+                        },
+
+                        backgroundBasics = function () {
+                            let contents = "";
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), WuxDef.GetAttribute("DisplayName"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("IntroName"), WuxDef.GetAttribute("IntroName"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title"), WuxDef.GetAttribute("Title"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("HomeRegion"), WuxDef.GetAttribute("HomeRegion"),
+                                WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
                             contents = WuxSheetMain.Table.FlexTableGroup(contents);
+                            return contents;
+                        },
 
-                            let backgroundContents = "";
-                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
+                        backgroundBackstory = function () {
+                            let contents = "";
+                            contents += WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
                                 "wuxInput wuxHeight30");
-                            backgroundContents += WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
+                            contents += WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
                                 "wuxInput wuxHeight150");
-                            backgroundContents = WuxSheetMain.Table.FlexTableGroup(backgroundContents)
+                            contents = WuxSheetMain.Table.FlexTableGroup(contents);
+                            return contents;
+                        },
 
-                            return `${WuxDefinition.InfoHeader(WuxDef.Get("Title_Background"))}
-                            ${WuxSheetMain.MultiRowGroup([contents, backgroundContents], WuxSheetMain.Table.FlexTable, 2)}`;
+                        backgroundGenerator = function () {
+                            let leftColmun = "";
+                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenName"), WuxDef.GetAttribute("Note_GenName"));
+                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenFullName"), WuxDef.GetAttribute("Note_GenFullName"));
+                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenGender"), WuxDef.GetAttribute("Note_GenGender"));
+                            leftColmun += WuxDefinition.BuildSelect(WuxDef.Get("Note_GenHomeRegion"), WuxDef.GetAttribute("Note_GenHomeRegion"),
+                                WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
+                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenRace"), WuxDef.GetAttribute("Note_GenRace"));
+                            leftColmun = WuxSheetMain.Table.FlexTableGroup(leftColmun);
+
+                            let rightColumn = "";
+                            let generatorDefinition = WuxDef.Get("Note_GenerateCharacter");
+                            let useDefinition = WuxDef.Get("Note_UseGeneration");
+                            let clearDefinition = WuxDef.Get("Note_ClearBackground");
+                            rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenPersonality"), WuxDef.GetAttribute("Note_GenPersonality"));
+                            rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenMotivation"), WuxDef.GetAttribute("Note_GenMotivation"));
+                            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(generatorDefinition.getAttribute(), generatorDefinition.getTitle()));
+                            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(useDefinition.getAttribute(), useDefinition.getTitle()));
+                            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(clearDefinition.getAttribute(), clearDefinition.getTitle()));
+                            rightColumn = WuxSheetMain.Table.FlexTableGroup(rightColumn);
+
+                            return `${WuxSheetMain.MultiRowGroup([leftColmun, rightColumn], WuxSheetMain.Table.FlexTable, 2)}`;
                         }
 
                     return {
@@ -451,7 +488,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 									${emoteContents}
 								</fieldset>
 							</div>`;
-                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
+                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150 wuxFlexTableItemGroup2");
                         },
 
                         buildOutfitContents = function () {
@@ -1673,6 +1710,317 @@ var DisplayLoadingScreen = DisplayLoadingScreen || (function () {
 
             return `${WuxSheetMain.HiddenField(popupActiveAttr, contents)}`;
         }
+
+    return {
+        Print: print
+    };
+}());
+
+var DisplayNpcSheet = DisplayNpcSheet || (function () {
+    'use strict';
+
+    var
+        print = function () {
+            let output = WuxSheetNavigation.BuildNpcPageNavigation() +
+                SideBarData.Print() +
+                MainContentData.Print();
+            return WuxSheet.PageDisplay("NPC", output);
+        },
+
+        SideBarData = SideBarData || (function () {
+            'use strict';
+
+            var
+                print = function () {
+                    let contents = "";
+                    contents += WuxSheetSidebar.BuildChatSection();
+                    contents += WuxSheetSidebar.BuildChecksSection();
+                    contents += WuxSheetSidebar.BuildBoonSection();
+                    contents += WuxSheetSidebar.BuildStatusSection();
+                    // contents += WuxSheetSidebar.BuildLanguageSection();
+                    return WuxSheetSidebar.Build("", contents);
+                }
+
+            return {
+                Print: print
+            };
+
+        }()),
+
+        MainContentData = MainContentData || (function () {
+            'use strict';
+
+            var
+                print = function () {
+                    let contents = "";
+                    contents += buildActionSection([
+                            {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: 3, slotMod: 0},
+                            {repeater: "RepeatingAdvTech", slot: "Forme_AdvancedSlot", max: 3, slotMod: 0},
+                            {repeater: "RepeatingAdvTech", slot: "Forme_StyleSlot", max: 9, slotMod: 3}],
+                        "Action_Techniques");
+                    return WuxSheetMain.Build(contents);
+                },
+
+                buildActionSection = function (repeaterSlotData, sectionDefName) {
+                    let contents = "";
+
+                    repeaterSlotData.forEach(function (repeaterData) {
+                        contents += repeatingFormeTechniquesSection(repeaterData);
+                    });
+                    contents += repeatingBasicTechniquesSection("RepeatingGearTech");
+                    contents += repeatingBasicTechniquesSection("RepeatingConsumables");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicActions");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicRecovery");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicAttack");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicSocial");
+                    contents += WuxSheetMain.HiddenAncestryField("Spirit",
+                        repeatingBasicTechniquesSection("RepeatingBasicSpirit"));
+                    contents += repeatingCustomTechniquesSection();
+                    contents = WuxSheetMain.TabBlock(contents);
+
+                    let sectionDef = WuxDef.Get(sectionDefName);
+                    return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
+                        `${sectionDef.getTitle()}`, contents);
+                },
+
+                repeatingFormeTechniquesSection = function (repeaterData) {
+                    let contents = "";
+                    for (let i = 1; i <= repeaterData.max; i++) {
+                        let repeatingFieldName = WuxDef.GetVariable(repeaterData.repeater, i + repeaterData.slotMod);
+                        let slotFieldName = WuxDef.GetAttribute(repeaterData.slot, i);
+                        contents += WuxSheetMain.HiddenField(slotFieldName,
+                            repeatingTechniquesSection(`<span name="${slotFieldName}"></span>`, repeatingFieldName)
+                        );
+                    }
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                repeatingBasicTechniquesSection = function (repeaterName) {
+                    let repeatingDef = WuxDef.Get(repeaterName);
+
+                    let contents = repeatingTechniquesSection(repeatingDef.getTitle(), repeatingDef.getVariable());
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                repeatingCustomTechniquesSection = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingCustomTech");
+
+                    let contents = `${WuxSheetMain.Header(repeatingDef.getTitle())}
+                        <div>
+                            <div class="wuxRepeatingFlexSection">
+                                <fieldset class="${repeatingDef.getVariable()}">
+                                ${addRepeaterContentsStyles(true)}
+                                </fieldset>
+                            </div>
+                        ${WuxSheetMain.Row("&nbsp;")}
+                    </div>`;
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                repeatingTechniquesSection = function (header, repeaterFieldName) {
+                    return `${WuxSheetMain.Header(header)}
+                        <div>
+                        ${buildRepeater(repeaterFieldName, addRepeaterContentsStyles(false))}
+                        ${WuxSheetMain.Row("&nbsp;")}
+                    </div>`;
+                },
+
+                getActionTypeAttribute = function (attribute, suffix) {
+                    let baseDefinition = WuxDef.Get("Action");
+                    return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
+                },
+
+                addRepeaterContentsStyles = function (isCustom) {
+                    let submenuFieldName = WuxDef.GetAttribute("Action_Actions");
+
+                    return `
+                    <div class="wuxFeature wuxMinWidth220">
+                        <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
+                        <div class="wuxFeatureHeader wuxSubMenuSection">
+                            <input type="checkbox" name="${submenuFieldName}">
+                            ${buildBaseTechniqueHeaderContents(`<span class="wuxSubMenuText">l&nbsp;</span>`)}
+                            <input type="hidden" class="wuxSubMenu-flag" name="${submenuFieldName}" value="0">
+                            <div class="wuxSubMenuContent">\n${isCustom ? addCustomSubmenuContentsStyles() : addSubmenuContentsStyles()}\n</div>
+                        </div>
+                        ${buildBaseTechniqueRequirements()}
+                    </div>`;
+                },
+
+                addSubmenuContentsStyles = function () {
+                    let useTechniqueDef = WuxDef.Get("Action_Use");
+                    let inspectTechniqueDef = WuxDef.Get("Action_Inspect");
+
+                    return `${WuxSheetMain.SubMenuOptionRollButton(useTechniqueDef.getAttribute(), useTechniqueDef.getVariable(), useTechniqueDef.getTitle())}
+                        ${WuxSheetMain.SubMenuOptionButton(inspectTechniqueDef.getAttribute(), `<span>${inspectTechniqueDef.getTitle()}</span>`)}
+                        ${WuxSheetMain.Header2("Full Technique Details")}
+                        ${buildSubmenuTechniqueTemplate()}
+                    `;
+                },
+
+                addCustomSubmenuContentsStyles = function () {
+                    let useTechniqueDef = WuxDef.Get("Action_Use");
+                    let setDataTechniqueDef = WuxDef.Get("Action_SetData");
+
+                    return `${WuxSheetMain.SubMenuOptionRollButton(useTechniqueDef.getAttribute(), useTechniqueDef.getVariable(), useTechniqueDef.getTitle())}
+                        ${WuxSheetMain.SubMenuOptionText(setDataTechniqueDef.getAttribute(), setDataTechniqueDef.getTitle())}
+                        ${WuxSheetMain.Header2("Full Technique Details")}
+                        ${buildSubmenuTechniqueTemplate()}
+                    `;
+                },
+
+                buildSubmenuTechniqueTemplate = function () {
+                    return `
+                    <div class="wuxFeature">
+                        <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
+                        <div class="wuxFeatureHeader">
+                            ${buildBaseTechniqueHeaderContents()}
+                        </div>
+                        ${buildBaseTechniqueRequirements()}
+                        ${buildExtendedTechniqueData()}
+                    </div>`;
+
+                },
+
+                buildBaseTechniqueHeaderContents = function (headerPrefix) {
+                    return `<div class="wuxFeatureHeaderDisplayBlock">
+                        <div class="wuxFeatureHeaderName">${headerPrefix != undefined ? headerPrefix : ""}<span name="${getActionTypeAttribute("TechName")}"></span></div>
+                        <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechResourceData")}"></span></div>
+                        <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechTargetingData")}"></span></div>
+                        <div class="wuxFeatureHeaderInfo">
+                            <span><strong>Traits: </strong></span>
+                            <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechTrait", 0)}" value="0" />
+                            <div class="wuxHiddenInlineAuxField">
+                                <span>None</span>
+                            </div>
+                            ${buildTooltipSection("TechTrait", 0)}
+                            ${buildTooltipSection("TechTrait", 1)}
+                            ${buildTooltipSection("TechTrait", 2)}
+                            ${buildTooltipSection("TechTrait", 3)}
+                            ${buildTooltipSection("TechTrait", 4)}
+                        </div>
+                    </div>`;
+                },
+
+                buildBaseTechniqueRequirements = function () {
+                    return `<input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechTrigger")}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureHeaderInfoTrigger">
+                            <span><strong>Trigger: </strong></span>
+                            <span name="${getActionTypeAttribute("TechTrigger")}"></span>
+                        </div>
+                    </div>
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechRequirements")}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureHeaderInfoReq">
+                            <span><strong>Requirements: </strong></span>
+                            <span name="${getActionTypeAttribute("TechRequirements")}"></span>
+                        </div>
+                    </div>
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechItemReq", 0)}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureHeaderInfoReq">
+                            <span><strong>Item Traits: </strong></span>
+                                ${buildTooltipSection("TechItemReq", 0, " and ")}
+                                ${buildTooltipSection("TechItemReq", 1, " and ")}
+                                ${buildTooltipSection("TechItemReq", 2, " and ")}
+                        </div>
+                    </div>`;
+                },
+
+                buildExtendedTechniqueData = function () {
+                    return `<input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechFlavorText")}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureFunctionBlock">
+                            <div class="wuxFeatureFunctionBlockFlavorText">
+                                <span name="${getActionTypeAttribute("TechFlavorText")}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="wuxFeatureEffectsBlock">
+                        ${addTechEffect(0)}
+                        ${addTechEffect(1)}
+                        ${addTechEffect(2)}
+                        ${addTechEffect(3)}
+                        ${addTechEffect(4)}
+                        ${addTechEffect(5)}
+                        ${addTechEffect(6)}
+                        ${addTechEffect(7)}
+                        ${addTechEffect(8)}
+                        ${addTechEffect(9)}
+                    </div>
+                    
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechDef", 0)}" value="0" />
+                    <div class="wuxHiddenField">
+                                <div class="wuxFeatureFunctionBlock">
+                                    <div class="wuxFeatureFunctionBlockRow">
+                                        <span><strong>Definitions: </strong></span>
+                                        ${buildTooltipSection("TechDef", 0)}
+                                        ${buildTooltipSection("TechDef", 1)}
+                                        ${buildTooltipSection("TechDef", 2)}
+                                        ${buildTooltipSection("TechDef", 3)}
+                                    </div>
+                                </div>
+                            </div>`;
+                },
+
+                buildTooltipSection = function (baseAttribute, index, delimiter) {
+                    return `<input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(baseAttribute, index)}" value="0" />
+                    <div class="wuxHiddenInlineField">
+                        ${index == 0 ? "" : `<span>${delimiter == undefined ? "; " : delimiter}</span>`}
+                        <span class="wuxTooltip">
+                            <span class="wuxTooltipText" name="${getActionTypeAttribute(baseAttribute, index)}">-</span>
+                            <div class="wuxTooltipContent">
+                                <div class="wuxHeader2"><span name="${getActionTypeAttribute(baseAttribute, index)}">-</span></div>
+                                <span class="wuxDescription"><em>Technique Trait</em></span>
+                                <span class="wuxDescription" name="${getActionTypeAttribute(baseAttribute, index + "desc0")}"></span>
+                                <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(baseAttribute, index + "desc1")}" value="0" />
+                                <div class="wuxHiddenField">
+                                    <span class="wuxDescription" name="${getActionTypeAttribute(baseAttribute, index + "desc1")}"></span>
+                                </div>
+                                <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(baseAttribute, index + "desc2")}" value="0" />
+                                <div class="wuxHiddenField">
+                                    <span class="wuxDescription" name="${getActionTypeAttribute(baseAttribute, index + "desc2")}"></span>
+                                </div>
+                            </div>
+                        </span>
+                    </div>`;
+                },
+
+                addTechEffect = function (index) {
+                    return `<input type="hidden" name="${getActionTypeAttribute("TechEffect", `${index}desc`)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEffect", `${index}name`)}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureCheckHeader">
+                            <span class="wuxTooltip">
+                                <span class="wuxTooltipText" name="${getActionTypeAttribute("TechEffect", `${index}name`)}">Name</span>
+                                <div class="wuxTooltipContent">
+                                    <div class="wuxHeader2"><span name="${getActionTypeAttribute("TechEffect", `${index}name`)}">Name</span></div>
+                                    <span class="wuxDescription" name="${getActionTypeAttribute("TechEffect", `${index}desc`)}"></span>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEffect", index)}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureCheckBlock">
+                            <span class="wuxFeatureCheckBlockRow" name="${getActionTypeAttribute("TechEffect", index)}">Effect</span>
+                        </div>
+                    </div>`;
+                },
+
+                buildRepeater = function (repeaterName, repeaterData) {
+                    return `<div class="wuxNoRepControl wuxRepeatingFlexSection">
+                        <fieldset class="${repeaterName}">
+                            ${repeaterData}
+                        </fieldset>
+                    </div>`;
+                }
+
+            return {
+                Print: print
+            }
+        }());
 
     return {
         Print: print

@@ -16,9 +16,8 @@ var Debug = Debug || (function () {
     };
 }());
 
-function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefinitionArray, systemDefinitionArray, styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray) {
-    let output = "";
-    
+function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefinitionArray, systemDefinitionArray,
+                                styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, namesArray, regionArray) {
     let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
     definitionDatabase.importSheets(definitionArray, function (arr) {
         let definition = new DefinitionData(arr);
@@ -99,8 +98,12 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
         definitionClassData.addPublicVariable(variableMods[i].variable, `"${variableMods[i].variable}"`);
     }
 
+    let output = "";
     output += definitionClassData.print("WuxDef");
-    
+
+    let nameDatabase = NameDatabase.Create(namesArray, regionArray);
+    output += "\n" + nameDatabase.print("WuxNames");
+
     return PrintLargeEntry(output, "]");
 }
 
@@ -186,6 +189,162 @@ function ConcatSheetsDatabase(arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, ar
     }
     return arr0;
 }
+
+var NameDatabase = NameDatabase || (function () {
+    const setNameData = function (data) {
+        return {
+            name: "" + data[0],
+            region: "" + data[1],
+            type: "" + data[2]
+        }
+    }
+
+    const dataOdds = function (name, odds) {
+        return {name: name, odds: odds};
+    }
+
+    const importNameDatabase = function (arr) {
+        if (arr == undefined || arr.length == 0) {
+            return {};
+        }
+        let nameDatabase = {};
+        for (let i = 0; i < arr.length; i++) {
+            let nameData = setNameData(arr[i]);
+            if (!nameDatabase.hasOwnProperty(nameData.region)) {
+                nameDatabase[nameData.region] = {};
+            }
+            if (!nameDatabase[nameData.region].hasOwnProperty(nameData.type)) {
+                nameDatabase[nameData.region][nameData.type] = [];
+            }
+            nameDatabase[nameData.region][nameData.type].push(nameData.name);
+        }
+        return nameDatabase;
+    }
+
+    const importRegionDatabase = function (arr) {
+        let regionDatabase = {
+            region: {},
+            ancestry: {}
+        };
+        if (arr == undefined || arr.length == 0) {
+            return regionDatabase;
+        }
+
+        // create a list of the races
+        let races = {};
+        let maxY = 0;
+        let racesRow = arr[0];
+        Debug.Log(`racesRow: ${JSON.stringify(racesRow)}`);
+        for (let i = 1; i < racesRow.length; i++) {
+            if (racesRow[i] == "") {
+                Debug.Log(`Skipping empty race maxY ${i}`);
+                maxY = i;
+                break;
+            }
+            races[i] = "" + racesRow[i];
+            Debug.Log("Adding races " + racesRow[i]);
+        }
+
+        for (let x = 1; x < arr.length; x++) {
+            let region = "" + arr[x][0];
+            Debug.Log("Adding region " + region);
+            for (let y = 1; y < maxY; y++) {
+                let odds = parseInt("" + arr[x][y]);
+                Debug.Log("Adding region " + region + " odds: " + odds);
+                if (!isNaN(odds) && odds != 0) {
+                    if (!regionDatabase.region.hasOwnProperty(region)) {
+                        regionDatabase.region[region] = {options: [], total: 0};
+                    }
+                    if (!regionDatabase.ancestry.hasOwnProperty(races[y])) {
+                        regionDatabase.ancestry[races[y]] = {options: [], total: 0};
+                    }
+                    regionDatabase.region[region].options.push(new dataOdds(races[y], odds));
+                    regionDatabase.region[region].total += odds;
+                    regionDatabase.ancestry[races[y]].options.push(new dataOdds(region, odds));
+                    regionDatabase.ancestry[races[y]].total += odds;
+                }
+            }
+        }
+        return regionDatabase;
+    }
+
+    'use strict';
+
+    const create = function (nameArr, regionArr) {
+            let dataClass = new JavascriptDataClass();
+            let nameDatabase = importNameDatabase(nameArr);
+            let regionDatabase = importRegionDatabase(regionArr);
+
+            dataClass.addPublicVariable("nameDatabase", dataClass.formatJsonForDatabase(nameDatabase));
+            dataClass.addPublicVariable("regionDatabase", dataClass.formatJsonForDatabase(regionDatabase));
+
+            dataClass.addPublicFunction("getName", getName);
+            dataClass.addPublicFunction("getRegionByAncestry", getRegionByAncestry);
+            dataClass.addPublicFunction("getAncestryByRegion", getAncestryByRegion);
+            return dataClass;
+        },
+
+        getName = function (region, type) {
+            switch (region) {
+                case "East Sea":
+                    region = "Walthair";
+                    break;
+                case "Dowfeng":
+                    region = "Aridsha";
+                    break;
+                case "Wayling":
+                    region = "Ceres";
+                    break;
+            }
+            if (type != "Family" && type != "Male" && type != "Female") {
+                if (Math.random() > 0.5) {
+                    type = "Male";
+                }
+                else {
+                    type = "Female";
+                }
+            }
+            let database = nameDatabase[region][type];
+            if (database == undefined || database.length == 0) {
+                return "";
+            }
+            let index = Math.floor(Math.random() * database.length);
+            return database[index];
+        },
+
+        getRegionByAncestry = function (ancestry) {
+            let database = regionDatabase.ancestry[ancestry];
+            if (database == undefined || database.options.length == 0) {
+                return "";
+            }
+            let index = Math.floor(Math.random() * database.total);
+            for (let i = 0; i < database.options.length; i++) {
+                index -= database.options[i].odds;
+                if (index < 0) {
+                    return database.options[i].name;
+                }
+            }
+        },
+
+        getAncestryByRegion = function (region) {
+            let database = regionDatabase.region[region];
+            if (database == undefined || database.options.length == 0) {
+                return "";
+            }
+            let index = Math.floor(Math.random() * database.total);
+            for (let i = 0; i < database.options.length; i++) {
+                index -= database.options[i].odds;
+                if (index < 0) {
+                    return database.options[i].name;
+                }
+            }
+        }
+
+    return {
+        Create: create,
+        GetName: getName
+    };
+}());
 
 var SheetsDatabase = SheetsDatabase || (function () {
     const createTechniques = function (arr) {
@@ -291,7 +450,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
     const setTechniqueDisplayFeatureDiv = function (techDisplayData, displayOptions, contents) {
         return `<div ${setFeatureStyle("wuxFeature", displayOptions)}>${contents}</div>\n`;
     };
-    
+
     var techniqueDisplayHeader = techniqueDisplayHeader || (function () {
         const setTechniqueDisplayHeaderExpandSection = function (techDisplayData, displayOptions) {
             if (displayOptions.hasCSS) {
@@ -392,7 +551,7 @@ var WuxPrintTechnique = WuxPrintTechnique || (function () {
             Print: print
         }
     })();
-    
+
     var techniqueDisplayContents = techniqueDisplayContents || (function () {
         const setTechniqueDisplayFunctionBlock = function (techDisplayData, displayOptions) {
 
@@ -725,9 +884,7 @@ var WuxDefinition = WuxDefinition || (function () {
         }
         return expandContents;
     };
-    const values = {
-        
-    };
+    const values = {};
     'use strict';
 
     const get = function () {
@@ -841,7 +998,7 @@ var WuxDefinition = WuxDefinition || (function () {
         getName = function (name, baseDefinition) {
             return baseDefinition.isResource ? `${name}` : `${baseDefinition.abbreviation}_${name}`;
         },
-        
+
 
         filterAndSortTechniquesByRequirement = function (techniquesFilterData) {
             let techniquesFilter = filter(techniquesFilterData);
@@ -865,7 +1022,7 @@ var WuxDefinition = WuxDefinition || (function () {
             return techniquesByRequirements;
         },
         getByVariable = function (key) {
-            
+
         },
 
         displayEntry = function (dictionary, key) {
@@ -1405,7 +1562,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
             let fieldName = "";
             switch (ancestryType) {
                 case "Spirit":
-                    fieldName = "wuxHiddenAncestrySpirit"; 
+                    fieldName = "wuxHiddenAncestrySpirit";
                     break;
             }
             return `<input type="hidden" class="wuxHiddenAncestry-flag" name="${WuxDef.GetAttribute("Ancestry")}" value="0">
@@ -1427,7 +1584,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 ${contents}
             </div>`;
         },
-        
+
         subMenuOptionRollButton = function (fieldName, variableName, contents) {
             return `<input type="hidden" name="${fieldName}" value="0"/>
             <button class="wuxButton wuxSubMenuOptionButton" type="roll" value="@{${variableName}}">
@@ -1441,7 +1598,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
             </div>`;
         };
 
-        var info = info || (function () {
+    var info = info || (function () {
             'use strict';
 
             var
@@ -1792,6 +1949,14 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         return buildStickySideTab(output);
     };
+    const partyManagerNavigation = function (tabTitle, subheader, infoAttribute, sideBarButtons) {
+        let mainContents = ""
+        mainContents += buildTabs(tabTitle, WuxDef.GetAttribute("Page"), ["NPC", "Notes"]);
+        mainContents += sideBarButtons;
+        mainContents += buildMainSheetHeader(subheader, infoAttribute);
+
+        return mainContents;
+    };
     'use strict';
 
     const buildSection = function (contents, infoContents) {
@@ -1864,6 +2029,16 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             return buildSection(mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
         },
 
+        buildNpcPageNavigation = function () {
+            let definition = WuxDef.Get("Page_NPC");
+            return buildSection(partyManagerNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
+        },
+
+        buildNotesPageNavigation = function () {
+            let definition = WuxDef.Get("Page_Notes");
+            return buildSection(partyManagerNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
+        },
+
         buildOriginPageNavigation = function (definition) {
             return buildSection(characterCreationNavigation(definition, definition.title), WuxSheetMain.Info.DefaultContents(definition));
         },
@@ -1912,6 +2087,8 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         BuildGearPageNavigation: buildGearPageNavigation,
         BuildActionsPageNavigation: buildActionsPageNavigation,
         BuildOriginPageNavigation: buildOriginPageNavigation,
+        BuildNpcPageNavigation: buildNpcPageNavigation,
+        BuildNotesPageNavigation: buildNotesPageNavigation,
         BuildTechniquesNavigation: buildTechniquesNavigation,
         BuildStylesNavigation: buildStylesNavigation,
         BuildTrainingPageNavigation: buildTrainingPageNavigation,
@@ -2119,14 +2296,14 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             for (let key in sortingGroups) {
                 keys += `${key}, `;
             }
-            Debug.Log (`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
+            Debug.Log(`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
         }
         if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
             let keys = "";
             for (let key in sortingGroups[property]) {
                 keys += `${key}, `;
             }
-            Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
+            Debug.Log(`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
         }
         return sortingGroups[property][propertyValue];
     };
@@ -2363,8 +2540,7 @@ function GetTechniqueFromSheetRow(sheet, row, assessColumn) {
     let techLine = sheet.getRange(row, 1, 1, assessColumn - 1).getValues()[0];
     if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
         return new TechniqueData(techLine);
-    }
-    else if (sheet.getSheetName() == "Items") {
+    } else if (sheet.getSheetName() == "Items") {
         let itemData = new ItemData(techLine);
         return itemData.technique;
     }
@@ -2519,22 +2695,18 @@ class TechniqueAssessment {
             this.assessment = "Average";
             if (value > 52) {
                 this.assessment += " 3";
-            }
-            else if (value > 46) {
+            } else if (value > 46) {
                 this.assessment += " 2";
-            }
-            else {
+            } else {
                 this.assessment += " 1";
             }
         } else if (value < 80) {
             this.assessment = "Strong";
             if (value > 72) {
                 this.assessment += " 3";
-            }
-            else if (value > 66) {
+            } else if (value > 66) {
                 this.assessment += " 2";
-            }
-            else {
+            } else {
                 this.assessment += " 1";
             }
         } else {
@@ -2548,7 +2720,7 @@ class TechniqueAssessment {
         range = this.sheet.getRange(this.row, this.assessColumn, 1, 2);
         range.setValues([[this.assessment, `${this.pointVarianceRange()}\n${this.points}`]]);
     }
-    
+
     printCellJson() {
         Debug.Log("Printing JSON for technique");
         let range = this.sheet.getRange(this.row, this.assessColumn + 4, 1, 1);
@@ -2590,7 +2762,7 @@ class TechniqueAssessment {
         }
         return output;
     }
-    
+
     pointVarianceRange() {
         let farPts = Math.floor(this.averagePoints * 3 / 10);
         let closePts = Math.floor(this.averagePoints / 10);
@@ -2934,8 +3106,7 @@ class TechniqueAssessment {
                 if (subTypes.length > 1) {
                     if (subTypes[1] == "Low") {
                         points = 17;
-                    }
-                    else if (subTypes[1] == "Moderate") {
+                    } else if (subTypes[1] == "Moderate") {
                         points = 30;
                     }
                 }
@@ -3251,19 +3422,19 @@ class GearValueAssessment {
     printNotes() {
         return `${this.materialCostCalc}\n${this.componentCostCalc}`;
     }
-    
+
     getBaseMaterialValue() {
         this.materialCost = this.item.bulk * this.item.valMod * this.baseMaterialValue;
         this.materialCostCalc = `${this.item.bulk}[bulk] * ${this.item.valMod}[mod] * ${this.baseMaterialValue}[matVal] = ${this.materialCost}`;
     }
-    
+
     getComponentValues() {
         if (this.item.components.trim() == "") {
             return;
         }
         let components = this.item.components.split(";");
         this.componentCost = 0;
-        
+
         components.forEach(componentData => {
             componentData = componentData.trim();
             let firstSpace = componentData.indexOf(" ");
@@ -3271,7 +3442,7 @@ class GearValueAssessment {
             let componentTypeName = componentData.substring(firstSpace).trim().split("_");
             let componentType = componentTypeName[0];
             let componentName = componentTypeName[1];
-            
+
             let component;
             if (componentType == "Goods") {
                 component = WuxGoods.Get(componentName);
@@ -3281,7 +3452,7 @@ class GearValueAssessment {
             } else if (componentType == "Item") {
                 component = WuxItems.Get(componentName);
             }
-            
+
             if (component != undefined && component.group != "") {
                 let val = count * component.value;
                 this.componentCostCalc += `\n${count}[${component.name}] * ${component.value}[${component.name}] = ${val}`;

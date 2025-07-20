@@ -382,7 +382,7 @@ function FormatWikiSideText(info) {
 function CreateArrayDataObject() {
   return {
     groups: [],
-    names: [],
+    nameDatabase: [],
 
     createNewGroupEntry: function(group) {
       if (!this.names.includes(group)) {

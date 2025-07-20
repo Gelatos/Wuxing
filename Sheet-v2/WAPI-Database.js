@@ -4104,222 +4104,93 @@ function GetRepeatingSectionIdFromId(id, repeatingSection) {
 // ===== Generators
 // =================================================
 
-function GetBlankCharacter() {
-    return {
-        name: "",
-        nationality: "",
-        nature: "",
-        ancestry: "",
-        gender: "",
-        classCategory: "",
-        sector: "",
-        profession: "",
-        rapport: 0,
-        favors: 0
-    };
-}
-
-function CharacterNationalityGenerator() {
-    let rnd = Math.floor(Math.random() * 5);
-    switch (rnd) {
-        case 0:
-            return "Minerva";
-        case 1:
-            return "Apollo";
-        case 2:
-            return "Juno";
-        case 3:
-            return "Ceres";
-        case 4:
-            return "Liber";
-        default:
-            return "Minerva";
-    }
-}
-
-function CharacterRaceGenerator(nationality) {
-    let races;
-
-    // change the odds based on nationality
-    switch (nationality) {
-        case "Minerva":
-            races = GetRaceList(60, 12, 10, 17, 1);
-            break;
-        case "Apollo":
-            races = GetRaceList(3, 85, 2, 10, 0);
-            break;
-        case "Juno":
-            races = GetRaceList(3, 2, 80, 10, 5);
-            break;
-        case "Ceres":
-            races = GetRaceList(10, 30, 4, 55, 1);
-            break;
-        case "Liber":
-            races = GetRaceList(1, 0, 2, 2, 95);
-            break;
-        default:
-            races = GetRaceList(20, 20, 20, 20, 20);
-            break;
+class WuxingHumanCharacterGenerator {
+    constructor() {
+        this.character = this.getBlankCharacter();
     }
 
-    // roll on the randomizer
-    let rnd = Math.floor(Math.random() * 100);
-
-    for (let i = 0; i < races.length; i++) {
-        if (rnd < races[i].odds) {
-            return races[i].race;
-        }
-        rnd -= races[i].odds;
+    getBlankCharacter() {
+        return {
+            firstName: "",
+            fullName: "",
+            homeRegion: "",
+            ancestry: "",
+            gender: "",
+            personality: "",
+            motivation: ""
+        };
     }
-
-    return "Coastborne";
-}
-
-function CharacterGenderGenerator() {
-    let rnd = Math.floor(Math.random() * 2);
-    if (rnd == 0) {
-        return "Male";
-    } else {
-        return "Female";
-    }
-}
-
-function CharacterNameGenerator(nationality, race, gender) {
-    let firstNameList;
-    let lastNameList;
-    let firstName;
-    let lastName;
-    let rnd;
-
-    // Choose whether to select a name based on race or nationality. 
-    rnd = Math.random() * 100;
-
-    // The logic here is that race has less of an effect than nationality on first names
-    if (rnd < 70) {
-        firstNameList = GetNameList(nationality, gender);
-    } else {
-        firstNameList = GetNameList(race, gender);
-    }
-
-    // The logic here is that race has more of an effect than nationality on last names
-    if (rnd < 15) {
-        lastNameList = GetNameList(nationality, "last");
-    } else {
-        lastNameList = GetNameList(race, "last");
-    }
-
-    // choose the names
-    firstName = firstNameList[Math.floor(Math.random() * firstNameList.length)];
-    lastName = lastNameList[Math.floor(Math.random() * lastNameList.length)];
-
-    if (lastName != "") {
-        return firstName + " " + lastName;
-    } else {
-        return firstName;
-    }
-}
-
-function CharacterNatureGenerator() {
-    let natures = GetNatureList();
-
-    let rnd = Math.floor(Math.random() * natures.length);
-
-    return natures[rnd];
-}
-
-function CharacterClassGenerator(venueClass) {
-    // set up variables
-    let maxRoll = 0;
-    let eliteRoll;
-    let highRoll;
-    let mediumRoll = 0;
-
-
-    // these represent ratios or chances each class might show up
-    let eliteMod = 1;
-    let highMod = 9;
-    let mediumMod = 60;
-    let lowMod = 120;
     
-
-    // first, we need to determine the maxRoll value which represents the highest possible roll
-    maxRoll += eliteMod;
-    eliteRoll = maxRoll;
-    maxRoll += highMod;
-    highRoll = maxRoll;
-
-
-    // add the other sets if the class is potentially lower
-    if (venueClass != "High") {
-        maxRoll += mediumMod;
-        mediumRoll = maxRoll;
-    }
-    if (venueClass != "High" && venueClass != "Medium") {
-        maxRoll += lowMod;
-    }
-
-
-    // select a random number within the Max Range
-    let rnd = Math.floor(Math.random() * maxRoll);
-
-
-    // return a class
-    if (rnd <= eliteRoll) {
-        return "Elite";
-    } else if (rnd <= highRoll) {
-        return "High";
-    } else if (rnd <= mediumRoll) {
-        return "Medium";
-    } else {
-        return "Low";
-    }
-}
-
-function CharacterSectorGenerator(classCategory) {
-    let sectors = GetSectorProbabilityList(classCategory);
-    let i;
-
-    // determine the number of odds
-    let maxRnd = 0;
-    for (i = 0; i < sectors.length; i++) {
-        maxRnd += sectors[i].odds;
-    }
-
-    // select a random sector
-    let rnd = Math.floor(Math.random() * maxRnd);
-    for (i = 0; i < sectors.length; i++) {
-        if (rnd < sectors[i].odds) {
-            return sectors[i].sector;
+    generateCharacter() {
+        if (this.character.ancestry == "") {
+            if (this.character.homeRegion == "" || this.character.homeRegion == "0") {
+                this.generateRandomHomeRegion();
+            }
+            this.generateAncestryFromHomeRegion();
         }
-        rnd -= sectors[i].odds;
+        else if (this.character.homeRegion == "" || this.character.homeRegion == "0") {
+            this.generateHomeRegionFromAncestry();
+        }
+        if (this.character.gender == "") {
+            this.generateGender();
+        }
+        if (this.character.firstName == "" || this.character.fullName == "") {
+            this.generateName();
+        }
+        
+        this.generateRandomPersonality();
+        this.generateRandomMotivation();
+    }
+    
+    generateRandom(groupName) {
+        let filter = WuxDef.Filter(new DatabaseFilterData("group", groupName));
+        let rnd = Math.floor(Math.random() * filter.length);
+        if (rnd > filter.length) {
+            rnd = 0;
+        }
+        return filter[rnd].getTitle();
     }
 
-    return "";
-}
-
-function CharacterProfessionGenerator(classCategory, sector) {
-    let professions = GetProfessionList(sector);
-    let professionsList;
-
-    switch (classCategory) {
-        case "Elite":
-            professionsList = professions.elite;
-            break;
-        case "High":
-            professionsList = professions.high;
-            break;
-        case "Medium":
-            professionsList = professions.medium;
-            break;
-        case "Low":
-        default:
-            professionsList = professions.low;
-            break;
+    generateRandomHomeRegion() {
+        this.character.homeRegion = this.generateRandom("RegionType");
     }
 
-    // select a random number within the list
-    let rnd = Math.floor(Math.random() * professionsList.length);
+    generateHomeRegionFromAncestry() {
+        this.character.homeRegion = WuxNames.GetRegionByAncestry(this.character.ancestry);
+    }
+    
+    generateAncestryFromHomeRegion() {
+        this.character.ancestry = WuxNames.GetAncestryByRegion(this.character.homeRegion);
+    }
+    
+    generateGender() {
+        let options = ["Male", "Female"];
+        let rnd = Math.floor(Math.random() * options.length);
+        if (rnd >= options.length) {
+            rnd = 0;
+        }
+        this.character.gender = options[rnd];
+    }
+    
+    generateName() {
+        if (this.character.firstName.trim() == "") {
+            this.character.firstName = WuxNames.GetName(this.character.homeRegion, this.character.gender);
+        }
+        if (this.character.fullName.trim() == "") {
+            this.character.fullName += `${this.character.firstName} `;
+            if (this.character.homeRegion == "Aridsha") {
+                this.character.fullName += `${WuxNames.GetName(this.character.homeRegion, "Family")}-`;
+            }
+            this.character.fullName += `${WuxNames.GetName(this.character.homeRegion, "Family")}`;
+        }
+    }
 
-    return professionsList[rnd];
+    generateRandomPersonality() {
+        this.character.personality = this.generateRandom("PersonalityType");
+    }
+
+    generateRandomMotivation() {
+        this.character.motivation = this.generateRandom("MotivationType");
+    }
 }
 

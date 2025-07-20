@@ -626,7 +626,7 @@ var TargetReference = TargetReference || (function () {
         commandIntroduce = function (msg, targets) {
             let characters, charObj = {};
             let sender = msg.who;
-            let introNameVar = WuxDef.GetVariable("IntroName");
+            let introNameVar = WuxDef.GetVariable("FullName");
             let emotesVar = WuxDef.GetVariable("Chat_Emotes");
             let titleVar = WuxDef.GetVariable("Title");
             let ageVar = WuxDef.GetVariable("Age");
@@ -702,7 +702,7 @@ var TargetReference = TargetReference || (function () {
         getDefaultActiveCharacters = function () {
             return {
                 targetData: {},
-                names: {}
+                nameDatabase: {}
             };
         },
 

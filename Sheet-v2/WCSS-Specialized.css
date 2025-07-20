@@ -24,7 +24,8 @@
 .wuxPageDisplay-Chat,
 .wuxPageDisplay-Options,
 .wuxPageDisplay-Gear,
-.wuxPageDisplay-PartyManager
+.wuxPageDisplay-Notes,
+.wuxPageDisplay-NPC
 {
 	display: none;
 }
@@ -52,7 +53,8 @@ input[type=hidden].wuxPageDisplay-Flag[value="Details"] ~ .wuxPageDisplay-Detail
 input[type=hidden].wuxPageDisplay-Flag[value="Chat"] ~ .wuxPageDisplay-Chat,
 input[type=hidden].wuxPageDisplay-Flag[value="Options"] ~ .wuxPageDisplay-Options,
 input[type=hidden].wuxPageDisplay-Flag[value="Gear"] ~ .wuxPageDisplay-Gear,
-input[type=hidden].wuxPageDisplay-Flag[value="PartyManager"] ~ .wuxPageDisplay-PartyManager
+input[type=hidden].wuxPageDisplay-Flag[value="Notes"] ~ .wuxPageDisplay-Notes,
+input[type=hidden].wuxPageDisplay-Flag[value="NPC"] ~ .wuxPageDisplay-NPC
 {
 	display: block;
 }

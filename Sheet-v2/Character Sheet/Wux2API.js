@@ -2898,7 +2898,7 @@ var TargetReference = TargetReference || (function () {
         commandIntroduce = function (msg, targets) {
             let characters, charObj = {};
             let sender = msg.who;
-            let introNameVar = WuxDef.GetVariable("IntroName");
+            let introNameVar = WuxDef.GetVariable("FullName");
             let emotesVar = WuxDef.GetVariable("Chat_Emotes");
             let titleVar = WuxDef.GetVariable("Title");
             let ageVar = WuxDef.GetVariable("Age");
@@ -2974,7 +2974,7 @@ var TargetReference = TargetReference || (function () {
         getDefaultActiveCharacters = function () {
             return {
                 targetData: {},
-                names: {}
+                nameDatabase: {}
             };
         },
 
@@ -9185,230 +9185,101 @@ function GetRepeatingSectionIdFromId(id, repeatingSection) {
 // ===== Generators
 // =================================================
 
-function GetBlankCharacter() {
-    return {
-        name: "",
-        nationality: "",
-        nature: "",
-        ancestry: "",
-        gender: "",
-        classCategory: "",
-        sector: "",
-        profession: "",
-        rapport: 0,
-        favors: 0
-    };
-}
-
-function CharacterNationalityGenerator() {
-    let rnd = Math.floor(Math.random() * 5);
-    switch (rnd) {
-        case 0:
-            return "Minerva";
-        case 1:
-            return "Apollo";
-        case 2:
-            return "Juno";
-        case 3:
-            return "Ceres";
-        case 4:
-            return "Liber";
-        default:
-            return "Minerva";
-    }
-}
-
-function CharacterRaceGenerator(nationality) {
-    let races;
-
-    // change the odds based on nationality
-    switch (nationality) {
-        case "Minerva":
-            races = GetRaceList(60, 12, 10, 17, 1);
-            break;
-        case "Apollo":
-            races = GetRaceList(3, 85, 2, 10, 0);
-            break;
-        case "Juno":
-            races = GetRaceList(3, 2, 80, 10, 5);
-            break;
-        case "Ceres":
-            races = GetRaceList(10, 30, 4, 55, 1);
-            break;
-        case "Liber":
-            races = GetRaceList(1, 0, 2, 2, 95);
-            break;
-        default:
-            races = GetRaceList(20, 20, 20, 20, 20);
-            break;
+class WuxingHumanCharacterGenerator {
+    constructor() {
+        this.character = this.getBlankCharacter();
     }
 
-    // roll on the randomizer
-    let rnd = Math.floor(Math.random() * 100);
-
-    for (let i = 0; i < races.length; i++) {
-        if (rnd < races[i].odds) {
-            return races[i].race;
-        }
-        rnd -= races[i].odds;
+    getBlankCharacter() {
+        return {
+            firstName: "",
+            fullName: "",
+            homeRegion: "",
+            ancestry: "",
+            gender: "",
+            personality: "",
+            motivation: ""
+        };
     }
-
-    return "Coastborne";
-}
-
-function CharacterGenderGenerator() {
-    let rnd = Math.floor(Math.random() * 2);
-    if (rnd == 0) {
-        return "Male";
-    } else {
-        return "Female";
-    }
-}
-
-function CharacterNameGenerator(nationality, race, gender) {
-    let firstNameList;
-    let lastNameList;
-    let firstName;
-    let lastName;
-    let rnd;
-
-    // Choose whether to select a name based on race or nationality. 
-    rnd = Math.random() * 100;
-
-    // The logic here is that race has less of an effect than nationality on first names
-    if (rnd < 70) {
-        firstNameList = GetNameList(nationality, gender);
-    } else {
-        firstNameList = GetNameList(race, gender);
-    }
-
-    // The logic here is that race has more of an effect than nationality on last names
-    if (rnd < 15) {
-        lastNameList = GetNameList(nationality, "last");
-    } else {
-        lastNameList = GetNameList(race, "last");
-    }
-
-    // choose the names
-    firstName = firstNameList[Math.floor(Math.random() * firstNameList.length)];
-    lastName = lastNameList[Math.floor(Math.random() * lastNameList.length)];
-
-    if (lastName != "") {
-        return firstName + " " + lastName;
-    } else {
-        return firstName;
-    }
-}
-
-function CharacterNatureGenerator() {
-    let natures = GetNatureList();
-
-    let rnd = Math.floor(Math.random() * natures.length);
-
-    return natures[rnd];
-}
-
-function CharacterClassGenerator(venueClass) {
-    // set up variables
-    let maxRoll = 0;
-    let eliteRoll;
-    let highRoll;
-    let mediumRoll = 0;
-
-
-    // these represent ratios or chances each class might show up
-    let eliteMod = 1;
-    let highMod = 9;
-    let mediumMod = 60;
-    let lowMod = 120;
     
-
-    // first, we need to determine the maxRoll value which represents the highest possible roll
-    maxRoll += eliteMod;
-    eliteRoll = maxRoll;
-    maxRoll += highMod;
-    highRoll = maxRoll;
-
-
-    // add the other sets if the class is potentially lower
-    if (venueClass != "High") {
-        maxRoll += mediumMod;
-        mediumRoll = maxRoll;
-    }
-    if (venueClass != "High" && venueClass != "Medium") {
-        maxRoll += lowMod;
-    }
-
-
-    // select a random number within the Max Range
-    let rnd = Math.floor(Math.random() * maxRoll);
-
-
-    // return a class
-    if (rnd <= eliteRoll) {
-        return "Elite";
-    } else if (rnd <= highRoll) {
-        return "High";
-    } else if (rnd <= mediumRoll) {
-        return "Medium";
-    } else {
-        return "Low";
-    }
-}
-
-function CharacterSectorGenerator(classCategory) {
-    let sectors = GetSectorProbabilityList(classCategory);
-    let i;
-
-    // determine the number of odds
-    let maxRnd = 0;
-    for (i = 0; i < sectors.length; i++) {
-        maxRnd += sectors[i].odds;
-    }
-
-    // select a random sector
-    let rnd = Math.floor(Math.random() * maxRnd);
-    for (i = 0; i < sectors.length; i++) {
-        if (rnd < sectors[i].odds) {
-            return sectors[i].sector;
+    generateCharacter() {
+        if (this.character.ancestry == "") {
+            if (this.character.homeRegion == "" || this.character.homeRegion == "0") {
+                this.generateRandomHomeRegion();
+            }
+            this.generateAncestryFromHomeRegion();
         }
-        rnd -= sectors[i].odds;
+        else if (this.character.homeRegion == "" || this.character.homeRegion == "0") {
+            this.generateHomeRegionFromAncestry();
+        }
+        if (this.character.gender == "") {
+            this.generateGender();
+        }
+        if (this.character.firstName == "" || this.character.fullName == "") {
+            this.generateName();
+        }
+        
+        this.generateRandomPersonality();
+        this.generateRandomMotivation();
+    }
+    
+    generateRandom(groupName) {
+        let filter = WuxDef.Filter(new DatabaseFilterData("group", groupName));
+        let rnd = Math.floor(Math.random() * filter.length);
+        if (rnd > filter.length) {
+            rnd = 0;
+        }
+        return filter[rnd].getTitle();
     }
 
-    return "";
-}
-
-function CharacterProfessionGenerator(classCategory, sector) {
-    let professions = GetProfessionList(sector);
-    let professionsList;
-
-    switch (classCategory) {
-        case "Elite":
-            professionsList = professions.elite;
-            break;
-        case "High":
-            professionsList = professions.high;
-            break;
-        case "Medium":
-            professionsList = professions.medium;
-            break;
-        case "Low":
-        default:
-            professionsList = professions.low;
-            break;
+    generateRandomHomeRegion() {
+        this.character.homeRegion = this.generateRandom("RegionType");
     }
 
-    // select a random number within the list
-    let rnd = Math.floor(Math.random() * professionsList.length);
+    generateHomeRegionFromAncestry() {
+        this.character.homeRegion = WuxNames.GetRegionByAncestry(this.character.ancestry);
+    }
+    
+    generateAncestryFromHomeRegion() {
+        this.character.ancestry = WuxNames.GetAncestryByRegion(this.character.homeRegion);
+    }
+    
+    generateGender() {
+        let options = ["Male", "Female"];
+        let rnd = Math.floor(Math.random() * options.length);
+        if (rnd >= options.length) {
+            rnd = 0;
+        }
+        this.character.gender = options[rnd];
+    }
+    
+    generateName() {
+        if (this.character.firstName.trim() == "") {
+            this.character.firstName = WuxNames.GetName(this.character.homeRegion, this.character.gender);
+        }
+        if (this.character.fullName.trim() == "") {
+            this.character.fullName += `${this.character.firstName} `;
+            if (this.character.homeRegion == "Aridsha") {
+                this.character.fullName += `${WuxNames.GetName(this.character.homeRegion, "Family")}-`;
+            }
+            this.character.fullName += `${WuxNames.GetName(this.character.homeRegion, "Family")}`;
+        }
+    }
 
-    return professionsList[rnd];
+    generateRandomPersonality() {
+        this.character.personality = this.generateRandom("PersonalityType");
+    }
+
+    generateRandomMotivation() {
+        this.character.motivation = this.generateRandom("MotivationType");
+    }
 }
 
 var WuxDef = WuxDef || (function() {
     'use strict';
 
     var
-        keys = ["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error","Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques","StyleFreeTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","WillBreak","CharSheetName","SheetName","FullName","DisplayName","IntroName","QuickDescription","Backstory","Age","Gender","Homeland","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","Currency_Jin","Currency_Gold","Currency_CP","HP","WILL","EN","StartEN","Cmb_Chakra","Chakra","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","Cmb_Vitality","Cmb_Surge","Cmb_HV","Cmb_Armor","Cmb_Hardness","Resistance","Weakness","Cmb_ResistanceDesc","Cmb_WeaknessDesc","Cmb_Mv","Cmb_MvPotency","MvCharge","Soc_Favor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceDesc","Soc_Severity","Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience","Trait_Arcanify","Trait_Arcing","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Resonator","Trait_Seeking","Trait_Transmute","Trait_AP","Trait_Brutal","Trait_Optional","Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent","Human","Spirit","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion","Speak","Whisper","Yell","Think","Describe","Boon_Rest","Boon_Savor","Boon_Truth","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Force","Dmg_Piercing","Dmg_Shock","Dmg_Tension","Dmg_Weapon","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks","JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper","StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft","StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons","StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons","StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment","StyleSubGroup_Fluctuation","StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury","StyleSubGroup_Transmulation","StyleSubGroup_Physiomancy","StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","StyleSubGroup_Persuasion","StyleSubGroup_Cunning","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Fight","Cast","Athletics","Page_SocialSkills","Persuade","Cunning","Page_TechnicalSkills","Craft","Device","Investigate","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Chat","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_LanguageSelect","Title_Skills","Title_Emotes","Title_Outfits","Title_EquippedGear","Loading","Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn","Chat_Type","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","Forme_SeeTechniques","RepeatingJobStyles","RepeatingStyles","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot","Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques","RepeatingJobTech","RepeatingAdvTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot","WeaponDamage","WeaponDamageVal","System_Crafting","System_CraftingComponent","CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime","System_Cooking","System_HighQualityMeals","Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns","Line","Cone","Blast","Burst","Zone","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEnter","Title_TechOnEndFocus","Title_TechNewTargets","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling","Teleport","Bulk","Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Rapid Strikes Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Telekinesis","Style_Windsweep","Style_Gravity Force","Style_Surging Water","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense","Style_Invigorating Rally","Style_Avowed","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Taunting Wit","Style_Underminer","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Stillheart","Style_Connecting Bond","Skill_Agility","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Channel","Skill_Charm","Skill_Conjure","Skill_Cook","Skill_Demoralize","Skill_Empathy","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Grappling","Skill_Heal","Skill_Inspire","Skill_Kinesis","Skill_Might","Skill_Misdirect","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Search","Skill_Shape","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Throw","Skill_Tinker","Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca","Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon","Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","Job_Etherealist","Job_Shade","JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner","JStyle_Etherealist","JStyle_Shade","Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned","Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"],
+        keys = ["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","Note","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error","Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","WillBreak","CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","Currency_Jin","Currency_Gold","Currency_CP","HP","WILL","EN","StartEN","Cmb_Chakra","Chakra","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","Cmb_Vitality","Cmb_Surge","Cmb_HV","Cmb_Armor","Cmb_Hardness","Resistance","Weakness","Cmb_ResistanceDesc","Cmb_WeaknessDesc","Cmb_Mv","Cmb_MvPotency","MvCharge","Soc_Favor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceDesc","Soc_Severity","Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience","Trait_Arcanify","Trait_Arcing","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Resonator","Trait_Seeking","Trait_Transmute","Trait_AP","Trait_Brutal","Trait_Optional","Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent","Human","Spirit","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion","Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus","Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Speak","Whisper","Yell","Think","Describe","Boon_Rest","Boon_Savor","Boon_Truth","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Force","Dmg_Piercing","Dmg_Shock","Dmg_Tension","Dmg_Weapon","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks","JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper","StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft","StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons","StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons","StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment","StyleSubGroup_Fluctuation","StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury","StyleSubGroup_Transmulation","StyleSubGroup_Physiomancy","StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","StyleSubGroup_Persuasion","StyleSubGroup_Cunning","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","Stoic","Charmer","Idealist","Cynic","Loner","Leader","Rebel","Thinker","Caregiver","Dreamer","Realist","Mediator","Strategist","Joker","Visionary","Survivor","Guardian","Tactician","Pacifist","Zealot","Justice","Freedom","Revenge","Survival","Glory","Redemption","Belonging","Wealth","Truth","Peace","Control","Chaos","Duty","Fame","Discovery","Legacy","Love","Escape","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Fight","Cast","Athletics","Page_SocialSkills","Persuade","Cunning","Page_TechnicalSkills","Craft","Device","Investigate","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Chat","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_LanguageSelect","Title_Skills","Title_Emotes","Title_Outfits","Title_EquippedGear","Loading","Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn","Chat_Type","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","Forme_SeeTechniques","RepeatingJobStyles","RepeatingStyles","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot","Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques","RepeatingJobTech","RepeatingAdvTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot","WeaponDamage","WeaponDamageVal","System_Crafting","System_CraftingComponent","CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime","System_Cooking","System_HighQualityMeals","Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns","Line","Cone","Blast","Burst","Zone","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEnter","Title_TechOnEndFocus","Title_TechNewTargets","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling","Teleport","Bulk","Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground","Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Rapid Strikes Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Telekinesis","Style_Windsweep","Style_Gravity Force","Style_Surging Water","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense","Style_Invigorating Rally","Style_Avowed","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Taunting Wit","Style_Underminer","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Stillheart","Style_Connecting Bond","Skill_Agility","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Channel","Skill_Charm","Skill_Conjure","Skill_Cook","Skill_Demoralize","Skill_Empathy","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Grappling","Skill_Heal","Skill_Inspire","Skill_Kinesis","Skill_Might","Skill_Misdirect","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Search","Skill_Shape","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Throw","Skill_Tinker","Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca","Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon","Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","Job_Etherealist","Job_Shade","JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner","JStyle_Etherealist","JStyle_Shade","Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned","Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"],
         values = {"Attribute":{"name":"Attribute","fieldName":"attribute","group":"Type","description":"","variable":"atr{0}{1}","title":"Attributes","subGroup":"","descriptions":[""],
                 "abbreviation":"Attr","baseFormula":"6;CR:_max;BonusAttributePoints","modifiers":"","formula":{"workers":[{"variableName":"","definitionName":"","value":6,"multiplier":1,"max":0},
                         {"variableName":"adv-cr_max","definitionName":"CR","value":0,"multiplier":1,"max":0},
@@ -9434,7 +9305,7 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"JStyle","baseFormula":"1","modifiers":"","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Knowledge":{"name":"Knowledge","fieldName":"knowledge","group":"Type","description":"","variable":"knw{0}{1}","title":"Knowledge","subGroup":"","descriptions":[""],
+            "Knowledge":{"name":"Knowledge","fieldName":"knowledge","group":"Type","description":"","variable":"knw{0}{1}","title":"Knowledge","subGroup":"","descriptions":["",""],
                 "abbreviation":"Know","baseFormula":"3;CR:_max*1;TrainingKnowledge","modifiers":"","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0},
                         {"variableName":"adv-cr_max","definitionName":"CR","value":0,"multiplier":1,"max":0},
                         {"variableName":"trn-tp_knowledge","definitionName":"TrainingKnowledge","value":0,"multiplier":1,"max":0}]},
@@ -9634,6 +9505,10 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"ConsuSlot","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
+            "Note":{"name":"Note","fieldName":"note","group":"Type","description":"","variable":"note{0}{1}","title":"Note","subGroup":"","descriptions":[""],
+                "abbreviation":"Note","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
             "_max":{"name":"_max","fieldName":"_max","group":"VariableMod","description":"","variable":"_max","title":"Max","subGroup":"","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -9794,20 +9669,20 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "AdvancementTechnique":{"name":"AdvancementTechnique","fieldName":"advancementtechnique","group":"Advancement","description":"","variable":"adv-ap_technique{0}","title":"Technique Points","subGroup":"","descriptions":["You can spend advancement points to gain Technique Points. These technique points can be used to learn a new standard style or technique. You must spend 1 advancement points to gain 1 technique point."],
+            "AdvancementTechnique":{"name":"AdvancementTechnique","fieldName":"advancementtechnique","group":"Advancement","description":"","variable":"adv-ap_technique{0}","title":"Style Points","subGroup":"","descriptions":["You can spend advancement points to gain Style Points. These style points can be used to learn a new style. You must spend 1 advancement points to gain 1 technique point."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "JobTier":{"name":"JobTier","fieldName":"jobtier","group":"Advancement","description":"","variable":"adv-jobtier{0}","title":"Job Tier","subGroup":"","descriptions":["Your job tier represents your skill in this job. Any tier above 0 allows you to choose this job as a set job style. Each tier will unlock the use of additional techniques as shown below.","Your maximum job tier in any job is equal to your Character Rank."],
+            "JobTier":{"name":"JobTier","fieldName":"jobtier","group":"Advancement","description":"","variable":"adv-jobtier{0}","title":"Job Tier","subGroup":"","descriptions":["Your job tier represents your skill in this job. Any tier above 0 allows you to choose this job as a set job style. Each tier will unlock the use of additional techniques as shown below.","Your maximum job tier in any job is equal to your Character Rank."]
+                ,
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "JobTechniques":{"name":"JobTechniques","fieldName":"jobtechniques","group":"Advancement","description":"","variable":"adv-jobtechniques{0}","title":"Job Techniques","subGroup":"","descriptions":["These techniques are gained when reaching the listed tier in the job. These techniques often help you perform tasks related to your job."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
-            "LearnStyle":{"name":"LearnStyle","fieldName":"learnstyle","group":"Advancement","description":"","variable":"adv-learnstyle{0}","title":"Learn Style","subGroup":"","descriptions":["In order to learn techniques in a style, the style must first be learned. To learn this style, check the box to the left. This box may be disabled if you lack the requirements necessary to learn this style, as shown in the style's requirements.","Learning a style always costs one Technique Point. "],
+            "LearnStyle":{"name":"LearnStyle","fieldName":"learnstyle","group":"Advancement","description":"","variable":"adv-learnstyle{0}","title":"Learn Style","subGroup":"","descriptions":["In order to learn techniques in a style, the style must first be learned. To learn this style, check the box to the left. This box may be disabled if you lack the requirements necessary to learn this style, as shown in the style's requirements.","Learning a style always costs one Style Point. "],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
@@ -9815,15 +9690,11 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "StyleFreeTechniques":{"name":"StyleFreeTechniques","fieldName":"stylefreetechniques","group":"Advancement","description":"","variable":"adv-stylefreetechniques{0}","title":"Free Techniques","subGroup":"","descriptions":["These techniques are automatically learned when this style is learned. You do not need to spend Technique Points to learn these techniques."],
-                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[],
-                "isResource":""},
             "TrainingKnowledge":{"name":"TrainingKnowledge","fieldName":"trainingknowledge","group":"Training","description":"","variable":"trn-tp_knowledge{0}","title":"Knowledge Points","subGroup":"","descriptions":["You can spend training points to gain Knowledge Points. These knowledge points can be used to increase tier in a job. You must spend 1 training points to gain 1 knowledge point."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "TrainingTechniques":{"name":"TrainingTechniques","fieldName":"trainingtechniques","group":"Training","description":"","variable":"trn-tp_technique{0}","title":"Technique Points","subGroup":"","descriptions":["You can spend training points to gain Technique Points. These technique points can be used to learn a new standard style or technique. You must spend 1 training points to gain 1 technique point."],
+            "TrainingTechniques":{"name":"TrainingTechniques","fieldName":"trainingtechniques","group":"Training","description":"","variable":"trn-tp_technique{0}","title":"Style Points","subGroup":"","descriptions":["You can spend training points to gain Style Points. These style points can be used to learn a new style. You must spend 1 training points to gain 1 style point."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
@@ -9955,10 +9826,6 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "IntroName":{"name":"IntroName","fieldName":"introname","group":"Origin","description":"","variable":"intro_name","title":"Intro Name","subGroup":"","descriptions":["This is the name Display Name will change to when an Introduction call is made"],
-                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[],
-                "isResource":""},
             "QuickDescription":{"name":"QuickDescription","fieldName":"quickdescription","group":"Origin","description":"","variable":"quickdescription","title":"Quick Description","subGroup":"","descriptions":["A short description of what this character is about"],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -9975,7 +9842,11 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Homeland":{"name":"Homeland","fieldName":"homeland","group":"Origin","description":"","variable":"homeland","title":"Homeland","subGroup":"","descriptions":["Where this character grew up. This will usually shape their perspectives in the world."],
+            "HomeRegion":{"name":"HomeRegion","fieldName":"homeregion","group":"Origin","description":"","variable":"homeregion","title":"Home Region","subGroup":"","descriptions":["The region of Wuxing where the character hails from."],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Homeland":{"name":"Homeland","fieldName":"homeland","group":"Origin","description":"","variable":"homeland","title":"Homeland","subGroup":"","descriptions":["Where this character originated. This will usually shape their perspectives in the world."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
@@ -10074,7 +9945,7 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Power":{"name":"Power","fieldName":"power","group":"General","description":"","variable":"gen-power{0}","title":"Power","subGroup":"","descriptions":["Power is used as a potency bonus for some techniques reliant on physical force. "],
+            "Power":{"name":"Power","fieldName":"power","group":"General","description":"","variable":"gen-power{0}","title":"Power","subGroup":"","descriptions":["Power is used as a potency bonus for some techniques reliant on physical force. ",""],
                 "abbreviation":"","baseFormula":"","modifiers":"_techset","formula":{"workers":[{"variableName":"atr-bod","definitionName":"Attr_BOD","value":0,"multiplier":1,"max":0},
                         {"variableName":"gen-power_techset","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
@@ -10589,6 +10460,66 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
+            "Walthair":{"name":"Walthair","fieldName":"walthair","group":"RegionType","description":"","variable":"Walthair","title":"Walthair","subGroup":"","descriptions":["Situated on the eastern coast of the main continent, Walthair is a region of hilly grassland, lush forests, and mountains. The most notable settlement is the Citystate of Minerva which takes up much of Walthair's coastline."],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "EastSea":{"name":"EastSea","fieldName":"eastsea","group":"RegionType","description":"","variable":"EastSea","title":"East Sea","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Khem":{"name":"Khem","fieldName":"khem","group":"RegionType","description":"","variable":"Khem","title":"Khem","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Aridsha":{"name":"Aridsha","fieldName":"aridsha","group":"RegionType","description":"","variable":"Aridsha","title":"Aridsha","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Ceres":{"name":"Ceres","fieldName":"ceres","group":"RegionType","description":"","variable":"Ceres","title":"Ceres","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Colswei":{"name":"Colswei","fieldName":"colswei","group":"RegionType","description":"","variable":"Colswei","title":"Colswei","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Dowfeng":{"name":"Dowfeng","fieldName":"dowfeng","group":"RegionType","description":"","variable":"Dowfeng","title":"Dowfeng","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Wayling":{"name":"Wayling","fieldName":"wayling","group":"RegionType","description":"","variable":"Wayling","title":"Wayling","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Novus":{"name":"Novus","fieldName":"novus","group":"RegionType","description":"","variable":"Novus","title":"Novus","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Coastborne":{"name":"Coastborne","fieldName":"coastborne","group":"RaceType","description":"","variable":"Coastborne","title":"Coastborne","subGroup":"Human","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Suntouched":{"name":"Suntouched","fieldName":"suntouched","group":"RaceType","description":"","variable":"Suntouched","title":"Suntouched","subGroup":"Human","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Sandfolk":{"name":"Sandfolk","fieldName":"sandfolk","group":"RaceType","description":"","variable":"Sandfolk","title":"Sandfolk","subGroup":"Human","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Plains-kin":{"name":"Plains-kin","fieldName":"plains-kin","group":"RaceType","description":"","variable":"Plains-kin","title":"Plains-kin","subGroup":"Human","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Frostcloaked":{"name":"Frostcloaked","fieldName":"frostcloaked","group":"RaceType","description":"","variable":"Frostcloaked","title":"Frostcloaked","subGroup":"Human","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Earthblood":{"name":"Earthblood","fieldName":"earthblood","group":"RaceType","description":"","variable":"Earthblood","title":"Earthblood","subGroup":"Human","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
             "Speak":{"name":"Speak","fieldName":"speak","group":"ChatType","description":"","variable":"ctmsg","title":"Speak","subGroup":"","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -10639,7 +10570,8 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Svr_LowSeverity":{"name":"Svr_LowSeverity","fieldName":"lowseverity","group":"SeverityRank","description":"","variable":"sev-low{0}","title":"+1 Low","subGroup":"","descriptions":["A low severity influence is usually notable in the short term and not important to who that character is. These influences can be long term goals but are also often fleeting desires from the moment they are formed. ","These influences grant 1 advantage or disadvantage on checks that leverage the influence. They also add or remove 1d6 to an associated request check. "],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":""},
             "Svr_ModerateSeverity":{"name":"Svr_ModerateSeverity","fieldName":"moderateseverity","group":"SeverityRank","description":"","variable":"sev-moderate{0}","title":"+2 Moderate","subGroup":"","descriptions":["A moderate severity influence are typically formed long term and have a hold on the character's convictions and desires. These influences can sway decisions even when tangentially related to a situation. Moderate influences often dicate how the character lives their daily lives. These influences can usually be leveraged to persuade a character to work outside of their self interest and stick their neck out for a greater cause.","These influences grant 2 advantages or disadvantages on checks that leverage the influence. They also add or remove 1d6+5 to an associated request check. "],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -10687,8 +10619,7 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Ter_Darkness":{"name":"Ter_Darkness","fieldName":"darkness","group":"TerrainFxType","description":"","variable":"ter-darkness{0}","title":"Darkness","subGroup":"","descriptions":["This area is covered in shadow that is difficult to see through. Everything within is considered to be in soft cover and dim light."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":"","definitionName":"","value":6,"multiplier":1,"max":0}]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "Ter_Fog":{"name":"Ter_Fog","fieldName":"fog","group":"TerrainFxType","description":"","variable":"ter-fog{0}","title":"Fog","subGroup":"","descriptions":["This area is covered in fine particles that are difficult to see through. Everything within is considered to be in soft cover."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":"","definitionName":"","value":6,"multiplier":1,"max":0}]},
@@ -10898,6 +10829,158 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
+            "Stoic":{"name":"Stoic","fieldName":"stoic","group":"PersonalityType","description":"","variable":"Stoic","title":"Stoic","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Charmer":{"name":"Charmer","fieldName":"charmer","group":"PersonalityType","description":"","variable":"Charmer","title":"Charmer","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Idealist":{"name":"Idealist","fieldName":"idealist","group":"PersonalityType","description":"","variable":"Idealist","title":"Idealist","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Cynic":{"name":"Cynic","fieldName":"cynic","group":"PersonalityType","description":"","variable":"Cynic","title":"Cynic","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Loner":{"name":"Loner","fieldName":"loner","group":"PersonalityType","description":"","variable":"Loner","title":"Loner","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Leader":{"name":"Leader","fieldName":"leader","group":"PersonalityType","description":"","variable":"Leader","title":"Leader","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Rebel":{"name":"Rebel","fieldName":"rebel","group":"PersonalityType","description":"","variable":"Rebel","title":"Rebel","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Thinker":{"name":"Thinker","fieldName":"thinker","group":"PersonalityType","description":"","variable":"Thinker","title":"Thinker","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Caregiver":{"name":"Caregiver","fieldName":"caregiver","group":"PersonalityType","description":"","variable":"Caregiver","title":"Caregiver","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Dreamer":{"name":"Dreamer","fieldName":"dreamer","group":"PersonalityType","description":"","variable":"Dreamer","title":"Dreamer","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Realist":{"name":"Realist","fieldName":"realist","group":"PersonalityType","description":"","variable":"Realist","title":"Realist","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Mediator":{"name":"Mediator","fieldName":"mediator","group":"PersonalityType","description":"","variable":"Mediator","title":"Mediator","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Strategist":{"name":"Strategist","fieldName":"strategist","group":"PersonalityType","description":"","variable":"Strategist","title":"Strategist","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Joker":{"name":"Joker","fieldName":"joker","group":"PersonalityType","description":"","variable":"Joker","title":"Joker","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Visionary":{"name":"Visionary","fieldName":"visionary","group":"PersonalityType","description":"","variable":"Visionary","title":"Visionary","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Survivor":{"name":"Survivor","fieldName":"survivor","group":"PersonalityType","description":"","variable":"Survivor","title":"Survivor","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Guardian":{"name":"Guardian","fieldName":"guardian","group":"PersonalityType","description":"","variable":"Guardian","title":"Guardian","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Tactician":{"name":"Tactician","fieldName":"tactician","group":"PersonalityType","description":"","variable":"Tactician","title":"Tactician","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Pacifist":{"name":"Pacifist","fieldName":"pacifist","group":"PersonalityType","description":"","variable":"Pacifist","title":"Pacifist","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Zealot":{"name":"Zealot","fieldName":"zealot","group":"PersonalityType","description":"","variable":"Zealot","title":"Zealot","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Justice":{"name":"Justice","fieldName":"justice","group":"MotivationType","description":"","variable":"Justice","title":"Justice","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Freedom":{"name":"Freedom","fieldName":"freedom","group":"MotivationType","description":"","variable":"Freedom","title":"Freedom","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Revenge":{"name":"Revenge","fieldName":"revenge","group":"MotivationType","description":"","variable":"Revenge","title":"Revenge","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Survival":{"name":"Survival","fieldName":"survival","group":"MotivationType","description":"","variable":"Survival","title":"Survival","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Glory":{"name":"Glory","fieldName":"glory","group":"MotivationType","description":"","variable":"Glory","title":"Glory","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Redemption":{"name":"Redemption","fieldName":"redemption","group":"MotivationType","description":"","variable":"Redemption","title":"Redemption","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Belonging":{"name":"Belonging","fieldName":"belonging","group":"MotivationType","description":"","variable":"Belonging","title":"Belonging","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Wealth":{"name":"Wealth","fieldName":"wealth","group":"MotivationType","description":"","variable":"Wealth","title":"Wealth","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Truth":{"name":"Truth","fieldName":"truth","group":"MotivationType","description":"","variable":"Truth","title":"Truth","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Peace":{"name":"Peace","fieldName":"peace","group":"MotivationType","description":"","variable":"Peace","title":"Peace","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Control":{"name":"Control","fieldName":"control","group":"MotivationType","description":"","variable":"Control","title":"Control","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Chaos":{"name":"Chaos","fieldName":"chaos","group":"MotivationType","description":"","variable":"Chaos","title":"Chaos","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Duty":{"name":"Duty","fieldName":"duty","group":"MotivationType","description":"","variable":"Duty","title":"Duty","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Fame":{"name":"Fame","fieldName":"fame","group":"MotivationType","description":"","variable":"Fame","title":"Fame","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Discovery":{"name":"Discovery","fieldName":"discovery","group":"MotivationType","description":"","variable":"Discovery","title":"Discovery","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Legacy":{"name":"Legacy","fieldName":"legacy","group":"MotivationType","description":"","variable":"Legacy","title":"Legacy","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Love":{"name":"Love","fieldName":"love","group":"MotivationType","description":"","variable":"Love","title":"Love","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Escape":{"name":"Escape","fieldName":"escape","group":"MotivationType","description":"","variable":"Escape","title":"Escape","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
             "PageSet_Character Creator":{"name":"PageSet_Character Creator","fieldName":"character_creator","group":"PageSet","description":"","variable":"pgs-character_creator{0}","title":"Character Creator","subGroup":"","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -11024,7 +11107,8 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Page_Details":{"name":"Page_Details","fieldName":"details","group":"Page","description":"","variable":"pag-details{0}","title":"Details","subGroup":"","descriptions":["The Details section contains all of your character's vital statistics. You can use this page to see exact numbers of each of their stats."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":""},
             "Page_Chat":{"name":"Page_Chat","fieldName":"chat","group":"Page","description":"","variable":"pag-chat{0}","title":"Chat","subGroup":"","descriptions":["This is the Chat section. Here you can set your character emotes for the chat's messaging system. You can also use the Chat Post Box to send messages to the chat and select which language you are speaking from the language selection."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -11190,6 +11274,14 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
+            "Page_NPC":{"name":"Page_NPC","fieldName":"npc","group":"Page","description":"","variable":"pag-npc{0}","title":"NPC","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Page_Notes":{"name":"Page_Notes","fieldName":"notes","group":"Page","description":"","variable":"pag-notes{0}","title":"Notes","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
             "Title_Origin":{"name":"Title_Origin","fieldName":"origin","group":"Title","description":"","variable":"ttl-origin{0}","title":"Origin","subGroup":"","descriptions":["These are the origin details of your character. They make no mechanical differences to your character, however may impact how you roleplay your character."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -11204,8 +11296,7 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Title_OriginTraining":{"name":"Title_OriginTraining","fieldName":"origintraining","group":"Title","description":"","variable":"ttl-origintraining{0}","title":"Training","subGroup":"","descriptions":["The pursuit of skill and knowledge is an ever flowing river. Training is a system to track your progress in learning knowledge and new techniques apart from Advancement.","Here you can set any training points your character may have gained prior to character creation. You may also immediately spend these points on further build points."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "Title_Advancement":{"name":"Title_Advancement","fieldName":"advancement","group":"Title","description":"","variable":"ttl-advancement{0}","title":"Advancement","subGroup":"","descriptions":["As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. ","In this section you can see your current level and track their experience. When you are ready, you may also access the advancement menu which will allow you to spend gained build points from leveling up."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -11597,7 +11688,8 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "ItemDescription":{"name":"ItemDescription","fieldName":"itemdescription","group":"Untyped","description":"","variable":"itemdescription{0}","title":"","subGroup":"","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":""},
             "ItemCraftSkill":{"name":"ItemCraftSkill","fieldName":"itemcraftskill","group":"Untyped","description":"","variable":"itemcraftskill{0}","title":"","subGroup":"","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -11757,8 +11849,7 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "System_HighQualityMeals":{"name":"System_HighQualityMeals","fieldName":"highqualitymeals","group":"System","description":"","variable":"sys-highqualitymeals{0}","title":"High Quality Meals","subGroup":"","descriptions":["A high quality meal is made and served at ideal temperatures, is well prepared, and nutritious. These meals always need to be consumed as soon as they are finished being prepared, otherwise they lose the high quality trait.","A character that consumes a high quality meal always gains their Savor Boon. Some recipes and preparations from certain character abilities may add additional benefits to consuming a high quality meal."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "Title_ResourceCost":{"name":"Title_ResourceCost","fieldName":"resourcecost","group":"Title","description":"","variable":"ttl-resourcecost{0}","title":"Resource Cost","subGroup":"Technique","descriptions":["Some techniques require that resources are spent before the technique can be used. You must pay these resources else the technique fails. Generally, resource costs fall into four categories: EN, WILL, Chakra, or Boon. ","EN is the most straightforward and common resource. EN is gained while in conflict and is spent as per a technique states.","WILL represents a willpower cost of the technique, most commonly associated when using magic. Whenever WILL is reduced to zero, a Will Break is caused. ","Whenever you cause a Will Break through a technique's WILL resource cost, you take tension damage equal to 5 + [5 x Character Rank] and your Chakra is reduced by 1. If Chakra is ever reduced to 0, you can no longer use and techniques that have a WILL resource cost.","Chakra is a rare resource for powerful techniques. It usually causes all the effects of a resource cost Will Break. ","Boon is a rare resource cost for particularly potent techniques. When consuming a Boon, remove a check from an active boon."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -11904,6 +11995,46 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
+            "Note_GenName":{"name":"Note_GenName","fieldName":"genname","group":"Note","description":"","variable":"note-genname{0}","title":"Name","subGroup":"Generator","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Note_GenFullName":{"name":"Note_GenFullName","fieldName":"genfullname","group":"Note","description":"","variable":"note-genfullname{0}","title":"Full Name","subGroup":"Generator","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Note_GenGender":{"name":"Note_GenGender","fieldName":"gengender","group":"Note","description":"","variable":"note-gengender{0}","title":"Gender","subGroup":"Generator","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Note_GenHomeRegion":{"name":"Note_GenHomeRegion","fieldName":"genhomeregion","group":"Note","description":"","variable":"note-genhomeregion{0}","title":"Home Region","subGroup":"Generator","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Note_GenRace":{"name":"Note_GenRace","fieldName":"genrace","group":"Note","description":"","variable":"note-genrace{0}","title":"Race","subGroup":"Generator","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Note_GenPersonality":{"name":"Note_GenPersonality","fieldName":"genpersonality","group":"Note","description":"","variable":"note-genpersonality{0}","title":"Personality","subGroup":"Generator","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Note_GenMotivation":{"name":"Note_GenMotivation","fieldName":"genmotivation","group":"Note","description":"","variable":"note-genmotivation{0}","title":"Motivation","subGroup":"Generator","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Note_GenerateCharacter":{"name":"Note_GenerateCharacter","fieldName":"generatecharacter","group":"Note","description":"","variable":"note-generatecharacter{0}","title":"Generate Character","subGroup":"Generator","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Note_UseGeneration":{"name":"Note_UseGeneration","fieldName":"usegeneration","group":"Note","description":"","variable":"note-usegeneration{0}","title":"Use This Character","subGroup":"Generator","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Note_ClearBackground":{"name":"Note_ClearBackground","fieldName":"clearbackground","group":"Note","description":"","variable":"note-clearbackground{0}","title":"Clear Background","subGroup":"Generator","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
             "Style_Basic Action":{"name":"Style_Basic Action","fieldName":"style_basic_action","group":"Style","description":"","variable":"sty-basic_action{0}","title":"Basic Action","subGroup":"Basic","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -11968,7 +12099,8 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","mainGroup":"Style","affinity":"","requirements":"None","tier":null},
-            "Style_Phalanx Arte":{"name":"Style_Phalanx Arte","fieldName":"style_phalanx_arte","group":"Style","description":"","variable":"sty-phalanx_arte{0}","title":"Phalanx Arte","subGroup":"Skirmish Weapons","descriptions":["A Skirmish-focused style that employs long reaching attacks."],
+            "Style_Phalanx Arte":{"name":"Style_Phalanx Arte","fieldName":"style_phalanx_arte","group":"Style","description":"","variable":"sty-phalanx_arte{0}","title":"Phalanx Arte","subGroup":"Skirmish Weapons","descriptions":["A Skirmish-focused style that employs long reaching attacks."]
+                ,
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","mainGroup":"Style","affinity":"","requirements":"None","tier":null},
@@ -12122,8 +12254,7 @@ var WuxDef = WuxDef || (function() {
                 "isResource":"","mainGroup":"Style","affinity":"","requirements":"None","tier":null},
             "Style_Hellfire":{"name":"Style_Hellfire","fieldName":"style_hellfire","group":"Style","description":"","variable":"sty-hellfire{0}","title":"Hellfire","subGroup":"Evocation","descriptions":["Fire. A Throw and Channel-focused style that allows many methods to blanket areas in fire."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":"","mainGroup":"Advanced","affinity":"","requirements":"None","tier":null},
             "Style_Storm Caller":{"name":"Style_Storm Caller","fieldName":"style_storm_caller","group":"Style","description":"","variable":"sty-storm_caller{0}","title":"Storm Caller","subGroup":"Evocation","descriptions":["Metal. A Shoot-focused style that wields lightning to directly harm its targets."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -12371,7 +12502,8 @@ var WuxDef = WuxDef || (function() {
                 "isResource":"","mainGroup":"Style","affinity":"","requirements":"None","tier":null},
             "Style_Hidden Footing":{"name":"Style_Hidden Footing","fieldName":"style_hidden_footing","group":"Style","description":"","variable":"sty-hidden_footing{0}","title":"Hidden Footing","subGroup":"Stealth","descriptions":["A Sneak-focused style allowing one to stay hidden and mobile."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":"","mainGroup":"Style","affinity":"","requirements":"None","tier":null},
             "Style_Remotion":{"name":"Style_Remotion","fieldName":"style_remotion","group":"Style","description":"","variable":"sty-remotion{0}","title":"Remotion","subGroup":"Acrobatics","descriptions":["An Agility-focused style that gives the user tremendous balance to stay on their feet and avoid attacks."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -12513,8 +12645,7 @@ var WuxDef = WuxDef || (function() {
             "Skill_Grappling":{"name":"Skill_Grappling","fieldName":"grappling","group":"Skill","description":"","variable":"skl-grappling{0}","title":"Grappling","subGroup":"Fight","descriptions":["Grappling is an active skill that represents attacking with one's own body. Wrestling and forcing movement are always grapple skill checks. In addition, many strikes from fists or kicks are often grappling checks."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":"atr-bod","definitionName":"Attr_BOD","value":0,"multiplier":1,"max":0},
                         {"variableName":"skl-grappling_rank","definitionName":"","value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "Skill_Heal":{"name":"Skill_Heal","fieldName":"heal","group":"Skill","description":"","variable":"skl-heal{0}","title":"Heal","subGroup":"Cast","descriptions":["Heal is an active skill used to perform medical procedures such as first aid and using healing magic. It includes long-term medical support for disease and illness and in circumstances where surgery is required."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":"atr-int","definitionName":"Attr_INT","value":0,"multiplier":1,"max":0},
@@ -12755,7 +12886,8 @@ var WuxDef = WuxDef || (function() {
                         {"variableName":"lor-fishing_rank","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Lore_Hunting":{"name":"Lore_Hunting","fieldName":"hunting","group":"Lore","description":"","variable":"lor-hunting{0}","title":"Hunting","subGroup":"Profession","descriptions":["Hunting knowledge imparts wisdom related to tracking, catching, and killing various creatures."],
+            "Lore_Hunting":{"name":"Lore_Hunting","fieldName":"hunting","group":"Lore","description":"","variable":"lor-hunting{0}","title":"Hunting","subGroup":"Profession","descriptions":["Hunting knowledge imparts wisdom related to tracking, catching, and killing various creatures."]
+                ,
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":"gen-recall","definitionName":"Recall","value":0,"multiplier":1,"max":0},
                         {"variableName":"lor-hunting_rank","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
@@ -12915,8 +13047,7 @@ var WuxDef = WuxDef || (function() {
                         {"variableName":"lor-fashion_rank","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Lore_Games":{"name":"Lore_Games","fieldName":"games","group":"Lore","description":"","variable":"lor-games{0}","title":"Games","subGroup":"Culture","descriptions":["Games knowledge covers general understanding of how many games are played whether they are reliant on cards, dice, or other kinds of chance."]
-                ,
+            "Lore_Games":{"name":"Lore_Games","fieldName":"games","group":"Lore","description":"","variable":"lor-games{0}","title":"Games","subGroup":"Culture","descriptions":["Games knowledge covers general understanding of how many games are played whether they are reliant on cards, dice, or other kinds of chance."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":"gen-recall","definitionName":"Recall","value":0,"multiplier":1,"max":0},
                         {"variableName":"lor-games_rank","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
@@ -13078,7 +13209,8 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","requirements":"None"},
-            "JStyle_Fighter":{"name":"JStyle_Fighter","fieldName":"jstyle_fighter","group":"JobStyle","description":"","variable":"jbs-fighter{0}","title":"Fighter","subGroup":"Vanguard","descriptions":["The art of war is about being the one that survives to the end and the fighter is the embodiment of this. Armed with methods to self sustain and heal, the fighter is a well spring of sustained combat.\nThe fighter is made to be very self sufficient, however it excels most when it can be provided healing. A teammate that can heal the fighter without spending its resources will see the fighter staying more effective.\nFighters like having a high body attribute as it increases their HP stat. The fighter doesn't want for any particular skills however might will allow it to use its body attribute to attack as well."],
+            "JStyle_Fighter":{"name":"JStyle_Fighter","fieldName":"jstyle_fighter","group":"JobStyle","description":"","variable":"jbs-fighter{0}","title":"Fighter","subGroup":"Vanguard","descriptions":["The art of war is about being the one that survives to the end and the fighter is the embodiment of this. Armed with methods to self sustain and heal, the fighter is a well spring of sustained combat.\nThe fighter is made to be very self sufficient, however it excels most when it can be provided healing. A teammate that can heal the fighter without spending its resources will see the fighter staying more effective.\nFighters like having a high body attribute as it increases their HP stat. The fighter doesn't want for any particular skills however might will allow it to use its body attribute to attack as well."]
+                ,
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","requirements":"None"},
@@ -13164,8 +13296,7 @@ var WuxDef = WuxDef || (function() {
                 "isResource":"","requirements":"None"},
             "JStyle_Spellwright":{"name":"JStyle_Spellwright","fieldName":"jstyle_spellwright","group":"JobStyle","description":"","variable":"jbs-spellwright{0}","title":"Spellwright","subGroup":"Waymaker","descriptions":["A spellwright is a master of shaping magic which allows one to transmute material quickly into objects and structures. \nWhile a spellwright is able to perform marvelous feats to objects, they innately lack any techniques to create them. A spellwright needs access to techniques that will allow them to create objects and structures to make full use of their skills.\nThe shape skill is required to make full use of a spellwright's abilities. Naturally, they also enjoy a high body attribute to further bolster their shape skill. Otherwise, like many Waymakers, conviction is also a strong attribute."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":"","requirements":"None"},
             "JStyle_Empath":{"name":"JStyle_Empath","fieldName":"jstyle_empath","group":"JobStyle","description":"","variable":"jbs-empath{0}","title":"Empath","subGroup":"Advocate","descriptions":["An empath is an expert in helping others reduce the tension in their lives. They can help calm negative emotions and reduce damage against will, even stepping in when times are tough.\nWhile an empath can reduce the amount of incoming Will damage, they lack much to progress in a social conflict. Treat them as a defensive tool against aggressive will attacks.\nAs their name suggests, an empath benefits from the empathy skill as many of their techniques become more powerful with successful checks. Similarly, an empath enjoys a high intuition attribute to bolster their empathy skill."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -13355,8 +13486,8 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"","points":"12","endsOnRoundStart":false,"endsOnTrigger":true}},
-        sortingGroups = {"group":{"Type":["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot"],"VariableMod":["_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error"],"Attribute":["Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN"],"Untyped":["Check","CombatDetails","FlatDC","BoostStyleTech","BoostGearTech","BoostPerkTech","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","EN","Resistance","Weakness","MvCharge","RepeatingInfluences","Loading","TechPopupValues","ItemPopupValues","RepeatingActiveEmotes","RepeatingOutfits","RepeatingJobStyles","RepeatingStyles","RepeatingJobTech","RepeatingAdvTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","WeaponDamage","WeaponDamageVal","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling","Teleport"],"Title":["Title_Boon","Title_UsingInfluences","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_LanguageSelect","Title_Skills","Title_Emotes","Title_Outfits","Title_EquippedGear","Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEnter","Title_TechOnEndFocus","Title_TechNewTargets"],"Advancement":["Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques","StyleFreeTechniques"],"Training":["TrainingKnowledge","TrainingTechniques","PP","BonusTraining"],"Defense":["Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion"],"Sense":["Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny"],"Result":["WillBreak"],"Origin":["CharSheetName","SheetName","FullName","DisplayName","IntroName","QuickDescription","Backstory","Age","Gender","Homeland"],"Currency":["Currency_Jin","Currency_Gold","Currency_CP"],"General":["HP","WILL","StartEN","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity"],"Combat":["Cmb_Chakra","Cmb_Vitality","Cmb_Surge","Cmb_HV","Cmb_Armor","Cmb_Hardness","Cmb_ResistanceDesc","Cmb_WeaknessDesc","Cmb_Mv","Cmb_MvPotency"],"":["Chakra","Severity"],"Social":["Soc_Favor","Soc_Influence","Soc_InfluenceDesc","Soc_Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience"],"Trait":["Trait_Arcanify","Trait_Arcing","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Resonator","Trait_Seeking","Trait_Transmute","Trait_AP","Trait_Brutal","Trait_Optional","Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent"],"AncestryType":["Human","Spirit"],"AffinityType":["Wood","Fire","Earth","Metal","Water"],"AffinityTypeDesc":["WoodF","FireF","EarthF","MetalF","WaterF"],"InnateDefenseType":["Def_BOD","Def_PRC","Def_QCK"],"InnateSenseType":["Def_CNV","Def_INT","Def_RSN"],"AttributeValue":["AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad"],"JobTier":["JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6"],"LoreTier":["LoreTier0","LoreTier1","LoreTier2","LoreTier3"],"GeneralLoreTier":["GeneralLoreTier0","GeneralLoreTier1"],"LoreCategory":["LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion"],"ChatType":["Speak","Whisper","Yell","Think","Describe"],"Boon":["Boon_Rest","Boon_Savor","Boon_Truth"],"InfluenceType":["InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal"],"SeverityRank":["Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity"],"DamageType":["Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Force","Dmg_Piercing","Dmg_Shock","Dmg_Tension","Dmg_Weapon"],"TerrainFxType":["Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden"],"PerkGroup":["PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks"],"JobGroup":["JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper"],"StyleGroup":["StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft"],"StyleSubGroup":["StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons","StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons","StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment","StyleSubGroup_Fluctuation","StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury","StyleSubGroup_Transmulation","StyleSubGroup_Physiomancy","StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","StyleSubGroup_Persuasion","StyleSubGroup_Cunning"],"GearGroup":["GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear"],"PageSet":["PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training"],"Page":["Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Page_SocialSkills","Page_TechnicalSkills","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Chat","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar"],"ActiveSkills":["Fight","Cast","Athletics"],"SocialSkills":["Persuade","Cunning"],"TechnicalSkills":["Craft","Device","Investigate"],"Popup":["Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn"],"Chat":["Chat_Type","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","Chat_OutfitDefault","Chat_OutfitDefaultURL"],"Forme":["Forme_SeeTechniques","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot"],"Action":["Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques"],"Gear":["Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot"],"System":["System_Crafting","System_CraftingComponent","System_Cooking","System_HighQualityMeals"],"CraftingComp":["CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime"],"PatternType":["Line","Cone","Blast","Burst","Zone"],"Rules":["Bulk"],"Style":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Rapid Strikes Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Telekinesis","Style_Windsweep","Style_Gravity Force","Style_Surging Water","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense","Style_Invigorating Rally","Style_Avowed","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Taunting Wit","Style_Underminer","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Stillheart","Style_Connecting Bond"],"Skill":["Skill_Agility","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Channel","Skill_Charm","Skill_Conjure","Skill_Cook","Skill_Demoralize","Skill_Empathy","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Grappling","Skill_Heal","Skill_Inspire","Skill_Kinesis","Skill_Might","Skill_Misdirect","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Search","Skill_Shape","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Throw","Skill_Tinker"],"Language":["Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca","Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan"],"Lore":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"Job":["Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","Job_Etherealist","Job_Shade"],"JobStyle":["JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner","JStyle_Etherealist","JStyle_Shade"],"Status":["Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned","Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"]
-            },"subGroup":{"":["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error","Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques","StyleFreeTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","WillBreak","CharSheetName","SheetName","FullName","DisplayName","IntroName","QuickDescription","Backstory","Age","Gender","Homeland","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","Currency_Jin","Currency_Gold","Currency_CP","HP","WILL","EN","StartEN","Cmb_Chakra","Chakra","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","Soc_Favor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceDesc","Soc_Severity","Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience","Human","Spirit","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion","Speak","Whisper","Yell","Think","Describe","Boon_Rest","Boon_Savor","Boon_Truth","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Tension","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks","JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper","StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Fight","Cast","Athletics","Page_SocialSkills","Persuade","Cunning","Page_TechnicalSkills","Craft","Device","Investigate","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Chat","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_LanguageSelect","Title_Skills","Title_Emotes","Title_Outfits","Title_EquippedGear","Loading","Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn","Chat_Type","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","Forme_SeeTechniques","RepeatingJobStyles","RepeatingStyles","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot","Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques","RepeatingJobTech","RepeatingAdvTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot","System_Crafting","System_CraftingComponent","CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime","System_Cooking","System_HighQualityMeals","Line","Cone","Blast","Burst","Zone","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEnter","Title_TechOnEndFocus","Title_TechNewTargets","Teleport"],"Combat Defense":["Def_Brace","Def_Warding","Def_Reflex"],"Defense":["Def_Fortitude","Def_Hide","Def_Evasion"],"Social Sense":["Def_Resolve","Def_Insight","Def_Guile"],"Sense":["Def_Freewill","Def_Notice","Def_Scrutiny"],"Life":["Cmb_Vitality","Cmb_Surge","Cmb_HV","Cmb_Armor","Cmb_Hardness","Resistance","Weakness","Cmb_ResistanceDesc","Cmb_WeaknessDesc"],"Movement":["Cmb_Mv","Cmb_MvPotency","MvCharge","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling"],"Technique Trait":["Trait_Arcanify","Trait_Arcing","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Resonator","Trait_Seeking","Trait_Transmute"],"Effect Trait":["Trait_AP","Trait_Brutal","Trait_Optional"],"Item Trait":["Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword"],"Goods Trait":["Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent"],"Energy":["Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Shock"],"Physical":["Dmg_Force","Dmg_Piercing","Dmg_Weapon"],"Melee Weaponry":["StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons"],"Ranged Weaponry":["StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons"],"Martial Arts":["StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte"],"Arcanification Magic":["StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment"],"Fluctuation Magic":["StyleSubGroup_Fluctuation"],"Materialization Magic":["StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury"],"Transformation Magic":["StyleSubGroup_Transmulation","StyleSubGroup_Physiomancy"],"Athletics":["StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","Skill_Agility","Skill_Physique","Skill_Sneak"],"Speechcraft":["StyleSubGroup_Persuasion","StyleSubGroup_Cunning"],"Damage":["WeaponDamage","WeaponDamageVal"],"Technique":["Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns"],"Gear":["Bulk"],"Basic":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit"],"Mighty Weapons":["Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte"],"Skirmish Weapons":["Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte"],"Finesse Weapons":["Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte"],"Kinetics":["Style_Rapid Strikes Arte"],"Shoot Weapons":["Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte"],"Throw Weapons":["Style_Bomber Arte","Style_Daggerthrow Arte"],"Evocation":["Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold"],"Channelling":["Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control"],"Enchantment":["Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control"],"Fluctuation":["Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Telekinesis","Style_Windsweep","Style_Gravity Force","Style_Surging Water"],"Battlesmithing":["Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith"],"Conjury":["Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore"],"Transmulation":["Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy"],"Physiomancy":["Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux"],"Brawn":["Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Unbeatable Brawn","Style_Unrelenting Motion"],"Stealth":["Style_Hidden Footing","Style_Shadow Walking"],"Acrobatics":["Style_Remotion","Style_Evasive Maneuvers","Style_Reactive Defense"],"Persuasion":["Style_Invigorating Rally","Style_Avowed","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics"],"Cunning":["Style_Taunting Wit","Style_Underminer","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Stillheart","Style_Connecting Bond","Skill_Demoralize","Skill_Empathy","Skill_Misdirect"],"Craft":["Skill_Alchemy","Skill_Build","Skill_Cook"],"Investigate":["Skill_Analyze","Skill_Resonance","Skill_Search"],"Cast":["Skill_Channel","Skill_Conjure","Skill_Enchant","Skill_Heal","Skill_Kinesis","Skill_Shape"],"Persuade":["Skill_Charm","Skill_Inspire","Skill_Rationalize"],"Fight":["Skill_Finesse","Skill_Grappling","Skill_Might","Skill_Shoot","Skill_Skirmish","Skill_Throw"],"Device":["Skill_Glyphwork","Skill_Pilot","Skill_Tinker"],"Walthair":["Lang_Minere","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca"],"Aridsha":["Lang_Junal","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira"],"Khem":["Lang_Apollen","Lang_Kleikan"],"Colswei":["Lang_Lib"],"Ceres":["Lang_Cert","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq"],"Special":["Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan"],"Academics":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology"],"Profession":["Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining"],"Craftmanship":["Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving"],"Geography":["Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane"],"History":["Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History"],"Culture":["Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater"],"Religion":["Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"Vanguard":["Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark"],"Operator":["Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist"],"Athlete":["Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer"],"Strategist":["Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor"],"Waymaker":["Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright"],"Advocate":["Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner"],"Esper":["Job_Etherealist","Job_Shade","JStyle_Etherealist","JStyle_Shade"],"Status":["Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious"],"Condition":["Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned"],"Emotion":["Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"]},"mainGroup":{"Style":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Rapid Strikes Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Arcane Conduit","Style_Freeform Flight","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Invigorating Rally","Style_Avowed","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Taunting Wit","Style_Underminer","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Stillheart","Style_Connecting Bond"],"Advanced":["Style_Mauler Arte","Style_Avenger Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Ether Magic","Style_Time Control","Style_Telekinesis","Style_Windsweep","Style_Gravity Force","Style_Surging Water","Style_Warsmith","Style_Structural Mastery","Style_Poison Spore","Style_Geomancy","Style_Cryomancy","Style_Soul Surge","Style_Blood Flux","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense"]},"formulaMods":{"CR":["Attribute","Skill","Job","Knowledge","Style","Perk","Influence","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","HP","WILL","Cmb_Chakra","Recall","Initiative","Cmb_Surge","Cmb_HV"],"BonusAttributePoints":["Attribute"],"Level":["Skill","Advancement","Training","HP","WILL"],"AdvancementSkill":["Skill"],"AdvancementJob":["Job"],"TrainingKnowledge":["Knowledge"],"AdvancementTechnique":["Style"],"TrainingTechniques":["Style"],"BonusTraining":["Training"],"Attr_BOD":["Def_Brace","Def_Fortitude","HP","Power","CarryingCapacity","Skill_Conjure","Skill_Grappling","Skill_Might","Skill_Physique","Skill_Throw"],"Attr_PRC":["Def_Warding","Def_Hide","Accuracy","Skill_Kinesis","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Tinker"],"Attr_QCK":["Def_Reflex","Def_Evasion","Initiative","Skill_Agility","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Pilot"],"Attr_CNV":["Def_Resolve","Def_Freewill","WILL","Charisma","Cmb_HV","Skill_Channel","Skill_Demoralize","Skill_Inspire","Skill_Misdirect","Skill_Resonance"],"Attr_INT":["Def_Insight","Def_Notice","Artistry","Skill_Charm","Skill_Cook","Skill_Empathy","Skill_Heal","Skill_Search"],"Attr_RSN":["Def_Guile","Def_Scrutiny","Recall","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Rationalize","Skill_Shape"],"Recall":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"]},"techMods":{"_tech":["Influence","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","HP","WILL","EN","StartEN","Cmb_Chakra","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","Cmb_Vitality","Cmb_Surge","Cmb_HV","Cmb_Armor","Cmb_Mv","Cmb_MvPotency"],"_techset":["Power","Accuracy","Artistry","Charisma","Recall"]},"hasMax":{"true":["Data","Advancement","Training","General","CR","XP","BonusTraining","HP","WILL","EN","Cmb_Chakra","Cmb_Vitality","Cmb_Surge","Soc_Favor"]}},
+        sortingGroups = {"group":{"Type":["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","Note"],"VariableMod":["_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error"],"Attribute":["Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN"]
+                ,"Untyped":["Check","CombatDetails","FlatDC","BoostStyleTech","BoostGearTech","BoostPerkTech","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","EN","Resistance","Weakness","MvCharge","RepeatingInfluences","Loading","TechPopupValues","ItemPopupValues","RepeatingActiveEmotes","RepeatingOutfits","RepeatingJobStyles","RepeatingStyles","RepeatingJobTech","RepeatingAdvTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","WeaponDamage","WeaponDamageVal","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling","Teleport"],"Title":["Title_Boon","Title_UsingInfluences","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_LanguageSelect","Title_Skills","Title_Emotes","Title_Outfits","Title_EquippedGear","Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEnter","Title_TechOnEndFocus","Title_TechNewTargets"],"Advancement":["Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques"],"Training":["TrainingKnowledge","TrainingTechniques","PP","BonusTraining"],"Defense":["Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion"],"Sense":["Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny"],"Result":["WillBreak"],"Origin":["CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland"],"Currency":["Currency_Jin","Currency_Gold","Currency_CP"],"General":["HP","WILL","StartEN","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity"],"Combat":["Cmb_Chakra","Cmb_Vitality","Cmb_Surge","Cmb_HV","Cmb_Armor","Cmb_Hardness","Cmb_ResistanceDesc","Cmb_WeaknessDesc","Cmb_Mv","Cmb_MvPotency"],"":["Chakra","Severity"],"Social":["Soc_Favor","Soc_Influence","Soc_InfluenceDesc","Soc_Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience"],"Trait":["Trait_Arcanify","Trait_Arcing","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Resonator","Trait_Seeking","Trait_Transmute","Trait_AP","Trait_Brutal","Trait_Optional","Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent"],"AncestryType":["Human","Spirit"],"AffinityType":["Wood","Fire","Earth","Metal","Water"],"AffinityTypeDesc":["WoodF","FireF","EarthF","MetalF","WaterF"],"InnateDefenseType":["Def_BOD","Def_PRC","Def_QCK"],"InnateSenseType":["Def_CNV","Def_INT","Def_RSN"],"AttributeValue":["AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad"],"JobTier":["JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6"],"LoreTier":["LoreTier0","LoreTier1","LoreTier2","LoreTier3"],"GeneralLoreTier":["GeneralLoreTier0","GeneralLoreTier1"],"LoreCategory":["LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion"],"RegionType":["Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus"],"RaceType":["Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood"],"ChatType":["Speak","Whisper","Yell","Think","Describe"],"Boon":["Boon_Rest","Boon_Savor","Boon_Truth"],"InfluenceType":["InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal"],"SeverityRank":["Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity"],"DamageType":["Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Force","Dmg_Piercing","Dmg_Shock","Dmg_Tension","Dmg_Weapon"],"TerrainFxType":["Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden"],"PerkGroup":["PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks"],"JobGroup":["JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper"],"StyleGroup":["StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft"],"StyleSubGroup":["StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons","StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons","StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment","StyleSubGroup_Fluctuation","StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury","StyleSubGroup_Transmulation","StyleSubGroup_Physiomancy","StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","StyleSubGroup_Persuasion","StyleSubGroup_Cunning"],"GearGroup":["GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear"],"PersonalityType":["Stoic","Charmer","Idealist","Cynic","Loner","Leader","Rebel","Thinker","Caregiver","Dreamer","Realist","Mediator","Strategist","Joker","Visionary","Survivor","Guardian","Tactician","Pacifist","Zealot"],"MotivationType":["Justice","Freedom","Revenge","Survival","Glory","Redemption","Belonging","Wealth","Truth","Peace","Control","Chaos","Duty","Fame","Discovery","Legacy","Love","Escape"],"PageSet":["PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training"],"Page":["Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Page_SocialSkills","Page_TechnicalSkills","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Chat","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes"],"ActiveSkills":["Fight","Cast","Athletics"],"SocialSkills":["Persuade","Cunning"],"TechnicalSkills":["Craft","Device","Investigate"],"Popup":["Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn"],"Chat":["Chat_Type","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","Chat_OutfitDefault","Chat_OutfitDefaultURL"],"Forme":["Forme_SeeTechniques","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot"],"Action":["Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques"],"Gear":["Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot"],"System":["System_Crafting","System_CraftingComponent","System_Cooking","System_HighQualityMeals"],"CraftingComp":["CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime"],"PatternType":["Line","Cone","Blast","Burst","Zone"],"Rules":["Bulk"],"Note":["Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground"],"Style":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Rapid Strikes Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Telekinesis","Style_Windsweep","Style_Gravity Force","Style_Surging Water","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense","Style_Invigorating Rally","Style_Avowed","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Taunting Wit","Style_Underminer","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Stillheart","Style_Connecting Bond"],"Skill":["Skill_Agility","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Channel","Skill_Charm","Skill_Conjure","Skill_Cook","Skill_Demoralize","Skill_Empathy","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Grappling","Skill_Heal","Skill_Inspire","Skill_Kinesis","Skill_Might","Skill_Misdirect","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Search","Skill_Shape","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Throw","Skill_Tinker"],"Language":["Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca","Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan"],"Lore":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"Job":["Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","Job_Etherealist","Job_Shade"],"JobStyle":["JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner","JStyle_Etherealist","JStyle_Shade"],"Status":["Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned","Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"]},"subGroup":{"":["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","Note","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error","Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","WillBreak","CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","Currency_Jin","Currency_Gold","Currency_CP","HP","WILL","EN","StartEN","Cmb_Chakra","Chakra","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","Soc_Favor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceDesc","Soc_Severity","Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience","Human","Spirit","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion","Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus","Speak","Whisper","Yell","Think","Describe","Boon_Rest","Boon_Savor","Boon_Truth","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Tension","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks","JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper","StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","Stoic","Charmer","Idealist","Cynic","Loner","Leader","Rebel","Thinker","Caregiver","Dreamer","Realist","Mediator","Strategist","Joker","Visionary","Survivor","Guardian","Tactician","Pacifist","Zealot","Justice","Freedom","Revenge","Survival","Glory","Redemption","Belonging","Wealth","Truth","Peace","Control","Chaos","Duty","Fame","Discovery","Legacy","Love","Escape","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Fight","Cast","Athletics","Page_SocialSkills","Persuade","Cunning","Page_TechnicalSkills","Craft","Device","Investigate","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Chat","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_LanguageSelect","Title_Skills","Title_Emotes","Title_Outfits","Title_EquippedGear","Loading","Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn","Chat_Type","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","Forme_SeeTechniques","RepeatingJobStyles","RepeatingStyles","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot","Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques","RepeatingJobTech","RepeatingAdvTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot","System_Crafting","System_CraftingComponent","CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime","System_Cooking","System_HighQualityMeals","Line","Cone","Blast","Burst","Zone","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEnter","Title_TechOnEndFocus","Title_TechNewTargets","Teleport"],"Combat Defense":["Def_Brace","Def_Warding","Def_Reflex"],"Defense":["Def_Fortitude","Def_Hide","Def_Evasion"],"Social Sense":["Def_Resolve","Def_Insight","Def_Guile"],"Sense":["Def_Freewill","Def_Notice","Def_Scrutiny"],"Life":["Cmb_Vitality","Cmb_Surge","Cmb_HV","Cmb_Armor","Cmb_Hardness","Resistance","Weakness","Cmb_ResistanceDesc","Cmb_WeaknessDesc"],"Movement":["Cmb_Mv","Cmb_MvPotency","MvCharge","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling"],"Technique Trait":["Trait_Arcanify","Trait_Arcing","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Resonator","Trait_Seeking","Trait_Transmute"],"Effect Trait":["Trait_AP","Trait_Brutal","Trait_Optional"],"Item Trait":["Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword"],"Goods Trait":["Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent"],"Human":["Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood"],"Energy":["Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Shock"],"Physical":["Dmg_Force","Dmg_Piercing","Dmg_Weapon"],"Melee Weaponry":["StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons"],"Ranged Weaponry":["StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons"],"Martial Arts":["StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte"],"Arcanification Magic":["StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment"],"Fluctuation Magic":["StyleSubGroup_Fluctuation"],"Materialization Magic":["StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury"],"Transformation Magic":["StyleSubGroup_Transmulation","StyleSubGroup_Physiomancy"],"Athletics":["StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","Skill_Agility","Skill_Physique","Skill_Sneak"],"Speechcraft":["StyleSubGroup_Persuasion","StyleSubGroup_Cunning"],"Damage":["WeaponDamage","WeaponDamageVal"],"Technique":["Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns"],"Gear":["Bulk"],"Generator":["Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground"],"Basic":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit"],"Mighty Weapons":["Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte"],"Skirmish Weapons":["Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte"],"Finesse Weapons":["Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte"],"Kinetics":["Style_Rapid Strikes Arte"],"Shoot Weapons":["Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte"],"Throw Weapons":["Style_Bomber Arte","Style_Daggerthrow Arte"],"Evocation":["Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold"],"Channelling":["Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control"],"Enchantment":["Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control"],"Fluctuation":["Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Telekinesis","Style_Windsweep","Style_Gravity Force","Style_Surging Water"],"Battlesmithing":["Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith"],"Conjury":["Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore"],"Transmulation":["Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy"],"Physiomancy":["Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux"],"Brawn":["Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Unbeatable Brawn","Style_Unrelenting Motion"],"Stealth":["Style_Hidden Footing","Style_Shadow Walking"],"Acrobatics":["Style_Remotion","Style_Evasive Maneuvers","Style_Reactive Defense"],"Persuasion":["Style_Invigorating Rally","Style_Avowed","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics"],"Cunning":["Style_Taunting Wit","Style_Underminer","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Stillheart","Style_Connecting Bond","Skill_Demoralize","Skill_Empathy","Skill_Misdirect"],"Craft":["Skill_Alchemy","Skill_Build","Skill_Cook"],"Investigate":["Skill_Analyze","Skill_Resonance","Skill_Search"],"Cast":["Skill_Channel","Skill_Conjure","Skill_Enchant","Skill_Heal","Skill_Kinesis","Skill_Shape"],"Persuade":["Skill_Charm","Skill_Inspire","Skill_Rationalize"],"Fight":["Skill_Finesse","Skill_Grappling","Skill_Might","Skill_Shoot","Skill_Skirmish","Skill_Throw"],"Device":["Skill_Glyphwork","Skill_Pilot","Skill_Tinker"],"Walthair":["Lang_Minere","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca"],"Aridsha":["Lang_Junal","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira"],"Khem":["Lang_Apollen","Lang_Kleikan"],"Colswei":["Lang_Lib"],"Ceres":["Lang_Cert","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq"],"Special":["Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan"],"Academics":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology"],"Profession":["Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining"],"Craftmanship":["Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving"],"Geography":["Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane"],"History":["Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History"],"Culture":["Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater"],"Religion":["Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"Vanguard":["Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark"],"Operator":["Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist"],"Athlete":["Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer"],"Strategist":["Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor"],"Waymaker":["Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright"],"Advocate":["Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner"],"Esper":["Job_Etherealist","Job_Shade","JStyle_Etherealist","JStyle_Shade"],"Status":["Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious"],"Condition":["Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned"],"Emotion":["Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"]},"mainGroup":{"Style":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Rapid Strikes Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Arcane Conduit","Style_Freeform Flight","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Invigorating Rally","Style_Avowed","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Taunting Wit","Style_Underminer","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Stillheart","Style_Connecting Bond"],"Advanced":["Style_Mauler Arte","Style_Avenger Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Ether Magic","Style_Time Control","Style_Telekinesis","Style_Windsweep","Style_Gravity Force","Style_Surging Water","Style_Warsmith","Style_Structural Mastery","Style_Poison Spore","Style_Geomancy","Style_Cryomancy","Style_Soul Surge","Style_Blood Flux","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense"]},"formulaMods":{"CR":["Attribute","Skill","Job","Knowledge","Style","Perk","Influence","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","HP","WILL","Cmb_Chakra","Recall","Initiative","Cmb_Surge","Cmb_HV"],"BonusAttributePoints":["Attribute"],"Level":["Skill","Advancement","Training","HP","WILL"],"AdvancementSkill":["Skill"],"AdvancementJob":["Job"],"TrainingKnowledge":["Knowledge"],"AdvancementTechnique":["Style"],"TrainingTechniques":["Style"],"BonusTraining":["Training"],"Attr_BOD":["Def_Brace","Def_Fortitude","HP","Power","CarryingCapacity","Skill_Conjure","Skill_Grappling","Skill_Might","Skill_Physique","Skill_Throw"],"Attr_PRC":["Def_Warding","Def_Hide","Accuracy","Skill_Kinesis","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Tinker"],"Attr_QCK":["Def_Reflex","Def_Evasion","Initiative","Skill_Agility","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Pilot"],"Attr_CNV":["Def_Resolve","Def_Freewill","WILL","Charisma","Cmb_HV","Skill_Channel","Skill_Demoralize","Skill_Inspire","Skill_Misdirect","Skill_Resonance"],"Attr_INT":["Def_Insight","Def_Notice","Artistry","Skill_Charm","Skill_Cook","Skill_Empathy","Skill_Heal","Skill_Search"],"Attr_RSN":["Def_Guile","Def_Scrutiny","Recall","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Rationalize","Skill_Shape"],"Recall":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"]},"techMods":{"_tech":["Influence","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","HP","WILL","EN","StartEN","Cmb_Chakra","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","Cmb_Vitality","Cmb_Surge","Cmb_HV","Cmb_Armor","Cmb_Mv","Cmb_MvPotency"],"_techset":["Power","Accuracy","Artistry","Charisma","Recall"]},"hasMax":{"true":["Data","Advancement","Training","General","CR","XP","BonusTraining","HP","WILL","EN","Cmb_Chakra","Cmb_Vitality","Cmb_Surge","Soc_Favor"]}},
         _max = "_max",
         _true = "_true",
         _rank = "_rank",
@@ -13471,14 +13602,14 @@ var WuxDef = WuxDef || (function() {
                 for (let key in sortingGroups) {
                     keys += `${key}, `;
                 }
-                Debug.Log (`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
+                Debug.Log(`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
             }
             if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
                 let keys = "";
                 for (let key in sortingGroups[property]) {
                     keys += `${key}, `;
                 }
-                Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
+                Debug.Log(`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
             }
             return sortingGroups[property][propertyValue];
         },
@@ -13579,5 +13710,164 @@ var WuxDef = WuxDef || (function() {
         _gear: _gear,
         _affinity: _affinity,
         _error: _error
+    };
+}());
+
+var WuxNames = WuxNames || (function() {
+    'use strict';
+
+    var
+        nameDatabase = {"Walthair":{"Male":["Abel","Ace","Andie","Ansel","Aretes","Arlo","Ash","Austin","Baldwin","Basil","Ben","Bertram","Booker","Brady","Burke","Caden","Cal","Casey","Cedric","Charles","Clark","Corbin","Dalton","Dane","Daryl","Dax","Deric","Dezi","Dion","Dorian","Drew","Easton","Edgard","Edom","Eliot","Emery","Ern","Esmond","Ethan","Faron","Felix","Fenton","Fitz","Florence","Ford","Fredric","Fulton","Gabe","Garth","Geoffrey","Gerald","Gideon","Gil","Glen","Gordon","Grant","Hale","Harris","Hector","Hiram","Holden","Hollis","Howe","Hubert","Hugh","Ian","Ilbert","Inigo","Ingram","Irvin","Ithiel","Jabin","Jace","Jaden","Jeffry","Jenson","Jett","Joby","Joss","Julien","Kaidan","Karson","Kendric","Kent","Kimbal","Kory","Laird","Lawrence","Laverne","Leigh","Leon","Lloyd","Lovel","Lucius","Mack","Marius","Meade","Merit","Merill","Milo","Monroe","Murray","Nathanael","Neil","Nic","Niles","Norris","Nowell","Odell","Ogden","Oliver","Ormond","Orral","Oscar","Otto","Paden","Peers","Peyton","Philippe","Porter","Prosper","Quentin","Quincy","Rastus","Reid","Remi","Riley","Robert","Sawyer","Scott","Selwyn","Shane","Silas","Stafford","Syd","Talbot","Terance","Theo","Titus","Topher","Travers","Ty","Urbain","Vere","Vergil","Wade","Wallis","Wil","Wolfe","Xavier","Yann","Yves","Zander","Zeph"]
+                ,
+                "Female":["Ada","Agathe","Alexis","Anais","Anona","Aria","Ashley","Bailey","Belinda","Blanche","Brandy","Brynn","Carine","Cecile","Chante","Cheryl","Claudia","Collyn","Dahlia","Dawn","Delia","Diantha","Dory","Dove","Drina","Easter","Edith","Eleonore","Emely","Etta","Eve","Evelyn","Fallon","Felicity","Florianne","Frankie","Freida","Gale","Gill","Ginger","Gloria","Gretta","Gwen","Harper","Hadyn","Helah","Helen","Hilary","Hope","Hyacinth","Ida","Ilene","Ione","Irene","Isadora","Izzy","Janine","Jeannette","Jeri","Jocelyn","Jolie","Judith","Kacie","Karenth","Kelsy","Keri","Kori","Kylee","Kym","Lecia","Leone","Libby","Lillian","Lois","Lorri","Maci","Makenzie","Marla","Mercia","Mia","Mirelle","Mora","Myrtie","Nance","Nena","Nevada","Nola","Nydia","Nylah","Odell","Odile","Opal","Orianne","Orinda","Paige","Parker","Pearle","Peony","Phibe","Piper","Pru","Purdie","Rachel","Ravenna","Reese","Robin","Rue","Rylie","Sabine","Sandrine","Selma","Shari","Simone","Sondra","Tansy","Tatienne","Tatum","Teagan","Tera","Tia","Tori","Tracy","Unice","Val","Victoire","Vivian","Wendy","Whitney","Yvra","Zula"],
+                "Family":["Abbott","Abram","Akers","Archambault","Ash","Averill","Babineaux","Beck","Bishop","Blanc","Bonnay","Brigham","Carter","Chester","Clement","Cobb","Crisp","Danell","Daviau","Deschamps","Dodge","Draper","Dufort","Eason","Eldred","Emerson","Ewart","Fabron","Fevre","Fields","Forest","Frost","Fulton","Gagne","Garland","Giles","Glazier","Gorbold","Gully","Hale","Herriot","Hobbs","Hudnall","Hunt","Ilbert","Ingham","Irvine","Jakes","Jepson","Joubert","Judd","Keighley","Key","Kimball","Kipling","Kynaston","Lavoie","Leclair","Lindon","Lowry","Lyon","Mann","Mayer","Merritt","Millard","Montgomery","Mullins","Neil","Nicols","Norris","Nye","Odell","Ogden","Ott","Owston","Paddon","Penn","Perigord","Pilgrim","Platt","Poulin","Quick","Radcliff","Reed","Rimmer","Romilly","Roux","Sams","Sault","Seward","Shaw","Small","Stafford","Styles","Tatum","Thayer","Tobin","Townsend","Treloar","Tuft","Upton","Varley","Virgo","Voclain","Wakefield","Wells","Winton","Wynne","Yap","Yoxall"]},
+            "Khem":{"Male":["Adalbert","Alban","Albrecht","Alexei","Alfons","Alois","Anselm","Armin","Aurel","Beat","Borya","Burchard","Burkhart","Christoph","Claus","Conrad","Demyan","Detleff","Diederich","Dieter","Dima","Dimitri","Dorofey","Eckart","Egon","Elmar","Emil","Engel","Erhard","Ernst","Eugen","Ewald","Falk","Fedot","Feliks","Ferdinand","Filipp","Fiete","Franz","Friedrich","Gebhard","Genya","Germain","Gilbert","Gottfried","Gotthold","Grigory","Gunter","Hagen","Hartmut","Heike","Heiner","Helmut","Hilmar","Horst","Ignatz","Ingo","Ipati","Irinei","Isidor","Ivo","Jorg","Julian","Lustus","Karlmann","Kaspar","Kirill","Kolman","Kolya","Kurt","Lars","Laurenz","Lavrenti","Leonid","Levin","Lothar","Ludwig","Lutz","Lyov","Maks","Malte","Manfried","Maxim","Meine","Meino","Miron","Mitya","Moritz","Nikifor","Nikon","Nil","Onisim","Otmar","Otto","Patya","Pavel","Platon","Prokhor","Quirin","Radimir","Rainer","Reimund","Rein","Renat","Reto","Rodion","Rolan","Rudi","Sanya","Serafim","Sevastian","Shura","Sieger","Sievert","Slava","Stepan","Taras","Terentity","Thiemo","Tikhon","Tillo","Timofey","Timur","Traugott","Udo","Ueli","Ulli","Ulrich","Utz","Vadim","Valeri","Varlam","Vasily","Veit","Vilen","Vitya","Vladilen","Volker","Waldemar","Wenzil","Werner","Wessel","Wiebe","Witold","Wolfram","Xaver","Yarik","Yegor","Yuli","Yuri","Zinovy"],
+                "Female":["Adelina","Agnes","Aksinya","Alexa","Alida","Amalya","Anfisa","Arina","Ava","Barbel","Boleslava","Brunhilde","Cacilie","Cathrin","Celine","Christel","Clara","Cora","Cornelia","Darya","Diana","Dietlinde","Dorothea","Dunya","Edel","Elena","Elfriede","Emilia","Erna","Esfir","Evelin","Faina","Felicitas","Franka","Fritzi","Fyokla","Galya","Gennadiya","Gerhild","Gisela","Greta","Gunda","Hedy","Heike","Helena","Helmine","Hermine","Hiltraud","Imke","Inna","Irina","Iris","Irmetrud","Isidora","Isolde","Ivonne","Juliane","Karina","Kasmira","Kathe","Kiki","Klava","Konstanze","Kristiane","Lada","Leonie","Lore","Ludmila","Luise","Lutgard","Lyubov","Margit","Marta","Meta","Mila","Monika","Nadine","Nata","Nele","Nicole","Ninel","Nora","Oda","Oksana","Olesya","Ortrun","Ottilie","Phillomena","Phyllis","Pia","Priska","Rada","Regine","Reinhild","Renate","Rita","Rosalie","Salome","Selena","Sieglinde","Silke","Sofya","Sveta","Taisiya","Tresa","Theda","Tonya","Ulrike","Ursel","Uschi","Ute","Varya","Vaska","Veron","Vreni","Wenke","Wilhemina","Yesfir","Yvonne","Zella","Zina","Ziska","Zoya"],
+                "Family":["Baifan","Baihou","Baikwan","Baitang","Chandu","Chanhu","Chanlam","Chenma","Chensun","Chenwu","Choubai","Choujiang","Chouzhao","Chowguan","Chowlin","Chowtan","Ducheung","Duhou","Duli","Dupan","Fanchou","Fanhuang","Fanlau","Fanwen","Guanhou","Guansun","Guanxu","Guanzhou","Guochan","Guojin","Guoli","Guoruan","Hancheung","Hankuang","Hansong","Hanzhao","Houchen","Houliao","Housong","Houwong","Hujin","Hulam","Hutan","Huwong","Jianghsu","Jiangwen","Jiangyu","Jinbai","Jinkwan","Jinliao","Kwandu","Kwanlam","Kwanma","Kwanzhang","Lauchan","Lauman","Lauxu","Lifan","Litang","Lixun","Liaobai","Liaojiang","Liaosong","Linkuang","Linwen","Linyu","Liuhan","Liutan","Liuyeung","Lubai","Luwen","Luzhou","Macheung","Majiang","Malin","Mazhang","Panguan","Panlau","Pansun","Panxu","Songfan","Songguo","Songlin","Songwu","Sunchou","Sunhuang","Sunli","Sunzhao","Tanchou","Wanghan","Wangkwan","Wangliao","Wenliu","Wenruan","Wenxun","Wonghu","Wongli","Wongman","Wukuang","Wuxun","Wuzhang","Xucheung","Xulau","Xuma","Xuyuen","Xundu","Xunguan","Xunkwan","Xunpan","Yujin","Yuman","Yutang","Yuzhou","Zhaodu","Zhaoguo","Zhaoliu","Zhaowu","Zhoufan","Zhouma","Zhoupan","Zhouhsu","Zhukuang","Zhusun","Zhuyeung"]},
+            "Ceres":{"Male":["Abioye","Ade","Adkachi","Akpan","Amadi","Anan","Axmed","Ayo","Baako","Bandile","Berphane","Berhanu","Berko","Bitrus","Bongani","Buhle","Cali","Chi","Chidi","Chike","Chima","Chizoba","Chuks","Dayo","Dejen","Desta","Dumi","Dumisani","Efe","Ejiro","Ekene","Eliud","Emeka","Emem","Enitan","Enu","Eskender","Darai","Faraji","Femi","Filbert","Folami","Fungai","Gadisa","Gudina","Gwandoya","Iakkopa","Idir","Ifa","Ikaia","Imamu","Ime","Inyene","Itoro","Izem","Jatau","Jengo","Jumaane","Kaipo","Kalei","Kato","Keanu","Kekoa","Keoni","Kibwe","Kojo","Kweku","Lanre","Lekan","Lishan","Maina","Makaio","Maui","Melisizwe","Mikala","Moana","Mwangi","Mwenye","Nalani","Neo","Ngozi","Nijinga","Noa","Nsia","Nthanda","Obi","Ochieng","Oghenero","Okafor","Okeke","Olabode","Oluchi","Otieno","Peni","Pika","Refilwe","Rutendo","Sefu","Sekani","Seydou","Sifiso","Simiyu","Sipho","Sizwe","Tadala","Tadesse","Tafari","Tesfaye","Thabo","Themba","Tionge","Tumelo","Udo","Uduak","Ufuoma","Unathi","Uzochi","Uzoma","Wafula","Wanjala","Wassma","Wekesa","Workneh","Xasan","Zolani","Yakubu","Yao","Yared","Zikomo","Zuberi"],
+                "Female":["Abena","Adaeze","Ade","Afia","Akua","Alaba","Ama","Anan","Awiti","Ayanda","Baako","Babirye","Berhane","Bolanle","Bontu","Bosede","Buhle","Charlize","Chichi","Chika","Chioma","Chisomo","Chizoba","Dada","Dayo","Desta","Dikeledi","Dubaku","Ebele","Efemena","Ejiro","Ekene","Ekua","Emem","Enu","Eshe","Dadumo","Farai","Fatsani","Folami","Funanya","Fungai","Gadise","Ganizani","Gugulethu","Hadiza","Haukea","Hibo","Hiwot","Hodan","Hokulani","Idowu","Iekika","Ife","Ime","Iolana","Itoro","Kagiso","Kahina","Kalea","Kapua","Keone","Kiana","Kidist","Kirabo","Konani","Lani","Lehua","Lelise","Lerato","Lulit","Lungile","Malie","Makena","Meklit","Mele","Momi","Monifa","Mumbi","Muthoni","Nafula","Nakato","Nanjala","Neo","Nia","Njeri","Nneka","Nontle","Nosipho","Nyah","Ogechi","Olamide","Oluchi","Onyeka","Opeyemi","Oyibo","Palesa","Pemphero","Pilirani","Puleng","Retha","Rufaro","Rutendo","Sauda","Saynab","Seble","Sibongile","Simisola","Subira","Tadala","Taonga","Tapiwa","Thema","Tidir","Titrit","Tumelo","Uzoma","Wairimu","Wangari","Wikolia","Yamikani","Yejide","Yewande","Zodwa","Zola"],
+                "Family":["Choi","Chung","Gang","Gim","Han","Jeong","Jo","Kang","Kim","Lee","Moon","Mun","Park","Rhee","Song","Yi"]},
+            "Aridsha":{"Male":["Aamir","Abhay","Adel","Ajit","Ala","Almas","Amrit","Anik","Anwer","Aseem","Atif","Ayaz","Babur","Baha","Bahij","Baki","Baldev","Basant","Bilal","Botros","Bulis","Burhan","Chand","Chander","Chandra","Cheten","Chiranjeevi","Chiranjivi","Daniyal","Darshan","Dawud","Danyal","Debdas","Dharma","Dilip","Diya","Durai","Dushyant","Ebrahim","Eesa","Esmail","Essa","Ezhil","Fadil","Fahd","Faisal","Faizel","Farag","Faraj","Faruk","Fathi","Firdos","Fuad","Furqan","Gabir","Gafar","Galal","Ganesh","Ghassan","Ghufran","Girish","Gopal","Govind","Guda","Gul","Hadi","Hafiz","Hakim","Hayder","Hesham","Hidayat","Hisein","Hosni","Idris","Ihab","Ikram","Ilyas","Imad","Imran","Inayat","Indra","Iskander","Itimad","Jabir","Jafer","Jagadish","Jaya","Jibril","Jinan","Jitender","Jothi","Juda","Juma","Jyoti","Kais","Kalash","Kali","Kalyan","Kanta","Kavi","Khayri","Kishan","Kuldeep","Kumaran","Kunal","Lakshman","Lal","Latif","Laxmi","Laxmi","Lochan","Maalik","Magdi","Mahir","Maram","Mehdi","Midhat","Miraj","Mitul","Mohan","Mushin","Naaji","Nader","Narendra","Neelam","Nihal","Nima","Nitin","Noor","Nuri","Nurul","Om","Omar","Omran","Othman","Othmane","Oualid","Padma","Parth","Parveen","Pitambar","Prabhat","Prakash","Pran","Pratap","Prem","Qadir","Qamar","Qays","Qismat","Qusay","Rabi","Radha","Rafiq","Rajesh","Ramiz","Rehman","Riaz","Rifat","Ruh","Rusul","Safi","Saleh","Sandeep","Satish","Shadi","Shakeel","Sib","Sri","Suhayl","Suresh","Tabassum","Tahir","Tahmid","Talib","Tariq","Tayyib","Thamir","Toufik","Tufayl","Tushar","Umar","Umran","Usama","Usman","Uthman","Uttar","Varghese","Vasant","Venkat","Vijay","Vipul","Vishal","Vivek","Wafai","Waheed","Walid","Wassim","Yahya","Yakub","Yaser","Yousaf","Yusuf","Zaahir","Zahid","Zain","Zaki","Ziad","Ziya","Zulfaqar"],
+                "Female":["Aaminah","Aarti","Abha","Afra","Alia","Aliyya","Alya","Amal","Anila","Aqila","Arij","Badr","Bahija","Bahiyya","Balqis","Basira","Batul","Bhavana","Bhavna","Budur","Bushra","Chanda","Chandana","Chandra","Chandrakanta","Chetana","Dalal","Dalia","Danya","Deepa","Deepti","Dema","Devi","Drishti","Dua","Durga","Eman","Ezhil","Fadia","Fadila","Fahima","Fahmida","Fairuz","Faiza","Fareeha","Farida","Fikriyya","Fizza","Galila","Gargi","Gayatri","Ghadir","Gowri","Grishma","Gulnaz","Gulrukh","Gurmeet","Habiba","Hadil","Hafza","Hagir","Hana","Hema","Hind","Hooda","Hosni","Husna","Husniya","Ihab","Ihsan","Ikram","Ila","Inas","Indira","Iqra","Ishani","Isra","Izdihar","Jalila","Jameela","Janan","Jannat","Jasvinder","Jawdat","Jinan","Jothi","Jumanah","Jyoti","Kajal","Kalyani","Kamatchi","Kamini","Kashi","Khadija","Kirtida","Kubra","Kumari","Laila","Lamis","Lateefah","Leela","Leila","Lina","Lochana","Lujayn","Maha","Mahinder","Mala","Malati","Maya","Mira","Mitra","Mohini","Mubina","Munya","Nadia","Narinder","Neela","Nida","Nihal","Nisha","Noor","Noora","Nour","Nuha","Nurul","Padma","Pallabi","Parminder","Pooja","Prachi","Preethi","Punita","Pushpa","Rabab","Rachana","Radha","Raisa","Rajani","Rakshi","Reem","Reva","Ritika","Ruba","Ruya","Sabah","Sadaf","Sadia","Samar","Seema","Shadya","Shreya","Shukriyya","Shweta","Shyama","Sita","Sitara","Somaya","Sona","Souad","Sri","Suad","Suha","Sujata","Tabassum","Tahira","Taliba","Tara","Tejal","Thamina","Thana","Thurayya","Trishna","Tuba","Uma","Upasana","Urvi","Usha","Uttara","Uzma","Vaishnavi","Varsha","Vasanti","Vasuda","Vasundhara","Veda","Vijaya","Vimala","Wafiya","Wahida","Warda","Wedad","Widad","Yamuna","Yusra","Zahia","Zahra","Zeenat","Zulekha"],
+                "Family":["Abarca","Abello","Abreu","Agua","Aiza","Alonso","Alvarez","Antunez","Araya","Barros","Bello","Belmonte","Bernat","Blanco","Bosch","Bustillo","Bustos","Cabello","Campos","Cantu","Castro","Chaves","Coello","Cruz","Cuesta","Dali","Diaz","Duarte","Elizondo","Esparza","Espina","Estrada","Felix","Ferreira","Ferrer","Flores","Fontana","Franco","Fuentes","Gallego","Garcia","Garza","Gebara","Gomez","Grec","Guerra","Guzma","Herrera","Hierro","Huerta","Ibarra","Iglesias","Inguez","Jaso","Jorda","Juarez","Lobo","Losa","Lucas","Macias","Magro","Marti","Mateu","Medina","Merlo","Moles","Moreno","Narvaez","Nieves","Noguera","Nunez","Obando","Ochoa","Ola","Olguin","Ortega","Ortiz","Otxoa","Palomo","Pavia","Pena","Pereiro","Petit","Puga","Puig","Quntana","Quiros","Ramrez","Ramos","Reyes","Rios","Rivera","Robles","Rocha","Roig","Rojo","Sala","Salazar","Sanchez","Sandoval","Silva","Solos","Suarez","Tapia","Terrazas","Tomas","Tosell","Trujillo","Ubina","Urbina","Valdez","Varela","Vega","Ventura","Vicario","Viteri","Vives","Ybarra","Zabala","Zavala","Zubizarreta","Zuniga"]},
+            "Colswei":{"Male":["Abdul","Adi","Aditya","Agung","Agus","Akbar","Ali","Amit","Anh","Arif","Ashok","Bagus","Bao","Batbayer","Bibek","Bima","Binh","Budi","Cahaya","Cahya","Cahyo","Chau","Chi","Chingis","Cong","Darma","Dat","Daud","Deepak","Dian","Dinesh","Dorji","Dwi","Eka","Eko","Firdaus","Ganbaatar","Ganesh","Giang","Gopal","Gusti","Gyatso","Hai","Hari","Harta","Hidayat","Hiri","Hung","Ibrahim","Ilham","Iman","Indra","Iskandar","Jamyang","Jusuf","Jyoti","Kadek","Kamon","Ketut","Khanh","Kishor","Klahan","Komang","Kulap","Kuwat","Lan","Lanh","Laxmi","Liem","Lutfi","Madhav","Mahesh","Mega","Minh","Mongkut","Muhammad","Narayan","Nergui","Ngoc","Nguyen","Niraj","Nur","Nurul","Nyoman","Pankaj","Passang","Pema","Pradeep","Prasad","Preecha","Putra","Putu","Quan","Quy","Quyen","Quynh","Raharjo","Rahman","Raja","Rajani","Rajiv","Ratna","Rishi","Roshan","Rustam","Sakchai","Sandip","Sanjay","Shankar","Shyam","Somchai","Somsak","Suchart","Sunil","Taufik","Tenzin","Thanh","Tirta","Trai","Truc","Tsering","Tuan","Van","Vien","Vinh","Wahyu","Wayan","Wibawa","Wira","Xuan","Yohanes","Yuda","Yusuf"],
+                "Female":["Aisyah","Alya","Anh","Anong","Asih","Batari","Bethari","Binh","Bulan","Chaya","Cahya","Chandra","Chau","Chi","Cinta","Cuc","Dawa","Dechin","Dewi","Dian","Diep","Dorji","Dwi","Eka","Eko","Enkhtuya","Fatimah","Gerel","Giang","Hang","Hira","Hong","Hue","Huong","Ilham","Iman","Indah","Intan","Intira","Jamyang","Jyoti","Kadek","Kalpana","Kamala","Kamon","Kanya","Kasih","Ketut","Khulan","Komang","Kulap","Kunzang","Kusuma","Lan","Lanh","Lawan","Laxmi","Lestari","Linh","Loan","Made","Mai","Malai","Mali","Manisha","Mawar","Melati","My","Namrata","Narangerel","Nergui","Ngoc","Nhung","Nirmala","Nisha","Nur","Nyoman","Otyunchimeg","Pakpao","Passang","Pema","Phuntsok","Porntip","Puja","Purnama","Pushpa","Putri","Putu","Quy","Rachana","Rajani","Ratna","Ratree","Ratu","Roshan","Rupa","Sari","Sarita","Sarnai","Sasithorn","Shanta","Shanti","Sinta","Siriporn","Sita","Sonam","Sri","Sukhon","Suman","Sunan","Sunita","Sushila","Tara","Tenzing","Thanh","Thi","Thu","Thuy","Tien","Trinh","Truc","Tsering","Testseg","Tu","Tuyen","Tuyet","Ubon","Usha","Utari","Van","Vina","Vinh","Wangchuk","Wangi","Wati","Wattana","Wayan","Widya","Wulan","Xuan","Yen","Yuliana"]},
+            "Novus":{"Male":["Achilles","Adonis","Aeneas","Agamemnon","Alcibiades","Alexander","Androcles","Apollonios","Aristides","Aristophanes","Bion","Cadmus","Charon","Cleon","Damon","Demetrius","Diogenes","Eleutherios","Epaminondas","Eryx","Euripides","Galen","Hector","Heracles","Heron","Hippocrates","Icarus","Isocrates","Kallias","Kyros","Leonidas","Lysander","Menelaus","Miltiades","Niketas","Orestes","Pericles","Philemon","Socrates","Thales","Aelius","Aemilius","Antonius","Augustus","Brutus","Cato","Cassius","Claudius","Cornelius","Decimus","Domitian","Drusus","Fabius","Flavian","Gaius","Germanicus","Gnaeus","Hadrian","Horatius","Julius","Junius","Laelius","Lentulus","Lucius","Magnus","Manius","Marcellus","Marcus","Maximus","Nero","Otho","Pompeius","Quintus","Severus","Tiberius","Artabanus","Artaxerxes","Ardeshir","Aryo","Babak","Bardiya","Cambyses","Cyrus","Darius","Darab","Esfandiar","Farhad","Gordafarid","Hormizd","Kaveh","Kurush","Mardonius","Mithra","Ormazd","Rostam","Sassan","Shapur","Siroos","Xerxes","Zartosht"],
+                "Female":["Andromache","Andromeda","Antigone","Ariadne","Artemis","Aspasia","Atalanta","Briseis","Calliope","Calypso","Cassandra","Chloe","Circe","Clio","Danaë","Daphne","Dido","Electra","Eris","Eudora","Eurydice","Gaia","Hecate","Helen","Hermione","Io","Iphigenia","Ismene","Leto","Lyra","Medea","Melaina","Melantho","Metis","Myrrine","Nyx","Penelope","Persephone","Phaedra","Phoebe","Selene","Thalia","Theia","Themis","Tisiphone","Xanthe","Zoe","Aelia","Antonia","Aquila","Aurelia","Caelia","Claudia","Cornelia","Domitia","Drusilla","Fabia","Flavia","Fulvia","Galla","Helvia","Hortensia","Julia","Junia","Livia","Lucretia","Marcia","Octavia","Plautia","Pompeia","Porcia","Prisca","Rubria","Sabina","Severina","Tullia","Valeria","Verginia","Vibia","Zenobia","Amestris","Anahita","Artembarsa","Atossa","Azita","Banu","Cassandane","Delaram","Dina","Esther","Farangis","Gordiya","Homay","Mandana","Mitra","Nashira","Parisa","Parysatis","Purandokht","Roxana","Shireen","Tahmineh","Yasmin","Zarina","Zohreh"],
+                "Family":["Achaimenid","Aetolian","Agiad","Akanthos","Alcmaeonid","Amorian","Antigonid","Apollonid","Archonid","Argaios","Argonaut","Aristid","Arsinoid","Artemid","Asclepiad","Aspendian","Atheniad","Atreid","Bacchiad","Basileid","Boeotian","Calliadan","Chersonid","Cimonid","Cleomenid","Colophonian","Corinthian","Cyrenaean","Delian","Demetrid","Dorian","Ephesian","Eretrian","Euxinian","Heracleid","Hesiodid","Hippocratid","Iliad","Ionid","Iphicratid","Ismenid","Kadmid","Laconid","Lemnian","Leontid","Lycaonid","Lycian","Macedonian","Messenian","Miltiadid","Mycenaean","Nemean","Olympian","Orchid","Patroclid","Peisistratid","Pelagid","Phocian","Phrygian","Ptolemaic","Rhodian","Seleucid","Sicyonian","Solonid","Spartan","Theban","Thessalian","Thucydid","Trojan","Zagreid","Achaemenid","Ariobarzanid","Arsacid","Artaxiad","Atropatenid","Avicennid","Barzanid","Behzadid","Cambysid","Cyrusid","Darian","Deylamid","Esfandid","Faravaharid","Hormizdid","Khusrawid","Kurushid","Median","Mehrdadid","Mithridatid","Nasirid","Ormazdid","Parthian","Rostamid","Sasanid","Shapurid","Sorushid","Tahmid","VohuManid","Xerxid","Zamaspid","Zoroastrid"]}},
+        regionDatabase = {"region":{"Walthair":{"options":[{"name":"Coastborne","odds":70},
+                        {"name":"Suntouched","odds":15},
+                        {"name":"Sandfolk","odds":15},
+                        {"name":"Plains-kin","odds":25},
+                        {"name":"Frostcloaked","odds":5},
+                        {"name":"Earthblood","odds":15}],
+                    "total":145},
+                "EastSea":{"options":[{"name":"Coastborne","odds":70},
+                        {"name":"Plains-kin","odds":5},
+                        {"name":"Frostcloaked","odds":10},
+                        {"name":"Earthblood","odds":5}],
+                    "total":90},
+                "Khem":{"options":[{"name":"Coastborne","odds":15},
+                        {"name":"Suntouched","odds":150},
+                        {"name":"Plains-kin","odds":25}],
+                    "total":190},
+                "Aridsha":{"options":[{"name":"Sandfolk","odds":120},
+                        {"name":"Plains-kin","odds":10},
+                        {"name":"Frostcloaked","odds":5}],
+                    "total":135},
+                "Ceres":{"options":[{"name":"Coastborne","odds":10},
+                        {"name":"Suntouched","odds":35},
+                        {"name":"Sandfolk","odds":10},
+                        {"name":"Plains-kin","odds":75}],
+                    "total":130},
+                "Colswei":{"options":[{"name":"Frostcloaked","odds":80},
+                        {"name":"Earthblood","odds":10}],
+                    "total":90},
+                "Dowfeng":{"options":[{"name":"Coastborne","odds":5},
+                        {"name":"Sandfolk","odds":50},
+                        {"name":"Plains-kin","odds":30}],
+                    "total":85},
+                "Wayling":{"options":[{"name":"Coastborne","odds":30},
+                        {"name":"Sandfolk","odds":5},
+                        {"name":"Plains-kin","odds":30}],
+                    "total":65},
+                "Novus":{"options":[{"name":"Earthblood","odds":120}],
+                    "total":120}},
+            "ancestry":{"Coastborne":{"options":[{"name":"Walthair","odds":70},
+                        {"name":"EastSea","odds":70},
+                        {"name":"Khem","odds":15},
+                        {"name":"Ceres","odds":10},
+                        {"name":"Dowfeng","odds":5},
+                        {"name":"Wayling","odds":30}],
+                    "total":200},
+                "Suntouched":{"options":[{"name":"Walthair","odds":15},
+                        {"name":"Khem","odds":150},
+                        {"name":"Ceres","odds":35}],
+                    "total":200},
+                "Sandfolk":{"options":[{"name":"Walthair","odds":15},
+                        {"name":"Aridsha","odds":120},
+                        {"name":"Ceres","odds":10},
+                        {"name":"Dowfeng","odds":50},
+                        {"name":"Wayling","odds":5}],
+                    "total":200},
+                "Plains-kin":{"options":[{"name":"Walthair","odds":25},
+                        {"name":"EastSea","odds":5},
+                        {"name":"Khem","odds":25},
+                        {"name":"Aridsha","odds":10},
+                        {"name":"Ceres","odds":75},
+                        {"name":"Dowfeng","odds":30},
+                        {"name":"Wayling","odds":30}],
+                    "total":200},
+                "Frostcloaked":{"options":[{"name":"Walthair","odds":5},
+                        {"name":"EastSea","odds":10},
+                        {"name":"Aridsha","odds":5},
+                        {"name":"Colswei","odds":80}],
+                    "total":100},
+                "Earthblood":{"options":[{"name":"Walthair","odds":15},
+                        {"name":"EastSea","odds":5},
+                        {"name":"Colswei","odds":10},
+                        {"name":"Novus","odds":120}],
+                    "total":150}}},
+
+        getName = function (region, type) {
+            switch (region) {
+                case "East Sea":
+                    region = "Walthair";
+                    break;
+                case "Dowfeng":
+                    region = "Aridsha";
+                    break;
+                case "Wayling":
+                    region = "Ceres";
+                    break;
+            }
+            if (type != "Family" && type != "Male" && type != "Female") {
+                if (Math.random() > 0.5) {
+                    type = "Male";
+                }
+                else {
+                    type = "Female";
+                }
+            }
+            let database = nameDatabase[region][type];
+            if (database == undefined || database.length == 0) {
+                return "";
+            }
+            let index = Math.floor(Math.random() * database.length);
+            return database[index];
+        },
+        getRegionByAncestry = function (ancestry) {
+            let database = regionDatabase.ancestry[ancestry];
+            if (database == undefined || database.options.length == 0) {
+                return "";
+            }
+            let index = Math.floor(Math.random() * database.total);
+            for (let i = 0; i < database.options.length; i++) {
+                index -= database.options[i].odds;
+                if (index < 0) {
+                    return database.options[i].name;
+                }
+            }
+        },
+        getAncestryByRegion = function (region) {
+            let database = regionDatabase.region[region];
+            if (database == undefined || database.options.length == 0) {
+                return "";
+            }
+            let index = Math.floor(Math.random() * database.total);
+            for (let i = 0; i < database.options.length; i++) {
+                index -= database.options[i].odds;
+                if (index < 0) {
+                    return database.options[i].name;
+                }
+            }
+        }
+    ;
+    return {
+        NameDatabase: nameDatabase,
+        RegionDatabase: regionDatabase,
+        GetName: getName,
+        GetRegionByAncestry: getRegionByAncestry,
+        GetAncestryByRegion: getAncestryByRegion
     };
 }());

@@ -53,7 +53,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), spacesLessName);
                 attrHandler.addUpdate(WuxDef.GetVariable("FullName"), eventinfo.newValue);
                 attrHandler.addUpdate(WuxDef.GetVariable("DisplayName"), eventinfo.newValue);
-                attrHandler.addUpdate(WuxDef.GetVariable("IntroName"), eventinfo.newValue);
                 combatDetailsHandler.onUpdateDisplayName(attrHandler, eventinfo.newValue);
             });
             attributeHandler.run();
@@ -68,11 +67,57 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             });
             attributeHandler.run();
         },
-        updateFullName = function (eventinfo) {
+        generateCharacter = function () {
             let attributeHandler = new WorkerAttributeHandler();
+            let nameVar = WuxDef.GetVariable("DisplayName");
+            let fullNameVar = WuxDef.GetVariable("FullName");
+            let genderVar = WuxDef.GetVariable("Gender");
+            let homeRegionVar = WuxDef.GetVariable("HomeRegion");
+            attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar]);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                attrHandler.addUpdate(WuxDef.GetVariable("IntroName"), eventinfo.newValue);
+                let generator = new WuxingHumanCharacterGenerator();
+                generator.character.firstName = attrHandler.parseString(nameVar);
+                generator.character.fullName = attrHandler.parseString(fullNameVar);
+                generator.character.gender = attrHandler.parseString(genderVar);
+                generator.character.homeRegion = attrHandler.parseString(homeRegionVar);
+                generator.generateCharacter();
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenName"), generator.character.firstName);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenFullName"), generator.character.fullName);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenRace"), generator.character.ancestry);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenGender"), generator.character.gender);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenHomeRegion"), generator.character.homeRegion);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenPersonality"), generator.character.personality);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenMotivation"), generator.character.motivation);
+            });
+            attributeHandler.run();
+
+        },
+        useGeneration = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+            let nameVar = WuxDef.GetVariable("Note_GenName");
+            let fullNameVar = WuxDef.GetVariable("Note_GenFullName");
+            let genderVar = WuxDef.GetVariable("Note_GenGender");
+            let homeRegionVar = WuxDef.GetVariable("Note_GenHomeRegion");
+            attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar]);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attrHandler.addUpdate("character_name", attrHandler.parseString(nameVar));
+                attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), attrHandler.parseString(nameVar));
+                attrHandler.addUpdate(WuxDef.GetVariable("DisplayName"), attrHandler.parseString(nameVar));
+                attrHandler.addUpdate(WuxDef.GetVariable("FullName"), attrHandler.parseString(fullNameVar));
+                attrHandler.addUpdate(WuxDef.GetVariable("Gender"), attrHandler.parseString(genderVar));
+                attrHandler.addUpdate(WuxDef.GetVariable("HomeRegion"), attrHandler.parseString(homeRegionVar));
+            });
+            attributeHandler.run();
+        },
+        clearBackground = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), "");
+                attrHandler.addUpdate(WuxDef.GetVariable("DisplayName"), "");
+                attrHandler.addUpdate(WuxDef.GetVariable("FullName"), "");
+                attrHandler.addUpdate(WuxDef.GetVariable("Gender"), "");
+                attrHandler.addUpdate(WuxDef.GetVariable("HomeRegion"), "");
             });
             attributeHandler.run();
         },
@@ -137,7 +182,9 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         UpdateDisplayName: updateDisplayName,
         UpdateCharacterSheetName: updateCharacterSheetName,
         UpdateSheetName: updateSheetName,
-        UpdateFullName: updateFullName,
+        GenerateCharacter: generateCharacter,
+        UseGeneration: useGeneration,
+        ClearBackground: clearBackground,
         UpdateStatus: updateStatus,
         UpdateCR: updateCR,
         OpenSubMenu: openSubMenu,
