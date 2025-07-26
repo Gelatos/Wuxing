@@ -483,18 +483,18 @@ var TargetReference = TargetReference || (function () {
                     commandResetToken(TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!tshowgroup":
-                    commandShowGroup(TokenReference.GetTokenTargetDataArray(msg), content);
+                    commandShowGroup(msg.who, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!cshowgroup":
                     content = getCharacterSheetTarget(content);
-                    commandShowGroup(content.targets, content.content);
+                    commandShowGroup(msg.who, content.targets, content.content);
                     break;
                 case "!tskillgroupcheck":
-                    commandRollSkillGroupCheck(TokenReference.GetTokenTargetDataArray(msg), content);
+                    commandRollSkillGroupCheck(msg.who, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!cskillgroupcheck":
                     content = getCharacterSheetTarget(content);
-                    commandRollSkillGroupCheck(content.targets, content.content);
+                    commandRollSkillGroupCheck(msg.who, content.targets, content.content);
                     break;
                 case "!intro":
                     commandIntroduce(msg, TokenReference.GetTokenTargetDataArray(msg));
@@ -584,7 +584,7 @@ var TargetReference = TargetReference || (function () {
             });
         },
 
-        commandShowGroup = function (targets, content) {
+        commandShowGroup = function (sender, targets, content) {
             content = content.split(";");
             let group = content[0];
             let advantage = content.length > 1 ? content[1] : 0;
@@ -601,24 +601,26 @@ var TargetReference = TargetReference || (function () {
             }
             else {
                 _.each(targets, function (tokenTargetData) {
-                    checkModifiers(tableName, tokenTargetData, groupArray, false, advantage);
+                    checkModifiers(sender, tableName, tokenTargetData, groupArray, false, advantage);
                 });
             }
         },
 
-        commandRollSkillGroupCheck = function (targets, content) {
+        commandRollSkillGroupCheck = function (sender, targets, content) {
             content = content.split(";");
             let subGroup = content[0];
             let advantage = content.length > 1 ? content[1] : 0;
             let tableName = `${content}`;
 
             if (subGroup == "Lore") {
-
+                _.each(targets, function (tokenTargetData) {
+                    checkLore(sender, tokenTargetData, advantage);
+                });
             }
             else {
                 let groupArray = WuxDef.Filter(new DatabaseFilterData("subGroup", subGroup));
                 _.each(targets, function (tokenTargetData) {
-                    checkModifiers(tableName, tokenTargetData, groupArray, true, advantage);
+                    checkModifiers(sender, tableName, tokenTargetData, groupArray, true, advantage);
                 });
             }
         },
@@ -668,7 +670,53 @@ var TargetReference = TargetReference || (function () {
 
         // Data Checkers
 
-        checkModifiers = function (tableName, tokenTargetData, definitions, addSkillCheck, advantage) {
+        checkLore = function (sender, tokenTargetData, advantage) {
+            let tableData = new TableMessage([tokenTargetData.displayName, `Lore,${advantage}`]);
+            let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+
+            let recallVar = WuxDef.GetVariable("Recall");
+            let knowledgeBuildVar = WuxDef.GetVariable("Knowledge", WuxDef._build);
+            attributeHandler.addMod([recallVar, knowledgeBuildVar]);
+            
+            let dieRoll = new DieRoll();
+            dieRoll.rollCheck(advantage);
+            let recallResults = new DieRoll(dieRoll);
+
+            attributeHandler.addFinishCallback(function (attrHandler) {
+                let recallValue = attrHandler.parseString(recallVar, 0, false);
+                recallResults.addModToRoll(recallValue);
+                tableData.addRow(["Recall", `${Format.ShowTooltip(`${recallResults.total}`, recallResults.message)}`]);
+
+                let knowledges = new WorkerBuildStats();
+                knowledges.import(attrHandler.parseJSON(knowledgeBuildVar));
+                
+                knowledges.iterate(function (buildStat) {
+                    let parts = buildStat.name.split("-");
+                    let title = parts[1].split("_")[0];
+                    if (parts[0] == "lor") {
+                        let results = new DieRoll(dieRoll);
+                        let value = parseInt(buildStat.value) + recallValue;
+                        results.addModToRoll(value);
+                        tableData.addRow([title, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
+                    }
+                    else if (parts[0] == "lrc") {
+                        tableData.addRow([title, `${Format.ShowTooltip(`${recallResults.total}`, recallResults.message)}`]);
+                    }
+                });
+            });
+            attributeHandler.run();
+
+            let senderMessage = new SystemInfoMessage(`You've made a Lore check. Results were sent to GM.`);
+            senderMessage.setSender(sender);
+            WuxMessage.Send(senderMessage, sender.split(" ")[0]);
+
+            let message = tableData.print();
+            let systemMessage = new SystemInfoMessage(message);
+            systemMessage.setSender(sender);
+            WuxMessage.Send(systemMessage, "GM");
+        },
+
+        checkModifiers = function (sender, tableName, tokenTargetData, definitions, addSkillCheck, advantage) {
             let tableData = new TableMessage([tokenTargetData.displayName, tableName]);
             let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
             let dieRoll = new DieRoll();
@@ -693,7 +741,7 @@ var TargetReference = TargetReference || (function () {
 
             let message = tableData.print();
             let systemMessage = new SystemInfoMessage(message);
-            systemMessage.setSender("System");
+            systemMessage.setSender(sender);
             WuxMessage.Send(systemMessage);
         },
 

@@ -479,16 +479,6 @@ function ParseSheetRollTechniqueJSON(stringifiedJSON) {
 // Old
 // =================================================
 
-function SendChatMessage(snd, msg, alt, opt) {
-
-    if (alt == undefined) {
-        sendChat(snd, msg);
-    }
-    else {
-        sendChat(snd, msg, alt, opt);
-    }
-}
-
 
 
 function CommandImportPartyStats(msg) {
