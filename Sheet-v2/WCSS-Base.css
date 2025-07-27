@@ -2,6 +2,16 @@
   Global HTML
 ========================================*/
 
+/*.ui-dialog .charsheet button {*/
+/*    all: unset; !* less destructive than inherit *!*/
+/*    font: inherit;*/
+/*    background: none;*/
+/*    border: none;*/
+/*    padding: 0;*/
+/*    margin: 0;*/
+/*    cursor: pointer;*/
+/*}*/
+
 select 
 {
     height: inherit;
@@ -48,7 +58,7 @@ input[type=number]::-webkit-inner-spin-button
 }
 
 .repcontrol .repcontrol_edit:after {
-    content: '(';
+    content: '(' !important;
     visibility: visible;
     font-family: pictos;
     background-color: #d0d0d0;
@@ -66,7 +76,7 @@ input[type=number]::-webkit-inner-spin-button
 }
 
 .repcontrol .repcontrol_add:before {
-    content: '&';
+    content: '&' !important;
     visibility: visible;
     font-family: pictos;
     background-color: #d0d0d0;
@@ -82,7 +92,7 @@ input[type=number]::-webkit-inner-spin-button
 .repcontrol .repcontrol_edit:hover:after,
 .repcontrol .repcontrol_add:hover:before
 {
-    background-color: #EFEFEF;
+    background-color: #9e9e9e;
 }
 
 .itemcontrol {
@@ -926,5 +936,145 @@ textarea.wuxInput
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 	background: #9e9fa1;
+}
+
+/*========================================
+    Button
+========================================*/
+
+.wuxButton,
+.wuxSmallButton
+{
+    position: relative;
+    display: inline-block;
+    height: 26px;
+    width: auto;
+    min-width: 36px;
+    margin-right: 3px;
+    
+    align-content: center;
+
+    background: linear-gradient(to bottom, #f4f6f8 0%, #939393 80%);
+    text-shadow: none;
+    box-shadow: none;
+    border: 1px solid black;
+}
+
+button[type=roll].wuxButton,
+button[type=roll].wuxSmallButton {
+    left: 5px;
+    height: 22px;
+}
+
+div.wuxButton,
+div.wuxSmallButton
+{
+    top: 1px;
+}
+
+.wuxButton:hover,
+.wuxSmallButton:hover,
+button[type=roll].wuxButton:hover,
+button[type=roll].wuxSmallButton:hover
+{
+    background: linear-gradient(to bottom, #f4f6f8 0%, #cacbcf 70%, #535353 100%);
+    box-shadow: #1d1e1f 0 0 5px;
+}
+
+.wuxButton input[type=checkbox],
+.wuxSmallButton input[type=checkbox]
+{
+    position: absolute;
+    display: block;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+}
+
+button[type=roll].wuxButton span,
+button[type=roll].wuxSmallButton span,
+.wuxButton span,
+.wuxSmallButton span
+{
+    display: block;
+    pointer-events: none;
+    padding: 0 10px;
+    
+    vertical-align: center;
+    text-align: center;
+    
+    color: #1d1e1f;
+    font-size: 10px;
+    font-weight: normal;
+}
+
+button[type=roll].wuxButton span,
+button[type=roll].wuxSmallButton span
+{
+    position: relative;
+    top: 1px;
+    display: block;
+    padding: 0;
+    width: 100%;
+    height: 24px;
+}
+
+button[type=roll].wuxButton span span,
+button[type=roll].wuxSmallButton span span,
+.wuxButton span span,
+.wuxSmallButton span span
+{
+    display: inline;
+    width: auto;
+}
+
+div.wuxPostButton,
+button.wuxPostButton[type=roll]
+{
+    position: relative;
+    display: block;
+    height: 14px;
+    margin: 0 5px 0 0;
+    width: calc(100% - 10px);
+
+    text-shadow: none;
+}
+
+button.wuxPostButton[type=roll]
+{
+    background-image: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
+    border-width: 0px;
+    border-radius: 5px;
+}
+
+div.wuxPostButton span,
+button.wuxPostButton[type=roll] span
+{
+    position: relative;
+    bottom: 5px;
+    left: -6px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    padding: 0 6px;
+
+    border: 0;
+}
+
+button.wuxPostButton[type=roll] span
+{
+    color: #f4f6f8;
+    font-weight: normal;
+    font-size: 10px;
+}
+
+button[type=roll].wuxButton::before,
+button[type=roll].wuxSmallButton::before,
+button.wuxPostButton[type=roll]::before
+{
+    content: "" !important;
 }
 

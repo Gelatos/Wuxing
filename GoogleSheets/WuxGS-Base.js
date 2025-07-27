@@ -169,7 +169,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             let titleDefinition = WuxDef.Get("Title_Advancement");
                             contents += WuxDefinition.InfoHeader(titleDefinition);
 
-                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
+                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`, "wuxWidth160"));
 
                             let levelDefinition = WuxDef.Get("Level");
                             contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute()));
@@ -185,7 +185,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             let titleDefinition = WuxDef.Get("Title_Training");
                             contents += WuxDefinition.InfoHeader(titleDefinition);
 
-                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`));
+                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`, "wuxWidth160"));
 
                             let levelDefinition = WuxDef.Get("Training");
                             contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute(WuxDef._max)));
@@ -579,6 +579,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             let contents = "";
                             contents += addNotebookPageHeader();
                             contents += addNotebookPageContents();
+                            contents += WuxSheetMain.Row("&nbsp;");
                             return contents;
                         },
                         
@@ -593,11 +594,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                     false,
                                     "wuxInfluenceType") +
                                 addPostButton() +
-                                WuxSheetMain.Button(deleteDef.getAttribute(), deleteDef.getTitle(), "wuxSmallButton") + 
+                                WuxSheetMain.Button(deleteDef.getAttribute(), deleteDef.getTitle(), "wuxSmallButton wuxNotebookButton") + 
                                 WuxSheetMain.CustomInput(
                                     "text",
                                     templateDataDef.getAttribute(),
-                                    "wuxInput wuxInlineBlock wuxWidth70",
+                                    "wuxInput wuxInlineBlock wuxWidth50",
                                     `onfocus="this.select();" placeholder="${templateDataDef.getTitle()}"`)
                             );
                         },
@@ -605,9 +606,9 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                         addPostButton = function () {
                             let postDef = WuxDef.Get("Note_PagePost");
                             let templateDataDef = WuxDef.Get("Note_PageTemplateData");
-                            return `<button class="wuxSmallButton" type="roll" value="@{${templateDataDef.getVariable()}}">
+                            return `<button class="wuxSmallButton wuxNotebookButton" type="roll" value="@{${templateDataDef.getVariable()}}">
                                 <span>${postDef.getTitle()}</span>
-                                </button>`;
+                            </button>`;
                         },
                         
                         addNotebookPageContents = function () {
@@ -619,7 +620,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxSheet.PageDisplay("Character", addNotebookPageCharacter());
                             contents += WuxSheet.PageDisplay("Location", addNotebookPageLocation());
                             contents += WuxSheet.PageDisplay("Chapter", addNotebookPageChapter());
-                            
                             return contents;
                         },
 
@@ -675,9 +675,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                             return `${WuxSheetMain.Input("text", questNameDef.getAttribute(), "", questNameDef.getTitle())}
                             ${WuxSheetMain.MultiRow(
-                                `<span class="wuxDescription">Chapter</span>${WuxSheetMain.CustomInput("number", chapterDef.getAttribute(),
+                                `<span class="wuxDescription wuxMarginRight5">${chapterDef.getTitle()}</span>
+                                    ${WuxSheetMain.CustomInput("number", chapterDef.getAttribute(),
                                     "wuxInput wuxInlineBlock wuxWidth70", `placeholder="${chapterDef.getTitle()}"`)}
-                                    <span class="wuxDescription">Part</span>${WuxSheetMain.CustomInput("number", partDef.getAttribute(),
+                                    <span class="wuxDescription wuxMarginLeft5 wuxMarginRight5">${partDef.getTitle()}</span>
+                                    ${WuxSheetMain.CustomInput("number", partDef.getAttribute(),
                                     "wuxInput wuxInlineBlock wuxWidth70", `placeholder="${partDef.getTitle()}"`)}
                                 `)}`;
                         },
@@ -1183,7 +1185,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 addItemGenerationButtons = function (definitions, rowSize) {
                     let contents = [];
                     for (let i = 0; i < definitions.length; i++) {
-                        contents.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(definitions[i].getAttribute(), definitions[i].getTitle())));
+                        contents.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(definitions[i].getAttribute(), definitions[i].getTitle(), "wuxWidth120")));
                     }
 
                     return `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_AddItem")}`)}
