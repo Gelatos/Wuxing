@@ -1138,7 +1138,7 @@
                 <div class="sheet-wuxHeader">
                     <span>{{area}}</span>
                 </div>
-                <div class="sheet-wuxSubheader">{{time}}</div>
+                <div class="sheet-wuxSubheader">{{date}}, {{time}}</div>
             </div>
         </div>
     </rolltemplate>
@@ -1188,10 +1188,10 @@
                                     {{/chapter}}
 
                                     <div class="formattedTextbox">
-                                        {{#header}}<span class="wuxHeader">{{header}}</span>{{/header}}
-                                        <h1>{{title}}</h1>
-                                        <span class="subheader">{{sub}}</span>
-                                        {{#footer}}<span class="wuxFooter">{{footer}}</span>{{/footer}}
+                                        {{#questHeader}}<span class="wuxHeader">{{questHeader}}</span>{{/questHeader}}
+                                        <h1>{{questName}}</h1>
+                                        <span class="subheader">{{subtitle}}</span>
+                                        {{#questRewards}}<span class="wuxFooter">{{questRewards}}</span>{{/questRewards}}
                                     </div>
                                 </div>
                                 {{#complete}}

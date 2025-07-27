@@ -24,7 +24,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
             output += printOverview(sheetsDb);
             output += printDetails(sheetsDb);
             output += printPost();
-            output += printOptions();
             return WuxSheet.PageDisplay("Character", output);
         },
 
@@ -47,13 +46,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                 SideBarData.PrintSidebar() +
                 MainContentData.PrintPost();
             return WuxSheet.PageDisplay("Post", output);
-        },
-
-        printOptions = function () {
-            let output = WuxSheetNavigation.BuildOverviewPageNavigation("Options") +
-                SideBarData.PrintSidebar() +
-                MainContentData.PrintOptions();
-            return WuxSheet.PageDisplay("Options", output);
         },
 
         SideBarData = SideBarData || (function () {
@@ -405,6 +397,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                         build = function () {
                             let contents = "";
                             contents += createChatDisplay();
+                            contents += createNotebookDisplay();
                             return contents;
                         },
 
@@ -497,28 +490,206 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             }
 
                             return contents;
-                        }
+                        },
 
+                        createNotebookDisplay = function () {
+                            let contents = WuxSheetMain.MultiRowGroup([notebookSelect(), notebookPages()], WuxSheetMain.Table.FlexTable, 2);
+                            contents = WuxSheetMain.TabBlock(contents);
 
-                    return {
-                        Build: build
-                    }
-                }()),
-
-                printOptions = function () {
-                    let contents = Options.Build();
-                    return WuxSheetMain.Build(contents);
-                },
-                Options = Options || (function () {
-                    'use strict';
-
-                    var
-                        build = function () {
-                            let contents = "";
-
-                            let definition = WuxDef.Get("Page_Options");
+                            let definition = WuxDef.Get("Title_Notebook");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                        },
+
+                        notebookSelect = function () {
+                            let repeatingDef = WuxDef.Get("Notebooks");
+                            let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                            <div>
+                                ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsNotebooks())}
+                                ${WuxSheetMain.Row("&nbsp;")}
+                            </div>`;
+
+                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
+                        },
+
+                        addRepeaterContentsNotebooks = function () {
+                            let nameDef = WuxDef.Get("Note_NotebookName");
+                            let actionDef = WuxDef.Get("Note_NotebookActions");
+
+                            return `
+                            <div class="wuxEquipableSubMenu">
+                                ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsNotebooks())}
+                            </div>
+                            ${WuxSheetMain.CustomInput("text", nameDef.getAttribute(), "wuxInput wuxWidth160")}`;
+                        },
+
+                        addSubmenuContentsNotebooks = function () {
+                            let openDef = WuxDef.Get("Note_NotebookOpen");
+                            let deleteDef = WuxDef.Get("Note_NotebookDelete");
+                            let contentsDef = WuxDef.Get("Note_NotebookContents");
+
+                            return `
+                                ${WuxSheetMain.SubMenuOptionButton(openDef.getAttribute(), `<span>${openDef.getTitle()}</span>`)}
+                                ${WuxSheetMain.SubMenuOptionButton(deleteDef.getAttribute(), `<span>${deleteDef.getTitle()}</span>`)}
+                                ${WuxSheetMain.SubMenuOptionText(contentsDef.getAttribute(), `Contents Empty`)}
+                            `;
+                        },
+
+                        notebookPages = function () {
+                            let contents = "";
+                            contents += addNotebookDisplay();
+                            contents += addNotebookPagesDisplay();
+
+                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150 wuxFlexTableItemGroup2");
+                        },
+                        
+                        addNotebookDisplay = function () {
+                            let nameDef = WuxDef.Get("Note_OpenNotebook");
+                            let actionDef = WuxDef.Get("Note_OpenNotebookActions");
+                            
+                            return `${WuxSheetMain.Header(`${nameDef.getTitle()}`)}
+                            <div class="wuxEquipableSubMenu">
+                                ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsOpenedNotebook())}
+                            </div>
+                            ${WuxSheetMain.CustomInput("text", nameDef.getAttribute(), "wuxInput wuxWidth160")}`;
+                        },
+
+                        addSubmenuContentsOpenedNotebook = function () {
+                            let saveDef = WuxDef.Get("Note_NotebookSave");
+                            let closeDef = WuxDef.Get("Note_NotebookClose");
+                            let reloadDef = WuxDef.Get("Note_NotebookReload");
+
+                            return `
+                                ${WuxSheetMain.SubMenuOptionButton(saveDef.getAttribute(), `<span>${saveDef.getTitle()}</span>`)}
+                                ${WuxSheetMain.SubMenuOptionButton(closeDef.getAttribute(), `<span>${closeDef.getTitle()}</span>`)}
+                                ${WuxSheetMain.SubMenuOptionButton(reloadDef.getAttribute(), `<span>${reloadDef.getTitle()}</span>`)}
+                            `;
+                        },
+                        
+                        addNotebookPagesDisplay = function () {
+                            let repeatingDef = WuxDef.Get("NotebookPages");
+                            return `
+                            ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                            <div>
+                                ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsNotebookPages())}
+                                ${WuxSheetMain.Row("&nbsp;")}
+                            </div>`;
+                        },
+
+                        addRepeaterContentsNotebookPages = function () {
+                            let contents = "";
+                            contents += addNotebookPageHeader();
+                            contents += addNotebookPageContents();
+                            return contents;
+                        },
+                        
+                        addNotebookPageHeader = function () {
+                            let deleteDef = WuxDef.Get("Note_PageDelete");
+                            let templateDataDef = WuxDef.Get("Note_PageTemplateData");
+
+                            return WuxSheetMain.MultiRow(
+                                WuxSheetMain.Select(
+                                    WuxDef.GetAttribute("Note_PageType"),
+                                    WuxDef.Filter([new DatabaseFilterData("group", "PostType")]),
+                                    false,
+                                    "wuxInfluenceType") +
+                                addPostButton() +
+                                WuxSheetMain.Button(deleteDef.getAttribute(), deleteDef.getTitle(), "wuxSmallButton") + 
+                                WuxSheetMain.CustomInput(
+                                    "text",
+                                    templateDataDef.getAttribute(),
+                                    "wuxInput wuxInlineBlock wuxWidth70",
+                                    `onfocus="this.select();" placeholder="${templateDataDef.getTitle()}"`)
+                            );
+                        },
+
+                        addPostButton = function () {
+                            let postDef = WuxDef.Get("Note_PagePost");
+                            let templateDataDef = WuxDef.Get("Note_PageTemplateData");
+                            return `<button class="wuxSmallButton" type="roll" value="@{${templateDataDef.getVariable()}}">
+                                <span>${postDef.getTitle()}</span>
+                                </button>`;
+                        },
+                        
+                        addNotebookPageContents = function () {
+                            let contents = "";
+                            let displayDef = WuxDef.Get("Note_PageDisplay");
+                            
+                            contents += WuxSheet.PageDisplayInput(displayDef.getAttribute(), "0");
+                            contents += WuxSheet.PageDisplay("0", addNotebookPageBasic());
+                            contents += WuxSheet.PageDisplay("Character", addNotebookPageCharacter());
+                            contents += WuxSheet.PageDisplay("Location", addNotebookPageLocation());
+                            contents += WuxSheet.PageDisplay("Chapter", addNotebookPageChapter());
+                            
+                            return contents;
+                        },
+
+                        addNotebookPageBasic = function () {
+                            let contentsDef = WuxDef.Get("Note_PageContents");
+                            return `${WuxSheetMain.Textarea(contentsDef.getAttribute(), "wuxInput wuxHeight30", contentsDef.getTitle())}`;
+                        },
+
+                        addNotebookPageCharacter = function () {
+                            let charNameDef = WuxDef.Get("Note_PageCharName");
+                            let charEmoteDef = WuxDef.Get("Note_PageCharEmote");
+                            let charURLDef = WuxDef.Get("Note_PageCharURL");
+                            let charLanguageDef = WuxDef.Get("Note_PageCharLanguage");
+                            let languageFilters = WuxDef.Filter([new DatabaseFilterData("group", "Language")]);
+                            for (let i = 0; i < languageFilters.length; i++) {
+                                languageFilters[i].variable = languageFilters[i].title;
+                            }
+                            
+                            let contentsDef = WuxDef.Get("Note_PageContents");
+                            
+                            return `${WuxSheetMain.MultiRow(
+                                `${WuxSheetMain.CustomInput("text", charNameDef.getAttribute(), 
+                                    "wuxInput wuxInlineBlock wuxWidth120", `placeholder="${charNameDef.getTitle()}"`)}
+                                    ${WuxSheetMain.CustomInput("text", charEmoteDef.getAttribute(),
+                                    "wuxInput wuxInlineBlock wuxWidth70", `placeholder="${charEmoteDef.getTitle()}"`)}
+                                    ${WuxSheetMain.CustomInput("text", charURLDef.getAttribute(),
+                                    "wuxInput wuxInlineBlock wuxWidth50", `placeholder="${charURLDef.getTitle()}"`)}
+                                    ${WuxSheetMain.Select(charLanguageDef.getAttribute(), languageFilters, false, "wuxInput wuxInlineBlock wuxWidth120")}
+                                `)}
+                                ${WuxSheetMain.Textarea(contentsDef.getAttribute(), "wuxInput wuxHeight30", contentsDef.getTitle())}`;
+                        },
+                        
+                        addNotebookPageLocation = function () {
+                            let locationDef = WuxDef.Get("Note_PageLocation");
+                            let areaDef = WuxDef.Get("Note_PageArea");
+                            let dateDef = WuxDef.Get("Note_PageDate");
+                            let timeDef = WuxDef.Get("Note_PageTime");
+                            let timeFilters = WuxDef.Filter([new DatabaseFilterData("group", "TimeType")]);
+                            
+                            return `${WuxSheetMain.Input("text", locationDef.getAttribute(), "", locationDef.getTitle())}
+                            ${WuxSheetMain.Input("text", areaDef.getAttribute(), "", areaDef.getTitle())}
+                            ${WuxSheetMain.MultiRow(
+                                `${WuxSheetMain.CustomInput("text", dateDef.getAttribute(),
+                                    "wuxInput wuxInlineBlock wuxWidth120", `placeholder="${dateDef.getTitle()}"`)}
+                                    ${WuxSheetMain.Select(timeDef.getAttribute(), timeFilters, false, "wuxInput wuxInlineBlock wuxWidth120")}
+                                `)}`;
+                        },
+                        
+                        addNotebookPageChapter = function () {
+                            let questNameDef = WuxDef.Get("Note_PageQuestName");
+                            let chapterDef = WuxDef.Get("Note_PageChapter");
+                            let partDef = WuxDef.Get("Note_PagePart");
+
+                            return `${WuxSheetMain.Input("text", questNameDef.getAttribute(), "", questNameDef.getTitle())}
+                            ${WuxSheetMain.MultiRow(
+                                `<span class="wuxDescription">Chapter</span>${WuxSheetMain.CustomInput("number", chapterDef.getAttribute(),
+                                    "wuxInput wuxInlineBlock wuxWidth70", `placeholder="${chapterDef.getTitle()}"`)}
+                                    <span class="wuxDescription">Part</span>${WuxSheetMain.CustomInput("number", partDef.getAttribute(),
+                                    "wuxInput wuxInlineBlock wuxWidth70", `placeholder="${partDef.getTitle()}"`)}
+                                `)}`;
+                        },
+
+                        buildRepeater = function (repeaterName, repeaterData, classes) {
+                            return `<div${classes != undefined ? ` class="${classes}"` : ""}>
+                                <fieldset class="${repeaterName}">
+                                    ${repeaterData}
+                                </fieldset>
+                            </div>`;
                         }
+
 
                     return {
                         Build: build
@@ -528,8 +699,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
             return {
                 PrintOverview: printOverview,
                 PrintDetails: printDetails,
-                PrintPost: printPost,
-                PrintOptions: printOptions
+                PrintPost: printPost
             }
         }());
 

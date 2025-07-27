@@ -2,6 +2,7 @@
   Character Sheet Display Style
 ========================================*/
 
+.wuxPageDisplay-0,
 .wuxPageDisplay-Origin,
 .wuxPageDisplay-Builder,
 .wuxPageDisplay-Training,
@@ -25,11 +26,14 @@
 .wuxPageDisplay-Options,
 .wuxPageDisplay-Gear,
 .wuxPageDisplay-Notes,
-.wuxPageDisplay-NPC
+.wuxPageDisplay-NPC,
+.wuxPageDisplay-Location,
+.wuxPageDisplay-Chapter
 {
 	display: none;
 }
 
+input[type=hidden].wuxPageDisplay-Flag[value="0"] ~ .wuxPageDisplay-0,
 input[type=hidden].wuxPageDisplay-Flag[value="Origin"] ~ .wuxPageDisplay-Origin,
 input[type=hidden].wuxPageDisplay-Flag[value="Builder"] ~ .wuxPageDisplay-Builder,
 input[type=hidden].wuxPageDisplay-Flag[value="Training"] ~ .wuxPageDisplay-Training,
@@ -54,7 +58,9 @@ input[type=hidden].wuxPageDisplay-Flag[value="Post"] ~ .wuxPageDisplay-Post,
 input[type=hidden].wuxPageDisplay-Flag[value="Options"] ~ .wuxPageDisplay-Options,
 input[type=hidden].wuxPageDisplay-Flag[value="Gear"] ~ .wuxPageDisplay-Gear,
 input[type=hidden].wuxPageDisplay-Flag[value="Notes"] ~ .wuxPageDisplay-Notes,
-input[type=hidden].wuxPageDisplay-Flag[value="NPC"] ~ .wuxPageDisplay-NPC
+input[type=hidden].wuxPageDisplay-Flag[value="NPC"] ~ .wuxPageDisplay-NPC,
+input[type=hidden].wuxPageDisplay-Flag[value="Location"] ~ .wuxPageDisplay-Location,
+input[type=hidden].wuxPageDisplay-Flag[value="Chapter"] ~ .wuxPageDisplay-Chapter
 {
 	display: block;
 }
@@ -312,53 +318,6 @@ input[type=hidden].wuxPageDisplay-Flag[value="NPC"] ~ .wuxPageDisplay-NPC
 .wuxEmotePostGroup .repcontainer > .repitem 
 {
     display: inline-block;
-}
-
-.wuxEmotePostGroup div.wuxEmoteButton,
-.wuxEmotePostGroup button.wuxEmoteButton[type=roll]
-{
-    position: relative;
-    display: block; 
-    height: 14px; 
-    margin: 0px; 
-    margin-right: 5px; 
-    width: calc(100% - 10px);
-
-    text-shadow: none;
-}
-
-.wuxEmotePostGroup button.wuxEmoteButton[type=roll]
-{
-    background: none;
-    background-image: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
-    border-width: 0px;
-    border-radius: 5px;
-}
-
-.wuxEmotePostGroup div.wuxEmoteButton span,
-.wuxEmotePostGroup button.wuxEmoteButton[type=roll] span
-{
-    position: relative;
-    bottom: 5px;
-    left: -6px;
-    display: inline-block;
-    vertical-align: middle;
-    width: 100%;
-    padding: 0px 6px;
-
-    border: 0px;
-}
-
-.wuxEmotePostGroup button.wuxEmoteButton[type=roll] span
-{
-    color: #f4f6f8;
-    font-weight: normal;
-    font-size: 10px;
-}
-
-.wuxEmotePostGroup button.wuxEmoteButton[type=roll]::before
-{
-    content: "" !important;
 }
 
 .wuxEmoteDisplayStyleList,

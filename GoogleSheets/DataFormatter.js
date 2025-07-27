@@ -1144,9 +1144,9 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         return `<div class="wuxInteractiveInnerBlock">
             <input class="wuxInteractiveContent-flag" type="checkbox" name="${fieldName}">
             <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
-            <span class="wuxInteractiveIcon">&#9662;</span>
+            <span class="wuxInteractiveIcon">&#9656;</span>
             <input type="hidden" class="wuxInteractiveIcon-flag" name="${fieldName}">
-            <span class="wuxInteractiveAuxIcon">&#9656;</span>
+            <span class="wuxInteractiveAuxIcon">&#9662;</span>
             
             ${titleContent}
         </div>`;
@@ -1772,15 +1772,20 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 },
 
                 emotePostButton = function () {
-                    return `<button class="wuxEmoteButton" type="roll" value="${senderPostMessage()}">
+                    return `<button class="wuxPostButton" type="roll" value="${senderPostMessage()}">
                     <span name="${WuxDef.GetAttribute("Chat_PostName")}">emote</span>
                     </button>`;
                 },
 
                 senderPostMessage = function () {
-                    let chatMessage = `&{template:@{${WuxDef.GetVariable("Chat_Type")}}} {{url=@{${WuxDef.GetVariable("Chat_PostURL")}}}} `;
-                    chatMessage += `{{title=@{${WuxDef.GetVariable("DisplayName")}}@{${WuxDef.GetVariable("Chat_Target")}}}} {{language=@{${WuxDef.GetVariable("Chat_Language")}}}} `;
-                    chatMessage += `{{message=@{${WuxDef.GetVariable("Chat_Message")}}}} @{${WuxDef.GetVariable("Chat_LanguageTag")}}`;
+                    let chatMessage = `&{template:@{${WuxDef.GetVariable("Chat_Type")}}} `;
+                    chatMessage += `{{url=@{${WuxDef.GetVariable("Chat_PostURL")}}}} `;
+                    chatMessage += `{{emote=@{${WuxDef.GetVariable("Chat_PostName")}}}} `;
+                    chatMessage += `{{name=@{${WuxDef.GetVariable("DisplayName")}}}} `;
+                    chatMessage += `{{title=@{${WuxDef.GetVariable("DisplayName")}}@{${WuxDef.GetVariable("Chat_Target")}}}} `;
+                    chatMessage += `{{language=@{${WuxDef.GetVariable("Chat_Language")}}}} `;
+                    chatMessage += `{{message=@{${WuxDef.GetVariable("Chat_Message")}}}} `;
+                    chatMessage += `@{${WuxDef.GetVariable("Chat_LanguageTag")}}`;
                     return chatMessage;
                 }
             return {

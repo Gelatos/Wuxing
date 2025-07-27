@@ -16,6 +16,9 @@ var WuxMessage = WuxMessage || (function () {
                 case "!i": return new InfoMessage(textMessage);
                 case "!s": return new SystemInfoMessage(textMessage);
                 case "!sa": return new SystemInfoAuxMessage(textMessage);
+                case "!history": return new HistoryMessage(textMessage);
+                case "!loc": return new LocationMessage(textMessage);
+                case "!chapter": return new ChapterMessage(textMessage);
             }
             return undefined;
         },
@@ -448,11 +451,20 @@ class SystemInfoAuxMessage extends InfoMessage {
     }
 }
 
+class HistoryMessage extends InfoMessage {
+    createEmpty() {
+        super.createEmpty();
+        this.template = "historyBox";
+    }
+}
+
 class EmoteMessage extends ChatMessage {
     createEmpty() {
         super.createEmpty();
         this.template = "";
         this.title = "";
+        this.name = "";
+        this.emote = "";
         this.url = "";
         this.language = "";
         this.affinity = "";
@@ -461,7 +473,7 @@ class EmoteMessage extends ChatMessage {
     }
 
     printTemplateData() {
-        let template = `{{url=${this.url}}} {{message=${this.message}}} {{title=${this.title}}}`;
+        let template = `{{url=${this.url}}} {{emote=${this.emote}}} {{name=${this.name}}} {{message=${this.message}}} {{title=${this.title}}}`;
         if (this.language) {
             template += ` {{language=${this.language}}}`;
             if (this.languageTag) {
@@ -562,6 +574,17 @@ class EmoteMessage extends ChatMessage {
         this.language = `@{${targetData.charName}|chat-language}`;
         this.languageTag = `@{${targetData.charName}|chat-languagetag}`;
     }
+    
+    setName(name) {
+        this.name = name;
+        if (this.title == "") {
+            this.title = name;
+        }
+    }
+    
+    setEmote(emote) {
+        this.emote = emote;
+    }
 
     setUrl(url) {
         this.url = url;
@@ -631,5 +654,100 @@ class IntroEmoteMessage extends EmoteMessage {
     createEmpty() {
         super.createEmpty();
         this.template = "ctintro";
+    }
+}
+
+class LocationMessage extends ChatMessage {
+
+    createEmpty() {
+        super.createEmpty();
+        this.template = "locationBox";
+        this.location = "";
+        this.area = "";
+        this.date = "";
+        this.time = "";
+    }
+
+    printTemplateData() {
+        return `{{location=${this.location}}} {{area=${this.area}}} {{date=${this.date}}} {{time=${this.time}}}`;
+    }
+
+    printHtml() {
+        return `<div class="sheet-rolltemplate-${this.template}">
+        <div>&nbsp;</div>
+        <div class="formattedTextbox">
+            <div class="inner-border">
+                <div class="sheet-wuxTemplateHeader">
+                    <span>${this.location}</span>
+                </div>
+                <div class="sheet-wuxHeader">
+                    <span>${this.area}</span>
+                </div>
+                <div class="sheet-wuxSubheader">${this.date} ${this.time}</div>
+            </div>
+        </div>
+    </div>`;
+    }
+    
+    setLocation(location) {
+        this.location = location;
+    }
+    
+    setArea(area) {
+        this.area = area;
+    }
+    
+    setDate(date) {
+        this.date = date;
+    }
+    
+    setTime(time) {
+        this.time = time;
+    }
+}
+
+class QuestMessage extends ChatMessage {
+
+    createEmpty() {
+        super.createEmpty();
+        this.template = "quest";
+        this.type = "";
+        this.isComplete = false;
+        this.questHeader = "";
+        this.questName = "";
+        this.subtitle = "";
+        this.questRewards = "";
+    }
+
+    printTemplateData() {
+        let options = this.questRewards ? ` {{questRewards=${this.questRewards}}}` : "";
+        options += this.isComplete ? " {{complete=1}}" : "";
+        options += this.questHeader != "" ? ` {{questHeader=${this.questHeader}}}` : "";
+        return `{{${this.type}=1}} {{questName=${this.questName}}} {{subtitle=${this.subtitle}}}${options}`;
+    }
+}
+
+class ChapterMessage extends QuestMessage {
+    createEmpty() {
+        super.createEmpty();
+        this.type = "chapter";
+        this.chapter = 0;
+        this.part = 0;
+    }
+    
+    setChapterName(name) {
+        this.questName = name;
+    }
+
+    setSubtitle(chapter, part) {
+        this.chapter = chapter;
+        this.part = part;
+        this.subtitle = `Chapter ${chapter} - Part ${part}`;
+    }
+
+    printTemplateData() {
+        let baseData = super.printTemplateData();
+        baseData += ` {{chapter=${this.chapter}}} {{part=${this.part}}}`;
+        return baseData;
     }
 }

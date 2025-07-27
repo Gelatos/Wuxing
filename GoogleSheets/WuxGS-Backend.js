@@ -508,6 +508,8 @@ var PopupBuilder = PopupBuilder || (function () {
         },
         listenerOpenSubMenu = function () {
             let groupVariableNames = [];
+            groupVariableNames.push(WuxDef.GetVariable("Note_OpenNotebookActions"));
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("Notebooks")}:${WuxDef.GetVariable("Note_NotebookActions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvancedStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Actions")}`]);
@@ -596,6 +598,10 @@ var ChatBuilder = ChatBuilder || (function () {
             output += listenerUpdateRepeatingChatEmoteDefaultUrlUpdate();
             output += listenerUpdateRepeatingChatEmoteNameUpdate();
             output += listenerUpdateRepeatingChatEmoteUrlUpdate();
+            output += listenerUpdateNotebookPageType();
+            output += listenerUpdateNotebookPageTemplateData();
+            output += listenerUpdateNotebookPageDelete();
+            output += listenerUpdateNotebookPageData();
             return output;
         },
         listenerUpdatePostContent = function () {
@@ -662,6 +668,47 @@ var ChatBuilder = ChatBuilder || (function () {
                 groupVariableNames.push(`${repeatingSection}:${WuxDef.GetVariable("Chat_EmoteURL")}${i}`);
             }
             let output = `WuxWorkerChat.UpdateOutfitEmotesUrl(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateNotebookPageType = function () {
+            let repeatingSection = WuxDef.GetVariable("NotebookPages");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Note_PageType")}`];
+            let output = `WuxWorkerChat.SetNotebookPageType(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateNotebookPageTemplateData = function () {
+            let repeatingSection = WuxDef.GetVariable("NotebookPages");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Note_PageTemplateData")}`];
+            let output = `WuxWorkerChat.SetNotebookPageTemplateData(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateNotebookPageDelete = function () {
+            let repeatingSection = WuxDef.GetVariable("NotebookPages");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Note_PageDelete")}`];
+            let output = `WuxWorkerChat.SetNotebookPageDelete(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateNotebookPageData = function () {
+            let repeatingSection = WuxDef.GetVariable("NotebookPages");
+            let groupVariableNames = [
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageContents")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageLocation")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageArea")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageDate")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageTime")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageCharName")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageCharURL")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageCharEmote")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageCharLanguage")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageQuestName")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PageChapter")}`,
+                `${repeatingSection}:${WuxDef.GetVariable("Note_PagePart")}`
+            ];
+            let output = `WuxWorkerChat.SetNotebookPageData(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
