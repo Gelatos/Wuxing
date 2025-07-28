@@ -1743,9 +1743,15 @@ var WuxSheetMain = WuxSheetMain || (function () {
 
                     contents += tags();
                     contents += chatType();
+                    contents += chatPostTarget();
                     contents += WuxSheetMain.Row("&nbsp;");
                     contents += textArea();
-                    contents += repeatingEmoteButtons();
+                    
+                    let postTargetAttr = WuxDef.GetAttribute("Chat_PostTarget");
+                    contents += WuxSheetMain.HiddenAuxField(postTargetAttr, 
+                        repeatingEmoteButtons("RepeatingActiveEmotes"));
+                    contents += WuxSheetMain.HiddenField(postTargetAttr, 
+                        repeatingEmoteButtons("RepeatingActiveEmotesNotes"));
 
                     return contents;
                 },
@@ -1755,17 +1761,23 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 },
 
                 chatType = function () {
-                    return WuxSheetMain.Row(WuxSheetMain.Select(WuxDef.GetAttribute("Chat_Type"), WuxDef.Filter([new DatabaseFilterData("group", "ChatType")]), false));
+                    return WuxSheetMain.Row(WuxSheetMain.Select(WuxDef.GetAttribute("Chat_Type"),
+                        WuxDef.Filter([new DatabaseFilterData("group", "ChatType")]), false));
+                },
+
+                chatPostTarget = function () {
+                    return WuxSheetMain.Row(WuxSheetMain.Select(WuxDef.GetAttribute("Chat_PostTarget"),
+                        WuxDef.Filter([new DatabaseFilterData("group", "EmotePostType")]), false));
                 },
 
                 textArea = function () {
                     return WuxSheetMain.Textarea(WuxDef.GetAttribute("Chat_Message"), "wuxInput wuxHeight150");
                 },
 
-                repeatingEmoteButtons = function () {
+                repeatingEmoteButtons = function (groupName) {
                     return `<div class="wuxNoRepControl wuxEmotePostGroup">
-                        <fieldset class="${WuxDef.GetVariable("RepeatingActiveEmotes")}">
-                            ${emotePostButton()}
+                        <fieldset class="${WuxDef.GetVariable(groupName)}">
+                            ${groupName == "RepeatingActiveEmotes" ? emotePostButton() : emoteNotePostButton()}
                             <input type="hidden" name="${WuxDef.GetAttribute("Chat_PostURL")}">
                         </fieldset>
                     </div>`;
@@ -1775,6 +1787,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     return `<button class="wuxPostButton" type="roll" value="${senderPostMessage()}">
                     <span name="${WuxDef.GetAttribute("Chat_PostName")}">emote</span>
                     </button>`;
+                },
+
+                emoteNotePostButton = function () {
+                    return WuxSheetMain.Button(WuxDef.GetAttribute("Chat_PostEmoteNote"), 
+                        `<span name="${WuxDef.GetAttribute("Chat_PostName")}">emote</span>`, "wuxPostButton");
                 },
 
                 senderPostMessage = function () {

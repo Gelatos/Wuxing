@@ -969,7 +969,8 @@ button[type=roll].wuxSmallButton
 }
 
 div.wuxButton,
-div.wuxSmallButton
+div.wuxSmallButton,
+div.wuxPostButton
 {
     top: 1px;
 }
@@ -984,7 +985,8 @@ button[type=roll].wuxSmallButton:hover
 }
 
 .wuxButton input[type=checkbox],
-.wuxSmallButton input[type=checkbox]
+.wuxSmallButton input[type=checkbox],
+.wuxPostButton input[type=checkbox]
 {
     position: absolute;
     display: block;
@@ -998,8 +1000,10 @@ button[type=roll].wuxSmallButton:hover
 
 button[type=roll].wuxButton span,
 button[type=roll].wuxSmallButton span,
-.wuxButton span,
-.wuxSmallButton span
+button[type=roll].wuxPostButton span,
+div.wuxButton span,
+div.wuxSmallButton span,
+div.wuxPostButton span
 {
     display: block;
     pointer-events: none;
@@ -1013,7 +1017,8 @@ button[type=roll].wuxSmallButton span,
 }
 
 button[type=roll].wuxButton span,
-button[type=roll].wuxSmallButton span
+button[type=roll].wuxSmallButton span,
+button[type=roll].wuxPostButton span
 {
     position: relative;
     top: 1px;
@@ -1025,8 +1030,10 @@ button[type=roll].wuxSmallButton span
 
 button[type=roll].wuxButton span span,
 button[type=roll].wuxSmallButton span span,
+button[type=roll].wuxPostButton span span,
 .wuxButton span span,
-.wuxSmallButton span span
+.wuxSmallButton span span,
+.wuxPostButton span span
 {
     display: inline;
     width: auto;
@@ -1035,20 +1042,18 @@ button[type=roll].wuxSmallButton span span,
 div.wuxPostButton,
 button[type=roll].wuxPostButton
 {
-    position: relative;
-    display: block;
-    height: 14px;
+    height: 17px;
     margin: 0 5px 0 0;
     width: calc(100% - 10px);
 
     text-shadow: none;
-}
-
-button[type=roll].wuxPostButton
-{
+    
     background-image: linear-gradient(to bottom, #512800 0%, #4b1e00 50%);
     border-width: 0;
     border-radius: 5px;
+}
+button[type=roll].wuxPostButton {
+    height: 14px;
 }
 
 div.wuxPostButton:hover,
@@ -1061,21 +1066,21 @@ div.wuxPostButton span,
 button.wuxPostButton[type=roll] span
 {
     position: relative;
-    bottom: 5px;
     left: -6px;
     display: inline-block;
     vertical-align: middle;
     width: 100%;
     padding: 0 6px;
 
-    border: 0;
-}
-
-button.wuxPostButton[type=roll] span
-{
     color: #f4f6f8;
     font-weight: normal;
     font-size: 10px;
+
+    border: 0;
+}
+
+button.wuxPostButton[type=roll] span {
+    /*bottom: 5px;*/
 }
 
 button[type=roll].wuxButton::before,
@@ -6503,7 +6508,7 @@ input[type=hidden].wuxSubMenu-flag:not([value="0"]) + .wuxSubMenuContent
     visibility: visible;
 }
 
-.wuxSubMenuOptionButton,
+div.wuxSubMenuOptionButton,
 button.wuxSubMenuOptionButton[type=roll]
 {
     position: relative;
@@ -6530,7 +6535,7 @@ input[type=hidden].wuxSubMenuOptionButton-flag[value="on"] + .wuxSubMenuOptionBu
     box-shadow: #1d1e1f 0 0 5px;
 }
 
-.wuxSubMenuOptionButton input[type=checkbox]
+div.wuxSubMenuOptionButton input[type=checkbox]
 {
     position: absolute;
     display: block;
@@ -6546,7 +6551,7 @@ input[type=hidden].wuxSubMenuOptionButton-flag[value="on"] + .wuxSubMenuOptionBu
 
 }
 
-.wuxSubMenuOptionButton span,
+div.wuxSubMenuOptionButton span,
 button.wuxSubMenuOptionButton[type=roll] span 
 {
     pointer-events: none;
@@ -6567,13 +6572,13 @@ button.wuxSubMenuOptionButton[type=roll] span {
     padding-left: 5px;
 }
 
-.wuxSubMenuOptionButton:hover,
+div.wuxSubMenuOptionButton:hover,
 button.wuxSubMenuOptionButton[type=roll]:hover {
 
     background: #9fa0a3;
 }
 
-.wuxSubMenuOptionButton:hover span,
+div.wuxSubMenuOptionButton:hover span,
 button.wuxSubMenuOptionButton[type=roll]:hover span {
 
     color: #000;

@@ -536,13 +536,13 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                         notebookPages = function () {
                             let contents = "";
-                            contents += addNotebookDisplay();
+                            contents += addOpenedNotebookDisplay();
                             contents += addNotebookPagesDisplay();
 
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150 wuxFlexTableItemGroup2");
                         },
                         
-                        addNotebookDisplay = function () {
+                        addOpenedNotebookDisplay = function () {
                             let nameDef = WuxDef.Get("Note_OpenNotebook");
                             let actionDef = WuxDef.Get("Note_OpenNotebookActions");
                             
@@ -550,7 +550,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             <div class="wuxEquipableSubMenu">
                                 ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsOpenedNotebook())}
                             </div>
-                            ${WuxSheetMain.CustomInput("text", nameDef.getAttribute(), "wuxInput wuxWidth160")}`;
+                            ${WuxSheetMain.CustomInput("text", nameDef.getAttribute(), "wuxInput wuxWidth160", `placeholder="Notebook Name"`)}`;
                         },
 
                         addSubmenuContentsOpenedNotebook = function () {

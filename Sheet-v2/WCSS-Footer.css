@@ -688,7 +688,7 @@ input[type=hidden].wuxSubMenu-flag:not([value="0"]) + .wuxSubMenuContent
     visibility: visible;
 }
 
-.wuxSubMenuOptionButton,
+div.wuxSubMenuOptionButton,
 button.wuxSubMenuOptionButton[type=roll]
 {
     position: relative;
@@ -715,7 +715,7 @@ input[type=hidden].wuxSubMenuOptionButton-flag[value="on"] + .wuxSubMenuOptionBu
     box-shadow: #1d1e1f 0 0 5px;
 }
 
-.wuxSubMenuOptionButton input[type=checkbox]
+div.wuxSubMenuOptionButton input[type=checkbox]
 {
     position: absolute;
     display: block;
@@ -731,7 +731,7 @@ input[type=hidden].wuxSubMenuOptionButton-flag[value="on"] + .wuxSubMenuOptionBu
 
 }
 
-.wuxSubMenuOptionButton span,
+div.wuxSubMenuOptionButton span,
 button.wuxSubMenuOptionButton[type=roll] span 
 {
     pointer-events: none;
@@ -752,13 +752,13 @@ button.wuxSubMenuOptionButton[type=roll] span {
     padding-left: 5px;
 }
 
-.wuxSubMenuOptionButton:hover,
+div.wuxSubMenuOptionButton:hover,
 button.wuxSubMenuOptionButton[type=roll]:hover {
 
     background: #9fa0a3;
 }
 
-.wuxSubMenuOptionButton:hover span,
+div.wuxSubMenuOptionButton:hover span,
 button.wuxSubMenuOptionButton[type=roll]:hover span {
 
     color: #000;

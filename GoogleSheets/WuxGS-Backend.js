@@ -598,6 +598,7 @@ var ChatBuilder = ChatBuilder || (function () {
             output += listenerUpdateRepeatingChatEmoteDefaultUrlUpdate();
             output += listenerUpdateRepeatingChatEmoteNameUpdate();
             output += listenerUpdateRepeatingChatEmoteUrlUpdate();
+            output += listenerUpdateRepeatingChatPostTarget();
             output += listenerUpdateNotebookPageType();
             output += listenerUpdateNotebookPageTemplateData();
             output += listenerUpdateNotebookPageDelete();
@@ -668,6 +669,13 @@ var ChatBuilder = ChatBuilder || (function () {
                 groupVariableNames.push(`${repeatingSection}:${WuxDef.GetVariable("Chat_EmoteURL")}${i}`);
             }
             let output = `WuxWorkerChat.UpdateOutfitEmotesUrl(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateRepeatingChatPostTarget = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingActiveEmotesNotes");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Chat_PostEmoteNote")}`];
+            let output = `WuxWorkerChat.PostToNotebook(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },

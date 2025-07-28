@@ -184,30 +184,36 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
                 let emoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotes");
                 emoteButtonRepeaterSection.getIds(function (emoteButtonRepeater) {
                     emoteButtonRepeater.removeAllIds();
+                    
+                    let emoteNoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotesNotes");
+                    emoteNoteButtonRepeaterSection.getIds(function (emoteNoteButtonRepeater) {
+                        emoteNoteButtonRepeater.removeAllIds();
 
-                    let attributeHandler = new WorkerAttributeHandler();
-                    let setIdVar = WuxDef.GetVariable("Chat_SetId");
-                    let outfitEmotesVar = WuxDef.GetVariable("Chat_OutfitEmotes", WuxDef._true);
-                    let outfitSelectVar = WuxDef.GetVariable("Chat_OutfitName", WuxDef._learn);
-                    attributeHandler.addMod(setIdVar);
-                    outfitRepeater.addAttributeMods(attributeHandler, [outfitEmotesVar]);
-
-                    attributeHandler.addGetAttrCallback(function (attrHandler) {
-                        let setId = attrHandler.parseString(setIdVar);
-                        let newSelectionId = outfitRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
-
-                        outfitRepeater.iterate(function (id) {
-                            if (setId == id) {
-                                attrHandler.addUpdate(outfitRepeater.getFieldName(id, outfitSelectVar), "0");
-                            }
+                        let attributeHandler = new WorkerAttributeHandler();
+                        let setIdVar = WuxDef.GetVariable("Chat_SetId");
+                        let outfitEmotesVar = WuxDef.GetVariable("Chat_OutfitEmotes", WuxDef._true);
+                        let outfitSelectVar = WuxDef.GetVariable("Chat_OutfitName", WuxDef._learn);
+                        attributeHandler.addMod(setIdVar);
+                        outfitRepeater.addAttributeMods(attributeHandler, [outfitEmotesVar]);
+    
+                        attributeHandler.addGetAttrCallback(function (attrHandler) {
+                            let setId = attrHandler.parseString(setIdVar);
+                            let newSelectionId = outfitRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+    
+                            outfitRepeater.iterate(function (id) {
+                                if (setId == id) {
+                                    attrHandler.addUpdate(outfitRepeater.getFieldName(id, outfitSelectVar), "0");
+                                }
+                            });
+                            attrHandler.addUpdate(outfitRepeater.getFieldName(newSelectionId, outfitSelectVar), "on");
+                            attrHandler.addUpdate(setIdVar, newSelectionId);
+                            let emotesString = attrHandler.parseString(outfitRepeater.getFieldName(newSelectionId, outfitEmotesVar));
+                            let outfitEmotes = new EmoteSetData(JSON.parse(emotesString));
+                            updateActiveEmoteSet(emoteButtonRepeater, attrHandler, outfitEmotes);
+                            updateActiveEmoteSet(emoteNoteButtonRepeater, attrHandler, outfitEmotes);
                         });
-                        attrHandler.addUpdate(outfitRepeater.getFieldName(newSelectionId, outfitSelectVar), "on");
-                        attrHandler.addUpdate(setIdVar, newSelectionId);
-                        let emotesString = attrHandler.parseString(outfitRepeater.getFieldName(newSelectionId, outfitEmotesVar));
-                        let outfitEmotes = new EmoteSetData(JSON.parse(emotesString));
-                        updateActiveEmoteSet(emoteButtonRepeater, attrHandler, outfitEmotes);
+                        attributeHandler.run();
                     });
-                    attributeHandler.run();
                 });
             });
         },
@@ -349,6 +355,62 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             setOutfitEmotesIndividualEntry(eventinfo);
         },
 
+        postToNotebook = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            let repeatingEmoteSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotesNotes");
+            let updateId = repeatingEmoteSection.getIdFromFieldName(eventinfo.sourceAttribute);
+
+            let displayNameVar = WuxDef.GetVariable("DisplayName");
+            let chatTypeVar = WuxDef.GetVariable("Chat_Type");
+            let chatMessageVar = WuxDef.GetVariable("Chat_Message");
+            let chatLanguageVar = WuxDef.GetVariable("Chat_Language");
+            let postNameVar = repeatingEmoteSection.getFieldName(updateId, WuxDef.GetVariable("Chat_PostName"));
+            let postUrlVar = repeatingEmoteSection.getFieldName(updateId, WuxDef.GetVariable("Chat_PostURL"));
+            attributeHandler.addMod([displayNameVar, chatTypeVar, chatMessageVar, chatLanguageVar, postNameVar, postUrlVar]);
+            
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let chatType = attrHandler.parseString(chatTypeVar);
+                let chatMessage = attrHandler.parseString(chatMessageVar);
+                let emoteMessage;
+                switch (chatType) {
+                    case "ctmsg":
+                        emoteMessage = new SpeakEmoteMessage(chatMessage);
+                        break;
+                    case "ctwsp":
+                        emoteMessage = new WhisperEmoteMessage(chatMessage);
+                        break;
+                    case "ctyell":
+                        emoteMessage = new YellEmoteMessage(chatMessage);
+                        break;
+                    case "ctthk":
+                        emoteMessage = new ThinkEmoteMessage(chatMessage);
+                        break;
+                    case "ctdesc":
+                        emoteMessage = new DescEmoteMessage(chatMessage);
+                        break;
+                    default:
+                        emoteMessage = new EmoteMessage(chatMessage);
+                }
+                emoteMessage.setName(attrHandler.parseString(displayNameVar));
+                emoteMessage.setTitle(attrHandler.parseString(displayNameVar));
+                emoteMessage.setEmote(attrHandler.parseString(postNameVar));
+                emoteMessage.setUrl(attrHandler.parseString(postUrlVar));
+                emoteMessage.setLanguage(attrHandler.parseString(chatLanguageVar));
+                
+                let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages");
+                let newRowId = repeatingSection.generateRowId();
+                attrHandler.addUpdate(repeatingSection.getFieldName(newRowId, WuxDef.GetVariable("Note_PageType")), chatType);
+                attrHandler.addUpdate(repeatingSection.getFieldName(newRowId, WuxDef.GetVariable("Note_PageDisplay")), "Character");
+                attrHandler.addUpdate(repeatingSection.getFieldName(newRowId, WuxDef.GetVariable("Note_PageCharName")), emoteMessage.name);
+                attrHandler.addUpdate(repeatingSection.getFieldName(newRowId, WuxDef.GetVariable("Note_PageCharURL")), emoteMessage.url);
+                attrHandler.addUpdate(repeatingSection.getFieldName(newRowId, WuxDef.GetVariable("Note_PageCharEmote")), emoteMessage.emote);
+                attrHandler.addUpdate(repeatingSection.getFieldName(newRowId, WuxDef.GetVariable("Note_PageCharLanguage")), emoteMessage.language);
+                attrHandler.addUpdate(repeatingSection.getFieldName(newRowId, WuxDef.GetVariable("Note_PageContents")), emoteMessage.message);
+                attrHandler.addUpdate(repeatingSection.getFieldName(newRowId, WuxDef.GetVariable("Note_PageTemplateData")), emoteMessage.printRollTemplate());
+            });
+            attributeHandler.run();
+        },
+
         setNotebookPageType = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages");
@@ -473,6 +535,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         UpdateOutfitEmotesName: updateOutfitEmotesName,
         UpdateOutfitEmotesDefaultUrl: updateOutfitEmotesDefaultUrl,
         UpdateOutfitEmotesUrl: updateOutfitEmotesUrl,
+        PostToNotebook: postToNotebook,
         SetNotebookPageType: setNotebookPageType,
         SetNotebookPageData: setNotebookPageData,
         SetNotebookPageDelete: setNotebookPageDelete,
