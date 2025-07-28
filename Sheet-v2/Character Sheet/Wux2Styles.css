@@ -943,7 +943,8 @@ textarea.wuxInput
 ========================================*/
 
 .wuxButton,
-.wuxSmallButton
+.wuxSmallButton,
+.wuxPostButton
 {
     position: relative;
     display: inline-block;
@@ -961,7 +962,8 @@ textarea.wuxInput
 }
 
 button[type=roll].wuxButton,
-button[type=roll].wuxSmallButton {
+button[type=roll].wuxSmallButton 
+{
     left: 5px;
     height: 22px;
 }
@@ -1003,7 +1005,6 @@ button[type=roll].wuxSmallButton span,
     pointer-events: none;
     padding: 0 10px;
     
-    vertical-align: center;
     text-align: center;
     
     color: #1d1e1f;
@@ -1032,7 +1033,7 @@ button[type=roll].wuxSmallButton span span,
 }
 
 div.wuxPostButton,
-button.wuxPostButton[type=roll]
+button[type=roll].wuxPostButton
 {
     position: relative;
     display: block;
@@ -1043,11 +1044,17 @@ button.wuxPostButton[type=roll]
     text-shadow: none;
 }
 
-button.wuxPostButton[type=roll]
+button[type=roll].wuxPostButton
 {
-    background-image: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
-    border-width: 0px;
+    background-image: linear-gradient(to bottom, #512800 0%, #4b1e00 50%);
+    border-width: 0;
     border-radius: 5px;
+}
+
+div.wuxPostButton:hover,
+button[type=roll].wuxPostButton:hover
+{
+    background-image: linear-gradient(to bottom, #764200 0%, #764200 70%);
 }
 
 div.wuxPostButton span,
@@ -3105,29 +3112,12 @@ input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplaySty
 button[type=roll].wuxNotebookButton,
 .wuxNotebookButton
 {
-    /*position: relative;*/
-    /*display: inline-block;*/
-    /*height: 14px;*/
-    /*margin: 0;*/
-    /*width: 37px;*/
-    /*font-weight: normal;*/
-    /*font-size: 10px;*/
-    
-    /*text-shadow: none;*/
     border-width: 0;
     border-radius: 5px;
 }
 
 .wuxNotebookButton span
 {
-    /*position: relative;*/
-    /*bottom: 5px;*/
-    /*left: -6px;*/
-    /*display: inline-block;*/
-    /*vertical-align: middle;*/
-    /*padding: 0px 6px;*/
-    /*width: 100%;*/
-    
     color: #000;
     font-weight: normal;
     font-size: 10px;

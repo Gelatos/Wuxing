@@ -1500,29 +1500,12 @@ input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplaySty
 button[type=roll].wuxNotebookButton,
 .wuxNotebookButton
 {
-    /*position: relative;*/
-    /*display: inline-block;*/
-    /*height: 14px;*/
-    /*margin: 0;*/
-    /*width: 37px;*/
-    /*font-weight: normal;*/
-    /*font-size: 10px;*/
-    
-    /*text-shadow: none;*/
     border-width: 0;
     border-radius: 5px;
 }
 
 .wuxNotebookButton span
 {
-    /*position: relative;*/
-    /*bottom: 5px;*/
-    /*left: -6px;*/
-    /*display: inline-block;*/
-    /*vertical-align: middle;*/
-    /*padding: 0px 6px;*/
-    /*width: 100%;*/
-    
     color: #000;
     font-weight: normal;
     font-size: 10px;
