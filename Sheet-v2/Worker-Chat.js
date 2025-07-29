@@ -174,6 +174,83 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         }
         return templateInfo[name];
     };
+    
+    const addNotebookPagesFromNotebook = function (attributeHandler, repeatingSection, notebookData) {
+        if (!Array.isArray(notebookData)) {
+            Debug.Log(`Tried to open Notebook data but the data is not formatted correctly: ${JSON.stringify(notebookData)}`);
+        }
+        for (let i = 0; i < notebookData.length; i++) {
+            let newId = repeatingSection.generateRowId();
+            addNotebookPageTemplateData(attributeHandler, repeatingSection, newId, notebookData[i]);
+        }
+    };
+    const addNotebookPageTemplateData = function (attributeHandler, repeatingSection, updateId, templateDataString) {
+        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageTemplateData")), templateDataString);
+        
+        let pageTypeVar = repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageType"));
+        let pageContentsVar = repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageContents"));
+        let pageDisplayVar = repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageDisplay"));
+
+        let templateDataParts = templateDataString.split("}}");
+        if (templateDataParts.length <= 1) {
+            Debug.Log(`Invalid template data. String requires }}, received: ${templateDataString}`);
+            attributeHandler.addUpdate(pageTypeVar, "0");
+            attributeHandler.addUpdate(pageDisplayVar, "0");
+            attributeHandler.addUpdate(pageContentsVar, templateDataParts[0]);
+        }
+        else {
+            let templateTypeParts = templateDataParts[0].split("} ");
+            templateDataParts[0] = templateTypeParts[1].trim();
+            let templateType = templateTypeParts[0].replace("&{template:", "").trim();
+
+            let templateParts = {};
+            for (let i = 0; i < templateDataParts.length; i++) {
+                let templateAttr = templateDataParts[i].replace("{{", "").trim();
+                if (templateAttr.includes("=")) {
+                    let splitParts = templateAttr.split("=");
+                    templateParts[splitParts[0].trim()] = splitParts[1].trim();
+                }
+            }
+
+            attributeHandler.addUpdate(pageTypeVar, templateType);
+            switch (templateType) {
+                case "i":
+                case "s":
+                case "history":
+                    attributeHandler.addUpdate(pageDisplayVar, "0");
+                    attributeHandler.addUpdate(pageContentsVar, getTemplateData(templateParts, "message"));
+                    break;
+                case "ctmsg":
+                case "ctwsp":
+                case "ctyell":
+                case "ctthk":
+                case "ctdesc":
+                    attributeHandler.addUpdate(pageDisplayVar, "Character");
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageCharName")), getTemplateData(templateParts, "name"));
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageCharURL")), getTemplateData(templateParts, "url"));
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageCharEmote")), getTemplateData(templateParts, "emote"));
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageCharLanguage")), getTemplateData(templateParts, "language"));
+                    attributeHandler.addUpdate(pageContentsVar, getTemplateData(templateParts, "message"));
+                    break;
+                case "locationBox":
+                    attributeHandler.addUpdate(pageDisplayVar, "Location");
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageLocation")), getTemplateData(templateParts, "location"));
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageArea")), getTemplateData(templateParts, "area"));
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageDate")), getTemplateData(templateParts, "date"));
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageTime")), getTemplateData(templateParts, "time"));
+                    break;
+                case "quest":
+                    if (templateParts.hasOwnProperty("chapter")) {
+                        attributeHandler.addUpdate(pageTypeVar, "chapter");
+                        attributeHandler.addUpdate(pageDisplayVar, "Chapter");
+                    }
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageQuestName")), getTemplateData(templateParts, "questName"));
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageChapter")), getTemplateData(templateParts, "chapter"));
+                    attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PagePart")), getTemplateData(templateParts, "part"));
+                    break;
+            }
+        }
+    };
     'use strict';
 
     const selectOutfit = function (eventinfo) {
@@ -411,6 +488,136 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             attributeHandler.run();
         },
 
+        openNotebook = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            let noteBookRepeaterSection = new WorkerRepeatingSectionHandler("Notebooks");
+            let updateId = noteBookRepeaterSection.getIdFromFieldName(eventinfo.sourceAttribute);
+            
+            let targetNotebookContentsVar = noteBookRepeaterSection.getFieldName(updateId, WuxDef.GetVariable("Note_NotebookContents"));
+            let targetNotebookNameVar = noteBookRepeaterSection.getFieldName(updateId, WuxDef.GetVariable("Note_NotebookName"));
+            let openNotebookVar = WuxDef.GetVariable("Note_OpenNotebook");
+            attributeHandler.addMod([targetNotebookContentsVar, targetNotebookNameVar]);
+            
+            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+            attributeHandler.addUpdate(noteBookRepeaterSection.getFieldName(updateId, WuxDef.GetVariable("Note_NotebookActions")), "0");
+
+            let pagesRepeaterSection = new WorkerRepeatingSectionHandler("NotebookPages");
+            pagesRepeaterSection.getIds(function (pagesRepeater) {
+                pagesRepeaterSection.removeAllIds();
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    attributeHandler.addUpdate(openNotebookVar, attrHandler.parseString(targetNotebookNameVar));
+                    addNotebookPagesFromNotebook(attrHandler, pagesRepeater, attrHandler.parseJSON(targetNotebookContentsVar));
+                });
+                attributeHandler.run();
+            });
+
+        },
+        deleteNotebook = function (eventinfo) {
+            let repeatingSection = new WorkerRepeatingSectionHandler("Notebooks");
+            let updateId = repeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
+            repeatingSection.removeId(updateId);
+            
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+            attributeHandler.run();
+        },
+        saveOpenedNotebook = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+            let openNotebookVar = WuxDef.GetVariable("Note_OpenNotebook");
+            let notebookNameVar = WuxDef.GetVariable("Note_NotebookName");
+            let notebookContentsVar = WuxDef.GetVariable("Note_NotebookContents");
+            let templateDataVar = WuxDef.GetVariable("Note_PageTemplateData");
+            attributeHandler.addMod(openNotebookVar);
+
+            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+            attributeHandler.addUpdate(WuxDef.GetVariable("Note_OpenNotebookActions"), "0");
+
+            let pagesRepeaterSection = new WorkerRepeatingSectionHandler("NotebookPages");
+            pagesRepeaterSection.getIds(function (pagesRepeatingSection) {
+                pagesRepeaterSection.iterate(function (id) {
+                    attributeHandler.addMod(pagesRepeaterSection.getFieldName(id, templateDataVar));
+                });
+                let noteBookRepeaterSection = new WorkerRepeatingSectionHandler("Notebooks");
+                noteBookRepeaterSection.getIds(function (notebookRepeatingSection) {
+                    notebookRepeatingSection.iterate(function (id) {
+                        attributeHandler.addMod(notebookRepeatingSection.getFieldName(id, notebookNameVar));
+                    });
+                    attributeHandler.addGetAttrCallback(function (attrHandler) {
+                        
+                        let openNotebook = attrHandler.parseString(openNotebookVar);
+                        if (openNotebook == "") {
+                            Debug.Log("No notebook is currently open, cannot save.");
+                            return;
+                        }
+                        let foundNotebook = "";
+                        notebookRepeatingSection.iterate(function (id) {
+                            if (attrHandler.parseString(notebookRepeatingSection.getFieldName(id, notebookNameVar)) == openNotebook) {
+                                foundNotebook = noteBookRepeaterSection.getFieldName(id, notebookContentsVar);
+                            }
+                        });
+                        if (foundNotebook == "") {
+                            let newRowId = notebookRepeatingSection.generateRowId();
+                            foundNotebook = notebookRepeatingSection.getFieldName(newRowId, notebookContentsVar);
+                            attrHandler.addUpdate(notebookRepeatingSection.getFieldName(newRowId, notebookNameVar), openNotebook);
+                            attrHandler.addUpdate(foundNotebook, "");
+                        }
+                        
+                        let notebookContents = [];
+                        pagesRepeatingSection.iterate(function (id) {
+                            notebookContents.push(attrHandler.parseString(pagesRepeaterSection.getFieldName(id, templateDataVar)));
+                        });
+                        attrHandler.addUpdate(foundNotebook, JSON.stringify(notebookContents));
+                    });
+                    attributeHandler.run();
+                });
+            });
+
+        },
+        closeOpenedNotebook = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addUpdate(WuxDef.GetVariable("Note_OpenNotebook"), "");
+            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+            attributeHandler.addUpdate(WuxDef.GetVariable("Note_OpenNotebookActions"), "0");
+            attributeHandler.run();
+            let repeaterSection = new WorkerRepeatingSectionHandler("NotebookPages");
+            repeaterSection.getIds(function (repeatingSection) {
+                repeatingSection.removeAllIds();
+            });
+        },
+        reloadOpenedNotebook = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+            let openNotebookVar = WuxDef.GetVariable("Note_OpenNotebook");
+            let notebookNameVar = WuxDef.GetVariable("Note_NotebookName");
+            let notebookContentsVar = WuxDef.GetVariable("Note_NotebookContents");
+            attributeHandler.addMod(openNotebookVar);
+
+            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+            attributeHandler.addUpdate(WuxDef.GetVariable("Note_OpenNotebookActions"), "0");
+            
+            let pagesRepeaterSection = new WorkerRepeatingSectionHandler("NotebookPages");
+            pagesRepeaterSection.getIds(function (pagesRepeatingSection) {
+                pagesRepeaterSection.removeAllIds();
+                let noteBookRepeaterSection = new WorkerRepeatingSectionHandler("Notebooks");
+                noteBookRepeaterSection.getIds(function (notebookRepeatingSection) {
+                    notebookRepeatingSection.iterate(function (id) {
+                        attributeHandler.addMod([
+                            notebookRepeatingSection.getFieldName(id, notebookNameVar),
+                            notebookRepeatingSection.getFieldName(id, notebookContentsVar)]);
+                    });
+                    attributeHandler.addGetAttrCallback(function (attrHandler) {
+                        let openNotebook = attrHandler.parseString(openNotebookVar);
+                        notebookRepeatingSection.iterate(function (id) {
+                            if (attrHandler.parseString(notebookRepeatingSection.getFieldName(id, notebookNameVar)) == openNotebook) {
+                                addNotebookPagesFromNotebook(attrHandler, pagesRepeatingSection, 
+                                    attrHandler.parseJSON(notebookRepeatingSection.getFieldName(id, notebookContentsVar)));
+                            }
+                        });
+                    });
+                    attributeHandler.run();
+                });
+            });
+        },
+
         setNotebookPageType = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages");
@@ -458,71 +665,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             let attributeHandler = new WorkerAttributeHandler();
             let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages");
             let updateId = repeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
-
-            let pageTypeVar = repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageType"));
-            let pageContentsVar = repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageContents"));
-            let pageDisplayVar = repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageDisplay"));
-            
-            let templateDataParts = eventinfo.newValue.split("}}");
-            
-            if (templateDataParts.length <= 1) {
-                attributeHandler.addUpdate(pageTypeVar, "0");
-                attributeHandler.addUpdate(pageDisplayVar, "0");
-                attributeHandler.addUpdate(pageContentsVar, templateDataParts[0]);
-            }
-            else {
-                let templateTypeParts = templateDataParts[0].split("} ");
-                templateDataParts[0] = templateTypeParts[1].trim();
-                let templateType = templateTypeParts[0].replace("&{template:", "").trim();
-                
-                let templateParts = {};
-                for (let i = 0; i < templateDataParts.length; i++) {
-                    let templateAttr = templateDataParts[i].replace("{{", "").trim();
-                    if (templateAttr.includes("=")) {
-                        let splitParts = templateAttr.split("=");
-                        templateParts[splitParts[0].trim()] = splitParts[1].trim();
-                    }
-                }
-
-                attributeHandler.addUpdate(pageTypeVar, templateType);
-                switch (templateType) {
-                    case "i":
-                    case "s":
-                    case "history":
-                        attributeHandler.addUpdate(pageDisplayVar, "0");
-                        attributeHandler.addUpdate(pageContentsVar, getTemplateData(templateParts, "message"));
-                        break;
-                    case "ctmsg":
-                    case "ctwsp":
-                    case "ctyell":
-                    case "ctthink":
-                    case "ctdesc":
-                        attributeHandler.addUpdate(pageDisplayVar, "Character");
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageCharName")), getTemplateData(templateParts, "name"));
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageCharURL")), getTemplateData(templateParts, "url"));
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageCharEmote")), getTemplateData(templateParts, "emote"));
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageCharLanguage")), getTemplateData(templateParts, "language"));
-                        attributeHandler.addUpdate(pageContentsVar, getTemplateData(templateParts, "message"));
-                        break;
-                    case "locationBox":
-                        attributeHandler.addUpdate(pageDisplayVar, "Location");
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageLocation")), getTemplateData(templateParts, "location"));
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageArea")), getTemplateData(templateParts, "area"));
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageDate")), getTemplateData(templateParts, "date"));
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageTime")), getTemplateData(templateParts, "time"));
-                        break;
-                    case "quest":
-                        if (templateParts.hasOwnProperty("chapter")) {
-                            attributeHandler.addUpdate(pageTypeVar, "chapter");
-                            attributeHandler.addUpdate(pageDisplayVar, "Chapter");
-                        }
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageQuestName")), getTemplateData(templateParts, "questName"));
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageChapter")), getTemplateData(templateParts, "chapter"));
-                        attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PagePart")), getTemplateData(templateParts, "part"));
-                        break;
-                }
-            }
-            
+            addNotebookPageTemplateData(attributeHandler, repeatingSection, updateId, eventinfo.newValue);
             attributeHandler.run();
         };
     return {
@@ -536,6 +679,11 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         UpdateOutfitEmotesDefaultUrl: updateOutfitEmotesDefaultUrl,
         UpdateOutfitEmotesUrl: updateOutfitEmotesUrl,
         PostToNotebook: postToNotebook,
+        OpenNotebook: openNotebook,
+        DeleteNotebook: deleteNotebook,
+        SaveOpenedNotebook: saveOpenedNotebook,
+        CloseOpenedNotebook: closeOpenedNotebook,
+        ReloadOpenedNotebook: reloadOpenedNotebook,
         SetNotebookPageType: setNotebookPageType,
         SetNotebookPageData: setNotebookPageData,
         SetNotebookPageDelete: setNotebookPageDelete,

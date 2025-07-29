@@ -598,6 +598,11 @@ var ChatBuilder = ChatBuilder || (function () {
             output += listenerUpdateRepeatingChatEmoteDefaultUrlUpdate();
             output += listenerUpdateRepeatingChatEmoteNameUpdate();
             output += listenerUpdateRepeatingChatEmoteUrlUpdate();
+            output += listenerRepeatingNotebookOpen();
+            output += listenerRepeatingNotebookDelete();
+            output += listenerOpenedNotebookSave();
+            output += listenerOpenedNotebookClose();
+            output += listenerOpenedNotebookReload();
             output += listenerUpdateRepeatingChatPostTarget();
             output += listenerUpdateNotebookPageType();
             output += listenerUpdateNotebookPageTemplateData();
@@ -671,6 +676,38 @@ var ChatBuilder = ChatBuilder || (function () {
             let output = `WuxWorkerChat.UpdateOutfitEmotesUrl(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerRepeatingNotebookOpen = function () {
+            let repeatingSection = WuxDef.GetVariable("Notebooks");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Note_NotebookOpen")}`];
+            let output = `WuxWorkerChat.OpenNotebook(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerRepeatingNotebookDelete = function () {
+            let repeatingSection = WuxDef.GetVariable("Notebooks");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Note_NotebookDelete")}`];
+            let output = `WuxWorkerChat.DeleteNotebook(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerOpenedNotebookSave = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Note_NotebookSave")}`];
+            let output = `WuxWorkerChat.SaveOpenedNotebook()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        listenerOpenedNotebookClose = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Note_NotebookClose")}`];
+            let output = `WuxWorkerChat.CloseOpenedNotebook()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        listenerOpenedNotebookReload = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Note_NotebookReload")}`];
+            let output = `WuxWorkerChat.ReloadOpenedNotebook()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerUpdateRepeatingChatPostTarget = function () {
             let repeatingSection = WuxDef.GetVariable("RepeatingActiveEmotesNotes");

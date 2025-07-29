@@ -341,12 +341,16 @@ class ChatMessage {
     constructor(msg) {
         this.createEmpty();
         if (msg != undefined) {
-            this.message = msg;
+            this.setMessage(msg);
         }
     }
     createEmpty() {
         this.sender = "";
         this.message = "";
+    }
+    
+    setMessage(msg) {
+        this.message = msg;
     }
 
     setSender(sender) {
@@ -423,6 +427,35 @@ class InfoMessage extends SimpleMessage {
     createEmpty() {
         super.createEmpty();
         this.template = "infoBox";
+        this.message2 = "";
+        this.message3 = "";
+        this.message4 = "";
+    }
+    
+    setMessage(msg) {
+        let msgArray = msg.split("\\");
+        this.message = msgArray[0].trim();
+        if (msgArray.length > 1) {
+            this.message2 = msgArray[1].trim();
+        } else {
+            this.message2 = "";
+        }
+        if (msgArray.length > 2) {
+            this.message3 = msgArray[2].trim();
+        } else {
+            this.message3 = "";
+        }
+        if (msgArray.length > 3) {
+            this.message4 = "";
+            for (let i = 3; i < msgArray.length; i++) {
+                if (this.message4 != "") {
+                    this.message4 += " ";
+                }
+                this.message4 += msgArray[i].trim();
+            }
+        } else {
+            this.message4 = "";
+        }
     }
 
     printHtml() {
@@ -434,6 +467,14 @@ class InfoMessage extends SimpleMessage {
             </div>
         </div>
     </div>`;
+    }
+
+    printTemplateData() {
+        let options = this.message2 != "" ? ` {{message2=${this.message2}}}` : "";
+        options += this.message3 != "" ? ` {{message3=${this.message3}}}` : "";
+        options += this.message4 != "" ? ` {{message4=${this.message4}}}` : "";
+        
+        return `{{message=${this.message}}}${options}`;
     }
 }
 

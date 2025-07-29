@@ -113,17 +113,20 @@
     max-width: 220px;
 }
 
-.wuxHeight30
+.wuxHeight30,
+textarea.wuxHeight30
 {
-    max-height: 36px;
+    height: 36px;
 }
 
-.wuxHeight60
+.wuxHeight60,
+textarea.wuxHeight60
 {
     height: 60px;
 }
 
-.wuxHeight150
+.wuxHeight150,
+textarea.wuxHeight150
 {
     height: 150px;
 }
