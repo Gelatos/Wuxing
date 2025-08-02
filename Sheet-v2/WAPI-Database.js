@@ -1838,9 +1838,6 @@ class TechniqueDisplayData {
         if (technique.action == "Brief" || technique.action == "Short" || technique.action == "Long") {
             this.resourceData = `During a ${technique.action} Rest`;
         }
-        else if (technique.group != "") {
-            this.resourceData = `${technique.action} ${technique.group}`;
-        }
         else {
             this.resourceData = `${technique.action} Action`;
         }

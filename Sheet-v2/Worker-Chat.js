@@ -214,9 +214,9 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 
             attributeHandler.addUpdate(pageTypeVar, templateType);
             switch (templateType) {
-                case "i":
-                case "s":
-                case "history":
+                case "infoBox":
+                case "systemInfoBox":
+                case "historyBox":
                     attributeHandler.addUpdate(pageDisplayVar, "0");
                     attributeHandler.addUpdate(pageContentsVar, getTemplateData(templateParts, "message"));
                     break;

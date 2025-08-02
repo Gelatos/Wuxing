@@ -5935,7 +5935,8 @@ textarea.wuxHeight60
     height: 60px;
 }
 
-.wuxHeight150
+.wuxHeight150,
+textarea.wuxHeight150
 {
     height: 150px;
 }
