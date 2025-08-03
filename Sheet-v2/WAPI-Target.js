@@ -62,9 +62,9 @@ class TargetData {
             return;
         }
         this.tokenId = token.get("_id");
+        this.displayName = token.get("name");
 
         let character = getObj('character', this.charId);
-
         this.charName = character.get("name");
         this.setOwner(character);
         this.setCharacterData();
@@ -132,7 +132,10 @@ class TargetData {
         attributeHandler.addMod(displayNameVar);
         attributeHandler.addMod(affinityVar);
         attributeHandler.addFinishCallback(function (attrHandler) {
-            targetData.displayName = attrHandler.parseString(displayNameVar);
+            let targetDisplayName = attrHandler.parseString(displayNameVar);
+            if (targetDisplayName != "") {
+                targetData.displayName = targetDisplayName;
+            }
             targetData.elem = targetData.getElementStatus(attrHandler.parseString(affinityVar));
         });
         attributeHandler.run();
@@ -181,6 +184,10 @@ class TokenTargetData extends TargetData {
 
     // token bar
     initToken() {
+        if (this.token == undefined) {
+            Debug.Log (`[TokenTargetData] No token data exists for ${this.charName}`);
+            return;
+        }
         this.token.set("bar_location", "overlap_bottom");
     }
     setBar(barIndex, variableObj, showBar, showText) {
@@ -301,7 +308,6 @@ class TokenTargetData extends TargetData {
     }
     addEnergy(attributeHandler, value, resultsCallback) {
         let tokenTargetData = this;
-        attributeHandler.addMod(chakraVar);
         this.modifyResourceAttribute(attributeHandler, "EN", value,
             function (results, value) {
                 tokenTargetData.addModifierToAttribute(results, value);
@@ -325,6 +331,26 @@ class TokenTargetData extends TargetData {
         this.modifyResourceAttribute(attributeHandler, "EN", 0,
             function (results, value, attrHandler) {
                 tokenTargetData.setModifierToAttribute(results, attrHandler.parseInt(startEnVar));
+            },
+            function (results, attrHandler, attributeVar) {
+                if (resultsCallback != undefined) {
+                    resultsCallback(results, attrHandler, attributeVar);
+                }
+                else {
+                    attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    tokenTargetData.setEnergy(results.newValue);
+                }
+                return results;
+            }
+        );
+    }
+    addStartRoundEnergy(attributeHandler, resultsCallback) {
+        let tokenTargetData = this;
+        let roundEnVar = WuxDef.GetVariable("RoundEN");
+        attributeHandler.addMod(roundEnVar);
+        this.modifyResourceAttribute(attributeHandler, "EN", value,
+            function (results, value, attrHandler) {
+                tokenTargetData.addModifierToAttribute(results, attrHandler.parseInt(roundEnVar));
             },
             function (results, attrHandler, attributeVar) {
                 if (resultsCallback != undefined) {
@@ -499,6 +525,9 @@ var TargetReference = TargetReference || (function () {
                 case "!intro":
                     commandIntroduce(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
+                case "!tgenname":
+                    commandGenerateName(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
             }
         },
 
@@ -666,6 +695,34 @@ var TargetReference = TargetReference || (function () {
                 attributeHandler.run();
             });
 
+        },
+
+        commandGenerateName = function (msg, targets) {
+            let raceVar = WuxDef.GetVariable("Ethnicity");
+            let genderVar = WuxDef.GetVariable("Gender");
+            let homeRegionVar = WuxDef.GetVariable("HomeRegion");
+
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+
+                attributeHandler.addMod([raceVar, genderVar, homeRegionVar]);
+                attributeHandler.addFinishCallback(function (attrHandler) {
+                    let generator = new WuxingHumanCharacterGenerator();
+                    generator.character.ancestry = attrHandler.parseString(raceVar);
+                    generator.character.gender = attrHandler.parseString(genderVar);
+                    generator.character.homeRegion = attrHandler.parseString(homeRegionVar);
+                    generator.generateCharacter();
+                    tokenTargetData.token.set("name", generator.character.firstName);
+                    
+                    let outputMessage = `Generated Name: ${generator.character.fullName}. ` + 
+                        `\They have a ${generator.character.motivation} Motivation and a ${generator.character.personality} Personality.`;
+                    let messageObject = new SystemInfoMessage(outputMessage);
+                    messageObject.setSender("System");
+                    WuxMessage.Send(messageObject, "GM");
+                });
+                attributeHandler.run();
+            });
+        
         },
 
         // Data Checkers

@@ -144,7 +144,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     tokenTargetData.setEnergyToStart(attributeHandler);
                 }
                 else {
-                    tokenTargetData.addEnergy(attributeHandler, 1);
+                    tokenTargetData.addStartRoundEnergy(attributeHandler);
                 }
                 
                 switch (state.WuxConflictManager.conflictType) {

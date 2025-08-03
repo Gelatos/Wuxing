@@ -305,9 +305,14 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), WuxDef.GetAttribute("DisplayName"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title"), WuxDef.GetAttribute("Title"));
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"));
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"),
+                                WuxDef.Filter([new DatabaseFilterData("group", "GenderType")]), true);
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("HomeRegion"), WuxDef.GetAttribute("HomeRegion"),
                                 WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Ethnicity"), WuxDef.GetAttribute("Ethnicity"),
+                                WuxDef.Filter([new DatabaseFilterData("group", "RaceType")]), true);
+                            // contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"),
+                            //         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
                             contents = WuxSheetMain.Table.FlexTableGroup(contents);
                             return contents;
                         },

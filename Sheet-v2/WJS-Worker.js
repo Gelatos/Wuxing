@@ -71,6 +71,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let attributeHandler = new WorkerAttributeHandler();
             let nameVar = WuxDef.GetVariable("DisplayName");
             let fullNameVar = WuxDef.GetVariable("FullName");
+            let raceVar = WuxDef.GetVariable("Ethnicity");
             let genderVar = WuxDef.GetVariable("Gender");
             let homeRegionVar = WuxDef.GetVariable("HomeRegion");
             attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar]);
@@ -79,6 +80,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 let generator = new WuxingHumanCharacterGenerator();
                 generator.character.firstName = attrHandler.parseString(nameVar);
                 generator.character.fullName = attrHandler.parseString(fullNameVar);
+                generator.character.ancestry = attrHandler.parseString(raceVar);
                 generator.character.gender = attrHandler.parseString(genderVar);
                 generator.character.homeRegion = attrHandler.parseString(homeRegionVar);
                 generator.generateCharacter();
@@ -99,6 +101,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let fullNameVar = WuxDef.GetVariable("Note_GenFullName");
             let genderVar = WuxDef.GetVariable("Note_GenGender");
             let homeRegionVar = WuxDef.GetVariable("Note_GenHomeRegion");
+            let raceVar = WuxDef.GetVariable("Note_GenRace");
             attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar]);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 attrHandler.addUpdate("character_name", attrHandler.parseString(nameVar));
@@ -107,6 +110,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("FullName"), attrHandler.parseString(fullNameVar));
                 attrHandler.addUpdate(WuxDef.GetVariable("Gender"), attrHandler.parseString(genderVar));
                 attrHandler.addUpdate(WuxDef.GetVariable("HomeRegion"), attrHandler.parseString(homeRegionVar));
+                attrHandler.addUpdate(WuxDef.GetVariable("Ethnicity"), attrHandler.parseString(raceVar));
             });
             attributeHandler.run();
         },
