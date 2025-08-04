@@ -246,6 +246,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             equipRepeater.iterate(function (id) {
                 equipStyleWorker.attributeHandler.addMod(equipRepeater.getFieldName(id, WuxDef.GetVariable("Forme_Name")), 0);
             });
+            let combatDetailsHandler = new CombatDetailsHandler(equipStyleWorker.attributeHandler);
 
             equipStyleWorker.attributeHandler.addGetAttrCallback(function (attrHandler) {
                 equipStyleWorker.closeMenu(attrHandler);
@@ -259,6 +260,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     }
                 }
                 equipStyleWorker.equipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
+                Debug.Log(`Equipping Job Style ${attrHandler.parseString(equipStyleWorker.styleFieldName)}`);
+                combatDetailsHandler.onUpdateJob(attrHandler, attrHandler.parseString(equipStyleWorker.styleFieldName));
             });
             let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
             loader.run();

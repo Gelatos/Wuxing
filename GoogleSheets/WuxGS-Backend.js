@@ -245,6 +245,8 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerClearBackground();
             output += listenerUpdateStatus();
             output += listenerUpdateCR();
+            output += listenerUpdateSurge();
+            output += listenerUpdateVitality();
             return output;
         },
         listenerUpdateDisplayName = function () {
@@ -298,7 +300,20 @@ var OverviewBuilder = OverviewBuilder || (function () {
             let output = `WuxWorkerGeneral.UpdateCR(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateSurge = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Cmb_Surge")}`];
+            let output = `WuxWorkerGeneral.UpdateSurge(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateVitality = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Cmb_Vitality")}`];
+            let output = `WuxWorkerGeneral.UpdateVitality(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
+        
     return {
         Print: print
     }

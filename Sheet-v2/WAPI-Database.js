@@ -1097,6 +1097,7 @@ class JobData extends WuxDatabaseData {
         let definition = new JobDefinitionData(super.createDefinition(baseDefinition));
         definition.subGroup = this.group;
         definition.requirements = this.getRequirements();
+        definition.defenses = this.defenses;
         definition.formula = new FormulaData();
         return definition;
     }
@@ -1732,6 +1733,7 @@ class JobDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
         this.requirements = json.requirements;
+        this.defenses = json.defenses
     }
 
     setImportSheetExtraData(property, value) {
@@ -1739,12 +1741,16 @@ class JobDefinitionData extends DefinitionData {
             case "requirements":
                 this.requirements = value;
                 break;
+            case "defenses":
+                this.defenses = value;
+                break;
         }
     }
 
     createEmpty() {
         super.createEmpty();
         this.requirements = "";
+        this.defenses = "";
     }
 }
 
@@ -3110,7 +3116,11 @@ class CombatDetailsHandler {
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
-    onUpdateJob(attrHandler, jobDef) {
+    onUpdateJob(attrHandler, jobName) {
+        let jobCatDef = WuxDef.Get("Job");
+        let jobDefinitionName = `${jobCatDef.abbreviation}_${jobName}`;
+        let jobDef = WuxDef.Get(jobDefinitionName);
+        Debug.Log(`[CombatDetailsHandler][onUpdateJob] Updating job to ${jobDef.title} with defenses ${jobDef.defenses}`);
         this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
         this.combatDetails.job = jobDef.title;
         this.combatDetails.jobDefenses = jobDef.defenses;
@@ -3132,6 +3142,24 @@ class CombatDetailsHandler {
     onUpdateSurges(attrHandler, value) {
         this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
         this.combatDetails.surges = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateMaxSurges(attrHandler, value) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.maxsurges = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateVitality(attrHandler, value) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.vitality = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateMaxVitality(attrHandler, value) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.maxvitality = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 

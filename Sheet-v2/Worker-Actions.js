@@ -45,9 +45,16 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let techBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostStyleTech"));
         let gearBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostGearTech"));
         let perkBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostPerkTech"));
+        let healValueVar = WuxDef.GetVariable("Cmb_HV");
+        let surgeDef = WuxDef.Get("Cmb_Surge");
+        let vitalityDef = WuxDef.Get("Cmb_Vitality");
         Debug.Log(`Boost Perk Tech: ${perkBoosters}`);
 
         let attributeHandler = new WorkerAttributeHandler();
+        attributeHandler.addMod([healValueVar,
+            surgeDef.getVariable(), surgeDef.getVariable(WuxDef._max),
+            vitalityDef.getVariable(), vitalityDef.getVariable(WuxDef._max)]);
+        let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
         // grab all formulas that get modified based on techniques (_tech)
         let techniqueModifierDefs = WuxDef.Filter(new DatabaseFilterData("techMods", WuxDef._tech));
         for (let i = 0; i < techniqueModifierDefs.length; i++) {
@@ -84,6 +91,11 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                     attrHandler.addUpdate(techniqueModifierDefs[i].getVariable(), techniqueModifierDefs[i].formula.getValue(attrHandler));
                 }
             }
+            combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueVar));
+            combatDetailsHandler.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable()));
+            combatDetailsHandler.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable(WuxDef._max)));
+            combatDetailsHandler.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable()));
+            combatDetailsHandler.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable(WuxDef._max)));
         });
         attributeHandler.run();
     }

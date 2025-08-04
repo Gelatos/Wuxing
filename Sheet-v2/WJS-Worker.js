@@ -2,7 +2,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
     'use strict';
 
     var
-        updateStats = function (attributeHandler) {
+        updateStats = function (attributeHandler, combatDetailsHandler) {
             Debug.Log("Update General Stats");
             let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", "CR"));
             
@@ -18,6 +18,10 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             newFilter = WuxDef.Filter(new DatabaseFilterData("group", "Social"));
             formulaDefinitions = formulaDefinitions.concat(newFilter);
 
+            let healValueVar = WuxDef.GetVariable("Cmb_HV");
+            let surgeDef = WuxDef.Get("Cmb_Surge");
+            let vitalityDef = WuxDef.Get("Cmb_Vitality");
+
             for (let i = 0; i < formulaDefinitions.length; i++) {
                 attributeHandler.addFormulaMods(formulaDefinitions[i]);
             }
@@ -31,6 +35,11 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                         attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
                     }
                 }
+                combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueVar));
+                combatDetailsHandler.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable()));
+                combatDetailsHandler.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable(WuxDef._max)));
+                combatDetailsHandler.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable()));
+                combatDetailsHandler.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable(WuxDef._max)));
             });
         },
         updateDisplayName = function (eventinfo) {
@@ -143,10 +152,24 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             WuxWorkerStyles.UpdateStats(attributeHandler);
             WuxWorkerAdvancement.UpdateStats(attributeHandler);
             WuxWorkerActions.UpdateStats(attributeHandler);
-            updateStats(attributeHandler);
+            updateStats(attributeHandler, combatDetailsHandler);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 combatDetailsHandler.onUpdateCR(attrHandler, cr);
             });
+            attributeHandler.run();
+        },
+        updateSurge = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+            let value = parseInt(eventinfo.newValue);
+            combatDetailsHandler.onUpdateSurges(attributeHandler, value);
+            attributeHandler.run();
+        },
+        updateVitality = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+            let value = parseInt(eventinfo.newValue);
+            combatDetailsHandler.onUpdateVitality(attributeHandler, value);
             attributeHandler.run();
         },
         openSubMenu = function (eventinfo) {
@@ -191,6 +214,8 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         ClearBackground: clearBackground,
         UpdateStatus: updateStatus,
         UpdateCR: updateCR,
+        UpdateSurge: updateSurge,
+        UpdateVitality: updateVitality,
         OpenSubMenu: openSubMenu,
         CloseSubMenu: closeSubMenu,
         ClosePopup: closePopup
